@@ -1,0 +1,4 @@
+[submodule "native"]
+	path = native
+	url = https://github.com/maidsafe/safe_client_libs.git
+	branch = dev
