@@ -20,6 +20,8 @@
 // and limitations relating to use of the SAFE Network Software.
 
 
+const lib = require('../native/lib');
+
 module.exports = class Auth {
   constructor(app) {
     this._app = app;
@@ -40,8 +42,14 @@ module.exports = class Auth {
 
   // }
 
-  // loginFromURI(responseUri) {
+  loginFromURI(responseUri) {
+    return lib.decode_ipc_msg(responseUri).then((resp) => {
+      // we can only handle 'granted' request
+      if (resp[0] !== 'granted') return Promise.reject(resp);
 
-
-  // }
+      const authGranted = resp[1];
+      this._registered = true;
+      return lib.app_registered(this._app, authGranted);
+    });
+  }
 };

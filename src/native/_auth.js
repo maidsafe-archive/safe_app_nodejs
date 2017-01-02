@@ -1,25 +1,18 @@
 const ffi = require('ffi');
+const Enum = require('enum');
 const ref = require('ref');
 const Struct = require('ref-struct');
 const base = require('./_base');
 const t = base.types;
 const make_ffi_string = base.helpers.make_ffi_string;
 
-// FIXME: how do we do enums?
-
-/// Permission action
-// pub enum Permission {
-//     /// Read
-//     Read,
-//     /// Insert
-//     Insert,
-//     /// Update
-//     Update,
-//     /// Delete
-//     Delete,
-//     /// Modify permissions
-//     ManagePermissions,
-// }
+const Permission = new Enum({
+  Read: 0,
+  Insert: 1,
+  Update: 2,
+  Delete: 3,
+  ManagePermissions: 4
+});
 
 const AppExchangeInfo = Struct({
   id: t.FfiString,
@@ -32,14 +25,12 @@ const AppExchangeInfo = Struct({
 
 const PermissionArray = Struct({
   // /// Pointer to first byte
-  // pub ptr: *mut Permission,
+  ptr: ref.refType(Permission),
   // /// Number of elements
   len: t.usize,
-  // pub len: usize,
   // /// Reserved by Rust allocator
-  // pub cap: usize,
   cap: t.usize
-})
+});
 
 const ContainerPermissions = Struct({
   cont_name: t.FfiString,
@@ -49,12 +40,10 @@ const ContainerPermissions = Struct({
 
 const ContainerPermissionsArray = Struct({
   // /// Pointer to first byte
-  // pub ptr: *mut ContainerPermissions,
+  ptr: ref.refType(ContainerPermissions),
   // /// Number of elements
-  // pub len: usize,
-  // /// Reserved by Rust allocator
-  // pub cap: usize,
   len: t.usize,
+  // /// Reserved by Rust allocator
   cap: t.usize
 });
 
@@ -159,24 +148,26 @@ module.exports = {
           fn.async(ffi_str,
                    ref.NULL,
                    ffi.Callback("void", ["u32", FfiAuthGranted], function(e, authGranted) {
-                      resolve("granted", authGranted)
+                      resolve(["granted", authGranted])
                    }),
                    ffi.Callback("void", ["u32"], function(e) {
-                      resolve("containers", e)
+                      resolve(["containers", e])
                    }),
                    ffi.Callback("void", [], function() {
-                      resolve("revoked")
+                      resolve(["revoked"])
                    }),
 
                    ffi.Callback("void", ["u32", "i32"], function(code, msg) {
-                      reject(code, msg)
+                      reject([code, msg])
                    })
               )
         }).done(res => {
-          lib.ffi_string_free(ffi_str);
+          // FIXME: freeing strings fails currently
+          // lib.ffi_string_free(ffi_str);
           res;
         }, reason => {
-          lib.ffi_string_free(ffi_str);
+          // FIXME: freeing strings fails currently
+          // lib.ffi_string_free(ffi_str);
           Promise.reject(reason);
         })
       })

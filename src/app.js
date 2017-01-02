@@ -1,4 +1,5 @@
 const EventEmitter = require('events').EventEmitter;
+const autoref = require('./helpers').autoref;
 const api = require('./api');
 
 
@@ -24,6 +25,11 @@ class SAFEApp extends EventEmitter {
 
   get appInfo() {
     return this._appInfo;
+  }
+
+  static fromAuthUri(appInfo, authUri) {
+    const app = autoref(new SAFEApp(appInfo));
+    return app.auth.loginFromAuth(authUri);
   }
 
   connect(opts) {
