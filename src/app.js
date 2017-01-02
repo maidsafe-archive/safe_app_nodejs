@@ -10,7 +10,7 @@ class SAFEApp extends EventEmitter {
     this._appInfo = appInfo;
     this._networkState = 'init';
     this._connection = null;
-    api.getOwnPropertyNames().forEach((key) => {
+    Object.getOwnPropertyNames(api).forEach((key) => {
       this[key] = new api[key](this);
     });
   }

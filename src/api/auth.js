@@ -21,6 +21,12 @@
 
 
 const lib = require('../native/lib');
+const helpers = require('../native/helpers');
+const authTypes = require('../native/_auth').types;
+const ref = require('ref');
+const makeAppInfo = helpers.makeAppInfo;
+const makePermissions = helpers.makePermissions;
+const makeFfiString = helpers.makeFfiString;
 
 module.exports = class Auth {
   constructor(app) {
@@ -32,15 +38,15 @@ module.exports = class Auth {
     return this._registered;
   }
 
-  login() {
-    // if we have a cached version, login with it
-    // otherwise go for requestLogin
-    return this.requestLogin();
+  genAuthUri(permissions, opts) {
+    const perm = makePermissions(permissions);
+    const appInfo = makeAppInfo(this._app.appInfo);
+    return lib.encode_auth_req(new authTypes.AuthReq({
+      app: appInfo,
+      app_container: !!(opts && opts.own_container),
+      containers: perm,
+    }));
   }
-
-  // requestLogin() {
-
-  // }
 
   loginFromURI(responseUri) {
     return lib.decode_ipc_msg(responseUri).then((resp) => {

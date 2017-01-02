@@ -1,7 +1,8 @@
 const ref = require("ref");
 const Struct = require('ref-struct');
-const t = require('./_base').types;
-
+const base = require('./_base');
+const t = base.types;
+const makeFfiString = base.helpers.makeFfiString;
 
 const App = Struct({});
 const AppPtr = ref.refType(App);
@@ -19,7 +20,7 @@ module.exports = {
   api: {
     app_unregistered: function(lib, fn) {
       return (function(app) {
-        let ffi_str = make_ffi_string(app.appInfo.id);
+        let ffi_str = makeFfiString(app.appInfo.id);
         let appCon = new AppPtr();
 
         fn.async(ffi_str,
@@ -34,7 +35,7 @@ module.exports = {
     },
     app_registered: function(lib, fn) {
       return (function(app, authGranted) {
-        let ffi_str = make_ffi_string(app.appInfo.id);
+        let ffi_str = makeFfiString(app.appInfo.id);
         let appCon = new AppPtr();
 
         fn.async(ffi_str,

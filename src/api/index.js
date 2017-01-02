@@ -1,11 +1,11 @@
-const ImmutableData = require('./immutable');
-const Container = require('./container');
-const MutableData = require('./mutable');
-const Auth = require('./auth');
+const immutableData = require('./immutable');
+const mutableData = require('./mutable');
+const container = require('./container');
+const auth = require('./auth');
 
 module.exports = {
-  ImmutableData,
-  MutableData,
-  Container,
-  Auth
+  immutableData,
+  mutableData,
+  container,
+  auth
 };

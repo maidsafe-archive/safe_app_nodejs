@@ -1,10 +1,12 @@
 const ffi = require('ffi');
 const Enum = require('enum');
+const ArrayType = require('ref-array');
 const ref = require('ref');
 const Struct = require('ref-struct');
-const base = require('./_base');
+const base = require('./_base.js');
 const t = base.types;
-const make_ffi_string = base.helpers.make_ffi_string;
+const helpers = base.helpers;
+const makeFfiString = base.helpers.makeFfiString;
 
 const Permission = new Enum({
   Read: 0,
@@ -16,16 +18,18 @@ const Permission = new Enum({
 
 const AppExchangeInfo = Struct({
   id: t.FfiString,
-  scope: t.u8,
+  scope: t.u8Pointer,
   scope_len: t.usize,
   scope_cap: t.usize,
   name: t.FfiString,
   vendor: t.FfiString
 });
 
+const PermissionArrayType = new ArrayType(Permission);
+
 const PermissionArray = Struct({
   // /// Pointer to first byte
-  ptr: ref.refType(Permission),
+  ptr: PermissionArrayType,
   // /// Number of elements
   len: t.usize,
   // /// Reserved by Rust allocator
@@ -35,12 +39,13 @@ const PermissionArray = Struct({
 const ContainerPermissions = Struct({
   cont_name: t.FfiString,
   access: PermissionArray
-
 });
+
+const ContainersPermissionArrayType = new ArrayType(ContainerPermissions);
 
 const ContainerPermissionsArray = Struct({
   // /// Pointer to first byte
-  ptr: ref.refType(ContainerPermissions),
+  ptr: ContainersPermissionArrayType,
   // /// Number of elements
   len: t.usize,
   // /// Reserved by Rust allocator
@@ -100,21 +105,57 @@ const AuthGranted = Struct({
   access_container: AccessContInfo
 });
 
+function makeAppInfo(appInfo) {
+  if (appInfo.scope) {
+    const scope = makeFfiString(appInfo.scope);
+    return new AppExchangeInfo({
+      id: makeFfiString(appInfo.id),
+      scope: scope.ptr,
+      scope_len: scope.len,
+      scope_cap: scope.cap,
+      name: makeFfiString(appInfo.name),
+      vendor: makeFfiString(appInfo.vendor)
+    });
+  }
 
+  return new AppExchangeInfo({
+    id: makeFfiString(appInfo.id),
+    scope: ref.NULL,
+    scope_len: 0,
+    scope_cap: 0,
+    name: makeFfiString(appInfo.name),
+    vendor: makeFfiString(appInfo.vendor)
+  });
+}
+
+function makePermissions(perms) {
+  const permissions = new ContainersPermissionArrayType(Object.getOwnPropertyNames(perms).map((key) => {
+    // map to the proper enum
+    const v = new PermissionArrayType(perms[key].map((x) => Permission.get(x)));
+    const permArray = PermissionArray({ ptr: v, len: v.length, cap: v.length });
+    return ContainerPermissions({
+      cont_name: makeFfiString(key),
+      access: permArray
+    });
+  }));
+
+  return ContainerPermissionsArray({
+    ptr: permissions,
+    len: permissions.length,
+    cap: permissions.length
+  });
+}
 
 
 module.exports = {
   types : {
     // request
-    AuthReq: AuthReq,
-    ContainerReq: ContainerReq,
-    PermissionArray: PermissionArray,
-    ContainerPermissions: ContainerPermissions,
-    ContainerPermissionsArray: ContainerPermissionsArray,
+    AuthReq,
+    ContainerReq,
     // response
-    AuthGranted: AuthGranted,
-    AccessContInfo: AccessContInfo,
-    AppKeys: AppKeys
+    AuthGranted,
+    AccessContInfo,
+    AppKeys,
   },
   functions: {
     // request
@@ -129,7 +170,7 @@ module.exports = {
     app_keys_drop: [t.Void, [AppKeys] ],
     access_container_drop: [t.Void, [AccessContInfo] ],
     // // ipc
-    // encode_auth_req: [t.i32, [AuthReq, t.u32Ptr, t.FfiString ] ],
+    encode_auth_req: [t.i32, [ AuthReq, ref.refType(ref.types.uint32),  t.FfiStringPointer ] ],
     // encode_containers_req: [t.i32, [ContainerReq, t.u32Ptr, t.FfiString] ],
     decode_ipc_msg: [t.Void, [
                       "pointer", //  (msg: FfiString,
@@ -140,10 +181,22 @@ module.exports = {
                       "pointer"  // o_err: extern "C" fn(*mut c_void, i32, u32)
                       ] ]
   },
+  helpers: {
+    makeAppInfo,
+    makePermissions,
+  },
   api: {
+    encode_auth_req: function(lib, fn) {
+      return (function(auth) {
+        const reqId = ref.alloc(ref.types.uint32);
+        const b = ref.alloc(t.FfiString);
+        fn(auth, reqId, b);
+        return helpers.read_string(b);
+      });
+    },
     decode_ipc_msg: function(lib, fn) {
       return (function(str) {
-        let ffi_str = make_ffi_string(str);
+        let ffi_str = makeFfiString(str);
         return new Promise(function(resolve, reject) {
           fn.async(ffi_str,
                    ref.NULL,
@@ -172,8 +225,5 @@ module.exports = {
         })
       })
     }
-  // },
-  // helpers : {
-  // 
   }
 }
