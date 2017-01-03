@@ -12,6 +12,9 @@
     "import/no-unresolved": [2, { "ignore": ["electron"] }],
     "import/no-extraneous-dependencies": 0,
     "generator-star-spacing": 0,
+    "no-underscore-dangle": ["error", {
+      "allowAfterThis": true
+    }],
     "no-console": ["error", { "allow": ["warn", "error"] }]
   },
   "plugins": [

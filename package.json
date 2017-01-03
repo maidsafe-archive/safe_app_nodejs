@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint src test",
+    "fix-lint": "eslint --fix src test",
     "build-release": "cd native/safe_app && cargo build --release && cd ../../ && cp -f native/target/release/*safe_app* ./src/native",
     "prepublish": "npm run build-release",
     "pretest": "cd native/safe_app && cargo build --features \"use-mock-routing\" && cd ../../ && cp -f native/target/debug/*safe_app* ./src/native",
@@ -23,6 +24,7 @@
   "dependencies": {
     "ffi": "^2.2.0",
     "ref": "^1.3.3",
+    "ref-array": "^1.2.0",
     "ref-struct": "^1.1.0",
     "weak": "^1.0.1"
   },
