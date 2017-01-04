@@ -15,7 +15,7 @@ describe('Smoke test', () => {
   });
 
   xit('should build an alternative if there is a scope', () => {
-     
+
     const first_app = createTestApp();
     const first_url = first_app.auth.genAuthUri({ _public: ['Insert'] });
     // FIXME: This currently segfaults

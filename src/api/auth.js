@@ -28,10 +28,30 @@ const makeAppInfo = helpers.makeAppInfo;
 const makePermissions = helpers.makePermissions;
 const makeFfiString = helpers.makeFfiString;
 
+function urlsafeBase64(str) {
+  return (new Buffer(str))
+          .toString('base64')
+              .replace(/\+/g, '-') // Convert '+' to '-'
+              .replace(/\//g, '_') // Convert '/' to '_'
+              .replace(/=+$/, ''); // Remove ending '='
+}
+
+
 module.exports = class Auth {
   constructor(app) {
     this._app = app;
     this._registered = false;
+    this.setupUri();
+  }
+
+  setupUri() {
+    const appInfo = this._app.appInfo;
+    const schema = "safe" + urlsafeBase64(appInfo.id);
+    lib.registerUriScheme({bundle: appInfo.id,
+                           vendor: appInfo.vendor,
+                           name: appInfo.name,
+                           icon: 'test',
+                           exec: appInfo.customAuthExecPath}, schema);
   }
 
   get registered() {

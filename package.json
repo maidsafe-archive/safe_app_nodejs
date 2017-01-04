@@ -6,9 +6,10 @@
   "scripts": {
     "lint": "eslint src test",
     "fix-lint": "eslint --fix src test",
-    "build-release": "cd native/safe_app && cargo build --release && cd ../../ && cp -f native/target/release/*safe_app* ./src/native",
+    "build-system-uri": "cd system_uri && cargo build --release && cd ../ && cp -f system_uri/target/release/*system_uri* ./src/native",
+    "build-release": "npm run build-system-uri && cd native/safe_app && cargo build --release && cd ../../ && cp -f native/target/release/*safe_app* ./src/native",
     "prepublish": "npm run build-release",
-    "pretest": "cd native/safe_app && cargo build --features \"use-mock-routing\" && cd ../../ && cp -f native/target/debug/*safe_app* ./src/native",
+    "pretest": "npm run build-system-uri && cd native/safe_app && cargo build --features \"use-mock-routing\" && cd ../../ && cp -f native/target/debug/*safe_app* ./src/native",
     "test": "mocha"
   },
   "repository": {
