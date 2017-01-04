@@ -107,12 +107,12 @@ const AuthGranted = Struct({
 
 function makeAppInfo(appInfo) {
   if (appInfo.scope) {
-    const scope = makeFfiString(appInfo.scope);
+    const scope = new Buffer(appInfo.scope);
     return new AppExchangeInfo({
       id: makeFfiString(appInfo.id),
-      scope: scope.ptr,
-      scope_len: scope.len,
-      scope_cap: scope.cap,
+      scope: scope,
+      scope_len: scope.length,
+      scope_cap: scope.length,
       name: makeFfiString(appInfo.name),
       vendor: makeFfiString(appInfo.vendor)
     });

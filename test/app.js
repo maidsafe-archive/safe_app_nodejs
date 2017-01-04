@@ -11,6 +11,17 @@ describe('Smoke test', () => {
   it('should build some authentication url', () => {
     const app = createTestApp();
     const url = app.auth.genAuthUri({ _public: ['Read'] });
-    should(url).be.startWith('safe-auth:');
+    should(url).startWith('safe-auth:');
+  });
+
+  xit('should build an alternative if there is a scope', () => {
+     
+    const first_app = createTestApp();
+    const first_url = first_app.auth.genAuthUri({ _public: ['Insert'] });
+    // FIXME: This currently segfaults
+    const second_app = createTestApp('website');
+    const second_url = second_app.auth.genAuthUri({ _public: ['Insert'] });
+    should(second_url).startWith('safe-auth:');
+    should(second_url).not.equal(url);
   });
 });
