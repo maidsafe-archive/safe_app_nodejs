@@ -68,6 +68,10 @@ module.exports = class Auth {
     }));
   }
 
+  connect_unregistered() {
+    return lib.app_unregistered(this._app);
+  }
+
   loginFromURI(responseUri) {
     return lib.decode_ipc_msg(responseUri).then((resp) => {
       // we can only handle 'granted' request

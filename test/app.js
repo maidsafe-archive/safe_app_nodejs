@@ -8,6 +8,10 @@ const createTestApp = (scope) => new App({ id: 'net.maidsafe.test.javascript.id'
 });
 
 describe('Smoke test', () => {
+  it('unauthorised connection', () => {
+    const app = createTestApp();
+    app.auth.connect_unregistered();
+  });
   it('should build some authentication url', () => {
     const app = createTestApp();
     const url = app.auth.genAuthUri({ _public: ['Read'] });

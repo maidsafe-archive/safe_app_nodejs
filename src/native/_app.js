@@ -1,3 +1,4 @@
+const ffi = require('ffi');
 const ref = require("ref");
 const Struct = require('ref-struct');
 const base = require('./_base');
@@ -20,33 +21,25 @@ module.exports = {
   api: {
     app_unregistered: function(lib, fn) {
       return (function(app) {
-        let ffi_str = makeFfiString(app.appInfo.id);
-        let appCon = new AppPtr();
+        const appCon = ref.alloc(AppPtr);
+        const cb = ffi.Callback("void", [t.i32, t.i32], (err, state) => app._networkStateUpdated(err, state));
 
-        fn.async(ffi_str,
-                 ref.NULL,
-                 ffi.Callback("void", [i32, i32], app._networkStateUpdated.bind(app)),
-                 appCon
-                );
-
-       app._connection = appCon;
-        return Promise.resolved(app);
+        fn(ref.NULL, cb, appCon);
+        
+        app._connection = appCon;
+        return Promise.resolve(app);
       })
     },
     app_registered: function(lib, fn) {
       return (function(app, authGranted) {
-        let ffi_str = makeFfiString(app.appInfo.id);
-        let appCon = new AppPtr();
+        const ffi_str = makeFfiString(app.appInfo.id);
+        const appCon = ref.alloc(AppPtr);
+        const cb = ffi.Callback("void", [t.i32, t.i32], (err, state) => app._networkStateUpdated(err, state));
 
-        fn.async(ffi_str,
-             authGranted,
-                 ref.NULL,
-                 ffi.Callback("void", [i32, i32], app._networkStateUpdated.bind(app)),
-                 appCon
-                );
+        fn(ffi_str, authGranted, ref.NULL, cb, appCon);
 
         app._connection = appCon;
-        return Promise.resolved(app);
+        return Promise.resolve(app);
       });
     }
   }
