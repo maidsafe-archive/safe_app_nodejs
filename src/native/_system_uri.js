@@ -7,8 +7,6 @@ const h = require('./helpers');
 const t = require('./types');
 const makeFfiString = h.makeFfiString;
 
-console.log(t.FfiString)
-
 const ffi = FFI.Library(path.join(dir, 'libsystem_uri'), {
   open: [t.i32, [t.FfiString] ],
   install: [t.i32, [t.FfiString, //bundle
