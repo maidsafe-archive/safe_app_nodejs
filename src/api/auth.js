@@ -23,10 +23,9 @@
 const lib = require('../native/lib');
 const helpers = require('../native/helpers');
 const authTypes = require('../native/_auth').types;
-const ref = require('ref');
+
 const makeAppInfo = helpers.makeAppInfo;
 const makePermissions = helpers.makePermissions;
-const makeFfiString = helpers.makeFfiString;
 
 function urlsafeBase64(str) {
   return (new Buffer(str))
@@ -46,12 +45,12 @@ module.exports = class Auth {
 
   setupUri() {
     const appInfo = this._app.appInfo;
-    const schema = "safe" + urlsafeBase64(appInfo.id);
-    lib.registerUriScheme({bundle: appInfo.id,
-                           vendor: appInfo.vendor,
-                           name: appInfo.name,
-                           icon: 'test',
-                           exec: appInfo.customAuthExecPath}, schema);
+    const schema = `safe${urlsafeBase64(appInfo.id)}`;
+    lib.registerUriScheme({ bundle: appInfo.id,
+      vendor: appInfo.vendor,
+      name: appInfo.name,
+      icon: 'test',
+      exec: appInfo.customAuthExecPath }, schema);
   }
 
   get registered() {
@@ -68,7 +67,7 @@ module.exports = class Auth {
     }));
   }
 
-  connect_unregistered() {
+  connectUnregistered() {
     return lib.app_unregistered(this._app);
   }
 
