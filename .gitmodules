@@ -4,4 +4,5 @@
 	branch = patch_ffi
 [submodule "system_uri"]
 	path = system_uri
-	url = https://github.com/maidsafe/system_uri.git
+	url = https://github.com/gnunicorn/system_uri.git
+	branch = fix-ffi-interface

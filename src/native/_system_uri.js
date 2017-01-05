@@ -12,9 +12,9 @@ console.log(t.FfiString)
 const ffi = FFI.Library(path.join(dir, 'libsystem_uri'), {
   open: [t.i32, [t.FfiString] ],
   install: [t.i32, [t.FfiString, //bundle
-                    t.FfiString, //exec
                     t.FfiString, //vendor
                     t.FfiString, //name
+                    t.FfiString, //exec
                     t.FfiString, //icon
                     t.FfiString, //schemes
                     ] ],
@@ -22,7 +22,7 @@ const ffi = FFI.Library(path.join(dir, 'libsystem_uri'), {
 
 function openUri(str) {
   const ret = ffi.open(makeFfiString(str));
-  if (!ret) {
+  if (ret === -1) {
     throw new Error("Error occured opening " + str + " : " + ret);
   }
 }
@@ -36,8 +36,8 @@ function registerUriScheme(appInfo, schemes) {
   const icon = makeFfiString(appInfo.icon);
   const joinedSchemes = makeFfiString(schemes.join ? schemes.join(',') : schemes);
 
-  const ret = ffi.install(bundle, exec, vendor, name, icon, joinedSchemes);
-  if (!ret) {
+  const ret = ffi.install(bundle, vendor, name, exec, icon, joinedSchemes);
+  if (ret === -1) {
     throw new Error("Error occured installing: " + ret);
   }
 
