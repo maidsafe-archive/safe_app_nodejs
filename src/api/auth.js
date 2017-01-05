@@ -67,6 +67,15 @@ module.exports = class Auth {
     }));
   }
 
+  genContainerAuthUri(containers) {
+    const ctnrs = makePermissions(containers);
+    const appInfo = makeAppInfo(this._app.appInfo);
+    return lib.encode_containers_req(new authTypes.ContainerReq({
+      app: appInfo,
+      containers: ctnrs,
+    }));
+  }
+
   connectUnregistered() {
     return lib.app_unregistered(this._app);
   }

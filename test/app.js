@@ -17,6 +17,11 @@ describe('Smoke test', () => {
     const url = app.auth.genAuthUri({ _public: ['Read'] });
     should(url).startWith('safe-auth:');
   });
+  it('should build some containers url', () => {
+    const app = createTestApp();
+    const url = app.auth.genContainerAuthUri({ private: ['Insert'] });
+    should(url).startWith('safe-auth:');
+  });
 
   xit('should build an alternative if there is a scope', () => {
     const firstApp = createTestApp();

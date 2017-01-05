@@ -170,8 +170,8 @@ module.exports = {
     app_keys_drop: [t.Void, [AppKeys] ],
     access_container_drop: [t.Void, [AccessContInfo] ],
     // // ipc
-    encode_auth_req: [t.i32, [ AuthReq, ref.refType(ref.types.uint32),  t.FfiStringPointer ] ],
-    // encode_containers_req: [t.i32, [ContainerReq, t.u32Ptr, t.FfiString] ],
+    encode_auth_req: [t.i32, [ AuthReq, ref.refType(ref.types.uint32), t.FfiStringPointer ] ],
+    encode_containers_req: [t.i32, [ContainerReq, ref.refType(ref.types.uint32), t.FfiStringPointer] ],
     decode_ipc_msg: [t.Void, [
                       "pointer", //  (msg: FfiString,
                       "pointer", // user_data: *mut c_void,
@@ -186,6 +186,14 @@ module.exports = {
     makePermissions,
   },
   api: {
+    encode_containers_req: function(lib, fn) {
+      return (function(ctnrs) {
+        const reqId = ref.alloc(ref.types.uint32);
+        const b = ref.alloc(t.FfiString);
+        fn(ctnrs, reqId, b);
+        return helpers.read_string(b);
+      });
+    },
     encode_auth_req: function(lib, fn) {
       return (function(auth) {
         const reqId = ref.alloc(ref.types.uint32);
