@@ -1,11 +1,7 @@
-const App = require('../src/app');
 const should = require('should');
-
-const createTestApp = (scope) => new App({ id: 'net.maidsafe.test.javascript.id',
-  name: 'JS Test',
-  vendor: 'MaidSafe Ltd.',
-  scope
-});
+const h = require('./helpers');
+const createTestApp = h.createTestApp;
+const createAuthenticatedTestApp= h.createAuthenticatedTestApp;
 
 describe('Smoke test', () => {
   it('unauthorised connection', () => {
@@ -22,6 +18,11 @@ describe('Smoke test', () => {
     const url = app.auth.genContainerAuthUri({ private: ['Insert'] });
     should(url).startWith('safe-auth:');
   });
+
+  it('creates registered for testing', () => {
+    const app = createAuthenticatedTestApp();
+    should(app.auth.registerd).be.true;
+  })
 
   xit('should build an alternative if there is a scope', () => {
     const firstApp = createTestApp();
