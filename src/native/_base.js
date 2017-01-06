@@ -1,4 +1,6 @@
-const ref = require("ref");
+
+const ffi = require('ffi');
+const ref = require('ref');
 const Struct = require('ref-struct');
 const ArrayType = require('ref-array'); 
 
@@ -9,6 +11,7 @@ const u8Pointer = ref.refType(u8);
 const Void = ref.types.void;
 const VoidPtr = ref.refType(Void);
 const usize = ref.types.size_t;
+const bool = ref.types.bool;
 
 const FfiString = new Struct({
   ptr: u8Pointer,
@@ -16,24 +19,29 @@ const FfiString = new Struct({
   cap: usize 
 });
 
-
 const FfiStringPointer = new ref.refType(FfiString);
 const u8Array = new ArrayType(u8);
+
+const App = Struct({});
+const AppPtr = ref.refType(App);
 
 
 
 module.exports = {
   types: {
-    FfiString: FfiString,
-    FfiStringPointer: FfiStringPointer,
-    VoidPtr: VoidPtr,
-    i32: i32,
-    u64: u64,
-    u8: u8,
-    u8Array: u8Array,
-    u8Pointer: u8Pointer,
-    Void: Void,
-    usize: usize 
+    App,
+    AppPtr,
+    FfiString,
+    FfiStringPointer,
+    VoidPtr,
+    i32,
+    bool,
+    u64,
+    u8,
+    u8Array,
+    u8Pointer,
+    Void,
+    usize 
   },
   functions: {
     ffi_string_create: [Void, [u8Pointer, usize]],
@@ -47,6 +55,29 @@ module.exports = {
     makeFfiString: function(str) {
         const b = new Buffer(str);
         return new FfiString({ptr: b, len: b.length, cap: b.length});
+    },
+    asFFIString: function(str) {
+      return [makeFfiString(str)]
+    },
+    Promisified: function(formatter, rTypes) {
+      return (lib, fn) => (function() {
+        const args = formatter ? formatter.apply(formatter, arguments): Array.prototype.slice.call(arguments);
+        let types = [i32];
+        if (Array.isArray(rTypes)) {
+          types += rTypes;
+        } else if (rTypes) {
+          types.push(rTypes);
+        }
+        return new Promise((resolve, reject) => {
+          args.push(ref.NULL)
+          args.push(ffi.Callback("void", types,
+              function(err) {
+                if(err) return reject(err);
+                resolve.apply(resolve, Array.prototype.slice.call(arguments, 1));
+              }));
+          fn.apply(fn, args);
+        })
+      })
     }
   }
 }

@@ -1,7 +1,8 @@
 const should = require('should');
 const h = require('./helpers');
+
 const createTestApp = h.createTestApp;
-const createAuthenticatedTestApp= h.createAuthenticatedTestApp;
+const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
 describe('Smoke test', () => {
   it('unauthorised connection', () => {
@@ -21,8 +22,8 @@ describe('Smoke test', () => {
 
   it('creates registered for testing', () => {
     const app = createAuthenticatedTestApp();
-    should(app.auth.registerd).be.true;
-  })
+    should(app.auth.registered).be.true();
+  });
 
   xit('should build an alternative if there is a scope', () => {
     const firstApp = createTestApp();
