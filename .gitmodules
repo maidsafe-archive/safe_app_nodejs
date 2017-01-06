@@ -1,7 +1,7 @@
 [submodule "native"]
 	path = native
-	url = https://github.com/nbaksalyar/safe_core.git
-	branch = patch_ffi
+	url = https://github.com/gnunicorn/safe_core.git
+	branch = temp-patches
 [submodule "system_uri"]
 	path = system_uri
 	url = https://github.com/gnunicorn/system_uri.git

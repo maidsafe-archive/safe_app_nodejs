@@ -26,7 +26,7 @@ module.exports = {
 
         fn(ref.NULL, cb, appCon);
         
-        app._connection = appCon;
+        app._connection = appCon.deref();
         return Promise.resolve(app);
       })
     },
@@ -38,7 +38,7 @@ module.exports = {
 
         fn(ffi_str, authGranted, ref.NULL, cb, appCon);
 
-        app._connection = appCon;
+        app._connection = appCon.deref();
         return Promise.resolve(app);
       });
     }
