@@ -9,7 +9,7 @@ function initializeApp(appInfo, opts) {
 
 function fromAuthURI(appInfo, responseUrl) {
   // tbd
-  return autoref(App.fromAuthUri(appInfo, responseUrl));
+  return App.fromAuthUri(appInfo, responseUrl);
 }
 
 module.exports = {

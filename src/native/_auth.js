@@ -1,60 +1,54 @@
 const ffi = require('ffi');
+const Enum = require('enum');
+const ArrayType = require('ref-array');
 const ref = require('ref');
 const Struct = require('ref-struct');
-const base = require('./_base');
+const base = require('./_base.js');
 const t = base.types;
-const make_ffi_string = base.helpers.make_ffi_string;
+const helpers = base.helpers;
+const makeFfiString = base.helpers.makeFfiString;
 
-// FIXME: how do we do enums?
-
-/// Permission action
-// pub enum Permission {
-//     /// Read
-//     Read,
-//     /// Insert
-//     Insert,
-//     /// Update
-//     Update,
-//     /// Delete
-//     Delete,
-//     /// Modify permissions
-//     ManagePermissions,
-// }
+const Permission = new Enum({
+  Read: 0,
+  Insert: 1,
+  Update: 2,
+  Delete: 3,
+  ManagePermissions: 4
+});
 
 const AppExchangeInfo = Struct({
   id: t.FfiString,
-  scope: t.u8,
+  scope: t.u8Pointer,
   scope_len: t.usize,
   scope_cap: t.usize,
   name: t.FfiString,
   vendor: t.FfiString
 });
 
+const PermissionArrayType = new ArrayType(Permission);
+
 const PermissionArray = Struct({
   // /// Pointer to first byte
-  // pub ptr: *mut Permission,
+  ptr: PermissionArrayType,
   // /// Number of elements
   len: t.usize,
-  // pub len: usize,
   // /// Reserved by Rust allocator
-  // pub cap: usize,
   cap: t.usize
-})
+});
 
 const ContainerPermissions = Struct({
   cont_name: t.FfiString,
   access: PermissionArray
-
 });
+
+const ContainersPermissionArrayType = new ArrayType(ContainerPermissions);
 
 const ContainerPermissionsArray = Struct({
   // /// Pointer to first byte
-  // pub ptr: *mut ContainerPermissions,
+  ptr: ContainersPermissionArrayType,
   // /// Number of elements
-  // pub len: usize,
-  // /// Reserved by Rust allocator
-  // pub cap: usize,
   len: t.usize,
+  // /// Reserved by Rust allocator
   cap: t.usize
 });
 
@@ -111,21 +105,57 @@ const AuthGranted = Struct({
   access_container: AccessContInfo
 });
 
+function makeAppInfo(appInfo) {
+  if (appInfo.scope) {
+    const scope = new Buffer(appInfo.scope);
+    return new AppExchangeInfo({
+      id: makeFfiString(appInfo.id),
+      scope: scope,
+      scope_len: scope.length,
+      scope_cap: scope.length,
+      name: makeFfiString(appInfo.name),
+      vendor: makeFfiString(appInfo.vendor)
+    });
+  }
 
+  return new AppExchangeInfo({
+    id: makeFfiString(appInfo.id),
+    scope: ref.NULL,
+    scope_len: 0,
+    scope_cap: 0,
+    name: makeFfiString(appInfo.name),
+    vendor: makeFfiString(appInfo.vendor)
+  });
+}
+
+function makePermissions(perms) {
+  const permissions = new ContainersPermissionArrayType(Object.getOwnPropertyNames(perms).map((key) => {
+    // map to the proper enum
+    const v = new PermissionArrayType(perms[key].map((x) => Permission.get(x)));
+    const permArray = PermissionArray({ ptr: v, len: v.length, cap: v.length });
+    return ContainerPermissions({
+      cont_name: makeFfiString(key),
+      access: permArray
+    });
+  }));
+
+  return ContainerPermissionsArray({
+    ptr: permissions,
+    len: permissions.length,
+    cap: permissions.length
+  });
+}
 
 
 module.exports = {
   types : {
     // request
-    AuthReq: AuthReq,
-    ContainerReq: ContainerReq,
-    PermissionArray: PermissionArray,
-    ContainerPermissions: ContainerPermissions,
-    ContainerPermissionsArray: ContainerPermissionsArray,
+    AuthReq,
+    ContainerReq,
     // response
-    AuthGranted: AuthGranted,
-    AccessContInfo: AccessContInfo,
-    AppKeys: AppKeys
+    AuthGranted,
+    AccessContInfo,
+    AppKeys,
   },
   functions: {
     // request
@@ -140,8 +170,8 @@ module.exports = {
     app_keys_drop: [t.Void, [AppKeys] ],
     access_container_drop: [t.Void, [AccessContInfo] ],
     // // ipc
-    // encode_auth_req: [t.i32, [AuthReq, t.u32Ptr, t.FfiString ] ],
-    // encode_containers_req: [t.i32, [ContainerReq, t.u32Ptr, t.FfiString] ],
+    encode_auth_req: [t.i32, [ AuthReq, ref.refType(ref.types.uint32), t.FfiStringPointer ] ],
+    encode_containers_req: [t.i32, [ContainerReq, ref.refType(ref.types.uint32), t.FfiStringPointer] ],
     decode_ipc_msg: [t.Void, [
                       "pointer", //  (msg: FfiString,
                       "pointer", // user_data: *mut c_void,
@@ -151,38 +181,57 @@ module.exports = {
                       "pointer"  // o_err: extern "C" fn(*mut c_void, i32, u32)
                       ] ]
   },
+  helpers: {
+    makeAppInfo,
+    makePermissions,
+  },
   api: {
+    encode_containers_req: function(lib, fn) {
+      return (function(ctnrs) {
+        const reqId = ref.alloc(ref.types.uint32);
+        const b = ref.alloc(t.FfiString);
+        fn(ctnrs, reqId, b);
+        return helpers.read_string(b);
+      });
+    },
+    encode_auth_req: function(lib, fn) {
+      return (function(auth) {
+        const reqId = ref.alloc(ref.types.uint32);
+        const b = ref.alloc(t.FfiString);
+        fn(auth, reqId, b);
+        return helpers.read_string(b);
+      });
+    },
     decode_ipc_msg: function(lib, fn) {
       return (function(str) {
-        let ffi_str = make_ffi_string(str);
+        let ffi_str = makeFfiString(str);
         return new Promise(function(resolve, reject) {
           fn.async(ffi_str,
                    ref.NULL,
                    ffi.Callback("void", ["u32", FfiAuthGranted], function(e, authGranted) {
-                      resolve("granted", authGranted)
+                      resolve(["granted", authGranted])
                    }),
                    ffi.Callback("void", ["u32"], function(e) {
-                      resolve("containers", e)
+                      resolve(["containers", e])
                    }),
                    ffi.Callback("void", [], function() {
-                      resolve("revoked")
+                      resolve(["revoked"])
                    }),
 
                    ffi.Callback("void", ["u32", "i32"], function(code, msg) {
-                      reject(code, msg)
+                      reject([code, msg])
                    })
               )
         }).done(res => {
-          lib.ffi_string_free(ffi_str);
+          // FIXME: freeing strings fails currently
+          // lib.ffi_string_free(ffi_str);
           res;
         }, reason => {
-          lib.ffi_string_free(ffi_str);
+          // FIXME: freeing strings fails currently
+          // lib.ffi_string_free(ffi_str);
           Promise.reject(reason);
         })
       })
     }
-  // },
-  // helpers : {
-  // 
   }
 }

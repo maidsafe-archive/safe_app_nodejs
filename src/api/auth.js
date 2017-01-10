@@ -20,28 +20,74 @@
 // and limitations relating to use of the SAFE Network Software.
 
 
+const lib = require('../native/lib');
+const helpers = require('../native/helpers');
+const authTypes = require('../native/_auth').types;
+
+const makeAppInfo = helpers.makeAppInfo;
+const makePermissions = helpers.makePermissions;
+
+function urlsafeBase64(str) {
+  return (new Buffer(str))
+          .toString('base64')
+              .replace(/\+/g, '-') // Convert '+' to '-'
+              .replace(/\//g, '_') // Convert '/' to '_'
+              .replace(/=+$/, ''); // Remove ending '='
+}
+
+
 module.exports = class Auth {
   constructor(app) {
     this._app = app;
     this._registered = false;
+    this.setupUri();
+  }
+
+  setupUri() {
+    const appInfo = this._app.appInfo;
+    const schema = `safe${urlsafeBase64(appInfo.id)}`;
+    lib.registerUriScheme({ bundle: appInfo.id,
+      vendor: appInfo.vendor,
+      name: appInfo.name,
+      icon: 'test',
+      exec: appInfo.customAuthExecPath }, schema);
   }
 
   get registered() {
     return this._registered;
   }
 
-  login() {
-    // if we have a cached version, login with it
-    // otherwise go for requestLogin
-    return this.requestLogin();
+  genAuthUri(permissions, opts) {
+    const perm = makePermissions(permissions);
+    const appInfo = makeAppInfo(this._app.appInfo);
+    return lib.encode_auth_req(new authTypes.AuthReq({
+      app: appInfo,
+      app_container: !!(opts && opts.own_container),
+      containers: perm,
+    }));
   }
 
-  // requestLogin() {
+  genContainerAuthUri(containers) {
+    const ctnrs = makePermissions(containers);
+    const appInfo = makeAppInfo(this._app.appInfo);
+    return lib.encode_containers_req(new authTypes.ContainerReq({
+      app: appInfo,
+      containers: ctnrs,
+    }));
+  }
 
-  // }
+  connectUnregistered() {
+    return lib.app_unregistered(this._app);
+  }
 
-  // loginFromURI(responseUri) {
+  loginFromURI(responseUri) {
+    return lib.decode_ipc_msg(responseUri).then((resp) => {
+      // we can only handle 'granted' request
+      if (resp[0] !== 'granted') return Promise.reject(resp);
 
-
-  // }
+      const authGranted = resp[1];
+      this._registered = true;
+      return lib.app_registered(this._app, authGranted);
+    });
+  }
 };
