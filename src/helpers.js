@@ -1,14 +1,14 @@
 const weak = require('weak');
 
 class NetworkObject {
-  constructor(con, ref) {
-    this._con = con;
+  constructor(app, ref) {
+    this.app = app;
     this._ref = ref;
   }
 
   __cleanup__() {
     if (this._ref && this._cleanup) {
-      this._cleanup(this._con, this._ref);
+      this._cleanup(this.app, this._ref);
     }
   }
 

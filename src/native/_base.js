@@ -64,12 +64,12 @@ module.exports = {
         const args = formatter ? formatter.apply(formatter, arguments): Array.prototype.slice.call(arguments);
         let types = [i32];
         if (Array.isArray(rTypes)) {
-          types += rTypes;
+          types = types.concat(rTypes);
         } else if (rTypes) {
           types.push(rTypes);
         }
         return new Promise((resolve, reject) => {
-          args.push(ref.NULL)
+          args.push(ref.NULL);
           args.push(ffi.Callback("void", types,
               function(err) {
                 if(err) return reject(err);
