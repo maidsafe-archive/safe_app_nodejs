@@ -2,13 +2,13 @@ const ffi = require('ffi');
 const ref = require("ref");
 const Struct = require('ref-struct');
 const base = require('./_base');
+const CipherOptHandle = require('./_cipher_opt').types.CipherOptHandle;
 const t = base.types;
 const h = base.helpers;
 const makeFfiString = base.helpers.makeFfiString;
 
 const SEWriteHandle = ref.refType(t.Void); 
 const SEReadHandle = ref.refType(t.Void);
-const CipherOptHandle = ref.refType(t.Void);
 
 module.exports = {
   types: {
@@ -17,8 +17,8 @@ module.exports = {
   },
   functions: {
     idata_new_self_encryptor: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
-    idata_write_to_self_encryptor: [t.Void, [t.AppPtr, SEWriteHandle, t.u8, t.usize, 'pointer', 'pointer']],
-    idata_close_self_encryptor: [t.Void, [t.AppPtr, SEWriteHandle, 'pointer', 'pointer']],
+    idata_write_to_self_encryptor: [t.Void, [t.AppPtr, SEWriteHandle, 'pointer', t.usize, 'pointer', 'pointer']],
+    idata_close_self_encryptor: [t.Void, [t.AppPtr, SEWriteHandle, CipherOptHandle, 'pointer', 'pointer']],
     idata_fetch_self_encryptor: [t.Void, [t.AppPtr, t.u8Array, 'pointer', 'pointer']],
     idata_size: [t.Void, [t.AppPtr, SEReadHandle, 'pointer', 'pointer']],
     idata_read_from_self_encryptor: [t.Void, [t.AppPtr, SEReadHandle, t.u64, t.u64, 'pointer', 'pointer']],
@@ -31,7 +31,7 @@ module.exports = {
       let b = new Buffer(str);
       return [appPtr, handle, b, b.length]
     }, null),
-    idata_close_self_encryptor: h.Promisified(null, [t.u8Array]),
+    idata_close_self_encryptor: h.Promisified(null, [t.u8]),
     idata_fetch_self_encryptor: h.Promisified(null, [SEReadHandle]),
     idata_size: h.Promisified(null, [t.u64]),
     idata_read_from_self_encryptor: h.Promisified(null, [t.u8, t.usize, t.usize]),

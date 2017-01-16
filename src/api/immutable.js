@@ -32,7 +32,8 @@ class ImmutableDataWriter extends helpers.NetworkObject {
   }
 
   close() {
-    return lib.idata_close_self_encryptor(this.app.connection, this._ref);
+    return this.app.cipherOpt.new_plain().then(opts =>
+      lib.idata_close_self_encryptor(this.app.connection, this._ref, opts._ref));
   }
 
   static _clean(app, ref) {
