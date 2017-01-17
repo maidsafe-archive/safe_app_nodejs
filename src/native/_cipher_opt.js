@@ -5,7 +5,7 @@ const base = require('./_base');
 const t = base.types;
 const h = base.helpers;
 
-const CipherOptHandle = ref.refType(t.Void);
+const CipherOptHandle = t.ObjectHandle;
 
 module.exports = {
   types: {
@@ -16,7 +16,7 @@ module.exports = {
     cipher_opt_free: [t.Void, [t.AppPtr, CipherOptHandle, 'pointer', 'pointer']]
   },
   api: {
-    cipher_opt_new_plaintext: h.Promisified(null, [CipherOptHandle]),
+    cipher_opt_new_plaintext: h.Promisified(null, CipherOptHandle),
     cipher_opt_free: h.Promisified(null, [])
   }
 }
