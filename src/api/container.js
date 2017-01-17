@@ -3,7 +3,7 @@ const lib = require('../native/lib');
 
 class Container extends helpers.NetworkObject {
   getAddressInfo() {
-    return lib.mdata_info_extract_name_and_type_tag(this.app.connection, this._ref);
+    return lib.mdata_info_extract_name_and_type_tag(this.app.connection, this.ref);
   }
   static _clean(app, ref) {
     // FIXME: doesn't exist in FFI/rust at the moment

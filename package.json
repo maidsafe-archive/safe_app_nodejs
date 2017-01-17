@@ -10,7 +10,7 @@
     "build-release": "npm run build-system-uri && cd native/safe_app && cargo build --release && cd ../../ && cp -f native/target/release/*safe_app* ./src/native",
     "prepublish": "npm run build-release",
     "pretest": "npm run build-system-uri && cd native/safe_app && cargo build --features \"use-mock-routing\" && cd ../../ && cp -f native/target/debug/*safe_app* ./src/native",
-    "test": "mocha"
+    "test": "RUST_BACKTRACE=1 mocha"
   },
   "repository": {
     "type": "git",
