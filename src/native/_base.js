@@ -76,11 +76,13 @@ module.exports = {
           args.push(ref.NULL);
           args.push(ffi.Callback("void", types,
               function(uctx, err) {
+                console.log("received", arguments);
                 if(err !== 0) return reject(makeFfiError(err));
                 // only one item or more?
                 let res = types.length === 3 ? arguments[2] : Array.prototype.slice.call(arguments, 2);
                 resolve(res);
               }));
+          console.log("calling", args);
           fn.apply(fn, args);
         })
       })

@@ -28,7 +28,7 @@ module.exports = {
   api: {
     idata_new_self_encryptor: h.Promisified(null, [SEWriteHandle]),
     idata_write_to_self_encryptor: h.Promisified((appPtr, handle, str) => {
-      let b = new Buffer(str);
+      let b = Buffer.isBuffer(str) ? str : Buffer.from(str);
       return [appPtr, handle, b, b.length]
     }, null),
     idata_close_self_encryptor: h.Promisified(null, t.XOR_NAME),

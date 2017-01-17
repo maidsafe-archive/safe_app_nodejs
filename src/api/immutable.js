@@ -5,15 +5,15 @@ const lib = require('../native/lib');
 class ImmutableDataReader extends helpers.NetworkObject {
 
   read() { // -> Promise
-    return lib.idata_read_from_self_encryptor(this.app.connection, this._ref);
+    return lib.idata_read_from_self_encryptor(this.app.connection, this.ref);
   }
 
   size() { // -> Promise
-    return lib.idata_size(this.app.connection, this._ref);
+    return lib.idata_size(this.app.connection, this.ref);
   }
 
   close() {
-    return lib.idata_close_self_encryptor(this.app.connection, this._ref);
+    return lib.idata_close_self_encryptor(this.app.connection, this.ref);
   }
 
   static _clean(app, ref) {
@@ -24,16 +24,21 @@ class ImmutableDataReader extends helpers.NetworkObject {
 
 class ImmutableDataWriter extends helpers.NetworkObject {
   write(string) {
-    return lib.idata_write_to_self_encryptor(this.app.connection, this._ref, string);
+    return lib.idata_write_to_self_encryptor(this.app.connection, this.ref, string);
   }
 
   size() { // -> Promise
-    return lib.idata_size(this.app.connection, this._ref);
+    return lib.idata_size(this.app.connection, this.ref);
   }
 
   close() {
-    return this.app.cipherOpt.new_plain().then(opts =>
-      lib.idata_close_self_encryptor(this.app.connection, this._ref, opts._ref));
+    return this.app.cipherOpt.new_plain().then(opt =>{
+      console.log(opt);
+          return lib.idata_close_self_encryptor(this.app.connection, this.ref, opt.ref)});
+  }
+
+  save() {
+    return this.close();
   }
 
   static _clean(app, ref) {
