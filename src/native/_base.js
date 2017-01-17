@@ -1,4 +1,4 @@
-
+const makeFfiError = require('./_error.js');
 const ffi = require('ffi');
 const ref = require('ref');
 const Struct = require('ref-struct');
@@ -20,7 +20,8 @@ const FfiString = new Struct({
 });
 
 const FfiStringPointer = new ref.refType(FfiString);
-const u8Array = new ArrayType(u8);
+const u8Array = ArrayType(u8);
+const XOR_NAME = ArrayType(u8, 32); // FIXME: use exported const instead
 
 const App = Struct({});
 const AppPtr = ref.refType(App);
@@ -33,6 +34,7 @@ module.exports = {
     AppPtr,
     FfiString,
     FfiStringPointer,
+    XOR_NAME,
     VoidPtr,
     i32,
     bool,
@@ -62,7 +64,7 @@ module.exports = {
     Promisified: function(formatter, rTypes) {
       return (lib, fn) => (function() {
         const args = formatter ? formatter.apply(formatter, arguments): Array.prototype.slice.call(arguments);
-        let types = [i32];
+        let types = ['pointer', i32]; // user_context, error
         if (Array.isArray(rTypes)) {
           types = types.concat(rTypes);
         } else if (rTypes) {
@@ -71,9 +73,11 @@ module.exports = {
         return new Promise((resolve, reject) => {
           args.push(ref.NULL);
           args.push(ffi.Callback("void", types,
-              function(err) {
-                if(err) return reject(err);
-                resolve.apply(resolve, Array.prototype.slice.call(arguments, 1));
+              function(uctx, err) {
+                if(err !== 0) return reject(makeFfiError(err));
+                // only one item or more?
+                let res = types.length === 3 ? arguments[2] : Array.prototype.slice.call(arguments, 2);
+                resolve(res);
               }));
           fn.apply(fn, args);
         })
