@@ -35,12 +35,48 @@ function urlsafeBase64(str) {
               .replace(/=+$/, ''); // Remove ending '='
 }
 
+class SignKey {
+  constructor(app, ref){
+    this.app = app;
+    this.ref = ref;
+  }
 
-module.exports = class Auth {
+  getRaw()  {
+    return Promise.reject(new Error("Not Implemented"))
+  }
+}
+
+class PubEncKey {
+  constructor(app, ref){
+    this.app = app;
+    this.ref = ref;
+  }
+
+  getRaw()  {
+    return Promise.reject(new Error("Not Implemented"))
+  }
+
+}
+
+
+class AuthProvider {
   constructor(app) {
     this._app = app;
     this._registered = false;
     this.setupUri();
+  }
+
+  refreshContainerAccess() {
+    return Promise.reject(new Error("Not Implemented"))
+  }
+
+  canAccessContainer(name, permissions) {
+    return Promise.reject(new Error("Not Implemented"))
+  }
+
+  getAccessContainerInfo(name) {
+    // -> return app.mutuableData.MutuableData
+    return Promise.reject(new Error("Not Implemented"))
   }
 
   setupUri() {
@@ -112,4 +148,30 @@ module.exports = class Auth {
         this.refreshContainerAccess().then(() => app));
     });
   }
+
+  // app key management
+  getPubSignKey() {
+    // -> SignKey
+    return Promise.reject(new Error("Not Implemented"))
+  }
+
+  getPubEncKey() {
+    // -> EncKey
+    return Promise.reject(new Error("Not Implemented"))
+  }
+
+  getSignKeyFromRaw(raw) {
+    // -> SignKey
+    return Promise.reject(new Error("Not Implemented"))
+  }
+
+  getEncKeyKeyFromRaw(raw) {
+    // -> EncKey
+    return Promise.reject(new Error("Not Implemented"))
+  }
+
+
 };
+
+
+module.exports = AuthProvider;
