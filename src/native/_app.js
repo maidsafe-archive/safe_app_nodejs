@@ -9,6 +9,7 @@ module.exports = {
   functions: {
     app_unregistered: [t.i32 ,['pointer', 'pointer', t.AppPtr]],
     app_registered: [t.i32 , [t.FfiString, 'pointer', 'pointer', t.AppPtr]],
+    app_free: [t.Void, [t.AppPtr]]
   },
   api: {
     app_unregistered: function(lib, fn) {
@@ -33,6 +34,12 @@ module.exports = {
         app._connection = appCon.deref();
         return Promise.resolve(app);
       });
+    },
+    app_free: function (lib, fn) {
+      return (function (app) {
+        fn(app);
+        return Promise.resolve();
+      });
     }
   }
-}
+};

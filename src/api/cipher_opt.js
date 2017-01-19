@@ -15,6 +15,12 @@ class CipherOptProvider {
   new_plain() {
     return lib.cipher_opt_new_plaintext(this.app.connection).then(c => new CipherOpt(this.app, c));
   }
+  new_symmetric() {
+    return lib.cipher_opt_new_symmetric(this.app.connection).then(c => new CipherOpt(this.app, c));
+  }
+  new_asymmetric(encryptKeyHandle) {
+    return lib.cipher_opt_new_symmetric(this.app.connection, encryptKeyHandle).then(c => new CipherOpt(this.app, c));
+  }
 }
 
 module.exports = CipherOptProvider;

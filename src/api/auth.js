@@ -112,4 +112,8 @@ module.exports = class Auth {
         this.refreshContainerAccess().then(() => app));
     });
   }
+
+  freeAppHandle(app) {
+    return lib.app_free(app);
+  }
 };

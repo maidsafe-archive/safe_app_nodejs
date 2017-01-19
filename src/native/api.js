@@ -6,5 +6,6 @@ module.exports = [
   require('./_cipher_opt'),
   require('./_immutable'),
   require('./_container'),
+  require('./_nfs'),
   isInTest ? require("./_testing") : {} // we have some testing helpers
 ];
