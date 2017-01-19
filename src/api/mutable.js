@@ -4,51 +4,51 @@ const lib = require('../native/lib');
 class PermissionsSet extends h.NetworkObject {
 
   setAllow(action) {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
-  setDeny(action){
-    return Promise.reject(new Error("Not Implemented"))
+  setDeny(action) {
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   clear() {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 }
 
 class Permissions {
   constructor(app, ref, mdata) {
     this.app = app;
-    this.mdata = mdata
+    this.mdata = mdata;
     this.ref = ref;
   }
 
   getPermissionSet(signKey) {
     // -> PermissionsSet
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   delPermissionsSet(signKey) {
     // -> Bool
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   newPermissionSet() {
     // -> PermissionsSet
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   insertPermissionSet(signKey, PermissionSet) {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   setPermissionSet(signKey, PermissionSet) {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
 }
@@ -56,45 +56,45 @@ class Permissions {
 class EntryMutationTransaction extends h.NetworkObject {
 
   insert(keyName, value) {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   delete(keyName) {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   update(keyName) {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 }
 
 class Entries extends h.NetworkObject {
 
   len() {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   get(keyName) {
-    return Promise.reject(new Error("Not Implemented")) 
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   insert(keyName, value) {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   mutate() {
     // -> EntryMutationTransaction
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   apply(mutations) {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 }
 
@@ -102,13 +102,13 @@ class Entries extends h.NetworkObject {
 class Keys extends h.NetworkObject {
 
   len() {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
 }
@@ -116,30 +116,29 @@ class Keys extends h.NetworkObject {
 class Values extends h.NetworkObject {
 
   len() {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 }
 
 class MutableData extends h.NetworkObject {
   constructor(app, mdataRef) {
-    super(app, mdataRef)
+    super(app, mdataRef);
     this.entriesRef = null;
     this.permissionsRef = null;
   }
 
-
   encryptKey(key) {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   encryptValue(value) {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   getNameAndTag() {
@@ -147,15 +146,15 @@ class MutableData extends h.NetworkObject {
   }
 
   getVersion() {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   get(key) {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   put() {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   getEntries() {
@@ -163,33 +162,33 @@ class MutableData extends h.NetworkObject {
     // storing local reference
 
     // -> Entries
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   getKeys() {
     // -> Keys
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   getValues() {
     // -> Values
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   getPermissions() {
     // Get or Creates a new set
     // storing local reference
     // -> Permissions
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   getUserPermissions() {
     // -> PermissionSet
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   changeOwner(otherSignKey) {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   serialise() {
@@ -225,12 +224,12 @@ class MutableDataProvider {
 
   newPermissions() {
     // -> Permissions
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   newMutation() {
     // -> EntryMutationTransaction
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   fromSerial(serial) {

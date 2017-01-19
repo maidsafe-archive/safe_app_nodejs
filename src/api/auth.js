@@ -36,24 +36,24 @@ function urlsafeBase64(str) {
 }
 
 class SignKey {
-  constructor(app, ref){
+  constructor(app, ref) {
     this.app = app;
     this.ref = ref;
   }
 
-  getRaw()  {
-    return Promise.reject(new Error("Not Implemented"))
+  getRaw() {
+    return Promise.reject(new Error('Not Implemented'));
   }
 }
 
 class PubEncKey {
-  constructor(app, ref){
+  constructor(app, ref) {
     this.app = app;
     this.ref = ref;
   }
 
-  getRaw()  {
-    return Promise.reject(new Error("Not Implemented"))
+  getRaw() {
+    return Promise.reject(new Error('Not Implemented'));
   }
 
 }
@@ -67,16 +67,16 @@ class AuthProvider {
   }
 
   refreshContainerAccess() {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   canAccessContainer(name, permissions) {
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   getAccessContainerInfo(name) {
     // -> return app.mutuableData.MutuableData
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   setupUri() {
@@ -152,26 +152,26 @@ class AuthProvider {
   // app key management
   getPubSignKey() {
     // -> SignKey
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   getPubEncKey() {
     // -> EncKey
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   getSignKeyFromRaw(raw) {
     // -> SignKey
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   getEncKeyKeyFromRaw(raw) {
     // -> EncKey
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
 
-};
+}
 
 
 module.exports = AuthProvider;

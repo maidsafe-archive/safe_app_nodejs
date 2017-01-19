@@ -13,20 +13,20 @@ class CipherOptProvider {
     this.app = app;
   }
 
-  newPlainText(){
+  newPlainText() {
     return lib.cipher_opt_new_plaintext(this.app.connection)
           .then((c) => new CipherOpt(this.app, c));
   }
 
   newSymmetric() {
     // -> CipherOpt
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   newAsymmetric(otherKey) {
     // -> CipherOpt
-    return Promise.reject(new Error("Not Implemented"))
+    return Promise.reject(new Error('Not Implemented'));
   }
 
 }
-module.exports = CipherOptProvider
+module.exports = CipherOptProvider;
