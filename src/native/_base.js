@@ -20,13 +20,14 @@ const FfiString = new Struct({
 });
 
 const FfiStringPointer = new ref.refType(FfiString);
+
 const u8Array = new ArrayType(u8);
 const XOR_NAME = new ArrayType(u8, 32); // FIXME: use exported const instead
+const PUBLICKEYBYTES = ref.refType(ArrayType(usize, 32)); // FIXME: use exported const instead
 
 const ObjectHandle = u64;
 const App = Struct({});
 const AppPtr = ref.refType(App);
-
 
 
 module.exports = {
@@ -37,6 +38,7 @@ module.exports = {
     FfiStringPointer,
     ObjectHandle,
     XOR_NAME,
+    PUBLICKEYBYTES,
     VoidPtr,
     i32,
     bool,

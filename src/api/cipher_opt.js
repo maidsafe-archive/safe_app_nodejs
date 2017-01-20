@@ -12,7 +12,6 @@ class CipherOptProvider {
   constructor(app) {
     this.app = app;
   }
-
   newPlainText() {
     return lib.cipher_opt_new_plaintext(this.app.connection)
           .then((c) => new CipherOpt(this.app, c));
@@ -20,12 +19,12 @@ class CipherOptProvider {
 
   newSymmetric() {
     // -> CipherOpt
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.cipher_opt_new_symmetric(this.app.connection).then(c => new CipherOpt(this.app, c));
   }
 
   newAsymmetric(otherKey) {
     // -> CipherOpt
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.cipher_opt_new_symmetric(this.app.connection, encryptKeyHandle).then(c => new CipherOpt(this.app, c));
   }
 
 }
