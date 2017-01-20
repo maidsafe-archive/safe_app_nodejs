@@ -2,9 +2,6 @@ const helpers = require('../helpers');
 const lib = require('../native/lib');
 
 class Nfs extends helpers.NetworkObject {
-  static _clean() {
-  }
-
   free(file) {
     return lib.file_free(file);
   }

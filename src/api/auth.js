@@ -42,7 +42,11 @@ class SignKey {
   }
 
   getRaw() {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.sign_key_get(this.app.connection, this.ref);
+  }
+
+  free() {
+    return lib.sign_key_free(this.app.connection, this.ref);
   }
 }
 
@@ -53,7 +57,11 @@ class PubEncKey {
   }
 
   getRaw() {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.enc_key_get(this.app.connection, this.ref);
+  }
+
+  free() {
+    return lib.enc_key_free(this.app.connection, this.ref);
   }
 
 }
@@ -91,6 +99,10 @@ class AuthProvider {
 
   get registered() {
     return this._registered;
+  }
+
+  free() {
+    return lib.app_free(this._app.connection);
   }
 
   genAuthUri(permissions, opts) {
@@ -151,26 +163,20 @@ class AuthProvider {
 
   // app key management
   getPubSignKey() {
-    // -> SignKey
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.app_pub_sign_key(this.app.connection).then(c => new SignKey(this.app, c));
   }
 
   getPubEncKey() {
-    // -> EncKey
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.app_pub_enc_key(this.app.connection).then(c => new PubEncKey(this.app, c));
   }
 
   getSignKeyFromRaw(raw) {
-    // -> SignKey
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.sign_key_new(this.app.connection, raw).then(c => new SignKey(this.app, c));
   }
 
   getEncKeyKeyFromRaw(raw) {
-    // -> EncKey
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.enc_key_new(this.app.connection, raw).then(c => new PubEncKey(this.app, c));
   }
-
-
 }
 
 
