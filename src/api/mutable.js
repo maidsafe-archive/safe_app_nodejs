@@ -140,11 +140,12 @@ class Entries extends h.NetworkObject {
 
   mutate() {
     // -> EntryMutationTransaction
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_entry_actions_new(this.app.connection)
+            .then(r => h.autoref(new EntryMutationTransaction(this.app, r)))
   }
 
   apply(mutations) {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_mutate_entries(this.app.connection, this.ref, mutations)
   }
 }
 
