@@ -4,7 +4,9 @@ const ArrayType = require('ref-array');
 const ref = require('ref');
 const Struct = require('ref-struct');
 const base = require('./_base.js');
+
 const t = base.types;
+const AppPtr = t.AppPtr;
 const helpers = base.helpers;
 const makeFfiString = base.helpers.makeFfiString;
 
@@ -146,7 +148,6 @@ function makePermissions(perms) {
   });
 }
 
-
 module.exports = {
   types : {
     // request
@@ -179,13 +180,28 @@ module.exports = {
                       "pointer", // o_containers: extern "C" fn(*mut c_void, u32),
                       "pointer", // o_revoked: extern "C" fn(*mut c_void),
                       "pointer"  // o_err: extern "C" fn(*mut c_void, i32, u32)
-                      ] ]
+                      ] ],
+    // access container:
+    // app: *const App, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32)
+    access_container_refresh_access_info: [t.Void, [AppPtr, "pointer", "pointer"]],
+    // app: *const App, name: FfiString, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32, MDataInfoHandle)
+    access_container_get_container_mdata_info: [t.Void, [AppPtr, t.FfiString, "pointer", "pointer"]],
+    // (app: *const App, name: FfiString, permission: Permission, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32, bool)) {
+    access_container_is_permitted: [t.Void, [AppPtr, t.FfiString, ContainerPermissionsArray, "pointer", "pointer"]],
   },
   helpers: {
     makeAppInfo,
     makePermissions,
   },
   api: {
+    access_container_refresh_access_info: helpers.Promisified(),
+    access_container_get_container_mdata_info: helpers.Promisified((app, str) =>
+      [app, helpers.makeFfiString(str)], 'pointer'),
+    access_container_is_permitted: helpers.Promisified((app, str, perms) => {
+      const v = new PermissionArrayType((perms, ['Read']).map((x) => Permission.get(x)));
+      const permArray = PermissionArray({ ptr: v, len: v.length, cap: v.length });
+      return [app, helpers.makeFfiString(str), permArray]
+    }, t.bool),
     encode_containers_req: function(lib, fn) {
       return (function(ctnrs) {
         const reqId = ref.alloc(ref.types.uint32);

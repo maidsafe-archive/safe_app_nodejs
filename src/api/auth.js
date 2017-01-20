@@ -35,12 +35,48 @@ function urlsafeBase64(str) {
               .replace(/=+$/, ''); // Remove ending '='
 }
 
+class SignKey {
+  constructor(app, ref) {
+    this.app = app;
+    this.ref = ref;
+  }
 
-module.exports = class Auth {
+  getRaw() {
+    return Promise.reject(new Error('Not Implemented'));
+  }
+}
+
+class PubEncKey {
+  constructor(app, ref) {
+    this.app = app;
+    this.ref = ref;
+  }
+
+  getRaw() {
+    return Promise.reject(new Error('Not Implemented'));
+  }
+
+}
+
+
+class AuthProvider {
   constructor(app) {
     this._app = app;
     this._registered = false;
     this.setupUri();
+  }
+
+  refreshContainerAccess() {
+    return Promise.reject(new Error('Not Implemented'));
+  }
+
+  canAccessContainer(name, permissions) {
+    return Promise.reject(new Error('Not Implemented'));
+  }
+
+  getAccessContainerInfo(name) {
+    // -> return app.mutuableData.MutuableData
+    return Promise.reject(new Error('Not Implemented'));
   }
 
   setupUri() {
@@ -80,6 +116,27 @@ module.exports = class Auth {
     return lib.app_unregistered(this._app);
   }
 
+  refreshContainerAccess() {
+    return lib.access_container_refresh_access_info(this._app.connection);
+  }
+
+  canAccessContainer(name, permissions) {
+    let perms = ['READ'];
+    if (permissions) {
+      if (typeof permissions === 'string') {
+        perms = [permissions];
+      } else {
+        perms = permissions;
+      }
+    }
+    return lib.access_container_is_permitted(this._app.connection, name, perms);
+  }
+
+  getAccessContainerInfo(name) {
+    return lib.access_container_is_permitted(this._app.connection, name)
+      .then((data) => this._app.container.wrapContainerInfo(data));
+  }
+
   loginFromURI(responseUri) {
     return lib.decode_ipc_msg(responseUri).then((resp) => {
       // we can only handle 'granted' request
@@ -87,7 +144,34 @@ module.exports = class Auth {
 
       const authGranted = resp[1];
       this._registered = true;
-      return lib.app_registered(this._app, authGranted);
+      return lib.app_registered(this._app, authGranted).then((app) =>
+        this.refreshContainerAccess().then(() => app));
     });
   }
-};
+
+  // app key management
+  getPubSignKey() {
+    // -> SignKey
+    return Promise.reject(new Error('Not Implemented'));
+  }
+
+  getPubEncKey() {
+    // -> EncKey
+    return Promise.reject(new Error('Not Implemented'));
+  }
+
+  getSignKeyFromRaw(raw) {
+    // -> SignKey
+    return Promise.reject(new Error('Not Implemented'));
+  }
+
+  getEncKeyKeyFromRaw(raw) {
+    // -> EncKey
+    return Promise.reject(new Error('Not Implemented'));
+  }
+
+
+}
+
+
+module.exports = AuthProvider;

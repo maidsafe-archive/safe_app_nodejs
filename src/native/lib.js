@@ -19,8 +19,11 @@ api.forEach(function(mod){
 
 const ffi = FFI.Library(path.join(dir, 'libsafe_app'), ffiFunctions);
 
-for (key in mappings) {
-  ffi[key] = mappings[key](ffi, ffi[key]);
+for (const key in mappings) {
+  ffi[key].fn_name = key;
+  let fn = mappings[key](ffi, ffi[key]);
+  fn.fn_name = "[mapped]" + key;
+  ffi[key] = fn;
 }
 
 // FIXME: As long as `safe-app` doesn't expose system uri itself, we'll
