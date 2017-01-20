@@ -28,7 +28,7 @@ class ImmutableDataReader extends helpers.NetworkObject {
     return lib.idata_close_self_encryptor(this.app.connection, this.ref);
   }
 
-  static _clean(app, ref) {
+  static free(app, ref) {
     lib.idata_self_encryptor_reader_free(app.connection, ref);
   }
 
@@ -54,7 +54,7 @@ class ImmutableDataWriter extends helpers.NetworkObject {
     return this.close();
   }
 
-  static _clean(app, ref) {
+  static free(app, ref) {
     lib.idata_self_encryptor_writer_free(app.connection, ref);
   }
 

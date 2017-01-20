@@ -19,6 +19,10 @@ class SAFEApp extends EventEmitter {
     return this._connection;
   }
 
+  get app() {
+    return this.connection
+  }
+
   get networkState() {
     return this._networkState;
   }
@@ -45,12 +49,11 @@ class SAFEApp extends EventEmitter {
     this._networkState = newState;
   }
 
-  __cleanup__() {
-    // let's dereference everything
-    this.container = null;
-    this.immutableData = null;
-    this.mutableData = null;
-
+  static free(app) {
+    // we are freed last, anything you do after this
+    // will probably fail.
+    lib.free_app(app)
+    
     // in the hopes, this all cleans up,
     // before we do in a matter of seconds from now
   }

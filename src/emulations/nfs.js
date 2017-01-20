@@ -2,8 +2,8 @@ const h = require('../helpers');
 const lib = require('../native/lib');
 
 class Nfs extends h.NetworkObject {
-  free(file) {
-    return lib.file_free(file);
+  static free(app, file) {
+    return lib.file_free(app.connection file);
   }
 }
 

@@ -21,11 +21,12 @@
 
 
 const lib = require('../native/lib');
-const helpers = require('../native/helpers');
+const nativeH = require('../native/helpers');
+const h = require('../helpers');
 const authTypes = require('../native/_auth').types;
 
-const makeAppInfo = helpers.makeAppInfo;
-const makePermissions = helpers.makePermissions;
+const makeAppInfo = nativeH.makeAppInfo;
+const makePermissions = nativeH.makePermissions;
 
 function urlsafeBase64(str) {
   return (new Buffer(str))
@@ -35,33 +36,25 @@ function urlsafeBase64(str) {
               .replace(/=+$/, ''); // Remove ending '='
 }
 
-class SignKey {
-  constructor(app, ref) {
-    this.app = app;
-    this.ref = ref;
-  }
+class SignKey extends h.NetworkObject {
 
   getRaw() {
     return lib.sign_key_get(this.app.connection, this.ref);
   }
 
-  free() {
-    return lib.sign_key_free(this.app.connection, this.ref);
+  static free(app, ref) {
+    return lib.sign_key_free(app.connection, ref);
   }
 }
 
-class PubEncKey {
-  constructor(app, ref) {
-    this.app = app;
-    this.ref = ref;
-  }
+class PubEncKey extends h.NetworkObject {
 
   getRaw() {
     return lib.enc_key_get(this.app.connection, this.ref);
   }
 
-  free() {
-    return lib.enc_key_free(this.app.connection, this.ref);
+  static free(app, ref) {
+    return lib.enc_key_free(app.connection, ref);
   }
 
 }
@@ -69,7 +62,7 @@ class PubEncKey {
 
 class AuthProvider {
   constructor(app) {
-    this._app = app;
+    this.app = app;
     this._registered = false;
     this.setupUri();
   }
@@ -88,7 +81,7 @@ class AuthProvider {
   }
 
   setupUri() {
-    const appInfo = this._app.appInfo;
+    const appInfo = this.app.appInfo;
     const schema = `safe${urlsafeBase64(appInfo.id)}`;
     lib.registerUriScheme({ bundle: appInfo.id,
       vendor: appInfo.vendor,
@@ -101,13 +94,9 @@ class AuthProvider {
     return this._registered;
   }
 
-  free() {
-    return lib.app_free(this._app.connection);
-  }
-
   genAuthUri(permissions, opts) {
     const perm = makePermissions(permissions);
-    const appInfo = makeAppInfo(this._app.appInfo);
+    const appInfo = makeAppInfo(this.app.appInfo);
     return lib.encode_auth_req(new authTypes.AuthReq({
       app: appInfo,
       app_container: !!(opts && opts.own_container),
@@ -117,7 +106,7 @@ class AuthProvider {
 
   genContainerAuthUri(containers) {
     const ctnrs = makePermissions(containers);
-    const appInfo = makeAppInfo(this._app.appInfo);
+    const appInfo = makeAppInfo(this.app.appInfo);
     return lib.encode_containers_req(new authTypes.ContainerReq({
       app: appInfo,
       containers: ctnrs,
@@ -125,11 +114,11 @@ class AuthProvider {
   }
 
   connectUnregistered() {
-    return lib.app_unregistered(this._app);
+    return lib.app_unregistered(this.app);
   }
 
   refreshContainerAccess() {
-    return lib.access_container_refresh_access_info(this._app.connection);
+    return lib.access_container_refresh_access_info(this.app.connection);
   }
 
   canAccessContainer(name, permissions) {
@@ -141,12 +130,12 @@ class AuthProvider {
         perms = permissions;
       }
     }
-    return lib.access_container_is_permitted(this._app.connection, name, perms);
+    return lib.access_container_is_permitted(this.app.connection, name, perms);
   }
 
   getAccessContainerInfo(name) {
-    return lib.access_container_is_permitted(this._app.connection, name)
-      .then((data) => this._app.container.wrapContainerInfo(data));
+    return lib.access_container_is_permitted(this.app.connection, name)
+      .then((data) => this.app.container.wrapContainerInfo(data));
   }
 
   loginFromURI(responseUri) {
@@ -156,26 +145,26 @@ class AuthProvider {
 
       const authGranted = resp[1];
       this._registered = true;
-      return lib.app_registered(this._app, authGranted).then((app) =>
+      return lib.app_registered(this.app, authGranted).then((app) =>
         this.refreshContainerAccess().then(() => app));
     });
   }
 
   // app key management
   getPubSignKey() {
-    return lib.app_pub_sign_key(this.app.connection).then(c => new SignKey(this.app, c));
+    return lib.app_pub_sign_key(this.app.connection).then(c => h.autoref(new SignKey(this.app, c)));
   }
 
   getPubEncKey() {
-    return lib.app_pub_enc_key(this.app.connection).then(c => new PubEncKey(this.app, c));
+    return lib.app_pub_enc_key(this.app.connection).then(c => h.autoref(new PubEncKey(this.app, c)));
   }
 
   getSignKeyFromRaw(raw) {
-    return lib.sign_key_new(this.app.connection, raw).then(c => new SignKey(this.app, c));
+    return lib.sign_key_new(this.app.connection, raw).then(c => h.autoref(new SignKey(this.app, c)));
   }
 
   getEncKeyKeyFromRaw(raw) {
-    return lib.enc_key_new(this.app.connection, raw).then(c => new PubEncKey(this.app, c));
+    return lib.enc_key_new(this.app.connection, raw).then(c => h.autoref(new PubEncKey(this.app, c)));
   }
 }
 

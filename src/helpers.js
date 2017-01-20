@@ -5,27 +5,15 @@ class NetworkObject {
     this.app = app;
     this.ref = ref;
   }
-
-  __cleanup__() {
-    if (this.ref && this._cleanup) {
-      this._cleanup(this.app, this.ref);
-    }
-  }
-
-}
-
-// automatic referencing counting allows
-// us to free up resources
-function autocleanup() {
-  // we are being dereferenced
-  // clean up loose ends
-  if (this.__cleanup__) {
-    this.__cleanup__();
-  }
 }
 
 function autoref(obj) {
-  return weak(obj, autocleanup);
+  if (obj.constructor && obj.constructor.free) {
+    return weak(obj, () => obj.constructor.free(obj.app, obj.ref));
+  } else {
+    console.warn('Can\'t clean up obj. No static "free" function found on obj:', obj);
+    return obj
+  }
 }
 
 
