@@ -20,7 +20,7 @@ class SAFEApp extends EventEmitter {
   }
 
   get app() {
-    return this.connection
+    return this.connection;
   }
 
   get networkState() {
@@ -52,8 +52,8 @@ class SAFEApp extends EventEmitter {
   static free(app) {
     // we are freed last, anything you do after this
     // will probably fail.
-    lib.free_app(app)
-    
+    lib.free_app(app);
+
     // in the hopes, this all cleans up,
     // before we do in a matter of seconds from now
   }

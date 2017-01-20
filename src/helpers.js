@@ -10,10 +10,10 @@ class NetworkObject {
 function autoref(obj) {
   if (obj.constructor && obj.constructor.free) {
     return weak(obj, () => obj.constructor.free(obj.app, obj.ref));
-  } else {
-    console.warn('Can\'t clean up obj. No static "free" function found on obj:', obj);
-    return obj
   }
+
+  console.warn('Can\'t clean up obj. No static "free" function found on obj:', obj);
+  return obj;
 }
 
 

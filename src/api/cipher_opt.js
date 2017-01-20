@@ -20,13 +20,13 @@ class CipherOptProvider {
   newSymmetric() {
     // -> CipherOpt
     return lib.cipher_opt_new_symmetric(this.app.connection)
-        .then(c => h.autoref(new CipherOpt(this.app, c)));
+        .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }
 
   newAsymmetric(otherKey) {
     // -> CipherOpt
     return lib.cipher_opt_new_symmetric(this.app.connection, encryptKeyHandle)
-        .then(c => h.autoref(new CipherOpt(this.app, c)));
+        .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }
 
 }
