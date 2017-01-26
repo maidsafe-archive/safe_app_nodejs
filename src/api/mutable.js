@@ -1,5 +1,6 @@
 const h = require('../helpers');
 const lib = require('../native/lib');
+const emulations = require('./emulations');
 
 class PermissionsSet extends h.NetworkObject {
 
@@ -249,6 +250,10 @@ class MutableData extends h.NetworkObject {
 
   serialise() {
     return lib.mdata_info_deserialise(this.app.connection, this.ref);
+  }
+
+  emulateAs(eml) {
+    return emulations[eml](this);
   }
 
 }
