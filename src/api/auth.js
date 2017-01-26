@@ -67,19 +67,6 @@ class AuthProvider {
     this.setupUri();
   }
 
-  refreshContainerAccess() {
-    return Promise.reject(new Error('Not Implemented'));
-  }
-
-  canAccessContainer(name, permissions) {
-    return Promise.reject(new Error('Not Implemented'));
-  }
-
-  getAccessContainerInfo(name) {
-    // -> return app.mutuableData.MutuableData
-    return Promise.reject(new Error('Not Implemented'));
-  }
-
   setupUri() {
     const appInfo = this.app.appInfo;
     const schema = `safe${urlsafeBase64(appInfo.id)}`;
