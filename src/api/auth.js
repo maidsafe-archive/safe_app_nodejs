@@ -134,7 +134,7 @@ class AuthProvider {
   }
 
   getAccessContainerInfo(name) {
-    return lib.access_container_is_permitted(this.app.connection, name)
+    return lib.access_container_get_container_mdata_info(this.app.connection, name)
       .then((data) => this.app.container.wrapContainerInfo(data));
   }
 
