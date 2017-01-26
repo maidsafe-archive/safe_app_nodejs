@@ -36,13 +36,6 @@ class SAFEApp extends EventEmitter {
     return app.auth.loginFromAuth(authUri);
   }
 
-  connect(opts) {
-    return this.auth.connect(opts
-      ).then((connection) => {
-        this._connection = connection;
-      });
-  }
-
   _networkStateUpdated(newState) {
     this.emit('network-state-updated', newState, this._networkState);
     this.emit(`network-state-${newState}`, this._networkState);

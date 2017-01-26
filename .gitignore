@@ -40,3 +40,4 @@ src/native/*safe_app*
 src/native/libsystem_uri*
 src/native/system_uri*
 .idea
+out
