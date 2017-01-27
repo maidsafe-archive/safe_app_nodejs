@@ -22,8 +22,8 @@
 
 const lib = require('../native/lib');
 const nativeH = require('../native/helpers');
+const types = require('../native/types');
 const h = require('../helpers');
-const authTypes = require('../native/_auth').types;
 
 const makeAppInfo = nativeH.makeAppInfo;
 const makePermissions = nativeH.makePermissions;
@@ -84,24 +84,31 @@ class AuthProvider {
   genAuthUri(permissions, opts) {
     const perm = makePermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
-    return lib.encode_auth_req(new authTypes.AuthReq({
+    return lib.encode_auth_req(new types.AuthReq({
       app: appInfo,
       app_container: !!(opts && opts.own_container),
       containers: perm,
-    }));
+      containers_len: perm.length,
+      containers_cap: perm.length
+    }).ref());
   }
 
   genContainerAuthUri(containers) {
     const ctnrs = makePermissions(containers);
     const appInfo = makeAppInfo(this.app.appInfo);
-    return lib.encode_containers_req(new authTypes.ContainerReq({
+    return lib.encode_containers_req(new types.ContainerReq({
       app: appInfo,
       containers: ctnrs,
-    }));
+      containers_len: ctnrs.length,
+      containers_cap: ctnrs.length
+    }).ref());
   }
 
   connectUnregistered() {
-    return lib.app_unregistered(this.app);
+    return lib.app_unregistered(this.app).then(app => {
+      this._registered = false;
+      return this.app;
+    });
   }
 
   refreshContainerAccess() {

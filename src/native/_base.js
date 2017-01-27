@@ -12,14 +12,7 @@ const Void = ref.types.void;
 const VoidPtr = ref.refType(Void);
 const usize = ref.types.size_t;
 const bool = ref.types.bool;
-
-const FfiString = new Struct({
-  ptr: u8Pointer,
-  len: usize,
-  cap: usize 
-});
-
-const FfiStringPointer = new ref.refType(FfiString);
+const NULL = ref.types.NULL;
 
 const u8Array = new ArrayType(u8);
 const XOR_NAME = new ArrayType(u8, 32); // FIXME: use exported const instead
@@ -34,8 +27,6 @@ module.exports = {
   types: {
     App,
     AppPtr,
-    FfiString,
-    FfiStringPointer,
     ObjectHandle,
     XOR_NAME,
     PUBLICKEYBYTES,
@@ -47,26 +38,15 @@ module.exports = {
     u8Array,
     u8Pointer,
     Void,
-    usize 
-  },
-  functions: {
-    ffi_string_create: [Void, [u8Pointer, usize]],
-    ffi_string_free: [Void, [FfiString] ]
+    usize,
+    NULL
   },
   helpers: {
-    read_string(ffi_str) {
-      const derf = ffi_str.deref();
-      return ref.reinterpret(derf.ptr, derf.len).toString();
-    },
-    makeFfiString: function(str) {
-        const b = new Buffer(str);
-        return new FfiString({ptr: b, len: b.length, cap: b.length});
-    },
-    asBuffer: function(res) {
-      return ref.reinterpret(res[0], res[1]);
-    },
+    fromCString: (cstr) => cstr.readCString(),
+    asBuffer: (res) => ref.reinterpret(res[0], res[1]),
     asFFIString: function(str) {
-      return [makeFfiString(str)]
+      throw Error("Not Supported");
+      return [str]
     },
     Promisified: function(formatter, rTypes, after) {
       // create internal function that will be

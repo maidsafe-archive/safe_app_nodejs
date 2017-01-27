@@ -1,7 +1,7 @@
 const EventEmitter = require('events').EventEmitter;
 const autoref = require('./helpers').autoref;
 const api = require('./api');
-
+const lib = require('./native/lib');
 
 class SAFEApp extends EventEmitter {
   // internal wrapper
@@ -13,6 +13,13 @@ class SAFEApp extends EventEmitter {
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[key] = new api[key](this);
     });
+  }
+
+  set connection(con) {
+    if (this._connection) {
+      lib.free_app(this._connection);
+    }
+    this._connection = con;
   }
 
   get connection() {
@@ -36,7 +43,7 @@ class SAFEApp extends EventEmitter {
     return app.auth.loginFromAuth(authUri);
   }
 
-  _networkStateUpdated(newState) {
+  _networkStateUpdated(error, newState) {
     this.emit('network-state-updated', newState, this._networkState);
     this.emit(`network-state-${newState}`, this._networkState);
     this._networkState = newState;
@@ -45,7 +52,7 @@ class SAFEApp extends EventEmitter {
   static free(app) {
     // we are freed last, anything you do after this
     // will probably fail.
-    lib.free_app(app);
+    lib.free_app(app.connection);
 
     // in the hopes, this all cleans up,
     // before we do in a matter of seconds from now

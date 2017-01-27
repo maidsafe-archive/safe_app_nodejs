@@ -21,18 +21,11 @@ module.exports = {
     File
   },
   functions: {
-    file_free: [t.Void, [File]],
-    file_fetch: [t.Void, [t.AppPtr, MDataInfoHandle, t.FfiString, 'pointer', 'pointer']],
-    file_insert: [t.Void, [t.AppPtr, MDataInfoHandle, t.FfiString, File, 'pointer', 'pointer']],
-    file_update: [t.Void, [t.AppPtr, MDataInfoHandle, t.FfiString, File, t.u64,'pointer', 'pointer']]
+    file_fetch: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', 'pointer', 'pointer']],
+    file_insert: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', File, 'pointer', 'pointer']],
+    file_update: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', File, t.u64,'pointer', 'pointer']]
   },
   api: {
-    file_free: function(lib, fn) {
-      return (function(fileHandle) {
-        fn(fileHandle);
-        return Promise.resolve();
-      });
-    },
     file_fetch: h.Promisified(null, [File, t.u64]),
     file_insert: h.Promisified(null, []),
     file_update: h.Promisified(null, [])

@@ -5,7 +5,6 @@ const dir = path.dirname(__filename);
 
 const h = require('./helpers');
 const t = require('./types');
-const makeFfiString = h.makeFfiString;
 
 const ffi = FFI.Library(path.join(dir, 'libsystem_uri'), {
   open: [t.i32, ['string'] ],

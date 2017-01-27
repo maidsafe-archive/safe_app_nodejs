@@ -10,7 +10,7 @@ const createTestApp = (scope) => new App({ id: 'net.maidsafe.test.javascript.id'
 
 function createAuthenticatedTestApp(scope) {
   const app = createTestApp(scope);
-  app._connection = lib.gen_testing_app_with_access();
+  app.connection = lib.gen_testing_app_with_access();
   app.auth._registered = true;
   return app;
 }

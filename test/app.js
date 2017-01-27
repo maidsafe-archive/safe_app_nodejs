@@ -7,17 +7,17 @@ const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 describe('Smoke test', () => {
   it('unauthorised connection', () => {
     const app = createTestApp();
-    app.auth.connectUnregistered();
+    return app.auth.connectUnregistered();
   });
-  it('should build some authentication url', () => {
+  it('should build some authentication uri', () => {
     const app = createTestApp();
-    const url = app.auth.genAuthUri({ _public: ['Read'] });
-    should(url).startWith('safe-auth:');
+    return app.auth.genAuthUri({ _public: ['Read'] })
+        .then(resp => should(resp.uri).startWith('safe-auth:'));
   });
-  it('should build some containers url', () => {
+  it('should build some containers uri', () => {
     const app = createTestApp();
-    const url = app.auth.genContainerAuthUri({ private: ['Insert'] });
-    should(url).startWith('safe-auth:');
+    return app.auth.genContainerAuthUri({ private: ['Insert'] })
+        .then(resp => should(resp.uri).startWith('safe-auth:'));
   });
 
   it('creates registered for testing', () => {
@@ -25,13 +25,16 @@ describe('Smoke test', () => {
     should(app.auth.registered).be.true();
   });
 
-  xit('should build an alternative if there is a scope', () => {
+  it('should build an alternative if there is a scope', () => {
     const firstApp = createTestApp();
-    const firstUrl = firstApp.auth.genAuthUri({ _public: ['Insert'] });
-    // FIXME: This currently segfaults
-    const secondApp = createTestApp('website');
-    const secondUrrl = secondApp.auth.genAuthUri({ _public: ['Insert'] });
-    should(secondUrrl).startWith('safe-auth:');
-    should(secondUrrl).not.equal(firstUrl);
+    return firstApp.auth.genAuthUri({ _public: ['Insert'] })
+      .then(firstResp => {
+        const secondApp = createTestApp('website');
+        return secondApp.auth.genAuthUri({ _public: ['Insert'] })
+            .then(secondResp => {
+              should(secondResp.uri).startWith('safe-auth:');
+              should(secondResp.uri).not.equal(firstResp.uri);
+            });
+      });
   });
 });
