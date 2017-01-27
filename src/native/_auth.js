@@ -160,8 +160,7 @@ module.exports = {
     access_container_get_container_mdata_info: helpers.Promisified((app, str) =>
       [app, str], 'pointer'),
     access_container_is_permitted: helpers.Promisified((app, str, perms) => {
-      const v = new PermissionsType((perms, ['Read']).map((x) => Permission.get(x)));
-      const permArray = Permissions({ ptr: v, len: v.length, cap: v.length });
+      const permArray = new Permissions((perms, ['Read']).map((x) => Permission.get(x)));
       return [app, str, permArray]
     }, t.bool),
     encode_containers_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),

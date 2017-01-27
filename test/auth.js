@@ -10,19 +10,18 @@ describe('Access Container', () => {
     should(app.auth.registered).be.true();
   });
 
-  xit('has read access to `_test`', () => app.auth.refreshContainerAccess().then(() =>
+  it('has read access to `_test`', () => app.auth.refreshContainerAccess().then(() =>
       app.auth.canAccessContainer('_test').then((hasAccess) => {
         should(hasAccess).be.true();
       })));
 
-  xit('can\'t access to `__does_not_exist`', () => app.auth.refreshContainerAccess().then(() =>
-      app.auth.canAccessContainer('__does_not_exist').then((hasAccess) => {
-        should(hasAccess).be.false();
-      })));
+  it('can\'t access to `__does_not_exist`', () => app.auth.refreshContainerAccess().then(() =>
+      app.auth.canAccessContainer('__does_not_exist')
+          .should.be.rejected()));
 
-  xit('read info of `_test`', () => app.auth.refreshContainerAccess().then(() =>
-      app.auth.getAccessContainerInfo('_test').then((ctnr) => ctnr.getAddressInfo()).then((address, tag) => {
-        should(address).is.true();
-        should(tag).equals(15000);
+  it('read info of `_test`', () => app.auth.refreshContainerAccess().then(() =>
+      app.auth.getAccessContainerInfo('_test').then((ctnr) => ctnr.getNameAndTag()).then(resp => {
+        should(resp.name).is.not.undefined();
+        should(resp.tag).equal(15000);
       })));
 });

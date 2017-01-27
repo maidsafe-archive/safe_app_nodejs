@@ -129,7 +129,7 @@ class AuthProvider {
 
   getAccessContainerInfo(name) {
     return lib.access_container_get_container_mdata_info(this.app.connection, name)
-      .then((data) => this.app.container.wrapContainerInfo(data));
+      .then((data) => this.app.mutableData.wrapMdata(data));
   }
 
   loginFromURI(responseUri) {
