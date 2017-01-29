@@ -36,29 +36,43 @@ class Permissions {
   }
 
   getPermissionSet(signKey) {
-    return lib.mdata_permissions_get(this.app.connection, this.mdata, signKey).then((c) => h.autoref(new PermissionsSet(this.app.connection, c)));
+    return lib.mdata_permissions_get(this.app.connection, this.mdata, signKey)
+        .then((c) => h.autoref(new PermissionsSet(this.app.connection, c)));
   }
 
   delPermissionsSet(signKey, version) {
-    return lib.mdata_del_user_permissions(this.app.connection, this.mdata, signKey, version);
+    return lib.mdata_del_user_permissions(this.app.connection,
+                                          this.mdata,
+                                          signKey,
+                                          version);
   }
 
   newPermissionSet() {
-    return lib.mdata_permission_set_new(this.app.connection).then((c) => h.autoref(new PermissionsSet(this.app.connection, c)));
+    return lib.mdata_permission_set_new(this.app.connection)
+        .then((c) => h.autoref(new PermissionsSet(this.app.connection, c)));
   }
 
   insertPermissionSet(signKey, PermissionSet) {
-    return lib.mdata_permissions_insert(this.app.connection, this.mdata, signKey, PermissionSet);
+    return lib.mdata_permissions_insert(this.app.connection,
+                                        this.mdata,
+                                        signKey,
+                                        PermissionSet);
   }
 
   setPermissionSet(signKey, PermissionSet, version) {
-    return lib.mdata_set_user_permissions(this.app.connection, this.mdata, signKey, PermissionSet, version);
+    return lib.mdata_set_user_permissions(this.app.connection,
+                                          this.mdata,
+                                          signKey,
+                                          PermissionSet,
+                                          version);
   }
 
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return lib.mdata_permissions_for_each(this.app.connection, this.mdata, fn);
+    return lib.mdata_permissions_for_each(this.app.connection,
+                                          this.mdata,
+                                          fn);
   }
 
 }
@@ -142,11 +156,11 @@ class Entries extends h.NetworkObject {
   mutate() {
     // -> EntryMutationTransaction
     return lib.mdata_entry_actions_new(this.app.connection)
-            .then(r => h.autoref(new EntryMutationTransaction(this.app, r)))
+            .then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
   }
 
   apply(mutations) {
-    return lib.mdata_mutate_entries(this.app.connection, this.ref, mutations)
+    return lib.mdata_mutate_entries(this.app.connection, this.ref, mutations);
   }
 }
 
@@ -196,11 +210,11 @@ class MutableData extends h.NetworkObject {
   }
 
   encryptKey(key) {
-    return Promise.reject(new Error('Not Implemented'));
+    return Promise.reject(new Error('Not Implemented', this, key));
   }
 
   encryptValue(value) {
-    return Promise.reject(new Error('Not Implemented'));
+    return Promise.reject(new Error('Not Implemented', this, value));
   }
 
   getNameAndTag() {
@@ -222,15 +236,18 @@ class MutableData extends h.NetworkObject {
   getEntries() {
     // Get or Creates a new set
     // storing local reference
-    return lib.mdata_list_entries(this.app, this.mdataRef).then((r) => h.autoref(new Entries(this.app, r)));
+    return lib.mdata_list_entries(this.app, this.mdataRef)
+        .then((r) => h.autoref(new Entries(this.app, r)));
   }
 
   getKeys() {
-    return lib.mdata_list_keys(this.app, this.mdataRef).then((r) => h.autoref(new Keys(this.app, r)));
+    return lib.mdata_list_keys(this.app, this.mdataRef)
+        .then((r) => h.autoref(new Keys(this.app, r)));
   }
 
   getValues() {
-    return lib.mdata_list_values(this.app, this.mdataRef).then((r) => h.autoref(new Values(this.app, r)));
+    return lib.mdata_list_values(this.app, this.mdataRef)
+        .then((r) => h.autoref(new Values(this.app, r)));
   }
 
   getPermissions() {
@@ -240,12 +257,17 @@ class MutableData extends h.NetworkObject {
   }
 
   getUserPermissions(signKey) {
-    return lib.mdata_list_user_permissions(this.app, this.mdataRef, signKey)
+    return lib.mdata_list_user_permissions(this.app,
+                                           this.mdataRef,
+                                           signKey)
       .then((r) => h.autoref(new PermissionsSet(this.app, r)));
   }
 
   changeOwner(otherSignKey, version) {
-    return lib.mdata_change_owner(this.app, this.mdataRef, otherSignKey, version);
+    return lib.mdata_change_owner(this.app,
+                                  this.mdataRef,
+                                  otherSignKey,
+                                  version);
   }
 
   serialise() {
@@ -284,15 +306,18 @@ class MutableDataProvider {
   }
 
   newPermissions() {
-    return lib.mdata_permissions_new(this.app).then((r) => h.autoref(new Permissions(this.app, null, r)));
+    return lib.mdata_permissions_new(this.app)
+        .then((r) => h.autoref(new Permissions(this.app, null, r)));
   }
 
   newMutation() {
-    return lib.mdata_entry_actions_new(this.app).then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
+    return lib.mdata_entry_actions_new(this.app)
+        .then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
   }
 
   newEntries() {
-    return lib.mdata_entries_new(this.app).then((r) => h.autoref(new Entries(this.app, r)));
+    return lib.mdata_entries_new(this.app)
+        .then((r) => h.autoref(new Entries(this.app, r)));
   }
 
   fromSerial(serial) {

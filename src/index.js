@@ -4,21 +4,21 @@ const autoref = require('./helpers').autoref;
 const version = require('../packages.json').version;
 
 /**
- * The main entry point to create a new SAFEApp 
+ * The main entry point to create a new SAFEApp
  * @arg appInfo
  * @return {Promise(SafeApp)} promise to a SAFEApp instance
  * @example // Usage Example
  * const safe = require('safe');
  * const lib = require('safe/native/lib');
- * 
+ *
  * // starting initialisation
  * let prms = safe.initializeApp({
  *                      id: "net.maidsafe.example",
  *                      name: 'Example App',
  *                      vendor: 'MaidSafe Ltd.'
  *                     });
- * // we want read-append access to `_pictures` and 
- * // read access to `_videos`: 
+ * // we want read-append access to `_pictures` and
+ * // read access to `_videos`:
  * const containers = { '_videos': 'READ', '_pictures' : ['READ', 'INSERT']}
  * prms.then(app => app.auth.genAuthUri(containers
  *           ).then(uri => lib.openUri(uri)
@@ -28,8 +28,8 @@ const version = require('../packages.json').version;
  */
 function initializeApp(appInfo) {
     // FIXME: add auto-login features here later
-    const app = autoref(new SAFEApp(appInfo));
-    return Promise.resolve(app);
+  const app = autoref(new App(appInfo));
+  return Promise.resolve(app);
 }
 
 

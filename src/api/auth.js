@@ -105,7 +105,7 @@ class AuthProvider {
   }
 
   connectUnregistered() {
-    return lib.app_unregistered(this.app).then(app => {
+    return lib.app_unregistered(this.app).then(() => {
       this._registered = false;
       return this.app;
     });
@@ -146,19 +146,23 @@ class AuthProvider {
 
   // app key management
   getPubSignKey() {
-    return lib.app_pub_sign_key(this.app.connection).then((c) => h.autoref(new SignKey(this.app, c)));
+    return lib.app_pub_sign_key(this.app.connection)
+        .then((c) => h.autoref(new SignKey(this.app, c)));
   }
 
   getPubEncKey() {
-    return lib.app_pub_enc_key(this.app.connection).then((c) => h.autoref(new PubEncKey(this.app, c)));
+    return lib.app_pub_enc_key(this.app.connection)
+        .then((c) => h.autoref(new PubEncKey(this.app, c)));
   }
 
   getSignKeyFromRaw(raw) {
-    return lib.sign_key_new(this.app.connection, raw).then((c) => h.autoref(new SignKey(this.app, c)));
+    return lib.sign_key_new(this.app.connection, raw)
+        .then((c) => h.autoref(new SignKey(this.app, c)));
   }
 
   getEncKeyKeyFromRaw(raw) {
-    return lib.enc_key_new(this.app.connection, raw).then((c) => h.autoref(new PubEncKey(this.app, c)));
+    return lib.enc_key_new(this.app.connection, raw)
+        .then((c) => h.autoref(new PubEncKey(this.app, c)));
   }
 }
 

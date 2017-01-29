@@ -12,12 +12,12 @@ describe('Smoke test', () => {
   it('should build some authentication uri', () => {
     const app = createTestApp();
     return app.auth.genAuthUri({ _public: ['Read'] })
-        .then(resp => should(resp.uri).startWith('safe-auth:'));
+        .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
   it('should build some containers uri', () => {
     const app = createTestApp();
     return app.auth.genContainerAuthUri({ private: ['Insert'] })
-        .then(resp => should(resp.uri).startWith('safe-auth:'));
+        .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
   it('creates registered for testing', () => {
@@ -28,10 +28,10 @@ describe('Smoke test', () => {
   it('should build an alternative if there is a scope', () => {
     const firstApp = createTestApp();
     return firstApp.auth.genAuthUri({ _public: ['Insert'] })
-      .then(firstResp => {
+      .then((firstResp) => {
         const secondApp = createTestApp('website');
         return secondApp.auth.genAuthUri({ _public: ['Insert'] })
-            .then(secondResp => {
+            .then((secondResp) => {
               should(secondResp.uri).startWith('safe-auth:');
               should(secondResp.uri).not.equal(firstResp.uri);
             });

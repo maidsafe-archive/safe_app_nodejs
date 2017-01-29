@@ -23,7 +23,7 @@ class CipherOptProvider {
         .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }
 
-  newAsymmetric(otherKey) {
+  newAsymmetric(encryptKeyHandle) {
     // -> CipherOpt
     return lib.cipher_opt_new_symmetric(this.app.connection, encryptKeyHandle)
         .then((c) => h.autoref(new CipherOpt(this.app, c)));

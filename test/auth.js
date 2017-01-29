@@ -20,7 +20,7 @@ describe('Access Container', () => {
           .should.be.rejected()));
 
   it('read info of `_test`', () => app.auth.refreshContainerAccess().then(() =>
-      app.auth.getAccessContainerInfo('_test').then((ctnr) => ctnr.getNameAndTag()).then(resp => {
+      app.auth.getAccessContainerInfo('_test').then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
         should(resp.name).is.not.undefined();
         should(resp.tag).equal(15000);
       })));
