@@ -5,7 +5,6 @@ const base = require('./_base');
 const CipherOptHandle = require('./_cipher_opt').types.CipherOptHandle;
 const t = base.types;
 const h = base.helpers;
-const makeFfiString = base.helpers.makeFfiString;
 
 const SEWriteHandle = t.ObjectHandle; 
 const SEReadHandle = t.ObjectHandle;

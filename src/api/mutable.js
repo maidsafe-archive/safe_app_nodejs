@@ -1,17 +1,22 @@
 const h = require('../helpers');
 const lib = require('../native/lib');
+const emulations = require('./emulations');
 
 class PermissionsSet extends h.NetworkObject {
 
   setAllow(action) {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_permissions_set_allow(this.app.connection, this.ref, action);
   }
   setDeny(action) {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_permissions_set_deny(this.app.connection, this.ref, action);
   }
 
-  clear() {
-    return Promise.reject(new Error('Not Implemented'));
+  clear(action) {
+    return lib.mdata_permissions_set_clear(this.app.connection, this.ref, action);
+  }
+
+  static free(app, ref) {
+    return lib.mdata_permissions_set_free(app.connection, ref);
   }
 }
 
@@ -22,107 +27,174 @@ class Permissions {
     this.ref = ref;
   }
 
-  getPermissionSet(signKey) {
-    // -> PermissionsSet
-    return Promise.reject(new Error('Not Implemented'));
+  len() {
+    return lib.mdata_permissions_len(this.app.connection, this.mdata);
   }
 
-  delPermissionsSet(signKey) {
-    // -> Bool
-    return Promise.reject(new Error('Not Implemented'));
+  free() {
+    return lib.mdata_permissions_free(this.app.connection, this.mdata);
+  }
+
+  getPermissionSet(signKey) {
+    return lib.mdata_permissions_get(this.app.connection, this.mdata, signKey)
+        .then((c) => h.autoref(new PermissionsSet(this.app.connection, c)));
+  }
+
+  delPermissionsSet(signKey, version) {
+    return lib.mdata_del_user_permissions(this.app.connection,
+                                          this.mdata,
+                                          signKey,
+                                          version);
   }
 
   newPermissionSet() {
-    // -> PermissionsSet
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_permission_set_new(this.app.connection)
+        .then((c) => h.autoref(new PermissionsSet(this.app.connection, c)));
   }
 
   insertPermissionSet(signKey, PermissionSet) {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_permissions_insert(this.app.connection,
+                                        this.mdata,
+                                        signKey,
+                                        PermissionSet);
   }
 
-  setPermissionSet(signKey, PermissionSet) {
-    return Promise.reject(new Error('Not Implemented'));
+  setPermissionSet(signKey, PermissionSet, version) {
+    return lib.mdata_set_user_permissions(this.app.connection,
+                                          this.mdata,
+                                          signKey,
+                                          PermissionSet,
+                                          version);
   }
 
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_permissions_for_each(this.app.connection,
+                                          this.mdata,
+                                          fn);
   }
 
 }
 
 class EntryMutationTransaction extends h.NetworkObject {
 
+  static free(app, ref) {
+    return lib.mdata_entry_actions_free(app.connection, ref);
+  }
+
   insert(keyName, value) {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_entry_actions_insert(
+      this.app,
+      this.ref,
+      keyName.ptr,
+      keyName.len,
+      value.ptr,
+      value.len
+    );
   }
 
-  delete(keyName) {
-    return Promise.reject(new Error('Not Implemented'));
+  remove(keyName, version) {
+    return lib.mdata_entry_actions_delete(
+      this.app,
+      this.ref,
+      keyName.ptr,
+      keyName.len,
+      version
+    );
   }
 
-  update(keyName) {
-    return Promise.reject(new Error('Not Implemented'));
+  update(keyName, value, version) {
+    return lib.mdata_entry_actions_update(
+      this.app,
+      this.ref,
+      keyName.ptr,
+      keyName.len,
+      value.ptr,
+      value.len,
+      version
+    );
   }
 }
 
 class Entries extends h.NetworkObject {
 
   len() {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_entries_len(this.app, this.ref);
+  }
+
+  static free(app, ref) {
+    return lib.mdata_entries_free(app.connection, ref);
   }
 
   get(keyName) {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_entries_get(
+      this.app,
+      this.ref,
+      keyName.ptr,
+      keyName.len
+    );
   }
 
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_entries_for_each(this.app, this.ref, fn);
   }
 
   insert(keyName, value) {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_entries_insert(
+      this.app,
+      this.ref,
+      keyName.ptr,
+      keyName.len,
+      value.ptr,
+      value.len
+    );
   }
 
   mutate() {
     // -> EntryMutationTransaction
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_entry_actions_new(this.app.connection)
+            .then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
   }
 
   apply(mutations) {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_mutate_entries(this.app.connection, this.ref, mutations);
   }
 }
-
 
 class Keys extends h.NetworkObject {
 
   len() {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_keys_len(this.app, this.ref);
   }
 
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_keys_for_each(this.app, this.ref, fn);
   }
 
+  static free(app, ref) {
+    return lib.mdata_keys_free(app.connection, ref);
+  }
 }
 
 class Values extends h.NetworkObject {
 
   len() {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_values_len(this.app, this.ref);
   }
 
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_values_for_each(this.app, this.ref, fn);
+  }
+
+  static free(app, ref) {
+    return lib.mdata_values_free(app.connection, ref);
   }
 }
 
@@ -133,12 +205,16 @@ class MutableData extends h.NetworkObject {
     this.permissionsRef = null;
   }
 
+  static free(app, ref) {
+    return lib.free_mdata_info(app.connection, ref);
+  }
+
   encryptKey(key) {
-    return Promise.reject(new Error('Not Implemented'));
+    return Promise.reject(new Error('Not Implemented', this, key));
   }
 
   encryptValue(value) {
-    return Promise.reject(new Error('Not Implemented'));
+    return Promise.reject(new Error('Not Implemented', this, value));
   }
 
   getNameAndTag() {
@@ -146,53 +222,60 @@ class MutableData extends h.NetworkObject {
   }
 
   getVersion() {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_get_version(this.app, this.mdataRef);
   }
 
   get(key) {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_get_value(this.app, this.mdataRef, key.ptr, key.len);
   }
 
   put() {
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_put(this.app, this.mdataRef, this.permissionsRef, this.entriesRef);
   }
 
   getEntries() {
     // Get or Creates a new set
     // storing local reference
-
-    // -> Entries
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_list_entries(this.app, this.mdataRef)
+        .then((r) => h.autoref(new Entries(this.app, r)));
   }
 
   getKeys() {
-    // -> Keys
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_list_keys(this.app, this.mdataRef)
+        .then((r) => h.autoref(new Keys(this.app, r)));
   }
 
   getValues() {
-    // -> Values
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_list_values(this.app, this.mdataRef)
+        .then((r) => h.autoref(new Values(this.app, r)));
   }
 
   getPermissions() {
     // Get or Creates a new set
     // storing local reference
-    // -> Permissions
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_list_permissions(this.app, this.mdataRef);
   }
 
-  getUserPermissions() {
-    // -> PermissionSet
-    return Promise.reject(new Error('Not Implemented'));
+  getUserPermissions(signKey) {
+    return lib.mdata_list_user_permissions(this.app,
+                                           this.mdataRef,
+                                           signKey)
+      .then((r) => h.autoref(new PermissionsSet(this.app, r)));
   }
 
-  changeOwner(otherSignKey) {
-    return Promise.reject(new Error('Not Implemented'));
+  changeOwner(otherSignKey, version) {
+    return lib.mdata_change_owner(this.app,
+                                  this.mdataRef,
+                                  otherSignKey,
+                                  version);
   }
 
   serialise() {
     return lib.mdata_info_deserialise(this.app.connection, this.ref);
+  }
+
+  emulateAs(eml) {
+    return emulations[eml](this);
   }
 
 }
@@ -223,13 +306,18 @@ class MutableDataProvider {
   }
 
   newPermissions() {
-    // -> Permissions
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_permissions_new(this.app)
+        .then((r) => h.autoref(new Permissions(this.app, null, r)));
   }
 
   newMutation() {
-    // -> EntryMutationTransaction
-    return Promise.reject(new Error('Not Implemented'));
+    return lib.mdata_entry_actions_new(this.app)
+        .then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
+  }
+
+  newEntries() {
+    return lib.mdata_entries_new(this.app)
+        .then((r) => h.autoref(new Entries(this.app, r)));
   }
 
   fromSerial(serial) {

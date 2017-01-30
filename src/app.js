@@ -1,7 +1,7 @@
 const EventEmitter = require('events').EventEmitter;
 const autoref = require('./helpers').autoref;
 const api = require('./api');
-
+const lib = require('./native/lib');
 
 class SAFEApp extends EventEmitter {
   // internal wrapper
@@ -15,8 +15,19 @@ class SAFEApp extends EventEmitter {
     });
   }
 
+  set connection(con) {
+    if (this._connection) {
+      lib.free_app(this._connection);
+    }
+    this._connection = con;
+  }
+
   get connection() {
     return this._connection;
+  }
+
+  get app() {
+    return this.connection;
   }
 
   get networkState() {
@@ -32,24 +43,16 @@ class SAFEApp extends EventEmitter {
     return app.auth.loginFromAuth(authUri);
   }
 
-  connect(opts) {
-    return this.auth.connect(opts
-      ).then((connection) => {
-        this._connection = connection;
-      });
-  }
-
-  _networkStateUpdated(newState) {
+  _networkStateUpdated(error, newState) {
     this.emit('network-state-updated', newState, this._networkState);
     this.emit(`network-state-${newState}`, this._networkState);
     this._networkState = newState;
   }
 
-  __cleanup__() {
-    // let's dereference everything
-    this.container = null;
-    this.immutableData = null;
-    this.mutableData = null;
+  static free(app) {
+    // we are freed last, anything you do after this
+    // will probably fail.
+    lib.free_app(app.connection);
 
     // in the hopes, this all cleans up,
     // before we do in a matter of seconds from now
