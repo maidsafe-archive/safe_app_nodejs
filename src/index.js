@@ -1,7 +1,7 @@
 
 const App = require('./app');
 const autoref = require('./helpers').autoref;
-const version = require('../packages.json').version;
+const version = require('../package.json').version;
 
 /**
  * The main entry point to create a new SAFEApp
