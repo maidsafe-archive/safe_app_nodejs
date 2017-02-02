@@ -6,6 +6,10 @@ const ref = require('ref');
 
 class File extends h.NetworkObject {
 
+  get data_map_name() {
+    return nativeH.fromCTime(this.ref.data_map_name);
+  }
+
   get created() {
     return nativeH.fromCTime(this.ref.created);
   }
@@ -49,17 +53,17 @@ class NfsEmulation {
 
   fetch(fileName) {
     return lib.file_fetch(this.mData.app.connection, this.mData.ref, fileName)
-      .then((info) => h.autoref(new File(this.mData.app, info)));
+      .then((res) => h.autoref(new File(this.mData.app, res.file, res.version)));
   }
 
   insert(fileName, file) {
     return lib.file_insert(this.mData.app.connection, this.mData.ref, fileName, file.ref)
-      .then((info) => h.autoref(new File(this.mData.app, info)));
+      .then((info) => file);
   }
 
   update(fileName, file, version) {
     return lib.file_update(this.mData.app.connection, this.mData.ref, fileName, file.ref, version)
-      .then((info) => h.autoref(new File(this.mData.app, info)));
+      .then((info) => file);
   }
 }
 
