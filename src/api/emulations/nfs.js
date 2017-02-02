@@ -5,6 +5,15 @@ const nativeH = require('../../native/helpers');
 const ref = require('ref');
 
 class File extends h.NetworkObject {
+
+  get created() {
+    return nativeH.fromCTime(this.ref.created);
+  }
+
+  get modified() {
+    return nativeH.fromCTime(this.ref.modified);
+  }
+
   static free(app, file) {
     return lib.file_free(app.connection, file);
   }
@@ -13,14 +22,6 @@ class File extends h.NetworkObject {
 class NfsEmulation {
   constructor(mData) {
     this.mData = mData;
-  }
-
-  get created() {
-    return nativeH.fromCTime(this.mdata.created);
-  }
-
-  get modified() {
-    return nativeH.fromCTime(this.mdata.modified);
   }
 
   create(content) {
