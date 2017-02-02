@@ -26,11 +26,11 @@ module.exports = {
       })
     },
     app_registered: function(lib, fn) {
-      return (function(app_id, authGranted) {
+      return (function(app, authGranted) {
         const appCon = ref.alloc(t.AppPtr);
         const cb = ffi.Callback("void", [t.VoidPtr, t.i32, t.i32], (user_data, err, state) => app._networkStateUpdated(user_data, err, state));
 
-        const err = fn(app_id, authGranted, ref.NULL, cb, appCon);
+        const err = fn(app.appInfo.id, authGranted, ref.NULL, cb, appCon);
         if (err) throw makeError(err, "Couldn't create App");
 
         app.connection = appCon.deref();
@@ -39,7 +39,7 @@ module.exports = {
     },
     app_free: function (lib, fn) {
       return (function (app) {
-        fn(app);
+        fn(app.connection);
         return Promise.resolve();
       });
     }

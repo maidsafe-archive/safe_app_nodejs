@@ -43,7 +43,8 @@ class SAFEApp extends EventEmitter {
     return app.auth.loginFromURI(authUri);
   }
 
-  _networkStateUpdated(user_data, error, newState) {
+  _networkStateUpdated(uData, error, newState) {
+    // FIXME: we need to map the state to strings
     this.emit('network-state-updated', newState, this._networkState);
     this.emit(`network-state-${newState}`, this._networkState);
     this._networkState = newState;
