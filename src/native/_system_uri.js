@@ -1,12 +1,13 @@
 const path = require('path');
 const FFI = require('ffi');
-
-const dir = path.dirname(__filename);
+const SYSTEM_URI_LIB_FILENAME = require('../consts').SYSTEM_URI_LIB_FILENAME;
 
 const h = require('./helpers');
 const t = require('./types');
 
-const ffi = FFI.Library(path.join(dir, 'libsystem_uri'), {
+const dir = path.dirname(__filename);
+
+const ffi = FFI.Library(path.join(dir, SYSTEM_URI_LIB_FILENAME), {
   open: [t.i32, ['string'] ],
   install: [t.i32, ['string', //bundle
                     'string', //vendor
