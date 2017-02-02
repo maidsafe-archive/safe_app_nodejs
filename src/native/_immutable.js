@@ -30,7 +30,9 @@ module.exports = {
       let b = Buffer.isBuffer(str) ? str : Buffer.from(str);
       return [appPtr, handle, b, b.length]
     }, null),
-    idata_close_self_encryptor: h.Promisified(null, t.XOR_NAME),
+    idata_close_self_encryptor: h.Promisified(null, 'pointer', 
+      // make a copy to ensure the data stays around
+      resp => t.XOR_NAME(ref.reinterpret(resp[0], 32))),
     idata_fetch_self_encryptor: h.Promisified(null, SEReadHandle),
     idata_size: h.Promisified(null, t.u64),
     idata_read_from_self_encryptor: h.Promisified(null, [t.u8Pointer, t.usize, t.usize], h.asBuffer),

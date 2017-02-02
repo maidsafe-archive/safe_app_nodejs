@@ -31,18 +31,21 @@ function bufferLastEntry() {
         .concat([str, str.length]);
 }
 function translateXorName(appPtr, str, tag) {
-  const b = Buffer.isBuffer(str) ? str : new Buffer(str);
-  if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
-  const name = t.XOR_NAME(b);
-  return [appPtr, name.ref().readPointer(0), tag]
+  let name = str;
+  if (!Buffer.isBuffer(str)) {
+    const b = new Buffer(str);
+    if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
+    name = t.XOR_NAME(b).ref();
+  }
+  return [appPtr, name, tag]
 }
 
 function strToBuffer(app, mdata) {
     const args = [app, mdata];
     Array.prototype.slice.call(arguments, 2).forEach(item => {
-        const buf = new Buffer(item);
-        args.push(buf);
-        args.push(buf.length);
+      const buf = item.buffer || (Buffer.isBuffer(item) ? item : new Buffer(item));
+      args.push(buf);
+      args.push(buf.length);
     });
     return args;
 }
@@ -125,8 +128,10 @@ module.exports = {
     mdata_info_random_private: Promisified(null, MDataInfoHandle),
     mdata_info_encrypt_entry_key: Promisified(bufferLastEntry, bufferTypes, h.asBuffer),
     mdata_info_encrypt_entry_value: Promisified(bufferLastEntry, bufferTypes, h.asBuffer),
-    mdata_info_extract_name_and_type_tag: Promisified(null, [t.XOR_NAME, t.u64],
-      resp => { return { name: resp[0], tag: resp[1] } }),
+    mdata_info_extract_name_and_type_tag: Promisified(null, ['pointer', t.u64],
+      // make sure to create a copy of this as it might be overwritten
+      // after the callback finishes
+      resp => { return { name: t.XOR_NAME(ref.reinterpret(resp[0], 32)), tag: resp[1] } }),
     mdata_info_serialise: Promisified(null, bufferTypes, h.asBuffer),
     mdata_info_deserialise: Promisified(bufferLastEntry, MDataInfoHandle),
     mdata_permission_set_new: Promisified(null, MDataPermissionSetHandle),

@@ -29,7 +29,10 @@ module.exports = {
     file_update: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, t.u64,'pointer', 'pointer']]
   },
   api: {
-    file_fetch: h.Promisified(null, [File, t.u64]),
+    file_fetch: h.Promisified(null, [FilePtr, t.u64], (res) => {
+      const file = ref.reinterpret(res[0], File.size);
+      return {file, version: res[1]}
+    }),
     file_insert: h.Promisified(null, []),
     file_update: h.Promisified(null, [])
   }
