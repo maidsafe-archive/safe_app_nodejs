@@ -2,6 +2,9 @@ const EventEmitter = require('events').EventEmitter;
 const autoref = require('./helpers').autoref;
 const api = require('./api');
 const lib = require('./native/lib');
+const crypto = require('crypto');
+const parseUrl = require('url').parse;
+const consts = require('./consts');
 
 class SAFEApp extends EventEmitter {
   // internal wrapper
@@ -16,7 +19,22 @@ class SAFEApp extends EventEmitter {
   }
 
   webFetch(url) {
-    return Promise.reject(new Error('Not Implemented'));
+    const parsedUrl = parseUrl(url);
+    if (!parsedUrl) return Promise.reject(new Error("Not a proper URL!"));
+
+    const hostname = parsedUrl.hostname;
+    const path = parsedUrl.pathname || '';
+    // lets' unpack
+    let hostParts = hostname.split('.');
+    const lookupName = hostParts.pop(); // last one is 'domain'
+    let serviceName = hostParts.join('.'); // all others are 'service'
+    const address = crypto.createHash('sha256').update(lookupName).digest();
+
+    return this.mutableData.newPublic(address, consts.TAG_TYPE_DNS)
+      .then(mdata => mdata.get(serviceName)
+        .then(value => this.mutableData.newPublic(value.buf, consts.TAG_TYPE_WWW))
+        .then(service => service.emulateAs("NFS").fetch(path)))
+
   }
 
   set connection(con) {
