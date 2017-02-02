@@ -23,6 +23,7 @@ class SAFEApp extends EventEmitter {
   }
 
   get connection() {
+    if (!this._connection) throw Error("Setup Incomplete. Connection not available yet.");
     return this._connection;
   }
 
