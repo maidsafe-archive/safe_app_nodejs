@@ -15,6 +15,10 @@ class SAFEApp extends EventEmitter {
     });
   }
 
+  webFetch(url) {
+    return Promise.reject(new Error('Not Implemented'));
+  }
+
   set connection(con) {
     if (this._connection) {
       lib.free_app(this._connection);

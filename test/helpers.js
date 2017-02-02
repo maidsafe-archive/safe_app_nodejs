@@ -1,12 +1,21 @@
 /* eslint no-underscore-dangle: ["warn", { "allow": ["_connection", "_registered"] }]*/
 const lib = require('../src/native/lib');
 const App = require('../src/app');
+const h = require('../src/helpers');
 
-const createTestApp = (scope) => new App({ id: 'net.maidsafe.test.javascript.id',
-  name: 'JS Test',
-  vendor: 'MaidSafe Ltd.',
-  scope
-});
+function createTestApp(scope){
+  return h.autoref(new App({
+    id: 'net.maidsafe.test.javascript.id',
+    name: 'JS Test',
+    vendor: 'MaidSafe Ltd.',
+    scope
+  }))
+}
+
+function createAnonTestApp(scope) {
+  const app = createTestApp(scope);
+  return app.auth.connectUnregistered()
+}
 
 function createAuthenticatedTestApp(scope) {
   const app = createTestApp(scope);
@@ -17,5 +26,6 @@ function createAuthenticatedTestApp(scope) {
 
 module.exports = {
   createTestApp,
+  createAnonTestApp,
   createAuthenticatedTestApp
 };

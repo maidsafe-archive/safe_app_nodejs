@@ -24,6 +24,21 @@ const ObjectHandle = u64;
 const App = Struct({});
 const AppPtr = ref.refType(App);
 
+
+const Time = Struct({
+  "tm_sec": i32,
+  "tm_min": i32,
+  "tm_hour": i32,
+  "tm_mday": i32,
+  "tm_mon": i32,
+  "tm_year": i32,
+  "tm_wday": i32,
+  "tm_yday": i32,
+  "tm_isdst": i32,
+  "tm_utcoff": i32,
+  "tm_nsec": i32,
+});
+
 module.exports = {
   types: {
     App,
@@ -42,15 +57,28 @@ module.exports = {
     u8Pointer,
     Void,
     usize,
-    NULL
+    NULL,
+    Time
   },
   helpers: {
     fromCString: (cstr) => cstr.readCString(),
     asBuffer: (res) => ref.reinterpret(res[0], res[1]),
-    asFFIString: function(str) {
-      throw Error("Not Supported");
-      return [str]
-    },
+    makeCTime: (dt) => new Time({
+      "tm_sec": dt.getUTCSeconds(),
+      "tm_min": dt.getUTCMinutes(),
+      "tm_hour": dt.getUTCHours(),
+      "tm_mday": dt.getUTCDate(),
+      "tm_mon": dt.getUTCMonth(),
+      "tm_year": dt.getUTCFullYear(),
+      "tm_wday": dt.getUTCDay(), // yeah, this is the _week_ day
+      "tm_yday": 0, // ToDo: Is this  needed?
+      "tm_isdst": 0,
+      "tm_utcoff": 0,
+      "tm_nsec": 0,
+    }),
+    fromCTime: (ctime) => new Date.UTC(ctime.tm_year, ctime.tm_mon, ctime.mday,
+                                  // FIXME: offset handling anyone?
+                                  ctime.tm_hour, ctime.tm_min, ctime.tm_sec),
     Promisified: function(formatter, rTypes, after) {
       // create internal function that will be
       // invoked ontop of the direct binding

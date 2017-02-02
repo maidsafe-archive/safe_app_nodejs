@@ -1,18 +1,28 @@
 const h = require('../helpers');
 const lib = require('../native/lib');
+const t = require('../native/types');
 const emulations = require('./emulations');
+
+function toAction(action) {
+  const a = t.MDataAction.get(action);
+  if (!a) throw Error(`'${action}' is not a valid action!`);
+  return a;
+}
 
 class PermissionsSet extends h.NetworkObject {
 
   setAllow(action) {
-    return lib.mdata_permissions_set_allow(this.app.connection, this.ref, action);
+    return lib.mdata_permissions_set_allow(this.app.connection,
+          this.ref, toAction(action));
   }
   setDeny(action) {
-    return lib.mdata_permissions_set_deny(this.app.connection, this.ref, action);
+    return lib.mdata_permissions_set_deny(this.app.connection,
+          this.ref, toAction(action));
   }
 
   clear(action) {
-    return lib.mdata_permissions_set_clear(this.app.connection, this.ref, action);
+    return lib.mdata_permissions_set_clear(this.app.connection,
+          this.ref, toAction(action));
   }
 
   static free(app, ref) {
@@ -114,7 +124,7 @@ class EntryMutationTransaction extends h.NetworkObject {
 class Entries extends h.NetworkObject {
 
   len() {
-    return lib.mdata_entries_len(this.app, this.ref);
+    return lib.mdata_entries_len(this.app.connection, this.ref);
   }
 
   static free(app, ref) {
@@ -128,7 +138,7 @@ class Entries extends h.NetworkObject {
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return lib.mdata_entries_for_each(this.app, this.ref, fn);
+    return lib.mdata_entries_for_each(this.app.connection, this.ref, fn);
   }
 
   insert(keyName, value) {
@@ -149,7 +159,7 @@ class Entries extends h.NetworkObject {
 class Keys extends h.NetworkObject {
 
   len() {
-    return lib.mdata_keys_len(this.app, this.ref);
+    return lib.mdata_keys_len(this.app.connection, this.ref);
   }
 
   forEach(fn) {
@@ -166,7 +176,7 @@ class Keys extends h.NetworkObject {
 class Values extends h.NetworkObject {
 
   len() {
-    return lib.mdata_values_len(this.app, this.ref);
+    return lib.mdata_values_len(this.app.connection, this.ref);
   }
 
   forEach(fn) {
@@ -222,45 +232,42 @@ class MutableData extends h.NetworkObject {
   }
 
   getVersion() {
-    return lib.mdata_get_version(this.app, this.ref);
+    return lib.mdata_get_version(this.app.connection, this.ref);
   }
 
   get(key) {
     return lib.mdata_get_value(this.app.connection, this.ref, key);
   }
 
-  put(pm, entries) {
-    return lib.mdata_put(this.app.connection, this.ref, pm.ref, entries.ref);
+  put(permissions, entries) {
+    return lib.mdata_put(this.app.connection, this.ref, permissions.ref, entries.ref);
   }
 
   getEntries() {
     // Get or Creates a new set
     // storing local reference
-    return lib.mdata_list_entries(this.app, this.ref)
+    return lib.mdata_list_entries(this.app.connection, this.ref)
         .then((r) => h.autoref(new Entries(this.app, r)));
   }
 
   getKeys() {
-    return lib.mdata_list_keys(this.app, this.ref)
+    return lib.mdata_list_keys(this.app.connection, this.ref)
         .then((r) => h.autoref(new Keys(this.app, r)));
   }
 
   getValues() {
-    return lib.mdata_list_values(this.app, this.ref)
+    return lib.mdata_list_values(this.app.connection, this.ref)
         .then((r) => h.autoref(new Values(this.app, r)));
   }
 
   getPermissions() {
-    // Get or Creates a new set
-    // storing local reference
-    return lib.mdata_list_permissions(this.app, this.ref);
+    return lib.mdata_list_permissions(this.app.connection, this.ref)
+      .then((r) => h.autoref(new Permissions(this.app, r, this)));
   }
 
   getUserPermissions(signKey) {
-    return lib.mdata_list_user_permissions(this.app,
-                                           this.ref,
-                                           signKey)
-      .then((r) => h.autoref(new PermissionsSet(this.app, r)));
+    return lib.mdata_list_user_permissions(this.app, this.ref, signKey)
+      .then((r) => h.autoref(new Permissions(this.app, r, this)));
   }
 
   changeOwner(otherSignKey, version) {
@@ -275,7 +282,7 @@ class MutableData extends h.NetworkObject {
   }
 
   emulateAs(eml) {
-    return emulations[eml](this);
+    return new emulations[eml](this);
   }
 
 }
