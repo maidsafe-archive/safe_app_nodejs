@@ -1,5 +1,6 @@
 const path = require('path');
 const FFI = require('ffi');
+const LIB_FILENAME = require('../consts').LIB_FILENAME;
 
 const dir = path.dirname(__filename);
 
@@ -17,7 +18,7 @@ api.forEach(function(mod){
   }
 });
 
-const ffi = FFI.Library(path.join(dir, 'libsafe_app'), ffiFunctions);
+const ffi = FFI.Library(path.join(dir, LIB_FILENAME), ffiFunctions);
 
 for (const key in mappings) {
   ffi[key].fn_name = key;
