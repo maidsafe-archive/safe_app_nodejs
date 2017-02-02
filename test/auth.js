@@ -4,7 +4,7 @@ const h = require('./helpers');
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
 describe('Access Container', () => {
-  const app = createAuthenticatedTestApp();
+  const app = createAuthenticatedTestApp('_test_scope');
 
   it('is authenticated for testing', () => {
     should(app.auth.registered).be.true();
