@@ -11,6 +11,7 @@ const createTestApp = (scope) => new App({ id: 'net.maidsafe.test.javascript.id'
 function createAuthenticatedTestApp(scope) {
   const app = createTestApp(scope);
   app.connection = lib.gen_testing_app_with_access();
+  //app.decode_ipc_msg = lib.decode_ipc_msg;
   app.auth._registered = true;
   return app;
 }

@@ -2,11 +2,11 @@ const makeFfiError = require('./_error.js');
 const ffi = require('ffi');
 const ref = require('ref');
 const Struct = require('ref-struct');
-const ArrayType = require('ref-array'); 
+const ArrayType = require('ref-array');
 
 const i32 = ref.types.int32;
-const u8 = ref.types.uint8; 
-const u64 = ref.types.uint64; 
+const u8 = ref.types.uint8;
+const u64 = ref.types.uint64;
 const u8Pointer = ref.refType(u8);
 const Void = ref.types.void;
 const VoidPtr = ref.refType(Void);
@@ -16,12 +16,13 @@ const NULL = ref.types.NULL;
 
 const u8Array = new ArrayType(u8);
 const XOR_NAME = new ArrayType(u8, 32); // FIXME: use exported const instead
-const PUBLICKEYBYTES = ref.refType(ArrayType(usize, 32)); // FIXME: use exported const instead
+const KEYBYTES = ArrayType(u8, 32); // FIXME: use exported const instead
+const SIGN_SECRETKEYBYTES = ArrayType(u8, 64);
+const NONCEBYTES = ArrayType(u8, 32); // I'm not sure if this is the right size or if it's 24
 
 const ObjectHandle = u64;
 const App = Struct({});
 const AppPtr = ref.refType(App);
-
 
 module.exports = {
   types: {
@@ -29,7 +30,9 @@ module.exports = {
     AppPtr,
     ObjectHandle,
     XOR_NAME,
-    PUBLICKEYBYTES,
+    KEYBYTES,
+    SIGN_SECRETKEYBYTES,
+    NONCEBYTES,
     VoidPtr,
     i32,
     bool,
@@ -60,7 +63,7 @@ module.exports = {
         // if there is a formatter, we are reformatting
         // the incoming arguments first
         const args = formatter ? formatter.apply(formatter, arguments): Array.prototype.slice.call(arguments);
-        
+
         // compile the callback-types-definiton
         let types = ['pointer', i32]; // we always have: user_context, error
         if (Array.isArray(rTypes)) {

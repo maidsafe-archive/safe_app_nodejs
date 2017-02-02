@@ -55,36 +55,36 @@ const ContainerReq = Struct({
 const AppKeys = Struct({
   // /// Owner signing public key
   // pub owner_key: [u8; sign::PUBLICKEYBYTES],
-  owner_key: t.u8Array,
+  owner_key: t.KEYBYTES,
   // /// Data symmetric encryption key
   // pub enc_key: [u8; secretbox::KEYBYTES],
-  enc_key: t.u8Array,
+  enc_key: t.KEYBYTES,
   // /// Asymmetric sign public key.
   // ///
   // /// This is the identity of the App in the Network.
   // pub sign_pk: [u8; sign::PUBLICKEYBYTES],
-  sign_pk: t.u8Array,
+  sign_pk: t.KEYBYTES,
   // /// Asymmetric sign private key.
   // pub sign_sk: [u8; sign::SECRETKEYBYTES],
-  sign_sk: t.u8Array,
+  sign_sk: t.SIGN_SECRETKEYBYTES,
   // /// Asymmetric enc public key.
   // pub enc_pk: [u8; box_::PUBLICKEYBYTES],
-  enc_pk: t.u8Array,
+  enc_pk: t.KEYBYTES,
   // /// Asymmetric enc private key.
   // pub enc_sk: [u8; box_::SECRETKEYBYTES],
-  enc_sk: t.u8Array
+  enc_sk: t.KEYBYTES
 })
 
 const AccessContInfo = Struct({
   // /// ID
   // pub id: [u8; XOR_NAME_LEN],
-  id: t.u8Array,
+  id: t.XOR_NAME,
   // /// Type tag
   // pub tag: u64,
   tag: t.u64,
   // /// Nonce
   // pub nonce: [u8; secretbox::NONCEBYTES],
-  nonce: t.u8Array
+  nonce: t.NONCEBYTES
 
 });
 
@@ -109,7 +109,7 @@ function makePermissions(perms) {
     return ContainerPermissions({
       cont_name: key,
       access: permArray,
-      access_len: permArray.length, 
+      access_len: permArray.length,
       access_cap: permArray.length
     });
   }));
@@ -137,7 +137,7 @@ module.exports = {
     encode_containers_req: [t.i32, [ref.refType(ContainerReq), 'pointer', 'pointer'] ],
     decode_ipc_msg: [t.Void, [
                       "string", //  (msg: *const c_char,
-                      "pointer", // user_data: *mut c_void,
+                      t.VoidPtr, // user_data: *mut c_void,
                       "pointer", // o_auth: extern "C" fn(*mut c_void, u32, FfiAuthGranted),
                       "pointer", // o_containers: extern "C" fn(*mut c_void, u32),
                       "pointer", // o_revoked: extern "C" fn(*mut c_void),
@@ -170,19 +170,19 @@ module.exports = {
         return new Promise(function(resolve, reject) {
           fn.async(str,
                    ref.NULL,
-                   ffi.Callback("void", ["uint32", FfiAuthGranted], function(e, authGranted) {
+                   ffi.Callback("void", [t.VoidPtr, "uint32", ref.refType(AuthGranted)], function(user_data, req_id, authGranted) {
                       resolve(["granted", authGranted])
                    }),
-                   ffi.Callback("void", ["uint32"], function(e) {
-                      resolve(["containers", e])
+                   ffi.Callback("void", [t.VoidPtr, "uint32"], function(user_data, req_id) {
+                      resolve(["containers", req_id])
                    }),
-                   ffi.Callback("void", [], function() {
+                   ffi.Callback("void", [t.VoidPtr], function(user_data) {
                       resolve(["revoked"])
                    }),
-
-                   ffi.Callback("void", ["uint32", "i32"], function(code, msg) {
+                   ffi.Callback("void", [t.VoidPtr, t.i32, "uint32"], function(user_data, code, msg) {
                       reject([code, msg])
-                   })
+                   }),
+                   function () {}
               )
         })
       })
