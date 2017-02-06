@@ -7,6 +7,8 @@
     "lint": "eslint src test",
     "fix-lint": "eslint --fix src test",
 
+    "clean": "cd system_uri && cargo clean && cd ../native/safe_app && cargo clean",
+
     "build-system-uri-release": "cd system_uri && cargo build --release && cd ../ && cp -f system_uri/target/release/*system_uri* ./src/native",
     "build-safe-lib-release": "cd native/safe_app && cargo build --release && cd ../../ && cp -f native/target/release/*safe_app* ./src/native",
     "build-libs-release": "npm run build-system-uri-release && npm run build-safe-app-release",
@@ -17,7 +19,7 @@
     
     "prepublish": "npm run build-libs",
     "pretest": "npm run build-libs",
-    "test": "RUST_BACKTRACE=1 mocha"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
