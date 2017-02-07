@@ -20,7 +20,8 @@ describe('Smoke test', () => {
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
-  it('creates registered for testing', () => {
+  it('creates registered for testing', function (){
+    this.timeout(5000);
     const app = createAuthenticatedTestApp();
     should(app.auth.registered).be.true();
   });
