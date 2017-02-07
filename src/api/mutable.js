@@ -201,8 +201,8 @@ class Values extends h.NetworkObject {
 class MutableData extends h.NetworkObject {
   constructor(app, mdataRef) {
     super(app, mdataRef);
-    this.entriesRef = null;
-    this.permissionsRef = null;
+    this.entriesRef = 0;
+    this.permissionsRef = 0;
   }
 
   static free(app, ref) {
@@ -222,15 +222,15 @@ class MutableData extends h.NetworkObject {
   }
 
   getVersion() {
-    return lib.mdata_get_version(this.app, this.mdataRef);
+    return lib.mdata_get_version(this.app.connection, this.ref);
   }
 
   get(key) {
-    return lib.mdata_get_value(this.app, this.mdataRef, key.ptr, key.len);
+    return lib.mdata_get_value(this.app.connection, this.ref, key.ptr, key.len);
   }
 
   put() {
-    return lib.mdata_put(this.app, this.mdataRef, this.permissionsRef, this.entriesRef);
+    return lib.mdata_put(this.app.connection, this.ref, this.permissionsRef, this.entriesRef);
   }
 
   getEntries() {
