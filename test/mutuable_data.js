@@ -35,4 +35,27 @@ describe('Mutable Data', () => {
             should(r.name).not.be.undefined();
             should(r.tag).equal(TAG_TYPE);
           }));
+
+  describe('I/O', () => {
+    it('can write and read from new', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup({ key: 'value' })
+        .then(() => m.get('key')
+          .then((v) => {
+            should(v.version).equal(0);
+            should(v.buf.toString()).equal('value');
+          })))
+    );
+
+    it('can write and read from name', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup({ myKey: 'other' })
+        .then(() => m.getNameAndTag()
+          .then(res => res.name)
+          .then(name => app.mutableData.newPublic(name, TAG_TYPE)
+            .then(() => m.get('myKey')
+              .then((v) => {
+                should(v.version).equal(0);
+                should(v.buf.toString()).equal('other');
+              })))))
+    );
+  });
 });
