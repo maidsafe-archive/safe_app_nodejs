@@ -8,5 +8,6 @@ module.exports = [
   require('./_mutable'),
   require('./_misc'),
   require('./_nfs'),
+  require('./_misc'),
   isInTest ? require("./_testing") : {} // we have some testing helpers
 ];
