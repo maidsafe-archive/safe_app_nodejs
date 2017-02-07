@@ -1,13 +1,13 @@
 const weak = require('weak');
 
 class NetworkObject {
-  constructor(app, ref){
+  constructor(app, ref) {
     this._app = app;
     this._ref = ref;
   }
 
   get app() {
-    return this._app
+    return this._app;
   }
 
   get ref() {

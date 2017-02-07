@@ -7,7 +7,7 @@ describe('Immutable Data', () => {
     const testString = `test-${Math.random()}`;
 
     return app.immutableData.create()
-      .then((w) =>w.write(testString)
+      .then((w) => w.write(testString)
         .then(() => w.close())
         .then((addr) => app.immutableData.fetch(addr)
            .then((r) => r.read())

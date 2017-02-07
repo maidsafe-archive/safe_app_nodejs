@@ -20,21 +20,20 @@ class SAFEApp extends EventEmitter {
 
   webFetch(url) {
     const parsedUrl = parseUrl(url);
-    if (!parsedUrl) return Promise.reject(new Error("Not a proper URL!"));
+    if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
 
     const hostname = parsedUrl.hostname;
     const path = parsedUrl.pathname || '';
     // lets' unpack
-    let hostParts = hostname.split('.');
+    const hostParts = hostname.split('.');
     const lookupName = hostParts.pop(); // last one is 'domain'
-    let serviceName = hostParts.join('.'); // all others are 'service'
+    const serviceName = hostParts.join('.'); // all others are 'service'
     const address = crypto.createHash('sha256').update(lookupName).digest();
 
     return this.mutableData.newPublic(address, consts.TAG_TYPE_DNS)
-      .then(mdata => mdata.get(serviceName)
-        .then(value => this.mutableData.newPublic(value.buf, consts.TAG_TYPE_WWW))
-        .then(service => service.emulateAs("NFS").fetch(path)))
-
+      .then((mdata) => mdata.get(serviceName)
+        .then((value) => this.mutableData.newPublic(value.buf, consts.TAG_TYPE_WWW))
+        .then((service) => service.emulateAs('NFS').fetch(path)));
   }
 
   set connection(con) {
@@ -45,7 +44,7 @@ class SAFEApp extends EventEmitter {
   }
 
   get connection() {
-    if (!this._connection) throw Error("Setup Incomplete. Connection not available yet.");
+    if (!this._connection) throw Error('Setup Incomplete. Connection not available yet.');
     return this._connection;
   }
 

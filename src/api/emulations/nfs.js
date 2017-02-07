@@ -2,10 +2,9 @@ const h = require('../../helpers');
 const lib = require('../../native/lib');
 const t = require('../../native/types');
 const nativeH = require('../../native/helpers');
-const ref = require('ref');
 
 function isString(arg) {
-  return typeof arg === 'string' || (arg.toString ? arg.toString() === '[object String]' : false)
+  return typeof arg === 'string' || (arg.toString ? arg.toString() === '[object String]' : false);
 }
 
 class File extends h.NetworkObject {
@@ -24,19 +23,18 @@ class File extends h.NetworkObject {
     if (this._ref.metadata) {
       let mData = this._ref.metadata;
       if (!isString(this._ref.metadata)) {
-        mData = JSON.stringify(this._ref.metadata) 
+        mData = JSON.stringify(this._ref.metadata);
       }
 
       const buf = new Buffer(mData);
-      data.user_metadata_ptr = buf.ref()
-      data.user_metadata_len = buf.length
-      data.user_metadata_cap = buf.length
+      data.user_metadata_ptr = buf.ref();
+      data.user_metadata_len = buf.length;
+      data.user_metadata_cap = buf.length;
     }
-    console.log('-----', data);
     return new t.File(data);
   }
 
-  get data_map_name() {
+  get dataMapName() {
     return this._ref.data_map_name;
   }
 
@@ -74,11 +72,11 @@ class NfsEmulation {
       .then((w) => w.write(content)
         .then(() => w.close()
           .then((xorAddr) => new File(this.mData.app, {
-                size: content.length,
-                data_map_name: xorAddr,
-                created: nativeH.makeCTime(now),
-                modified: nativeH.makeCTime(now)
-              }))
+            size: content.length,
+            data_map_name: xorAddr,
+            created: nativeH.makeCTime(now),
+            modified: nativeH.makeCTime(now)
+          }))
         )
     );
   }
@@ -90,12 +88,12 @@ class NfsEmulation {
 
   insert(fileName, file) {
     return lib.file_insert(this.mData.app.connection, this.mData.ref, fileName, file.ref.ref())
-      .then((info) => file);
+      .then(() => file);
   }
 
   update(fileName, file, version) {
     return lib.file_update(this.mData.app.connection, this.mData.ref, fileName, file.ref, version)
-      .then((info) => file);
+      .then(() => file);
   }
 }
 

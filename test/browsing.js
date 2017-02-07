@@ -23,15 +23,15 @@ describe('Browsing', () => {
             .then(() => {
               const dnsName = c.createHash('sha256').update(domain).digest();
               return app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS)
-                .then(dnsData => serviceMdata.getNameAndTag()
-                    .then(res => dnsData.quickSetup({'': res.name})));
+                .then((dnsData) => serviceMdata.getNameAndTag()
+                    .then((res) => dnsData.quickSetup({ '': res.name })));
             });
         }));
   });
 
   it('fetch content', () => createAnonTestApp()
     .then((app) => app.webFetch(`safe://${domain}`)
-      .then((f) => app.immutableData.fetch(f.data_map_name))
+      .then((f) => app.immutableData.fetch(f.dataMapName))
       .then((i) => i.read())
       .then((co) => should(co.toString()).equal(content))
   ));
