@@ -1,31 +1,47 @@
 const path = require('path');
 const FFI = require('ffi');
 const LIB_FILENAME = require('../consts').LIB_FILENAME;
+const os = require('os');
 
 const dir = path.dirname(__filename);
 
 const api = require('./api');
 
-let ffiFunctions = {};
-let mappings = {}
+const ffi = {};
+
+
+
+const RTLD_NOW = FFI.DynamicLibrary.FLAGS.RTLD_NOW;
+const RTLD_GLOBAL = FFI.DynamicLibrary.FLAGS.RTLD_GLOBAL;
+const mode = RTLD_NOW | RTLD_GLOBAL;
+
+if (os.platform() === 'win32') {
+  FFI.DynamicLibrary(path.resolve(__dirname, 'libwinpthread-1'), mode);  
+}
+
+const lib = FFI.DynamicLibrary(path.join(dir, LIB_FILENAME), mode);
+
 
 api.forEach(function(mod){
-  if (mod.functions ){
-    Object.assign(ffiFunctions, mod.functions);
+  if (mod.functions){
+    for (const key in mod.functions) {
+      const funcDefinition = mod.functions[key];
+      ffi[key] = FFI.ForeignFunction(lib.get(key),
+                                     funcDefinition[0],
+                                     funcDefinition[1])
+    }
   }
   if (mod.api) {
-    Object.assign(mappings, mod.api);
+    for (const key in mod.api) {
+      ffi[key].fn_name = key;
+      let fn = mod.api[key](ffi, ffi[key]);
+      fn.fn_name = "[mapped]" + key;
+      ffi[key] = fn;
+    }
+  //   Object.assign(mappings, mod.api);
   }
 });
 
-const ffi = FFI.Library(path.join(dir, LIB_FILENAME), ffiFunctions);
-
-for (const key in mappings) {
-  ffi[key].fn_name = key;
-  let fn = mappings[key](ffi, ffi[key]);
-  fn.fn_name = "[mapped]" + key;
-  ffi[key] = fn;
-}
 
 // FIXME: As long as `safe-app` doesn't expose system uri itself, we'll
 // patch it directly on it. This should later move into its own sub-module
