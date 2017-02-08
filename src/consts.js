@@ -1,8 +1,7 @@
-
 const os = require('os');
 
-const TAG_TYPE_DNS = 1500;
-const TAG_TYPE_WWW = 1500;
+const TAG_TYPE_DNS = 15001;
+const TAG_TYPE_WWW = 15002;
 
 const LIB_FILENAME = {
   win32: 'safe_app.dll',
