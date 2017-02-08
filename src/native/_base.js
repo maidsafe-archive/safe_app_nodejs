@@ -88,10 +88,6 @@ module.exports = {
         // the internal function that wraps the
         // actual function call
 
-        // if there is a formatter, we are reformatting
-        // the incoming arguments first
-        const args = formatter ? formatter.apply(formatter, arguments): Array.prototype.slice.call(arguments);
-
         // compile the callback-types-definiton
         let types = ['pointer', i32]; // we always have: user_context, error
         if (Array.isArray(rTypes)) {
@@ -100,6 +96,16 @@ module.exports = {
           types.push(rTypes);
         }
         return new Promise((resolve, reject) => {
+          // if there is a formatter, we are reformatting
+          // the incoming arguments first
+          let args;
+          try {
+            args = formatter ? formatter.apply(formatter, arguments): Array.prototype.slice.call(arguments);
+          } catch(err) {
+            // reject promise if error is thrown by the formatter
+            return reject(err);
+          }
+
           // append user-context and callback
           // to the arguments
           args.push(ref.NULL);
