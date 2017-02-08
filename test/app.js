@@ -21,7 +21,7 @@ describe('Smoke test', () => {
   });
 
   it('creates registered for testing', function testingCreated() {
-    this.timeout(5000);
+    this.timeout(20000);
     const app = createAuthenticatedTestApp();
     should(app.auth.registered).be.true();
   });
