@@ -30,14 +30,12 @@ module.exports = {
   },
   api: {
     file_fetch: h.Promisified(null, [FilePtr, t.u64], (res) => {
-      console.log("response:", res);
-      const file = File(res[0]);
-      console.log("YAY, FILE: --- ", file);
+      const file = res[0].deref();
       const data_map_name = file.data_map_name;
       const size = file.size;
       const created = file.created;
       const modified = file.modified;
-      let metadata = file.user_metadata_ptr.isNull()
+      let metadata = file.user_metadata_len > 0
                      ? null
                      : ref.reinterpret(file.user_metadata_ptr,
                                        file.user_metadata_len);
