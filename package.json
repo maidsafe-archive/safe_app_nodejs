@@ -19,6 +19,7 @@
     
     "prepublish": "npm run build-libs",
     "pretest": "npm run build-libs",
+    "docs": "documentation build --github true --theme node_modules/clean-documentation-theme --output docs --format html src/**",
     "test": "mocha"
   },
   "repository": {
@@ -40,6 +41,8 @@
     "weak": "^1.0.1"
   },
   "devDependencies": {
+    "clean-documentation-theme": "^0.4.2",
+    "documentation": "^4.0.0-beta.18",
     "eslint": "^3.12.2",
     "eslint-config-airbnb-base": "^11.0.0",
     "eslint-plugin-import": "^2.2.0",
