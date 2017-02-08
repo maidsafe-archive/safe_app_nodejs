@@ -12,6 +12,7 @@ describe('Mutable Data', () => {
   const TEST_NAME_PRIVATE = 'test-name-private-01010101010101';
   const TEST_NAME_PUBLIC  = 'test-name-public--01010101010101';
   const TEST_NAME_INVALID = 'name-shorter-than-32-bytes-long';
+  const TEST_ENTRIES = { key1: 'value1', key2: 'value2' };
 
   describe('Create with invalid values', () => {
     it.skip('create random public with reserved tag type', () => {
@@ -116,18 +117,47 @@ describe('Mutable Data', () => {
       );
 
       it('get existing key', () => app.mutableData.newRandomPublic(TAG_TYPE)
-          .then((m) => m.quickSetup({ key: 'value' }).then(() => m.get('key')))
+          .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.get('key1')))
           .then((value) => {
             should(value).not.be.undefined();
-            should(value.buf.toString()).equal('value');
+            should(value.buf.toString()).equal('value1');
           })
       );
   });
 
   describe('Entries', () => {
-      it.skip('insert and get a single entry', () => {
-         throw new Error('Not Implemented')
-      });
+      it('get entries and check length', () => app.mutableData.newRandomPublic(TAG_TYPE)
+          .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
+          .then((entries) => entries.len())
+          .then((len) => {
+            should(len).equal(Object.keys(TEST_ENTRIES).length);
+          })
+      );
+
+      it('get entries and get a value', () => app.mutableData.newRandomPublic(TAG_TYPE)
+          .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
+          .then((entries) => entries.get('key1'))
+          .then((value) => {
+            should(value).not.be.undefined();
+            should(value.buf.toString()).equal('value1');
+          })
+      );
+
+      it('insert & get a single value', () => app.mutableData.newRandomPublic(TAG_TYPE)
+          .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
+          .then((entries) => entries.insert('newKey', 'newValue').then(entries.get('newKey')
+          .then((value) => {
+            should(value).not.be.undefined();
+            should(value.buf.toString()).equal('newValue');
+          }))
+      ));
+
+      it.skip('forEach entry', () => app.mutableData.newRandomPublic(TAG_TYPE)
+          .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
+          .then((entries) => entries.forEach((key, value) => {
+            throw new Error('Not Implemented')
+          }))
+      );
 
       it.skip('update a single entry', () => {
         throw new Error('Not Implemented')
@@ -138,10 +168,6 @@ describe('Mutable Data', () => {
       });
 
       it.skip('delete a single entry', () => {
-        throw new Error('Not Implemented')
-      });
-
-      it.skip('get list of entries', () => {
         throw new Error('Not Implemented')
       });
 
