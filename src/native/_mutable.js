@@ -97,7 +97,7 @@ module.exports = {
     mdata_list_entries: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_list_keys: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_list_values: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
-    mdata_mutate_entries: [t.Void, [t.AppPtr, MDataEntryActionsHandle, MDataEntryActionsHandle, 'pointer', 'pointer']],
+    mdata_mutate_entries: [t.Void, [t.AppPtr, MDataInfoHandle, MDataEntryActionsHandle, 'pointer', 'pointer']],
     mdata_list_permissions: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_list_user_permissions: [t.Void, [t.AppPtr, MDataInfoHandle, SignKeyHandle, 'pointer', 'pointer']],
     mdata_set_user_permissions: [t.Void, [t.AppPtr, MDataInfoHandle, SignKeyHandle, MDataPermissionSetHandle, t.u64, 'pointer', 'pointer']],

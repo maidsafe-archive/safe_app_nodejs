@@ -122,7 +122,6 @@ describe('Mutable Data', () => {
         })
     );
 
-
     it('serialise/deserialise smoketest', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => m.serialise())) // serialise
@@ -192,24 +191,6 @@ describe('Mutable Data', () => {
         })
     );
 
-    it.skip('apply insert mutation', () => app.mutableData.newRandomPublic(TAG_TYPE)
-        .then((m) => m.quickSetup(TEST_ENTRIES)
-          .then(() => app.mutableData.newMutation()
-            .then((mut) => mut.insert('newKey', 'newValue')
-              .then(() => m.getEntries()
-                .then((entries) => entries.apply(mut)
-                  .then(() => entries.get('newKey'))
-                  .then((value) => {
-                    should(value).not.be.undefined();
-                    should(value.buf.toString()).equal('newValue');
-                  })
-                )))))
-    );
-
-    it.skip('single mutation followed by a bulk mutation', () => {
-      throw new Error('Not Implemented');
-    });
-
     it.skip('encrypt entry key', () => {
       throw new Error('Not Implemented');
     });
@@ -217,6 +198,66 @@ describe('Mutable Data', () => {
     it.skip('encrypt entry value', () => {
       throw new Error('Not Implemented');
     });
+  });
+
+  describe('Applying EntryMutationTransaction', () => {
+    it('an insert mutation from existing entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getEntries()
+            .then((entries) => entries.mutate()
+              .then((mut) => mut.insert('newKey', 'newValue')
+                .then(() => m.applyEntriesMutation(mut))
+                .then(() => m.get('newKey'))
+                .then((value) => {
+                  should(value).not.be.undefined();
+                  should(value.buf.toString()).equal('newValue');
+                })
+            ))))
+    );
+
+    it.skip('an update mutation from existing entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getEntries()
+            .then((entries) => entries.mutate()
+              .then((mut) => mut.update('key2', 'updatedValue', 1)
+                .then(() => m.applyEntriesMutation(mut))
+                .then(() => m.get('key2'))
+                .then((value) => {
+                  should(value).not.be.undefined();
+                  should(value.buf.toString()).equal('updatedValue');
+                })
+            ))))
+    );
+
+    it.skip('a remove mutation from existing entries', () => {
+      throw new Error('Not Implemented');
+    });
+
+    it('an insert mutation from new mutation obj', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newMutation()
+            .then((mut) => mut.insert('newKey', 'newValue')
+              .then(() => m.applyEntriesMutation(mut))
+              .then(() => m.get('newKey'))
+              .then((value) => {
+                should(value).not.be.undefined();
+                should(value.buf.toString()).equal('newValue');
+              })
+            )))
+    );
+
+    it.skip('an update mutation from new mutation obj', () => {
+      throw new Error('Not Implemented');
+    });
+
+    it.skip('a remove mutation from new mutation obj', () => {
+      throw new Error('Not Implemented');
+    });
+
+    it.skip('a single mutation followed by a bulk mutation', () => {
+      throw new Error('Not Implemented');
+    });
+
   });
 
   describe.skip('Permissions', () => {
