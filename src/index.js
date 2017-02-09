@@ -5,8 +5,8 @@ const version = require('../package.json').version;
 
 /**
  * The main entry point to create a new SAFEApp
- * @arg appInfo
- * @return {Promise(SafeApp)} promise to a SAFEApp instance
+ * @arg {Object} appInfo
+ * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  * @example // Usage Example
  * const safe = require('safe');
  * const lib = require('safe/native/lib');
@@ -38,7 +38,9 @@ function initializeApp(appInfo) {
  * to store securely), you can directly get an authenticated app
  * by using this helper function. Just provide said URI as the
  * second value.
- * @return {Promise(SafeApp)} promise to a SAFEApp instance
+ * @param {Object} appInfo
+ * @param {String} responseUrl
+ * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  */
 function fromAuthURI(appInfo, responseUrl) {
   return App.fromAuthUri(appInfo, responseUrl);
