@@ -16,7 +16,7 @@ const lib = require('../src/native/lib');
 const appInfo = {
   'id': 'net.maidsafe.examples.nfsReadWrite',
   'name': 'NodeJS example App - NFS read/write',
-  'vendor': 'MaidSafe.net Ltd.'
+  'vendor': 'MaidSafe'
 };
 
 const containers = {
@@ -110,9 +110,9 @@ authoriseApp()
         // Fetching file created. This returns File object which holds the Immutable data address within `data_map_name` key.
         .then(() => nfs.fetch(fileName))
         // Get Immutable data reader object
-        .then((res) => appObj.immutableData.fetch(res.data_map_name))
+        .then((file) => appObj.immutableData.fetch(file.ref.data_map_name))
         // Read the Immutable data
-        .then((res) => res.read())
+        .then((i) => i.read())
         .then((res) => {
           console.log('\nImmutable data content ::', res.toString());
           return resolve(res);

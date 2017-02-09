@@ -15,7 +15,7 @@ const lib = require('../src/native/lib');
 const appInfo = {
   'id': 'net.maidsafe.examples.createPublicName',
   'name': 'NodeJS example App - create public name',
-  'vendor': 'MaidSafe.net Ltd.'
+  'vendor': 'MaidSafe'
 };
 
 const containers = {
@@ -105,7 +105,7 @@ authoriseApp()
         .catch(reject)
     });
   })
-  .then((data) => (serializedData = data))
+  .then((data) => (serializedData = data.toString('base64')))
   // Get _publicNames container to store the new Public Name
   .then(() => appObj.auth.getAccessContainerInfo('_publicNames'))
   .then((mut) => mut.getEntries())
