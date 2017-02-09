@@ -6,6 +6,10 @@ const crypto = require('crypto');
 const parseUrl = require('url').parse;
 const consts = require('./consts');
 
+
+/**
+ * Holds one sessions with the network
+ */
 class SAFEApp extends EventEmitter {
   // internal wrapper
   constructor(appInfo) { // -> SAFEApp
