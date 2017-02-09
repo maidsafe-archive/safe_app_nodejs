@@ -11,7 +11,7 @@ describe('Browsing', () => {
   const content = `hello world, on ${domain}`;
 
   before(function setup() {
-    this.timeout(5000);
+    this.timeout(20000);
     const app = createAuthenticatedTestApp();
     return app.mutableData.newRandomPublic(consts.TAG_TYPE_WWW)
       .then((serviceMdata) => serviceMdata.quickSetup()

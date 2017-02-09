@@ -27,9 +27,10 @@ const MDataAction = new Enum({
 
 function bufferLastEntry() {
   let str = new Buffer(arguments[arguments.length - 1]);
-  return Array.prototype.slice.call(arguments, 0)
+  return Array.prototype.slice.call(arguments, 0, arguments.length - 1)
         .concat([str, str.length]);
 }
+
 function translateXorName(appPtr, str, tag) {
   let name = str;
   if (!Buffer.isBuffer(str)) {
@@ -96,7 +97,7 @@ module.exports = {
     mdata_list_entries: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_list_keys: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_list_values: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
-    mdata_mutate_entries: [t.Void, [t.AppPtr, MDataInfoHandle, MDataEntryActionsHandle, 'pointer', 'pointer']],
+    mdata_mutate_entries: [t.Void, [t.AppPtr, MDataEntryActionsHandle, MDataEntryActionsHandle, 'pointer', 'pointer']],
     mdata_list_permissions: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_list_user_permissions: [t.Void, [t.AppPtr, MDataInfoHandle, SignKeyHandle, 'pointer', 'pointer']],
     mdata_set_user_permissions: [t.Void, [t.AppPtr, MDataInfoHandle, SignKeyHandle, MDataPermissionSetHandle, t.u64, 'pointer', 'pointer']],
@@ -162,14 +163,14 @@ module.exports = {
     mdata_del_user_permissions: Promisified(null, []),
     mdata_change_owner: Promisified(null, []),
     mdata_entry_actions_new: Promisified(null, MDataEntryActionsHandle),
-    mdata_entry_actions_insert: Promisified(null, []),
+    mdata_entry_actions_insert: Promisified(strToBuffer, []),
     mdata_entry_actions_update: Promisified(null, []),
-    mdata_entry_actions_delete: Promisified(null, []),
+    mdata_entry_actions_delete: Promisified(strToBuffer, []),
     mdata_entry_actions_free: Promisified(null, []),
     mdata_entries_new: Promisified(null, MDataEntriesHandle),
     mdata_entries_insert: Promisified(strToBuffer, []),
     mdata_entries_len: Promisified(null, t.usize),
-    mdata_entries_get: Promisified(strToBuffer, [t.u8Pointer, t.usize, t.u64]),
+    mdata_entries_get: Promisified(strToBuffer, [t.u8Pointer, t.usize, t.u64], readValueToBuffer),
     mdata_entries_for_each: Promisified(null, []),
     mdata_entries_free: Promisified(null, []),
     mdata_keys_len: Promisified(null, t.usize),
