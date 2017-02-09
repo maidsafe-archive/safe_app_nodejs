@@ -273,7 +273,7 @@ class MutableData extends h.NetworkObject {
   }
 
   serialise() {
-    return lib.mdata_info_deserialise(this.app.connection, this.ref);
+    return lib.mdata_info_serialise(this.app.connection, this.ref);
   }
 
   emulateAs(eml) {

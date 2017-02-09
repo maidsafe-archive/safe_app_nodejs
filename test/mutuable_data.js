@@ -121,6 +121,13 @@ describe('Mutable Data', () => {
           should(value.buf.toString()).equal('value1');
         })
     );
+
+
+    it('serialise/deserialise smoketest', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.serialise())) // serialise
+          .then((serial) => app.mutableData.fromSerial(serial)) // check it deserialises again
+    );
   });
 
   describe('Entries', () => {

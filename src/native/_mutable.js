@@ -27,9 +27,10 @@ const MDataAction = new Enum({
 
 function bufferLastEntry() {
   let str = new Buffer(arguments[arguments.length - 1]);
-  return Array.prototype.slice.call(arguments, 0)
+  return Array.prototype.slice.call(arguments, 0, arguments.length - 1)
         .concat([str, str.length]);
 }
+
 function translateXorName(appPtr, str, tag) {
   let name = str;
   if (!Buffer.isBuffer(str)) {
