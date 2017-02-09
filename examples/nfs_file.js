@@ -1,7 +1,7 @@
 /**
  * NFS Read and Write - example app
  * Run the code using `node examples/nfs_file.js` cmd from root directory.
- * NOTE: Open latest safe_browser instance from terminal.
+ * NOTE: Open SAFE Browser instance with the authenticator add-on from the terminal.
  *       Auth request popups on executing this code.
  *       Click Allow button and you will see response URI printed on safe_browser terminal.
  *       Copy that response URI and paste it on example terminal next to `Enter Authenticator response =>`.
