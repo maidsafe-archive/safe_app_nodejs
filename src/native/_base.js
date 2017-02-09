@@ -89,6 +89,7 @@ module.exports = {
         // actual function call
 
         // compile the callback-types-definiton
+        let args;
         let types = ['pointer', i32]; // we always have: user_context, error
         if (Array.isArray(rTypes)) {
           types = types.concat(rTypes);
@@ -98,7 +99,6 @@ module.exports = {
         return new Promise((resolve, reject) => {
           // if there is a formatter, we are reformatting
           // the incoming arguments first
-          let args;
           try {
             args = formatter ? formatter.apply(formatter, arguments): Array.prototype.slice.call(arguments);
           } catch(err) {
