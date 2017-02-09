@@ -257,7 +257,6 @@ describe('Mutable Data', () => {
     it.skip('a single mutation followed by a bulk mutation', () => {
       throw new Error('Not Implemented');
     });
-
   });
 
   describe.skip('Permissions', () => {
