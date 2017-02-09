@@ -91,10 +91,8 @@ class EntryMutationTransaction extends h.NetworkObject {
     return lib.mdata_entry_actions_insert(
       this.app.connection,
       this.ref,
-      keyName.ptr,
-      keyName.len,
-      value.ptr,
-      value.len
+      keyName,
+      value
     );
   }
 
@@ -102,8 +100,7 @@ class EntryMutationTransaction extends h.NetworkObject {
     return lib.mdata_entry_actions_delete(
       this.app.connection,
       this.ref,
-      keyName.ptr,
-      keyName.len,
+      keyName,
       version
     );
   }
@@ -112,10 +109,8 @@ class EntryMutationTransaction extends h.NetworkObject {
     return lib.mdata_entry_actions_update(
       this.app.connection,
       this.ref,
-      keyName.ptr,
-      keyName.len,
-      value.ptr,
-      value.len,
+      keyName,
+      value,
       version
     );
   }
@@ -152,7 +147,7 @@ class Entries extends h.NetworkObject {
   }
 
   apply(mutations) {
-    return lib.mdata_mutate_entries(this.app.connection, this.ref, mutations);
+    return lib.mdata_mutate_entries(this.app.connection, this.ref, mutations.ref);
   }
 }
 
