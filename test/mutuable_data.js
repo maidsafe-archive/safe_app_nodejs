@@ -169,17 +169,35 @@ describe('Mutable Data', () => {
       throw new Error('Not Implemented');
     });
 
-    it.skip('get list of keys', () => {
-      throw new Error('Not Implemented');
-    });
+    it('get list of keys', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
+        .then((keys) => keys.len())
+        .then((len) => {
+          should(len).equal(Object.keys(TEST_ENTRIES).length);
+        })
+    );
 
-    it.skip('get list of values', () => {
-      throw new Error('Not Implemented');
-    });
+    it('get list of values', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
+        .then((values) => values.len())
+        .then((len) => {
+          should(len).equal(Object.keys(TEST_ENTRIES).length);
+        })
+    );
 
-    it.skip('mutate entries in bulk and check versions', () => {
-      throw new Error('Not Implemented');
-    });
+    it.skip('apply insert mutation', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newMutation()
+            .then((mut) => mut.insert('newKey', 'newValue')
+              .then(() => m.getEntries()
+                .then((entries) => entries.apply(mut)
+                  .then(() => entries.get('newKey'))
+                  .then((value) => {
+                    should(value).not.be.undefined();
+                    should(value.buf.toString()).equal('newValue');
+                  })
+                )))))
+    );
 
     it.skip('single mutation followed by a bulk mutation', () => {
       throw new Error('Not Implemented');
