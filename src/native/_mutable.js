@@ -51,6 +51,21 @@ function strToBuffer(app, mdata) {
     return args;
 }
 
+// keep last entry as is
+function strToBufferButLastEntry(app, mdata) {
+    let lastArg = arguments[arguments.length - 1];
+    const args = [app, mdata];
+    Array.prototype.slice.call(arguments, 2, arguments.length - 1).forEach(item => {
+      const buf = item.buffer || (Buffer.isBuffer(item) ? item : new Buffer(item));
+      args.push(buf);
+      args.push(buf.length);
+    });
+    args.push(lastArg);
+    return args;
+}
+
+// args[2] is expected to be content capacity
+// args[3] is expected to be content version
 function readValueToBuffer(args) {
     return {
         buf: ref.reinterpret(args[0], args[1], 0),
@@ -58,6 +73,14 @@ function readValueToBuffer(args) {
     }
 }
 
+// args[2] is not expected to be content capacity
+// but content version instead
+function readValueToBufferNoCapacity(args) {
+    return {
+        buf: ref.reinterpret(args[0], args[1], 0),
+        version: args[2]
+    }
+}
 
 module.exports = {
   types: {
@@ -164,13 +187,13 @@ module.exports = {
     mdata_change_owner: Promisified(null, []),
     mdata_entry_actions_new: Promisified(null, MDataEntryActionsHandle),
     mdata_entry_actions_insert: Promisified(strToBuffer, []),
-    mdata_entry_actions_update: Promisified(null, []),
-    mdata_entry_actions_delete: Promisified(strToBuffer, []),
+    mdata_entry_actions_update: Promisified(strToBufferButLastEntry, []),
+    mdata_entry_actions_delete: Promisified(strToBufferButLastEntry, []),
     mdata_entry_actions_free: Promisified(null, []),
     mdata_entries_new: Promisified(null, MDataEntriesHandle),
     mdata_entries_insert: Promisified(strToBuffer, []),
     mdata_entries_len: Promisified(null, t.usize),
-    mdata_entries_get: Promisified(strToBuffer, [t.u8Pointer, t.usize, t.u64], readValueToBuffer),
+    mdata_entries_get: Promisified(strToBuffer, [t.u8Pointer, t.usize, t.u64], readValueToBufferNoCapacity),
     mdata_entries_for_each: Promisified(null, []),
     mdata_entries_free: Promisified(null, []),
     mdata_keys_len: Promisified(null, t.usize),
