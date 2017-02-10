@@ -12,7 +12,9 @@ safe_app nodejs library.
 
 To build and use this module locally you need latest stable [NodeJS](https://nodejs.org/en/) (& npm) and [Rust](https://www.rust-lang.org/en-US/) (we recommend [rustup](https://rustup.rs/)).
 
-The binary library will automatically build when you do a `npm install` after checking out the code, and place them in `src/native` accordingly. It will also ensure you have the latest `debug`-build  with `use-mock-routing` enabled whenever you run `npm test`.
+Initially after pulling the code ensure that you have the git submodules setup: `git submodule update --init` when you pull initially (`git submodule update` when you pull updates thereafter). 
+
+The binary library will then automatically build when you do an `npm install`, and place them in `src/native` accordingly. It will also ensure you have the latest `debug`-build  with `use-mock-routing` enabled whenever you run `npm test`.
 
 If you want to build the release version just run `npm run build-release`.
 
