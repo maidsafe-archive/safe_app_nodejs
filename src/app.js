@@ -13,15 +13,8 @@ const consts = require('./consts');
  * this session.
  */
 class SAFEApp extends EventEmitter {
-
-  /**
-  * Create a new local object holding the given `appInfo`
-  * and wire up all the API interfaces.
-  *
-  * The app is not yet connected to the network, please
-  * take a look at the `app.auth` to do that.
-  **/
-  constructor(appInfo) { // -> SAFEApp
+  // internal
+  constructor(appInfo) {
     super();
     this._appInfo = appInfo;
     this._networkState = 'init';
@@ -68,7 +61,7 @@ class SAFEApp extends EventEmitter {
   * Helper to lookup a given `safe://`-url in accordance with the
   * convention and find the requested object.
   *
-  * @args url {String} the url you want to fetch
+  * @arg {String} url the url you want to fetch
   * @returns {Promise<File>} the file object found for that URL
   */
   webFetch(url) {
