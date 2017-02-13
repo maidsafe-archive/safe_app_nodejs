@@ -47,7 +47,7 @@ class SignKey extends h.NetworkObject {
   }
 }
 
-class PubEncKey extends h.NetworkObject {
+class EncKey extends h.NetworkObject {
 
   getRaw() {
     return lib.enc_key_get(this.app.connection, this.ref);
@@ -60,13 +60,25 @@ class PubEncKey extends h.NetworkObject {
 }
 
 
+/**
+* The AuthProvider contains all authentication related
+* functionality with the network. Like creating an authenticated
+* or unauthenticated connection or create messages for the IPC
+* authentitcation protocol.
+*
+* Access your instance through ypur {SAFEApp} instance under `.auth`.
+**/
 class AuthProvider {
+
+  // Internal
   constructor(app) {
     this.app = app;
     this._registered = false;
     this.setupUri();
   }
 
+  // internal, triggered on initiation
+  // sets up the safe-auth-ipc-URL with the system
   setupUri() {
     const appInfo = this.app.appInfo;
     const schema = `safe${urlsafeBase64(appInfo.id)}`;
@@ -77,10 +89,34 @@ class AuthProvider {
       exec: appInfo.customAuthExecPath }, schema);
   }
 
+  /**
+  * Whether or not this is a registered/authenticated
+  * session.
+  *
+  * @returns {Boolean} true if this is an authenticated session
+  **/
   get registered() {
     return this._registered;
   }
 
+  /**
+  * generate an Authentication URL for the app with
+  * the given permissions and optional parameters.
+  *
+  * @param {Object} permissions  mapping the container-names
+  *                  to a list of permissions you want to
+  *                  request
+  * @param {Object} [opts={own_container: false}] optional parameters:
+  *  - {bool} `own_container`  whether or not to request
+  *    our own container to be created for us, too
+  *
+  * @returns {String} `safe-auth://`-Url
+  * @example // using an Authentication example:
+  * app.auth.genAuthUri({
+  *  '_public': ['Insert'], // request to insert into public
+  *  '_other': ['Insert', 'Update'] // request to insert and update
+  * }, {own_container: true}) // and we want our own container, too
+  **/
   genAuthUri(permissions, opts) {
     const perm = makePermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
@@ -93,6 +129,13 @@ class AuthProvider {
     }).ref());
   }
 
+  /**
+  * Generate a `safe-auth`-Url to request further container permissions
+  * see the `genAuthUri`-Example to understand how container permissions
+  * are to be specified
+  * @returns {String}
+  * @arg {Object} containers mapping container name to list of permissions
+  **/
   genContainerAuthUri(containers) {
     const ctnrs = makePermissions(containers);
     const appInfo = makeAppInfo(this.app.appInfo);
@@ -104,6 +147,11 @@ class AuthProvider {
     }).ref());
   }
 
+  /**
+  * Create a new, unregistered Session (read-only), overwrites any previously
+  * set session
+  * @returns {Promise<SAFEApp>} same instace but with newly set up connection
+  */
   connectUnregistered() {
     return lib.app_unregistered(this.app).then(() => {
       this._registered = false;
@@ -111,12 +159,24 @@ class AuthProvider {
     });
   }
 
+  /**
+  * Fetch the access container info from the network. Useful when you just
+  * connected or received a response in the IPC protocol.
+  * @return {Promise}
+  */
   refreshContainerAccess() {
     return lib.access_container_refresh_access_info(this.app.connection);
   }
 
+  /**
+  * Whether or not this session has specifc permission access of a given
+  * container.
+  * @arg {String} name  name of the container, e.g. `_public`
+  * @arg {String||Array<String>} [permissions=['Read']] permissions to check for
+  * @returns {Promise<bool>}
+  **/
   canAccessContainer(name, permissions) {
-    let perms = ['READ'];
+    let perms = ['Read'];
     if (permissions) {
       if (typeof permissions === 'string') {
         perms = [permissions];
@@ -127,11 +187,22 @@ class AuthProvider {
     return lib.access_container_is_permitted(this.app.connection, name, perms);
   }
 
-  getAccessContainerInfo(name) {
+  /**
+  * Lookup and return the information necessary to access a container.
+  * @arg name {String} name of the container, e.g. `'_public'`
+  * @returns {Promise<MutableData>} the Mutable Data behind that object
+  */
+  getAccessContainerInfo(name) { // FIXME: considering the return value, this name is bogus
     return lib.access_container_get_container_mdata_info(this.app.connection, name)
       .then((data) => this.app.mutableData.wrapMdata(data));
   }
 
+  /**
+  * Create a new authenticated session using the provided IPC-Response.
+  * @arg {String} responseURI the IPC response string given
+  * @returns {Promise<SAFEApp>} the given App Instance with a newly setup and
+  *          authenticated session.
+  */
   loginFromURI(responseUri) {
     return lib.decode_ipc_msg(responseUri).then((resp) => {
       // we can only handle 'granted' request
@@ -147,25 +218,44 @@ class AuthProvider {
     });
   }
 
-  // app key management
+  /**
+  * Get the public signing key of this session
+  * @returns {Promise<SignKey>}
+  **/
   getPubSignKey() {
     return lib.app_pub_sign_key(this.app.connection)
         .then((c) => h.autoref(new SignKey(this.app, c)));
   }
 
-  getPubEncKey() {
+  /**
+  * Get the public encryption key of this session
+  * @returns {Promise<EncKey>}
+  **/
+  getEncKey() {
     return lib.app_pub_enc_key(this.app.connection)
-        .then((c) => h.autoref(new PubEncKey(this.app, c)));
+        .then((c) => h.autoref(new EncKey(this.app, c)));
   }
 
+  /**
+  * Interprete the SignKey from a given raw string
+  * FIXME: is this expected to be Base64 encoded?
+  * @param {String} raw
+  * @returns {Promise<SignKey>}
+  **/
   getSignKeyFromRaw(raw) {
     return lib.sign_key_new(this.app.connection, raw)
         .then((c) => h.autoref(new SignKey(this.app, c)));
   }
 
+  /**
+  * Interprete the encryption Key from a given raw string
+  * FIXME: is this expected to be Base64 encoded?
+  * @arg {String} raw
+  * @returns {Promise<EncKey>}
+  **/
   getEncKeyKeyFromRaw(raw) {
     return lib.enc_key_new(this.app.connection, raw)
-        .then((c) => h.autoref(new PubEncKey(this.app, c)));
+        .then((c) => h.autoref(new EncKey(this.app, c)));
   }
 }
 
