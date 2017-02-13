@@ -1,6 +1,10 @@
 const h = require('../helpers');
 const lib = require('../native/lib');
 
+/**
+* Holds the reference to a Cipher Options,
+* either PlainText, Symmetric or Asymmetric
+**/
 class CipherOpt extends h.NetworkObject {
   static free(app, ref) {
     // FIXME: doesn't exist in FFI/rust at the moment
@@ -8,24 +12,40 @@ class CipherOpt extends h.NetworkObject {
   }
 }
 
+/**
+* Provide the Cipher Opt API
+**/
 class CipherOptProvider {
+
   constructor(app) {
     this.app = app;
   }
+
+  /**
+  * Create a PlainText Cipher Opt
+  * @returns {CipherOpt}
+  **/
   newPlainText() {
     return lib.cipher_opt_new_plaintext(this.app.connection)
           .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }
 
+  /**
+  * Create a new Symmetric Cipher
+  * @returns {CipherOpt}
+  **/
   newSymmetric() {
-    // -> CipherOpt
     return lib.cipher_opt_new_symmetric(this.app.connection)
         .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }
 
-  newAsymmetric(encryptKeyHandle) {
-    // -> CipherOpt
-    return lib.cipher_opt_new_symmetric(this.app.connection, encryptKeyHandle)
+  /**
+  * Create a new Asymmetric Cipher for the given key
+  * @param {EncKey} key
+  * @returns {CipherOpt}
+  **/
+  newAsymmetric(key) {
+    return lib.cipher_opt_new_symmetric(this.app.connection, key.ref)
         .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }
 
