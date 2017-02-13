@@ -3,6 +3,7 @@ const lib = require('../native/lib');
 const t = require('../native/types');
 const emulations = require('./emulations');
 
+
 function toAction(action) {
   const a = t.MDataAction.get(action);
   if (!a) throw Error(`'${action}' is not a valid action!`);
@@ -166,12 +167,31 @@ class Values extends h.NetworkObject {
   }
 }
 
+
+/**
+* @typedef {Object} NameAndTag
+* @param {Buffer} name - the name/address on the network
+* @param {Number} tag - the type tag
+**/
+
+/**
+* Holds the reference to a MutableData
+**/
 class MutableData extends h.NetworkObject {
 
+  // internal use only
   static free(app, ref) {
     return lib.free_mdata_info(app.connection, ref);
   }
 
+  /**
+  * Quickly set up a newly (not yet created) MutableData with
+  * the app having full-access permissions (and no other).
+  *
+  * @param {Object=} data - a key-value payload it should
+  *        create the data with
+  * @returns {Promise<MutableData>} - self
+  **/
   quickSetup(data) {
     let entriesSetup = this.app.mutableData.newEntries();
     if (data) {
@@ -203,10 +223,21 @@ class MutableData extends h.NetworkObject {
     return Promise.reject(new Error('Not Implemented', this, value));
   }
 
+  /**
+  * Look up the name and tag of the MutableData as required to look it
+  * up on the network.
+  *
+  * @returns {Promise<NameAndTag>}
+  **/
   getNameAndTag() {
     return lib.mdata_info_extract_name_and_type_tag(this.app.connection, this.ref);
   }
 
+  /**
+  * Look up the mutable data object version on the network
+  *
+  * @returns {Promise<Number>} the version
+  **/
   getVersion() {
     return lib.mdata_get_version(this.app.connection, this.ref);
   }
@@ -282,56 +313,124 @@ class MutableData extends h.NetworkObject {
 
 }
 
+
+/**
+* Provide the MutableData API for the session.
+* 
+* Access via `mutableData` on your app Instance.
+*
+* @example // using mutable Data
+* app.mutableData.newRandomPublic(15001)
+*   // set it up with starting data
+*   .then((mdata) => mdata.quickSetup({'keyA': 'input value'})
+*    .then(() => mdata.getNameAndTag())) // return name and tag
+*
+* // now read using name and tag
+* .then((ref) => app.mutableData.newPublic(ref.name, ref.tag)
+*   .then((mdata) => mdata.get('keyA').then((val) => {
+*     should(val.toString()).equal('input value');
+*   })))
+**/
 class MutableDataProvider {
+  // internal
   constructor(app) {
     this.app = app;
   }
 
+  /**
+  * Create a new mutuable data at a random address with private
+  * access. 
+  * @param {Number} typeTag - the typeTag to use
+  * @returns {Promise<MutableData>}
+  **/
   newRandomPrivate(typeTag) {
     return lib.mdata_info_random_private(this.app.connection, typeTag)
           .then((m) => h.autoref(new MutableData(this.app, m)));
   }
 
+
+  /**
+  * Create a new mutuable data at a random address with public
+  * access. 
+  * @param {Number} typeTag - the typeTag to use
+  * @returns {Promise<MutableData>}
+  **/
   newRandomPublic(typeTag) {
     return lib.mdata_info_random_public(this.app.connection, typeTag)
           .then((m) => h.autoref(new MutableData(this.app, m)));
   }
 
+  /**
+  * Initiate a mutuable data at the given address with private
+  * access.
+  * @param {Buffer|String} 
+  * @param {Number} typeTag - the typeTag to use
+  * @returns {Promise<MutableData>}
+  **/
   newPrivate(name, typeTag) {
     return lib.mdata_info_new_private(this.app.connection, name, typeTag)
           .then((m) => h.autoref(new MutableData(this.app, m)));
   }
 
+  /**
+  * Initiate a mutuable data at the given address with public
+  * access.
+  * @param {Buffer|String} 
+  * @param {Number} typeTag - the typeTag to use
+  * @returns {Promise<MutableData>}
+  **/
   newPublic(name, typeTag) {
     return lib.mdata_info_new_public(this.app.connection, name, typeTag)
           .then((m) => h.autoref(new MutableData(this.app, m)));
   }
 
+  /**
+  * Create a new Permissions object.
+  * @returns {Promise<Permissions>}
+  **/
   newPermissions() {
     return lib.mdata_permissions_new(this.app.connection)
         .then((r) => h.autoref(new Permissions(this.app, r)));
   }
 
+  /**
+  * Create a new PermissionsSet object.
+  * @returns {Promise<PermissionsSet>}
+  **/
   newPermissionSet() {
     return lib.mdata_permission_set_new(this.app.connection)
         .then((c) => h.autoref(new PermissionsSet(this.app, c)));
   }
 
+  /**
+  * Create a new EntryMutationTransaction object.
+  * @returns {Promise<EntryMutationTransaction>}
+  **/
   newMutation() {
     return lib.mdata_entry_actions_new(this.app.connection)
         .then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
   }
 
+  /**
+  * Create a new Entries object.
+  * @returns {Promise<Entries>}
+  **/
   newEntries() {
     return lib.mdata_entries_new(this.app.connection)
         .then((r) => h.autoref(new Entries(this.app, r)));
   }
 
+
+  /**
+  * Create a new Mutuable Data object from its serial
+  * @returns {Promise<MutableData>}
+  **/
   fromSerial(serial) {
     return lib.mdata_info_deserialise(this.app.connection, serial)
           .then((m) => h.autoref(new MutableData(this.app, m)));
   }
 
+  // internal use only
   wrapMdata(mdata) {
     return h.autoref(new MutableData(this.app, mdata));
   }
