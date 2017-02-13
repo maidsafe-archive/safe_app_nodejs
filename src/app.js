@@ -8,20 +8,69 @@ const consts = require('./consts');
 
 
 /**
- * Holds one sessions with the network
+ * Holds one sessions with the network and is the primary interface to interact
+ * with the network. As such it also provides all API-Providers connected through
+ * this session.
  */
 class SAFEApp extends EventEmitter {
-  // internal wrapper
+
+  /**
+  * Create a new local object holding the given `appInfo`
+  * and wire up all the API interfaces.
+  *
+  * The app is not yet connected to the network, please
+  * take a look at the `app.auth` to do that.
+  **/
   constructor(appInfo) { // -> SAFEApp
     super();
     this._appInfo = appInfo;
     this._networkState = 'init';
     this._connection = null;
     Object.getOwnPropertyNames(api).forEach((key) => {
-      this[key] = new api[key](this);
+      this['_' + key] = new api[key](this);
     });
   }
 
+  /**
+  * get the AuthProvider instance connected to this session
+  * @returns {AuthProvider}
+  **/
+  get auth() {
+    return this._auth
+  }
+
+
+  /**
+  * get the CipherOptProvider instance connected to this session
+  * @returns {CipherOptProvider}
+  **/
+  get cipherOpt() {
+    return this._cipherOpt
+  }
+
+  /**
+  * get the ImmutableDataProvider instance connected to this session
+  * @returns {ImmutableDataProvider}
+  **/
+  get immutableData() {
+    return this._immutableData
+  }
+
+  /**
+  * get the MutableDataProvider instance connected to this session
+  * @returns {MutableDataProvider}
+  **/
+  get mutableData() {
+    return this._mutableData
+  }
+
+  /**
+  * Helper to lookup a given `safe://`-url in accordance with the
+  * convention and find the requested object.
+  *
+  * @args url {String} the url you want to fetch
+  * @returns {Promise<File>} the file object found for that URL
+  */
   webFetch(url) {
     const parsedUrl = parseUrl(url);
     if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
@@ -40,6 +89,8 @@ class SAFEApp extends EventEmitter {
         .then((service) => service.emulateAs('NFS').fetch(path)));
   }
 
+  // update the current connection
+  // internal use only
   set connection(con) {
     if (this._connection) {
       lib.free_app(this._connection);
@@ -47,28 +98,40 @@ class SAFEApp extends EventEmitter {
     this._connection = con;
   }
 
+  /**
+  * The current connection object hold on the Rust-Side
+  * @returns {Pointer}
+  **/
   get connection() {
     if (!this._connection) throw Error('Setup Incomplete. Connection not available yet.');
     return this._connection;
   }
 
-  get app() {
-    return this.connection;
-  }
-
+  /**
+  * The current Network state
+  * @returns {String} of latest state
+  **/
   get networkState() {
     return this._networkState;
   }
 
+  /**
+  * The current appInfo
+  **/
   get appInfo() {
     return this._appInfo;
   }
 
+  /**
+  * Create a SAFEApp and try to login it through the `authUri`
+  * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp 
+  **/
   static fromAuthUri(appInfo, authUri) {
     const app = autoref(new SAFEApp(appInfo));
     return app.auth.loginFromURI(authUri);
   }
 
+  // internal
   _networkStateUpdated(uData, error, newState) {
     // FIXME: we need to map the state to strings
     this.emit('network-state-updated', newState, this._networkState);
@@ -76,6 +139,7 @@ class SAFEApp extends EventEmitter {
     this._networkState = newState;
   }
 
+  // internal
   static free(app) {
     // we are freed last, anything you do after this
     // will probably fail.
