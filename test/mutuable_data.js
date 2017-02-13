@@ -288,13 +288,14 @@ describe('Mutable Data', () => {
             )))
     );
 
+    // this is currently not supported, a removed key is currently updated with an empty value
     it.skip('a removal followed by an insert with the same key', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => m.getEntries()
             .then((entries) => entries.mutate()
               .then((mut) => mut.remove('key2', 1)
                 .then(() => m.applyEntriesMutation(mut))
-                .then(() => mut.insert('key2', 'newVaue'))
+                .then(() => mut.insert('key2', 'newValue'))
                 .then(() => m.applyEntriesMutation(mut))
                 .then(() => m.get('key2'))
                 .then((value) => {
@@ -328,24 +329,56 @@ describe('Mutable Data', () => {
     );
   });
 
-  describe.skip('Permissions', () => {
-    it('get list of permissions', () => {
-      throw new Error('Test Not Implemented');
-    });
+  describe('Permissions', () => {
+    it('get list of permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getPermissions()
+            .then((perm) => perm.len())
+            .then((length) => {
+              should(length).equal(1);
+            })
+          ))
+    );
 
-    it('get list of user\'s permissions', () => {
-      throw new Error('Test Not Implemented');
-    });
+    it.skip('get user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.auth.getPubSignKey()
+            .then((pk) => m.getUserPermissions(pk.ref)
+              .then((perm) => perm.len())
+              .then((length) => {
+                should(length).equal(1);
+              })
+            )))
+    );
 
-    it('insert a permission', () => {
-      throw new Error('Test Not Implemented');
-    });
+    it.skip('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getPermissions()
+            .then((perm) => app.auth.getPubSignKey()
+              .then((pk) => perm.getPermissionSet(pk.ref))
+              .then((permSet) => permSet.len())
+              .then((length) => {
+                should(length).equal(3);
+              })
+          )))
+    );
 
-    it('update a permission', () => {
-      throw new Error('Test Not Implemented');
-    });
+    it.skip('remove a permission', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getPermissions()
+            .then((perm) => app.auth.getPubSignKey()
+              .then((pk) => perm.delPermissionsSet(pk.ref, 1))
+              .then((updatedPerm) => m.getEntries()
+                .then((entries) => m.put(updatedPerm, entries))
+                .then(() => app.mutableData.newMutation()
+                  .then((mut) => mut.update('key2', 'updatedValue', 1)
+                    .then(() => {
+                      should(m.applyEntriesMutation(mut)).be.fulfilled();
+                    })
+                  ))))))
+    );
 
-    it('delete a permission', () => {
+    it.skip('update a permission', () => {
       throw new Error('Test Not Implemented');
     });
   });

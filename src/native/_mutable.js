@@ -109,7 +109,7 @@ module.exports = {
     mdata_permissions_set_clear: [t.Void, [t.AppPtr, MDataPermissionSetHandle, 'pointer', 'pointer']],
     mdata_permissions_set_free: [t.Void, [t.AppPtr, MDataPermissionSetHandle, 'pointer', 'pointer']],
     mdata_permissions_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
-    mdata_permissions_len: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer', 'pointer']],
+    mdata_permissions_len: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
     mdata_permissions_get: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignKeyHandle, 'pointer', 'pointer']],
     mdata_permissions_for_each: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
     mdata_permissions_insert: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignKeyHandle, MDataPermissionSetHandle, 'pointer', 'pointer']],
