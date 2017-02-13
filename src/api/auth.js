@@ -119,11 +119,11 @@ class AuthProvider {
   * generate an Authentication URL for the app with
   * the given permissions and optional parameters.
   *
-  * @param {Object} permissions  mapping the container-names
+  * @param {Object} permissions - mapping the container-names
   *                  to a list of permissions you want to
   *                  request
-  * @param {Object} [opts={own_container: false}] optional parameters:
-  *  - {bool} `own_container`  whether or not to request
+  * @param {Object=} opts - optional parameters
+  * @param {Boolean} [opts.own_container=false] - whether or not to request
   *    our own container to be created for us, too
   *
   * @returns {String} `safe-auth://`-Url
@@ -188,7 +188,7 @@ class AuthProvider {
   * Whether or not this session has specifc permission access of a given
   * container.
   * @arg {String} name  name of the container, e.g. `_public`
-  * @arg {String||Array<String>} [permissions=['Read']] permissions to check for
+  * @arg {(String||Array<String>)} [permissions=['Read']] permissions to check for
   * @returns {Promise<bool>}
   **/
   canAccessContainer(name, permissions) {
