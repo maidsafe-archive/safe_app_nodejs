@@ -36,23 +36,39 @@ function urlsafeBase64(str) {
               .replace(/=+$/, ''); // Remove ending '='
 }
 
+/**
+* Holds signature key
+**/
 class SignKey extends h.NetworkObject {
 
+  /**
+  * generate raw string copy of signature key
+  * @returns {Promise<String>}
+  **/
   getRaw() {
     return lib.sign_key_get(this.app.connection, this.ref);
   }
 
+  // internal use only
   static free(app, ref) {
     return lib.sign_key_free(app.connection, ref);
   }
 }
 
+/**
+* Holds an encryption key 
+**/
 class EncKey extends h.NetworkObject {
 
+  /**
+  * generate raw string copy of encryption key
+  * @returns {Promise<String>}
+  **/
   getRaw() {
     return lib.enc_key_get(this.app.connection, this.ref);
   }
 
+  // internal use only
   static free(app, ref) {
     return lib.enc_key_free(app.connection, ref);
   }
