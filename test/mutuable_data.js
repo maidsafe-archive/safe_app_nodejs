@@ -373,7 +373,7 @@ describe('Mutable Data', () => {
                 .then(() => app.mutableData.newMutation()
                   .then((mut) => mut.update('key2', 'updatedValue', 1)
                     .then(() => {
-                      should(m.applyEntriesMutation(mut)).be.fulfilled();
+                      should(m.applyEntriesMutation(mut)).be.rejected();
                     })
                   ))))))
     );
