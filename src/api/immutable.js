@@ -11,7 +11,7 @@ class Reader extends helpers.NetworkObject {
   * Read the given amount of bytes from the network
   * @param {Object=} options
   * @param {Number} [options.offset=0] start position
-  * @param {Number} [options.end=size] end position or end of data 
+  * @param {Number} [options.end=size] end position or end of data
   **/
   read(options) {
     const opts = Object.assign({}, options);
@@ -31,7 +31,7 @@ class Reader extends helpers.NetworkObject {
 
   /**
   * The size of the mutable data on the network
-  * @returns {Promise<Number>} length in bytes 
+  * @returns {Promise<Number>} length in bytes
   **/
   size() {
     return lib.idata_size(this.app.connection, this.ref);
@@ -39,7 +39,7 @@ class Reader extends helpers.NetworkObject {
 
   /**
   * Close this handle
-  * @returns {Promise<()>} 
+  * @returns {Promise<()>}
   */
   close() {
     // FIXME: Is this even needed in Reading?
@@ -82,7 +82,7 @@ class Writer extends helpers.NetworkObject {
   * Append the given data to immutable Data.
   *
   * @param {String} string
-  * @returns {Promise<()>} 
+  * @returns {Promise<()>}
   **/
   write(string) {
     return lib.idata_write_to_self_encryptor(this.app.connection, this.ref, string);
@@ -90,7 +90,7 @@ class Writer extends helpers.NetworkObject {
 
   /**
   * The size of the immutable data on the network
-  * @returns {Promise<Number>} length in bytes 
+  * @returns {Promise<Number>} length in bytes
   **/
   size() {
     // FIXME: does this even work on a writer?

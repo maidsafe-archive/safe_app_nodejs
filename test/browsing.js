@@ -19,7 +19,6 @@ describe('Browsing', () => {
           const nfs = serviceMdata.emulateAs('NFS');
           // let's write the file
           return nfs.create(content)
-            .then( (f) => {console.log(f); return f;})
             .then((file) => nfs.insert('', file))
             .then(() => {
               const dnsName = c.createHash('sha256').update(domain).digest();

@@ -1,4 +1,3 @@
-const h = require('../../helpers');
 const lib = require('../../native/lib');
 const t = require('../../native/types');
 const nativeH = require('../../native/helpers');
@@ -11,7 +10,7 @@ function isString(arg) {
 * A NFS-style File
 *
 * _Note_: As this application layer, the network does not check any
-* of the metadata provided. 
+* of the metadata provided.
 **/
 class File {
 
@@ -81,7 +80,7 @@ class File {
 
   /**
   * Which version was this? Equals the Mdata-value-version.
-  * @return {Number} 
+  * @return {Number}
   **/
   get version() {
     return this._ref.version;
@@ -147,7 +146,8 @@ class NFS {
   * Replace a path with a new file. Directly commit to the network.
   * @param {(String|Buffer)} fileName - the path to store the file under
   * @param {File} file - the file to serialise and store there
-  * @param {Number} version - the current version number, to ensure you are overwriting the right one
+  * @param {Number} version - the current version number, to ensure you
+           are overwriting the right one
   * @returns {Promise<File>} - the same file
   **/
   update(fileName, file, version) {

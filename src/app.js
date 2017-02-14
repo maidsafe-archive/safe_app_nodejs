@@ -13,12 +13,12 @@ const consts = require('./consts');
  * this session.
  */
 class SAFEApp extends EventEmitter {
-  
+
   /**
   * @private
   * Initiate a new App instace. Wire up all the API's and set up the
   * authentication URI-handler with the system.
-  * 
+  *
   * @param {AppInfo} appInfo
   */
   constructor(appInfo) {
@@ -27,7 +27,7 @@ class SAFEApp extends EventEmitter {
     this._networkState = 'init';
     this._connection = null;
     Object.getOwnPropertyNames(api).forEach((key) => {
-      this['_' + key] = new api[key](this);
+      this[`_${key}`] = new api[key](this);
     });
   }
 
@@ -36,7 +36,7 @@ class SAFEApp extends EventEmitter {
   * @returns {AuthInterface}
   **/
   get auth() {
-    return this._auth
+    return this._auth;
   }
 
 
@@ -45,7 +45,7 @@ class SAFEApp extends EventEmitter {
   * @returns {CipherOptInterface}
   **/
   get cipherOpt() {
-    return this._cipherOpt
+    return this._cipherOpt;
   }
 
   /**
@@ -53,7 +53,7 @@ class SAFEApp extends EventEmitter {
   * @returns {ImmutableDataInterface}
   **/
   get immutableData() {
-    return this._immutableData
+    return this._immutableData;
   }
 
   /**
@@ -61,7 +61,7 @@ class SAFEApp extends EventEmitter {
   * @returns {MutableDataInterface}
   **/
   get mutableData() {
-    return this._mutableData
+    return this._mutableData;
   }
 
   /**
@@ -89,7 +89,7 @@ class SAFEApp extends EventEmitter {
         .then((service) => service.emulateAs('NFS').fetch(path)));
   }
 
-  
+
   /**
   * @private
   * Replace the connection to the native layer. When there is already one
@@ -134,18 +134,18 @@ class SAFEApp extends EventEmitter {
   * Create a SAFEApp and try to login it through the `authUri`
   * @param {AppInfo} appInfo - the AppInfo
   * @param {String} authUri - URI containing the authentication info
-  * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp 
+  * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp
   **/
   static fromAuthUri(appInfo, authUri) {
     const app = autoref(new SAFEApp(appInfo));
     return app.auth.loginFromURI(authUri);
   }
 
-  
+
   /**
   * @private
   * Called from the native library whenever the network state
-  * changes. 
+  * changes.
   */
   _networkStateUpdated(uData, error, newState) {
     // FIXME: we need to map the state to strings
@@ -154,7 +154,7 @@ class SAFEApp extends EventEmitter {
     this._networkState = newState;
   }
 
-  
+
   /**
   * @private
   * free the app. used by the autoref feature

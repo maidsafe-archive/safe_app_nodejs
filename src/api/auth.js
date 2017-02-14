@@ -65,7 +65,7 @@ class SignKey extends h.NetworkObject {
 }
 
 /**
-* Holds an encryption key 
+* Holds an encryption key
 **/
 class EncKey extends h.NetworkObject {
 

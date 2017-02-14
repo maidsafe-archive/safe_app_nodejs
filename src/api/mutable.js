@@ -161,7 +161,7 @@ class Permissions extends h.NetworkObject {
 
 /**
 * Holds a  mutations to be done to the entries within one
-* transaction on the network. 
+* transaction on the network.
 *
 * You need this whenever you want to change the content of
 * the entries.
@@ -174,7 +174,7 @@ class Permissions extends h.NetworkObject {
 *     .then((m) => m.insert('key', value)
 *       // this is where all mutations are recorded
 *       .then(() => entries.apply(m)
-*       )))) 
+*       ))))
 **/
 class EntryMutationTransaction extends h.NetworkObject {
 
@@ -250,7 +250,7 @@ class Entries extends h.NetworkObject {
 
   /**
   * Get the total number of entries in the Mdata
-  * @returns {Promise<Number>} 
+  * @returns {Promise<Number>}
   **/
   len() {
     return lib.mdata_entries_len(this.app.connection, this.ref);
@@ -317,7 +317,7 @@ class Keys extends h.NetworkObject {
 
   /**
   * Get the total number of keys in the Mdata
-  * @returns {Promise<Number>} 
+  * @returns {Promise<Number>}
   **/
   len() {
     return lib.mdata_keys_len(this.app.connection, this.ref);
@@ -352,7 +352,7 @@ class Values extends h.NetworkObject {
 
   /**
   * Get the total number of values in the Mdata
-  * @returns {Promise<Number>} 
+  * @returns {Promise<Number>}
   **/
   len() {
     return lib.mdata_values_len(this.app.connection, this.ref);
@@ -570,7 +570,7 @@ class MutableData extends h.NetworkObject {
 
   /**
   * Wrap this MData into a known abstraction. Currently known: `NFS`
-  * @param {String} eml - name of the emulation 
+  * @param {String} eml - name of the emulation
   * @returns {Emulation} the Emulation you are asking for
   **/
   emulateAs(eml) {
@@ -582,14 +582,14 @@ class MutableData extends h.NetworkObject {
 
 /**
 * Provide the MutableData API for the session.
-* 
+*
 * Access via `mutableData` on your app Instance.
 *
 * @example // using mutable Data
 * app.mutableData.newRandomPublic(15001)
 *   // set it up with starting data
 *   .then((mdata) => mdata.quickSetup({'keyA': 'input value'})
-*    .then(() => mdata.getNameAndTag())) // return name and tag
+*    .then(() => mdata.getNameAndTag())) // return name and tag
 *
 * // now read using name and tag
 * .then((ref) => app.mutableData.newPublic(ref.name, ref.tag)
@@ -609,7 +609,7 @@ class MutableDataInterface {
 
   /**
   * Create a new mutuable data at a random address with private
-  * access. 
+  * access.
   * @param {Number} typeTag - the typeTag to use
   * @returns {Promise<MutableData>}
   **/
@@ -621,7 +621,7 @@ class MutableDataInterface {
 
   /**
   * Create a new mutuable data at a random address with public
-  * access. 
+  * access.
   * @param {Number} typeTag - the typeTag to use
   * @returns {Promise<MutableData>}
   **/
@@ -633,7 +633,7 @@ class MutableDataInterface {
   /**
   * Initiate a mutuable data at the given address with private
   * access.
-  * @param {Buffer|String} 
+  * @param {Buffer|String}
   * @param {Number} typeTag - the typeTag to use
   * @returns {Promise<MutableData>}
   **/
@@ -645,7 +645,7 @@ class MutableDataInterface {
   /**
   * Initiate a mutuable data at the given address with public
   * access.
-  * @param {Buffer|String} 
+  * @param {Buffer|String}
   * @param {Number} typeTag - the typeTag to use
   * @returns {Promise<MutableData>}
   **/
@@ -704,8 +704,8 @@ class MutableDataInterface {
   * @private
   * Helper to create a new autorefence MutableData for a given
   * mdata reference from the native layer
-  * 
-  * @param {handle} mdata - the native handle 
+  *
+  * @param {handle} mdata - the native handle
   * @returns {MutableData} - wrapped
   */
   wrapMdata(mdata) {
