@@ -15,6 +15,13 @@ function isString(arg) {
 **/
 class File {
 
+  /**
+  * @private
+  **/
+  constructor(ref) {
+    this._ref = ref;
+  }
+
   get ref() {
     const data = {
       created: this._ref.created,
@@ -79,16 +86,6 @@ class File {
   get version() {
     return this._ref.version;
   }
-
-  /**
-  * @private
-  * used by autoref to clean the reference
-  * @param {SAFEApp} app
-  * @param {handle} ref
-  **/
-  static free(app, file) {
-    return lib.file_free(app.connection, file);
-  }
 }
 
 /**
@@ -115,7 +112,7 @@ class NFS {
     return this.mData.app.immutableData.create()
       .then((w) => w.write(content)
         .then(() => w.close()
-          .then((xorAddr) => new File(this.mData.app, {
+          .then((xorAddr) => new File({
             size: content.length,
             data_map_name: xorAddr,
             created: nativeH.makeCTime(now),
@@ -132,7 +129,7 @@ class NFS {
   **/
   fetch(fileName) {
     return lib.file_fetch(this.mData.app.connection, this.mData.ref, fileName)
-      .then((res) => h.autoref(new File(this.mData.app, res)));
+      .then((res) => new File(res));
   }
 
   /**

@@ -77,7 +77,7 @@ class Permissions extends h.NetworkObject {
   * @param {SAFEApp} app
   * @param {handle} ref
   **/
-  free() {
+  static free() {
     return lib.mdata_permissions_free(this.app.connection, this.ref);
   }
 
