@@ -1,23 +1,24 @@
 toc:
+
+  - name: External API
+    description: The externally exposed API
   - initializeApp
   - fromAuthURI
-  # - API
-  - SAFEApp
-  - AuthProvider
-  - CipherOptProvider
-  - ImmutableDataProvider
-  - MutableDataProvider
-  # - Types
   - AppInfo
-  - SignKey
-  - EncKey
-  - CipherOpt
-  - ImmutableDataReader
-  - ImmutableDataWriter
-  - NameAndTag
+
+  - name: App Interface
+    description: the App and the API it exposes
+  - SAFEApp
+  - AuthInterface
+  - CipherOptInterface
+  - ImmutableDataInterface
+  - MutableDataInterface
+
+  - name: Immutable
+  - Reader
+  - Writer
+  - name: Mutable
   - MutableData
-  - NFS
-  - ValueVersion
   - Entries
   - Keys
   - Values
@@ -25,4 +26,16 @@ toc:
   - MDataAction
   - Permissions
   - PermissionsSet
+
+  - name: Emulations
+    description: Emulations and Abstractions on top of MData
+  - NFS
   - File
+
+  - name: Types
+  # - Types
+  - SignKey
+  - EncKey
+  - CipherOpt
+  - NameAndTag
+  - ValueVersion

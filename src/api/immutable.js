@@ -5,7 +5,7 @@ const lib = require('../native/lib');
 /**
 * Hold the connection to read an existing ImmutableData
 */
-class ImmutableDataReader extends helpers.NetworkObject {
+class Reader extends helpers.NetworkObject {
 
   /**
   * Read the given amount of bytes from the network
@@ -76,7 +76,7 @@ class ImmutableDataReader extends helpers.NetworkObject {
 * })
 *
 **/
-class ImmutableDataWriter extends helpers.NetworkObject {
+class Writer extends helpers.NetworkObject {
 
   /**
   * Append the given data to immutable Data.
@@ -133,31 +133,34 @@ class ImmutableDataWriter extends helpers.NetworkObject {
 *
 * Access it through your {SAFEApp} instance under `app.immutableData`
 */
-class ImmutableDataProvider {
+class ImmutableDataInterface {
 
-  // internal use only
+  /**
+  * @private
+  * @param {SAFEApp} app
+  **/
   constructor(app) {
     this.app = app;
   }
 
   /**
-  * Create a new ImmutableData
-  * @returns {Promise<ImmutableDataWriter>}
+  * Create a new ImmutableDataInterface
+  * @returns {Promise<Writer>}
   **/
   create() {
     return lib.idata_new_self_encryptor(this.app.connection)
-      .then((ref) => helpers.autoref(new ImmutableDataWriter(this.app, ref)));
+      .then((ref) => helpers.autoref(new Writer(this.app, ref)));
   }
 
   /**
   * Look up an existing Immutable Data for the given address
   * @param {Buffer} address - the XorName on the network
-  * @returns {Promise<ImmutableDataReader>}
+  * @returns {Promise<Reader>}
   **/
   fetch(address) {
     return lib.idata_fetch_self_encryptor(this.app.connection, address)
-      .then((ref) => helpers.autoref(new ImmutableDataReader(this.app, ref)));
+      .then((ref) => helpers.autoref(new Reader(this.app, ref)));
   }
 }
 
-module.exports = ImmutableDataProvider;
+module.exports = ImmutableDataInterface;

@@ -20,8 +20,8 @@ const MDataEntryActionsHandle = t.ObjectHandle;
 const bufferTypes = [t.u8Pointer, t.usize, t.usize];
 
 /**
-* @typedef {String} MDataAction
 * One of: `Insert`, `Update`, `Delete`, `ManagePermissions`
+* @typedef {String} MDataAction 
 **/
 const MDataAction = new Enum({
   Insert: 0,

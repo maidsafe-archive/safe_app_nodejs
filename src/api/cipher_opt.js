@@ -15,7 +15,7 @@ class CipherOpt extends h.NetworkObject {
 /**
 * Provide the Cipher Opt API
 **/
-class CipherOptProvider {
+class CipherOptInterface {
 
   constructor(app) {
     this.app = app;
@@ -50,4 +50,4 @@ class CipherOptProvider {
   }
 
 }
-module.exports = CipherOptProvider;
+module.exports = CipherOptInterface;

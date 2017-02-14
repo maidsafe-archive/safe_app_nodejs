@@ -32,8 +32,8 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
-  * get the AuthProvider instance connected to this session
-  * @returns {AuthProvider}
+  * get the AuthInterface instance connected to this session
+  * @returns {AuthInterface}
   **/
   get auth() {
     return this._auth
@@ -41,24 +41,24 @@ class SAFEApp extends EventEmitter {
 
 
   /**
-  * get the CipherOptProvider instance connected to this session
-  * @returns {CipherOptProvider}
+  * get the CipherOptInterface instance connected to this session
+  * @returns {CipherOptInterface}
   **/
   get cipherOpt() {
     return this._cipherOpt
   }
 
   /**
-  * get the ImmutableDataProvider instance connected to this session
-  * @returns {ImmutableDataProvider}
+  * get the ImmutableDataInterface instance connected to this session
+  * @returns {ImmutableDataInterface}
   **/
   get immutableData() {
     return this._immutableData
   }
 
   /**
-  * get the MutableDataProvider instance connected to this session
-  * @returns {MutableDataProvider}
+  * get the MutableDataInterface instance connected to this session
+  * @returns {MutableDataInterface}
   **/
   get mutableData() {
     return this._mutableData

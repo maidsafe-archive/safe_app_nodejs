@@ -571,7 +571,7 @@ class MutableData extends h.NetworkObject {
   /**
   * Wrap this MData into a known abstraction. Currently known: `NFS`
   * @param {String} eml - name of the emulation 
-  * @returns {Object} the Emulation you are asking for
+  * @returns {Emulation} the Emulation you are asking for
   **/
   emulateAs(eml) {
     return new emulations[eml](this);
@@ -597,7 +597,7 @@ class MutableData extends h.NetworkObject {
 *     should(val.toString()).equal('input value');
 *   })))
 **/
-class MutableDataProvider {
+class MutableDataInterface {
   /**
   * @private
   * Create a new MutableData
@@ -714,4 +714,4 @@ class MutableDataProvider {
 
 }
 
-module.exports = MutableDataProvider;
+module.exports = MutableDataInterface;

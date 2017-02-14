@@ -28,6 +28,10 @@ const h = require('../helpers');
 const makeAppInfo = nativeH.makeAppInfo;
 const makePermissions = nativeH.makePermissions;
 
+/**
+* @private
+* @todo
+**/
 function urlsafeBase64(str) {
   return (new Buffer(str))
           .toString('base64')
@@ -49,7 +53,12 @@ class SignKey extends h.NetworkObject {
     return lib.sign_key_get(this.app.connection, this.ref);
   }
 
-  // internal use only
+  /**
+  * @private
+  * used by autoref to clean the reference
+  * @param {SAFEApp} app
+  * @param {handle} ref
+  **/
   static free(app, ref) {
     return lib.sign_key_free(app.connection, ref);
   }
@@ -68,7 +77,12 @@ class EncKey extends h.NetworkObject {
     return lib.enc_key_get(this.app.connection, this.ref);
   }
 
-  // internal use only
+  /**
+  * @private
+  * used by autoref to clean the reference
+  * @param {SAFEApp} app
+  * @param {handle} ref
+  **/
   static free(app, ref) {
     return lib.enc_key_free(app.connection, ref);
   }
@@ -77,24 +91,29 @@ class EncKey extends h.NetworkObject {
 
 
 /**
-* The AuthProvider contains all authentication related
+* The AuthInterface contains all authentication related
 * functionality with the network. Like creating an authenticated
 * or unauthenticated connection or create messages for the IPC
 * authentitcation protocol.
 *
 * Access your instance through ypur {SAFEApp} instance under `.auth`.
 **/
-class AuthProvider {
+class AuthInterface {
 
-  // Internal
+  /**
+  * @private
+  * @todo
+  **/
   constructor(app) {
     this.app = app;
     this._registered = false;
     this.setupUri();
   }
 
-  // internal, triggered on initiation
-  // sets up the safe-auth-ipc-URL with the system
+  /**
+  * @private
+  * @todo
+  **/
   setupUri() {
     const appInfo = this.app.appInfo;
     const schema = `safe${urlsafeBase64(appInfo.id)}`;
@@ -276,4 +295,4 @@ class AuthProvider {
 }
 
 
-module.exports = AuthProvider;
+module.exports = AuthInterface;
