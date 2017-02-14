@@ -1,0 +1,17 @@
+toc:
+  - initializeApp
+  - fromAuthURI
+  # - API
+  - SAFEApp
+  - AuthProvider
+  - CipherOptProvider
+  - ImmutableDataProvider
+  - MutableDataProvider
+  # - Types
+  - AppInfo
+  - SignKey
+  - EncKey
+  - CipherOpt
+  - ImmutableDataReader
+  - ImmutableDataWriter
+  - NameAndTag
