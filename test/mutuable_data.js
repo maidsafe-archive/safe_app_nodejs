@@ -175,9 +175,12 @@ describe('Mutable Data', () => {
         })
     );
 
-    it.skip('forEach on list of keys', () => {
-      throw new Error('Test Not Implemented');
-    });
+    it('forEach on list of keys', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
+      .then((keys) => keys.forEach((key) => {
+        should(TEST_ENTRIES).have.ownProperty(key.toString());
+      }))
+    );
 
     it('get list of values', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
@@ -187,9 +190,14 @@ describe('Mutable Data', () => {
         })
     );
 
-    it.skip('forEach on list of values', () => {
-      throw new Error('Test Not Implemented');
-    });
+    it('forEach on list of values', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
+      .then((values) => values.forEach((value) => {
+        should(TEST_ENTRIES).matchAny((v) => {
+          should(v).be.eql(value.toString());
+        });
+      }))
+    );
 
     it.skip('encrypt entry key', () => {
       throw new Error('Test Not Implemented');

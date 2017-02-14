@@ -31,6 +31,22 @@ function bufferLastEntry() {
         .concat([str, str.length]);
 }
 
+function callBackLastEntry() {
+  let fn = arguments[arguments.length - 1];
+  if (typeof fn !== 'function') throw Error('A function parameter _must be_ provided')
+
+  let cb = ffi.Callback("void", ['pointer', t.u8Pointer, t.usize],
+    function(uctx, value, length) {
+      // call the function provided by the user
+      let v = ref.reinterpret(value, length, 0);
+      fn(v);
+    }
+  );
+
+  return Array.prototype.slice.call(arguments, 0, arguments.length - 1)
+            .concat(cb);
+}
+
 function translateXorName(appPtr, str, tag) {
   let name = str;
   if (!Buffer.isBuffer(str)) {
@@ -197,10 +213,10 @@ module.exports = {
     mdata_entries_for_each: Promisified(null, []),
     mdata_entries_free: Promisified(null, []),
     mdata_keys_len: Promisified(null, t.usize),
-    mdata_keys_for_each: Promisified(null, []),
+    mdata_keys_for_each: Promisified(callBackLastEntry, []),
     mdata_keys_free: Promisified(null, []),
     mdata_values_len: Promisified(null, t.usize),
-    mdata_values_for_each: Promisified(null, []),
+    mdata_values_for_each: Promisified(callBackLastEntry, []),
     mdata_values_free: Promisified(null, []),
   }
 };

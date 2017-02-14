@@ -141,7 +141,7 @@ class Keys extends h.NetworkObject {
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return lib.mdata_keys_for_each(this.app, this.ref, fn);
+    return lib.mdata_keys_for_each(this.app.connection, this.ref, fn);
   }
 
   static free(app, ref) {
@@ -158,7 +158,7 @@ class Values extends h.NetworkObject {
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return lib.mdata_values_for_each(this.app, this.ref, fn);
+    return lib.mdata_values_for_each(this.app.connection, this.ref, fn);
   }
 
   static free(app, ref) {
