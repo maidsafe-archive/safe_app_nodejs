@@ -47,6 +47,23 @@ function callBackLastEntry() {
             .concat(cb);
 }
 
+function callBackKeyValueLastEntry() {
+  let fn = arguments[arguments.length - 1];
+  if (typeof fn !== 'function') throw Error('A function parameter _must be_ provided')
+
+  let cb = ffi.Callback("void", ['pointer', t.u8Pointer, t.usize, t.u8Pointer, t.usize, t.u64],
+    function(uctx, key, keyLen, value, valueLen, version) {
+      // call the function provided by the user
+      let k = ref.reinterpret(key, keyLen, 0);
+      let v = ref.reinterpret(value, valueLen, 0);
+      fn(k, v, version);
+    }
+  );
+
+  return Array.prototype.slice.call(arguments, 0, arguments.length - 1)
+            .concat(cb);
+}
+
 function translateXorName(appPtr, str, tag) {
   let name = str;
   if (!Buffer.isBuffer(str)) {
@@ -210,7 +227,7 @@ module.exports = {
     mdata_entries_insert: Promisified(strToBuffer, []),
     mdata_entries_len: Promisified(null, t.usize),
     mdata_entries_get: Promisified(strToBuffer, [t.u8Pointer, t.usize, t.u64], readValueToBufferNoCapacity),
-    mdata_entries_for_each: Promisified(null, []),
+    mdata_entries_for_each: Promisified(callBackKeyValueLastEntry, []),
     mdata_entries_free: Promisified(null, []),
     mdata_keys_len: Promisified(null, t.usize),
     mdata_keys_for_each: Promisified(callBackLastEntry, []),

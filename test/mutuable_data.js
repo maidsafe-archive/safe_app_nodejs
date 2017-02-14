@@ -160,11 +160,13 @@ describe('Mutable Data', () => {
           }))
     ));
 
-    it.skip('forEach on the list of entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
-        .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
-        .then((entries) => entries.forEach(() => {
-          throw new Error('Test Not Implemented');
-        }))
+    it('forEach on list of entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
+      .then((entries) => entries.forEach((key, value, version) => {
+        should(version).be.equal(0);
+        should(TEST_ENTRIES).have.ownProperty(key.toString());
+        should(TEST_ENTRIES[key.toString()]).be.equal(value.toString());
+      }))
     );
 
     it('get list of keys', () => app.mutableData.newRandomPublic(TAG_TYPE)
