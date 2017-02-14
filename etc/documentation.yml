@@ -16,6 +16,7 @@ toc:
   - ImmutableDataWriter
   - NameAndTag
   - MutableData
+  - NFS
   - ValueVersion
   - Entries
   - Keys
@@ -24,3 +25,4 @@ toc:
   - MDataAction
   - Permissions
   - PermissionsSet
+  - File

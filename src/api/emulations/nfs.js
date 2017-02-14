@@ -7,7 +7,13 @@ function isString(arg) {
   return typeof arg === 'string' || (arg.toString ? arg.toString() === '[object String]' : false);
 }
 
-class File extends h.NetworkObject {
+/**
+* A NFS-style File
+*
+* _Note_: As this application layer, the network does not check any
+* of the metadata provided. 
+**/
+class File {
 
   get ref() {
     const data = {
@@ -34,38 +40,76 @@ class File extends h.NetworkObject {
     return new t.File(data);
   }
 
+  /**
+  * The dataMapName to read the immutable data at
+  * @returns {Buffer}
+  **/
   get dataMapName() {
     return this._ref.data_map_name;
   }
 
+  /**
+  * When was this created? in UTC.
+  * @return {Date}
+  **/
   get created() {
     return nativeH.fromCTime(this._ref.created);
   }
 
+  /**
+  * When was this last modified? in UTC.
+  * @return {Date}
+  **/
   get modified() {
     return nativeH.fromCTime(this._ref.modified);
   }
 
+  /**
+  * How big is that file?
+  * @return {Number} size in bytes
+  **/
   get size() {
     return this._ref.size;
   }
 
+  /**
+  * Which version was this? Equals the Mdata-value-version.
+  * @return {Number} 
+  **/
   get version() {
     return this._ref.version;
   }
 
-  // FIXME: add setters!
-
+  /**
+  * @private
+  * used by autoref to clean the reference
+  * @param {SAFEApp} app
+  * @param {handle} ref
+  **/
   static free(app, file) {
     return lib.file_free(app.connection, file);
   }
 }
 
-class NfsEmulation {
+/**
+* NFS Emulation on top of an MData
+**/
+class NFS {
+  /**
+  * @private
+  * @param {MutableData} mData - the MutableData to wrap around
+  **/
   constructor(mData) {
     this.mData = mData;
   }
 
+  /**
+  * Create a new file with the given content, put the content
+  * on the network via immutableData (public) and wrap it into
+  * a File.
+  * @param {(String|Buffer)} content
+  * @returns {Promise<File>} a newly created file
+  **/
   create(content) {
     const now = new Date();
     return this.mData.app.immutableData.create()
@@ -81,20 +125,38 @@ class NfsEmulation {
     );
   }
 
+  /**
+  * Find the file of the given filename (aka keyName in the MData)
+  * @param {String} fileName - the path/file name
+  * @returns {Promise<File>} - the file found for that path
+  **/
   fetch(fileName) {
     return lib.file_fetch(this.mData.app.connection, this.mData.ref, fileName)
       .then((res) => h.autoref(new File(this.mData.app, res)));
   }
 
+  /**
+  * Insert the given file into the underlying MData, directly commit to the network
+  * @param {(String|Buffer)} fileName - the path to store the file under
+  * @param {File} file - the file to serialise and store there
+  * @returns {Promise<File>} - the same file
+  **/
   insert(fileName, file) {
     return lib.file_insert(this.mData.app.connection, this.mData.ref, fileName, file.ref.ref())
       .then(() => file);
   }
 
+  /**
+  * Replace a path with a new file. Directly commit to the network.
+  * @param {(String|Buffer)} fileName - the path to store the file under
+  * @param {File} file - the file to serialise and store there
+  * @param {Number} version - the current version number, to ensure you are overwriting the right one
+  * @returns {Promise<File>} - the same file
+  **/
   update(fileName, file, version) {
     return lib.file_update(this.mData.app.connection, this.mData.ref, fileName, file.ref, version)
       .then(() => file);
   }
 }
 
-module.exports = NfsEmulation;
+module.exports = NFS;
