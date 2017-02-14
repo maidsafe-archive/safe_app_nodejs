@@ -46,7 +46,13 @@ class ImmutableDataReader extends helpers.NetworkObject {
     return lib.idata_close_self_encryptor(this.app.connection, this.ref);
   }
 
-  // internal usage
+  /**
+  * @private
+  * free the reference of reader of the app on the native side
+  * used by the autoref feature
+  * @param {SAFEApp} app - the app the reference belongs to
+  * @param {handle} ref - the reference to free
+  */
   static free(app, ref) {
     lib.idata_self_encryptor_reader_free(app.connection, ref);
   }
@@ -103,12 +109,19 @@ class ImmutableDataWriter extends helpers.NetworkObject {
   }
 
   /**
-  * Prxy to `close`.
+  * Proxy to `close`.
   **/
   save() {
     return this.close();
   }
 
+  /**
+  * @private
+  * free the reference of writer of the app on the native side.
+  * used by the autoref feature
+  * @param {SAFEApp} app - the app the reference belongs to
+  * @param {handle} ref - the reference to free
+  */
   static free(app, ref) {
     lib.idata_self_encryptor_writer_free(app.connection, ref);
   }

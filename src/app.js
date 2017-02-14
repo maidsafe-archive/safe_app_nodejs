@@ -13,7 +13,14 @@ const consts = require('./consts');
  * this session.
  */
 class SAFEApp extends EventEmitter {
-  // internal
+  
+  /**
+  * @private
+  * Initiate a new App instace. Wire up all the API's and set up the
+  * authentication URI-handler with the system.
+  * 
+  * @param {AppInfo} appInfo
+  */
   constructor(appInfo) {
     super();
     this._appInfo = appInfo;
@@ -82,8 +89,16 @@ class SAFEApp extends EventEmitter {
         .then((service) => service.emulateAs('NFS').fetch(path)));
   }
 
-  // update the current connection
-  // internal use only
+  
+  /**
+  * @private
+  * Replace the connection to the native layer. When there is already one
+  * set up for the current app, free it on the native layer. Should only be
+  * used at startup/beginning as it will devaluate all handlers that might
+  * still be around after switching.
+  *
+  * @param {Pointer} con - the pointer to the native object
+  */
   set connection(con) {
     if (this._connection) {
       lib.free_app(this._connection);
@@ -117,6 +132,8 @@ class SAFEApp extends EventEmitter {
 
   /**
   * Create a SAFEApp and try to login it through the `authUri`
+  * @param {AppInfo} appInfo - the AppInfo
+  * @param {String} authUri - URI containing the authentication info
   * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp 
   **/
   static fromAuthUri(appInfo, authUri) {
@@ -124,7 +141,12 @@ class SAFEApp extends EventEmitter {
     return app.auth.loginFromURI(authUri);
   }
 
-  // internal
+  
+  /**
+  * @private
+  * Called from the native library whenever the network state
+  * changes. 
+  */
   _networkStateUpdated(uData, error, newState) {
     // FIXME: we need to map the state to strings
     this.emit('network-state-updated', newState, this._networkState);
@@ -132,7 +154,12 @@ class SAFEApp extends EventEmitter {
     this._networkState = newState;
   }
 
-  // internal
+  
+  /**
+  * @private
+  * free the app. used by the autoref feature
+  * @param {SAFEApp} app - the app to free
+  */
   static free(app) {
     // we are freed last, anything you do after this
     // will probably fail.

@@ -332,7 +332,11 @@ class MutableData extends h.NetworkObject {
 *   })))
 **/
 class MutableDataProvider {
-  // internal
+  /**
+  * @private
+  * Create a new MutableData
+  * @param {SAFEApp} app - instance this is bound to
+  */
   constructor(app) {
     this.app = app;
   }
@@ -430,7 +434,14 @@ class MutableDataProvider {
           .then((m) => h.autoref(new MutableData(this.app, m)));
   }
 
-  // internal use only
+  /**
+  * @private
+  * Helper to create a new autorefence MutableData for a given
+  * mdata reference from the native layer
+  * 
+  * @param {handle} mdata - the native handle 
+  * @returns {MutableData} - wrapped
+  */
   wrapMdata(mdata) {
     return h.autoref(new MutableData(this.app, mdata));
   }
