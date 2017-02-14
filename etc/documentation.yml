@@ -15,3 +15,12 @@ toc:
   - ImmutableDataReader
   - ImmutableDataWriter
   - NameAndTag
+  - MutableData
+  - ValueVersion
+  - Entries
+  - Keys
+  - Values
+  - EntryMutationTransaction
+  - MDataAction
+  - Permissions
+  - PermissionsSet
