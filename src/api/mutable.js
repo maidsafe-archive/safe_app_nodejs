@@ -145,10 +145,6 @@ class Entries extends h.NetworkObject {
     return lib.mdata_entry_actions_new(this.app.connection)
             .then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
   }
-
-  apply(mutations) {
-    return lib.mdata_mutate_entries(this.app.connection, this.ref, mutations.ref);
-  }
 }
 
 class Keys extends h.NetworkObject {
@@ -263,6 +259,10 @@ class MutableData extends h.NetworkObject {
   getUserPermissions(signKey) {
     return lib.mdata_list_user_permissions(this.app, this.ref, signKey)
       .then((r) => h.autoref(new Permissions(this.app, r, this)));
+  }
+
+  applyEntriesMutation(mutations) {
+    return lib.mdata_mutate_entries(this.app.connection, this.ref, mutations.ref);
   }
 
   changeOwner(otherSignKey, version) {

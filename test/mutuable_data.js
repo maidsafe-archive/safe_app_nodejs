@@ -119,9 +119,9 @@ describe('Mutable Data', () => {
         .then((value) => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('value1');
+          should(value.version).equal(0);
         })
     );
-
 
     it('serialise/deserialise smoketest', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
@@ -145,36 +145,27 @@ describe('Mutable Data', () => {
         .then((value) => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('value1');
+          should(value.version).equal(0);
         })
     );
 
     it('insert & get a single value', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
-        .then((entries) => entries.insert('newKey', 'newValue').then(entries.get('newKey')
-        .then((value) => {
-          should(value).not.be.undefined();
-          should(value.buf.toString()).equal('newValue');
-        }))
+        .then((entries) => entries.insert('newKey', 'newValue')
+          .then(entries.get('newKey')
+          .then((value) => {
+            should(value).not.be.undefined();
+            should(value.buf.toString()).equal('newValue');
+            should(value.version).equal(0);
+          }))
     ));
 
-    it.skip('forEach entry', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it.skip('forEach on the list of entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
         .then((entries) => entries.forEach(() => {
-          throw new Error('Not Implemented');
+          throw new Error('Test Not Implemented');
         }))
     );
-
-    it.skip('update a single entry', () => {
-      throw new Error('Not Implemented');
-    });
-
-    it.skip('update a single entry and check version', () => {
-      throw new Error('Not Implemented');
-    });
-
-    it.skip('delete a single entry', () => {
-      throw new Error('Not Implemented');
-    });
 
     it('get list of keys', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
@@ -184,6 +175,10 @@ describe('Mutable Data', () => {
         })
     );
 
+    it.skip('forEach on list of keys', () => {
+      throw new Error('Test Not Implemented');
+    });
+
     it('get list of values', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
         .then((values) => values.len())
@@ -192,58 +187,205 @@ describe('Mutable Data', () => {
         })
     );
 
-    it.skip('apply insert mutation', () => app.mutableData.newRandomPublic(TAG_TYPE)
-        .then((m) => m.quickSetup(TEST_ENTRIES)
-          .then(() => app.mutableData.newMutation()
-            .then((mut) => mut.insert('newKey', 'newValue')
-              .then(() => m.getEntries()
-                .then((entries) => entries.apply(mut)
-                  .then(() => entries.get('newKey'))
-                  .then((value) => {
-                    should(value).not.be.undefined();
-                    should(value.buf.toString()).equal('newValue');
-                  })
-                )))))
-    );
-
-    it.skip('single mutation followed by a bulk mutation', () => {
-      throw new Error('Not Implemented');
+    it.skip('forEach on list of values', () => {
+      throw new Error('Test Not Implemented');
     });
 
     it.skip('encrypt entry key', () => {
-      throw new Error('Not Implemented');
+      throw new Error('Test Not Implemented');
     });
 
     it.skip('encrypt entry value', () => {
-      throw new Error('Not Implemented');
+      throw new Error('Test Not Implemented');
     });
   });
 
-  describe.skip('Permissions', () => {
-    it('get list of permissions', () => {
-      throw new Error('Not Implemented');
-    });
+  describe('Applying EntryMutationTransaction', () => {
+    it('an insert mutation from existing entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getEntries()
+            .then((entries) => entries.mutate()
+              .then((mut) => mut.insert('newKey', 'newValue')
+                .then(() => m.applyEntriesMutation(mut))
+                .then(() => m.get('newKey'))
+                .then((value) => {
+                  should(value).not.be.undefined();
+                  should(value.buf.toString()).equal('newValue');
+                  should(value.version).equal(0);
+                })
+            ))))
+    );
 
-    it('get list of user\'s permissions', () => {
-      throw new Error('Not Implemented');
-    });
+    it('an update mutation from existing entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getEntries()
+            .then((entries) => entries.mutate()
+              .then((mut) => mut.update('key2', 'updatedValue', 1)
+                .then(() => m.applyEntriesMutation(mut))
+                .then(() => m.get('key2'))
+                .then((value) => {
+                  should(value).not.be.undefined();
+                  should(value.buf.toString()).equal('updatedValue');
+                  should(value.version).equal(1);
+                })
+            ))))
+    );
 
-    it('insert a permission', () => {
-      throw new Error('Not Implemented');
-    });
+    it('a remove mutation from existing entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getEntries()
+            .then((entries) => entries.mutate()
+              .then((mut) => mut.remove('key2', 1)
+                .then(() => m.applyEntriesMutation(mut))
+                .then(() => m.get('key2'))
+                .then((value) => {
+                  should(value).not.be.undefined();
+                  should(value.buf.toString()).equal('');
+                  should(value.version).equal(1);
+                })
+            ))))
+    );
 
-    it('update a permission', () => {
-      throw new Error('Not Implemented');
-    });
+    it('an insert mutation from new mutation obj', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newMutation()
+            .then((mut) => mut.insert('newKey', 'newValue')
+              .then(() => m.applyEntriesMutation(mut))
+              .then(() => m.get('newKey'))
+              .then((value) => {
+                should(value).not.be.undefined();
+                should(value.buf.toString()).equal('newValue');
+                should(value.version).equal(0);
+              })
+            )))
+    );
 
-    it('delete a permission', () => {
-      throw new Error('Not Implemented');
+    it('an update mutation from new mutation obj', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newMutation()
+            .then((mut) => mut.update('key2', 'updatedValue', 1)
+              .then(() => m.applyEntriesMutation(mut))
+              .then(() => m.get('key2'))
+              .then((value) => {
+                should(value).not.be.undefined();
+                should(value.buf.toString()).equal('updatedValue');
+                should(value.version).equal(1);
+              })
+            )))
+    );
+
+    it('a remove mutation from new mutation obj', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newMutation()
+            .then((mut) => mut.remove('key2', 1)
+              .then(() => m.applyEntriesMutation(mut))
+              .then(() => m.get('key2'))
+              .then((value) => {
+                should(value).not.be.undefined();
+                should(value.buf.toString()).equal('');
+                should(value.version).equal(1);
+              })
+            )))
+    );
+
+    // this is currently not supported, a removed key is currently updated with an empty value
+    it.skip('a removal followed by an insert with the same key', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getEntries()
+            .then((entries) => entries.mutate()
+              .then((mut) => mut.remove('key2', 1)
+                .then(() => m.applyEntriesMutation(mut))
+                .then(() => mut.insert('key2', 'newValue'))
+                .then(() => m.applyEntriesMutation(mut))
+                .then(() => m.get('key2'))
+                .then((value) => {
+                  should(value).not.be.undefined();
+                  should(value.buf.toString()).equal('newValue');
+                  should(value.version).equal(2);
+                })
+            ))))
+    );
+
+    it('a removal & an update within the same mutation', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getEntries()
+            .then((entries) => entries.mutate()
+              .then((mut) => mut.remove('key2', 1)
+                .then(() => mut.update('key1', 'updatedValue', 1))
+                .then(() => m.applyEntriesMutation(mut))
+                .then(() => m.get('key2'))
+                .then((value) => {
+                  should(value).not.be.undefined();
+                  should(value.buf.toString()).equal('');
+                  should(value.version).equal(1);
+                })
+                .then(() => m.get('key1'))
+                .then((value) => {
+                  should(value).not.be.undefined();
+                  should(value.buf.toString()).equal('updatedValue');
+                  should(value.version).equal(1);
+                })
+            ))))
+    );
+  });
+
+  describe('Permissions', () => {
+    it('get list of permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getPermissions()
+            .then((perm) => perm.len())
+            .then((length) => {
+              should(length).equal(1);
+            })
+          ))
+    );
+
+    it.skip('get user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.auth.getPubSignKey()
+            .then((pk) => m.getUserPermissions(pk.ref)
+              .then((perm) => perm.len())
+              .then((length) => {
+                should(length).equal(1);
+              })
+            )))
+    );
+
+    it.skip('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getPermissions()
+            .then((perm) => app.auth.getPubSignKey()
+              .then((pk) => perm.getPermissionSet(pk.ref))
+              .then((permSet) => permSet.len())
+              .then((length) => {
+                should(length).equal(3);
+              })
+          )))
+    );
+
+    it.skip('remove a permission', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getPermissions()
+            .then((perm) => app.auth.getPubSignKey()
+              .then((pk) => perm.delPermissionsSet(pk.ref, 1))
+              .then((updatedPerm) => m.getEntries()
+                .then((entries) => m.put(updatedPerm, entries))
+                .then(() => app.mutableData.newMutation()
+                  .then((mut) => mut.update('key2', 'updatedValue', 1)
+                    .then(() => {
+                      should(m.applyEntriesMutation(mut)).be.rejected();
+                    })
+                  ))))))
+    );
+
+    it.skip('update a permission', () => {
+      throw new Error('Test Not Implemented');
     });
   });
 
   describe.skip('Owners', () => {
     it('change oenwership', () => {
-      throw new Error('Not Implemented');
+      throw new Error('Test Not Implemented');
     });
   });
 });
