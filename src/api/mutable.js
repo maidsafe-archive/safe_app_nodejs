@@ -91,12 +91,6 @@ class Permissions extends h.NetworkObject {
         .then((c) => h.autoref(new PermissionsSet(this.app, c)));
   }
 
-  insertPermissionSet(signKey, permissionSet) {
-    return lib.mdata_permissions_insert(this.app.connection,
-                                        this.ref,
-                                        signKey.ref,
-                                        permissionSet.ref);
-  }
 
   /**
   * Delete the permissions of a specifc key. Directly commits to the network.
@@ -120,11 +114,11 @@ class Permissions extends h.NetworkObject {
   * @param {PermissionSet} pmset - the permissionset you'd like insert
   * @returns {Promise} - once finished
   **/
-  insertPermissionSet(signKey, pmset) {
+  insertPermissionSet(signKey, permissionSet) {
     return lib.mdata_permissions_insert(this.app.connection,
                                         this.ref,
                                         signKey.ref,
-                                        pmset.ref);
+                                        permissionSet.ref);
   }
 
   /**
