@@ -7,7 +7,7 @@ const createAnonTestApp = h.createAnonTestApp;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
 function createRandomDomain(content, path, service) {
-  const domain = `test_${Math.round(Math.random() * 100000)}`;  
+  const domain = `test_${Math.round(Math.random() * 100000)}`;
   const app = createAuthenticatedTestApp();
   return app.mutableData.newRandomPublic(consts.TAG_TYPE_WWW)
     .then((serviceMdata) => serviceMdata.quickSetup()
@@ -21,12 +21,12 @@ function createRandomDomain(content, path, service) {
             return app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS)
               .then((dnsData) => serviceMdata.getNameAndTag()
                   .then((res) => {
-                    let payload = {};
+                    const payload = {};
                     payload[service || ''] = res.name;
                     return dnsData.quickSetup(payload);
                   }));
           });
-      })).then( () => domain);
+      })).then(() => domain);
 }
 
 describe('Browsing', () => {
@@ -34,13 +34,13 @@ describe('Browsing', () => {
     this.timeout(20000);
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '', '')
-      .then((domain) =>createAnonTestApp()
+      .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
           .then((f) => app.immutableData.fetch(f.dataMapName))
           .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
-    });
+  });
 
   it('fetch any path on any url', function test() {
     this.timeout(20000);
@@ -52,7 +52,7 @@ describe('Browsing', () => {
           .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
-    });
+  });
 
   it('find any service fallback', function test() {
     this.timeout(20000);
@@ -64,7 +64,7 @@ describe('Browsing', () => {
           .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
-    });
+  });
 
   it('find missing slash fallback', function test() {
     this.timeout(20000);
@@ -76,53 +76,53 @@ describe('Browsing', () => {
           .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
-    });
+  });
 
   it('fetch index.html fallback', function test() {
     this.timeout(20000);
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/index.html', '')
-      .then((domain) =>createAnonTestApp()
+      .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
           .then((f) => app.immutableData.fetch(f.dataMapName))
           .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
-    });
+  });
 
   it('fetch www fallback', function test() {
     this.timeout(20000);
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '', 'www')
-      .then((domain) =>createAnonTestApp()
+      .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
           .then((f) => app.immutableData.fetch(f.dataMapName))
           .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
-    });
+  });
 
   it('fetch index.html on www fallback', function test() {
     this.timeout(20000);
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/index.html', 'www')
-      .then((domain) =>createAnonTestApp()
+      .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
           .then((f) => app.immutableData.fetch(f.dataMapName))
           .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
-    });
+  });
 
   it('subdirectory fallback', function test() {
     this.timeout(20000);
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/subdir/index.html', 'www')
-      .then((domain) =>createAnonTestApp()
-        .then((app) => app.webFetch(`safe://${domain}/subdir`)
+      .then((domain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://${domain}/subdir/`)
           .then((f) => app.immutableData.fetch(f.dataMapName))
           .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
-    });
+  });
 });
