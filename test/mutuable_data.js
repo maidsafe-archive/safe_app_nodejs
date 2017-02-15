@@ -160,11 +160,13 @@ describe('Mutable Data', () => {
           }))
     ));
 
-    it.skip('forEach on the list of entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
-        .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
-        .then((entries) => entries.forEach(() => {
-          throw new Error('Test Not Implemented');
-        }))
+    it('forEach on list of entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
+      .then((entries) => entries.forEach((key, value, version) => {
+        should(version).be.equal(0);
+        should(TEST_ENTRIES).have.ownProperty(key.toString());
+        should(TEST_ENTRIES[key.toString()]).be.equal(value.toString());
+      }))
     );
 
     it('get list of keys', () => app.mutableData.newRandomPublic(TAG_TYPE)
@@ -175,9 +177,12 @@ describe('Mutable Data', () => {
         })
     );
 
-    it.skip('forEach on list of keys', () => {
-      throw new Error('Test Not Implemented');
-    });
+    it('forEach on list of keys', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
+      .then((keys) => keys.forEach((key) => {
+        should(TEST_ENTRIES).have.ownProperty(key.toString());
+      }))
+    );
 
     it('get list of values', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
@@ -187,9 +192,14 @@ describe('Mutable Data', () => {
         })
     );
 
-    it.skip('forEach on list of values', () => {
-      throw new Error('Test Not Implemented');
-    });
+    it('forEach on list of values', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
+      .then((values) => values.forEach((value) => {
+        should(TEST_ENTRIES).matchAny((v) => {
+          should(v).be.eql(value.toString());
+        });
+      }))
+    );
 
     it.skip('encrypt entry key', () => {
       throw new Error('Test Not Implemented');
@@ -340,22 +350,12 @@ describe('Mutable Data', () => {
           ))
     );
 
-    it.skip('get user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
-        .then((m) => m.quickSetup(TEST_ENTRIES)
-          .then(() => app.auth.getPubSignKey()
-            .then((pk) => m.getUserPermissions(pk.ref)
-              .then((perm) => perm.len())
-              .then((length) => {
-                should(length).equal(1);
-              })
-            )))
-    );
-
     it.skip('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => m.getPermissions()
             .then((perm) => app.auth.getPubSignKey()
-              .then((pk) => perm.getPermissionSet(pk.ref))
+              .then((pk) => perm.getPermissionSet(pk))
+              // the above command is failing with ERR_INVALID_SIGN_KEY_HANDLE
               .then((permSet) => permSet.len())
               .then((length) => {
                 should(length).equal(3);
@@ -363,24 +363,50 @@ describe('Mutable Data', () => {
           )))
     );
 
-    it.skip('remove a permission', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it.skip('insert permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
-          .then(() => m.getPermissions()
-            .then((perm) => app.auth.getPubSignKey()
-              .then((pk) => perm.delPermissionsSet(pk.ref, 1))
-              .then((updatedPerm) => m.getEntries()
-                .then((entries) => m.put(updatedPerm, entries))
-                .then(() => app.mutableData.newMutation()
-                  .then((mut) => mut.update('key2', 'updatedValue', 1)
-                    .then(() => {
-                      should(m.applyEntriesMutation(mut)).be.rejected();
-                    })
-                  ))))))
+          .then(() => app.auth.getPubSignKey()
+            .then((pk) => app.mutableData.newPermissionSet()
+              .then((newPermSet) => newPermSet.setAllow('Delete')
+                .then(() => m.getPermissions()
+                  .then((perm) => perm.insertPermissionSet(pk, newPermSet)
+                    .then(() => app.mutableData.newMutation()
+                      .then((mut) => mut.update('key2', 'updatedValue', 1)
+                        .then(() => should(m.applyEntriesMutation(mut))
+                                        .be.rejected()) // this is failing
+                      ))))))))
     );
 
-    it.skip('update a permission', () => {
-      throw new Error('Test Not Implemented');
-    });
+    it('get user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.auth.getPubSignKey()
+            .then((pk) => m.getUserPermissions(pk).should.be.fulfilled())
+            // we should be testing something more here...
+          ))
+    );
+
+    it('remove user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.auth.getPubSignKey()
+            .then((pk) => m.delUserPermissions(pk, 1))
+            .then(() => app.mutableData.newMutation()
+              .then((mut) => mut.update('key2', 'updatedValue', 1)
+                .then(() => should(m.applyEntriesMutation(mut)).be.rejected())
+              ))))
+    );
+
+    it('update user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.auth.getPubSignKey()
+            .then((pk) => app.mutableData.newPermissionSet()
+              .then((newPerm) => newPerm.setAllow('Insert')
+                .then(() => m.setUserPermissions(pk, newPerm, 1))
+                .then(() => app.mutableData.newMutation()
+                  .then((mut) => mut.update('key2', 'updatedValue', 1)
+                    .then(() => should(m.applyEntriesMutation(mut))
+                                  .be.rejected())
+                  ))))))
+    );
   });
 
   describe.skip('Owners', () => {
