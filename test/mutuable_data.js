@@ -162,10 +162,10 @@ describe('Mutable Data', () => {
 
     it('forEach on list of entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
-      .then((entries) => entries.forEach((key, value, version) => {
-        should(version).be.equal(0);
+      .then((entries) => entries.forEach((key, value) => {
+        should(value.version).be.equal(0);
         should(TEST_ENTRIES).have.ownProperty(key.toString());
-        should(TEST_ENTRIES[key.toString()]).be.equal(value.toString());
+        should(TEST_ENTRIES[key.toString()]).be.equal(value.buf.toString());
       }))
     );
 
@@ -196,7 +196,8 @@ describe('Mutable Data', () => {
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
       .then((values) => values.forEach((value) => {
         should(TEST_ENTRIES).matchAny((v) => {
-          should(v).be.eql(value.toString());
+          should(v).be.eql(value.buf.toString());
+          should(value.version).be.equal(0);
         });
       }))
     );
