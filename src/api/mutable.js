@@ -41,30 +41,15 @@ class Permissions extends h.NetworkObject {
   }
 
   getPermissionSet(signKey) {
-    return lib.mdata_permissions_get(this.app.connection, this.ref, signKey)
-        .then((c) => h.autoref(new PermissionsSet(this.app.connection, c)));
+    return lib.mdata_permissions_get(this.app.connection, this.ref, signKey.ref)
+        .then((c) => h.autoref(new PermissionsSet(this.app, c)));
   }
 
-  delPermissionsSet(signKey, version) {
-    return lib.mdata_del_user_permissions(this.app.connection,
-                                          this.ref,
-                                          signKey,
-                                          version);
-  }
-
-  insertPermissionSet(signKey, PermissionSet) {
+  insertPermissionSet(signKey, permissionSet) {
     return lib.mdata_permissions_insert(this.app.connection,
                                         this.ref,
-                                        signKey,
-                                        PermissionSet);
-  }
-
-  setPermissionSet(signKey, PermissionSet, version) {
-    return lib.mdata_set_user_permissions(this.app.connection,
-                                          this.ref,
-                                          signKey,
-                                          PermissionSet,
-                                          version);
+                                        signKey.ref,
+                                        permissionSet.ref);
   }
 
   forEach(fn) {
@@ -145,10 +130,6 @@ class Entries extends h.NetworkObject {
     return lib.mdata_entry_actions_new(this.app.connection)
             .then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
   }
-
-  apply(mutations) {
-    return lib.mdata_mutate_entries(this.app.connection, this.ref, mutations.ref);
-  }
 }
 
 class Keys extends h.NetworkObject {
@@ -160,7 +141,7 @@ class Keys extends h.NetworkObject {
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return lib.mdata_keys_for_each(this.app, this.ref, fn);
+    return lib.mdata_keys_for_each(this.app.connection, this.ref, fn);
   }
 
   static free(app, ref) {
@@ -177,7 +158,7 @@ class Values extends h.NetworkObject {
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return lib.mdata_values_for_each(this.app, this.ref, fn);
+    return lib.mdata_values_for_each(this.app.connection, this.ref, fn);
   }
 
   static free(app, ref) {
@@ -207,7 +188,7 @@ class MutableData extends h.NetworkObject {
             .then(() => pmSet.setAllow('Delete'))
             .then(() => pmSet.setAllow('ManagePermissions'))
             .then(() => this.app.mutableData.newPermissions()
-              .then((pm) => pm.insertPermissionSet(key.ref, pmSet.ref)
+              .then((pm) => pm.insertPermissionSet(key, pmSet)
                 .then(() => entriesSetup
                   .then((entries) => this.put(pm, entries))
           )))))
@@ -261,8 +242,27 @@ class MutableData extends h.NetworkObject {
   }
 
   getUserPermissions(signKey) {
-    return lib.mdata_list_user_permissions(this.app, this.ref, signKey)
-      .then((r) => h.autoref(new Permissions(this.app, r, this)));
+    return lib.mdata_list_user_permissions(this.app.connection, this.ref, signKey.ref)
+      .then((r) => h.autoref(new PermissionsSet(this.app, r, this)));
+  }
+
+  delUserPermissions(signKey, version) {
+    return lib.mdata_del_user_permissions(this.app.connection,
+                                          this.ref,
+                                          signKey.ref,
+                                          version);
+  }
+
+  setUserPermissions(signKey, permissionSet, version) {
+    return lib.mdata_set_user_permissions(this.app.connection,
+                                          this.ref,
+                                          signKey.ref,
+                                          permissionSet.ref,
+                                          version);
+  }
+
+  applyEntriesMutation(mutations) {
+    return lib.mdata_mutate_entries(this.app.connection, this.ref, mutations.ref);
   }
 
   changeOwner(otherSignKey, version) {

@@ -31,6 +31,39 @@ function bufferLastEntry() {
         .concat([str, str.length]);
 }
 
+function callBackLastEntry() {
+  let fn = arguments[arguments.length - 1];
+  if (typeof fn !== 'function') throw Error('A function parameter _must be_ provided')
+
+  let cb = ffi.Callback("void", ['pointer', t.u8Pointer, t.usize],
+    function(uctx, value, length) {
+      // call the function provided by the user
+      let v = ref.reinterpret(value, length, 0);
+      fn(v);
+    }
+  );
+
+  return Array.prototype.slice.call(arguments, 0, arguments.length - 1)
+            .concat(cb);
+}
+
+function callBackKeyValueLastEntry() {
+  let fn = arguments[arguments.length - 1];
+  if (typeof fn !== 'function') throw Error('A function parameter _must be_ provided')
+
+  let cb = ffi.Callback("void", ['pointer', t.u8Pointer, t.usize, t.u8Pointer, t.usize, t.u64],
+    function(uctx, key, keyLen, value, valueLen, version) {
+      // call the function provided by the user
+      let k = ref.reinterpret(key, keyLen, 0);
+      let v = ref.reinterpret(value, valueLen, 0);
+      fn(k, v, version);
+    }
+  );
+
+  return Array.prototype.slice.call(arguments, 0, arguments.length - 1)
+            .concat(cb);
+}
+
 function translateXorName(appPtr, str, tag) {
   let name = str;
   if (!Buffer.isBuffer(str)) {
@@ -51,6 +84,21 @@ function strToBuffer(app, mdata) {
     return args;
 }
 
+// keep last entry as is
+function strToBufferButLastEntry(app, mdata) {
+    let lastArg = arguments[arguments.length - 1];
+    const args = [app, mdata];
+    Array.prototype.slice.call(arguments, 2, arguments.length - 1).forEach(item => {
+      const buf = item.buffer || (Buffer.isBuffer(item) ? item : new Buffer(item));
+      args.push(buf);
+      args.push(buf.length);
+    });
+    args.push(lastArg);
+    return args;
+}
+
+// args[2] is expected to be content capacity
+// args[3] is expected to be content version
 function readValueToBuffer(args) {
     return {
         buf: ref.reinterpret(args[0], args[1], 0),
@@ -58,6 +106,14 @@ function readValueToBuffer(args) {
     }
 }
 
+// args[2] is not expected to be content capacity
+// but content version instead
+function readValueToBufferNoCapacity(args) {
+    return {
+        buf: ref.reinterpret(args[0], args[1], 0),
+        version: args[2]
+    }
+}
 
 module.exports = {
   types: {
@@ -86,7 +142,7 @@ module.exports = {
     mdata_permissions_set_clear: [t.Void, [t.AppPtr, MDataPermissionSetHandle, 'pointer', 'pointer']],
     mdata_permissions_set_free: [t.Void, [t.AppPtr, MDataPermissionSetHandle, 'pointer', 'pointer']],
     mdata_permissions_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
-    mdata_permissions_len: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer', 'pointer']],
+    mdata_permissions_len: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
     mdata_permissions_get: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignKeyHandle, 'pointer', 'pointer']],
     mdata_permissions_for_each: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
     mdata_permissions_insert: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignKeyHandle, MDataPermissionSetHandle, 'pointer', 'pointer']],
@@ -97,7 +153,7 @@ module.exports = {
     mdata_list_entries: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_list_keys: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_list_values: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
-    mdata_mutate_entries: [t.Void, [t.AppPtr, MDataEntryActionsHandle, MDataEntryActionsHandle, 'pointer', 'pointer']],
+    mdata_mutate_entries: [t.Void, [t.AppPtr, MDataInfoHandle, MDataEntryActionsHandle, 'pointer', 'pointer']],
     mdata_list_permissions: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_list_user_permissions: [t.Void, [t.AppPtr, MDataInfoHandle, SignKeyHandle, 'pointer', 'pointer']],
     mdata_set_user_permissions: [t.Void, [t.AppPtr, MDataInfoHandle, SignKeyHandle, MDataPermissionSetHandle, t.u64, 'pointer', 'pointer']],
@@ -164,20 +220,20 @@ module.exports = {
     mdata_change_owner: Promisified(null, []),
     mdata_entry_actions_new: Promisified(null, MDataEntryActionsHandle),
     mdata_entry_actions_insert: Promisified(strToBuffer, []),
-    mdata_entry_actions_update: Promisified(null, []),
-    mdata_entry_actions_delete: Promisified(strToBuffer, []),
+    mdata_entry_actions_update: Promisified(strToBufferButLastEntry, []),
+    mdata_entry_actions_delete: Promisified(strToBufferButLastEntry, []),
     mdata_entry_actions_free: Promisified(null, []),
     mdata_entries_new: Promisified(null, MDataEntriesHandle),
     mdata_entries_insert: Promisified(strToBuffer, []),
     mdata_entries_len: Promisified(null, t.usize),
-    mdata_entries_get: Promisified(strToBuffer, [t.u8Pointer, t.usize, t.u64], readValueToBuffer),
-    mdata_entries_for_each: Promisified(null, []),
+    mdata_entries_get: Promisified(strToBuffer, [t.u8Pointer, t.usize, t.u64], readValueToBufferNoCapacity),
+    mdata_entries_for_each: Promisified(callBackKeyValueLastEntry, []),
     mdata_entries_free: Promisified(null, []),
     mdata_keys_len: Promisified(null, t.usize),
-    mdata_keys_for_each: Promisified(null, []),
+    mdata_keys_for_each: Promisified(callBackLastEntry, []),
     mdata_keys_free: Promisified(null, []),
     mdata_values_len: Promisified(null, t.usize),
-    mdata_values_for_each: Promisified(null, []),
+    mdata_values_for_each: Promisified(callBackLastEntry, []),
     mdata_values_free: Promisified(null, []),
   }
 };
