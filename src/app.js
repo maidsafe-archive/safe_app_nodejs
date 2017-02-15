@@ -85,14 +85,22 @@ class SAFEApp extends EventEmitter {
 
     return this.mutableData.newPublic(address, consts.TAG_TYPE_DNS)
       .then((mdata) => mdata.get(serviceName)
+          .catch( (err) => {
+            if ((err.name === 'ERR_NO_SUCH_ENTRY') && (!serviceName || !serviceName.length)){
+              return mdata.get('www')
+            }
+            return Promise.reject(err)
+          })
         .then((value) => this.mutableData.newPublic(value.buf, consts.TAG_TYPE_WWW))
         .then((service) => service.emulateAs('NFS'))
         .then((emulation) => emulation.fetch(path)
           .catch((err) => {
-            if (err.name !== 'ERR_FILE_NOT_FOUND') return Promise.rejected(err)
-            if (!path || path.length == 0 || path[path.length -1] == '/')
+            if ((err.name === 'ERR_FILE_NOT_FOUND') &&
+                (!path || path.length == 0 || path[path.length -1] == '/')) {
               // File not found, as a fallback, try finding an index.html in the folder
               return emulation.fetch((path || '/') + 'index.html')
+            }
+            return Promise.reject(err)
           })));
   }
 
