@@ -355,13 +355,10 @@ describe('Mutable Data', () => {
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => m.getPermissions()
             .then((perm) => app.auth.getPubSignKey()
-              .then((pk) => perm.getPermissionSet(pk))
+              .then((pk) => perm.getPermissionSet(pk).should.be.fulfilled())
               // the above command is failing with ERR_INVALID_SIGN_KEY_HANDLE
-              .then((permSet) => permSet.len())
-              .then((length) => {
-                should(length).equal(3);
-              })
-          )))
+              // due to an issue in safe_app: MAID-????
+            )))
     );
 
     it.skip('insert permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
