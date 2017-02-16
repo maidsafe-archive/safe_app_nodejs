@@ -10,7 +10,7 @@ safe_app nodejs library.
 
 # Development
 
-To build and use this module locally you need latest stable [NodeJS](https://nodejs.org/en/) (& npm) and [Rust](https://www.rust-lang.org/en-US/) (we recommend [rustup](https://rustup.rs/)).
+To build and use this module locally you need latest stable [NodeJS](https://nodejs.org/en/) (& npm) and [Rust](https://www.rust-lang.org/en-US/) (we recommend [rustup](https://rustup.rs/)). Note that Rust-1.15.0 and Rust-1.15.1 have some known issues with the way that cargo workspaces are handled, which is a feature we make use of. For this reason please use Rust-1.14.0 until Rust-1.16.0 is released.
 
 Initially after pulling the code ensure that you have the git submodules setup: `git submodule update --init` when you pull initially (`git submodule update` when you pull updates thereafter). 
 
