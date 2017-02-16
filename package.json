@@ -17,7 +17,7 @@
     "build-safe-lib": "cd native/safe_app && cargo build --features \"use-mock-routing testing\" && cd ../../ && cp -f native/target/debug/*safe_app* ./src/native",
     "build-libs": "npm run build-system-uri && npm run build-safe-lib",
     
-    "prepublish": "npm run build-libs",
+    "postinstall": "npm run build-libs",
     "pretest": "npm run build-libs",
     "docs": "documentation build --config etc/documentation.yml --github true --output docs --format html src/**",
     "serve-docs": "documentation serve --config etc/documentation.yml --github true --output docs --format html src/**",
