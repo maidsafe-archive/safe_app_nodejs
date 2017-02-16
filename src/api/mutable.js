@@ -354,7 +354,7 @@ class Values extends h.NetworkObject {
 
   /**
   * Iterate over the value, execute the function every time
-  * @param {function(Buffer, Version)} fn - the function to call
+  * @param {function(Buffer, ValueVersion)} fn - the function to call
   * @returns {Promise<()>} - resolves once the iteration is done
   **/
   forEach(fn) {

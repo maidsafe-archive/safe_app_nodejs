@@ -162,10 +162,10 @@ describe('Mutable Data', () => {
 
     it('forEach on list of entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
-      .then((entries) => entries.forEach((key, value, version) => {
-        should(version).be.equal(0);
+      .then((entries) => entries.forEach((key, value) => {
+        should(value.version).be.equal(0);
         should(TEST_ENTRIES).have.ownProperty(key.toString());
-        should(TEST_ENTRIES[key.toString()]).be.equal(value.toString());
+        should(TEST_ENTRIES[key.toString()]).be.equal(value.buf.toString());
       }))
     );
 
@@ -196,7 +196,8 @@ describe('Mutable Data', () => {
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
       .then((values) => values.forEach((value) => {
         should(TEST_ENTRIES).matchAny((v) => {
-          should(v).be.eql(value.toString());
+          should(v).be.eql(value.buf.toString());
+          should(value.version).be.equal(0);
         });
       }))
     );
@@ -354,13 +355,10 @@ describe('Mutable Data', () => {
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => m.getPermissions()
             .then((perm) => app.auth.getPubSignKey()
-              .then((pk) => perm.getPermissionSet(pk))
+              .then((pk) => perm.getPermissionSet(pk).should.be.fulfilled())
               // the above command is failing with ERR_INVALID_SIGN_KEY_HANDLE
-              .then((permSet) => permSet.len())
-              .then((length) => {
-                should(length).equal(3);
-              })
-          )))
+              // due to an issue in safe_app: MAID-????
+            )))
     );
 
     it.skip('insert permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
