@@ -86,7 +86,7 @@ class SAFEApp extends EventEmitter {
     return this.mutableData.newPublic(address, consts.TAG_TYPE_DNS)
       .then((mdata) => mdata.get(serviceName)
         .then((value) => this.mutableData.newPublic(value.buf, consts.TAG_TYPE_WWW))
-        .then((service) => service.emulateAs('NFS').fetch(path)));
+        .then((service) => service.emulateAs('NFS').fetch(path[0] === '/' ? path.substr(1) : path))));
   }
 
 
