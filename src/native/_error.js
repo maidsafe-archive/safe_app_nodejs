@@ -7,7 +7,7 @@ function makeError(code, name) {
       this.stack = (new Error()).stack;
     else
       Error.captureStackTrace(this, this.constructor);
-    this.message = message;
+    this.message = message || name;
   }
   E.prototype = new Error();
   E.prototype.name = name;

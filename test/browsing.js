@@ -125,4 +125,46 @@ describe('Browsing', () => {
           .then((co) => should(co.toString()).equal(content))
       ));
   });
+
+  describe('errors', () => {
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    let domain; // eslint-disable-line no-unused-vars
+    let client;
+    before(function setup() {
+      this.timeout(20000);
+      return createRandomDomain(content, '/subdir/index.html', 'www')
+        .then((testDomain) => {
+          domain = testDomain;
+        }).then(() => {
+          createAnonTestApp().then((app) => {
+            client = app;
+          });
+        });
+    });
+
+    it('should not find dns', () =>
+      client.webFetch('safe://$domain_doesnt_exist')
+        .should.be.rejectedWith('ERR_NO_SUCH_DATA')
+    );
+
+    it('should be case sensitive', () =>
+      client.webFetch('safe://$domain/SUBDIR/index.html')
+        .should.be.rejectedWith('ERR_NO_SUCH_DATA')
+    );
+
+    it('should not find service', () =>
+      client.webFetch('safe://faulty_service.$domain')
+        .should.be.rejectedWith('ERR_NO_SUCH_DATA')
+    );
+
+    it('should not find file', () =>
+      client.webFetch('safe://www.$domain/404.html')
+        .should.be.rejectedWith('ERR_NO_SUCH_DATA')
+    );
+
+    it('should not find file in subdirectory', () =>
+      client.webFetch('safe://www.$domain/subdir/404.html')
+        .should.be.rejectedWith('ERR_NO_SUCH_DATA')
+    );
+  });
 });
