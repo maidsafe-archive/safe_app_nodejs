@@ -29,6 +29,30 @@ function createRandomDomain(content, path, service) {
       })).then(() => domain);
 }
 
+
+function createRandomPrivateServiceDomain(content, path, service) {
+  const domain = `test_${Math.round(Math.random() * 100000)}`;
+  const app = createAuthenticatedTestApp();
+  return app.mutableData.newRandomPrivate(consts.TAG_TYPE_WWW)
+    .then((serviceMdata) => serviceMdata.quickSetup()
+      .then(() => {
+        const nfs = serviceMdata.emulateAs('NFS');
+        // let's write the file
+        return nfs.create(content)
+          .then((file) => nfs.insert(path || '', file))
+          .then(() => {
+            const dnsName = c.createHash('sha256').update(domain).digest();
+            return app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS)
+              .then((dnsData) => serviceMdata.serialise()
+                  .then((serial) => {
+                    const payload = {};
+                    payload[service || ''] = serial;
+                    return dnsData.quickSetup(payload);
+                  }));
+          });
+      })).then(() => domain);
+}
+
 describe('Browsing', () => {
   it('fetch content', function test() {
     this.timeout(20000);
@@ -60,6 +84,18 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/yumyum.html', 'whatever.valid_service')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://whatever.valid_service.${domain}/yumyum.html`)
+          .then((f) => app.immutableData.fetch(f.dataMapName))
+          .then((i) => i.read())
+          .then((co) => should(co.toString()).equal(content))
+      ));
+  });
+
+  it('find private service', function test() {
+    this.timeout(20000);
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    return createRandomPrivateServiceDomain(content, '/yumyum.html', 'www')
+      .then((domain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://www.${domain}/yumyum.html`)
           .then((f) => app.immutableData.fetch(f.dataMapName))
           .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))

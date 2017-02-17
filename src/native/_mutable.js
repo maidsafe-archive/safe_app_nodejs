@@ -73,7 +73,7 @@ function translateXorName(appPtr, str, tag) {
 function strToBuffer(app, mdata) {
     const args = [app, mdata];
     Array.prototype.slice.call(arguments, 2).forEach(item => {
-      const buf = item.buffer || (Buffer.isBuffer(item) ? item : new Buffer(item));
+      const buf = Buffer.isBuffer(item) ? item : (item.buffer || new Buffer(item));
       args.push(buf);
       args.push(buf.length);
     });
