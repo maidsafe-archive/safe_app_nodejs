@@ -29,6 +29,30 @@ function createRandomDomain(content, path, service) {
       })).then(() => domain);
 }
 
+
+function createRandomPrivateServiceDomain(content, path, service) {
+  const domain = `test_${Math.round(Math.random() * 100000)}`;
+  const app = createAuthenticatedTestApp();
+  return app.mutableData.newRandomPrivate(consts.TAG_TYPE_WWW)
+    .then((serviceMdata) => serviceMdata.quickSetup()
+      .then(() => {
+        const nfs = serviceMdata.emulateAs('NFS');
+        // let's write the file
+        return nfs.create(content)
+          .then((file) => nfs.insert(path || '', file))
+          .then(() => {
+            const dnsName = c.createHash('sha256').update(domain).digest();
+            return app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS)
+              .then((dnsData) => serviceMdata.serialise()
+                  .then((serial) => {
+                    const payload = {};
+                    payload[service || ''] = serial;
+                    return dnsData.quickSetup(payload);
+                  }));
+          });
+      })).then(() => domain);
+}
+
 describe('Browsing', () => {
   it('fetch content', function test() {
     this.timeout(20000);
@@ -60,6 +84,18 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/yumyum.html', 'whatever.valid_service')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://whatever.valid_service.${domain}/yumyum.html`)
+          .then((f) => app.immutableData.fetch(f.dataMapName))
+          .then((i) => i.read())
+          .then((co) => should(co.toString()).equal(content))
+      ));
+  });
+
+  it('find private service', function test() {
+    this.timeout(20000);
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    return createRandomPrivateServiceDomain(content, '/yumyum.html', 'www')
+      .then((domain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://www.${domain}/yumyum.html`)
           .then((f) => app.immutableData.fetch(f.dataMapName))
           .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
@@ -124,5 +160,47 @@ describe('Browsing', () => {
           .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
+  });
+
+  describe('errors', () => {
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    let domain; // eslint-disable-line no-unused-vars
+    let client;
+    before(function setup() {
+      this.timeout(20000);
+      return createRandomDomain(content, '/subdir/index.html', 'www')
+        .then((testDomain) => {
+          domain = testDomain;
+        }).then(() => {
+          createAnonTestApp().then((app) => {
+            client = app;
+          });
+        });
+    });
+
+    it('should not find dns', () =>
+      client.webFetch('safe://$domain_doesnt_exist')
+        .should.be.rejectedWith('ERR_NO_SUCH_DATA')
+    );
+
+    it('should be case sensitive', () =>
+      client.webFetch('safe://$domain/SUBDIR/index.html')
+        .should.be.rejectedWith('ERR_NO_SUCH_DATA')
+    );
+
+    it('should not find service', () =>
+      client.webFetch('safe://faulty_service.$domain')
+        .should.be.rejectedWith('ERR_NO_SUCH_DATA')
+    );
+
+    it('should not find file', () =>
+      client.webFetch('safe://www.$domain/404.html')
+        .should.be.rejectedWith('ERR_NO_SUCH_DATA')
+    );
+
+    it('should not find file in subdirectory', () =>
+      client.webFetch('safe://www.$domain/subdir/404.html')
+        .should.be.rejectedWith('ERR_NO_SUCH_DATA')
+    );
   });
 });

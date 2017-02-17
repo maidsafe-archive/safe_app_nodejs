@@ -91,7 +91,8 @@ class SAFEApp extends EventEmitter {
             }
             return Promise.reject(err);
           })
-        .then((value) => this.mutableData.newPublic(value.buf, consts.TAG_TYPE_WWW))
+        .then((value) => this.mutableData.fromSerial(value.buf)
+            .catch(() => this.mutableData.newPublic(value.buf, consts.TAG_TYPE_WWW)))
         .then((service) => service.emulateAs('NFS'))
         .then((emulation) => emulation.fetch(path)
           .catch((err) => {
