@@ -10,7 +10,9 @@ safe_app nodejs library.
 
 # Development
 
-To build and use this module locally you need latest stable [NodeJS](https://nodejs.org/en/) (& npm) and [Rust](https://www.rust-lang.org/en-US/) (we recommend [rustup](https://rustup.rs/)).
+To build and use this module locally you need latest stable [NodeJS](https://nodejs.org/en/) (& npm) and [Rust](https://www.rust-lang.org/en-US/) (we recommend [rustup](https://rustup.rs/)). 
+[See here for more information about the version of rust we use.](https://github.com/maidsafe/QA/blob/master/Documentation/Rust%20Style.md#rust-version).
+
 
 Initially after pulling the code ensure that you have the git submodules setup: `git submodule update --init` when you pull initially (`git submodule update` when you pull updates thereafter). 
 
