@@ -21,7 +21,7 @@ const bufferTypes = [t.u8Pointer, t.usize, t.usize];
 
 /**
 * One of: `Insert`, `Update`, `Delete`, `ManagePermissions`
-* @typedef {String} MDataAction 
+* @typedef {String} MDataAction
 **/
 const MDataAction = new Enum({
   Insert: 0,
@@ -127,8 +127,8 @@ module.exports = {
     mdata_info_new_private: [t.Void, [t.AppPtr, ref.refType(t.XOR_NAME), t.u64,  "pointer", "pointer"]],
     mdata_info_random_public: [t.Void, [t.AppPtr, t.u64, "pointer", "pointer"]],
     mdata_info_random_private: [t.Void, [t.AppPtr, t.u64, "pointer", "pointer"]],
-    mdata_info_encrypt_entry_key: [t.Void, [t.AppPtr, MDataInfoHandle, "pointer", t.usize, "pointer", "pointer"]],
-    mdata_info_encrypt_entry_value: [t.Void, [t.AppPtr, MDataInfoHandle, "pointer", t.usize, "pointer", "pointer"]],
+    mdata_info_encrypt_entry_key: [t.Void, [t.AppPtr, MDataInfoHandle, t.u8Pointer, t.usize, "pointer", "pointer"]],
+    mdata_info_encrypt_entry_value: [t.Void, [t.AppPtr, MDataInfoHandle, t.u8Pointer, t.usize, "pointer", "pointer"]],
     mdata_info_extract_name_and_type_tag: [t.Void ,[t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_info_serialise: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_info_deserialise: [t.Void, [t.AppPtr, t.u8Array, t.usize, 'pointer', 'pointer']],
@@ -222,7 +222,7 @@ module.exports = {
     mdata_entries_new: Promisified(null, MDataEntriesHandle),
     mdata_entries_insert: Promisified(strToBuffer, []),
     mdata_entries_len: Promisified(null, t.usize),
-    mdata_entries_get: Promisified(strToBuffer, [t.u8Pointer, t.usize, t.u64], readValueToBufferNoCapacity),
+    mdata_entries_get: Promisified(strToBuffer, bufferTypes, readValueToBufferNoCapacity),
     mdata_entries_for_each: Promisified(keyValueCallBackLastEntry.bind(null,
           ['pointer', t.u8Pointer, t.usize, t.u8Pointer, t.usize, t.u64]), []),
     mdata_entries_free: Promisified(null, []),

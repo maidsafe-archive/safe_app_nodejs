@@ -434,11 +434,11 @@ class MutableData extends h.NetworkObject {
   }
 
   encryptKey(key) {
-    return Promise.reject(new Error('Not Implemented', this, key));
+    return lib.mdata_info_encrypt_entry_key(this.app.connection, this.ref, key);
   }
 
   encryptValue(value) {
-    return Promise.reject(new Error('Not Implemented', this, value));
+    return lib.mdata_info_encrypt_entry_value(this.app.connection, this.ref, value);
   }
 
   /**

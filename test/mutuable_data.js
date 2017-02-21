@@ -201,14 +201,44 @@ describe('Mutable Data', () => {
         });
       }))
     );
+  });
 
-    it.skip('encrypt entry key', () => {
-      throw new Error('Test Not Implemented');
-    });
+  describe('Encrypt entry key/value', () => {
+    it('encrypt entry key on public md', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => m.encryptKey('_testkey'))
+        .then((key) => {
+          should(key).not.be.undefined();
+          should(key.toString()).equal('_testkey');
+        }))
+    );
 
-    it.skip('encrypt entry value', () => {
-      throw new Error('Test Not Implemented');
-    });
+    it('encrypt entry value on public md', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => m.encryptValue('_testvalue'))
+        .then((value) => {
+          should(value).not.be.undefined();
+          should(value.toString()).equal('_testvalue');
+        }))
+    );
+
+    it('encrypt entry key on private md', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => m.encryptKey('_testkey'))
+        .then((key) => {
+          should(key).not.be.undefined();
+          should(key.toString()).not.be.equal('_testkey');
+        }))
+    );
+
+    it('encrypt entry value on private md', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => m.encryptValue('_testvalue'))
+        .then((value) => {
+          should(value).not.be.undefined();
+          should(value.toString()).not.be.equal('_testvalue');
+        }))
+    );
   });
 
   describe('Applying EntryMutationTransaction', () => {
