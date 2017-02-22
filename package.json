@@ -19,6 +19,7 @@
     
     "prepublish": "npm run build-libs",
     "pretest": "npm run build-libs",
+    "postinstall": "download_deps --package package.json",
     "docs": "documentation build --config etc/documentation.yml --github true --output docs --format html src/**",
     "serve-docs": "documentation serve --config etc/documentation.yml --github true --output docs --format html src/**",
     "test": "mocha"
@@ -34,6 +35,7 @@
   },
   "homepage": "https://github.com/maidsafe/safe_app_nodejs#readme",
   "dependencies": {
+    "deps_downloader": "git+https://github.com/gnunicorn/deps_downloader.git",
     "enum": "^2.3.0",
     "ffi": "^2.2.0",
     "ref": "^1.3.3",
@@ -49,5 +51,12 @@
     "jsdoc": "^3.4.3",
     "mocha": "^3.2.0",
     "should": "^11.1.2"
+  },
+  "download_deps": {
+    "system_uri": {
+      "mirror": "https://github.com/gnunicorn/system_uri/releases/download/v",
+      "version": "0.0.9-testing",
+      "targetDir": "src/native"
+    }
   }
 }
