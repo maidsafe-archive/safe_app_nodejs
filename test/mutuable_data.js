@@ -381,13 +381,11 @@ describe('Mutable Data', () => {
           ))
     );
 
-    it.skip('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => m.getPermissions()
             .then((perm) => app.auth.getPubSignKey()
               .then((pk) => perm.getPermissionSet(pk).should.be.fulfilled())
-              // this is fixed in https://github.com/maidsafe/safe_client_libs/pull/459
-              // so we can enable it when it's merged to master
             )))
     );
 
@@ -448,7 +446,7 @@ describe('Mutable Data', () => {
   });
 
   describe.skip('Owners', () => {
-    it('change oenwership', () => {
+    it('change ownership', () => {
       throw new Error('Test Not Implemented');
     });
   });
