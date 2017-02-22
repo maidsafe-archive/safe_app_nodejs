@@ -400,12 +400,28 @@ class MutableData extends h.NetworkObject {
       .then(() => this);
   }
 
+  /**
+  * Encrypt the entry key provided as parameter with the encryption key
+  * contained in a Private MutableData. If the MutableData is Public, the same
+  * (and unencrypted) value is returned.
+  *
+  * @param {(String|Buffer)} key - the key you want to encrypt
+  * @returns {Promise<Key>} - the encrypted entry key
+  **/
   encryptKey(key) {
-    return Promise.reject(new Error('Not Implemented', this, key));
+    return lib.mdata_info_encrypt_entry_key(this.app.connection, this.ref, key);
   }
 
+  /**
+  * Encrypt the entry value provided as parameter with the encryption key
+  * contained in a Private MutableData. If the MutableData is Public, the same
+  * (and unencrypted) value is returned.
+  *
+  * @param {(String|Buffer)} value - the data you want to encrypt
+  * @returns {Promise<Value>} - the encrypted entry value
+  **/
   encryptValue(value) {
-    return Promise.reject(new Error('Not Implemented', this, value));
+    return lib.mdata_info_encrypt_entry_value(this.app.connection, this.ref, value);
   }
 
   /**
