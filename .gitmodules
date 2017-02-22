@@ -2,7 +2,9 @@
 	path = native
 	url = https://github.com/maidsafe/safe_client_libs.git
 	branch = dev
+	shallow = true
 [submodule "system_uri"]
 	path = system_uri
 	url = https://github.com/maidsafe/system_uri.git
 	branch = master
+	shallow = true
