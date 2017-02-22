@@ -94,7 +94,7 @@ class SAFEApp extends EventEmitter {
         .then((value) => this.mutableData.fromSerial(value.buf)
             .catch(() => this.mutableData.newPublic(value.buf, consts.TAG_TYPE_WWW)))
         .then((service) => service.emulateAs('NFS'))
-        .then((emulation) => emulation.fetch(path)
+        .then((emulation) => emulation.fetch(path[0] === '/' ? path.substr(1) : path)
           .catch((err) => {
             if (err.name === 'ERR_FILE_NOT_FOUND') {
               let newPath;
