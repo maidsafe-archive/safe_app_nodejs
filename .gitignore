@@ -15,7 +15,10 @@ lib-cov
 docs/
 
 # Coverage directory used by tools like istanbul
-coverage
+/coverage/*
+# This script is used to update the test coverage badge for the README page, so we track it
+!/coverage/publish-test-cov-badge.sh
+
 
 # nyc test coverage
 .nyc_output
