@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const should = require('should');
 const h = require('./helpers');
 
@@ -201,14 +202,44 @@ describe('Mutable Data', () => {
         });
       }))
     );
+  });
 
-    it.skip('encrypt entry key', () => {
-      throw new Error('Test Not Implemented');
-    });
+  describe('Encrypt entry key/value', () => {
+    it('encrypt entry key on public md', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => m.encryptKey('_testkey'))
+        .then((key) => {
+          should(key).not.be.undefined();
+          should(key.toString()).equal('_testkey');
+        }))
+    );
 
-    it.skip('encrypt entry value', () => {
-      throw new Error('Test Not Implemented');
-    });
+    it('encrypt entry value on public md', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => m.encryptValue('_testvalue'))
+        .then((value) => {
+          should(value).not.be.undefined();
+          should(value.toString()).equal('_testvalue');
+        }))
+    );
+
+    it('encrypt entry key on private md', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => m.encryptKey('_testkey'))
+        .then((key) => {
+          should(key).not.be.undefined();
+          should(key.toString()).not.be.equal('_testkey');
+        }))
+    );
+
+    it('encrypt entry value on private md', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => m.encryptValue('_testvalue'))
+        .then((value) => {
+          should(value).not.be.undefined();
+          should(value.toString()).not.be.equal('_testvalue');
+        }))
+    );
   });
 
   describe('Applying EntryMutationTransaction', () => {
@@ -240,6 +271,22 @@ describe('Mutable Data', () => {
                   should(value.version).equal(1);
                 })
             ))))
+    );
+
+    it('an update mutation from existing entries with buffer value', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => app.mutableData.newMutation()
+          .then((mut) => {
+            const newVal = crypto.randomBytes(36);
+            return mut.update('key2', newVal, 1)
+              .then(() => m.applyEntriesMutation(mut))
+              .then(() => m.get('key2'))
+              .then((value) => {
+                should(value).not.be.undefined();
+                should(Buffer.from(value.buf)).deepEqual(newVal);
+                should(value.version).equal(1);
+              });
+          })))
     );
 
     it('a remove mutation from existing entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
