@@ -86,7 +86,7 @@ function strToBufferButLastEntry(app, mdata) {
     let lastArg = arguments[arguments.length - 1];
     const args = [app, mdata];
     Array.prototype.slice.call(arguments, 2, arguments.length - 1).forEach(item => {
-      const buf = item.buffer || (Buffer.isBuffer(item) ? item : new Buffer(item));
+      const buf = Buffer.isBuffer(item) ? item : (item.buffer || new Buffer(item));
       args.push(buf);
       args.push(buf.length);
     });
