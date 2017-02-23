@@ -398,28 +398,36 @@ describe('Mutable Data', () => {
           ))
     );
 
-    it.skip('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => m.getPermissions()
             .then((perm) => app.auth.getPubSignKey()
               .then((pk) => perm.getPermissionSet(pk).should.be.fulfilled())
-              // the above command is failing with ERR_INVALID_SIGN_KEY_HANDLE
-              // due to an issue in safe_app: MAID-????
             )))
     );
 
-    it.skip('insert permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it('insert new permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => app.auth.getPubSignKey()
             .then((pk) => app.mutableData.newPermissionSet()
               .then((newPermSet) => newPermSet.setAllow('Delete')
-                .then(() => m.getPermissions()
-                  .then((perm) => perm.insertPermissionSet(pk, newPermSet)
-                    .then(() => app.mutableData.newMutation()
-                      .then((mut) => mut.update('key2', 'updatedValue', 1)
-                        .then(() => should(m.applyEntriesMutation(mut))
-                                        .be.rejected()) // this is failing
-                      ))))))))
+                .then(() => m.setUserPermissions(pk, newPermSet, 1)
+                  .then(() => app.mutableData.newMutation()
+                    .then((mut) => mut.update('key2', 'updatedValue', 1)
+                      .then(() => should(m.applyEntriesMutation(mut)).be.rejected())
+                    )))))))
+    );
+
+    it('update user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.auth.getPubSignKey()
+            .then((pk) => m.getUserPermissions(pk)
+              .then((permSet) => permSet.setDeny('Update')
+                .then(() => m.setUserPermissions(pk, permSet, 1)
+                .then(() => app.mutableData.newMutation()
+                  .then((mut) => mut.update('key2', 'updatedValue', 1)
+                    .then(() => should(m.applyEntriesMutation(mut)).be.rejected())
+                  )))))))
     );
 
     it('get user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
@@ -455,7 +463,7 @@ describe('Mutable Data', () => {
   });
 
   describe.skip('Owners', () => {
-    it('change oenwership', () => {
+    it('change ownership', () => {
       throw new Error('Test Not Implemented');
     });
   });
