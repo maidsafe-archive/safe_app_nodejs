@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const should = require('should');
 const h = require('./helpers');
 
@@ -270,6 +271,22 @@ describe('Mutable Data', () => {
                   should(value.version).equal(1);
                 })
             ))))
+    );
+
+    it('an update mutation from existing entries with buffer value', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => app.mutableData.newMutation()
+          .then((mut) => {
+            const newVal = crypto.randomBytes(36);
+            return mut.update('key2', newVal, 1)
+              .then(() => m.applyEntriesMutation(mut))
+              .then(() => m.get('key2'))
+              .then((value) => {
+                should(value).not.be.undefined();
+                should(Buffer.from(value.buf)).deepEqual(newVal);
+                should(value.version).equal(1);
+              });
+          })))
     );
 
     it('a remove mutation from existing entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
