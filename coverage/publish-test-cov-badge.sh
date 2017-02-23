@@ -12,8 +12,9 @@ SOURCE_BRANCH="master"
 # Save some useful information
 SHA=`git rev-parse --verify HEAD`
 
-rm -rf ./publish-badge
-git clone https://${GH_TOKEN}@github.com/bochaco/testing publish-badge
+#rm -rf ./publish-badge
+#git clone --quiet https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG} publish-badge > /dev/null
+git clone https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG} publish-badge
 
 cp coverage/code-coverage.svg publish-badge/coverage/code-coverage.svg
 
@@ -24,10 +25,6 @@ git config user.name "Travis CI"
 git config user.email "travis@travis-ci.org"
 
 echo "Publishing new coverage badge..."
-# Commit the "changes", i.e. the new version.
-# The delta will show diffs between new and old versions.
 git add -f ./coverage/code-coverage.svg
-
 git commit -m "Updating test coverage badge: ${SHA} [ci skip]"
-
 git push -fq origin > /dev/null
