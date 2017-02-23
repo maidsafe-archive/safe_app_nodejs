@@ -286,8 +286,7 @@ describe('Mutable Data', () => {
                 should(Buffer.from(value.buf)).deepEqual(newVal);
                 should(value.version).equal(1);
               });
-            }
-          )))
+          })))
     );
 
     it('a remove mutation from existing entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
