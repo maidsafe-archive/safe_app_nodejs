@@ -12,13 +12,10 @@ SOURCE_BRANCH="master"
 # Save some useful information
 SHA=`git rev-parse --verify HEAD`
 
-cd $TRAVIS_BUILD_DIR
-echo $TRAVIS_BUILD_DIR
-
 #git clone --quiet https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG} publish-badge > /dev/null
 git clone https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG} publish-badge
 
-cp coverage/code-coverage.svg publish-badge/coverage/code-coverage.svg
+cp coverage/code-coverage.svg publish-badge/coverage/
 
 cd publish-badge
 
