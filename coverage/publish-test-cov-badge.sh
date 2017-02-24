@@ -12,7 +12,6 @@ SOURCE_BRANCH="master"
 # Save some useful information
 SHA=`git rev-parse --verify HEAD`
 
-#rm -rf ./publish-badge
 #git clone --quiet https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG} publish-badge > /dev/null
 git clone https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG} publish-badge
 
