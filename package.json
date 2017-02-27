@@ -55,7 +55,7 @@
   "download_deps": {
     "system_uri": {
       "mirror": "https://github.com/gnunicorn/system_uri/releases/download/v",
-      "version": "0.0.9-testing",
+      "version": "1.0.0-pre",
       "targetDir": "src/native"
     }
   }
