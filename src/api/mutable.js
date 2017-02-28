@@ -91,22 +91,6 @@ class Permissions extends h.NetworkObject {
         .then((c) => h.autoref(new PermissionsSet(this.app, c)));
   }
 
-
-  /**
-  * Delete the permissions of a specifc key. Directly commits to the network.
-  * Requires 'ManagePermissions'-Permission for the app.
-  * @param {SignKey} signKey - the key to lookup for
-  * @param {Number} version - the current version, to confirm you are
-  *        actually asking for the right state
-  * @returns {Promise} - once finished
-  **/
-  delPermissionsSet(signKey, version) {
-    return lib.mdata_del_user_permissions(this.app.connection,
-                                          this.ref,
-                                          signKey.ref,
-                                          version);
-  }
-
   /**
   * Insert a new permissions to a specifc key. Directly commits to the network.
   * Requires 'ManagePermissions'-Permission for the app.
@@ -119,23 +103,6 @@ class Permissions extends h.NetworkObject {
                                         this.ref,
                                         signKey.ref,
                                         permissionSet.ref);
-  }
-
-  /**
-  * Set the permissions of a specifc key. Directly commits to the network.
-  * Requires 'ManagePermissions'-Permission for the app.
-  * @param {SignKey} signKey - the key to lookup for
-  * @param {PermissionSet} pmset - the permissionset to set to
-  * @param {Number} version - the current version, to confirm you are
-  *        actually asking for the right state
-  * @returns {Promise} - once finished
-  **/
-  setPermissionSet(signKey, pmset, version) {
-    return lib.mdata_set_user_permissions(this.app.connection,
-                                          this.ref,
-                                          signKey.ref,
-                                          pmset.ref,
-                                          version);
   }
 
   /**
@@ -546,6 +513,14 @@ class MutableData extends h.NetworkObject {
       .then((r) => h.autoref(new PermissionsSet(this.app, r, this)));
   }
 
+  /**
+  * Delete the permissions of a specifc key. Directly commits to the network.
+  * Requires 'ManagePermissions'-Permission for the app.
+  * @param {SignKey} signKey - the key to lookup for
+  * @param {Number} version - the current version, to confirm you are
+  *        actually asking for the right state
+  * @returns {Promise} - once finished
+  **/
   delUserPermissions(signKey, version) {
     return lib.mdata_del_user_permissions(this.app.connection,
                                           this.ref,
@@ -553,11 +528,20 @@ class MutableData extends h.NetworkObject {
                                           version);
   }
 
-  setUserPermissions(signKey, permissionSet, version) {
+  /**
+  * Set the permissions of a specifc key. Directly commits to the network.
+  * Requires 'ManagePermissions'-Permission for the app.
+  * @param {SignKey} signKey - the key to lookup for
+  * @param {PermissionSet} pmset - the permissionset to set to
+  * @param {Number} version - the current version, to confirm you are
+  *        actually asking for the right state
+  * @returns {Promise} - once finished
+  **/
+  setUserPermissions(signKey, pmset, version) {
     return lib.mdata_set_user_permissions(this.app.connection,
                                           this.ref,
                                           signKey.ref,
-                                          permissionSet.ref,
+                                          pmset.ref,
                                           version);
   }
 

@@ -18,6 +18,7 @@ const MDataKeysHandle = t.ObjectHandle;
 const MDataValuesHandle = t.ObjectHandle;
 const MDataEntryActionsHandle = t.ObjectHandle;
 const bufferTypes = [t.u8Pointer, t.usize, t.usize];
+const valueVersionType = [t.u8Pointer, t.usize, t.u64];
 
 /**
 * One of: `Insert`, `Update`, `Delete`, `ManagePermissions`
@@ -47,11 +48,11 @@ function keyValueCallBackLastEntry(types) {
       args.push(ref.reinterpret(arguments[1], arguments[2], 0));
     } else if (arguments.length === 4) {
       // the callback is only for an entry's value (with its version)
-      args.push(readValueToBufferNoCapacity([arguments[1], arguments[2], arguments[3]]));
+      args.push(readValueToBuffer([arguments[1], arguments[2], arguments[3]]));
     } else { // arguments.length === 6
       // the callback is for both entry's key and value (with its version)
       args.push(ref.reinterpret(arguments[1], arguments[2], 0));
-      args.push(readValueToBufferNoCapacity([arguments[3], arguments[4], arguments[5]]));
+      args.push(readValueToBuffer([arguments[3], arguments[4], arguments[5]]));
     }
     fn.apply(fn, args);
   });
@@ -93,20 +94,10 @@ function strToBufferButLastEntry(app, mdata) {
     return args;
 }
 
-// args[2] is expected to be content capacity
-// args[3] is expected to be content version
+// args[2] is expected to be content version
 function readValueToBuffer(args) {
     return {
-        buf: ref.reinterpret(args[0], args[1], 0),
-        version: args[3]
-    }
-}
-
-// args[2] is not expected to be content capacity
-// but content version instead
-function readValueToBufferNoCapacity(args) {
-    return {
-        buf: ref.reinterpret(args[0], args[1], 0),
+        buf: new Buffer(ref.reinterpret(args[0], args[1], 0)),
         version: args[2]
     }
 }
@@ -204,7 +195,7 @@ module.exports = {
     mdata_permissions_free: Promisified(null, []),
     mdata_put: Promisified(null, []),
     mdata_get_version: Promisified(null, t.u64),
-    mdata_get_value: Promisified(strToBuffer, [t.u8Pointer, t.usize, t.usize, t.u64], readValueToBuffer),
+    mdata_get_value: Promisified(strToBuffer, valueVersionType, readValueToBuffer),
     mdata_list_entries: Promisified(null, MDataEntriesHandle),
     mdata_list_keys: Promisified(null, MDataKeysHandle),
     mdata_list_values: Promisified(null, MDataValuesHandle),
@@ -222,7 +213,7 @@ module.exports = {
     mdata_entries_new: Promisified(null, MDataEntriesHandle),
     mdata_entries_insert: Promisified(strToBuffer, []),
     mdata_entries_len: Promisified(null, t.usize),
-    mdata_entries_get: Promisified(strToBuffer, bufferTypes, readValueToBufferNoCapacity),
+    mdata_entries_get: Promisified(strToBuffer, valueVersionType, readValueToBuffer),
     mdata_entries_for_each: Promisified(keyValueCallBackLastEntry.bind(null,
           ['pointer', t.u8Pointer, t.usize, t.u8Pointer, t.usize, t.u64]), []),
     mdata_entries_free: Promisified(null, []),

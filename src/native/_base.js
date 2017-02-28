@@ -62,7 +62,7 @@ module.exports = {
   },
   helpers: {
     fromCString: (cstr) => cstr.readCString(),
-    asBuffer: (res) => ref.reinterpret(res[0], res[1]),
+    asBuffer: (res) => new Buffer(ref.reinterpret(res[0], res[1])),
     makeCTime: (dt) => new Time({
       "tm_sec": dt.getUTCSeconds(),
       "tm_min": dt.getUTCMinutes(),
