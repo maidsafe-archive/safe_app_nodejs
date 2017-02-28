@@ -10,16 +10,11 @@ safe_app nodejs library.
 
 # Development
 
-To build and use this module locally you need latest stable [NodeJS](https://nodejs.org/en/) (& npm) and [Rust](https://www.rust-lang.org/en-US/) (we recommend [rustup](https://rustup.rs/)). 
-[See here for more information about the version of rust we use.](https://github.com/maidsafe/QA/blob/master/Documentation/Rust%20Style.md#rust-version).
+To build and use this module locally, you need [Node.js](https://nodejs.org/en/) (the latest stable version) and [Rust](https://www.rust-lang.org/en-US/) ([click here to see which version we currently use](https://github.com/maidsafe/QA/blob/master/Documentation/Rust%20Style.md#rust-version)).
 
-
-Initially after pulling the code ensure that you have the git submodules setup: `git submodule update --init` when you pull initially (`git submodule update` when you pull updates thereafter). 
+After pulling the code, ensure that you have the git submodules setup: `git submodule update --init` when you pull initially (`git submodule update` when you pull updates thereafter).
 
 The binary library will then automatically build when you do an `npm install`, and place them in `src/native` accordingly. It will also ensure you have the latest `debug`-build  with `use-mock-routing` enabled whenever you run `npm test`.
-
-If you want to build the release version just run `npm run build-release`.
-
 
 # License
 
