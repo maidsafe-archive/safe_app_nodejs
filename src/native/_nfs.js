@@ -36,9 +36,7 @@ module.exports = {
       const created = file.created;
       const modified = file.modified;
       let metadata = file.user_metadata_len > 0
-                     ? null
-                     : ref.reinterpret(file.user_metadata_ptr,
-                                       file.user_metadata_len);
+        ? ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len) : null;
 
       if (metadata) {
         // we try to understand it as JSON
