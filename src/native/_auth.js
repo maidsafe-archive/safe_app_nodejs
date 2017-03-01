@@ -1,11 +1,13 @@
-const ffi = require('ffi');
+const fastcall = require('fastcall');
+const ffi = fastcall.ffi;
 const Enum = require('enum');
-const ArrayType = require('ref-array');
-const ref = require('ref');
-const Struct = require('ref-struct');
+const ArrayType = fastcall.ArrayType;
+const ref = fastcall.ref;
+const Struct = fastcall.StructType;
 const base = require('./_base.js');
 
 const t = base.types;
+const h = base.helpers;
 const AppPtr = t.AppPtr;
 const helpers = base.helpers;
 
@@ -123,6 +125,10 @@ function remapEncodeValues(resp) {
 }
 
 module.exports = {
+  callbacks: {
+    EncodedStrCB: h.expectCallback('uint32', 'char *'),
+    BoolCB: h.expectCallback('bool')
+  },
   types : {
     // request
     AuthReq,
@@ -133,8 +139,8 @@ module.exports = {
     AppKeys,
   },
   functions: {
-    encode_auth_req: [t.i32, [ ref.refType(AuthReq), 'pointer', 'pointer'] ],
-    encode_containers_req: [t.i32, [ref.refType(ContainerReq), 'pointer', 'pointer'] ],
+    encode_auth_req: [t.i32, [ ref.refType(AuthReq), 'pointer', 'EncodedStrCB'] ],
+    encode_containers_req: [t.i32, [ref.refType(ContainerReq), 'pointer', 'EncodedStrCB'] ],
     decode_ipc_msg: [t.Void, [
                       "string", //  (msg: *const c_char,
                       t.VoidPtr, // user_data: *mut c_void,
@@ -145,26 +151,23 @@ module.exports = {
                       ] ],
     // access container:
     // app: *const App, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32)
-    access_container_refresh_access_info: [t.Void, [AppPtr, "pointer", "pointer"]],
+    access_container_refresh_access_info: [t.Void, [AppPtr, "pointer", "EmptyCB"]],
     // app: *const App, name: FfiString, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32, MDataInfoHandle)
-    access_container_get_container_mdata_info: [t.Void, [AppPtr, 'string', "pointer", "pointer"]],
+    access_container_get_container_mdata_info: [t.Void, [AppPtr, 'string', "pointer", "ObjectHandleCB"]],
     // (app: *const App, name: FfiString, permission: Permission, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32, bool)) {
-    access_container_is_permitted: [t.Void, [AppPtr, 'string', ContainerPermissionsArray, "pointer", "pointer"]],
+    access_container_is_permitted: [t.Void, [AppPtr, 'string', ContainerPermissionsArray, "pointer", "BoolCB"]],
   },
   helpers: {
     makeAppInfo,
     makePermissions,
   },
   api: {
-    access_container_refresh_access_info: helpers.Promisified(),
-    access_container_get_container_mdata_info: helpers.Promisified((app, str) =>
-      [app, str], 'pointer'),
     access_container_is_permitted: helpers.Promisified((app, str, perms) => {
       const permArray = new Permissions((perms, ['Read']).map((x) => Permission.get(x)));
       return [app, str, permArray]
     }, t.bool),
-    encode_containers_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
-    encode_auth_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
+    encode_containers_req: helpers.Promisified(null, remapEncodeValues),
+    encode_auth_req: helpers.Promisified(null, remapEncodeValues),
     decode_ipc_msg: function(lib, fn) {
       return (function(str) {
         return new Promise(function(resolve, reject) {

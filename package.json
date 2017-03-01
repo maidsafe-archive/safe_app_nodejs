@@ -37,10 +37,7 @@
   "dependencies": {
     "deps_downloader": "git+https://github.com/gnunicorn/deps_downloader.git",
     "enum": "^2.3.0",
-    "ffi": "^2.2.0",
-    "ref": "^1.3.3",
-    "ref-array": "^1.2.0",
-    "ref-struct": "^1.1.0",
+    "fastcall": "^0.2.3",
     "weak": "^1.0.1"
   },
   "devDependencies": {

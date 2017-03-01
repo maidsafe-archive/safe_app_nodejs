@@ -1,5 +1,5 @@
 const path = require('path');
-const FFI = require('ffi');
+const FFI = require('fastcall').ffi;
 const SYSTEM_URI_LIB_FILENAME = require('../consts').SYSTEM_URI_LIB_FILENAME;
 
 const h = require('./helpers');
