@@ -21,7 +21,8 @@ if (os.platform() === 'win32') {
 
 
 const lib = new fastcall.Library(path.join(dir, LIB_FILENAME))
-  .callback({ CB: ['void', ['int', 'int']] })
+  .array('uint8[] XorName')
+  .callback('void XorNameCB(int err, XorName[32]* name)');
 const ffi = {};
 
 api.forEach(function(mod) {

@@ -1,5 +1,5 @@
 
-const ref = require('ref');
+const ref = require('fastcall').ref;
 const t = require("./_base").types;
 
 module.exports = {

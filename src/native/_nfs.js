@@ -1,10 +1,11 @@
-const ffi = require('ffi');
-const ref = require("ref");
-const Struct = require('ref-struct');
+const fastcall = require('fastcall');
+const ffi = fastcall.ffi;
+const ref = fastcall.ref;
+const Struct = fastcall.StructType;
 const base = require('./_base');
-const MDataInfoHandle = require('./_mutable').types.MDataInfoHandle;
 const t = base.types;
 const h = base.helpers;
+const ObjectHandle = t.ObjectHandle;
 
 const File = Struct({
   size: t.u64,
@@ -24,9 +25,9 @@ module.exports = {
     FilePtr
   },
   functions: {
-    file_fetch: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', 'pointer', 'pointer']],
-    file_insert: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, 'pointer', 'pointer']],
-    file_update: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, t.u64, 'pointer', 'pointer']]
+    file_fetch: [t.Void, [t.AppPtr, ObjectHandle, 'string', 'pointer', 'pointer']],
+    file_insert: [t.Void, [t.AppPtr, ObjectHandle, 'string', FilePtr, 'pointer', 'pointer']],
+    file_update: [t.Void, [t.AppPtr, ObjectHandle, 'string', FilePtr, t.u64, 'pointer', 'pointer']]
   },
   api: {
     file_fetch: h.Promisified(null, [FilePtr, t.u64], (res) => {
