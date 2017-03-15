@@ -167,9 +167,11 @@ class AuthInterface {
   /**
   * Open the given URI to the authenticator
   **/
+  /* eslint-disable class-methods-use-this */
   openUri(uri) {
-    return lib.openUri(uri)
+    return lib.openUri(uri);
   }
+  /* eslint-enable class-methods-use-this */
 
   /**
   * Generate a `safe-auth`-Url to request further container permissions
@@ -270,7 +272,7 @@ class AuthInterface {
     const permissions = makePermissions(access);
     this.app.connection = lib.test_create_app_with_access(permissions);
     this._registered = true;
-    return Promise.resolve(this.app)
+    return Promise.resolve(this.app);
   }
 
   /**
