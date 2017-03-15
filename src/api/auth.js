@@ -165,6 +165,13 @@ class AuthInterface {
   }
 
   /**
+  * Open the given URI to the authenticator
+  **/
+  openUri(uri) {
+    return lib.openUri(uri)
+  }
+
+  /**
   * Generate a `safe-auth`-Url to request further container permissions
   * see the `genAuthUri`-Example to understand how container permissions
   * are to be specified
