@@ -261,6 +261,19 @@ class AuthInterface {
   }
 
   /**
+  * *ONLY AVAILALBE IF RUN In NODE_ENV='development' || 'testing'*
+  *
+  * Generates a _locally_ registered App with the given permissions.
+  * @returns {Promise<SAFEApp>}
+  **/
+  loginForTest(access) {
+    const permissions = makePermissions(access);
+    this.app.connection = lib.test_create_app_with_access(permissions);
+    this._registered = true;
+    return Promise.resolve(this.app)
+  }
+
+  /**
   * Get the public signing key of this session
   * @returns {Promise<SignKey>}
   **/

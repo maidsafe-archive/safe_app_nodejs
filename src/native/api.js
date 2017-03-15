@@ -1,4 +1,4 @@
-var isInTest = typeof global.it === 'function';
+const loadTesting = (process.env.NODE_ENV || '').match(/dev|development|testing|test/) || typeof global.it === 'function';
 module.exports = [
   require('./_base'),
   require('./_app'),
@@ -8,5 +8,5 @@ module.exports = [
   require('./_mutable'),
   require('./_nfs'),
   require('./_misc'),
-  isInTest ? require("./_testing") : {} // we have some testing helpers
+  loadTesting ? require("./_testing") : {} // we have some testing helpers
 ];
