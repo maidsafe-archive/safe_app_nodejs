@@ -269,7 +269,7 @@ class AuthInterface {
   * @returns {Promise<SAFEApp>}
   **/
   loginForTest(access) {
-    const permissions = makePermissions(access);
+    const permissions = makePermissions(access || {});
     this.app.connection = lib.test_create_app_with_access(permissions);
     this._registered = true;
     return Promise.resolve(this.app);
