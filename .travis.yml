@@ -41,9 +41,7 @@ before_install:
 install:
   - node --version
   - npm --version
-  # make sure we are clean
-  - npm run clean
-  # also runs cargo build for release version
+  # also downloads the build for release version
   - npm install
 
 script:
