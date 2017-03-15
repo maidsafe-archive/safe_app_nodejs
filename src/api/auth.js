@@ -116,7 +116,7 @@ class AuthInterface {
   **/
   setupUri() {
     const appInfo = this.app.appInfo;
-    const schema = `safe${urlsafeBase64(appInfo.id)}`;
+    const schema = `safe-${urlsafeBase64(appInfo.id).toLowerCase()}`;
     lib.registerUriScheme({ bundle: appInfo.id,
       vendor: appInfo.vendor,
       name: appInfo.name,
