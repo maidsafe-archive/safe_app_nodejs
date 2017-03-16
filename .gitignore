@@ -46,6 +46,4 @@ src/native/system_uri*
 out
 src/native/*.dll
 .cache/
-native/
-system_uri/
 .npmignore
