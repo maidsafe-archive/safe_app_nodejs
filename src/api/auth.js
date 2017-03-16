@@ -165,6 +165,15 @@ class AuthInterface {
   }
 
   /**
+  * Open the given URI to the authenticator
+  **/
+  /* eslint-disable class-methods-use-this */
+  openUri(uri) {
+    return lib.openUri(uri);
+  }
+  /* eslint-enable class-methods-use-this */
+
+  /**
   * Generate a `safe-auth`-Url to request further container permissions
   * see the `genAuthUri`-Example to understand how container permissions
   * are to be specified
@@ -251,6 +260,19 @@ class AuthInterface {
       // .then((app) =>
       //   this.refreshContainerAccess().then(() => app));
     });
+  }
+
+  /**
+  * *ONLY AVAILALBE IF RUN In NODE_ENV='development' || 'testing'*
+  *
+  * Generates a _locally_ registered App with the given permissions.
+  * @returns {Promise<SAFEApp>}
+  **/
+  loginForTest(access) {
+    const permissions = makePermissions(access || {});
+    this.app.connection = lib.test_create_app_with_access(permissions);
+    this._registered = true;
+    return Promise.resolve(this.app);
   }
 
   /**
