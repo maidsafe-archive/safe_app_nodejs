@@ -10,6 +10,13 @@ describe('Access Container', () => {
     should(app.auth.registered).be.true();
   });
 
+  it('get container names', () => app.auth.refreshContainerAccess().then(() =>
+    app.auth.getAccessContainerNames().then((names) => {
+      // we always get a our own sandboxed container in tests")
+      should(names.length).be.equal(2);
+      should(names).containEql('_public');
+    })));
+
   it('has read access to `_public`', () => app.auth.refreshContainerAccess().then(() =>
       app.auth.canAccessContainer('_public').then((hasAccess) => {
         should(hasAccess).be.true();

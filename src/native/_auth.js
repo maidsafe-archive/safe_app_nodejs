@@ -24,6 +24,8 @@ const AppExchangeInfo = Struct({
   vendor: 'string'
 });
 
+const ContainerNames = new ArrayType('char *');
+
 const Permissions = new ArrayType(Permission);
 
 const ContainerPermissions = Struct({
@@ -153,6 +155,8 @@ module.exports = {
                       "pointer"  // o_err: extern "C" fn(*mut c_void, i32, u32)
                       ] ],
     // access container:
+    // app: *const App, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32, *const *const c_char, u32))
+    access_container_get_names: [t.Void, [AppPtr, "pointer", "pointer"]],
     // app: *const App, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32)
     access_container_refresh_access_info: [t.Void, [AppPtr, "pointer", "pointer"]],
     // app: *const App, name: FfiString, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32, MDataInfoHandle)
@@ -165,6 +169,17 @@ module.exports = {
     makePermissions,
   },
   api: {
+    access_container_get_names: helpers.Promisified(null, ["pointer", 'uint32'], (args) => {
+      const ptr = args[0];
+      const len = args[1];
+      const names = [];
+      const PTR_SIZE = ptr.ref().length;
+      for (let i = 0; i < len; i++) {
+         let name = ref.readCString(ref.readPointer(ptr, i* PTR_SIZE , (i + 1) * PTR_SIZE));
+         names.push(name);
+      }
+      return names;
+    }),
     access_container_refresh_access_info: helpers.Promisified(),
     access_container_get_container_mdata_info: helpers.Promisified((app, str) =>
       [app, str], 'pointer'),
