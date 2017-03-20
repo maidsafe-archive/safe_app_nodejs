@@ -90,7 +90,16 @@ const AccessContInfo = Struct({
 
 const AuthGranted = Struct({
   app_keys: AppKeys,
-  access_container: AccessContInfo
+  access_container: AccessContInfo,
+  // /// Crust's bootstrap config
+  //pub bootstrap_config_ptr: *mut u8,
+  bootstrap_config_ptr: t.u8Pointer,
+  // /// `bootstrap_config`'s length
+  //pub bootstrap_config_len: usize,
+  bootstrap_config_len: t.usize,
+  // /// Used by Rust memory allocator
+  //pub bootstrap_config_cap: usize,
+  bootstrap_config_cap: t.usize
 });
 
 function makeAppInfo(appInfo) {
