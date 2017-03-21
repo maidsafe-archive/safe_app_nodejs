@@ -48,7 +48,7 @@
     },
     "safe_app": {
       "mirror": "https://github.com/gnunicorn/safe_core/releases/download/v",
-      "version": "0.1.0-pre9",
+      "version": "0.1.0-pre17",
       "targetDir": "src/native",
       "filename": "safe_app-dev",
       "filePattern": "^.*\\.(dll|so|dylib)$"
@@ -60,9 +60,6 @@
           "version": "0.1.0-pre3",
           "targetDir": "src/native",
           "filePattern": "^libwinpthread-1.dll$"
-        },
-        "safe_app": {
-          "version": "0.1.0-pre3"
         }
       }
     }

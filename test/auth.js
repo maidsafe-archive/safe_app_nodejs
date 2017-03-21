@@ -17,6 +17,10 @@ describe('Access Container', () => {
       should(names).containEql('_public');
     })));
 
+  it('get home container', () => app.auth.refreshContainerAccess().then(() =>
+    app.auth.getHomeContainer().then((mdata) => {
+      should(mdata).is.not.undefined();
+    })));
   it('has read access to `_public`', () => app.auth.refreshContainerAccess().then(() =>
       app.auth.canAccessContainer('_public').then((hasAccess) => {
         should(hasAccess).be.true();
