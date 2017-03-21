@@ -1,13 +1,11 @@
-const ffi = require('ffi');
-const ref = require("ref");
-const Struct = require('ref-struct');
+const fastcall = require('fastcall');
+const ffi = fastcall.ffi;
+const ref = fastcall.ref;
+const Struct = fastcall.StructType;
 const base = require('./_base');
-const CipherOptHandle = require('./_cipher_opt').types.CipherOptHandle;
 const t = base.types;
 const h = base.helpers;
 
-const SEWriteHandle = t.ObjectHandle;
-const SEReadHandle = t.ObjectHandle;
 
 
 function translateXorName(appPtr, str) {
@@ -24,33 +22,25 @@ function translateXorName(appPtr, str) {
 
 
 module.exports = {
-  types: {
-    SEWriteHandle,
-    SEReadHandle
-  },
   functions: {
-    idata_new_self_encryptor: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
-    idata_write_to_self_encryptor: [t.Void, [t.AppPtr, SEWriteHandle, 'pointer', t.usize, 'pointer', 'pointer']],
-    idata_close_self_encryptor: [t.Void, [t.AppPtr, SEWriteHandle, CipherOptHandle, 'pointer', 'pointer']],
-    idata_fetch_self_encryptor: [t.Void, [t.AppPtr, ref.refType(t.XOR_NAME), 'pointer', 'pointer']],
-    idata_size: [t.Void, [t.AppPtr, SEReadHandle, 'pointer', 'pointer']],
-    idata_read_from_self_encryptor: [t.Void, [t.AppPtr, SEReadHandle, t.u64, t.u64, 'pointer', 'pointer']],
-    idata_self_encryptor_writer_free: [t.Void, [t.AppPtr, SEWriteHandle, 'pointer', 'pointer']],
-    idata_self_encryptor_reader_free: [t.Void, [t.AppPtr, SEReadHandle, 'pointer', 'pointer']],
+    idata_new_self_encryptor: [t.Void, [t.AppPtr, 'pointer', 'ObjectHandleCB']],
+    idata_write_to_self_encryptor: [t.Void, [t.AppPtr, t.ObjectHandle, 'pointer', t.usize, 'pointer', 'EmptyCB']],
+    idata_close_self_encryptor: [t.Void, [t.AppPtr, t.ObjectHandle, t.ObjectHandle, 'pointer', 'XorNameCB']],
+    idata_fetch_self_encryptor: [t.Void, [t.AppPtr, ref.refType(t.XOR_NAME), 'pointer', 'ObjectHandleCB']],
+    idata_size: [t.Void, [t.AppPtr, t.ObjectHandle, 'pointer', 'SizeCB']],
+    idata_read_from_self_encryptor: [t.Void, [t.AppPtr, t.ObjectHandle, t.u64, t.u64, 'pointer', 'BufferCB']],
+    idata_self_encryptor_writer_free: [t.Void, [t.AppPtr, t.ObjectHandle, 'pointer', 'EmptyCB']],
+    idata_self_encryptor_reader_free: [t.Void, [t.AppPtr, t.ObjectHandle, 'pointer', 'EmptyCB']],
   },
   api: {
-    idata_new_self_encryptor: h.Promisified(null, [SEWriteHandle]),
     idata_write_to_self_encryptor: h.Promisified((appPtr, handle, str) => {
       let b = Buffer.isBuffer(str) ? str : Buffer.from(str);
       return [appPtr, handle, b, b.length]
     }, null),
-    idata_close_self_encryptor: h.Promisified(null, 'pointer',
-      // make a copy to ensure the data stays around
-      resp => t.XOR_NAME(ref.reinterpret(resp[0], 32))),
-    idata_fetch_self_encryptor: h.Promisified(translateXorName, SEReadHandle),
-    idata_size: h.Promisified(null, t.u64),
-    idata_read_from_self_encryptor: h.Promisified(null, [t.u8Pointer, t.usize, t.usize], h.asBuffer),
-    idata_self_encryptor_writer_free: h.Promisified(null, null),
-    idata_self_encryptor_reader_free: h.Promisified(null,  null),
+    // idata_close_self_encryptor: h.Promisified(null, 
+    //   // make a copy to ensure the data stays around
+    //   resp => {console.log("reformat", resp); return t.XOR_NAME(ref.reinterpret(resp[0], 32))}),
+    idata_fetch_self_encryptor: h.Promisified(translateXorName),
+    idata_read_from_self_encryptor: h.bufferPromise,
   }
 }

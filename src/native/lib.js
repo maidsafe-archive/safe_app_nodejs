@@ -1,44 +1,59 @@
 const path = require('path');
-const FFI = require('ffi');
+const fastcall = require('fastcall');
+const FFI = fastcall.ffi;
 const LIB_FILENAME = require('../consts').LIB_FILENAME;
 const os = require('os');
 
 const dir = path.dirname(__filename);
-
 const api = require('./api');
+const simplePromise = require('./_base').helpers.simplePromise;
 
-const ffi = {};
-
-
-
-const RTLD_NOW = FFI.DynamicLibrary.FLAGS.RTLD_NOW;
-const RTLD_GLOBAL = FFI.DynamicLibrary.FLAGS.RTLD_GLOBAL;
-const mode = RTLD_NOW | RTLD_GLOBAL;
+// const RTLD_NOW = fastcall.DynamicLibrary.FLAGS.RTLD_NOW;
+// const RTLD_GLOBAL = fastcall.DynamicLibrary.FLAGS.RTLD_GLOBAL;
+// const mode = RTLD_NOW | RTLD_GLOBAL;
 
 if (os.platform() === 'win32') {
-  FFI.DynamicLibrary(path.resolve(__dirname, 'libwinpthread-1'), mode);  
+  FFI.Library(path.resolve(__dirname, 'libwinpthread-1'), {});  
 }
 
-const lib = FFI.DynamicLibrary(path.join(dir, LIB_FILENAME), mode);
+
+// let defs = {};
 
 
-api.forEach(function(mod){
-  if (mod.functions){
-    for (const key in mod.functions) {
-      const funcDefinition = mod.functions[key];
-      ffi[key] = FFI.ForeignFunction(lib.get(key),
-                                     funcDefinition[0],
-                                     funcDefinition[1])
+const lib = new fastcall.Library(path.join(dir, LIB_FILENAME))
+  .array('uint8[] XorName')
+  .callback('void XorNameCB(int err, XorName[32]* name)');
+const ffi = {};
+
+api.forEach(function(mod) {
+
+  let overwrites = mod.api || {};
+
+  if (mod.callbacks) {
+    // Object.assign(defs, mod.functions);
+    for (const key in mod.callbacks) {
+      console.log(key, mod.callbacks[key]);
+      lib.callback({[key]: mod.callbacks[key]});
     }
   }
-  if (mod.api) {
-    for (const key in mod.api) {
-      ffi[key].fn_name = key;
-      let fn = mod.api[key](ffi, ffi[key]);
+  if (mod.functions) {
+    // Object.assign(defs, mod.functions);
+    for (const key in mod.functions) {
+      lib.function({[key]: mod.functions[key]});
+      fn = lib.interface[key];
+      fn.fn_name = key;
+
+      if (overwrites[key]) {
+        console.log("overwrite", key);
+        fn = overwrites[key](lib, fn);
+      } else {
+        // SIMPLE PROMISES
+        fn = simplePromise(lib, fn);
+        console.log("simple promise for", key)
+      }
       fn.fn_name = "[mapped]" + key;
       ffi[key] = fn;
     }
-  //   Object.assign(mappings, mod.api);
   }
 });
 

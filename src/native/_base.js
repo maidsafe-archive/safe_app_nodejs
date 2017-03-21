@@ -1,10 +1,11 @@
 const makeFfiError = require('./_error.js');
-const ffi = require('ffi');
-const ref = require('ref');
-const Struct = require('ref-struct');
-const ArrayType = require('ref-array');
+const fastcall = require('fastcall');
+const ffi = fastcall.ffi;
+const ref = fastcall.ref;
+const Struct = fastcall.StructType;
+const ArrayType = fastcall.ArrayType;
 
-const i32 = ref.types.int32;
+const i32 = 'int';
 const u8 = ref.types.uint8;
 const u64 = ref.types.uint64;
 const u8Pointer = ref.refType(u8);
@@ -23,6 +24,7 @@ const NONCEBYTES = ArrayType(u8, 32); // I'm not sure if this is the right size 
 const ObjectHandle = u64;
 const App = Struct({});
 const AppPtr = ref.refType(App);
+const bufferTypes = [u8Pointer, usize, usize];
 
 
 const Time = Struct({
@@ -38,6 +40,74 @@ const Time = Struct({
   "tm_utcoff": i32,
   "tm_nsec": i32,
 });
+
+
+function expectCallback(types) {
+  let ret = ['pointer', 'int'];
+
+  if (arguments.length > 1)
+    Array.prototype.push.apply(ret, arguments)
+  else if (types) {
+    if (Array.isArray(types)) {
+      Array.prototype.push.apply(ret, types)
+    } else {
+      ret.push(types)
+    }
+  }
+  return [Void, ret]
+}
+
+function Promisified(formatter, after) {
+  // create internal function that will be
+  // invoked ontop of the direct binding
+  // mixing a callback into the arguments
+  // and returning a promise
+  return (lib, fn) => (function() {
+    // the internal function that wraps the
+    // actual function call
+
+    // compile the callback-types-definiton
+    let args;
+    return new Promise((resolve, reject) => {
+      // if there is a formatter, we are reformatting
+      // the incoming arguments first
+      try {
+        args = formatter ? formatter.apply(formatter, arguments): Array.prototype.slice.call(arguments);
+      } catch(err) {
+        // reject promise if error is thrown by the formatter
+        return reject(err);
+      }
+
+      // append user-context and callback
+      // to the arguments
+      args.push(ref.NULL);
+      args.push(function (_uctx, err) {
+        console.log(fn.fn_name, " called", err !== 0, arguments);
+        // error found, errback with translated error
+        try {
+          if(err !== 0) return reject(makeFfiError(err));
+
+          // take off the ctx and error
+          let res = Array.prototype.slice.call(arguments, 2);
+          if (after) {
+            // we are post-processing the entry
+            res = after(res);
+          } else if (res.length === 1){
+            // no post-processing but given only one
+            // item given, use instead of array.
+            res = res[0]
+          }
+          console.log("resolving", res)
+          resolve(res);
+        } catch(e) {
+          reject(e)
+        }
+      });
+      console.log(fn.fn_name, args);
+      fn.apply(fn, args);
+    });
+  });
+}
 
 module.exports = {
   types: {
@@ -60,9 +130,17 @@ module.exports = {
     NULL,
     Time
   },
+  callbacks : {
+    BufferCB: expectCallback(bufferTypes),
+    ObjectHandleCB: expectCallback(ObjectHandle),
+    SizeCB: expectCallback(usize),
+    KeyBytesCB: expectCallback(KEYBYTES),
+    EmptyCB: expectCallback()
+  },
   helpers: {
+    expectCallback: expectCallback,
     fromCString: (cstr) => cstr.readCString(),
-    asBuffer: (res) => new Buffer(ref.reinterpret(res[0], res[1])),
+    // asBuffer: (res) => new Buffer(ref.reinterpret(res[0], res[1])),
     makeCTime: (dt) => new Time({
       "tm_sec": dt.getUTCSeconds(),
       "tm_min": dt.getUTCMinutes(),
@@ -79,57 +157,9 @@ module.exports = {
     fromCTime: (ctime) => new Date.UTC(ctime.tm_year, ctime.tm_mon, ctime.mday,
                                   // FIXME: offset handling anyone?
                                   ctime.tm_hour, ctime.tm_min, ctime.tm_sec),
-    Promisified: function(formatter, rTypes, after) {
-      // create internal function that will be
-      // invoked ontop of the direct binding
-      // mixing a callback into the arguments
-      // and returning a promise
-      return (lib, fn) => (function() {
-        // the internal function that wraps the
-        // actual function call
-
-        // compile the callback-types-definiton
-        let args;
-        let types = ['pointer', i32]; // we always have: user_context, error
-        if (Array.isArray(rTypes)) {
-          types = types.concat(rTypes);
-        } else if (rTypes) {
-          types.push(rTypes);
-        }
-        return new Promise((resolve, reject) => {
-          // if there is a formatter, we are reformatting
-          // the incoming arguments first
-          try {
-            args = formatter ? formatter.apply(formatter, arguments): Array.prototype.slice.call(arguments);
-          } catch(err) {
-            // reject promise if error is thrown by the formatter
-            return reject(err);
-          }
-
-          // append user-context and callback
-          // to the arguments
-          args.push(ref.NULL);
-          args.push(ffi.Callback("void", types,
-              function(uctx, err) {
-                // error found, errback with translated error
-                if(err !== 0) return reject(makeFfiError(err));
-
-                // take off the ctx and error
-                let res = Array.prototype.slice.call(arguments, 2)
-                if (after) {
-                  // we are post-processing the entry
-                  res = after(res);
-                } else if (types.length === 3){
-                  // no post-processing but given only one
-                  // item given, use instead of array.
-                  res = arguments[2]
-                }
-                resolve(res);
-              }));
-          // and call the function
-          fn.apply(fn, args);
-        });
-      });
-    }
+    Promisified: Promisified,
+    bufferPromise: Promisified(null,
+        (res) => new Buffer(ref.reinterpret(res[0], res[1]))),
+    simplePromise: Promisified()
   }
 }
