@@ -213,6 +213,14 @@ class AuthInterface {
   }
 
   /**
+  * Get the names of all access containers found.
+  * @return {Promise<[String]}
+  */
+  getAccessContainerNames() {
+    return lib.access_container_get_names(this.app.connection);
+  }
+
+  /**
   * Whether or not this session has specifc permission access of a given
   * container.
   * @arg {String} name  name of the container, e.g. `_public`
