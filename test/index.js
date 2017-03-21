@@ -9,9 +9,9 @@ describe('Smoke testing', () => {
 });
 
 describe('External API', () => {
-  describe.skip('fromAuthURI', () => {
+  describe('fromAuthURI', () => {
     it('should authenticate', () => {
-      const uri = 'safe-bmV0Lm1haWRzYWZlLmV4YW1wbGVzLm5vZGUtanMtdGVzdC1hcHA=:AAAAAWqJQyQAAAAAAAAAAAAAAAAAAAAgKf93dpDDH83rbPEHdv-yVOdp-5cg4e21sIQLStzgV1sAAAAAAAAAIPA9UirtY4gZnQACwRZubU5IXREkGWUHx4TlJnt6JxCCAAAAAAAAACCA-JC8S3piz2gh04Lf0bMtLKtiFuTcU5vyeI-QObssewAAAAAAAABAu5DnQCn6lFnPr_npQf6T_hWIDhSLKc1aVxALaH4m5YCA-JC8S3piz2gh04Lf0bMtLKtiFuTcU5vyeI-QObssewAAAAAAAAAgA3LD4n881Xay-rjwxL_nZuMFHnyvP7Pp99mhCP5__R4AAAAAAAAAIDGkCvw0Jcpfk0u8Fg1Choe1k58uGgN_ml8GdV8dxkjpAAAAAAAAACDvfcNpfSM6tcigyaGPXjbYhmZBawfZiIZ7oJ60D2EktwAAAAAAADqYAAAAAAAAABhBwlUCCCr3XDBzI5KPdTkxtlYAVxU5Kpo=';
+      const uri = 'safe-bmV0Lm1haWRzYWZlLnRlc3Qud2ViYXBwLmlk:AAAAAWkT26UAAAAAAAAAAAAAAAAAAAAgn__HmmtNgunV-kW2ByRQrVKDUZ5-sBpzD8d9smI7-GMAAAAAAAAAINgqZuU2la2DuDqevJoiiTmN17-M04RhJ-PgZtLjrg_4AAAAAAAAACD2lsisP4_w--osgnNVGQCOWfeGmVSRSRUjIWpkSiJ_0QAAAAAAAABAW4yv1zLKQHcer-gVYalU-ttwY2R0Aiwre4WL2gk7IrT2lsisP4_w--osgnNVGQCOWfeGmVSRSRUjIWpkSiJ_0QAAAAAAAAAgReTGI9CwlBjEMiWMMlcnXXbKDBAwqEfOGc3435i0EW8AAAAAAAAAICmIQ65WjpvyC6VU9vivHuQWAUt7JKPWgNxsNd56QxtQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIHnsE8npD4vtW56vdNPU0jMBOFK1KDfGQ6up2HyPmznkAAAAAAAAOpgAAAAAAAAAGJpOhm2rJOogJzNCh-4ewdrA9apdeFk2xA';
       const appInfo = {
         id: 'net.maidsafe.example.tests',
         name: 'Example Test',
