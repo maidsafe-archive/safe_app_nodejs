@@ -24,6 +24,7 @@ const lib = require('../native/lib');
 const nativeH = require('../native/helpers');
 const types = require('../native/types');
 const h = require('../helpers');
+const inTesting = require('../consts').inTesting;
 
 const makeAppInfo = nativeH.makeAppInfo;
 const makePermissions = nativeH.makePermissions;
@@ -277,6 +278,7 @@ class AuthInterface {
   * @returns {Promise<SAFEApp>}
   **/
   loginForTest(access) {
+    if (!inTesting) throw Error('Not supported outside of Dev and Testing Environment!');
     const permissions = makePermissions(access || {});
     this.app.connection = lib.test_create_app_with_access(permissions);
     this._registered = true;

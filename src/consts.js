@@ -1,5 +1,7 @@
 const os = require('os');
 
+const inTesting = (process.env.NODE_ENV || '').match(/dev|development|testing|test/) || typeof global.it === 'function';
+
 const TAG_TYPE_DNS = 15001;
 const TAG_TYPE_WWW = 15002;
 
@@ -21,5 +23,7 @@ module.exports = {
   SYSTEM_URI_LIB_FILENAME,
 
   TAG_TYPE_DNS,
-  TAG_TYPE_WWW
+  TAG_TYPE_WWW,
+
+  inTesting
 };
