@@ -398,6 +398,17 @@ describe('Mutable Data', () => {
           ))
     );
 
+    it('forEach on list of permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => app.auth.getPubSignKey())
+        .then((pubSignKey) => m.getPermissions()
+          .then((perms) => perms.forEach((signkey, pmset) => {
+            perms.getPermissionSet(signkey).should.be.fulfilled();
+          }))
+        )
+      )
+    );
+
     it('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => m.getPermissions()

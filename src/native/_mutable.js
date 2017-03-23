@@ -61,6 +61,18 @@ function keyValueCallBackLastEntry(types) {
             .concat(cb);
 }
 
+function permissionsCallBackLastEntry(types) {
+  let fn = arguments[arguments.length - 1];
+  if (typeof fn !== 'function') throw Error('A function parameter _must be_ provided')
+
+  let cb = ffi.Callback("void", types, function(uctx) {
+    fn(arguments[1], arguments[2]);
+  });
+
+  return Array.prototype.slice.call(arguments, 1, arguments.length - 1)
+            .concat(cb);
+}
+
 function translateXorName(appPtr, str, tag) {
   let name = str;
   if (!Buffer.isBuffer(str)) {
@@ -131,7 +143,7 @@ module.exports = {
     mdata_permissions_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
     mdata_permissions_len: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
     mdata_permissions_get: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignKeyHandle, 'pointer', 'pointer']],
-    mdata_permissions_for_each: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
+    mdata_permissions_for_each: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer', 'pointer']],
     mdata_permissions_insert: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignKeyHandle, MDataPermissionSetHandle, 'pointer', 'pointer']],
     mdata_permissions_free: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
     mdata_put: [t.Void, [t.AppPtr, MDataInfoHandle, MDataPermissionsHandle, MDataEntriesHandle, 'pointer', 'pointer']],
@@ -190,7 +202,8 @@ module.exports = {
     mdata_permissions_new: Promisified(null, MDataPermissionsHandle),
     mdata_permissions_len: Promisified(null, t.usize),
     mdata_permissions_get: Promisified(null, MDataPermissionSetHandle),
-    mdata_permissions_for_each: Promisified(null, []),
+    mdata_permissions_for_each: Promisified(permissionsCallBackLastEntry.bind(null,
+          ['pointer', SignKeyHandle, MDataPermissionSetHandle]), []),
     mdata_permissions_insert: Promisified(null, []),
     mdata_permissions_free: Promisified(null, []),
     mdata_put: Promisified(null, []),
