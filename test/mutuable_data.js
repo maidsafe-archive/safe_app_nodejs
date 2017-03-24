@@ -400,11 +400,14 @@ describe('Mutable Data', () => {
 
     it('forEach on list of permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getPermissions()
-        .then((perms) => perms.forEach((signkey, pmset) => {
-          perms.getPermissionSet(signkey).should.be.fulfilled();
-          m.delUserPermissions(pmset, signkey, 1).should.be.fulfilled();
-        }))
-      ))
+        .then((perms) => app.auth.getPubSignKey()
+          .then((pk) => perms.getPermissionSet(pk).should.be.fulfilled()
+            .then(() => perms.forEach((signkey, pmset) => {
+              pmset.setAllow('Delete').should.be.fulfilled()
+                .then(() => m.delUserPermissions(signkey, 1))
+                .then(() => m.getUserPermissions(pk).should.be.rejected());
+            })))
+        )))
     );
 
     it('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
