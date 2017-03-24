@@ -161,14 +161,15 @@ describe('Mutable Data', () => {
           }))
     ));
 
-    it('forEach on list of entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
-      .then((entries) => entries.forEach((key, value) => {
-        should(value.version).be.equal(0);
-        should(TEST_ENTRIES).have.ownProperty(key.toString());
-        should(TEST_ENTRIES[key.toString()]).be.equal(value.buf.toString());
-      }))
-    );
+    it('forEach on list of entries', (done) => {
+      app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
+        .then((entries) => entries.forEach((key, value) => {
+          should(value.version).be.equal(0);
+          should(TEST_ENTRIES).have.ownProperty(key.toString());
+          should(TEST_ENTRIES[key.toString()]).be.equal(value.buf.toString());
+        }).then(() => done(), (err) => done(err)));
+    });
 
     it('get list of keys', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
@@ -178,12 +179,13 @@ describe('Mutable Data', () => {
         })
     );
 
-    it('forEach on list of keys', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
-      .then((keys) => keys.forEach((key) => {
-        should(TEST_ENTRIES).have.ownProperty(key.toString());
-      }))
-    );
+    it('forEach on list of keys', (done) => {
+      app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
+        .then((keys) => keys.forEach((key) => {
+          should(TEST_ENTRIES).have.ownProperty(key.toString());
+        }).then(() => done(), (err) => done(err)));
+    });
 
     it('get list of values', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
@@ -193,15 +195,16 @@ describe('Mutable Data', () => {
         })
     );
 
-    it('forEach on list of values', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
-      .then((values) => values.forEach((value) => {
-        should(TEST_ENTRIES).matchAny((v) => {
-          should(v).be.eql(value.buf.toString());
-          should(value.version).be.equal(0);
-        });
-      }))
-    );
+    it('forEach on list of values', (done) => {
+      app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
+        .then((values) => values.forEach((value) => {
+          should(TEST_ENTRIES).matchAny((v) => {
+            should(v).be.eql(value.buf.toString());
+            should(value.version).be.equal(0);
+          });
+        }).then(() => done(), (err) => done(err)));
+    });
   });
 
   describe('Encrypt entry key/value', () => {
