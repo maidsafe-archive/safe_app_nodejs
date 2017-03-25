@@ -16,7 +16,7 @@ module.exports = {
     app_unregistered: function(lib, fn) {
       return (function(app) {
         const appCon = ref.alloc(t.AppPtr);
-        const cb = ffi.Callback("void", [t.i32, t.i32], (err, state) => app._networkStateUpdated(err, state));
+        const cb = ffi.Callback("void", [t.i32, t.i32], (user_data, err, state) => app._networkStateUpdated(user_data, err, state));
 
         const err = fn(ref.NULL, cb, appCon);
         if (err) throw makeError(err, "Couldn't create App");
