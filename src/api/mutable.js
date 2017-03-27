@@ -2,7 +2,7 @@ const h = require('../helpers');
 const lib = require('../native/lib');
 const t = require('../native/types');
 const emulations = require('./emulations');
-
+const { SignKey } = require('./misc');
 
 function toAction(action) {
   const a = t.MDataAction.get(action);
@@ -113,9 +113,11 @@ class Permissions extends h.NetworkObject {
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return lib.mdata_permissions_for_each(this.app.connection,
-                                          this.ref,
-                                          fn);
+    return lib.mdata_permissions_for_each(
+      this.app.connection,
+      this.ref,
+      (s, p) => fn(h.autoref(new SignKey(this.app, s)),
+                    h.autoref(new PermissionsSet(this.app, p))));
   }
 
 }
