@@ -479,6 +479,20 @@ describe('Mutable Data', () => {
     );
   });
 
+  describe.only('NFS emulation', () => {
+    it('nfs update', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
+      .then((nfs) => nfs.create('Hello world')
+        .then((file) => nfs.insert('test.txt', file))
+        .then(() => nfs.fetch('test.txt'))
+        .then((f) => app.immutableData.fetch(f.dataMapName)
+          .then((i) => i.read())
+          .then(() => nfs.create('hello world updated'))
+          .then((file) => nfs.update('test.txt', file, f.version + 1)))
+      )
+    );
+  });
+
   describe.skip('Owners', () => {
     it('change ownership', () => {
       throw new Error('Test Not Implemented');
