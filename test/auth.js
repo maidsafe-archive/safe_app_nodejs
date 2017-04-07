@@ -35,4 +35,19 @@ describe('Access Container', () => {
         should(resp.name).is.not.undefined();
         should(resp.tag).equal(15000);
       })));
+
+  it.only('mutate info of home container', () => app.auth.refreshContainerAccess().then(() =>
+      app.auth.getHomeContainer()
+        .then((md) => md.getEntries()
+          .then((entries) => entries.mutate()
+            .then((mut) => mut.insert('key1', 'value1')
+              .then(() => md.applyEntriesMutation(mut))
+            )))
+        .then(() => app.auth.getHomeContainer())
+          .then((md) => md.get('key1'))
+          .then((value) => {
+            should(value).not.be.undefined();
+            should(v.toString()).equal('value1');
+          })
+  ));
 });
