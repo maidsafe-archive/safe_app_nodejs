@@ -4,7 +4,7 @@ const h = require('./helpers');
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
 describe('Access Container', () => {
-  const app = createAuthenticatedTestApp('_test_scope', { _public: ['Read'] });
+  const app = createAuthenticatedTestApp('_test_scope', { _public: ['Read'], _publicNames: ['Read', 'Insert'] });
 
   it('is authenticated for testing', () => {
     should(app.auth.registered).be.true();
@@ -36,6 +36,21 @@ describe('Access Container', () => {
         should(resp.tag).equal(15000);
       })));
 
+  it.only('mutate info of `_public` container', () => app.auth.refreshContainerAccess().then(() =>
+      app.auth.getAccessContainerInfo('_publicNames')
+        .then((md) => md.getEntries()
+          .then((entries) => entries.mutate()
+            .then((mut) => mut.insert('key1', 'value1')
+              .then(() => md.applyEntriesMutation(mut))
+            )))
+        .then(() => app.auth.getAccessContainerInfo('_publicNames'))
+          .then((md) => md.get('key1'))
+          .then((value) => {
+            should(value).not.be.undefined();
+            should(v.toString()).equal('value1');
+          })
+  ));
+
   it.only('mutate info of home container', () => app.auth.refreshContainerAccess().then(() =>
       app.auth.getHomeContainer()
         .then((md) => md.getEntries()
@@ -50,4 +65,5 @@ describe('Access Container', () => {
             should(v.toString()).equal('value1');
           })
   ));
+
 });
