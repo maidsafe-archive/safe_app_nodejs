@@ -13,7 +13,7 @@ describe('Access Container', () => {
   it('get container names', () => app.auth.refreshContainerAccess().then(() =>
     app.auth.getAccessContainerNames().then((names) => {
       // we always get a our own sandboxed container in tests")
-      should(names.length).be.equal(2);
+      should(names.length).be.equal(3);
       should(names).containEql('_public');
     })));
 
@@ -36,7 +36,7 @@ describe('Access Container', () => {
         should(resp.tag).equal(15000);
       })));
 
-  it.only('mutate info of `_public` container', () => app.auth.refreshContainerAccess().then(() =>
+  it.skip('mutate info of `_public` container', () => app.auth.refreshContainerAccess().then(() =>
       app.auth.getAccessContainerInfo('_publicNames')
         .then((md) => md.getEntries()
           .then((entries) => entries.mutate()
@@ -47,11 +47,11 @@ describe('Access Container', () => {
           .then((md) => md.get('key1'))
           .then((value) => {
             should(value).not.be.undefined();
-            should(v.toString()).equal('value1');
+            should(value.toString()).equal('value1');
           })
   ));
 
-  it.only('mutate info of home container', () => app.auth.refreshContainerAccess().then(() =>
+  it.skip('mutate info of home container', () => app.auth.refreshContainerAccess().then(() =>
       app.auth.getHomeContainer()
         .then((md) => md.getEntries()
           .then((entries) => entries.mutate()
@@ -62,8 +62,7 @@ describe('Access Container', () => {
           .then((md) => md.get('key1'))
           .then((value) => {
             should(value).not.be.undefined();
-            should(v.toString()).equal('value1');
+            should(value.toString()).equal('value1');
           })
   ));
-
 });

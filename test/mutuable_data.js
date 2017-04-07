@@ -423,6 +423,27 @@ describe('Mutable Data', () => {
             )))
     );
 
+    // This is failing in the client_libs, we need to report the bug
+    it.skip('insert permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newPermissionSet()
+            .then((newPermSet) => newPermSet.setAllow('Delete')
+              .then(() => m.getPermissions()
+              .then((perm) => perm.insertPermissionSet(null, newPermSet).should.be.fulfilled())
+            ))))
+    );
+
+    // This is failing in the client_libs, we need to report the bug
+    it.skip('get permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newPermissionSet()
+            .then((newPermSet) => newPermSet.setAllow('Delete')
+              .then(() => m.getPermissions()
+              .then((perm) => perm.insertPermissionSet(null, newPermSet)
+                .then(() => perm.getPermissionSet(null).should.be.fulfilled())
+              )))))
+    );
+
     it('insert new permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => app.auth.getPubSignKey()
@@ -476,6 +497,32 @@ describe('Mutable Data', () => {
                     .then(() => should(m.applyEntriesMutation(mut))
                                   .be.rejected())
                   ))))))
+    );
+
+    it('insert new permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newPermissionSet())
+          .then((newPermSet) => newPermSet.setAllow('Insert')
+            .then(() => m.setUserPermissions(null, newPermSet, 1).should.be.fulfilled())
+          ))
+    );
+
+    it('get user permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newPermissionSet())
+          .then((newPermSet) => newPermSet.setAllow('Insert')
+            .then(() => m.setUserPermissions(null, newPermSet, 1)))
+          .then(() => m.getUserPermissions(null).should.be.fulfilled())
+        )
+    );
+
+    it('remove user permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newPermissionSet())
+          .then((newPermSet) => newPermSet.setAllow('Insert')
+            .then(() => m.setUserPermissions(null, newPermSet, 1)))
+          .then(() => m.delUserPermissions(null, 2).should.be.fulfilled())
+        )
     );
   });
 
