@@ -151,7 +151,8 @@ class NFS {
   * @returns {Promise<File>} - the same file
   **/
   update(fileName, file, version) {
-    return lib.file_update(this.mData.app.connection, this.mData.ref, fileName, file.ref, version)
+    return lib.file_update(this.mData.app.connection, this.mData.ref, fileName,
+                              file.ref.ref(), version)
       .then(() => file);
   }
 }
