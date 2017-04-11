@@ -26,16 +26,15 @@ describe('Immutable Data', () => {
       .then((w) => w.write(testString)
         .then(() => w.close())
         .then((addr) => app.mutableData.newPublic(TEST_NAME_PUBLIC, TAG_TYPE)
-          .then((md) => md.quickSetup({'key1': addr}))
+          .then((md) => md.quickSetup({ key1: addr }))
         ))
       .then(() => app.mutableData.newPublic(TEST_NAME_PUBLIC, TAG_TYPE))
       .then((md) => md.get('key1'))
       .then((value) => app.immutableData.fetch(value.buf))
       .then((r) => r.read())
       .then((res) => {
-        console.log("Test string: ", res.toString());
         should(res.toString()).equal(testString);
-      })
+      });
   });
 
   it.skip('store address in a serialised/deserialised  MD', () => {
@@ -47,22 +46,20 @@ describe('Immutable Data', () => {
         .then((addr) => app.mutableData.newPublic(TEST_NAME_PUBLIC, TAG_TYPE)
           .then((md) => md.serialise())
           .then((serial) => app.mutableData.fromSerial(serial))
-            .then((md) => md.getEntries())
+            .then((md) => md.getEntries()
             .then((entries) => entries.mutate())
             .then((mut) => mut.insert('key1', addr)
               .then(() => md.applyEntriesMutation(mut))
-            )
+            ))
         ))
       .then(() => app.mutableData.newPublic(TEST_NAME_PUBLIC, TAG_TYPE))
       .then((md) => md.getEntries())
       .then((entries) => entries.forEach((key, value) => {
-          app.immutableData.fetch(value.buf)
-          .then((r) => r.read())
-          .then((res) => {
-            console.log("Test string: ", res.toString());
-            should(res.toString()).equal(testString);
-          });
-        })
-      )
+        app.immutableData.fetch(value.buf)
+        .then((r) => r.read())
+        .then((res) => {
+          should(res.toString()).equal(testString);
+        });
+      }));
   });
 });
