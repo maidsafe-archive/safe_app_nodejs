@@ -1,4 +1,5 @@
-var isInTest = typeof global.it === 'function';
+const inTesting = require('../consts').inTesting;
+
 module.exports = [
   require('./_base'),
   require('./_app'),
@@ -8,5 +9,5 @@ module.exports = [
   require('./_mutable'),
   require('./_nfs'),
   require('./_misc'),
-  isInTest ? require("./_testing") : {} // we have some testing helpers
+  inTesting ? require("./_testing") : {} // we have some testing helpers
 ];

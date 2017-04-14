@@ -6,15 +6,6 @@
   "scripts": {
     "lint": "eslint src test",
     "fix-lint": "eslint --fix src test",
-    "clean": "cd system_uri && cargo clean && cd ../native/safe_app && cargo clean",
-    "build-system-uri-release": "cd system_uri && cargo build --release && cd ../ && cp -f system_uri/target/release/*system_uri* ./src/native",
-    "build-safe-lib-release": "cd native/safe_app && cargo build --release && cd ../../ && cp -f native/target/release/*safe_app* ./src/native",
-    "build-libs-release": "npm run build-system-uri-release && npm run build-safe-app-release",
-    "build-system-uri": "cd system_uri && cargo build && cd ../ && cp -f system_uri/target/debug/*system_uri* ./src/native",
-    "build-safe-lib": "cd native/safe_app && cargo build --features \"use-mock-routing testing\" && cd ../../ && cp -f native/target/debug/*safe_app* ./src/native",
-    "build-libs": "npm run build-system-uri && npm run build-safe-lib",
-    "prepublish": "npm run build-libs",
-    "pretest": "npm run build-libs",
     "postinstall": "download_deps --package package.json",
     "docs": "documentation build --config etc/documentation.yml --github true --output docs --format html src/**",
     "serve-docs": "documentation serve --config etc/documentation.yml --github true --output docs --format html src/**",
@@ -56,7 +47,25 @@
     "system_uri": {
       "mirror": "https://github.com/gnunicorn/system_uri/releases/download/v",
       "version": "1.0.0-pre",
-      "targetDir": "src/native"
+      "targetDir": "src/native",
+      "filePattern": "^.*\\.(dll|so|dylib)$"
+    },
+    "safe_app": {
+      "mirror": "https://github.com/gnunicorn/safe_core/releases/download/v",
+      "version": "0.1.0-pre17",
+      "targetDir": "src/native",
+      "filename": "safe_app-dev",
+      "filePattern": "^.*\\.(dll|so|dylib)$"
+    },
+    "ENV": {
+      "win32": {
+        "libwinpthread-1": {
+          "mirror": "https://github.com/gnunicorn/safe_core/releases/download/v",
+          "version": "0.1.0-pre3",
+          "targetDir": "src/native",
+          "filePattern": "^libwinpthread-1.dll$"
+        }
+      }
     }
   }
 }

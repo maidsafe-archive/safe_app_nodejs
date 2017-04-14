@@ -58,7 +58,7 @@ describe('Mutable Data', () => {
   });
 
   describe('MutableData info', () => {
-    it('create random public entry and read its name', () =>
+    it('create random public and read its name', () =>
         app.mutableData.newRandomPublic(TAG_TYPE)
             .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
             .then((r) => {
@@ -67,7 +67,7 @@ describe('Mutable Data', () => {
             })
     );
 
-    it('create random private entry and read its name', () =>
+    it('create random private and read its name', () =>
         app.mutableData.newRandomPrivate(TAG_TYPE)
             .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
             .then((r) => {
@@ -76,7 +76,7 @@ describe('Mutable Data', () => {
             })
     );
 
-    it('create custom public entry and read its name', () =>
+    it('create custom public and read its name', () =>
         app.mutableData.newPublic(TEST_NAME_PUBLIC, TAG_TYPE)
             .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
             .then((r) => {
@@ -87,12 +87,11 @@ describe('Mutable Data', () => {
             })
     );
 
-    it('create custom private entry and read its name', () =>
+    it('create custom private and read its name', () =>
         app.mutableData.newPrivate(TEST_NAME_PRIVATE, TAG_TYPE)
             .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
             .then((r) => {
               should(r.name).not.be.undefined();
-              // test XOR_NAME generation algorithm applied to the name provided???
               should(r.name).have.length(TEST_NAME_PUBLIC.length);
               should(r.tag).equal(TAG_TYPE);
             })
@@ -161,14 +160,15 @@ describe('Mutable Data', () => {
           }))
     ));
 
-    it('forEach on list of entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
-      .then((entries) => entries.forEach((key, value) => {
-        should(value.version).be.equal(0);
-        should(TEST_ENTRIES).have.ownProperty(key.toString());
-        should(TEST_ENTRIES[key.toString()]).be.equal(value.buf.toString());
-      }))
-    );
+    it('forEach on list of entries', (done) => {
+      app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
+        .then((entries) => entries.forEach((key, value) => {
+          should(value.version).be.equal(0);
+          should(TEST_ENTRIES).have.ownProperty(key.toString());
+          should(TEST_ENTRIES[key.toString()]).be.equal(value.buf.toString());
+        }).then(() => done(), (err) => done(err)));
+    });
 
     it('get list of keys', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
@@ -178,12 +178,13 @@ describe('Mutable Data', () => {
         })
     );
 
-    it('forEach on list of keys', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
-      .then((keys) => keys.forEach((key) => {
-        should(TEST_ENTRIES).have.ownProperty(key.toString());
-      }))
-    );
+    it('forEach on list of keys', (done) => {
+      app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
+        .then((keys) => keys.forEach((key) => {
+          should(TEST_ENTRIES).have.ownProperty(key.toString());
+        }).then(() => done(), (err) => done(err)));
+    });
 
     it('get list of values', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
@@ -193,15 +194,16 @@ describe('Mutable Data', () => {
         })
     );
 
-    it('forEach on list of values', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
-      .then((values) => values.forEach((value) => {
-        should(TEST_ENTRIES).matchAny((v) => {
-          should(v).be.eql(value.buf.toString());
-          should(value.version).be.equal(0);
-        });
-      }))
-    );
+    it('forEach on list of values', (done) => {
+      app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
+        .then((values) => values.forEach((value) => {
+          should(TEST_ENTRIES).matchAny((v) => {
+            should(v).be.eql(value.buf.toString());
+            should(value.version).be.equal(0);
+          });
+        }).then(() => done(), (err) => done(err)));
+    });
   });
 
   describe('Encrypt entry key/value', () => {
@@ -398,12 +400,48 @@ describe('Mutable Data', () => {
           ))
     );
 
+    it('forEach on list of permissions', (done) => {
+      app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getPermissions()
+          .then((perms) => app.auth.getPubSignKey()
+            .then((pk) => perms.getPermissionSet(pk).should.be.fulfilled()
+              .then(() => perms.forEach((signkey, pmset) => {
+                pmset.setAllow('Delete').then(() => {
+                  // FIXME: if the number of permissions is > 1
+                  // this would be evaluating only the first forEach iteration
+                  m.delUserPermissions(signkey, 1).then(() => done(), (err) => done(err));
+                }, (err) => done(err));
+              }).then(null, (err) => done(err)))
+            ))));
+    });
+
     it('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => m.getPermissions()
             .then((perm) => app.auth.getPubSignKey()
               .then((pk) => perm.getPermissionSet(pk).should.be.fulfilled())
             )))
+    );
+
+    // This is failing in the client_libs, we need to report the bug
+    it.skip('insert permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newPermissionSet()
+            .then((newPermSet) => newPermSet.setAllow('Delete')
+              .then(() => m.getPermissions()
+              .then((perm) => perm.insertPermissionSet(null, newPermSet).should.be.fulfilled())
+            ))))
+    );
+
+    // This is failing in the client_libs, we need to report the bug
+    it.skip('get permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newPermissionSet()
+            .then((newPermSet) => newPermSet.setAllow('Delete')
+              .then(() => m.getPermissions()
+              .then((perm) => perm.insertPermissionSet(null, newPermSet)
+                .then(() => perm.getPermissionSet(null).should.be.fulfilled())
+              )))))
     );
 
     it('insert new permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
@@ -459,6 +497,46 @@ describe('Mutable Data', () => {
                     .then(() => should(m.applyEntriesMutation(mut))
                                   .be.rejected())
                   ))))))
+    );
+
+    it('insert new permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newPermissionSet())
+          .then((newPermSet) => newPermSet.setAllow('Insert')
+            .then(() => m.setUserPermissions(null, newPermSet, 1).should.be.fulfilled())
+          ))
+    );
+
+    it('get user permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newPermissionSet())
+          .then((newPermSet) => newPermSet.setAllow('Insert')
+            .then(() => m.setUserPermissions(null, newPermSet, 1)))
+          .then(() => m.getUserPermissions(null).should.be.fulfilled())
+        )
+    );
+
+    it('remove user permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newPermissionSet())
+          .then((newPermSet) => newPermSet.setAllow('Insert')
+            .then(() => m.setUserPermissions(null, newPermSet, 1)))
+          .then(() => m.delUserPermissions(null, 2).should.be.fulfilled())
+        )
+    );
+  });
+
+  describe.only('NFS emulation', () => {
+    it('nfs update', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
+      .then((nfs) => nfs.create('Hello world')
+        .then((file) => nfs.insert('test.txt', file))
+        .then(() => nfs.fetch('test.txt'))
+        .then((f) => app.immutableData.fetch(f.dataMapName)
+          .then((i) => i.read())
+          .then(() => nfs.create('hello world updated'))
+          .then((file) => nfs.update('test.txt', file, f.version + 1)))
+      )
     );
   });
 

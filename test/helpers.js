@@ -1,6 +1,3 @@
-/* eslint no-underscore-dangle: ["warn", { "allow": ["_connection", "_registered"] }]*/
-const lib = require('../src/native/lib');
-const nativeH = require('../src/native/helpers');
 const App = require('../src/app');
 const h = require('../src/helpers');
 
@@ -20,9 +17,7 @@ function createAnonTestApp(scope) {
 
 function createAuthenticatedTestApp(scope, access) {
   const app = createTestApp(scope);
-  const permissions = nativeH.makePermissions(access || {});
-  app.connection = lib.test_create_app_with_access(permissions);
-  app.auth._registered = true;
+  app.auth.loginForTest(access); // Promise, but immediate
   return app;
 }
 

@@ -76,9 +76,9 @@ module.exports = {
       "tm_utcoff": 0,
       "tm_nsec": 0,
     }),
-    fromCTime: (ctime) => new Date.UTC(ctime.tm_year, ctime.tm_mon, ctime.mday,
+    fromCTime: (ctime) => new Date(Date.UTC(ctime.tm_year, ctime.tm_mon, ctime.mday,
                                   // FIXME: offset handling anyone?
-                                  ctime.tm_hour, ctime.tm_min, ctime.tm_sec),
+                                  ctime.tm_hour, ctime.tm_min, ctime.tm_sec)),
     Promisified: function(formatter, rTypes, after) {
       // create internal function that will be
       // invoked ontop of the direct binding

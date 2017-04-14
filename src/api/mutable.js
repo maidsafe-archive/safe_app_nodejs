@@ -2,7 +2,7 @@ const h = require('../helpers');
 const lib = require('../native/lib');
 const t = require('../native/types');
 const emulations = require('./emulations');
-
+const { SignKey } = require('./misc');
 
 function toAction(action) {
   const a = t.MDataAction.get(action);
@@ -87,7 +87,8 @@ class Permissions extends h.NetworkObject {
   * @returns {Promise<PermissionSet>} - the permissionset for that key
   **/
   getPermissionSet(signKey) {
-    return lib.mdata_permissions_get(this.app.connection, this.ref, signKey.ref)
+    return lib.mdata_permissions_get(this.app.connection, this.ref,
+                                                      signKey ? signKey.ref : 0)
         .then((c) => h.autoref(new PermissionsSet(this.app, c)));
   }
 
@@ -101,7 +102,7 @@ class Permissions extends h.NetworkObject {
   insertPermissionSet(signKey, permissionSet) {
     return lib.mdata_permissions_insert(this.app.connection,
                                         this.ref,
-                                        signKey.ref,
+                                        signKey ? signKey.ref : 0,
                                         permissionSet.ref);
   }
 
@@ -113,9 +114,11 @@ class Permissions extends h.NetworkObject {
   forEach(fn) {
     // iterate through all key-value-pairs
     // returns promise that resolves once done
-    return lib.mdata_permissions_for_each(this.app.connection,
-                                          this.ref,
-                                          fn);
+    return lib.mdata_permissions_for_each(
+      this.app.connection,
+      this.ref,
+      (s, p) => fn(h.autoref(new SignKey(this.app, s)),
+                    h.autoref(new PermissionsSet(this.app, p))));
   }
 
 }
@@ -509,7 +512,8 @@ class MutableData extends h.NetworkObject {
   * @returns {Promise<(Permissions)>}
   **/
   getUserPermissions(signKey) {
-    return lib.mdata_list_user_permissions(this.app.connection, this.ref, signKey.ref)
+    return lib.mdata_list_user_permissions(this.app.connection, this.ref,
+                                                      signKey ? signKey.ref : 0)
       .then((r) => h.autoref(new PermissionsSet(this.app, r, this)));
   }
 
@@ -524,7 +528,7 @@ class MutableData extends h.NetworkObject {
   delUserPermissions(signKey, version) {
     return lib.mdata_del_user_permissions(this.app.connection,
                                           this.ref,
-                                          signKey.ref,
+                                          signKey ? signKey.ref : 0,
                                           version);
   }
 
@@ -540,7 +544,7 @@ class MutableData extends h.NetworkObject {
   setUserPermissions(signKey, pmset, version) {
     return lib.mdata_set_user_permissions(this.app.connection,
                                           this.ref,
-                                          signKey.ref,
+                                          signKey ? signKey.ref : 0,
                                           pmset.ref,
                                           version);
   }

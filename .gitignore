@@ -47,3 +47,8 @@ src/native/libsystem_uri*
 src/native/system_uri*
 .idea
 out
+src/native/*.dll
+.cache/
+.npmignore
+/native
+/system_uri

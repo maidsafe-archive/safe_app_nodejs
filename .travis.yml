@@ -5,6 +5,7 @@ env:
     - secure: kkIKGaPMAaI02ozykYVAgONbscaqXhsb2tue5HrAuJLIVfSNtVrIokfuqpratq3cG5ZsmIVI/CwFBBHH1s318AqJj62JuVHc/2KgDVOLLBNkgCaMFjd74UtP6ejDIXBNHYKGGs57JZTGVdiYyRjcGQ/Hi6tTN+HLsUqdNSKkRvHDLE9AiO73jLpmOhm63Aa378PB+YvTXPpz4tbs+9628jfqob6LBA93EEjDe8oBt+zLBhQ8AlRb8l5mCusNKjuOEd4/PxUdRlZ6Ei/3sVHo2NwCxf3evbER1MNqGHCxQ1UkNdBiBW2T6Zz5v1iHW1N+UshWtzZLjdRr+0/gW5pXaakgoPvfuSjhMIMDf9rC5CYA5Kt9rVYfgnCDE/ZOjMaSo1VXll7xvQtcVFR1R5paBaJZzq4TSGDK4BkmDy+OgyJIWhX/l9iUDBh3ilb6brpbVxnJ+ATw9oI1kgBEAuREtsSvZPDjVuDPrwy6XnJFyIp4EE4NItdPLLtckraxfgnL2gAN8rTfWWCRg/uKWSGZ3smRKe87vT7cGvPcRcy4D3woCmJzHYlbLW8ErtwKLfAO8vcyXzcZXsuw6Kspw8J3Ar7r/h3HBBdnQmoPdFGzDk0O/swsyujRbdfao4jwQPXDo4ExzriM6JiTd4qFTfhDZ5mY9pHBhnpxrO9k7zTKnfA=
 
 sudo: true
+dist: trusty
 
 os:
   - linux
@@ -35,15 +36,12 @@ cache:
     - node_modules
 
 before_install:
-  - curl -s https://static.rust-lang.org/rustup.sh > rustup.sh && sh rustup.sh --prefix=~/rust --spec=1.14.0 -y --disable-sudo
   - "[[ ${TRAVIS_OS_NAME} = linux ]] && export CXX=g++-4.8 || echo 'skipped'"
 
 install:
   - node --version
   - npm --version
-  # make sure we are clean
-  - npm run clean
-  # also runs cargo build for release version
+  # also downloads the build for release version
   - npm install
 
 script:
