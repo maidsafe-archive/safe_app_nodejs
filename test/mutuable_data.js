@@ -526,7 +526,7 @@ describe('Mutable Data', () => {
     );
   });
 
-  describe.only('NFS emulation', () => {
+  describe('NFS emulation', () => {
     it('nfs update', () => app.mutableData.newRandomPrivate(TAG_TYPE)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
       .then((nfs) => nfs.create('Hello world')
