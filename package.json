@@ -9,7 +9,9 @@
     "postinstall": "download_deps --package package.json",
     "docs": "documentation build --config etc/documentation.yml --github true --output docs --format html src/**",
     "serve-docs": "documentation serve --config etc/documentation.yml --github true --output docs --format html src/**",
-    "test": "mocha"
+    "test": "mocha",
+    "test-cov": "istanbul cover _mocha --report cobertura",
+    "test-cov-badge": "npm run test-cov && istanbul-cobertura-badger -f -b code-coverage -r coverage/cobertura-coverage.xml -d coverage/"
   },
   "repository": {
     "type": "git",
@@ -35,6 +37,8 @@
     "eslint": "^3.12.2",
     "eslint-config-airbnb-base": "^11.0.0",
     "eslint-plugin-import": "^2.2.0",
+    "istanbul": "^0.4.5",
+    "istanbul-cobertura-badger": "^1.2.1",
     "jsdoc": "^3.4.3",
     "mocha": "^3.2.0",
     "should": "^11.1.2"
