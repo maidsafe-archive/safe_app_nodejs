@@ -4,14 +4,11 @@ const h = require('./helpers');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
-
 describe('Mutable Data', () => {
   const app = createAuthenticatedTestApp();
   const TAG_TYPE = 15639;
   const TAG_TYPE_RESERVED = 10000;
   const TAG_TYPE_INVALID = '_invalid_tag';
-  const TEST_NAME_PRIVATE = 'test-name-private-01010101010101';
-  const TEST_NAME_PUBLIC = 'test-name-public--01010101010101';
   const TEST_NAME_INVALID = 'name-shorter-than-32-bytes-long';
   const TEST_ENTRIES = { key1: 'value1', key2: 'value2' };
 
@@ -25,11 +22,11 @@ describe('Mutable Data', () => {
     );
 
     it.skip('create custom public with reserved tag type', () =>
-      should(app.mutableData.newPublic(TEST_NAME_PUBLIC, TAG_TYPE_RESERVED)).be.rejected()
+      should(app.mutableData.newPublic(h.createRandomXorName(), TAG_TYPE_RESERVED)).be.rejected()
     );
 
     it.skip('create custom private with reserved tag type', () =>
-      should(app.mutableData.newPrivate(TEST_NAME_PRIVATE, TAG_TYPE_RESERVED)).be.rejected()
+      should(app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE_RESERVED)).be.rejected()
     );
 
     it('create random public with invalid tag vaue', () =>
@@ -41,11 +38,11 @@ describe('Mutable Data', () => {
     );
 
     it('create custom public with invalid tag value', () =>
-      should(app.mutableData.newPublic(TEST_NAME_PUBLIC, TAG_TYPE_INVALID)).be.rejected()
+      should(app.mutableData.newPublic(h.createRandomXorName(), TAG_TYPE_INVALID)).be.rejected()
     );
 
     it('create custom private with invalid tag value', () =>
-      should(app.mutableData.newPrivate(TEST_NAME_PRIVATE, TAG_TYPE_INVALID)).be.rejected()
+      should(app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE_INVALID)).be.rejected()
     );
 
     it('create custom public with invalid name', () =>
@@ -77,22 +74,22 @@ describe('Mutable Data', () => {
     );
 
     it('create custom public and read its name', () =>
-        app.mutableData.newPublic(TEST_NAME_PUBLIC, TAG_TYPE)
+        app.mutableData.newPublic(h.createRandomXorName(), TAG_TYPE)
             .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
             .then((r) => {
               should(r.name).not.be.undefined();
               // test XOR_NAME generation algorithm applied to the name provided???
-              should(r.name).have.length(TEST_NAME_PUBLIC.length);
+              should(r.name).have.length(32);
               should(r.tag).equal(TAG_TYPE);
             })
     );
 
     it('create custom private and read its name', () =>
-        app.mutableData.newPrivate(TEST_NAME_PRIVATE, TAG_TYPE)
+        app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE)
             .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
             .then((r) => {
               should(r.name).not.be.undefined();
-              should(r.name).have.length(TEST_NAME_PUBLIC.length);
+              should(r.name).have.length(32);
               should(r.tag).equal(TAG_TYPE);
             })
     );
@@ -526,7 +523,7 @@ describe('Mutable Data', () => {
     );
   });
 
-  describe.only('NFS emulation', () => {
+  describe('NFS emulation', () => {
     it('nfs update', () => app.mutableData.newRandomPrivate(TAG_TYPE)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
       .then((nfs) => nfs.create('Hello world')
