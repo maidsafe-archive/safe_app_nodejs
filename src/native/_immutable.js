@@ -13,11 +13,15 @@ const SEReadHandle = t.ObjectHandle;
 function translateXorName(appPtr, str) {
   let name = str;
   if (str.buffer) {
-    name = str.buffer;
+    if (str.buffer.buffer) {
+      name = str.buffer;
+    } else {
+      name = str;
+    }
   } else {
     const b = new Buffer(str);
     if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
-    name = t.XOR_NAME(b).ref();
+    name = t.XOR_NAME(b).ref().readPointer(0);
   }
   return [appPtr, name]
 }

@@ -36,7 +36,7 @@ describe('Access Container', () => {
         should(resp.tag).equal(15000);
       })));
 
-  it.skip('mutate info of `_public` container', () => app.auth.refreshContainerAccess().then(() =>
+  it('mutate info of `_public` container', () => app.auth.refreshContainerAccess().then(() =>
       app.auth.getAccessContainerInfo('_publicNames')
         .then((md) => md.getEntries()
           .then((entries) => entries.mutate()
@@ -44,14 +44,14 @@ describe('Access Container', () => {
               .then(() => md.applyEntriesMutation(mut))
             )))
         .then(() => app.auth.getAccessContainerInfo('_publicNames'))
-          .then((md) => md.get('key1'))
+          .then((md) => md.encryptKey('key1').then((key) => md.get(key)))
           .then((value) => {
-            should(value).not.be.undefined();
-            should(value.toString()).equal('value1');
+            should(value.buf).not.be.undefined();
+            should(value.buf.toString()).equal('value1');
           })
   ));
 
-  it.skip('mutate info of home container', () => app.auth.refreshContainerAccess().then(() =>
+  it('mutate info of home container', () => app.auth.refreshContainerAccess().then(() =>
       app.auth.getHomeContainer()
         .then((md) => md.getEntries()
           .then((entries) => entries.mutate()
@@ -59,10 +59,10 @@ describe('Access Container', () => {
               .then(() => md.applyEntriesMutation(mut))
             )))
         .then(() => app.auth.getHomeContainer())
-          .then((md) => md.get('key1'))
+          .then((md) => md.encryptKey('key1').then((key) => md.get(key)))
           .then((value) => {
-            should(value).not.be.undefined();
-            should(value.toString()).equal('value1');
+            should(value.buf).not.be.undefined();
+            should(value.buf.toString()).equal('value1');
           })
   ));
 });

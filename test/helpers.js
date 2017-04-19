@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const App = require('../src/app');
 const h = require('../src/helpers');
 
@@ -21,8 +22,11 @@ function createAuthenticatedTestApp(scope, access) {
   return app;
 }
 
+const createRandomXorName = () => crypto.randomBytes(32);
+
 module.exports = {
   createTestApp,
   createAnonTestApp,
-  createAuthenticatedTestApp
+  createAuthenticatedTestApp,
+  createRandomXorName
 };
