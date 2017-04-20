@@ -23,8 +23,10 @@ class File {
 
   get ref() {
     const data = {
-      created: this._ref.created,
-      modified: this._ref.modified,
+      created_sec: this._ref.created_sec,
+      created_nsec: this._ref.created_nsec,
+      modified_sec: this._ref.modified_sec,
+      modified_nsec: this._ref.modified_nsec,
       size: this._ref.size,
       data_map_name: this._ref.data_map_name,
       user_metadata_ptr: this._ref.data_map_name.ref(),
@@ -59,7 +61,7 @@ class File {
   * @return {Date}
   **/
   get created() {
-    return nativeH.fromCTime(this._ref.created);
+    return nativeH.fromSafeLibTime(this._ref.created_sec, this._ref.created_nsec);
   }
 
   /**
@@ -67,7 +69,7 @@ class File {
   * @return {Date}
   **/
   get modified() {
-    return nativeH.fromCTime(this._ref.modified);
+    return nativeH.fromSafeLibTime(this._ref.modified_sec, this._ref.modified_nsec);
   }
 
   /**
@@ -108,14 +110,17 @@ class NFS {
   **/
   create(content) {
     const now = new Date();
+    const {secs, nsecs_part} = nativeH.toSafeLibTime(now);
     return this.mData.app.immutableData.create()
       .then((w) => w.write(content)
         .then(() => w.close()
           .then((xorAddr) => new File({
             size: content.length,
             data_map_name: xorAddr,
-            created: nativeH.makeCTime(now),
-            modified: nativeH.makeCTime(now)
+            created_sec: secs,
+            created_nsec: nsecs_part,
+            modified_sec: secs,
+            modified_nsec: nsecs_part,
           }))
         )
     );

@@ -8,8 +8,10 @@ const h = base.helpers;
 
 const File = Struct({
   size: t.u64,
-  created: t.Time, // TODO fix it for TM
-  modified: t.Time, // TODO fix it for TM
+  created_sec: t.i64,
+  created_nsec: t.u32,
+  modified_sec: t.i64,
+  modified_nsec: t.u32,
   user_metadata_ptr: t.u8Pointer,
   user_metadata_len: t.usize,
   user_metadata_cap: t.usize,
@@ -33,8 +35,11 @@ module.exports = {
       const file = res[0].deref();
       const data_map_name = file.data_map_name;
       const size = file.size;
-      const created = file.created;
-      const modified = file.modified;
+      const created_sec = file.created_sec;
+      const created_nsec = file.created_nsec;
+      const modified_sec = file.modified_sec;
+      const modified_nsec = file.modified_nsec;
+
       let metadata = file.user_metadata_len > 0
         ? ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len) : null;
 
@@ -52,8 +57,10 @@ module.exports = {
       return {metadata,
               data_map_name,
               size,
-              created,
-              modified,
+              created_sec,
+              created_nsec,
+              modified_sec,
+              modified_nsec,
               version: res[1]}
     }),
     file_insert: h.Promisified(null, []),
