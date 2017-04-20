@@ -109,18 +109,17 @@ class NFS {
   * @returns {Promise<File>} a newly created file
   **/
   create(content) {
-    const now = new Date();
-    const {secs, nsecs_part} = nativeH.toSafeLibTime(now);
+    const now = nativeH.toSafeLibTime(new Date());
     return this.mData.app.immutableData.create()
       .then((w) => w.write(content)
         .then(() => w.close()
           .then((xorAddr) => new File({
             size: content.length,
             data_map_name: xorAddr,
-            created_sec: secs,
-            created_nsec: nsecs_part,
-            modified_sec: secs,
-            modified_nsec: nsecs_part,
+            created_sec: now.now_sec_part,
+            created_nsec: now.now_nsec_part,
+            modified_sec: now.now_sec_part,
+            modified_nsec: now.now_nsec_part,
           }))
         )
     );
