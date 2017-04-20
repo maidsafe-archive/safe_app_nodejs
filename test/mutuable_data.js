@@ -420,8 +420,7 @@ describe('Mutable Data', () => {
             )))
     );
 
-    // This is failing in the client_libs, we need to report the bug
-    it.skip('insert permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it('insert permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => app.mutableData.newPermissionSet()
             .then((newPermSet) => newPermSet.setAllow('Delete')
@@ -430,8 +429,7 @@ describe('Mutable Data', () => {
             ))))
     );
 
-    // This is failing in the client_libs, we need to report the bug
-    it.skip('get permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it('get permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => app.mutableData.newPermissionSet()
             .then((newPermSet) => newPermSet.setAllow('Delete')
