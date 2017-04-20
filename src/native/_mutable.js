@@ -109,7 +109,7 @@ function strToBufferButLastEntry(app, mdata) {
 // args[2] is expected to be content version
 function readValueToBuffer(args) {
     return {
-        buf: new Buffer(ref.reinterpret(args[0], args[1], 0)),
+        buf: ref.isNull(args[0]) ? args[0] : new Buffer(ref.reinterpret(args[0], args[1], 0)),
         version: args[2]
     }
 }
