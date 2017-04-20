@@ -120,6 +120,19 @@ describe('Mutable Data', () => {
         })
     );
 
+    it.skip('get existing key from private MD', () => {
+      let testXorName = h.createRandomXorName();
+      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES))
+        .then(() => app.mutableData.newPrivate(testXorName, TAG_TYPE))
+        .then((md) => md.encryptKey('key1').then((key) => md.get(key)))
+        .then((value) => {
+          should(value).not.be.undefined();
+          should(value.buf.toString()).equal('value1');
+          should(value.version).equal(0);
+        })
+    });
+
     it('serialise/deserialise smoketest', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => m.serialise())) // serialise
