@@ -121,7 +121,7 @@ describe('Mutable Data', () => {
     );
 
     it('get existing key from private MD', () => {
-      let testXorName = h.createRandomXorName();
+      const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => md.encryptKey('key1').then((key) => md.get(key)))
@@ -129,12 +129,12 @@ describe('Mutable Data', () => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('value1');
           should(value.version).equal(0);
-        })
+        });
     });
 
     // this is failing due to a problem in safe_client_lilbs already reported
     it.skip('get existing key from fetching private MD again', () => {
-      let testXorName = h.createRandomXorName();
+      const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then(() => app.mutableData.newPrivate(testXorName, TAG_TYPE))
@@ -143,11 +143,11 @@ describe('Mutable Data', () => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('value1');
           should(value.version).equal(0);
-        })
+        });
     });
 
     it('get existing key from fetching public MD again', () => {
-      let testXorName = h.createRandomXorName();
+      const testXorName = h.createRandomXorName();
       return app.mutableData.newPublic(testXorName, TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then(() => app.mutableData.newPublic(testXorName, TAG_TYPE))
@@ -156,7 +156,7 @@ describe('Mutable Data', () => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('value1');
           should(value.version).equal(0);
-        })
+        });
     });
 
     it('serialise/deserialise smoketest', () => app.mutableData.newRandomPublic(TAG_TYPE)
@@ -343,7 +343,7 @@ describe('Mutable Data', () => {
     );
 
     it('a remove mutation on public MD', () => {
-      let testXorName = h.createRandomXorName();
+      const testXorName = h.createRandomXorName();
       return app.mutableData.newPublic(testXorName, TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then(() => app.mutableData.newPublic(testXorName, TAG_TYPE))
@@ -362,13 +362,13 @@ describe('Mutable Data', () => {
 
     // this is failing due to a problem in safe_client_lilbs already reported
     it.skip('a remove mutation on private MD', () => {
-      let testXorName = h.createRandomXorName();
+      const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => app.mutableData.newMutation()
           .then((mut) => md.encryptKey('key1').then((key) => mut.remove(key, 1))
             .then(() => md.applyEntriesMutation(mut))
-          ))
+          ));
 /*        .then(() => app.mutableData.newPrivate(testXorName, TAG_TYPE))
         .then(() => md.encryptKey('key1').then((key) => mut.get(key)))
         .then((value) => {
@@ -380,7 +380,7 @@ describe('Mutable Data', () => {
 
     // this is failing due to a problem in safe_client_lilbs already reported
     it.skip('a remove mutation on private MD fetching it again', () => {
-      let testXorName = h.createRandomXorName();
+      const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then(() => app.mutableData.newPrivate(testXorName, TAG_TYPE))
@@ -388,7 +388,7 @@ describe('Mutable Data', () => {
           .then((mut) => md.encryptKey('key1').then((key) => mut.remove(key, 1))
             .then(() => md.applyEntriesMutation(mut))
           )
-        /*.then(() => md.encryptKey('key1').then((key) => mut.get(key)))
+/*        .then(() => md.encryptKey('key1').then((key) => mut.get(key)))
           .then((value) => {
             should(value).not.be.undefined();
             should(value.buf.toString()).equal('');
