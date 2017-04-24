@@ -104,14 +104,14 @@ describe('Mutable Data', () => {
   });
 
   describe('QuickSetup', () => {
-    it('get non-existing key', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it('get non-existing key from public MD', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup({}).then(() => {
           should(m.get('_non-existing-key')).be.rejected();
           // add validation of the error code returned
         }))
     );
 
-    it('get existing key', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it('get existing key from public MD', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.get('key1')))
         .then((value) => {
           should(value).not.be.undefined();
@@ -120,12 +120,38 @@ describe('Mutable Data', () => {
         })
     );
 
-    it.skip('get existing key from private MD', () => {
+    it('get existing key from private MD', () => {
+      let testXorName = h.createRandomXorName();
+      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES))
+        .then((md) => md.encryptKey('key1').then((key) => md.get(key)))
+        .then((value) => {
+          should(value).not.be.undefined();
+          should(value.buf.toString()).equal('value1');
+          should(value.version).equal(0);
+        })
+    });
+
+    // this is failing due to a problem in safe_client_lilbs already reported
+    it.skip('get existing key from fetching private MD again', () => {
       let testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then(() => app.mutableData.newPrivate(testXorName, TAG_TYPE))
         .then((md) => md.encryptKey('key1').then((key) => md.get(key)))
+        .then((value) => {
+          should(value).not.be.undefined();
+          should(value.buf.toString()).equal('value1');
+          should(value.version).equal(0);
+        })
+    });
+
+    it('get existing key from fetching public MD again', () => {
+      let testXorName = h.createRandomXorName();
+      return app.mutableData.newPublic(testXorName, TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES))
+        .then(() => app.mutableData.newPublic(testXorName, TAG_TYPE))
+        .then((md) => md.get('key1'))
         .then((value) => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('value1');
@@ -315,6 +341,61 @@ describe('Mutable Data', () => {
                 })
             ))))
     );
+
+    it('a remove mutation on public MD', () => {
+      let testXorName = h.createRandomXorName();
+      return app.mutableData.newPublic(testXorName, TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES))
+        .then(() => app.mutableData.newPublic(testXorName, TAG_TYPE))
+        .then((md) => app.mutableData.newMutation()
+          .then((mut) => mut.remove('key1', 1)
+            .then(() => md.applyEntriesMutation(mut))
+          ))
+        .then(() => app.mutableData.newPublic(testXorName, TAG_TYPE))
+        .then((md) => md.get('key1'))
+        .then((value) => {
+          should(value).not.be.undefined();
+          should(value.buf.toString()).equal('');
+          should(value.version).equal(1);
+        });
+    });
+
+    // this is failing due to a problem in safe_client_lilbs already reported
+    it.skip('a remove mutation on private MD', () => {
+      let testXorName = h.createRandomXorName();
+      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES))
+        .then((md) => app.mutableData.newMutation()
+          .then((mut) => md.encryptKey('key1').then((key) => mut.remove(key, 1))
+            .then(() => md.applyEntriesMutation(mut))
+          ))
+/*        .then(() => app.mutableData.newPrivate(testXorName, TAG_TYPE))
+        .then(() => md.encryptKey('key1').then((key) => mut.get(key)))
+        .then((value) => {
+          should(value).not.be.undefined();
+          should(value.buf.toString()).equal('');
+          should(value.version).equal(1);
+        });*/
+    });
+
+    // this is failing due to a problem in safe_client_lilbs already reported
+    it.skip('a remove mutation on private MD fetching it again', () => {
+      let testXorName = h.createRandomXorName();
+      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES))
+        .then(() => app.mutableData.newPrivate(testXorName, TAG_TYPE))
+        .then((md) => app.mutableData.newMutation()
+          .then((mut) => md.encryptKey('key1').then((key) => mut.remove(key, 1))
+            .then(() => md.applyEntriesMutation(mut))
+          )
+        /*.then(() => md.encryptKey('key1').then((key) => mut.get(key)))
+          .then((value) => {
+            should(value).not.be.undefined();
+            should(value.buf.toString()).equal('');
+            should(value.version).equal(1);
+          })*/
+        );
+    });
 
     it('an insert mutation from new mutation obj', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
