@@ -132,13 +132,13 @@ describe('Mutable Data', () => {
         });
     });
 
-    // this is failing due to a problem in safe_client_lilbs already reported
-    it.skip('get existing key from fetching private MD again', () => {
+    it('get existing key from serialised private MD', () => {
       const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
-        .then(() => app.mutableData.newPrivate(testXorName, TAG_TYPE))
-        .then((md) => md.encryptKey('key1').then((key) => md.get(key)))
+        .then((md) => md.serialise())
+        .then((serial) => app.mutableData.fromSerial(serial))
+        .then((privmd) => privmd.encryptKey('key1').then((key) => privmd.get(key)))
         .then((value) => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('value1');
@@ -360,40 +360,39 @@ describe('Mutable Data', () => {
         });
     });
 
-    // This is failing due to a problem in safe_client_lilbs already reported
     it.skip('a remove mutation on private MD', () => {
       const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => app.mutableData.newMutation()
-          .then((mut) => md.encryptKey('key1').then((key) => mut.remove(key, 1))
-            .then(() => md.applyEntriesMutation(mut))
-          ));
-/*        .then(() => app.mutableData.newPrivate(testXorName, TAG_TYPE))
-        .then(() => md.encryptKey('key1').then((key) => mut.get(key)))
-        .then((value) => {
-          should(value).not.be.undefined();
-          should(value.buf.toString()).equal('');
-          should(value.version).equal(1);
-        });*/
-    });
-
-    // This is failing due to a problem in safe_client_lilbs already reported
-    it.skip('a remove mutation on private MD fetching it again', () => {
-      const testXorName = h.createRandomXorName();
-      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
-        .then((m) => m.quickSetup(TEST_ENTRIES))
-        .then(() => app.mutableData.newPrivate(testXorName, TAG_TYPE))
-        .then((md) => app.mutableData.newMutation()
-          .then((mut) => md.encryptKey('key1').then((key) => mut.remove(key, 1))
+          .then((mut) => mut.remove('key1', 1)
             .then(() => md.applyEntriesMutation(mut))
           )
-/*        .then(() => md.encryptKey('key1').then((key) => mut.get(key)))
+          .then(() => md.encryptKey('key1').then((key) => md.get(key)))
           .then((value) => {
             should(value).not.be.undefined();
             should(value.buf.toString()).equal('');
             should(value.version).equal(1);
-          })*/
+          })
+        );
+    });
+
+    it.skip('a remove mutation from serialised private MD', () => {
+      const testXorName = h.createRandomXorName();
+      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES))
+        .then((md) => md.serialise())
+        .then((serial) => app.mutableData.fromSerial(serial))
+        .then((privmd) => app.mutableData.newMutation()
+          .then((mut) => mut.remove('key1', 1)
+            .then(() => privmd.applyEntriesMutation(mut))
+          )
+          .then(() => privmd.encryptKey('key1').then((key) => privmd.get(key)))
+          .then((value) => {
+            should(value).not.be.undefined();
+            should(value.buf.toString()).equal('');
+            should(value.version).equal(1);
+          })
         );
     });
 
