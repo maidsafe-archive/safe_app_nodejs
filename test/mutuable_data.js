@@ -360,7 +360,7 @@ describe('Mutable Data', () => {
         });
     });
 
-    // this is failing due to a problem in safe_client_lilbs already reported
+    // This is failing due to a problem in safe_client_lilbs already reported
     it.skip('a remove mutation on private MD', () => {
       const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
@@ -378,7 +378,7 @@ describe('Mutable Data', () => {
         });*/
     });
 
-    // this is failing due to a problem in safe_client_lilbs already reported
+    // This is failing due to a problem in safe_client_lilbs already reported
     it.skip('a remove mutation on private MD fetching it again', () => {
       const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
