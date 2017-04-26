@@ -360,12 +360,13 @@ describe('Mutable Data', () => {
         });
     });
 
+    // This is failing due a bug in safe_app already reported
     it.skip('a remove mutation on private MD', () => {
       const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => app.mutableData.newMutation()
-          .then((mut) => mut.remove('key1', 1)
+          .then((mut) => md.encryptKey('key1').then((key) => mut.remove(key, 1))
             .then(() => md.applyEntriesMutation(mut))
           )
           .then(() => md.encryptKey('key1').then((key) => md.get(key)))
@@ -377,6 +378,7 @@ describe('Mutable Data', () => {
         );
     });
 
+    // This is failing due a bug in safe_app already reported
     it.skip('a remove mutation from serialised private MD', () => {
       const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
@@ -384,7 +386,7 @@ describe('Mutable Data', () => {
         .then((md) => md.serialise())
         .then((serial) => app.mutableData.fromSerial(serial))
         .then((privmd) => app.mutableData.newMutation()
-          .then((mut) => mut.remove('key1', 1)
+          .then((mut) => privmd.encryptKey('key1').then((key) => mut.remove(key, 1))
             .then(() => privmd.applyEntriesMutation(mut))
           )
           .then(() => privmd.encryptKey('key1').then((key) => privmd.get(key)))
