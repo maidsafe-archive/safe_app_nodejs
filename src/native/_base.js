@@ -5,7 +5,9 @@ const Struct = require('ref-struct');
 const ArrayType = require('ref-array');
 
 const i32 = ref.types.int32;
+const u32 = ref.types.uint32;
 const u8 = ref.types.uint8;
+const i64 = ref.types.int64;
 const u64 = ref.types.uint64;
 const u8Pointer = ref.refType(u8);
 const Void = ref.types.void;
@@ -24,21 +26,6 @@ const ObjectHandle = u64;
 const App = Struct({});
 const AppPtr = ref.refType(App);
 
-
-const Time = Struct({
-  "tm_sec": i32,
-  "tm_min": i32,
-  "tm_hour": i32,
-  "tm_mday": i32,
-  "tm_mon": i32,
-  "tm_year": i32,
-  "tm_wday": i32,
-  "tm_yday": i32,
-  "tm_isdst": i32,
-  "tm_utcoff": i32,
-  "tm_nsec": i32,
-});
-
 module.exports = {
   types: {
     App,
@@ -50,35 +37,31 @@ module.exports = {
     NONCEBYTES,
     VoidPtr,
     i32,
+    u32,
     bool,
+    i64,
     u64,
     u8,
     u8Array,
     u8Pointer,
     Void,
     usize,
-    NULL,
-    Time
+    NULL
   },
   helpers: {
     fromCString: (cstr) => cstr.readCString(),
     asBuffer: (res) => new Buffer(ref.reinterpret(res[0], res[1])),
-    makeCTime: (dt) => new Time({
-      "tm_sec": dt.getUTCSeconds(),
-      "tm_min": dt.getUTCMinutes(),
-      "tm_hour": dt.getUTCHours(),
-      "tm_mday": dt.getUTCDate(),
-      "tm_mon": dt.getUTCMonth(),
-      "tm_year": dt.getUTCFullYear(),
-      "tm_wday": dt.getUTCDay(), // yeah, this is the _week_ day
-      "tm_yday": 0, // ToDo: Is this  needed?
-      "tm_isdst": 0,
-      "tm_utcoff": 0,
-      "tm_nsec": 0,
-    }),
-    fromCTime: (ctime) => new Date(Date.UTC(ctime.tm_year, ctime.tm_mon, ctime.mday,
-                                  // FIXME: offset handling anyone?
-                                  ctime.tm_hour, ctime.tm_min, ctime.tm_sec)),
+    toSafeLibTime: (now) => {
+      const now_msec = now.getTime();
+      const now_msec_part = (now_msec % 1000);
+      const now_sec_part = now_msec - now_msec_part;
+      const now_nsec_part = 1000 * now_msec_part;
+      return {now_sec_part, now_nsec_part};
+    },
+    fromSafeLibTime: (sec, nsec_part) => {
+      let d = new Date();
+      d.setTime(sec + (nsec_part / 1000));
+    },
     Promisified: function(formatter, rTypes, after) {
       // create internal function that will be
       // invoked ontop of the direct binding
