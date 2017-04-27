@@ -19,6 +19,10 @@ function strToBuffer(str) {
   return [res, res.length]
 }
 
+function appStrToBuffer(appPtr, str) {
+  return [appPtr].concat(strToBuffer(str)).concat(Array.prototype.slice.call(arguments, 2))
+}
+
 module.exports = {
   types: {
     SignKeyHandle,
@@ -37,10 +41,14 @@ module.exports = {
 
     enc_pub_key_new: [t.Void, [t.AppPtr, t.KEYBYTES, 'pointer', 'pointer']],
     enc_pub_key_get: [t.Void, [t.AppPtr, EncryptPubKeyHandle, 'pointer', 'pointer']],
+    enc_secret_key_free: [t.Void, [t.AppPtr, EncryptPubKeyHandle, 'pointer', 'pointer']],
 
     enc_secret_key_new: [t.Void, [t.AppPtr, t.KEYBYTES, 'pointer', 'pointer']],
     enc_secret_key_get: [t.Void, [t.AppPtr, EncryptSecKeyHandle, 'pointer', 'pointer']],
-    // enc_key_free: [t.Void, [t.AppPtr, EncryptKeyHandle, 'pointer', 'pointer']],
+    enc_secret_key_free: [t.Void, [t.AppPtr, EncryptSecKeyHandle, 'pointer', 'pointer']],
+
+    encrypt: [t.Void, [t.AppPtr, 'pointer', t.usize, EncryptPubKeyHandle, EncryptSecKeyHandle, 'pointer', 'pointer']],
+    decrypt: [t.Void, [t.AppPtr, 'pointer', t.usize, EncryptPubKeyHandle, EncryptSecKeyHandle, 'pointer', 'pointer']],
 
     sha3_hash: [t.Void, ['pointer', t.usize, 'pointer', 'pointer']]
   },
@@ -58,37 +66,16 @@ module.exports = {
 
     enc_secret_key_new: h.Promisified(null, EncryptPubKeyHandle),
     enc_secret_key_get: h.Promisified(null, t.KEYBYTES),
-    // enc_key_free: h.Promisified(null, []),
+
+    encrypt: h.Promisified(appStrToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
+    decrypt: h.Promisified(appStrToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
+
     sha3_hash: h.Promisified(strToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
   }
 };
 
 
 // TODO : still need to be implemented
-
-// /// Retrieve the private encryption key as raw array.
-// pub unsafe extern "C" fn enc_secret_key_get(app: *const App,
-//                                             handle: EncryptSecKeyHandle,
-//                                             user_data: *mut c_void,
-//                                             o_cb: extern "C" fn(*mut c_void, i32, *const SecKey)) {
-// /// Create new public encryption key from raw array.
-// pub unsafe extern "C" fn enc_secret_key_new(app: *const App,
-//                                             data: *const SecKey,
-//                                             user_data: *mut c_void,
-//                                             o_cb: extern "C" fn(*mut c_void,
-//                                                                 i32,
-//                                                                 EncryptSecKeyHandle)) {
-// /// Free encryption key from memory
-// pub unsafe extern "C" fn enc_pub_key_free(app: *const App,
-//                                           handle: EncryptPubKeyHandle,
-//                                           user_data: *mut c_void,
-//                                           o_cb: extern "C" fn(*mut c_void, i32)) {
-
-// /// Free private key from memory
-// pub unsafe extern "C" fn enc_secret_key_free(app: *const App,
-//                                              handle: EncryptSecKeyHandle,
-//                                              user_data: *mut c_void,
-//                                              o_cb: extern "C" fn(*mut c_void, i32)) {
 
 // /// Encrypts arbitrary data using a given key pair.
 // /// You should provide a recipient's public key and a sender's secret key.

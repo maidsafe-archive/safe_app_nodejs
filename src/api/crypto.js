@@ -95,6 +95,51 @@ class SecEncKey extends h.NetworkObject {
   static free(app, ref) {
     return lib.enc_key_free(app.connection, ref);
   }
+}
+
+class KeyPair {
+
+  constructor(app, pub, secret) {
+    this.app = app;
+    this._public = pub;
+    this._secret = secret;
+  }
+
+
+  /**
+  * get the Public Encryption key instance of this keypair
+  * @returns {PubEncKey}
+  **/
+  get pubEncKey() {
+    return this._public;
+  }
+
+
+  /**
+  * get the Secrect Encryption key instance of this keypair
+  * @returns {secEncKey}
+  **/
+  get secEncKey() {
+    return this._secret;
+  }
+
+
+  /**
+  * Encrypt the input (buffer or string) using the private and public key
+  * @returns {Promise<Buffer>} Ciphertext
+  **/
+  encrypt(str) {
+    return lib.encrypt(this.app.connection, str, this.pubEncKey.ref, this.secEncKey.ref)
+  }
+
+
+  /**
+  * Decrypt the given ciphertext (buffer or string) using the private and public key
+  * @returns {Promise<Buffer>} Plaintext
+  **/
+  decrypt(cipher) {
+    return lib.decrypt(this.app.connection, cipher, this.pubEncKey.ref, this.secEncKey.ref)
+  }
 
 }
 
@@ -144,14 +189,14 @@ class CryptoInterface {
 
   /**
   * Generate a new Asymmetric EncryptionKeyPair
-  * @returns {Promise<[PubEncKey, SecEncKey]>}
+  * @returns {Promise<KeyPair>}
   **/
   generateEncKeyPair() {
     return lib.enc_generate_key_pair(this.app.connection)
-        .then(r => [
+        .then(r => new KeyPair(this.app,
             h.autoref(new PubEncKey(this.app, r[0])),
             h.autoref(new SecEncKey(this.app, r[1]))
-          ]);
+          ));
   }
 
   /**
@@ -182,5 +227,6 @@ module.exports = {
   SignKey,
   PubEncKey,
   SecEncKey,
+  KeyPair,
   CryptoInterface
 };

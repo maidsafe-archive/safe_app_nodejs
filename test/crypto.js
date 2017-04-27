@@ -56,20 +56,37 @@ describe.only('App Crypto Tests', () => {
     })
   });
 
-  it("can generate a new key pair", () => {
-    return app.crypto.generateEncKeyPair().then(keys => {
-      should(keys).be.lengthOf(2);
-      return Promise.all([
-          keys[0].getRaw().then(r => {
+  describe("new key pair", () => {
+
+    let keyPair;
+
+    before(() => app.crypto.generateEncKeyPair()
+          .then(kp => {
+            keyPair = kp;
+            should(keyPair).not.be.undefined;
+          }));
+
+    it("generation creates appropriate keys", () => Promise.all([
+          keyPair.pubEncKey.getRaw().then(r => {
             should(r).not.be.undefined();
             return r;
           }),
-          keys[1].getRaw().then(r => {
+          keyPair.secEncKey.getRaw().then(r => {
             should(r).not.be.undefined();
             return r
           })
-        ]).then( r => should(r[0]).not.equal(r[1]));
-    });
-  })
+        ]).then( r => should(r[0]).not.equal(r[1])));
 
+    it("encrypts and decrypts", () => {
+      const INPT = `all teh ${Math.random()} times where I've been`;
+      return keyPair.encrypt(INPT)
+        .then( cipher => {
+          should(cipher.toString()).not.equal(INPT);
+          return keyPair.decrypt(cipher)
+            .then( (raw) => {
+              should(INPT).equal(raw.toString());
+            });
+        });
+    });
+  });
 });
