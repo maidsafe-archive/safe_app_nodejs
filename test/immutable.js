@@ -18,7 +18,7 @@ describe('Immutable Data', () => {
            })));
   });
 
-  it.skip('store address in a MD', () => {
+  it('store address in a MD', () => {
     const testString = `test-${Math.random()}`;
     const testXorName = h.createRandomXorName();
 

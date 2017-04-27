@@ -19,6 +19,10 @@ class File {
   **/
   constructor(ref) {
     this._ref = ref;
+    if (Array.isArray(ref.data_map_name)) {
+      // translate the incoming array back into a buffer we can use internally
+      this._ref.data_map_name = t.XOR_NAME(ref.data_map_name);
+    }
   }
 
   get ref() {
@@ -28,8 +32,8 @@ class File {
       modified_sec: this._ref.modified_sec,
       modified_nsec: this._ref.modified_nsec,
       size: this._ref.size,
-      data_map_name: this._ref.data_map_name,
-      user_metadata_ptr: this._ref.data_map_name.ref(),
+      data_map_name: this.dataMapName,
+      user_metadata_ptr: this.dataMapName.ref(),
       user_metadata_len: 0,
       user_metadata_cap: 0
     };
@@ -156,7 +160,7 @@ class NFS {
   **/
   update(fileName, file, version) {
     return lib.file_update(this.mData.app.connection, this.mData.ref, fileName,
-                              file.ref.ref(), version)
+                           file.ref.ref(), version)
       .then(() => file);
   }
 }
