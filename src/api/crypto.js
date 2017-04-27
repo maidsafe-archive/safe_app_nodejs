@@ -115,6 +115,15 @@ class CryptoInterface {
   }
 
   /**
+  * Hash the given input with SHA3 Hash
+  * @returns {Promise<Buffer>}
+  **/
+  sha3Hash(inpt) {
+    return lib.sha3_hash(inpt);
+  }
+
+
+  /**
   * Get the public signing key of this session
   * @returns {Promise<SignKey>}
   **/

@@ -20,9 +20,23 @@ describe('Crypto Smoke Test', () => {
 });
 
 
-describe('App Crypto Tests', () => {
+describe.only('App Crypto Tests', () => {
 
   let app = h.createAuthenticatedTestApp();
+
+  it("can hash nicely", () => {
+    return app.crypto.sha3Hash("testing input").then( resp => {
+      should(resp.toString())
+        .equal(Buffer("97bc11468af46662f6df912b8d47edb7652e5209062c1588046bccfc7ac2dd7d", 'hex').toString());
+    })
+  });
+
+  it("can hash nicely unauthorised", () => {
+    return h.createTestApp().crypto.sha3Hash("testing input").then( resp => {
+      should(resp.toString())
+        .equal(Buffer("97bc11468af46662f6df912b8d47edb7652e5209062c1588046bccfc7ac2dd7d", 'hex').toString());
+    })
+  });
 
   it("can get sign key", () => {
     return app.crypto.getAppPubSignKey().then(key => {
@@ -31,7 +45,7 @@ describe('App Crypto Tests', () => {
         should(raw).not.be.undefined()
       })
     })
-  });
+  }); 
 
   it("can get public key", () => {
     return app.crypto.getAppPubEncKey().then(key => {
