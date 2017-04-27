@@ -2,11 +2,11 @@ const ffi = require('ffi');
 const ref = require("ref");
 const Struct = require('ref-struct');
 const base = require('./_base');
+const EncryptKeyHandle = require('./_crypto').types.EncryptKeyHandle;
 const t = base.types;
 const h = base.helpers;
 
 const CipherOptHandle = t.ObjectHandle;
-const EncryptKeyHandle = t.ObjectHandle;
 
 module.exports = {
   types: {

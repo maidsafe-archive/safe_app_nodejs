@@ -7,7 +7,7 @@ const base = require('./_base');
 const t = base.types;
 const h = base.helpers;
 const Promisified = base.helpers.Promisified;
-const SignKeyHandle = require('./_misc').types.SignKeyHandle;
+const SignKeyHandle = require('./_crypto').types.SignKeyHandle;
 
 const MDataInfo = Struct({});
 const MDataInfoHandle = ref.refType(MDataInfo);
