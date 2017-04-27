@@ -2,7 +2,6 @@ const EventEmitter = require('events').EventEmitter;
 const autoref = require('./helpers').autoref;
 const api = require('./api');
 const lib = require('./native/lib');
-const crypto = require('crypto');
 const parseUrl = require('url').parse;
 const consts = require('./consts');
 
@@ -88,45 +87,45 @@ class SAFEApp extends EventEmitter {
     const hostParts = hostname.split('.');
     const lookupName = hostParts.pop(); // last one is 'domain'
     const serviceName = hostParts.join('.'); // all others are 'service'
-    const address = crypto.createHash('sha256').update(lookupName).digest();
 
-    return this.mutableData.newPublic(address, consts.TAG_TYPE_DNS)
-      .then((mdata) => mdata.get(serviceName)
-          .catch((err) => {
-            if ((err.name === 'ERR_NO_SUCH_ENTRY') && (!serviceName || !serviceName.length)) {
-              return mdata.get('www');
-            }
-            return Promise.reject(err);
-          })
-        .then((value) => this.mutableData.fromSerial(value.buf)
-            .catch(() => this.mutableData.newPublic(value.buf, consts.TAG_TYPE_WWW)))
-        .then((service) => service.emulateAs('NFS'))
-        .then((emulation) => emulation.fetch(path)
-          .catch((err) => {
-            if (err.name === 'ERR_FILE_NOT_FOUND') {
-              let newPath;
-              if (!path || !path.length) {
-                newPath = '/index.html';
-              } else if (path[path.length - 1] === '/') {
-                newPath = `${path}index.html`;
-              } else if (path[0] === '/') {
-                // directly try the non-slash version
-                return emulation.fetch(path.slice(1, path.length));
+    return this.crypto.sha3Hash(lookupName)
+      .then((address) => this.mutableData.newPublic(address, consts.TAG_TYPE_DNS)
+        .then((mdata) => mdata.get(serviceName)
+            .catch((err) => {
+              if ((err.name === 'ERR_NO_SUCH_ENTRY') && (!serviceName || !serviceName.length)) {
+                return mdata.get('www');
               }
+              return Promise.reject(err);
+            })
+          .then((value) => this.mutableData.fromSerial(value.buf)
+              .catch(() => this.mutableData.newPublic(value.buf, consts.TAG_TYPE_WWW)))
+          .then((service) => service.emulateAs('NFS'))
+          .then((emulation) => emulation.fetch(path)
+            .catch((err) => {
+              if (err.name === 'ERR_FILE_NOT_FOUND') {
+                let newPath;
+                if (!path || !path.length) {
+                  newPath = '/index.html';
+                } else if (path[path.length - 1] === '/') {
+                  newPath = `${path}index.html`;
+                } else if (path[0] === '/') {
+                  // directly try the non-slash version
+                  return emulation.fetch(path.slice(1, path.length));
+                }
 
-              if (newPath) {
-                // try the newly created path
-                return emulation.fetch(newPath).catch((e) => {
-                  // and the version without the leading slash
-                  if (e.name === 'ERR_FILE_NOT_FOUND') {
-                    return emulation.fetch(newPath.slice(1, path.length));
-                  }
-                  return Promise.reject(e);
-                });
+                if (newPath) {
+                  // try the newly created path
+                  return emulation.fetch(newPath).catch((e) => {
+                    // and the version without the leading slash
+                    if (e.name === 'ERR_FILE_NOT_FOUND') {
+                      return emulation.fetch(newPath.slice(1, path.length));
+                    }
+                    return Promise.reject(e);
+                  });
+                }
               }
-            }
-            return Promise.reject(err);
-          })));
+              return Promise.reject(err);
+            }))));
   }
 
 

@@ -1,6 +1,5 @@
 const should = require('should');
 const h = require('./helpers');
-const c = require('crypto');
 const consts = require('../src/consts');
 
 const createAnonTestApp = h.createAnonTestApp;
@@ -16,17 +15,16 @@ function createRandomDomain(content, path, service) {
         // let's write the file
         return nfs.create(content)
           .then((file) => nfs.insert(path || '', file))
-          .then(() => {
-            const dnsName = c.createHash('sha256').update(domain).digest();
-            return app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS)
+          .then(() => app.crypto.sha3Hash(domain)
+            .then((dnsName) => app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS)
               .then((dnsData) => serviceMdata.getNameAndTag()
                   .then((res) => {
                     const payload = {};
                     payload[service || ''] = res.name;
                     return dnsData.quickSetup(payload);
-                  }));
-          });
-      })).then(() => domain);
+                  }))));
+      }))
+    .then(() => domain);
 }
 
 
@@ -40,17 +38,16 @@ function createRandomPrivateServiceDomain(content, path, service) {
         // let's write the file
         return nfs.create(content)
           .then((file) => nfs.insert(path || '', file))
-          .then(() => {
-            const dnsName = c.createHash('sha256').update(domain).digest();
-            return app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS)
+          .then(() => app.crypto.sha3Hash(domain)
+            .then((dnsName) => app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS)
               .then((dnsData) => serviceMdata.serialise()
                   .then((serial) => {
                     const payload = {};
                     payload[service || ''] = serial;
                     return dnsData.quickSetup(payload);
-                  }));
-          });
-      })).then(() => domain);
+                  }))));
+      }))
+    .then(() => domain);
 }
 
 describe('Browsing', () => {
