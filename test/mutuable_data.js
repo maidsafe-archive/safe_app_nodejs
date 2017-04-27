@@ -495,7 +495,7 @@ describe('Mutable Data', () => {
     it('forEach on list of permissions', (done) => {
       app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getPermissions()
-          .then((perms) => app.auth.getPubSignKey()
+          .then((perms) => app.crypto.getAppPubSignKey()
             .then((pk) => perms.getPermissionSet(pk).should.be.fulfilled()
               .then(() => perms.forEach((signkey, pmset) => {
                 pmset.setAllow('Delete').then(() => {
@@ -510,7 +510,7 @@ describe('Mutable Data', () => {
     it('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => m.getPermissions()
-            .then((perm) => app.auth.getPubSignKey()
+            .then((perm) => app.crypto.getAppPubSignKey()
               .then((pk) => perm.getPermissionSet(pk).should.be.fulfilled())
             )))
     );
@@ -536,7 +536,7 @@ describe('Mutable Data', () => {
 
     it('insert new permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
-          .then(() => app.auth.getPubSignKey()
+          .then(() => app.crypto.getAppPubSignKey()
             .then((pk) => app.mutableData.newPermissionSet()
               .then((newPermSet) => newPermSet.setAllow('Delete')
                 .then(() => m.setUserPermissions(pk, newPermSet, 1)
@@ -548,7 +548,7 @@ describe('Mutable Data', () => {
 
     it('update user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
-          .then(() => app.auth.getPubSignKey()
+          .then(() => app.crypto.getAppPubSignKey()
             .then((pk) => m.getUserPermissions(pk)
               .then((permSet) => permSet.setDeny('Update')
                 .then(() => m.setUserPermissions(pk, permSet, 1)
@@ -560,7 +560,7 @@ describe('Mutable Data', () => {
 
     it('get user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
-          .then(() => app.auth.getPubSignKey()
+          .then(() => app.crypto.getAppPubSignKey()
             .then((pk) => m.getUserPermissions(pk).should.be.fulfilled())
             // we should be testing something more here...
           ))
@@ -568,7 +568,7 @@ describe('Mutable Data', () => {
 
     it('remove user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
-          .then(() => app.auth.getPubSignKey()
+          .then(() => app.crypto.getAppPubSignKey()
             .then((pk) => m.delUserPermissions(pk, 1))
             .then(() => app.mutableData.newMutation()
               .then((mut) => mut.update('key2', 'updatedValue', 1)
@@ -578,7 +578,7 @@ describe('Mutable Data', () => {
 
     it('update user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
-          .then(() => app.auth.getPubSignKey()
+          .then(() => app.crypto.getAppPubSignKey()
             .then((pk) => app.mutableData.newPermissionSet()
               .then((newPerm) => newPerm.setAllow('Insert')
                 .then(() => m.setUserPermissions(pk, newPerm, 1))

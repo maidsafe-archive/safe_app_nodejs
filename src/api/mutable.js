@@ -388,7 +388,7 @@ class MutableData extends h.NetworkObject {
           entries.insert(key, data[key]))).then(() => entries));
     }
 
-    return this.app.crypto.getPubSignKey()
+    return this.app.crypto.getAppPubSignKey()
       .then((key) => this.app.mutableData.newPermissionSet()
         .then((pmSet) =>
           pmSet.setAllow('Insert')

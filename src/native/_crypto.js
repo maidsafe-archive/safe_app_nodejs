@@ -50,6 +50,9 @@ module.exports = {
     encrypt: [t.Void, [t.AppPtr, 'pointer', t.usize, EncryptPubKeyHandle, EncryptSecKeyHandle, 'pointer', 'pointer']],
     decrypt: [t.Void, [t.AppPtr, 'pointer', t.usize, EncryptPubKeyHandle, EncryptSecKeyHandle, 'pointer', 'pointer']],
 
+    encrypt_sealed_box: [t.Void, [t.AppPtr, 'pointer', t.usize, EncryptPubKeyHandle, 'pointer', 'pointer']],
+    decrypt_sealed_box: [t.Void, [t.AppPtr, 'pointer', t.usize, EncryptPubKeyHandle, EncryptSecKeyHandle, 'pointer', 'pointer']],
+
     sha3_hash: [t.Void, ['pointer', t.usize, 'pointer', 'pointer']]
   },
   api: {
@@ -70,53 +73,9 @@ module.exports = {
     encrypt: h.Promisified(appStrToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
     decrypt: h.Promisified(appStrToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
 
+    encrypt_sealed_box: h.Promisified(appStrToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
+    decrypt_sealed_box: h.Promisified(appStrToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
+
     sha3_hash: h.Promisified(strToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
   }
 };
-
-
-// TODO : still need to be implemented
-
-// /// Encrypts arbitrary data using a given key pair.
-// /// You should provide a recipient's public key and a sender's secret key.
-// pub unsafe extern "C" fn encrypt(app: *const App,
-//                                  data: *const u8,
-//                                  len: usize,
-//                                  pk_h: EncryptPubKeyHandle,
-//                                  sk_h: EncryptSecKeyHandle,
-//                                  user_data: *mut c_void,
-//                                  o_cb: extern "C" fn(*mut c_void, i32, *const u8, usize)) {
-
-// /// Decrypts arbitrary data using a given key pair.
-// /// You should provide a sender's public key and a recipient's secret key.
-// pub unsafe extern "C" fn decrypt(app: *const App,
-//                                  data: *const u8,
-//                                  len: usize,
-//                                  pk_h: EncryptPubKeyHandle,
-//                                  sk_h: EncryptSecKeyHandle,
-//                                  user_data: *mut c_void,
-//                                  o_cb: extern "C" fn(*mut c_void, i32, *const u8, usize)) {
-
-// /// Encrypts arbitrary data for a single recipient.
-// /// You should provide a recipient's public key.
-// pub unsafe extern "C" fn encrypt_sealed_box(app: *const App,
-//                                             data: *const u8,
-//                                             len: usize,
-//                                             pk_h: EncryptPubKeyHandle,
-//                                             user_data: *mut c_void,
-//                                             o_cb: extern "C" fn(*mut c_void,
-//                                                                 i32,
-//                                                                 *const u8,
-//                                                                 usize)) {
-// /// Decrypts arbitrary data for a single recipient.
-// /// You should provide a recipients's private and public key.
-// pub unsafe extern "C" fn decrypt_sealed_box(app: *const App,
-//                                             data: *const u8,
-//                                             len: usize,
-//                                             pk_h: EncryptPubKeyHandle,
-//                                             sk_h: EncryptSecKeyHandle,
-//                                             user_data: *mut c_void,
-//                                             o_cb: extern "C" fn(*mut c_void,
-//                                                                 i32,
-//                                                                 *const u8,
-//                                                                 usize)) {

@@ -70,6 +70,22 @@ class PubEncKey extends h.NetworkObject {
     return lib.enc_key_free(app.connection, ref);
   }
 
+  /**
+  * Encrypt the input (buffer or string) using the private and public key with a seal
+  * @returns {Promise<Buffer>} Ciphertext
+  **/
+  encryptSealed(str) {
+    return lib.encrypt_sealed_box(this.app.connection, str, this.ref);
+  }
+
+
+  /**
+  * Encrypt the input (buffer or string) using the private and public key and the given privateKey
+  * @returns {Promise<Buffer>} Ciphertext
+  **/
+  encrypt(str, secretKey) {
+    return lib.encrypt(this.app.connection, str, this.ref, secretKey.ref);
+  }
 }
 
 
@@ -94,6 +110,15 @@ class SecEncKey extends h.NetworkObject {
   **/
   static free(app, ref) {
     return lib.enc_key_free(app.connection, ref);
+  }
+
+  /**
+  * Decrypt the given ciphertext (buffer or string) using the private and public key
+  * @arg theirPubKey {PubEncKey} the others public key
+  * @returns {Promise<Buffer>} Plaintext
+  **/
+  decrypt(cipher, theirPubKey) {
+    return lib.decrypt(this.app.connection, cipher, theirPubKey.ref, this.ref);
   }
 }
 
@@ -123,22 +148,13 @@ class KeyPair {
     return this._secret;
   }
 
-
   /**
-  * Encrypt the input (buffer or string) using the private and public key
-  * @returns {Promise<Buffer>} Ciphertext
-  **/
-  encrypt(str) {
-    return lib.encrypt(this.app.connection, str, this.pubEncKey.ref, this.secEncKey.ref)
-  }
-
-
-  /**
-  * Decrypt the given ciphertext (buffer or string) using the private and public key
+  * Decrypt the given ciphertext with a seal (buffer or string) using the private and public key
   * @returns {Promise<Buffer>} Plaintext
   **/
-  decrypt(cipher) {
-    return lib.decrypt(this.app.connection, cipher, this.pubEncKey.ref, this.secEncKey.ref)
+  decryptSealed(cipher) {
+    return lib.decrypt_sealed_box(this.app.connection, cipher,
+                                  this.pubEncKey.ref, this.secEncKey.ref);
   }
 
 }
@@ -163,9 +179,12 @@ class CryptoInterface {
   * Hash the given input with SHA3 Hash
   * @returns {Promise<Buffer>}
   **/
+  /* eslint-disable class-methods-use-this */
   sha3Hash(inpt) {
     return lib.sha3_hash(inpt);
   }
+
+  /* eslint-enable class-methods-use-this */
 
 
   /**
@@ -179,7 +198,6 @@ class CryptoInterface {
 
   /**
   * Get the public encryption key of this session
-  * May only works if 
   * @returns {Promise<PubEncKey>}
   **/
   getAppPubEncKey() {
@@ -193,7 +211,7 @@ class CryptoInterface {
   **/
   generateEncKeyPair() {
     return lib.enc_generate_key_pair(this.app.connection)
-        .then(r => new KeyPair(this.app,
+        .then((r) => new KeyPair(this.app,
             h.autoref(new PubEncKey(this.app, r[0])),
             h.autoref(new SecEncKey(this.app, r[1]))
           ));
@@ -216,8 +234,8 @@ class CryptoInterface {
   * @arg {String} raw
   * @returns {Promise<PubEncKey>}
   **/
-  PubEncKeyKeyFromRaw(raw) {
-    return lib.enc_key_new(this.app.connection, raw)
+  pubEncKeyKeyFromRaw(raw) {
+    return lib.enc_pub_key_new(this.app.connection, raw)
         .then((c) => h.autoref(new PubEncKey(this.app, c)));
   }
 }
