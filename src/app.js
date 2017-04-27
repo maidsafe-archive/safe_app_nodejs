@@ -39,6 +39,13 @@ class SAFEApp extends EventEmitter {
     return this._auth;
   }
 
+  /**
+  * get the Crypto instance connected to this session
+  * @returns {CryptoInterface}
+  **/
+  get crypto() {
+    return this._crypto;
+  }
 
   /**
   * get the CipherOptInterface instance connected to this session

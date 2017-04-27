@@ -2,7 +2,7 @@ const h = require('../helpers');
 const lib = require('../native/lib');
 const t = require('../native/types');
 const emulations = require('./emulations');
-const { SignKey } = require('./misc');
+const { SignKey } = require('./crypto');
 
 function toAction(action) {
   const a = t.MDataAction.get(action);
@@ -388,7 +388,7 @@ class MutableData extends h.NetworkObject {
           entries.insert(key, data[key]))).then(() => entries));
     }
 
-    return this.app.auth.getPubSignKey()
+    return this.app.crypto.getPubSignKey()
       .then((key) => this.app.mutableData.newPermissionSet()
         .then((pmSet) =>
           pmSet.setAllow('Insert')
