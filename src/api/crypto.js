@@ -83,7 +83,7 @@ class SecEncKey extends h.NetworkObject {
   * @returns {Promise<String>}
   **/
   getRaw() {
-    return lib.enc_sec_key_get(this.app.connection, this.ref);
+    return lib.enc_secret_key_get(this.app.connection, this.ref);
   }
 
   /**
@@ -140,6 +140,18 @@ class CryptoInterface {
   getAppPubEncKey() {
     return lib.app_pub_enc_key(this.app.connection)
         .then((c) => h.autoref(new PubEncKey(this.app, c)));
+  }
+
+  /**
+  * Generate a new Asymmetric EncryptionKeyPair
+  * @returns {Promise<[PubEncKey, SecEncKey]>}
+  **/
+  generateEncKeyPair() {
+    return lib.enc_generate_key_pair(this.app.connection)
+        .then(r => [
+            h.autoref(new PubEncKey(this.app, r[0])),
+            h.autoref(new SecEncKey(this.app, r[1]))
+          ]);
   }
 
   /**

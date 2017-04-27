@@ -40,9 +40,9 @@ describe.only('App Crypto Tests', () => {
 
   it("can get sign key", () => {
     return app.crypto.getAppPubSignKey().then(key => {
-      should(key).not.be.undefined()
+      should(key).not.be.undefined();
       return key.getRaw().then( (raw) => {
-        should(raw).not.be.undefined()
+        should(raw).not.be.undefined();
       })
     })
   }); 
@@ -51,9 +51,25 @@ describe.only('App Crypto Tests', () => {
     return app.crypto.getAppPubEncKey().then(key => {
       should(key).not.be.undefined()
       return key.getRaw().then( (raw) => {
-        should(raw).not.be.undefined()
+        should(raw).not.be.undefined();
       })
     })
   });
+
+  it("can generate a new key pair", () => {
+    return app.crypto.generateEncKeyPair().then(keys => {
+      should(keys).be.lengthOf(2);
+      return Promise.all([
+          keys[0].getRaw().then(r => {
+            should(r).not.be.undefined();
+            return r;
+          }),
+          keys[1].getRaw().then(r => {
+            should(r).not.be.undefined();
+            return r
+          })
+        ]).then( r => should(r[0]).not.equal(r[1]));
+    });
+  })
 
 });

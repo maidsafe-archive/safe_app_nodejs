@@ -35,7 +35,6 @@ module.exports = {
     app_pub_enc_key: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
     enc_generate_key_pair: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
 
-
     enc_pub_key_new: [t.Void, [t.AppPtr, t.KEYBYTES, 'pointer', 'pointer']],
     enc_pub_key_get: [t.Void, [t.AppPtr, EncryptPubKeyHandle, 'pointer', 'pointer']],
 
@@ -52,12 +51,10 @@ module.exports = {
     sign_key_free: h.Promisified(null, []),
 
     app_pub_enc_key: h.Promisified(null, EncryptKeyHandle),
-    // enc_generate_key_pair: h.Promisified(null, [EncryptPubKeyHandle, EncryptSecKeyHandle]),
-
+    enc_generate_key_pair: h.Promisified(null, [EncryptPubKeyHandle, EncryptSecKeyHandle]),
 
     enc_pub_key_new: h.Promisified(null, EncryptPubKeyHandle),
     enc_pub_key_get: h.Promisified(null, t.KEYBYTES),
-
 
     enc_secret_key_new: h.Promisified(null, EncryptPubKeyHandle),
     enc_secret_key_get: h.Promisified(null, t.KEYBYTES),
@@ -67,21 +64,7 @@ module.exports = {
 };
 
 
-
-
 // TODO : still need to be implemented
-
-// type SecKey = [u8; box_::SECRETKEYBYTES];
-// type PubKey = [u8; box_::PUBLICKEYBYTES];
-
-
-// /// Generate a new encryption key pair (public & private key).
-// pub unsafe extern "C" fn enc_generate_key_pair(app: *const App,
-//                                                user_data: *mut c_void,
-//                                                o_cb: extern "C" fn(*mut c_void,
-//                                                                    i32,
-//                                                                    EncryptPubKeyHandle,
-//                                                                    EncryptSecKeyHandle)) {
 
 // /// Retrieve the private encryption key as raw array.
 // pub unsafe extern "C" fn enc_secret_key_get(app: *const App,
