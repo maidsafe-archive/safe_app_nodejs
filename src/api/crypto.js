@@ -122,6 +122,10 @@ class SecEncKey extends h.NetworkObject {
   }
 }
 
+
+/**
+* Holds an asymmetrict keypair
+**/
 class KeyPair {
 
   constructor(app, pub, secret) {
