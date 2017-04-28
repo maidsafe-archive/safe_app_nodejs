@@ -9,6 +9,7 @@ toc:
   - name: App Interface
     description: the App and the API it exposes
   - SAFEApp
+  - CryptoInterface
   - AuthInterface
   - CipherOptInterface
   - ImmutableDataInterface
@@ -35,7 +36,9 @@ toc:
   - name: Types
   # - Types
   - SignKey
-  - EncKey
+  - KeyPair
+  - SecEncKey
+  - PubEncKey
   - CipherOpt
   - NameAndTag
   - ValueVersion
