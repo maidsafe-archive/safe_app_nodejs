@@ -18,7 +18,7 @@ function createAnonTestApp(scope) {
 
 function createAuthenticatedTestApp(scope, access) {
   const app = createTestApp(scope);
-  app.auth.loginForTest(access); // Promise, but immediate
+  app.auth.loginForTest(access || {}); // Promise, but immediate
   return app;
 }
 

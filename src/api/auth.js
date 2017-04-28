@@ -23,9 +23,7 @@
 const lib = require('../native/lib');
 const nativeH = require('../native/helpers');
 const types = require('../native/types');
-const h = require('../helpers');
 const inTesting = require('../consts').inTesting;
-const { SignKey, EncKey } = require('./misc');
 
 const makeAppInfo = nativeH.makeAppInfo;
 const makePermissions = nativeH.makePermissions;
@@ -260,46 +258,6 @@ class AuthInterface {
     this.app.connection = lib.test_create_app_with_access(permissions);
     this._registered = true;
     return Promise.resolve(this.app);
-  }
-
-  /**
-  * Get the public signing key of this session
-  * @returns {Promise<SignKey>}
-  **/
-  getPubSignKey() {
-    return lib.app_pub_sign_key(this.app.connection)
-        .then((c) => h.autoref(new SignKey(this.app, c)));
-  }
-
-  /**
-  * Get the public encryption key of this session
-  * @returns {Promise<EncKey>}
-  **/
-  getEncKey() {
-    return lib.app_pub_enc_key(this.app.connection)
-        .then((c) => h.autoref(new EncKey(this.app, c)));
-  }
-
-  /**
-  * Interprete the SignKey from a given raw string
-  * FIXME: is this expected to be Base64 encoded?
-  * @param {String} raw
-  * @returns {Promise<SignKey>}
-  **/
-  getSignKeyFromRaw(raw) {
-    return lib.sign_key_new(this.app.connection, raw)
-        .then((c) => h.autoref(new SignKey(this.app, c)));
-  }
-
-  /**
-  * Interprete the encryption Key from a given raw string
-  * FIXME: is this expected to be Base64 encoded?
-  * @arg {String} raw
-  * @returns {Promise<EncKey>}
-  **/
-  getEncKeyKeyFromRaw(raw) {
-    return lib.enc_key_new(this.app.connection, raw)
-        .then((c) => h.autoref(new EncKey(this.app, c)));
   }
 }
 
