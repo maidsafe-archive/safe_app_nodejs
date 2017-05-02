@@ -222,6 +222,18 @@ class CryptoInterface {
   }
 
   /**
+  * Generate a new Asymmetric EncryptionKeyPair from raw secret and public keys
+  * @returns {Promise<KeyPair>}
+  **/
+  generateEncKeyPairFromRaw(rawPublicKey, rawSecretkey) {
+    let pubKey;
+    return this.pubEncKeyKeyFromRaw(rawPublicKey)
+        .then((pk) => { pubKey = pk; })
+        .then(() => this.secEncKeyKeyFromRaw(rawSecretkey))
+        .then((sk) => new KeyPair(this.app, pubKey, sk));
+  }
+
+  /**
   * Interprete the SignKey from a given raw string
   * FIXME: is this expected to be Base64 encoded?
   * @param {String} raw
@@ -233,7 +245,7 @@ class CryptoInterface {
   }
 
   /**
-  * Interprete the encryption Key from a given raw string
+  * Interprete the public encryption Key from a given raw string
   * FIXME: is this expected to be Base64 encoded?
   * @arg {String} raw
   * @returns {Promise<PubEncKey>}
@@ -241,6 +253,17 @@ class CryptoInterface {
   pubEncKeyKeyFromRaw(raw) {
     return lib.enc_pub_key_new(this.app.connection, raw)
         .then((c) => h.autoref(new PubEncKey(this.app, c)));
+  }
+
+  /**
+  * Interprete the secret encryption Key from a given raw string
+  * FIXME: is this expected to be Base64 encoded?
+  * @arg {String} raw
+  * @returns {Promise<SecEncKey>}
+  **/
+  secEncKeyKeyFromRaw(raw) {
+    return lib.enc_secret_key_new(this.app.connection, raw)
+        .then((c) => h.autoref(new SecEncKey(this.app, c)));
   }
 }
 
