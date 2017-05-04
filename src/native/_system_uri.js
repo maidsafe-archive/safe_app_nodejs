@@ -18,8 +18,8 @@ const ffi = FFI.Library(path.join(dir, SYSTEM_URI_LIB_FILENAME), {
                     ] ],
 });
 
-function openUri(str) {
-  const ret = ffi.open(str);
+function openUri(uri) {
+  const ret = ffi.open(uri.uri || uri);
   if (ret === -1) {
     throw new Error("Error occured opening " + str + " : " + ret);
   }
