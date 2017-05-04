@@ -124,7 +124,7 @@ describe('Mutable Data', () => {
       const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
-        .then((md) => md.encryptKey('key1').then((key) => md.get(key)))
+        .then((md) => md.get('key1'))
         .then((value) => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('value1');
@@ -138,7 +138,7 @@ describe('Mutable Data', () => {
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => md.serialise())
         .then((serial) => app.mutableData.fromSerial(serial))
-        .then((privmd) => privmd.encryptKey('key1').then((key) => privmd.get(key)))
+        .then((privmd) => privmd.get('key1'))
         .then((value) => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('value1');
@@ -186,6 +186,17 @@ describe('Mutable Data', () => {
     );
 
     it('insert & get a single value', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
+        .then((entries) => entries.insert('newKey', 'newValue')
+          .then(entries.get('newKey')
+          .then((value) => {
+            should(value).not.be.undefined();
+            should(value.buf.toString()).equal('newValue');
+            should(value.version).equal(0);
+          }))
+    ));
+
+    it('insert & get a single value from private MD', () => app.mutableData.newRandomPrivate(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
         .then((entries) => entries.insert('newKey', 'newValue')
           .then(entries.get('newKey')
@@ -296,7 +307,37 @@ describe('Mutable Data', () => {
             ))))
     );
 
+    it('an insert mutation from existing entries on private MD', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getEntries()
+            .then((entries) => entries.mutate()
+              .then((mut) => mut.insert('newKey', 'newValue')
+                .then(() => m.applyEntriesMutation(mut))
+                .then(() => m.get('newKey'))
+                .then((value) => {
+                  should(value).not.be.undefined();
+                  should(value.buf.toString()).equal('newValue');
+                  should(value.version).equal(0);
+                })
+            ))))
+    );
+
     it('an update mutation from existing entries', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getEntries()
+            .then((entries) => entries.mutate()
+              .then((mut) => mut.update('key2', 'updatedValue', 1)
+                .then(() => m.applyEntriesMutation(mut))
+                .then(() => m.get('key2'))
+                .then((value) => {
+                  should(value).not.be.undefined();
+                  should(value.buf.toString()).equal('updatedValue');
+                  should(value.version).equal(1);
+                })
+            ))))
+    );
+
+    it('an update mutation from existing entries on private MD', () => app.mutableData.newRandomPrivate(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => m.getEntries()
             .then((entries) => entries.mutate()
@@ -342,6 +383,21 @@ describe('Mutable Data', () => {
             ))))
     );
 
+    it('a remove mutation from existing entries on private MD', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.getEntries()
+            .then((entries) => entries.mutate()
+              .then((mut) => mut.remove('key2', 1)
+                .then(() => m.applyEntriesMutation(mut))
+                .then(() => m.get('key2'))
+                .then((value) => {
+                  should(value).not.be.undefined();
+                  should(value.buf.toString()).equal('');
+                  should(value.version).equal(1);
+                })
+            ))))
+    );
+
     it('a remove mutation on public MD', () => {
       const testXorName = h.createRandomXorName();
       return app.mutableData.newPublic(testXorName, TAG_TYPE)
@@ -360,16 +416,15 @@ describe('Mutable Data', () => {
         });
     });
 
-    // This is failing due a bug in safe_app already reported
-    it.skip('a remove mutation on private MD', () => {
+    it('a remove mutation on private MD', () => {
       const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => app.mutableData.newMutation()
-          .then((mut) => md.encryptKey('key1').then((key) => mut.remove(key, 1))
+          .then((mut) => mut.remove('key1', 1)
             .then(() => md.applyEntriesMutation(mut))
           )
-          .then(() => md.encryptKey('key1').then((key) => md.get(key)))
+          .then(() => md.get('key1'))
           .then((value) => {
             should(value).not.be.undefined();
             should(value.buf.toString()).equal('');
@@ -378,18 +433,17 @@ describe('Mutable Data', () => {
         );
     });
 
-    // This is failing due a bug in safe_app already reported
-    it.skip('a remove mutation from serialised private MD', () => {
+    it('a remove mutation on a serialised private MD', () => {
       const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => md.serialise())
         .then((serial) => app.mutableData.fromSerial(serial))
         .then((privmd) => app.mutableData.newMutation()
-          .then((mut) => privmd.encryptKey('key1').then((key) => mut.remove(key, 1))
+          .then((mut) => mut.remove('key1', 1)
             .then(() => privmd.applyEntriesMutation(mut))
           )
-          .then(() => privmd.encryptKey('key1').then((key) => privmd.get(key)))
+          .then(() => privmd.get('key1'))
           .then((value) => {
             should(value).not.be.undefined();
             should(value.buf.toString()).equal('');
@@ -412,6 +466,21 @@ describe('Mutable Data', () => {
             )))
     );
 
+    it('an insert mutation on a private MD', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newMutation()
+            .then((mut) => mut.insert('newKey', 'newValue')
+              .then(() => m.applyEntriesMutation(mut))
+            )
+            .then(() => m.get('newKey'))
+            .then((value) => {
+              should(value).not.be.undefined();
+              should(value.buf.toString()).equal('newValue');
+              should(value.version).equal(0);
+            })
+          ))
+    );
+
     it('an update mutation from new mutation obj', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => app.mutableData.newMutation()
@@ -424,6 +493,21 @@ describe('Mutable Data', () => {
                 should(value.version).equal(1);
               })
             )))
+    );
+
+    it('an update mutation on a private MD', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newMutation()
+            .then((mut) => mut.update('key2', 'updatedValue', 1)
+              .then(() => m.applyEntriesMutation(mut))
+            )
+            .then(() => m.get('key2'))
+            .then((value) => {
+              should(value).not.be.undefined();
+              should(value.buf.toString()).equal('updatedValue');
+              should(value.version).equal(1);
+            })
+          ))
     );
 
     it('a remove mutation from new mutation obj', () => app.mutableData.newRandomPublic(TAG_TYPE)
