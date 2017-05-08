@@ -5,7 +5,7 @@ const h = require('./helpers');
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
 describe('Mutable Data', () => {
-  const app = createAuthenticatedTestApp();
+  let app = createAuthenticatedTestApp();
   const TAG_TYPE = 15639;
   const TAG_TYPE_RESERVED = 10000;
   const TAG_TYPE_INVALID = '_invalid_tag';
@@ -701,6 +701,13 @@ describe('Mutable Data', () => {
   });
 
   describe('NFS emulation', () => {
+    before(function bfore(done) {
+      // Let's get a new instance of the app to not hit the PUTs limit
+      this.timeout(5000);
+      app = createAuthenticatedTestApp();
+      done();
+    });
+
     it('nfs update', () => app.mutableData.newRandomPrivate(TAG_TYPE)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
       .then((nfs) => nfs.create('Hello world')
