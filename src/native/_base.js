@@ -26,6 +26,11 @@ const ObjectHandle = u64;
 const App = Struct({});
 const AppPtr = ref.refType(App);
 
+const FfiResult = Struct({
+  error_code: i32,
+  error_description: 'string'
+});
+
 module.exports = {
   types: {
     App,
@@ -73,7 +78,7 @@ module.exports = {
 
         // compile the callback-types-definiton
         let args;
-        let types = ['pointer', i32]; // we always have: user_context, error
+        let types = ['pointer', FfiResult]; // we always have: user_context and FfiResult
         if (Array.isArray(rTypes)) {
           types = types.concat(rTypes);
         } else if (rTypes) {
@@ -95,7 +100,7 @@ module.exports = {
           args.push(ffi.Callback("void", types,
               function(uctx, err) {
                 // error found, errback with translated error
-                if(err !== 0) return reject(makeFfiError(err));
+                if(err.error_code !== 0) return reject(makeFfiError(err.error_code, err.error_description));
 
                 // take off the ctx and error
                 let res = Array.prototype.slice.call(arguments, 2)
