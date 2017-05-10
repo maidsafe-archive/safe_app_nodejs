@@ -44,7 +44,7 @@ describe('Access Container', () => {
               .then(() => md.applyEntriesMutation(mut))
             )))
         .then(() => app.auth.getAccessContainerInfo('_publicNames'))
-          .then((md) => md.encryptKey('key1').then((key) => md.get(key)))
+          .then((md) => md.get('key1'))
           .then((value) => {
             should(value.buf).not.be.undefined();
             should(value.buf.toString()).equal('value1');
@@ -59,7 +59,7 @@ describe('Access Container', () => {
               .then(() => md.applyEntriesMutation(mut))
             )))
         .then(() => app.auth.getHomeContainer())
-          .then((md) => md.encryptKey('key1').then((key) => md.get(key)))
+          .then((md) => md.get('key1'))
           .then((value) => {
             should(value.buf).not.be.undefined();
             should(value.buf.toString()).equal('value1');
