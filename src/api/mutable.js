@@ -389,19 +389,17 @@ class MutableData extends h.NetworkObject {
         return Promise.all(Object.getOwnPropertyNames(data).map((key) =>
           entries.insert(key, data[key]))).then(() => entries);
       })
-      .then((entries) => {
-        return this.app.crypto.getAppPubSignKey()
-          .then((key) => this.app.mutableData.newPermissionSet()
-            .then((pmSet) =>
-              pmSet.setAllow('Insert')
-                .then(() => pmSet.setAllow('Update'))
-                .then(() => pmSet.setAllow('Delete'))
-                .then(() => pmSet.setAllow('ManagePermissions'))
-                .then(() => this.app.mutableData.newPermissions()
-                  .then((pm) => pm.insertPermissionSet(key, pmSet)
-                    .then(() => this.put(pm, entries))))))
-          .then(() => this);
-      })
+      .then((entries) => this.app.crypto.getAppPubSignKey()
+        .then((key) => this.app.mutableData.newPermissionSet()
+          .then((pmSet) =>
+            pmSet.setAllow('Insert')
+              .then(() => pmSet.setAllow('Update'))
+              .then(() => pmSet.setAllow('Delete'))
+              .then(() => pmSet.setAllow('ManagePermissions'))
+              .then(() => this.app.mutableData.newPermissions()
+                .then((pm) => pm.insertPermissionSet(key, pmSet)
+                  .then(() => this.put(pm, entries))))))
+        .then(() => this));
   }
 
   /**
