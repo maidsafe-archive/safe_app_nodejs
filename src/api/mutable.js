@@ -381,26 +381,25 @@ class MutableData extends h.NetworkObject {
   * @returns {Promise<MutableData>} - self
   **/
   quickSetup(data) {
-    let entriesSetup = this.app.mutableData.newEntries();
-    if (data) {
-      entriesSetup = entriesSetup.then((entries) =>
-        Promise.all(Object.getOwnPropertyNames(data).map((key) =>
-          entries.insert(key, data[key]))).then(() => entries));
-    }
-
-    return this.app.crypto.getAppPubSignKey()
-      .then((key) => this.app.mutableData.newPermissionSet()
-        .then((pmSet) =>
-          pmSet.setAllow('Insert')
-            .then(() => pmSet.setAllow('Update'))
-            .then(() => pmSet.setAllow('Delete'))
-            .then(() => pmSet.setAllow('ManagePermissions'))
-            .then(() => this.app.mutableData.newPermissions()
-              .then((pm) => pm.insertPermissionSet(key, pmSet)
-                .then(() => entriesSetup
-                  .then((entries) => this.put(pm, entries))
-          )))))
-      .then(() => this);
+    return this.app.mutableData.newEntries()
+      .then((entries) => {
+        if (!data) {
+          return entries;
+        }
+        return Promise.all(Object.getOwnPropertyNames(data).map((key) =>
+          entries.insert(key, data[key]))).then(() => entries);
+      })
+      .then((entries) => this.app.crypto.getAppPubSignKey()
+        .then((key) => this.app.mutableData.newPermissionSet()
+          .then((pmSet) =>
+            pmSet.setAllow('Insert')
+              .then(() => pmSet.setAllow('Update'))
+              .then(() => pmSet.setAllow('Delete'))
+              .then(() => pmSet.setAllow('ManagePermissions'))
+              .then(() => this.app.mutableData.newPermissions()
+                .then((pm) => pm.insertPermissionSet(key, pmSet)
+                  .then(() => this.put(pm, entries))))))
+        .then(() => this));
   }
 
   /**
