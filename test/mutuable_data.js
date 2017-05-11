@@ -719,6 +719,24 @@ describe('Mutable Data', () => {
           .then((file) => nfs.update('test.txt', file, f.version + 1)))
       )
     );
+
+    // Awaiting for resolution from safe_app libs as if timestamps are set in safe_app lib layer
+    it.skip('nfs creation and modification dates', () => {
+      let creation_date;
+      return app.mutableData.newRandomPrivate(TAG_TYPE)
+        .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
+        .then((nfs) => nfs.create('Hello world')
+          .then((file) => nfs.insert('test.txt', file))
+          .then((file_inserted) => creation_date = file_inserted.created)
+          .then(() => nfs.fetch('test.txt'))
+          .then((file) => nfs.update('test.txt', file, file.version + 1))
+          .then((file_updated) => {
+            console.log("UPDATED ", creation_date, file_updated.created, file_updated.modified)
+            should(creation_date).be.equal(file_updated.created);
+            should(creation_date).not.equal(file_updated.modified);
+          })
+        );
+    });
   });
 
   describe.skip('Owners', () => {

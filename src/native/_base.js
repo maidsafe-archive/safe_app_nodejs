@@ -66,6 +66,7 @@ module.exports = {
     fromSafeLibTime: (sec, nsec_part) => {
       let d = new Date();
       d.setTime(sec + (nsec_part / 1000));
+      return d;
     },
     Promisified: function(formatter, rTypes, after) {
       // create internal function that will be
