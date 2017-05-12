@@ -427,6 +427,17 @@ class MutableData extends h.NetworkObject {
   }
 
   /**
+  * Decrypt the entry key/value provided as parameter with the encryption key
+  * contained in a Private MutableData.
+  *
+  * @param {(String|Buffer)} value - the data you want to decrypt
+  * @returns {Promise<Value>} - the decrypted value
+  **/
+  decrypt(value) {
+    return lib.mdata_info_decrypt(this.app.connection, this.ref, value);
+  }
+
+  /**
   * Look up the name and tag of the MutableData as required to look it
   * up on the network.
   *

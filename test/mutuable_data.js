@@ -481,6 +481,23 @@ describe('Mutable Data', () => {
           ))
     );
 
+    it('an insert mutation on a private MD with encrypted entry', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newMutation()
+            .then((mut) => m.encryptKey('newKey')
+              .then((key) => m.encryptValue('newValue')
+                .then((value) => mut.insert(key, value))
+                .then(() => m.applyEntriesMutation(mut))
+            ))
+            .then(() => m.encryptKey('newKey').then((key) => m.get(key)))
+            .then((value) => m.decrypt(value.buf))
+            .then((d) => {
+              should(d).not.be.undefined();
+              should(d.toString()).equal('newValue');
+            })
+          ))
+    );
+
     it('an update mutation from new mutation obj', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => app.mutableData.newMutation()
