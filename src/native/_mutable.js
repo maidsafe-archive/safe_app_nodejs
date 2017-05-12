@@ -133,6 +133,7 @@ module.exports = {
     mdata_info_encrypt_entry_key: [t.Void, [t.AppPtr, MDataInfoHandle, t.u8Pointer, t.usize, "pointer", "pointer"]],
     mdata_info_encrypt_entry_value: [t.Void, [t.AppPtr, MDataInfoHandle, t.u8Pointer, t.usize, "pointer", "pointer"]],
     mdata_info_extract_name_and_type_tag: [t.Void ,[t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
+    mdata_info_decrypt: [t.Void, [t.AppPtr, MDataInfoHandle, t.u8Pointer, t.usize, "pointer", "pointer"]],
     mdata_info_serialise: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_info_deserialise: [t.Void, [t.AppPtr, t.u8Array, t.usize, 'pointer', 'pointer']],
     mdata_permission_set_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
@@ -184,6 +185,7 @@ module.exports = {
     mdata_info_random_private: Promisified(null, MDataInfoHandle),
     mdata_info_encrypt_entry_key: Promisified(bufferLastEntry, bufferTypes, h.asBuffer),
     mdata_info_encrypt_entry_value: Promisified(bufferLastEntry, bufferTypes, h.asBuffer),
+    mdata_info_decrypt: Promisified(bufferLastEntry, bufferTypes, h.asBuffer),
     mdata_info_extract_name_and_type_tag: Promisified(null, ['pointer', t.u64],
       // make sure to create a copy of this as it might be overwritten
       // after the callback finishes
