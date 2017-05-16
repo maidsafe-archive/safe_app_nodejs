@@ -235,8 +235,7 @@ class CryptoInterface {
 
   /**
   * Interprete the SignKey from a given raw string
-  * FIXME: is this expected to be Base64 encoded?
-  * @param {String} raw
+  * @param {String} raw sign key raw bytes as string
   * @returns {Promise<SignKey>}
   **/
   getSignKeyFromRaw(raw) {
@@ -246,8 +245,7 @@ class CryptoInterface {
 
   /**
   * Interprete the public encryption Key from a given raw string
-  * FIXME: is this expected to be Base64 encoded?
-  * @arg {String} raw
+  * @arg {String} raw public encryption key raw bytes as string
   * @returns {Promise<PubEncKey>}
   **/
   pubEncKeyKeyFromRaw(raw) {
@@ -257,8 +255,7 @@ class CryptoInterface {
 
   /**
   * Interprete the secret encryption Key from a given raw string
-  * FIXME: is this expected to be Base64 encoded?
-  * @arg {String} raw
+  * @arg {String} raw secret encryption key raw bytes as string
   * @returns {Promise<SecEncKey>}
   **/
   secEncKeyKeyFromRaw(raw) {

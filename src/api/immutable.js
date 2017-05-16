@@ -38,15 +38,6 @@ class Reader extends helpers.NetworkObject {
   }
 
   /**
-  * Close this handle
-  * @returns {Promise<()>}
-  */
-  close() {
-    // FIXME: Is this even needed in Reading?
-    return lib.idata_close_self_encryptor(this.app.connection, this.ref);
-  }
-
-  /**
   * @private
   * free the reference of reader of the app on the native side
   * used by the autoref feature
@@ -86,15 +77,6 @@ class Writer extends helpers.NetworkObject {
   **/
   write(string) {
     return lib.idata_write_to_self_encryptor(this.app.connection, this.ref, string);
-  }
-
-  /**
-  * The size of the immutable data on the network
-  * @returns {Promise<Number>} length in bytes
-  **/
-  size() {
-    // FIXME: does this even work on a writer?
-    return lib.idata_size(this.app.connection, this.ref);
   }
 
   /**

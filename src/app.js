@@ -5,6 +5,10 @@ const lib = require('./native/lib');
 const parseUrl = require('url').parse;
 const consts = require('./consts');
 
+const NetworkStateEvent = {
+  "-1": "Disconnected",
+  "0": "Connected"
+}
 
 /**
  * Holds one sessions with the network and is the primary interface to interact
@@ -23,7 +27,7 @@ class SAFEApp extends EventEmitter {
   constructor(appInfo) {
     super();
     this._appInfo = appInfo;
-    this._networkState = 'init';
+    this._networkState = 'Init';
     this._connection = null;
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
@@ -187,10 +191,10 @@ class SAFEApp extends EventEmitter {
   * changes.
   */
   _networkStateUpdated(uData, error, newState) {
-    // FIXME: we need to map the state to strings
-    this.emit('network-state-updated', newState, this._networkState);
-    this.emit(`network-state-${newState}`, this._networkState);
-    this._networkState = newState;
+    let state = NetworkStateEvent[newState];
+    this.emit('network-state-updated', state, this._networkState);
+    this.emit(`network-state-${state}`, this._networkState);
+    this._networkState = state;
   }
 
 

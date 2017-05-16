@@ -7,7 +7,6 @@ const lib = require('../native/lib');
 **/
 class CipherOpt extends h.NetworkObject {
   static free(app, ref) {
-    // FIXME: doesn't exist in FFI/rust at the moment
     lib.cipher_opt_free(app.connection, ref);
   }
 }
