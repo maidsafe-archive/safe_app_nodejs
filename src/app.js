@@ -6,9 +6,9 @@ const parseUrl = require('url').parse;
 const consts = require('./consts');
 
 const NetworkStateEvent = {
-  "-1": "Disconnected",
-  "0": "Connected"
-}
+  '-1': 'Disconnected',
+  0: 'Connected',
+};
 
 /**
  * Holds one sessions with the network and is the primary interface to interact
@@ -191,7 +191,7 @@ class SAFEApp extends EventEmitter {
   * changes.
   */
   _networkStateUpdated(uData, error, newState) {
-    let state = NetworkStateEvent[newState];
+    const state = NetworkStateEvent[newState];
     this.emit('network-state-updated', state, this._networkState);
     this.emit(`network-state-${state}`, this._networkState);
     this._networkState = state;
