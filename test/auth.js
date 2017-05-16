@@ -21,8 +21,14 @@ describe('Access Container', () => {
     app.auth.getHomeContainer().then((mdata) => {
       should(mdata).is.not.undefined();
     })));
+
   it('has read access to `_public`', () => app.auth.refreshContainerAccess().then(() =>
       app.auth.canAccessContainer('_public').then((hasAccess) => {
+        should(hasAccess).be.true();
+      })));
+
+  it('has read access to `_public` for `Read` and Insert`', () => app.auth.refreshContainerAccess().then(() =>
+      app.auth.canAccessContainer('_public', ['Read', 'Insert']).then((hasAccess) => {
         should(hasAccess).be.true();
       })));
 

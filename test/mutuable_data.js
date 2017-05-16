@@ -733,7 +733,9 @@ describe('Mutable Data', () => {
         .then((f) => app.immutableData.fetch(f.dataMapName)
           .then((i) => i.read())
           .then(() => nfs.create('hello world updated'))
-          .then((file) => nfs.update('test.txt', file, f.version + 1)))
+          .then((file) => nfs.update('test.txt', file, f.version + 1)
+            .then(() => should(file.version).be.equal(f.version + 1))
+          ))
       )
     );
   });
