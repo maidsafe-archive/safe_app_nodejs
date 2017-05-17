@@ -597,15 +597,12 @@ describe('Mutable Data', () => {
       app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getPermissions()
           .then((perms) => app.crypto.getAppPubSignKey()
-            .then((pk) => perms.getPermissionSet(pk).should.be.fulfilled()
-              .then(() => perms.forEach((signkey, pmset) => {
-                pmset.setAllow('Delete').then(() => {
-                  // FIXME: if the number of permissions is > 1
-                  // this would be evaluating only the first forEach iteration
-                  m.delUserPermissions(signkey, 1).then(() => done(), (err) => done(err));
-                }, (err) => done(err));
-              }).then(null, (err) => done(err)))
-            ))));
+            .then((pk) => perms.getPermissionSet(pk).should.be.fulfilled())
+            .then(() => perms.forEach((signkey, pmset) => pmset.setAllow('Delete')
+                .then(() => m.delUserPermissions(signkey, 1).should.be.fulfilled())
+                .catch((err) => done(err))
+            ).then(() => done(), (err) => done(err)))
+          )));
     });
 
     it('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
@@ -726,7 +723,8 @@ describe('Mutable Data', () => {
     });
 
     it('nfs update', () => app.mutableData.newRandomPrivate(TAG_TYPE)
-      .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
+      // Note we use lowercase 'nfs' below to test that it is case insensitive
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
       .then((nfs) => nfs.create('Hello world')
         .then((file) => nfs.insert('test.txt', file))
         .then(() => nfs.fetch('test.txt'))

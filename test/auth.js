@@ -37,19 +37,19 @@ describe('Access Container', () => {
           .should.be.rejected()));
 
   it('read info of `_public`', () => app.auth.refreshContainerAccess().then(() =>
-      app.auth.getAccessContainerInfo('_public').then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
+      app.auth.getContainer('_public').then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
         should(resp.name).is.not.undefined();
         should(resp.tag).equal(15000);
       })));
 
   it('mutate info of `_public` container', () => app.auth.refreshContainerAccess().then(() =>
-      app.auth.getAccessContainerInfo('_publicNames')
+      app.auth.getContainer('_publicNames')
         .then((md) => md.getEntries()
           .then((entries) => entries.mutate()
             .then((mut) => mut.insert('key1', 'value1')
               .then(() => md.applyEntriesMutation(mut))
             )))
-        .then(() => app.auth.getAccessContainerInfo('_publicNames'))
+        .then(() => app.auth.getContainer('_publicNames'))
           .then((md) => md.get('key1'))
           .then((value) => {
             should(value.buf).not.be.undefined();

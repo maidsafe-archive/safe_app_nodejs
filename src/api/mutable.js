@@ -588,7 +588,7 @@ class MutableData extends h.NetworkObject {
   * @returns {Emulation} the Emulation you are asking for
   **/
   emulateAs(eml) {
-    return new emulations[eml](this);
+    return new emulations[eml.toUpperCase()](this);
   }
 }
 

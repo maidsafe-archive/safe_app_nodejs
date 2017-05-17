@@ -189,7 +189,7 @@ class AuthInterface {
     if (appInfo.scope) {
       containerName += `/${appInfo.scope}`;
     }
-    let prms = this.getAccessContainerInfo(containerName);
+    let prms = this.getContainer(containerName);
 
     if (inTesting) {
       prms = prms.catch((err) => {
@@ -197,7 +197,7 @@ class AuthInterface {
         return this.getAccessContainerNames().then((names) => {
           const ctrnName = names.find((x) => x.match(/^apps\//));
           if (!ctrnName) return Promise.reject(err);
-          return this.getAccessContainerInfo(ctrnName);
+          return this.getContainer(ctrnName);
         });
       });
     }
@@ -225,9 +225,9 @@ class AuthInterface {
   /**
   * Lookup and return the information necessary to access a container.
   * @arg name {String} name of the container, e.g. `'_public'`
-  * @returns {Promise<MutableData>} the MutableData behind that object
+  * @returns {Promise<MutableData>} the MutableData behind it
   */
-  getAccessContainerInfo(name) { // FIXME: considering the return value, this name is bogus
+  getContainer(name) {
     return lib.access_container_get_container_mdata_info(this.app.connection, name)
       .then((data) => this.app.mutableData.wrapMdata(data));
   }
