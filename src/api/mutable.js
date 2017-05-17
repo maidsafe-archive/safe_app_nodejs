@@ -88,7 +88,9 @@ class Permissions extends h.NetworkObject {
 
   /**
   * Lookup the permissions of a specifc key
-  * @param {SignKey} signKey the key to lookup for
+  * If the signKey provided is `null` the permission set will be then
+  * assumed to be `USER_ANYONE`.
+  * @param {SignKey|null} signKey the key to lookup for
   * @returns {Promise<PermissionSet>} the permission set for that key
   **/
   getPermissionSet(signKey) {
@@ -101,7 +103,9 @@ class Permissions extends h.NetworkObject {
   * Insert a new permission set mapped to a specifc key. Directly commits
   * to the network.
   * Requires 'ManagePermissions'-Permission for the app.
-  * @param {SignKey} signKey - the key to map to
+  * If the signKey provided is `null` the permission set will be then
+  * set for `USER_ANYONE`.
+  * @param {SignKey|null} signKey the key to map to
   * @param {PermissionSet} pmset - the permission set to insert
   * @returns {Promise} - once finished
   **/
@@ -137,7 +141,7 @@ class Permissions extends h.NetworkObject {
 *
 * @example // Mutate a range of Entries
 *
-* app.mutableData.newPublic(somename tagtype)
+* app.mutableData.newPublic(somename, tagtype)
 *  .then((mData) => mData.getEntries()
 *   .then((entries) => entries.mutate()
 *     .then((m) => m.insert('key', 'value')
@@ -524,7 +528,9 @@ class MutableData extends h.NetworkObject {
   /**
   * Get a Handle to the permissions associated with this MutableData for
   * a specifc key
-  * @param {SignKey} signKey the key to look up
+  * If the signKey provided is `null` the permission set will be then
+  * assummed as `USER_ANYONE`.
+  * @param {SignKey|null} signKey the key to look up
   * @returns {Promise<(Permissions)>} the permissions set associated to the key
   **/
   getUserPermissions(signKey) {
@@ -536,7 +542,9 @@ class MutableData extends h.NetworkObject {
   /**
   * Delete the permissions of a specifc key. Directly commits to the network.
   * Requires 'ManagePermissions'-Permission for the app.
-  * @param {SignKey} signKey the key to lookup for
+  * If the signKey provided is `null` the permission set will be then
+  * assummed for `USER_ANYONE`.
+  * @param {SignKey|null} signKey the key to lookup for
   * @param {Number} version the version successor, to confirm you are
   *        actually asking for the right one
   * @returns {Promise} once finished
@@ -551,8 +559,10 @@ class MutableData extends h.NetworkObject {
   /**
   * Set the permissions of a specifc key. Directly commits to the network.
   * Requires 'ManagePermissions'-Permission for the app.
-  * @param {SignKey} signKey the key to lookup for
-  * @param {PermissionSet} pmset the permissionset to set to
+  * If the signKey provided is `null` the permission set will be then
+  * set for `USER_ANYONE`.
+  * @param {SignKey|null} signKey the key to lookup for
+  * @param {PermissionSet} pmset the permission set to set to
   * @param {Number} version the version successor, to confirm you are
   *        actually asking for the right one
   * @returns {Promise} resolves once finished
