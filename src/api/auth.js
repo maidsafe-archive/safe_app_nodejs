@@ -66,7 +66,7 @@ class AuthInterface {
 
   /**
   * @private
-  * Generate the app's URI for the RPC protocol using the app's id
+  * Generate the app's URI for the IPC protocol using the app's id
   * and register the URI scheme.
   **/
   setupUri() {
@@ -166,15 +166,15 @@ class AuthInterface {
   * connected or received a response from the authenticator in the IPC protocol.
   * @return {Promise}
   */
-  refreshContainerAccess() {
+  refreshContainersPermissions() {
     return lib.access_container_refresh_access_info(this.app.connection);
   }
 
   /**
-  * Get the names of all access containers found.
-  * @return {Promise<[String]}
+  * Get the names of all containers found.
+  * @return {Promise<[String]>}
   */
-  getAccessContainerNames() {
+  getContainersNames() {
     return lib.access_container_get_names(this.app.connection);
   }
 
@@ -194,7 +194,7 @@ class AuthInterface {
     if (inTesting) {
       prms = prms.catch((err) => {
         if (err.name !== 'ERR_NO_SUCH_CONTAINER') return Promise.reject(err);
-        return this.getAccessContainerNames().then((names) => {
+        return this.getContainersNames().then((names) => {
           const ctrnName = names.find((x) => x.match(/^apps\//));
           if (!ctrnName) return Promise.reject(err);
           return this.getContainer(ctrnName);

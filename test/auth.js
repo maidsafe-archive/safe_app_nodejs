@@ -10,39 +10,39 @@ describe('Access Container', () => {
     should(app.auth.registered).be.true();
   });
 
-  it('get container names', () => app.auth.refreshContainerAccess().then(() =>
-    app.auth.getAccessContainerNames().then((names) => {
+  it('get container names', () => app.auth.refreshContainersPermissions().then(() =>
+    app.auth.getContainersNames().then((names) => {
       // we always get a our own sandboxed container in tests")
       should(names.length).be.equal(3);
       should(names).containEql('_public');
     })));
 
-  it('get home container', () => app.auth.refreshContainerAccess().then(() =>
+  it('get home container', () => app.auth.refreshContainersPermissions().then(() =>
     app.auth.getHomeContainer().then((mdata) => {
       should(mdata).is.not.undefined();
     })));
 
-  it('has read access to `_public`', () => app.auth.refreshContainerAccess().then(() =>
+  it('has read access to `_public`', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.canAccessContainer('_public').then((hasAccess) => {
         should(hasAccess).be.true();
       })));
 
-  it('has read access to `_public` for `Read` and Insert`', () => app.auth.refreshContainerAccess().then(() =>
+  it('has read access to `_public` for `Read` and Insert`', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.canAccessContainer('_public', ['Read', 'Insert']).then((hasAccess) => {
         should(hasAccess).be.true();
       })));
 
-  it('can\'t access to `__does_not_exist`', () => app.auth.refreshContainerAccess().then(() =>
+  it('can\'t access to `__does_not_exist`', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.canAccessContainer('__does_not_exist')
           .should.be.rejected()));
 
-  it('read info of `_public`', () => app.auth.refreshContainerAccess().then(() =>
+  it('read info of `_public`', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.getContainer('_public').then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
         should(resp.name).is.not.undefined();
         should(resp.tag).equal(15000);
       })));
 
-  it('mutate info of `_public` container', () => app.auth.refreshContainerAccess().then(() =>
+  it('mutate info of `_public` container', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.getContainer('_publicNames')
         .then((md) => md.getEntries()
           .then((entries) => entries.mutate()
@@ -57,7 +57,7 @@ describe('Access Container', () => {
           })
   ));
 
-  it('mutate info of home container', () => app.auth.refreshContainerAccess().then(() =>
+  it('mutate info of home container', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.getHomeContainer()
         .then((md) => md.getEntries()
           .then((entries) => entries.mutate()
