@@ -16,6 +16,10 @@ class File {
 
   /**
   * @private
+  * Instantiate a new NFS File instance.
+  *
+  * @param {Object} ref the file's metadata including the XoR-name
+  * of ImmutableData containing the file's content.
   **/
   constructor(ref) {
     this._ref = ref;
@@ -25,6 +29,11 @@ class File {
     }
   }
 
+  /**
+  * @private
+  * Return an instance of the underlying File structure used by the safe_app
+  * lib containing the file's metadata.
+  **/
   get ref() {
     const data = {
       created_sec: this._ref.created_sec,
@@ -54,7 +63,7 @@ class File {
 
   /**
   * The dataMapName to read the immutable data at
-  * @returns {Buffer}
+  * @returns {Buffer} XoR-name
   **/
   get dataMapName() {
     return this._ref.data_map_name;
@@ -85,11 +94,21 @@ class File {
   }
 
   /**
-  * Which version was this? Equals the Mdata-value-version.
+  * Which version was this? Equals the underlying MutableData's entry version.
   * @return {Number}
   **/
   get version() {
     return this._ref.version;
+  }
+
+  /**
+  * @private
+  * Update the file's version. This shall be only internally used and only
+  * when its underlying entry in the MutableData is updated
+  * @param {Integer} version version to set
+  **/
+  set version(version) {
+    this._ref.version = version;
   }
 }
 
@@ -99,6 +118,8 @@ class File {
 class NFS {
   /**
   * @private
+  * Instantiate the NFS emulation layer rapping a MutableData instance
+  *
   * @param {MutableData} mData - the MutableData to wrap around
   **/
   constructor(mData) {
@@ -107,7 +128,7 @@ class NFS {
 
   /**
   * Create a new file with the given content, put the content
-  * on the network via immutableData (public) and wrap it into
+  * on the network via ImmutableData (public) and wrap it into
   * a File.
   * @param {(String|Buffer)} content
   * @returns {Promise<File>} a newly created file
@@ -130,7 +151,7 @@ class NFS {
   }
 
   /**
-  * Find the file of the given filename (aka keyName in the MData)
+  * Find the file of the given filename (aka keyName in the MutableData)
   * @param {String} fileName - the path/file name
   * @returns {Promise<File>} - the file found for that path
   **/
@@ -140,9 +161,10 @@ class NFS {
   }
 
   /**
-  * Insert the given file into the underlying MData, directly commit to the network
+  * Insert the given file into the underlying MutableData, directly commit
+  * to the network.
   * @param {(String|Buffer)} fileName - the path to store the file under
-  * @param {File} file - the file to serialise and store there
+  * @param {File} file - the file to serialise and store
   * @returns {Promise<File>} - the same file
   **/
   insert(fileName, file) {
@@ -153,14 +175,15 @@ class NFS {
   /**
   * Replace a path with a new file. Directly commit to the network.
   * @param {(String|Buffer)} fileName - the path to store the file under
-  * @param {File} file - the file to serialise and store there
-  * @param {Number} version - the current version number, to ensure you
+  * @param {File} file - the file to serialise and store
+  * @param {Number} version - the version successor number, to ensure you
            are overwriting the right one
   * @returns {Promise<File>} - the same file
   **/
   update(fileName, file, version) {
     return lib.file_update(this.mData.app.connection, this.mData.ref, fileName,
                            file.ref.ref(), version)
+      .then(() => { file.version = version; })  // eslint-disable-line no-param-reassign
       .then(() => file);
   }
 }

@@ -22,7 +22,6 @@ const version = require('../package.json').version;
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  * @example // Usage Example
  * const safe = require('safe');
- * const lib = require('safe/native/lib');
  *
  * // starting initialisation
  * let prms = safe.initializeApp({
@@ -34,13 +33,12 @@ const version = require('../package.json').version;
  * // read access to `_videos`:
  * const containers = { '_videos': ['Read'], '_pictures' : ['Read', 'Insert']}
  * prms.then(app => app.auth.genAuthUri(containers
- *           ).then(uri => lib.openUri(uri)
+ *           ).then(uri => app.auth.openUri(uri)
  *        // now we either quit the programm
  *        // or wait for a result url
  *        ))
  */
 function initializeApp(appInfo) {
-    // FIXME: add auto-login features here later
   const app = autoref(new App(appInfo));
   return Promise.resolve(app);
 }
