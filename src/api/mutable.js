@@ -655,12 +655,14 @@ class MutableDataInterface {
   /**
   * Initiate a mutuable data at the given address with private
   * access.
-  * @param {Buffer|String}
+  * @param {Buffer|String} name
   * @param {Number} typeTag - the typeTag to use
+  * @param {Buffer|String} secKey
+  * @param {Buffer|String} nonce
   * @returns {Promise<MutableData>}
   **/
-  newPrivate(name, typeTag) {
-    return lib.mdata_info_new_private(this.app.connection, name, typeTag)
+  newPrivate(name, typeTag, secKey, nonce) {
+    return lib.mdata_info_new_private(this.app.connection, name, typeTag, secKey, nonce)
           .then((m) => h.autoref(new MutableData(this.app, m)));
   }
 

@@ -73,6 +73,31 @@ function permissionsCallBackLastEntry(types) {
             .concat(cb);
 }
 
+function translatePrivMDInput(appPtr, xorname, tag, secKey, nonce) {
+  let name = xorname;
+  if (!Buffer.isBuffer(xorname)) {
+    const b = new Buffer(xorname);
+    if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
+    name = t.XOR_NAME(b).ref().readPointer(0);
+  }
+
+  let sk = secKey;
+  if (!Buffer.isBuffer(secKey)) {
+    const b = new Buffer(secKey);
+    if (b.length != 32) throw Error("Secret Key _must be_ 32 bytes long.")
+    sk = t.KEYBYTES(b).ref().readPointer(0);
+  }
+
+  let n = nonce;
+  if (!Buffer.isBuffer(nonce)) {
+    const b = new Buffer(nonce);
+    if (b.length != 32) throw Error("Nonce _must be_ 32 bytes long.")
+    n = t.NONCEBYTES(b).ref().readPointer(0);
+  }
+
+  return [appPtr, name, tag, sk, n]
+}
+
 function translateXorName(appPtr, str, tag) {
   let name = str;
   if (!Buffer.isBuffer(str)) {
@@ -127,7 +152,7 @@ module.exports = {
   },
   functions: {
     mdata_info_new_public: [t.Void, [t.AppPtr, ref.refType(t.XOR_NAME), t.u64, "pointer", "pointer"]],
-    mdata_info_new_private: [t.Void, [t.AppPtr, ref.refType(t.XOR_NAME), t.u64,  "pointer", "pointer"]],
+    mdata_info_new_private: [t.Void, [t.AppPtr, ref.refType(t.XOR_NAME), t.u64, ref.refType(t.KEYBYTES), ref.refType(t.NONCEBYTES), "pointer", "pointer"]],
     mdata_info_random_public: [t.Void, [t.AppPtr, t.u64, "pointer", "pointer"]],
     mdata_info_random_private: [t.Void, [t.AppPtr, t.u64, "pointer", "pointer"]],
     mdata_info_encrypt_entry_key: [t.Void, [t.AppPtr, MDataInfoHandle, t.u8Pointer, t.usize, "pointer", "pointer"]],
@@ -180,7 +205,7 @@ module.exports = {
   api: {
     // creation
     mdata_info_new_public: Promisified(translateXorName, MDataInfoHandle),
-    mdata_info_new_private: Promisified(translateXorName, MDataInfoHandle),
+    mdata_info_new_private: Promisified(translatePrivMDInput, MDataInfoHandle),
     mdata_info_random_public: Promisified(null, MDataInfoHandle),
     mdata_info_random_private: Promisified(null, MDataInfoHandle),
     mdata_info_encrypt_entry_key: Promisified(bufferLastEntry, bufferTypes, h.asBuffer),
