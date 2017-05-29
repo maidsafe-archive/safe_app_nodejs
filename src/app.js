@@ -96,7 +96,8 @@ class SAFEApp extends EventEmitter {
       .then((address) => this.mutableData.newPublic(address, consts.TAG_TYPE_DNS)
         .then((mdata) => mdata.get(serviceName)
             .catch((err) => {
-              if ((err.name === 'ERR_NO_SUCH_ENTRY') && (!serviceName || !serviceName.length)) {
+              // Error code -106 coresponds to 'Requested entry not found'
+              if ((err.code === -106) && (!serviceName || !serviceName.length)) {
                 return mdata.get('www');
               }
               return Promise.reject(err);
@@ -106,7 +107,8 @@ class SAFEApp extends EventEmitter {
           .then((service) => service.emulateAs('NFS'))
           .then((emulation) => emulation.fetch(path)
             .catch((err) => {
-              if (err.name === 'ERR_FILE_NOT_FOUND') {
+              // Error code -305 corresponds to 'NfsError::FileNotFound'
+              if (err.code === -305) {
                 let newPath;
                 if (!path || !path.length) {
                   newPath = '/index.html';
@@ -191,7 +193,13 @@ class SAFEApp extends EventEmitter {
   * changes.
   */
   _networkStateUpdated(uData, error, newState) {
-    const state = NetworkStateEvent[newState];
+    let state = 'Unknown';
+    if (error.error_code !== 0) {
+      console.error('An error was reported from network state observer: ', error.error_code, error.error_description);
+    } else {
+      state = NetworkStateEvent[newState];
+    }
+
     this.emit('network-state-updated', state, this._networkState);
     this.emit(`network-state-${state}`, this._networkState);
     this._networkState = state;
