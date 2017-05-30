@@ -161,6 +161,7 @@ module.exports = {
     mdata_info_decrypt: [t.Void, [t.AppPtr, MDataInfoHandle, t.u8Pointer, t.usize, "pointer", "pointer"]],
     mdata_info_serialise: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_info_deserialise: [t.Void, [t.AppPtr, t.u8Array, t.usize, 'pointer', 'pointer']],
+    mdata_info_free: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_permission_set_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
     mdata_permissions_set_allow: [t.Void, [t.AppPtr, MDataPermissionSetHandle, t.i32, 'pointer', 'pointer']],
     mdata_permissions_set_deny: [t.Void, [t.AppPtr, MDataPermissionSetHandle, t.i32, 'pointer', 'pointer']],
@@ -217,6 +218,7 @@ module.exports = {
       resp => { return { name: t.XOR_NAME(ref.reinterpret(resp[0], 32)), tag: resp[1] } }),
     mdata_info_serialise: Promisified(null, bufferTypes, h.asBuffer),
     mdata_info_deserialise: Promisified(bufferLastEntry, MDataInfoHandle),
+    mdata_info_free: Promisified(null, []),
     mdata_permission_set_new: Promisified(null, MDataPermissionSetHandle),
     mdata_permissions_set_allow: Promisified((appPtr, handle, action) => {
       const mA = MDataAction.get(action);

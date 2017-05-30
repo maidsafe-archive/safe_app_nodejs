@@ -214,7 +214,7 @@ class SAFEApp extends EventEmitter {
   static free(app) {
     // we are freed last, anything you do after this
     // will probably fail.
-    lib.free_app(app.connection);
+    lib.app_free(app.connection);
 
     // in the hopes, this all cleans up,
     // before we do in a matter of seconds from now

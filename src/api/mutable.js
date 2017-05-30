@@ -376,7 +376,7 @@ class MutableData extends h.NetworkObject {
   * @param {handle} ref
   **/
   static free(app, ref) {
-    return lib.free_mdata_info(app.connection, ref);
+    return lib.mdata_info_free(app.connection, ref);
   }
 
   /**
