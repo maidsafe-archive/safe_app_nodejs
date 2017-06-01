@@ -26,7 +26,9 @@ describe('Mutable Data', () => {
     );
 
     it.skip('create custom private with reserved tag type', () =>
-      should(app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE_RESERVED)).be.rejected()
+      should(app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE_RESERVED,
+                                          h.createRandomSecKey(),
+                                          h.createRandomNonce())).be.rejected()
     );
 
     it('create random public with invalid tag vaue', () =>
@@ -42,7 +44,9 @@ describe('Mutable Data', () => {
     );
 
     it('create custom private with invalid tag value', () =>
-      should(app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE_INVALID)).be.rejected()
+      should(app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE_INVALID,
+                                          h.createRandomSecKey(),
+                                          h.createRandomNonce())).be.rejected()
     );
 
     it('create custom public with invalid name', () =>
@@ -50,7 +54,9 @@ describe('Mutable Data', () => {
     );
 
     it('create custom private with invalid name', () =>
-      should(app.mutableData.newPrivate(TEST_NAME_INVALID, TAG_TYPE)).be.rejected()
+      should(app.mutableData.newPrivate(TEST_NAME_INVALID, TAG_TYPE,
+                                          h.createRandomSecKey(),
+                                          h.createRandomNonce())).be.rejected()
     );
   });
 
@@ -85,7 +91,8 @@ describe('Mutable Data', () => {
     );
 
     it('create custom private and read its name', () =>
-        app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE)
+        app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE,
+                                    h.createRandomSecKey(), h.createRandomNonce())
             .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
             .then((r) => {
               should(r.name).not.be.undefined();
@@ -122,7 +129,8 @@ describe('Mutable Data', () => {
 
     it('get existing key from private MD', () => {
       const testXorName = h.createRandomXorName();
-      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
+      return app.mutableData.newPrivate(testXorName, TAG_TYPE,
+                                        h.createRandomSecKey(), h.createRandomNonce())
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => md.get('key1'))
         .then((value) => {
@@ -134,7 +142,8 @@ describe('Mutable Data', () => {
 
     it('get existing key from serialised private MD', () => {
       const testXorName = h.createRandomXorName();
-      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
+      return app.mutableData.newPrivate(testXorName, TAG_TYPE,
+                                        h.createRandomSecKey(), h.createRandomNonce())
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => md.serialise())
         .then((serial) => app.mutableData.fromSerial(serial))
@@ -418,7 +427,8 @@ describe('Mutable Data', () => {
 
     it('a remove mutation on private MD', () => {
       const testXorName = h.createRandomXorName();
-      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
+      return app.mutableData.newPrivate(testXorName, TAG_TYPE,
+                                        h.createRandomSecKey(), h.createRandomNonce())
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => app.mutableData.newMutation()
           .then((mut) => mut.remove('key1', 1)
@@ -435,7 +445,8 @@ describe('Mutable Data', () => {
 
     it('a remove mutation on a serialised private MD', () => {
       const testXorName = h.createRandomXorName();
-      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
+      return app.mutableData.newPrivate(testXorName, TAG_TYPE,
+                                          h.createRandomSecKey(), h.createRandomNonce())
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => md.serialise())
         .then((serial) => app.mutableData.fromSerial(serial))
@@ -687,10 +698,18 @@ describe('Mutable Data', () => {
                   ))))))
     );
 
-    it('insert new permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it('set new permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => app.mutableData.newPermissionSet())
           .then((newPermSet) => newPermSet.setAllow('Insert')
+            .then(() => m.setUserPermissions(null, newPermSet, 1).should.be.fulfilled())
+          ))
+    );
+
+    it('set cleared permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newPermissionSet())
+          .then((newPermSet) => newPermSet.clear('Insert')
             .then(() => m.setUserPermissions(null, newPermSet, 1).should.be.fulfilled())
           ))
     );

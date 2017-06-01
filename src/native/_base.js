@@ -35,6 +35,7 @@ module.exports = {
   types: {
     App,
     AppPtr,
+    FfiResult,
     ObjectHandle,
     XOR_NAME,
     KEYBYTES,
@@ -100,7 +101,7 @@ module.exports = {
           args.push(ffi.Callback("void", types,
               function(uctx, err) {
                 // error found, errback with translated error
-                if(err.error_code !== 0) return reject(makeFfiError(err.error_code, err.error_description));
+                if (err.error_code !== 0) return reject(makeFfiError(err.error_code, err.error_description));
 
                 // take off the ctx and error
                 let res = Array.prototype.slice.call(arguments, 2)

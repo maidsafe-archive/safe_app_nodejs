@@ -193,7 +193,8 @@ class AuthInterface {
 
     if (inTesting) {
       prms = prms.catch((err) => {
-        if (err.name !== 'ERR_NO_SUCH_CONTAINER') return Promise.reject(err);
+        // Error code -1002 corresponds to 'Container not found' case
+        if (err.code !== -1002) return Promise.reject(err);
         return this.getContainersNames().then((names) => {
           const ctrnName = names.find((x) => x.match(/^apps\//));
           if (!ctrnName) return Promise.reject(err);
