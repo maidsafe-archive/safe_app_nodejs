@@ -165,7 +165,7 @@ module.exports = {
     mdata_permission_set_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
     mdata_permissions_set_allow: [t.Void, [t.AppPtr, MDataPermissionSetHandle, t.i32, 'pointer', 'pointer']],
     mdata_permissions_set_deny: [t.Void, [t.AppPtr, MDataPermissionSetHandle, t.i32, 'pointer', 'pointer']],
-    mdata_permissions_set_clear: [t.Void, [t.AppPtr, MDataPermissionSetHandle, 'pointer', 'pointer']],
+    mdata_permissions_set_clear: [t.Void, [t.AppPtr, MDataPermissionSetHandle, t.i32, 'pointer', 'pointer']],
     mdata_permissions_set_free: [t.Void, [t.AppPtr, MDataPermissionSetHandle, 'pointer', 'pointer']],
     mdata_permissions_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
     mdata_permissions_len: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],

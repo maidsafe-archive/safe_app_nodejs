@@ -698,10 +698,18 @@ describe('Mutable Data', () => {
                   ))))))
     );
 
-    it('insert new permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it('set new permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => app.mutableData.newPermissionSet())
           .then((newPermSet) => newPermSet.setAllow('Insert')
+            .then(() => m.setUserPermissions(null, newPermSet, 1).should.be.fulfilled())
+          ))
+    );
+
+    it('set cleared permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newPermissionSet())
+          .then((newPermSet) => newPermSet.clear('Insert')
             .then(() => m.setUserPermissions(null, newPermSet, 1).should.be.fulfilled())
           ))
     );
