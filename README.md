@@ -2,7 +2,7 @@
 
 **Maintainer:** Krishna Kumar (krishna.kumar@maidsafe.net)
 
-safe_app nodejs library.
+safe_app Node.js library.
 
 |Linux/OS X|Windows|
 |:---:|:--------:|
@@ -11,6 +11,10 @@ safe_app nodejs library.
 |Coverage status|
 |:-----------:|
 |[![Coverage Status](https://coveralls.io/repos/github/maidsafe/safe_app_nodejs/badge.svg)](https://coveralls.io/github/maidsafe/safe_app_nodejs)|
+
+## Documentation
+
+The documentation for the safe_app Node.js API is available at http://docs.maidsafe.net/safe_app_nodejs/.
 
 ## External Libraries
 
