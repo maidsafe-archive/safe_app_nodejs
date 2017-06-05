@@ -129,8 +129,9 @@ describe('Mutable Data', () => {
 
     it('get existing key from private MD', () => {
       const testXorName = h.createRandomXorName();
-      return app.mutableData.newPrivate(testXorName, TAG_TYPE,
-                                        h.createRandomSecKey(), h.createRandomNonce())
+      return app.crypto.generateNonce()
+        .then((nonce) => app.mutableData.newPrivate(testXorName, TAG_TYPE,
+                                        h.createRandomSecKey(), nonce))
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => md.get('key1'))
         .then((value) => {

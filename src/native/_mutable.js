@@ -91,7 +91,7 @@ function translatePrivMDInput(appPtr, xorname, tag, secKey, nonce) {
   let n = nonce;
   if (!Buffer.isBuffer(nonce)) {
     const b = new Buffer(nonce);
-    if (b.length != 32) throw Error("Nonce _must be_ 32 bytes long.")
+    if (b.length != 24) throw Error("Nonce _must be_ 24 bytes long.")
     n = t.NONCEBYTES(b).ref().readPointer(0);
   }
 
