@@ -42,6 +42,11 @@ describe('App Crypto Tests', () => {
     });
   }));
 
+  it('generate nonce', () => app.crypto.generateNonce().then((nonce) => {
+    should(nonce).not.be.undefined();
+    should(nonce.length).be.equal(24);
+  }));
+
   describe('custom key pair', () => {
     let keyPair;
 
@@ -134,7 +139,6 @@ describe('App Crypto Tests', () => {
               }))
       ]))
     );
-
 
     it('encrypts and decrypts', () => {
       const INPT = `all the ${Math.random()} times where I've been`;

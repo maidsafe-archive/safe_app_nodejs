@@ -262,6 +262,15 @@ class CryptoInterface {
     return lib.enc_secret_key_new(this.app.connection, raw)
         .then((c) => h.autoref(new SecEncKey(this.app, c)));
   }
+
+  /**
+  * Generate a nonce that can be used when creating private MutableData
+  * @returns {Promise<Nonce>} the nonce generated
+  **/
+  /* eslint-disable class-methods-use-this */
+  generateNonce() {
+    return lib.generate_nonce();
+  }
 }
 
 

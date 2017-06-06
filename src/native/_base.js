@@ -20,7 +20,7 @@ const u8Array = ArrayType(u8);
 const XOR_NAME = ArrayType(u8, 32);
 const KEYBYTES = ArrayType(u8, 32);
 const SIGN_SECRETKEYBYTES = ArrayType(u8, 64);
-const NONCEBYTES = ArrayType(u8, 32); // I'm not sure if this is the right size or if it's 24
+const NONCEBYTES = ArrayType(u8, 24);
 
 const ObjectHandle = u64;
 const App = Struct({});
