@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>  | Documentation</title>
+  <title>safe-app 0.0.1 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -13,8 +13,8 @@
     <div class='clearfix md-mxn2'>
       <div class='fixed xs-hide fix-3 overflow-auto max-height-100'>
         <div class='py1 px2'>
-          <h3 class='mb0 no-anchor'></h3>
-          <div class='mb1'><code></code></div>
+          <h3 class='mb0 no-anchor'>safe-app</h3>
+          <div class='mb1'><code>0.0.1</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -155,6 +155,7 @@
                     </ul>
                   
                   
+                  
                 </div>
                 
                 </li>
@@ -198,6 +199,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#CryptoInterface#generateEncKeyPairFromRaw'
+                        class='regular pre-open'>
+                        #generateEncKeyPairFromRaw
+                      </a></li>
+                      
+                      <li><a
                         href='#CryptoInterface#getSignKeyFromRaw'
                         class='regular pre-open'>
                         #getSignKeyFromRaw
@@ -209,7 +216,20 @@
                         #pubEncKeyKeyFromRaw
                       </a></li>
                       
+                      <li><a
+                        href='#CryptoInterface#secEncKeyKeyFromRaw'
+                        class='regular pre-open'>
+                        #secEncKeyKeyFromRaw
+                      </a></li>
+                      
+                      <li><a
+                        href='#CryptoInterface#generateNonce'
+                        class='regular pre-open'>
+                        #generateNonce
+                      </a></li>
+                      
                     </ul>
+                  
                   
                   
                 </div>
@@ -261,15 +281,15 @@
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#refreshContainerAccess'
+                        href='#AuthInterface#refreshContainersPermissions'
                         class='regular pre-open'>
-                        #refreshContainerAccess
+                        #refreshContainersPermissions
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#getAccessContainerNames'
+                        href='#AuthInterface#getContainersNames'
                         class='regular pre-open'>
-                        #getAccessContainerNames
+                        #getContainersNames
                       </a></li>
                       
                       <li><a
@@ -285,9 +305,9 @@
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#getAccessContainerInfo'
+                        href='#AuthInterface#getContainer'
                         class='regular pre-open'>
-                        #getAccessContainerInfo
+                        #getContainer
                       </a></li>
                       
                       <li><a
@@ -303,6 +323,7 @@
                       </a></li>
                       
                     </ul>
+                  
                   
                   
                 </div>
@@ -344,6 +365,7 @@
                     </ul>
                   
                   
+                  
                 </div>
                 
                 </li>
@@ -375,6 +397,7 @@
                       </a></li>
                       
                     </ul>
+                  
                   
                   
                 </div>
@@ -452,6 +475,7 @@
                     </ul>
                   
                   
+                  
                 </div>
                 
                 </li>
@@ -492,13 +516,8 @@
                         #size
                       </a></li>
                       
-                      <li><a
-                        href='#Reader#close'
-                        class='regular pre-open'>
-                        #close
-                      </a></li>
-                      
                     </ul>
+                  
                   
                   
                 </div>
@@ -526,12 +545,6 @@
                       </a></li>
                       
                       <li><a
-                        href='#Writer#size'
-                        class='regular pre-open'>
-                        #size
-                      </a></li>
-                      
-                      <li><a
                         href='#Writer#close'
                         class='regular pre-open'>
                         #close
@@ -544,6 +557,7 @@
                       </a></li>
                       
                     </ul>
+                  
                   
                   
                 </div>
@@ -590,6 +604,12 @@
                         href='#MutableData#encryptValue'
                         class='regular pre-open'>
                         #encryptValue
+                      </a></li>
+                      
+                      <li><a
+                        href='#MutableData#decrypt'
+                        class='regular pre-open'>
+                        #decrypt
                       </a></li>
                       
                       <li><a
@@ -679,6 +699,7 @@
                     </ul>
                   
                   
+                  
                 </div>
                 
                 </li>
@@ -730,6 +751,7 @@
                     </ul>
                   
                   
+                  
                 </div>
                 
                 </li>
@@ -763,6 +785,7 @@
                     </ul>
                   
                   
+                  
                 </div>
                 
                 </li>
@@ -794,6 +817,7 @@
                       </a></li>
                       
                     </ul>
+                  
                   
                   
                 </div>
@@ -833,6 +857,7 @@
                       </a></li>
                       
                     </ul>
+                  
                   
                   
                 </div>
@@ -890,6 +915,7 @@
                     </ul>
                   
                   
+                  
                 </div>
                 
                 </li>
@@ -927,6 +953,7 @@
                       </a></li>
                       
                     </ul>
+                  
                   
                   
                 </div>
@@ -984,6 +1011,7 @@
                     </ul>
                   
                   
+                  
                 </div>
                 
                 </li>
@@ -1035,6 +1063,7 @@
                     </ul>
                   
                   
+                  
                 </div>
                 
                 </li>
@@ -1070,6 +1099,7 @@
                       </a></li>
                       
                     </ul>
+                  
                   
                   
                 </div>
@@ -1111,6 +1141,7 @@
                     </ul>
                   
                   
+                  
                 </div>
                 
                 </li>
@@ -1142,6 +1173,7 @@
                       </a></li>
                       
                     </ul>
+                  
                   
                   
                 </div>
@@ -1181,6 +1213,7 @@
                       </a></li>
                       
                     </ul>
+                  
                   
                   
                 </div>
@@ -1239,7 +1272,7 @@
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='External API' class='mt0'>
+  <h2 id='external-api' class='mt0'>
     External API
   </h2>
 
@@ -1262,7 +1295,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/index.js#L42-L46'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/index.js#L41-L44'>
       <span>src/index.js</span>
       </a>
     
@@ -1276,6 +1309,7 @@
   
   
 
+  
   
   
   
@@ -1317,7 +1351,6 @@
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Usage Example</span>
 <span class="hljs-keyword">const</span> safe = <span class="hljs-built_in">require</span>(<span class="hljs-string">'safe'</span>);
-<span class="hljs-keyword">const</span> lib = <span class="hljs-built_in">require</span>(<span class="hljs-string">'safe/native/lib'</span>);
 
 <span class="hljs-comment">// starting initialisation</span>
 <span class="hljs-keyword">let</span> prms = safe.initializeApp({
@@ -1329,7 +1362,7 @@
 <span class="hljs-comment">// read access to `_videos`:</span>
 <span class="hljs-keyword">const</span> containers = { <span class="hljs-string">'_videos'</span>: [<span class="hljs-string">'Read'</span>], <span class="hljs-string">'_pictures'</span> : [<span class="hljs-string">'Read'</span>, <span class="hljs-string">'Insert'</span>]}
 prms.then(<span class="hljs-function"><span class="hljs-params">app</span> =&gt;</span> app.auth.genAuthUri(containers
-          ).then(<span class="hljs-function"><span class="hljs-params">uri</span> =&gt;</span> lib.openUri(uri)
+          ).then(<span class="hljs-function"><span class="hljs-params">uri</span> =&gt;</span> app.auth.openUri(uri)
        <span class="hljs-comment">// now we either quit the programm</span>
        <span class="hljs-comment">// or wait for a result url</span>
        ))</pre>
@@ -1356,7 +1389,7 @@ prms.then(<span class="hljs-function"><span class="hljs-params">app</span> =&gt;
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/index.js#L58-L60'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/index.js#L56-L58'>
       <span>src/index.js</span>
       </a>
     
@@ -1373,6 +1406,7 @@ second value.</p>
   
   
 
+  
   
   
   
@@ -1440,7 +1474,7 @@ second value.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/index.js#L42-L46'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/index.js#L41-L44'>
       <span>src/index.js</span>
       </a>
     
@@ -1463,10 +1497,19 @@ second value.</p>
   
   
   
+  
 
   
     <div class='py1 quiet mt1 prose-big'>Parameters</div>
     <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>appInfo</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
       
         <div class='space-bottom0'>
           <div>
@@ -1516,14 +1559,6 @@ to use when registering the URI with the system.
           
         </div>
       
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>appInfo</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
     </div>
   
 
@@ -1547,7 +1582,7 @@ to use when registering the URI with the system.
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='App Interface' class='mt0'>
+  <h2 id='app-interface' class='mt0'>
     App Interface
   </h2>
 
@@ -1570,7 +1605,7 @@ to use when registering the URI with the system.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/app.js#L14-L211'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/app.js#L18-L223'>
       <span>src/app.js</span>
       </a>
     
@@ -1582,7 +1617,7 @@ with the network. As such it also provides all API-Providers connected through
 this session.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new SAFEApp()</div>
+  <div class='pre p1 fill-light mt0'>new SAFEApp(appInfo: any)</div>
   
   
     <p>
@@ -1598,7 +1633,21 @@ this session.</p>
   
   
   
+  
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>appInfo</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -1627,7 +1676,7 @@ this session.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/app.js#L178-L181'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/app.js#L184-L187'>
       <span>src/app.js</span>
       </a>
     
@@ -1641,6 +1690,7 @@ this session.</p>
   
   
 
+  
   
   
   
@@ -1720,7 +1770,7 @@ this session.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/app.js#L37-L39'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/app.js#L41-L43'>
       <span>src/app.js</span>
       </a>
     
@@ -1734,6 +1784,7 @@ this session.</p>
   
   
 
+  
   
   
   
@@ -1782,7 +1833,7 @@ this session.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/app.js#L45-L47'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/app.js#L49-L51'>
       <span>src/app.js</span>
       </a>
     
@@ -1796,6 +1847,7 @@ this session.</p>
   
   
 
+  
   
   
   
@@ -1844,7 +1896,7 @@ this session.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/app.js#L53-L55'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/app.js#L57-L59'>
       <span>src/app.js</span>
       </a>
     
@@ -1858,6 +1910,7 @@ this session.</p>
   
   
 
+  
   
   
   
@@ -1906,7 +1959,7 @@ this session.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/app.js#L61-L63'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/app.js#L65-L67'>
       <span>src/app.js</span>
       </a>
     
@@ -1920,6 +1973,7 @@ this session.</p>
   
   
 
+  
   
   
   
@@ -1968,7 +2022,7 @@ this session.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/app.js#L69-L71'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/app.js#L73-L75'>
       <span>src/app.js</span>
       </a>
     
@@ -1982,6 +2036,7 @@ this session.</p>
   
   
 
+  
   
   
   
@@ -2030,7 +2085,7 @@ this session.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/app.js#L80-L129'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/app.js#L84-L135'>
       <span>src/app.js</span>
       </a>
     
@@ -2045,6 +2100,7 @@ convention and find the requested object.</p>
   
   
 
+  
   
   
   
@@ -2107,7 +2163,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/app.js#L152-L155'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/app.js#L158-L161'>
       <span>src/app.js</span>
       </a>
     
@@ -2121,6 +2177,7 @@ convention and find the requested object.</p>
   
   
 
+  
   
   
   
@@ -2169,7 +2226,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/app.js#L161-L163'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/app.js#L167-L169'>
       <span>src/app.js</span>
       </a>
     
@@ -2183,6 +2240,7 @@ convention and find the requested object.</p>
   
   
 
+  
   
   
   
@@ -2231,7 +2289,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/app.js#L168-L170'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/app.js#L174-L176'>
       <span>src/app.js</span>
       </a>
     
@@ -2245,6 +2303,7 @@ convention and find the requested object.</p>
   
   
 
+  
   
   
   
@@ -2291,7 +2350,7 @@ convention and find the requested object.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L172-L245'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L172-L274'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2302,7 +2361,7 @@ convention and find the requested object.</p>
 <p>Access it through your {SAFEApp} instance under <code>app.crypto</code></p>
 
 
-  <div class='pre p1 fill-light mt0'>new CryptoInterface()</div>
+  <div class='pre p1 fill-light mt0'>new CryptoInterface(app: any)</div>
   
   
 
@@ -2311,7 +2370,21 @@ convention and find the requested object.</p>
   
   
   
+  
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>app</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -2342,7 +2415,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L187-L189'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L187-L189'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2356,6 +2429,7 @@ convention and find the requested object.</p>
   
   
 
+  
   
   
   
@@ -2417,7 +2491,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L198-L201'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L198-L201'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2431,6 +2505,7 @@ convention and find the requested object.</p>
   
   
 
+  
   
   
   
@@ -2479,7 +2554,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L207-L210'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L207-L210'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2493,6 +2568,7 @@ convention and find the requested object.</p>
   
   
 
+  
   
   
   
@@ -2541,7 +2617,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L216-L222'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L216-L222'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2560,7 +2636,92 @@ convention and find the requested object.</p>
   
   
   
+  
 
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#keypair">KeyPair</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='CryptoInterface#generateEncKeyPairFromRaw'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>generateEncKeyPairFromRaw(rawPublicKey, rawSecretkey)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L228-L234'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Generate a new Asymmetric EncryptionKeyPair from raw secret and public keys</p>
+
+
+  <div class='pre p1 fill-light mt0'>generateEncKeyPairFromRaw(rawPublicKey: any, rawSecretkey: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#keypair">KeyPair</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>rawPublicKey</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>rawSecretkey</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -2603,21 +2764,21 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L230-L233'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L241-L244'>
       <span>src/api/crypto.js</span>
       </a>
     
   </div>
   
 
-  <p>Interprete the SignKey from a given raw string
-FIXME: is this expected to be Base64 encoded?</p>
+  <p>Interprete the SignKey from a given raw string</p>
 
 
   <div class='pre p1 fill-light mt0'>getSignKeyFromRaw(raw: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#signkey">SignKey</a>></div>
   
   
 
+  
   
   
   
@@ -2631,7 +2792,8 @@ FIXME: is this expected to be Base64 encoded?</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>raw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    
+	    sign key raw bytes as string
+
           </div>
           
         </div>
@@ -2679,21 +2841,21 @@ FIXME: is this expected to be Base64 encoded?</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L241-L244'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L251-L254'>
       <span>src/api/crypto.js</span>
       </a>
     
   </div>
   
 
-  <p>Interprete the encryption Key from a given raw string
-FIXME: is this expected to be Base64 encoded?</p>
+  <p>Interprete the public encryption Key from a given raw string</p>
 
 
   <div class='pre p1 fill-light mt0'>pubEncKeyKeyFromRaw(raw: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#pubenckey">PubEncKey</a>></div>
   
   
 
+  
   
   
   
@@ -2707,7 +2869,8 @@ FIXME: is this expected to be Base64 encoded?</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>raw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    
+	    public encryption key raw bytes as string
+
           </div>
           
         </div>
@@ -2722,6 +2885,146 @@ FIXME: is this expected to be Base64 encoded?</p>
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#pubenckey">PubEncKey</a>></code>:
         
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='CryptoInterface#secEncKeyKeyFromRaw'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>secEncKeyKeyFromRaw(raw)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L261-L264'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Interprete the secret encryption Key from a given raw string</p>
+
+
+  <div class='pre p1 fill-light mt0'>secEncKeyKeyFromRaw(raw: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#secenckey">SecEncKey</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>raw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    secret encryption key raw bytes as string
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#secenckey">SecEncKey</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='CryptoInterface#generateNonce'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>generateNonce()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L271-L273'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Generate a nonce that can be used when creating private MutableData</p>
+
+
+  <div class='pre p1 fill-light mt0'>generateNonce(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;Nonce></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;Nonce></code>:
+        the nonce generated
 
       
     
@@ -2761,7 +3064,7 @@ FIXME: is this expected to be Base64 encoded?</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/auth.js#L51-L262'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/auth.js#L52-L270'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -2775,7 +3078,7 @@ authentitcation protocol.</p>
 <p>Access your instance through ypur {SAFEApp} instance under <code>.auth</code>.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new AuthInterface()</div>
+  <div class='pre p1 fill-light mt0'>new AuthInterface(app: any)</div>
   
   
 
@@ -2784,7 +3087,21 @@ authentitcation protocol.</p>
   
   
   
+  
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>app</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -2815,21 +3132,21 @@ authentitcation protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/auth.js#L83-L85'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/auth.js#L87-L89'>
       <span>src/api/auth.js</span>
       </a>
     
   </div>
   
 
-  <p>Whether or not this is a registered/authenticated
-session.</p>
+  <p>Whether or not this is a registered/authenticated session.</p>
 
 
   <div class='pre p1 fill-light mt0'>registered</div>
   
   
 
+  
   
   
   
@@ -2878,14 +3195,14 @@ session.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/auth.js#L105-L115'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/auth.js#L109-L119'>
       <span>src/api/auth.js</span>
       </a>
     
   </div>
   
 
-  <p>generate an Authentication URL for the app with
+  <p>Generate an authentication URI for the app with
 the given permissions and optional parameters.</p>
 
 
@@ -2893,6 +3210,7 @@ the given permissions and optional parameters.</p>
   
   
 
+  
   
   
   
@@ -2935,7 +3253,7 @@ request
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>opts.own_container</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>?</code>
+                  <td class='break-word'><span class='code bold'>opts.own_container</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
                   
                     (default <code>false</code>)
                   </td>
@@ -2959,7 +3277,7 @@ our own container to be created for us, too
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>:
         <code>safe-auth://</code>
--Url
+-URI
 
       
     
@@ -2973,8 +3291,8 @@ our own container to be created for us, too
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// using an Authentication example:</span>
 app.auth.genAuthUri({
- <span class="hljs-string">'_public'</span>: [<span class="hljs-string">'Insert'</span>], <span class="hljs-comment">// request to insert into public</span>
- <span class="hljs-string">'_other'</span>: [<span class="hljs-string">'Insert'</span>, <span class="hljs-string">'Update'</span>] <span class="hljs-comment">// request to insert and update</span>
+ <span class="hljs-attr">_public</span>: [<span class="hljs-string">'Insert'</span>], <span class="hljs-comment">// request to insert into public</span>
+ _other: [<span class="hljs-string">'Insert'</span>, <span class="hljs-string">'Update'</span>] <span class="hljs-comment">// request to insert and update</span>
 }, {<span class="hljs-attr">own_container</span>: <span class="hljs-literal">true</span>}) <span class="hljs-comment">// and we want our own container, too</span></pre>
     
   
@@ -3003,20 +3321,21 @@ app.auth.genAuthUri({
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/auth.js#L121-L123'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/auth.js#L125-L127'>
       <span>src/api/auth.js</span>
       </a>
     
   </div>
   
 
-  <p>Open the given URI to the authenticator</p>
+  <p>Open the given Authentication URI to the authenticator</p>
 
 
   <div class='pre p1 fill-light mt0'>openUri(uri: any)</div>
   
   
 
+  
   
   
   
@@ -3070,22 +3389,21 @@ app.auth.genAuthUri({
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/auth.js#L133-L142'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/auth.js#L139-L148'>
       <span>src/api/auth.js</span>
       </a>
     
   </div>
   
 
-  <p>Generate a <code>safe-auth</code>-Url to request further container permissions
-see the <code>genAuthUri</code>-Example to understand how container permissions
-are to be specified</p>
+  <p>Generate a <code>'safe-auth'</code>-URI to request further container permissions</p>
 
 
   <div class='pre p1 fill-light mt0'>genContainerAuthUri(containers: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></div>
   
   
 
+  
   
   
   
@@ -3123,6 +3441,15 @@ are to be specified</p>
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// generating a container authorisation URI:</span>
+app.auth.genContainerAuthUri(
+ _publicNames: [<span class="hljs-string">'Insert'</span>], <span class="hljs-comment">// request to insert into publicNames</span>
+})</pre>
+    
+  
 
   
 
@@ -3148,21 +3475,24 @@ are to be specified</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/auth.js#L149-L154'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/auth.js#L157-L162'>
       <span>src/api/auth.js</span>
       </a>
     
   </div>
   
 
-  <p>Create a new, unregistered Session (read-only), overwrites any previously
-set session</p>
+  <p>Create a new, unregistered session (read-only), overwrites any previously
+set session.
+An application can read public data from the network with an unregistered
+session such as web pages.</p>
 
 
   <div class='pre p1 fill-light mt0'>connectUnregistered(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
   
   
 
+  
   
   
   
@@ -3197,11 +3527,11 @@ set session</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#refreshContainerAccess'>
+    <div class='border-bottom' id='AuthInterface#refreshContainersPermissions'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>refreshContainerAccess()</span>
+            <span class='code strong strong truncate'>refreshContainersPermissions()</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3211,21 +3541,22 @@ set session</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/auth.js#L161-L163'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/auth.js#L169-L171'>
       <span>src/api/auth.js</span>
       </a>
     
   </div>
   
 
-  <p>Fetch the access container info from the network. Useful when you just
-connected or received a response in the IPC protocol.</p>
+  <p>Refresh the access persmissions from the network. Useful when you just
+connected or received a response from the authenticator in the IPC protocol.</p>
 
 
-  <div class='pre p1 fill-light mt0'>refreshContainerAccess(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>refreshContainersPermissions(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -3260,11 +3591,11 @@ connected or received a response in the IPC protocol.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#getAccessContainerNames'>
+    <div class='border-bottom' id='AuthInterface#getContainersNames'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getAccessContainerNames()</span>
+            <span class='code strong strong truncate'>getContainersNames()</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3274,30 +3605,39 @@ connected or received a response in the IPC protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/auth.js#L169-L171'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/auth.js#L177-L179'>
       <span>src/api/auth.js</span>
       </a>
     
   </div>
   
 
-  <p>Get the names of all access containers found.</p>
+  <p>Get the names of all containers found.</p>
 
 
-  <div class='pre p1 fill-light mt0'>getAccessContainerNames()</div>
-  
-  
-
-  
-  
-  
+  <div class='pre p1 fill-light mt0'>getContainersNames(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>]></div>
   
   
 
   
+  
+  
+  
+  
+  
 
   
 
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>]></code>:
+        
+
+      
+    
   
 
   
@@ -3328,14 +3668,14 @@ connected or received a response in the IPC protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/auth.js#L178-L197'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/auth.js#L186-L206'>
       <span>src/api/auth.js</span>
       </a>
     
   </div>
   
 
-  <p>Get the MData for the apps own container generated by Authenticator
+  <p>Get the MutableData for the app's own container generated by Authenticator.
 When run in tests, this falls back to the randomly generated version</p>
 
 
@@ -3343,6 +3683,7 @@ When run in tests, this falls back to the randomly generated version</p>
   
   
 
+  
   
   
   
@@ -3383,21 +3724,21 @@ When run in tests, this falls back to the randomly generated version</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/auth.js#L206-L216'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/auth.js#L214-L224'>
       <span>src/api/auth.js</span>
       </a>
     
   </div>
   
 
-  <p>Whether or not this session has specifc permission access of a given
-container.</p>
+  <p>Whether or not this session has specifc access permission for a given container.</p>
 
 
   <div class='pre p1 fill-light mt0'>canAccessContainer(name: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, permissions: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;bool></div>
   
   
 
+  
   
   
   
@@ -3412,7 +3753,7 @@ container.</p>
           <div>
             <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
 	    name of the container, e.g. 
-<code>_public</code>
+<code>'_public'</code>
 
           </div>
           
@@ -3455,11 +3796,11 @@ container.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#getAccessContainerInfo'>
+    <div class='border-bottom' id='AuthInterface#getContainer'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getAccessContainerInfo(name)</span>
+            <span class='code strong strong truncate'>getContainer(name)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3469,7 +3810,7 @@ container.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/auth.js#L223-L226'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/auth.js#L231-L234'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3479,10 +3820,11 @@ container.</p>
   <p>Lookup and return the information necessary to access a container.</p>
 
 
-  <div class='pre p1 fill-light mt0'>getAccessContainerInfo(name: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#mutabledata">MutableData</a>></div>
+  <div class='pre p1 fill-light mt0'>getContainer(name: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#mutabledata">MutableData</a>></div>
   
   
 
+  
   
   
   
@@ -3512,7 +3854,7 @@ container.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#mutabledata">MutableData</a>></code>:
-        the Mutable Data behind that object
+        the MutableData behind it
 
       
     
@@ -3536,7 +3878,7 @@ container.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>loginFromURI(responseURI, responseUri)</span>
+            <span class='code strong strong truncate'>loginFromURI(responseUri)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3546,20 +3888,21 @@ container.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/auth.js#L234-L247'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/auth.js#L242-L255'>
       <span>src/api/auth.js</span>
       </a>
     
   </div>
   
 
-  <p>Create a new authenticated session using the provided IPC-Response.</p>
+  <p>Create a new authenticated session using the provided IPC response.</p>
 
 
-  <div class='pre p1 fill-light mt0'>loginFromURI(responseURI: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, responseUri: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
+  <div class='pre p1 fill-light mt0'>loginFromURI(responseUri: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
   
   
 
+  
   
   
   
@@ -3572,17 +3915,9 @@ container.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>responseURI</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+            <span class='code bold'>responseUri</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
 	    the IPC response string given
 
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>responseUri</span> <code class='quiet'>(any)</code>
-	    
           </div>
           
         </div>
@@ -3596,7 +3931,7 @@ container.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></code>:
-        the given App Instance with a newly setup and
+        the given app instance with a newly setup and
 authenticated session.
 
       
@@ -3631,21 +3966,22 @@ authenticated session.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/auth.js#L255-L261'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/auth.js#L263-L269'>
       <span>src/api/auth.js</span>
       </a>
     
   </div>
   
 
-  <p><em>ONLY AVAILALBE IF RUN In NODE_ENV='development' || 'testing'</em></p>
-<p>Generates a <em>locally</em> registered App with the given permissions.</p>
+  <p><em>ONLY AVAILALBE IF RUN in NODE_ENV='development' || 'testing'</em></p>
+<p>Generate a <em>locally</em> registered App with the given permissions.</p>
 
 
   <div class='pre p1 fill-light mt0'>loginForTest(access: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
   
   
 
+  
   
   
   
@@ -3673,7 +4009,7 @@ authenticated session.
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></code>:
-        
+        the locally registered App instance
 
       
     
@@ -3713,7 +4049,7 @@ authenticated session.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/cipher_opt.js#L18-L52'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/cipher_opt.js#L17-L51'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -3723,7 +4059,7 @@ authenticated session.
   <p>Provide the Cipher Opt API</p>
 
 
-  <div class='pre p1 fill-light mt0'>new CipherOptInterface()</div>
+  <div class='pre p1 fill-light mt0'>new CipherOptInterface(app: any)</div>
   
   
 
@@ -3732,7 +4068,21 @@ authenticated session.
   
   
   
+  
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>app</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -3763,7 +4113,7 @@ authenticated session.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/cipher_opt.js#L28-L31'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/cipher_opt.js#L27-L30'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -3777,6 +4127,7 @@ authenticated session.
   
   
 
+  
   
   
   
@@ -3825,7 +4176,7 @@ authenticated session.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/cipher_opt.js#L37-L40'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/cipher_opt.js#L36-L39'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -3839,6 +4190,7 @@ authenticated session.
   
   
 
+  
   
   
   
@@ -3887,7 +4239,7 @@ authenticated session.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/cipher_opt.js#L47-L50'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/cipher_opt.js#L46-L49'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -3901,6 +4253,7 @@ authenticated session.
   
   
 
+  
   
   
   
@@ -3968,7 +4321,7 @@ authenticated session.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/immutable.js#L136-L164'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/immutable.js#L118-L146'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -3979,7 +4332,7 @@ authenticated session.
 <p>Access it through your {SAFEApp} instance under <code>app.immutableData</code></p>
 
 
-  <div class='pre p1 fill-light mt0'>new ImmutableDataInterface()</div>
+  <div class='pre p1 fill-light mt0'>new ImmutableDataInterface(app: any)</div>
   
   
 
@@ -3988,7 +4341,21 @@ authenticated session.
   
   
   
+  
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>app</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -4019,7 +4386,7 @@ authenticated session.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/immutable.js#L150-L153'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/immutable.js#L132-L135'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -4033,6 +4400,7 @@ authenticated session.
   
   
 
+  
   
   
   
@@ -4081,7 +4449,7 @@ authenticated session.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/immutable.js#L160-L163'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/immutable.js#L142-L145'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -4095,6 +4463,7 @@ authenticated session.
   
   
 
+  
   
   
   
@@ -4163,7 +4532,7 @@ authenticated session.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L598-L713'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L622-L739'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -4174,7 +4543,7 @@ authenticated session.
 <p>Access via <code>mutableData</code> on your app Instance.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new MutableDataInterface()</div>
+  <div class='pre p1 fill-light mt0'>new MutableDataInterface(app: any)</div>
   
   
 
@@ -4183,7 +4552,21 @@ authenticated session.
   
   
   
+  
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>app</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -4199,13 +4582,13 @@ authenticated session.
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// using mutable Data</span>
 app.mutableData.newRandomPublic(<span class="hljs-number">15001</span>)
   <span class="hljs-comment">// set it up with starting data</span>
-  .then(<span class="hljs-function">(<span class="hljs-params">mdata</span>) =&gt;</span> mdata.quickSetup({<span class="hljs-string">'keyA'</span>: <span class="hljs-string">'input value'</span>})
+  .then(<span class="hljs-function">(<span class="hljs-params">mdata</span>) =&gt;</span> mdata.quickSetup({<span class="hljs-attr">keyA</span>: <span class="hljs-string">'input value'</span>})
    .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> mdata.getNameAndTag())) <span class="hljs-comment">// return name and tag</span>
 
 <span class="hljs-comment">// now read using name and tag</span>
 .then(<span class="hljs-function">(<span class="hljs-params">ref</span>) =&gt;</span> app.mutableData.newPublic(ref.name, ref.tag)
   .then(<span class="hljs-function">(<span class="hljs-params">mdata</span>) =&gt;</span> mdata.get(<span class="hljs-string">'keyA'</span>).then(<span class="hljs-function">(<span class="hljs-params">val</span>) =&gt;</span> {
-    should(val.toString()).equal(<span class="hljs-string">'input value'</span>);
+    should(val.buf.toString()).equal(<span class="hljs-string">'input value'</span>);
   })))</pre>
     
   
@@ -4230,7 +4613,7 @@ app.mutableData.newRandomPublic(<span class="hljs-number">15001</span>)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L614-L617'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L638-L641'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -4245,6 +4628,7 @@ access.</p>
   
   
 
+  
   
   
   
@@ -4307,7 +4691,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L626-L629'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L650-L653'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -4322,6 +4706,7 @@ access.</p>
   
   
 
+  
   
   
   
@@ -4374,7 +4759,7 @@ access.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>newPrivate(typeTag, name)</span>
+            <span class='code strong strong truncate'>newPrivate(name, typeTag, secKey, nonce)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -4384,7 +4769,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L638-L641'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L664-L667'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -4395,10 +4780,11 @@ access.</p>
 access.</p>
 
 
-  <div class='pre p1 fill-light mt0'>newPrivate(typeTag: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, name: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#mutabledata">MutableData</a>></div>
+  <div class='pre p1 fill-light mt0'>newPrivate(name: (<a href="https://nodejs.org/api/buffer.html">Buffer</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>), typeTag: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, secKey: (<a href="https://nodejs.org/api/buffer.html">Buffer</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>), nonce: (<a href="https://nodejs.org/api/buffer.html">Buffer</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#mutabledata">MutableData</a>></div>
   
   
 
+  
   
   
   
@@ -4411,6 +4797,14 @@ access.</p>
       
         <div class='space-bottom0'>
           <div>
+            <span class='code bold'>name</span> <code class='quiet'>((<a href="https://nodejs.org/api/buffer.html">Buffer</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>))</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
             <span class='code bold'>typeTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
 	    the typeTag to use
 
@@ -4420,7 +4814,15 @@ access.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>name</span> <code class='quiet'>(any)</code>
+            <span class='code bold'>secKey</span> <code class='quiet'>((<a href="https://nodejs.org/api/buffer.html">Buffer</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>))</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nonce</span> <code class='quiet'>((<a href="https://nodejs.org/api/buffer.html">Buffer</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>))</code>
 	    
           </div>
           
@@ -4459,7 +4861,7 @@ access.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>newPublic(typeTag, name)</span>
+            <span class='code strong strong truncate'>newPublic(name, typeTag)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -4469,7 +4871,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L650-L653'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L676-L679'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -4480,10 +4882,11 @@ access.</p>
 access.</p>
 
 
-  <div class='pre p1 fill-light mt0'>newPublic(typeTag: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, name: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#mutabledata">MutableData</a>></div>
+  <div class='pre p1 fill-light mt0'>newPublic(name: any, typeTag: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#mutabledata">MutableData</a>></div>
   
   
 
+  
   
   
   
@@ -4496,17 +4899,17 @@ access.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>typeTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
-	    the typeTag to use
-
+            <span class='code bold'>name</span> <code class='quiet'>(any)</code>
+	    
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>name</span> <code class='quiet'>(any)</code>
-	    
+            <span class='code bold'>typeTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    the typeTag to use
+
           </div>
           
         </div>
@@ -4554,7 +4957,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L659-L662'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L685-L688'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -4568,6 +4971,7 @@ access.</p>
   
   
 
+  
   
   
   
@@ -4616,7 +5020,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L668-L671'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L694-L697'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -4630,6 +5034,7 @@ access.</p>
   
   
 
+  
   
   
   
@@ -4678,7 +5083,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L677-L680'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L703-L706'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -4692,6 +5097,7 @@ access.</p>
   
   
 
+  
   
   
   
@@ -4740,7 +5146,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L686-L689'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L712-L715'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -4754,6 +5160,7 @@ access.</p>
   
   
 
+  
   
   
   
@@ -4802,7 +5209,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L696-L699'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L722-L725'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -4816,6 +5223,7 @@ access.</p>
   
   
 
+  
   
   
   
@@ -4875,7 +5283,7 @@ access.</p>
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='Immutable' class='mt0'>
+  <h2 id='immutable' class='mt0'>
     Immutable
   </h2>
 
@@ -4895,7 +5303,7 @@ access.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/immutable.js#L8-L60'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/immutable.js#L8-L51'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -4916,6 +5324,7 @@ access.</p>
     </p>
   
 
+  
   
   
   
@@ -4952,7 +5361,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/immutable.js#L16-L30'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/immutable.js#L16-L30'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -4966,6 +5375,7 @@ access.</p>
   
   
 
+  
   
   
   
@@ -4996,7 +5406,7 @@ access.</p>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>options.offset</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>?</code>
+                  <td class='break-word'><span class='code bold'>options.offset</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></code>
                   
                     (default <code>0</code>)
                   </td>
@@ -5005,7 +5415,7 @@ access.</p>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>options.end</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>?</code>
+                  <td class='break-word'><span class='code bold'>options.end</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></code>
                   
                     (default <code>size</code>)
                   </td>
@@ -5053,7 +5463,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/immutable.js#L36-L38'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/immutable.js#L36-L38'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5072,6 +5482,7 @@ access.</p>
   
   
   
+  
 
   
 
@@ -5082,68 +5493,6 @@ access.</p>
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></code>:
         length in bytes
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='Reader#close'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>close()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/immutable.js#L44-L47'>
-      <span>src/api/immutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Close this handle</p>
-
-
-  <div class='pre p1 fill-light mt0'>close(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></code>:
-        
 
       
     
@@ -5183,7 +5532,7 @@ access.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/immutable.js#L79-L129'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/immutable.js#L70-L111'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5204,6 +5553,7 @@ access.</p>
     </p>
   
 
+  
   
   
   
@@ -5257,7 +5607,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/immutable.js#L87-L89'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/immutable.js#L78-L80'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5271,6 +5621,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   
   
 
+  
   
   
   
@@ -5318,68 +5669,6 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
       </div>
     </div>
   
-    <div class='border-bottom' id='Writer#size'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>size()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/immutable.js#L95-L98'>
-      <span>src/api/immutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>The size of the immutable data on the network</p>
-
-
-  <div class='pre p1 fill-light mt0'>size(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></code>:
-        length in bytes
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='Writer#close'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -5394,7 +5683,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/immutable.js#L104-L109'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/immutable.js#L86-L91'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5408,6 +5697,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   
   
 
+  
   
   
   
@@ -5456,7 +5746,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/immutable.js#L114-L116'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/immutable.js#L96-L98'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5470,6 +5760,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   
   
 
+  
   
   
   
@@ -5508,7 +5799,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='Mutable' class='mt0'>
+  <h2 id='mutable' class='mt0'>
     Mutable
   </h2>
 
@@ -5528,7 +5819,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L363-L578'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L370-L603'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5549,6 +5840,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
     </p>
   
 
+  
   
   
   
@@ -5575,7 +5867,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>quickSetup(data?)</span>
+            <span class='code strong strong truncate'>quickSetup(data)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -5585,21 +5877,22 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L383-L404'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L396-L416'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Quickly set up a newly (not yet created) MutableData with
+  <p>Easily set up a newly (not yet created) MutableData with
 the app having full-access permissions (and no other).</p>
 
 
-  <div class='pre p1 fill-light mt0'>quickSetup(data: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#mutabledata">MutableData</a>></div>
+  <div class='pre p1 fill-light mt0'>quickSetup(data: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#mutabledata">MutableData</a>></div>
   
   
 
+  
   
   
   
@@ -5612,7 +5905,7 @@ the app having full-access permissions (and no other).</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
 	    a key-value payload it should
 create the data with
 
@@ -5637,6 +5930,16 @@ create the data with
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>app.mutableData.newRandomPublic(tagtype)
+  .then(<span class="hljs-function">(<span class="hljs-params">md</span>) =&gt;</span> md.quickSetup({
+       <span class="hljs-attr">key1</span>: <span class="hljs-string">'value1'</span>,
+       <span class="hljs-attr">key2</span>: <span class="hljs-string">'value2'</span>
+     }))</pre>
+    
   
 
   
@@ -5663,7 +5966,7 @@ create the data with
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L414-L416'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L426-L428'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5679,6 +5982,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
   
   
 
+  
   
   
   
@@ -5741,7 +6045,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L426-L428'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L438-L440'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5757,6 +6061,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
   
   
 
+  
   
   
   
@@ -5805,6 +6110,84 @@ contained in a Private MutableData. If the MutableData is Public, the same
       </div>
     </div>
   
+    <div class='border-bottom' id='MutableData#decrypt'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>decrypt(value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L449-L451'>
+      <span>src/api/mutable.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Decrypt the entry key/value provided as parameter with the encryption key
+contained in a Private MutableData.</p>
+
+
+  <div class='pre p1 fill-light mt0'>decrypt(value: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;Value></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>))</code>
+	    the data you want to decrypt
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;Value></code>:
+        the decrypted value
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='MutableData#getNameAndTag'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -5819,7 +6202,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L436-L438'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L459-L461'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5839,6 +6222,7 @@ up on the network.</p>
   
   
   
+  
 
   
 
@@ -5848,7 +6232,7 @@ up on the network.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#nameandtag">NameAndTag</a>></code>:
-        
+        the XoR-name and type tag
 
       
     
@@ -5882,7 +6266,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L445-L447'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L468-L470'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5901,6 +6285,7 @@ up on the network.</p>
   
   
   
+  
 
   
 
@@ -5910,7 +6295,7 @@ up on the network.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></code>:
-        the version
+        current version
 
       
     
@@ -5944,7 +6329,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L454-L456'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L477-L479'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5958,6 +6343,7 @@ up on the network.</p>
   
   
 
+  
   
   
   
@@ -5985,7 +6371,7 @@ up on the network.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#valueversion">ValueVersion</a>></code>:
-        the value at the current version
+        the entry value and its current version
 
       
     
@@ -6019,20 +6405,21 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L464-L466'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L487-L489'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Create this MutableData on the network.</p>
+  <p>Commit this MutableData to the network.</p>
 
 
-  <div class='pre p1 fill-light mt0'>put(permissions: Permission, entries: <a href="#entries">Entries</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></div>
+  <div class='pre p1 fill-light mt0'>put(permissions: Permission, entries: <a href="#entries">Entries</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -6046,7 +6433,7 @@ up on the network.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>permissions</span> <code class='quiet'>(Permission)</code>
-	    the permissions to create the mdata with
+	    the permissions to create the mutable data with
 
           </div>
           
@@ -6055,7 +6442,7 @@ up on the network.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>entries</span> <code class='quiet'>(<a href="#entries">Entries</a>)</code>
-	    data payload to create the mdata with
+	    data entries to create the mutable data with
 
           </div>
           
@@ -6069,7 +6456,7 @@ up on the network.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
         
 
       
@@ -6104,20 +6491,21 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L473-L478'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L496-L499'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Get a Handle to the entries associated with this mdata</p>
+  <p>Get a Handle to the entries associated with this MutableData</p>
 
 
   <div class='pre p1 fill-light mt0'>getEntries(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#entries">Entries</a>)></div>
   
   
 
+  
   
   
   
@@ -6132,7 +6520,7 @@ up on the network.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#entries">Entries</a>)></code>:
-        
+        the entries representation object
 
       
     
@@ -6166,20 +6554,21 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L485-L488'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L505-L508'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Get a Handle to the keys associated with this mdata</p>
+  <p>Get a Handle to the keys associated with this MutableData</p>
 
 
   <div class='pre p1 fill-light mt0'>getKeys(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#keys">Keys</a>)></div>
   
   
 
+  
   
   
   
@@ -6194,7 +6583,7 @@ up on the network.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#keys">Keys</a>)></code>:
-        
+        the keys representation object
 
       
     
@@ -6228,20 +6617,21 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L494-L497'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L514-L517'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Get a Handle to the values associated with this mdata</p>
+  <p>Get a Handle to the values associated with this MutableData</p>
 
 
   <div class='pre p1 fill-light mt0'>getValues(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#values">Values</a>)></div>
   
   
 
+  
   
   
   
@@ -6256,7 +6646,7 @@ up on the network.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#values">Values</a>)></code>:
-        
+        the values representation object
 
       
     
@@ -6290,20 +6680,21 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L503-L506'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L523-L526'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Get a Handle to the permissions associated with this mdata</p>
+  <p>Get a Handle to the permissions associated with this mutableData</p>
 
 
   <div class='pre p1 fill-light mt0'>getPermissions(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#permissions">Permissions</a>)></div>
   
   
 
+  
   
   
   
@@ -6318,7 +6709,7 @@ up on the network.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#permissions">Permissions</a>)></code>:
-        
+        the permissions representation object
 
       
     
@@ -6352,21 +6743,24 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L514-L518'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L536-L540'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Get a Handle to the permissions associated with this mdata for
-a specifc key</p>
+  <p>Get a Handle to the permissions associated with this MutableData for
+a specifc key
+If the signKey provided is <code>null</code> the permission set will be then
+assummed as <code>USER_ANYONE</code>.</p>
 
 
-  <div class='pre p1 fill-light mt0'>getUserPermissions(signKey: <a href="#signkey">SignKey</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#permissions">Permissions</a>)></div>
+  <div class='pre p1 fill-light mt0'>getUserPermissions(signKey: (<a href="#signkey">SignKey</a> | null)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#permissions">Permissions</a>)></div>
   
   
 
+  
   
   
   
@@ -6379,7 +6773,7 @@ a specifc key</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>signKey</span> <code class='quiet'>(<a href="#signkey">SignKey</a>)</code>
+            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#signkey">SignKey</a> | null))</code>
 	    the key to look up
 
           </div>
@@ -6395,7 +6789,7 @@ a specifc key</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#permissions">Permissions</a>)></code>:
-        
+        the permissions set associated to the key
 
       
     
@@ -6429,7 +6823,7 @@ a specifc key</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L528-L533'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L552-L557'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6437,13 +6831,16 @@ a specifc key</p>
   
 
   <p>Delete the permissions of a specifc key. Directly commits to the network.
-Requires 'ManagePermissions'-Permission for the app.</p>
+Requires 'ManagePermissions'-Permission for the app.
+If the signKey provided is <code>null</code> the permission set will be then
+assummed for <code>USER_ANYONE</code>.</p>
 
 
-  <div class='pre p1 fill-light mt0'>delUserPermissions(signKey: <a href="#signkey">SignKey</a>, version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>delUserPermissions(signKey: (<a href="#signkey">SignKey</a> | null), version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -6456,7 +6853,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>signKey</span> <code class='quiet'>(<a href="#signkey">SignKey</a>)</code>
+            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#signkey">SignKey</a> | null))</code>
 	    the key to lookup for
 
           </div>
@@ -6466,8 +6863,8 @@ Requires 'ManagePermissions'-Permission for the app.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>version</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
-	    the current version, to confirm you are
-actually asking for the right state
+	    the version successor, to confirm you are
+actually asking for the right one
 
           </div>
           
@@ -6516,7 +6913,7 @@ actually asking for the right state
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L544-L550'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L570-L576'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6524,13 +6921,16 @@ actually asking for the right state
   
 
   <p>Set the permissions of a specifc key. Directly commits to the network.
-Requires 'ManagePermissions'-Permission for the app.</p>
+Requires 'ManagePermissions'-Permission for the app.
+If the signKey provided is <code>null</code> the permission set will be then
+set for <code>USER_ANYONE</code>.</p>
 
 
-  <div class='pre p1 fill-light mt0'>setUserPermissions(signKey: <a href="#signkey">SignKey</a>, pmset: PermissionSet, version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>setUserPermissions(signKey: (<a href="#signkey">SignKey</a> | null), pmset: PermissionSet, version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -6543,7 +6943,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>signKey</span> <code class='quiet'>(<a href="#signkey">SignKey</a>)</code>
+            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#signkey">SignKey</a> | null))</code>
 	    the key to lookup for
 
           </div>
@@ -6553,7 +6953,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>pmset</span> <code class='quiet'>(PermissionSet)</code>
-	    the permissionset to set to
+	    the permission set to set to
 
           </div>
           
@@ -6562,8 +6962,8 @@ Requires 'ManagePermissions'-Permission for the app.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>version</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
-	    the current version, to confirm you are
-actually asking for the right state
+	    the version successor, to confirm you are
+actually asking for the right one
 
           </div>
           
@@ -6578,7 +6978,7 @@ actually asking for the right state
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        once finished
+        resolves once finished
 
       
     
@@ -6612,7 +7012,7 @@ actually asking for the right state
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L557-L559'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L583-L585'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6626,6 +7026,7 @@ actually asking for the right state
   
   
 
+  
   
   
   
@@ -6654,7 +7055,7 @@ actually asking for the right state
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        
+        resolves once finished
 
       
     
@@ -6688,20 +7089,21 @@ actually asking for the right state
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L565-L567'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L591-L593'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Serialise the current mdata</p>
+  <p>Serialise the current MutableData</p>
 
 
   <div class='pre p1 fill-light mt0'>serialise(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)></div>
   
   
 
+  
   
   
   
@@ -6716,7 +7118,7 @@ actually asking for the right state
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)></code>:
-        
+        the serialilsed version of the MutableData
 
       
     
@@ -6750,20 +7152,21 @@ actually asking for the right state
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L574-L576'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L600-L602'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Wrap this MData into a known abstraction. Currently known: <code>NFS</code></p>
+  <p>Wrap this MutableData into a known abstraction. Currently only known: <code>NFS</code></p>
 
 
   <div class='pre p1 fill-light mt0'>emulateAs(eml: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): Emulation</div>
   
   
 
+  
   
   
   
@@ -6832,14 +7235,14 @@ actually asking for the right state
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L213-L275'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L222-L284'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Represent the Entries of an MData network object</p>
+  <p>Represent the Entries of a MutableData network object</p>
 
 
   <div class='pre p1 fill-light mt0'>new Entries()</div>
@@ -6853,6 +7256,7 @@ actually asking for the right state
     </p>
   
 
+  
   
   
   
@@ -6889,20 +7293,21 @@ actually asking for the right state
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L219-L221'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L228-L230'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Get the total number of entries in the Mdata</p>
+  <p>Get the total number of entries in the MutableData</p>
 
 
   <div class='pre p1 fill-light mt0'>len(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></div>
   
   
 
+  
   
   
   
@@ -6917,7 +7322,7 @@ actually asking for the right state
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></code>:
-        
+        number of entries
 
       
     
@@ -6951,7 +7356,7 @@ actually asking for the right state
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L238-L240'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L248-L250'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6961,10 +7366,11 @@ actually asking for the right state
   <p>Look up the value of a specific key</p>
 
 
-  <div class='pre p1 fill-light mt0'>get(keyName: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#valueversion">ValueVersion</a>></div>
+  <div class='pre p1 fill-light mt0'>get(keyName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#valueversion">ValueVersion</a>></div>
   
   
 
+  
   
   
   
@@ -6977,8 +7383,9 @@ actually asking for the right state
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>keyName</span> <code class='quiet'>(any)</code>
-	    
+            <span class='code bold'>keyName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the key to lookup
+
           </div>
           
         </div>
@@ -6992,7 +7399,7 @@ actually asking for the right state
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#valueversion">ValueVersion</a>></code>:
-        the value at the current version
+        the entry's value and the current version
 
       
     
@@ -7026,20 +7433,21 @@ actually asking for the right state
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L247-L249'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L257-L259'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Iterate over the entries, execute the function every time</p>
+  <p>Iterate over the entries, execute the function for each item</p>
 
 
-  <div class='pre p1 fill-light mt0'>forEach(fn: function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>, <a href="#valueversion">ValueVersion</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></div>
+  <div class='pre p1 fill-light mt0'>forEach(fn: function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>, <a href="#valueversion">ValueVersion</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -7067,7 +7475,7 @@ actually asking for the right state
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
         resolves once the iteration is done
 
       
@@ -7102,7 +7510,7 @@ actually asking for the right state
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L261-L263'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L271-L273'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7111,13 +7519,14 @@ actually asking for the right state
 
   <p>Insert a new entry. Will directly commit that transaction to the network.
 Will fail if the entry already exists or the current app doesn't have the
-permissions to edit that mdata.</p>
+permissions to edit that mutable data.</p>
 
 
-  <div class='pre p1 fill-light mt0'>insert(keyName: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), value: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>))</div>
+  <div class='pre p1 fill-light mt0'>insert(keyName: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), value: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -7152,6 +7561,14 @@ permissions to edit that mdata.</p>
   
 
   
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        resolves once storing is done
+
+      
+    
+  
 
   
 
@@ -7181,20 +7598,21 @@ permissions to edit that mdata.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L269-L273'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L279-L282'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Start a new transaction of mutation of the entries</p>
+  <p>Create a new mutation transaction for the entries</p>
 
 
   <div class='pre p1 fill-light mt0'>mutate(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#entrymutationtransaction">EntryMutationTransaction</a>></div>
   
   
 
+  
   
   
   
@@ -7209,7 +7627,7 @@ permissions to edit that mdata.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#entrymutationtransaction">EntryMutationTransaction</a>></code>:
-        
+        the mutation transaction object
 
       
     
@@ -7249,14 +7667,14 @@ permissions to edit that mdata.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L280-L310'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L289-L317'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Represent the keys of an MData network object</p>
+  <p>Represent the keys of a MutableData network object</p>
 
 
   <div class='pre p1 fill-light mt0'>new Keys()</div>
@@ -7270,6 +7688,7 @@ permissions to edit that mdata.</p>
     </p>
   
 
+  
   
   
   
@@ -7306,20 +7725,21 @@ permissions to edit that mdata.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L286-L288'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L295-L297'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Get the total number of keys in the Mdata</p>
+  <p>Get the total number of keys in the MutableData</p>
 
 
   <div class='pre p1 fill-light mt0'>len(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></div>
   
   
 
+  
   
   
   
@@ -7334,7 +7754,7 @@ permissions to edit that mdata.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></code>:
-        
+        number of keys
 
       
     
@@ -7368,20 +7788,21 @@ permissions to edit that mdata.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L295-L299'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L304-L306'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Iterate over the value, execute the function every time</p>
+  <p>Iterate over the keys, execute the function for each entry.</p>
 
 
-  <div class='pre p1 fill-light mt0'>forEach(fn: function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></div>
+  <div class='pre p1 fill-light mt0'>forEach(fn: function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -7409,7 +7830,7 @@ permissions to edit that mdata.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
         resolves once the iteration is done
 
       
@@ -7450,14 +7871,14 @@ permissions to edit that mdata.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L315-L343'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L322-L350'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Represent the values of an MData network object</p>
+  <p>Represent the values of a MutableData network object</p>
 
 
   <div class='pre p1 fill-light mt0'>new Values()</div>
@@ -7471,6 +7892,7 @@ permissions to edit that mdata.</p>
     </p>
   
 
+  
   
   
   
@@ -7507,20 +7929,21 @@ permissions to edit that mdata.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L321-L323'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L328-L330'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Get the total number of values in the Mdata</p>
+  <p>Get the total number of values in the MutableData</p>
 
 
   <div class='pre p1 fill-light mt0'>len(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></div>
   
   
 
+  
   
   
   
@@ -7535,7 +7958,7 @@ permissions to edit that mdata.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></code>:
-        
+        number of values
 
       
     
@@ -7569,20 +7992,21 @@ permissions to edit that mdata.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L330-L332'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L337-L339'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Iterate over the value, execute the function every time</p>
+  <p>Iterate over the values, execute the function for each entry.</p>
 
 
-  <div class='pre p1 fill-light mt0'>forEach(fn: function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>, <a href="#valueversion">ValueVersion</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></div>
+  <div class='pre p1 fill-light mt0'>forEach(fn: function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>, <a href="#valueversion">ValueVersion</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -7610,7 +8034,7 @@ permissions to edit that mdata.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
         resolves once the iteration is done
 
       
@@ -7651,14 +8075,14 @@ permissions to edit that mdata.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L143-L207'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L152-L216'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Holds a  mutations to be done to the entries within one
+  <p>Holds a mutations to be done to the entries within one
 transaction on the network.</p>
 <p>You need this whenever you want to change the content of
 the entries.</p>
@@ -7680,6 +8104,7 @@ the entries.</p>
   
   
   
+  
 
   
 
@@ -7695,13 +8120,13 @@ the entries.</p>
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Mutate a range of Entries</span>
 
-app.mutableData.fetch(somename)
- .then(<span class="hljs-function">(<span class="hljs-params">mData</span>) =&gt;</span> mData.entries()
+app.mutableData.newPublic(somename, tagtype)
+ .then(<span class="hljs-function">(<span class="hljs-params">mData</span>) =&gt;</span> mData.getEntries()
   .then(<span class="hljs-function">(<span class="hljs-params">entries</span>) =&gt;</span> entries.mutate()
-    .then(<span class="hljs-function">(<span class="hljs-params">m</span>) =&gt;</span> m.insert(<span class="hljs-string">'key'</span>, value)
+    .then(<span class="hljs-function">(<span class="hljs-params">m</span>) =&gt;</span> m.insert(<span class="hljs-string">'key'</span>, <span class="hljs-string">'value'</span>)
       <span class="hljs-comment">// this is where all mutations are recorded</span>
-      .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> entries.apply(m)
-      ))))</pre>
+      .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> mData.applyEntriesMutation(m))
+    )))</pre>
     
   
 
@@ -7725,20 +8150,21 @@ app.mutableData.fetch(somename)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L163-L170'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L172-L179'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Store a new <code>Insert</code>-Action in the transaction.</p>
+  <p>Store a new <code>Insert</code>-Action in the transaction to store a new entry.</p>
 
 
   <div class='pre p1 fill-light mt0'>insert(keyName: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), value: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -7752,7 +8178,8 @@ app.mutableData.fetch(somename)
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>keyName</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>))</code>
-	    
+	    the key you want to insert
+
           </div>
           
         </div>
@@ -7760,7 +8187,8 @@ app.mutableData.fetch(somename)
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>value</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>))</code>
-	    
+	    the value you want to insert
+
           </div>
           
         </div>
@@ -7808,20 +8236,21 @@ app.mutableData.fetch(somename)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L180-L187'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L189-L196'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Store a new <code>Remove</code>-Action in the transaction</p>
+  <p>Store a new <code>Remove</code>-Action in the transaction to remove an existing entry.</p>
 
 
   <div class='pre p1 fill-light mt0'>remove(keyName: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -7844,8 +8273,8 @@ app.mutableData.fetch(somename)
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>version</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
-	    the current version, to confirm you are
-actually asking for the right state
+	    the version successor, to confirm you are
+actually asking for the right version
 
           </div>
           
@@ -7894,20 +8323,21 @@ actually asking for the right state
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L198-L206'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L207-L215'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Store a <code>Update</code>-Action in the transaction</p>
+  <p>Store a <code>Update</code>-Action in the transaction to update an existing entry.</p>
 
 
   <div class='pre p1 fill-light mt0'>update(keyName: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), value: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -7921,7 +8351,7 @@ actually asking for the right state
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>keyName</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>))</code>
-	    the key you want to remove
+	    the key for the entry you want to update
 
           </div>
           
@@ -7939,8 +8369,8 @@ actually asking for the right state
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>version</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
-	    the current version, to confirm you are
-actually asking for the right state
+	    the version successor, to confirm you are
+actually asking for the right version
 
           </div>
           
@@ -7995,7 +8425,7 @@ actually asking for the right state
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/native/_mutable.js#L27-L32'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/native/_mutable.js#L27-L32'>
       <span>src/native/_mutable.js</span>
       </a>
     
@@ -8014,6 +8444,7 @@ actually asking for the right state
   
   
 
+  
   
   
   
@@ -8050,14 +8481,14 @@ actually asking for the right state
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L64-L124'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L69-L133'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Holds the permissions of a MData object</p>
+  <p>Holds the permissions of a MutableData object</p>
 
 
   <div class='pre p1 fill-light mt0'>new Permissions()</div>
@@ -8071,6 +8502,7 @@ actually asking for the right state
     </p>
   
 
+  
   
   
   
@@ -8107,7 +8539,7 @@ actually asking for the right state
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L70-L72'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L75-L77'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8126,6 +8558,7 @@ actually asking for the right state
   
   
   
+  
 
   
 
@@ -8135,7 +8568,7 @@ actually asking for the right state
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></code>:
-        
+        number of entries
 
       
     
@@ -8169,20 +8602,23 @@ actually asking for the right state
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L89-L93'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L96-L100'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Lookup the permissions of a specifc key</p>
+  <p>Lookup the permissions of a specifc key
+If the signKey provided is <code>null</code> the permission set will be then
+assumed to be <code>USER_ANYONE</code>.</p>
 
 
-  <div class='pre p1 fill-light mt0'>getPermissionSet(signKey: <a href="#signkey">SignKey</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;PermissionSet></div>
+  <div class='pre p1 fill-light mt0'>getPermissionSet(signKey: (<a href="#signkey">SignKey</a> | null)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;PermissionSet></div>
   
   
 
+  
   
   
   
@@ -8195,7 +8631,7 @@ actually asking for the right state
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>signKey</span> <code class='quiet'>(<a href="#signkey">SignKey</a>)</code>
+            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#signkey">SignKey</a> | null))</code>
 	    the key to lookup for
 
           </div>
@@ -8211,7 +8647,7 @@ actually asking for the right state
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;PermissionSet></code>:
-        the permissionset for that key
+        the permission set for that key
 
       
     
@@ -8235,7 +8671,7 @@ actually asking for the right state
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>insertPermissionSet(signKey, pmset, permissionSet)</span>
+            <span class='code strong strong truncate'>insertPermissionSet(signKey, permissionSet, pmset)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -8245,21 +8681,25 @@ actually asking for the right state
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L102-L107'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L112-L117'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Insert a new permissions to a specifc key. Directly commits to the network.
-Requires 'ManagePermissions'-Permission for the app.</p>
+  <p>Insert a new permission set mapped to a specifc key. Directly commits
+to the network.
+Requires 'ManagePermissions'-Permission for the app.
+If the signKey provided is <code>null</code> the permission set will be then
+set for <code>USER_ANYONE</code>.</p>
 
 
-  <div class='pre p1 fill-light mt0'>insertPermissionSet(signKey: <a href="#signkey">SignKey</a>, pmset: PermissionSet, permissionSet: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>insertPermissionSet(signKey: (<a href="#signkey">SignKey</a> | null), permissionSet: any, pmset: PermissionSet): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -8272,17 +8712,8 @@ Requires 'ManagePermissions'-Permission for the app.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>signKey</span> <code class='quiet'>(<a href="#signkey">SignKey</a>)</code>
-	    the key to lookup for
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>pmset</span> <code class='quiet'>(PermissionSet)</code>
-	    the permissionset you'd like insert
+            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#signkey">SignKey</a> | null))</code>
+	    the key to map to
 
           </div>
           
@@ -8292,6 +8723,15 @@ Requires 'ManagePermissions'-Permission for the app.</p>
           <div>
             <span class='code bold'>permissionSet</span> <code class='quiet'>(any)</code>
 	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pmset</span> <code class='quiet'>(PermissionSet)</code>
+	    the permission set to insert
+
           </div>
           
         </div>
@@ -8339,20 +8779,22 @@ Requires 'ManagePermissions'-Permission for the app.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L114-L122'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L125-L131'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Iterate over the entries, execute the function every time</p>
+  <p>Iterate over the entries, execute the function provided for each of entry,
+and return a promise that resolves once iteration is finished.</p>
 
 
-  <div class='pre p1 fill-light mt0'>forEach(fn: function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>, <a href="#valueversion">ValueVersion</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></div>
+  <div class='pre p1 fill-light mt0'>forEach(fn: function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>, <a href="#valueversion">ValueVersion</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -8380,7 +8822,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
         resolves once the iteration is done
 
       
@@ -8421,7 +8863,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L18-L59'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L23-L64'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8443,6 +8885,7 @@ allowed or denied</p>
     </p>
   
 
+  
   
   
   
@@ -8479,7 +8922,7 @@ allowed or denied</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L25-L28'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L30-L33'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8489,10 +8932,11 @@ allowed or denied</p>
   <p>Set the action as allowed</p>
 
 
-  <div class='pre p1 fill-light mt0'>setAllow(action: <a href="#mdataaction">MDataAction</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>setAllow(action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -8505,8 +8949,9 @@ allowed or denied</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>action</span> <code class='quiet'>(<a href="#mdataaction">MDataAction</a>)</code>
-	    
+            <span class='code bold'>action</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the action to be set as allowed
+
           </div>
           
         </div>
@@ -8554,7 +8999,7 @@ allowed or denied</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L35-L38'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L40-L43'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8564,10 +9009,11 @@ allowed or denied</p>
   <p>Set the action as denied</p>
 
 
-  <div class='pre p1 fill-light mt0'>setDeny(action: <a href="#mdataaction">MDataAction</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>setDeny(action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -8580,8 +9026,9 @@ allowed or denied</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>action</span> <code class='quiet'>(<a href="#mdataaction">MDataAction</a>)</code>
-	    
+            <span class='code bold'>action</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the action to be set as denied
+
           </div>
           
         </div>
@@ -8629,7 +9076,7 @@ allowed or denied</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L45-L48'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L50-L53'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8639,10 +9086,11 @@ allowed or denied</p>
   <p>Remove action from the set</p>
 
 
-  <div class='pre p1 fill-light mt0'>clear(action: <a href="#mdataaction">MDataAction</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>clear(action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
+  
   
   
   
@@ -8655,8 +9103,9 @@ allowed or denied</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>action</span> <code class='quiet'>(<a href="#mdataaction">MDataAction</a>)</code>
-	    
+            <span class='code bold'>action</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the action to clear permissions on
+
           </div>
           
         </div>
@@ -8702,7 +9151,7 @@ allowed or denied</p>
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='Emulations' class='mt0'>
+  <h2 id='emulations' class='mt0'>
     Emulations
   </h2>
 
@@ -8725,7 +9174,7 @@ allowed or denied</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/emulations/nfs.js#L99-L166'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/emulations/nfs.js#L118-L189'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -8735,7 +9184,7 @@ allowed or denied</p>
   <p>NFS Emulation on top of an MData</p>
 
 
-  <div class='pre p1 fill-light mt0'>new NFS()</div>
+  <div class='pre p1 fill-light mt0'>new NFS(mData: any)</div>
   
   
 
@@ -8744,7 +9193,21 @@ allowed or denied</p>
   
   
   
+  
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>mData</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -8775,7 +9238,7 @@ allowed or denied</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/emulations/nfs.js#L115-L130'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/emulations/nfs.js#L136-L151'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -8783,7 +9246,7 @@ allowed or denied</p>
   
 
   <p>Create a new file with the given content, put the content
-on the network via immutableData (public) and wrap it into
+on the network via ImmutableData (public) and wrap it into
 a File.</p>
 
 
@@ -8791,6 +9254,7 @@ a File.</p>
   
   
 
+  
   
   
   
@@ -8852,20 +9316,21 @@ a File.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/emulations/nfs.js#L137-L140'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/emulations/nfs.js#L158-L161'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
   </div>
   
 
-  <p>Find the file of the given filename (aka keyName in the MData)</p>
+  <p>Find the file of the given filename (aka keyName in the MutableData)</p>
 
 
   <div class='pre p1 fill-light mt0'>fetch(fileName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#file">File</a>></div>
   
   
 
+  
   
   
   
@@ -8928,20 +9393,22 @@ a File.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/emulations/nfs.js#L148-L151'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/emulations/nfs.js#L170-L173'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
   </div>
   
 
-  <p>Insert the given file into the underlying MData, directly commit to the network</p>
+  <p>Insert the given file into the underlying MutableData, directly commit
+to the network.</p>
 
 
   <div class='pre p1 fill-light mt0'>insert(fileName: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), file: <a href="#file">File</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#file">File</a>></div>
   
   
 
+  
   
   
   
@@ -8964,7 +9431,7 @@ a File.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>file</span> <code class='quiet'>(<a href="#file">File</a>)</code>
-	    the file to serialise and store there
+	    the file to serialise and store
 
           </div>
           
@@ -9013,7 +9480,7 @@ a File.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/emulations/nfs.js#L161-L165'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/emulations/nfs.js#L183-L188'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9027,6 +9494,7 @@ a File.</p>
   
   
 
+  
   
   
   
@@ -9049,7 +9517,7 @@ a File.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>file</span> <code class='quiet'>(<a href="#file">File</a>)</code>
-	    the file to serialise and store there
+	    the file to serialise and store
 
           </div>
           
@@ -9058,7 +9526,7 @@ a File.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>version</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
-	    the current version number, to ensure you
+	    the version successor number, to ensure you
 are overwriting the right one
 
           </div>
@@ -9114,7 +9582,7 @@ are overwriting the right one
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/emulations/nfs.js#L15-L94'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/emulations/nfs.js#L15-L113'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9126,7 +9594,7 @@ are overwriting the right one
 of the metadata provided.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new File()</div>
+  <div class='pre p1 fill-light mt0'>new File(ref: any)</div>
   
   
 
@@ -9135,7 +9603,21 @@ of the metadata provided.</p>
   
   
   
+  
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>ref</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -9166,7 +9648,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/emulations/nfs.js#L59-L61'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/emulations/nfs.js#L68-L70'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9185,6 +9667,7 @@ of the metadata provided.</p>
   
   
   
+  
 
   
 
@@ -9194,7 +9677,7 @@ of the metadata provided.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://nodejs.org/api/buffer.html">Buffer</a></code>:
-        
+        XoR-name
 
       
     
@@ -9228,7 +9711,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/emulations/nfs.js#L67-L69'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/emulations/nfs.js#L76-L78'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9242,6 +9725,7 @@ of the metadata provided.</p>
   
   
 
+  
   
   
   
@@ -9290,7 +9774,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/emulations/nfs.js#L75-L77'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/emulations/nfs.js#L84-L86'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9304,6 +9788,7 @@ of the metadata provided.</p>
   
   
 
+  
   
   
   
@@ -9352,7 +9837,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/emulations/nfs.js#L83-L85'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/emulations/nfs.js#L92-L94'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9366,6 +9851,7 @@ of the metadata provided.</p>
   
   
 
+  
   
   
   
@@ -9414,20 +9900,21 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/emulations/nfs.js#L91-L93'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/emulations/nfs.js#L100-L102'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
   </div>
   
 
-  <p>Which version was this? Equals the Mdata-value-version.</p>
+  <p>Which version was this? Equals the underlying MutableData's entry version.</p>
 
 
   <div class='pre p1 fill-light mt0'>version</div>
   
   
 
+  
   
   
   
@@ -9474,7 +9961,7 @@ of the metadata provided.</p>
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='Types' class='mt0'>
+  <h2 id='types' class='mt0'>
     Types
   </h2>
 
@@ -9494,7 +9981,7 @@ of the metadata provided.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L29-L48'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L29-L48'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -9515,6 +10002,7 @@ of the metadata provided.</p>
     </p>
   
 
+  
   
   
   
@@ -9551,7 +10039,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L35-L37'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L35-L37'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -9565,6 +10053,7 @@ of the metadata provided.</p>
   
   
 
+  
   
   
   
@@ -9619,7 +10108,7 @@ of the metadata provided.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L129-L164'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L129-L164'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -9629,7 +10118,7 @@ of the metadata provided.</p>
   <p>Holds an asymmetrict keypair</p>
 
 
-  <div class='pre p1 fill-light mt0'>new KeyPair()</div>
+  <div class='pre p1 fill-light mt0'>new KeyPair(app: any, pub: any, secret: any)</div>
   
   
 
@@ -9638,7 +10127,37 @@ of the metadata provided.</p>
   
   
   
+  
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>app</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pub</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>secret</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -9669,7 +10188,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L142-L144'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L142-L144'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -9683,6 +10202,7 @@ of the metadata provided.</p>
   
   
 
+  
   
   
   
@@ -9731,7 +10251,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L151-L153'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L151-L153'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -9745,6 +10265,7 @@ of the metadata provided.</p>
   
   
 
+  
   
   
   
@@ -9793,7 +10314,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L159-L162'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L159-L162'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -9807,6 +10328,7 @@ of the metadata provided.</p>
   
   
 
+  
   
   
   
@@ -9874,7 +10396,7 @@ of the metadata provided.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L95-L123'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L95-L123'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -9895,6 +10417,7 @@ of the metadata provided.</p>
     </p>
   
 
+  
   
   
   
@@ -9931,7 +10454,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L101-L103'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L101-L103'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -9945,6 +10468,7 @@ of the metadata provided.</p>
   
   
 
+  
   
   
   
@@ -9983,7 +10507,7 @@ of the metadata provided.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>decrypt(theirPubKey, cipher)</span>
+            <span class='code strong strong truncate'>decrypt(cipher, theirPubKey)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -9993,7 +10517,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L120-L122'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L120-L122'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -10003,10 +10527,11 @@ of the metadata provided.</p>
   <p>Decrypt the given ciphertext (buffer or string) using the private and public key</p>
 
 
-  <div class='pre p1 fill-light mt0'>decrypt(theirPubKey: any, cipher: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
+  <div class='pre p1 fill-light mt0'>decrypt(cipher: any, theirPubKey: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
   
   
 
+  
   
   
   
@@ -10019,17 +10544,17 @@ of the metadata provided.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>theirPubKey</span> <code class='quiet'>(any)</code>
-	    {PubEncKey} the others public key
-
+            <span class='code bold'>cipher</span> <code class='quiet'>(any)</code>
+	    
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>cipher</span> <code class='quiet'>(any)</code>
-	    
+            <span class='code bold'>theirPubKey</span> <code class='quiet'>(any)</code>
+	    {PubEncKey} the others public key
+
           </div>
           
         </div>
@@ -10083,7 +10608,7 @@ of the metadata provided.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L53-L89'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L53-L89'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -10104,6 +10629,7 @@ of the metadata provided.</p>
     </p>
   
 
+  
   
   
   
@@ -10140,7 +10666,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L59-L61'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L59-L61'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -10154,6 +10680,7 @@ of the metadata provided.</p>
   
   
 
+  
   
   
   
@@ -10202,7 +10729,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L77-L79'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L77-L79'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -10216,6 +10743,7 @@ of the metadata provided.</p>
   
   
 
+  
   
   
   
@@ -10277,7 +10805,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/crypto.js#L86-L88'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/crypto.js#L86-L88'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -10291,6 +10819,7 @@ of the metadata provided.</p>
   
   
 
+  
   
   
   
@@ -10366,7 +10895,7 @@ of the metadata provided.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/cipher_opt.js#L8-L13'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/cipher_opt.js#L8-L12'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -10388,6 +10917,7 @@ either PlainText, Symmetric or Asymmetric</p>
     </p>
   
 
+  
   
   
   
@@ -10424,7 +10954,7 @@ either PlainText, Symmetric or Asymmetric</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L363-L578'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L370-L603'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -10454,6 +10984,7 @@ either PlainText, Symmetric or Asymmetric</p>
   
   
   
+  
 
   
     <div class='py1 quiet mt1 prose-big'>Parameters</div>
@@ -10462,7 +10993,7 @@ either PlainText, Symmetric or Asymmetric</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>name</span> <code class='quiet'>(<a href="https://nodejs.org/api/buffer.html">Buffer</a>)</code>
-	    the name/address on the network
+	    the XoR-name/address on the network
 
           </div>
           
@@ -10508,7 +11039,7 @@ either PlainText, Symmetric or Asymmetric</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/mutable.js#L363-L578'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/mutable.js#L370-L603'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -10533,6 +11064,7 @@ either PlainText, Symmetric or Asymmetric</p>
     </p>
   
 
+  
   
   
   
@@ -10593,7 +11125,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/9a47f5f9d820eb4f2f1ae84fed11c3d5a38dc4b1/src/api/emulations/index.js#L8-L10'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaindia/safe_app_nodejs/blob/2763a3f8596e29496dee0e688979ed5067c23812/src/api/emulations/index.js#L8-L10'>
       <span>src/api/emulations/index.js</span>
       </a>
     
@@ -10612,6 +11144,7 @@ Holds the informatation of a value of a MutableData
   
   
 
+  
   
   
   
