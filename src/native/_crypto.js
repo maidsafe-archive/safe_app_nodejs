@@ -53,7 +53,8 @@ module.exports = {
     encrypt_sealed_box: [t.Void, [t.AppPtr, 'pointer', t.usize, EncryptPubKeyHandle, 'pointer', 'pointer']],
     decrypt_sealed_box: [t.Void, [t.AppPtr, 'pointer', t.usize, EncryptPubKeyHandle, EncryptSecKeyHandle, 'pointer', 'pointer']],
 
-    sha3_hash: [t.Void, ['pointer', t.usize, 'pointer', 'pointer']]
+    sha3_hash: [t.Void, ['pointer', t.usize, 'pointer', 'pointer']],
+    generate_nonce: [t.Void, ['pointer', 'pointer']]
   },
   api: {
     app_pub_sign_key: h.Promisified(null, SignKeyHandle),
@@ -77,5 +78,6 @@ module.exports = {
     decrypt_sealed_box: h.Promisified(appStrToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
 
     sha3_hash: h.Promisified(strToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
+    generate_nonce: h.Promisified(null, t.NONCEBYTES)
   }
 };
