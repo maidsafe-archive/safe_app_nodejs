@@ -19,6 +19,13 @@ function strToBuffer(str) {
   return [res, res.length]
 }
 
+function toBuffer(app, key) {
+  let keyArr = key.buffer || key;
+  if (keyArr.length != 32) throw Error("Sign/Enc Keys _must be_ 32 bytes long.")
+  keyArr = t.KEYBYTES(keyArr);
+  return [app, keyArr]
+}
+
 function appStrToBuffer(appPtr, str) {
   return [appPtr].concat(strToBuffer(str)).concat(Array.prototype.slice.call(arguments, 2))
 }
@@ -58,17 +65,17 @@ module.exports = {
   },
   api: {
     app_pub_sign_key: h.Promisified(null, SignKeyHandle),
-    sign_key_new: h.Promisified(null, SignKeyHandle),
+    sign_key_new: h.Promisified(toBuffer, SignKeyHandle),
     sign_key_get: h.Promisified(null, t.KEYBYTES),
     sign_key_free: h.Promisified(null, []),
 
     app_pub_enc_key: h.Promisified(null, EncryptKeyHandle),
     enc_generate_key_pair: h.Promisified(null, [EncryptPubKeyHandle, EncryptSecKeyHandle]),
 
-    enc_pub_key_new: h.Promisified(null, EncryptPubKeyHandle),
+    enc_pub_key_new: h.Promisified(toBuffer, EncryptPubKeyHandle),
     enc_pub_key_get: h.Promisified(null, t.KEYBYTES),
 
-    enc_secret_key_new: h.Promisified(null, EncryptPubKeyHandle),
+    enc_secret_key_new: h.Promisified(toBuffer, EncryptPubKeyHandle),
     enc_secret_key_get: h.Promisified(null, t.KEYBYTES),
 
     encrypt: h.Promisified(appStrToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
