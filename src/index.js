@@ -46,8 +46,8 @@ function initializeApp(appInfo) {
 
 /**
  * If you have received a response URI (which you are allowed
- * to store securely), you can directly get an authenticated app
- * by using this helper function. Just provide said URI as the
+ * to store securely), you can directly get an authenticated or non-authenticated
+ * connection by using this helper function. Just provide said URI as the
  * second value.
  * @param {AppInfo} appInfo - the app info
  * @param {String} authUri - the URI coming back from the Authenticator
@@ -57,13 +57,8 @@ function fromAuthURI(appInfo, authUri) {
   return App.fromAuthUri(appInfo, authUri);
 }
 
-function fromConnURI(appInfo, connUri) {
-  return App.fromConnUri(appInfo, connUri);
-}
-
 module.exports = {
   VERSION: version,
   initializeApp,
-  fromAuthURI,
-  fromConnURI
+  fromAuthURI
 };

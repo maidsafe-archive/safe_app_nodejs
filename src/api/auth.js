@@ -125,6 +125,7 @@ class AuthInterface {
   * @example // using an Authentication example:
   * app.auth.genConnUri()
   **/
+  /* eslint-disable class-methods-use-this */
   genConnUri() {
     return lib.encode_unregistered_req();
   }
@@ -156,25 +157,6 @@ class AuthInterface {
       containers_len: ctnrs.length,
       containers_cap: ctnrs.length
     }).ref());
-  }
-
-  /**
-  * Create a new, unregistered session (read-only), overwrites any previously
-  * set session.
-  * An application can read public data from the network with an unregistered
-  * session such as web pages.
-  * @arg {String} connUri the IPC response string given
-  * @returns {Promise<SAFEApp>} same instace but with newly set up connection
-  */
-  connectUnregistered(connUri) {
-    return lib.decode_ipc_msg(connUri).then((resp) => {
-      if (resp[0] !== 'unregistered') return Promise.reject(resp);
-
-      return lib.app_unregistered(this.app, resp[1]).then(() => {
-        this._registered = false;
-        return this.app;
-      });
-    });
   }
 
   /**
@@ -250,23 +232,28 @@ class AuthInterface {
   }
 
   /**
-  * Create a new authenticated session using the provided IPC response.
+  * Create a new authenticated or unregistered session using the provided IPC response.
   * @arg {String} responseUri the IPC response string given
   * @returns {Promise<SAFEApp>} the given app instance with a newly setup and
   *          authenticated session.
   */
   loginFromURI(responseUri) {
     return lib.decode_ipc_msg(responseUri).then((resp) => {
-      // we can only handle 'granted' request
-      if (resp[0] !== 'granted') return Promise.reject(resp);
+      // we can only handle 'granted' and 'unregistered' request
+      if (resp[0] === 'unregistered') {
+        this._registered = false;
+        return lib.app_unregistered(this.app, resp[1]);
+      } else if (resp[0] === 'granted') {
+        const authGranted = resp[1];
+        this._registered = true;
+        return lib.app_registered(this.app, authGranted);
+        // FIXME: in the future: automatically check for the
+        // containers, too
+        // .then((app) =>
+        //   this.refreshContainerAccess().then(() => app));
+      }
 
-      const authGranted = resp[1];
-      this._registered = true;
-      return lib.app_registered(this.app, authGranted);
-      // FIXME: in the future: automatically check for the
-      // containers, too
-      // .then((app) =>
-      //   this.refreshContainerAccess().then(() => app));
+      return Promise.reject(resp);
     });
   }
 

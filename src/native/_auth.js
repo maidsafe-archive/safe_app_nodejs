@@ -201,7 +201,6 @@ module.exports = {
                       resolve(["granted", authGranted])
                    }),
                    ffi.Callback("void", [t.VoidPtr, "uint32", t.u8Pointer, t.usize], function(user_data, req_id, connUri, connUriLen) {
-                      console.log("unregistered CB: ", connUri);
                       resolve(["unregistered"], new Buffer(ref.reinterpret(connUri, connUriLen)))
                    }),
                    ffi.Callback("void", [t.VoidPtr, "uint32"], function(user_data, req_id) {

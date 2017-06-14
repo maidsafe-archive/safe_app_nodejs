@@ -9,7 +9,6 @@ describe('Smoke test', () => {
     const app = createTestApp();
     return app.auth.genConnUri()
       .then((resp) => {
-        console.log("URI:", resp.uri);
         should(resp.uri).is.not.undefined();
         should(resp.uri).startWith('safe-auth:');
       });

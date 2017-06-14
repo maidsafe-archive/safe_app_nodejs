@@ -51,12 +51,11 @@ function createRandomPrivateServiceDomain(content, path, service) {
 }
 
 describe('Browsing', () => {
-  it.only('fetch content', function test() {
+  it('fetch content', function test() {
     this.timeout(20000);
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '', '')
       .then((domain) => createAnonTestApp()
-        .then((app) => { console.log("APP: ", app); return app; })
         .then((app) => app.webFetch(`safe://${domain}`)
           .then((f) => app.immutableData.fetch(f.dataMapName))
           .then((i) => i.read())
