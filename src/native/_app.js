@@ -8,7 +8,7 @@ const AuthGranted = require('./_auth').types.AuthGranted;
 
 module.exports = {
   functions: {
-    app_unregistered: [t.i32 ,['pointer', 'pointer', t.AppPtr]],
+    app_unregistered: [t.i32 ,[t.VoidPtr, t.u8Pointer, t.usize, 'pointer', t.AppPtr]],
     app_registered: [t.i32 , ['string', ref.refType(AuthGranted), t.VoidPtr, 'pointer', t.AppPtr]],
     app_free: [t.Void, [t.AppPtr]]
   },

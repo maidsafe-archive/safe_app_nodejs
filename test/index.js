@@ -22,7 +22,7 @@ describe('External API', () => {
     });
 
     it('should connect unregistered', () => {
-      const uri = 'safe-auth:AAAAAMteFc4CAAAA';
+      const uri = 'safe-dW5yZWdpc3RlcmVk:AQAAAHDL4SwCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
       const appInfo = {
         id: 'net.maidsafe.example.tests',
         name: 'Example Test',

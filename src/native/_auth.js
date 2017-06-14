@@ -201,7 +201,7 @@ module.exports = {
                       resolve(["granted", authGranted])
                    }),
                    ffi.Callback("void", [t.VoidPtr, "uint32", t.u8Pointer, t.usize], function(user_data, req_id, connUri, connUriLen) {
-                      resolve(["unregistered"], new Buffer(ref.reinterpret(connUri, connUriLen)))
+                      resolve(["unregistered", new Buffer(ref.reinterpret(connUri, connUriLen, 0))])
                    }),
                    ffi.Callback("void", [t.VoidPtr, "uint32"], function(user_data, req_id) {
                       resolve(["containers", req_id])
