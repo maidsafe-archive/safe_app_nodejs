@@ -186,6 +186,10 @@ class SAFEApp extends EventEmitter {
     return app.auth.loginFromURI(authUri);
   }
 
+  static fromConnUri(appInfo, connUri) {
+    const app = autoref(new SAFEApp(appInfo));
+    return app.auth.connectUnregistered(connUri);
+  }
 
   /**
   * @private

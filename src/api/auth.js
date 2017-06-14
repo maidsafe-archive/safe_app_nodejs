@@ -119,6 +119,17 @@ class AuthInterface {
   }
 
   /**
+  * Generate an unregistered connection URI for the app.
+  *
+  * @returns {String} `safe-auth://`-URI
+  * @example // using an Authentication example:
+  * app.auth.genConnUri()
+  **/
+  genConnUri() {
+    return lib.encode_unregistered_req();
+  }
+
+  /**
   * Open the given Authentication URI to the authenticator
   **/
   /* eslint-disable class-methods-use-this */
@@ -152,12 +163,17 @@ class AuthInterface {
   * set session.
   * An application can read public data from the network with an unregistered
   * session such as web pages.
+  * @arg {String} connUri the IPC response string given
   * @returns {Promise<SAFEApp>} same instace but with newly set up connection
   */
-  connectUnregistered() {
-    return lib.app_unregistered(this.app).then(() => {
-      this._registered = false;
-      return this.app;
+  connectUnregistered(connUri) {
+    return lib.decode_ipc_msg(connUri).then((resp) => {
+      if (resp[0] !== 'unregistered') return Promise.reject(resp);
+
+      return lib.app_unregistered(this.app, resp[1]).then(() => {
+        this._registered = false;
+        return this.app;
+      });
     });
   }
 

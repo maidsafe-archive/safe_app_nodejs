@@ -144,12 +144,14 @@ module.exports = {
     AppKeys,
   },
   functions: {
-    encode_auth_req: [t.i32, [ ref.refType(AuthReq), 'pointer', 'pointer'] ],
-    encode_containers_req: [t.i32, [ref.refType(ContainerReq), 'pointer', 'pointer'] ],
+    encode_auth_req: [t.Void, [ ref.refType(AuthReq), 'pointer', 'pointer'] ],
+    encode_containers_req: [t.Void, [ref.refType(ContainerReq), 'pointer', 'pointer'] ],
+    encode_unregistered_req: [t.Void, ['pointer', 'pointer'] ],
     decode_ipc_msg: [t.Void, [
                       "string", //  (msg: *const c_char,
                       t.VoidPtr, // user_data: *mut c_void,
                       "pointer", // o_auth: extern "C" fn(*mut c_void, u32, FfiAuthGranted),
+                      "pointer", // o_unregistered: extern "C" fn(*mut c_void, u32, *const u8, usize),
                       "pointer", // o_containers: extern "C" fn(*mut c_void, u32),
                       "pointer", // o_revoked: extern "C" fn(*mut c_void),
                       "pointer"  // o_err: extern "C" fn(*mut c_void, i32, u32)
@@ -189,6 +191,7 @@ module.exports = {
     }, t.bool),
     encode_containers_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_auth_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
+    encode_unregistered_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     decode_ipc_msg: function(lib, fn) {
       return (function(str) {
         return new Promise(function(resolve, reject) {
@@ -196,6 +199,10 @@ module.exports = {
                    ref.NULL,
                    ffi.Callback("void", [t.VoidPtr, "uint32", ref.refType(AuthGranted)], function(user_data, req_id, authGranted) {
                       resolve(["granted", authGranted])
+                   }),
+                   ffi.Callback("void", [t.VoidPtr, "uint32", t.u8Pointer, t.usize], function(user_data, req_id, connUri, connUriLen) {
+                      console.log("unregistered CB: ", connUri);
+                      resolve(["unregistered"], new Buffer(ref.reinterpret(connUri, connUriLen)))
                    }),
                    ffi.Callback("void", [t.VoidPtr, "uint32"], function(user_data, req_id) {
                       resolve(["containers", req_id])

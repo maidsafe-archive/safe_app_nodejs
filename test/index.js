@@ -1,6 +1,7 @@
 const lib = require('../src/native/lib');
 const should = require('should');
 const fromAuthURI = require('../src').fromAuthURI;
+const fromConnURI = require('../src').fromConnURI;
 
 describe('Smoke testing', () => {
   it('confirms there is a lib', () => {
@@ -19,6 +20,20 @@ describe('External API', () => {
       };
 
       return fromAuthURI(appInfo, uri);
+    });
+  });
+
+  describe('fromConnURI', () => {
+    it('should connect', () => {
+//      const uri = 'safe-auth:AAAAAMteFc4CAAAA';
+      const uri = 'safe-auth:AAAAABq3ESUAAAAAHgAAAAAAAABuZXQubWFpZHNhZmUuZXhhbXBsZXMudGVzdC1hcHAAEgAAAAAAAABOb2RlSlMgZXhhbXBsZSBBcHARAAAAAAAAAE1haWRTYWZlLm5ldCBMdGQuAAEAAAAAAAAABwAAAAAAAABfcHVibGljBAAAAAAAAAAAAAAAAQAAAAMAAAAEAAAA';
+      const appInfo = {
+        id: 'net.maidsafe.example.tests',
+        name: 'Example Test',
+        vendor: 'MaidSafe Ltd.'
+      };
+
+      return fromConnURI(appInfo, uri);
     });
   });
 });

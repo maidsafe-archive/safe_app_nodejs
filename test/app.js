@@ -7,13 +7,20 @@ const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 describe('Smoke test', () => {
   it('unauthorised connection', () => {
     const app = createTestApp();
-    return app.auth.connectUnregistered();
+    return app.auth.genConnUri()
+      .then((resp) => {
+        console.log("URI:", resp.uri);
+        should(resp.uri).is.not.undefined();
+        should(resp.uri).startWith('safe-auth:');
+      });
   });
+
   it('should build some authentication uri', () => {
     const app = createTestApp();
     return app.auth.genAuthUri({ _public: ['Read'] })
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
+
   it('should build some containers uri', () => {
     const app = createTestApp();
     return app.auth.genContainerAuthUri({ private: ['Insert'] })

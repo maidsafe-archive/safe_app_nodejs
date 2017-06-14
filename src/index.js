@@ -57,8 +57,13 @@ function fromAuthURI(appInfo, authUri) {
   return App.fromAuthUri(appInfo, authUri);
 }
 
+function fromConnURI(appInfo, connUri) {
+  return App.fromConnUri(appInfo, connUri);
+}
+
 module.exports = {
   VERSION: version,
   initializeApp,
-  fromAuthURI
+  fromAuthURI,
+  fromConnURI
 };
