@@ -209,8 +209,8 @@ module.exports = {
                    ffi.Callback("void", [t.VoidPtr], function(user_data) {
                       resolve(["revoked"])
                    }),
-                   ffi.Callback("void", [t.VoidPtr, t.i32, "uint32"], function(user_data, code, msg) {
-                      reject([code, msg])
+                   ffi.Callback("void", [t.VoidPtr, t.FfiResult, "uint32"], function(user_data, result, req_id) {
+                      reject([result.error_code, result.error_description])
                    }),
                    function () {}
               )

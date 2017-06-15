@@ -18,7 +18,8 @@ describe('External API', () => {
         vendor: 'MaidSafe Ltd.'
       };
 
-      return fromAuthURI(appInfo, uri);
+      return fromAuthURI(appInfo, uri)
+        .then((app) => should(app.auth.registered).be.true());
     });
 
     it('should connect unregistered', () => {
@@ -29,7 +30,8 @@ describe('External API', () => {
         vendor: 'MaidSafe Ltd.'
       };
 
-      return fromAuthURI(appInfo, uri);
+      return fromAuthURI(appInfo, uri)
+        .then((app) => should(app.auth.registered).not.be.true());
     });
   });
 });
