@@ -50,7 +50,7 @@ function createRandomPrivateServiceDomain(content, path, service) {
     .then(() => domain);
 }
 
-describe('Browsing', () => {
+describe.skip('Browsing', () => {
   it('fetch content', function test() {
     this.timeout(20000);
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
