@@ -15,31 +15,35 @@ module.exports = {
   api: {
     app_unregistered: function(lib, fn) {
       return (function(app, uri) {
-        if (!uri) throw makeFfiError(-1, "Missing connection URI");
+        return new Promise((resolve, reject) => {
+          if (!uri) reject(makeFfiError(-1, "Missing connection URI"));
 
-        const network_observer_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.i32], (user_data, result, state) => app._networkStateUpdated(user_data, result, state));
-        const uriBuf = Buffer.isBuffer(uri) ? uri : (uri.buffer || new Buffer(uri));
-        const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.AppPtr], function(user_data, result, appCon) {
-          if (result.error_code !== 0) throw makeFfiError(result.error_code, result.error_description);
+          const network_observer_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.i32], (user_data, result, state) => app._networkStateUpdated(user_data, result, state));
+          const uriBuf = Buffer.isBuffer(uri) ? uri : (uri.buffer || new Buffer(uri));
+          const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.AppPtr], function(user_data, result, appCon) {
+            if (result.error_code !== 0) reject(makeFfiError(result.error_code, result.error_description));
 
-          app.connection = appCon;
+            app.connection = appCon;
+            resolve(app);
+          });
+
+          fn.apply(fn, [ref.NULL, uriBuf, uriBuf.length, network_observer_cb, result_cb]);
         });
-
-        fn(ref.NULL, uriBuf, uriBuf.length, network_observer_cb, result_cb);
-        return Promise.resolve(app);
       })
     },
     app_registered: function(lib, fn) {
       return (function(app, authGranted) {
-        const network_observer_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.i32], (user_data, result, state) => app._networkStateUpdated(user_data, result, state));
-        const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.AppPtr], function(user_data, result, appCon) {
-          if (result.error_code !== 0) throw makeFfiError(result.error_code, result.error_description);
+        return new Promise((resolve, reject) => {
+          const network_observer_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.i32], (user_data, result, state) => app._networkStateUpdated(user_data, result, state));
+          const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.AppPtr], function(user_data, result, appCon) {
+            if (result.error_code !== 0) reject(makeFfiError(result.error_code, result.error_description));
 
-          app.connection = appCon;
+            app.connection = appCon;
+            resolve(app);
+          });
+
+          fn.apply(fn, [app.appInfo.id, authGranted, ref.NULL, network_observer_cb, result_cb]);
         });
-
-        fn(app.appInfo.id, authGranted, ref.NULL, network_observer_cb, result_cb);
-        return Promise.resolve(app);
       });
     },
     app_free: function (lib, fn) {
