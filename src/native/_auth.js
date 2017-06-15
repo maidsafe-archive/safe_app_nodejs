@@ -4,6 +4,7 @@ const ArrayType = require('ref-array');
 const ref = require('ref');
 const Struct = require('ref-struct');
 const base = require('./_base.js');
+const makeFfiError = require('./_error.js');
 
 const t = base.types;
 const AppPtr = t.AppPtr;
@@ -210,7 +211,7 @@ module.exports = {
                       resolve(["revoked"])
                    }),
                    ffi.Callback("void", [t.VoidPtr, t.FfiResult, "uint32"], function(user_data, result, req_id) {
-                      reject([result.error_code, result.error_description])
+                      reject(makeFfiError(result.error_code, result.error_description))
                    }),
                    function () {}
               )

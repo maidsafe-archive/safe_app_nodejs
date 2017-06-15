@@ -252,7 +252,6 @@ class AuthInterface {
         // .then((app) =>
         //   this.refreshContainerAccess().then(() => app));
       }
-
       return Promise.reject(resp);
     });
   }
