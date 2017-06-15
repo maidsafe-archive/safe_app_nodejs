@@ -18,7 +18,20 @@ describe('External API', () => {
         vendor: 'MaidSafe Ltd.'
       };
 
-      return fromAuthURI(appInfo, uri);
+      return fromAuthURI(appInfo, uri)
+        .then((app) => should(app.auth.registered).be.true());
+    });
+
+    it('should connect unregistered', () => {
+      const uri = 'safe-dW5yZWdpc3RlcmVk:AQAAAHDL4SwCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
+      const appInfo = {
+        id: 'net.maidsafe.example.tests',
+        name: 'Example Test',
+        vendor: 'MaidSafe Ltd.'
+      };
+
+      return fromAuthURI(appInfo, uri)
+        .then((app) => should(app.auth.registered).not.be.true());
     });
   });
 });

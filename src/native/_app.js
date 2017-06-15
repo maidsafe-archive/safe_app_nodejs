@@ -8,33 +8,42 @@ const AuthGranted = require('./_auth').types.AuthGranted;
 
 module.exports = {
   functions: {
-    app_unregistered: [t.i32 ,['pointer', 'pointer', t.AppPtr]],
-    app_registered: [t.i32 , ['string', ref.refType(AuthGranted), t.VoidPtr, 'pointer', t.AppPtr]],
+    app_unregistered: [t.Void ,[t.VoidPtr, t.u8Pointer, t.usize, 'pointer', 'pointer']],
+    app_registered: [t.Void , ['string', ref.refType(AuthGranted), t.VoidPtr, 'pointer', 'pointer']],
     app_free: [t.Void, [t.AppPtr]]
   },
   api: {
     app_unregistered: function(lib, fn) {
-      return (function(app) {
-        const appCon = ref.alloc(t.AppPtr);
-        const cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.i32], (user_data, err, state) => app._networkStateUpdated(user_data, err, state));
+      return (function(app, uri) {
+        return new Promise((resolve, reject) => {
+          if (!uri) reject(makeFfiError(-1, "Missing connection URI"));
 
-        const err = fn(ref.NULL, cb, appCon);
-        if (err) throw makeError(err, "Couldn't create App");
+          const network_observer_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.i32], (user_data, result, state) => app._networkStateUpdated(user_data, result, state));
+          const uriBuf = Buffer.isBuffer(uri) ? uri : (uri.buffer || new Buffer(uri));
+          const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.AppPtr], function(user_data, result, appCon) {
+            if (result.error_code !== 0) reject(makeFfiError(result.error_code, result.error_description));
 
-        app.connection = appCon.deref();
-        return Promise.resolve(app);
+            app.connection = appCon;
+            resolve(app);
+          });
+
+          fn.apply(fn, [ref.NULL, uriBuf, uriBuf.length, network_observer_cb, result_cb]);
+        });
       })
     },
     app_registered: function(lib, fn) {
       return (function(app, authGranted) {
-        const appCon = ref.alloc(t.AppPtr);
-        const cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.i32], (user_data, err, state) => app._networkStateUpdated(user_data, err, state));
+        return new Promise((resolve, reject) => {
+          const network_observer_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.i32], (user_data, result, state) => app._networkStateUpdated(user_data, result, state));
+          const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.AppPtr], function(user_data, result, appCon) {
+            if (result.error_code !== 0) reject(makeFfiError(result.error_code, result.error_description));
 
-        const err = fn(app.appInfo.id, authGranted, ref.NULL, cb, appCon);
-        if (err) throw makeError(err, "Couldn't create App");
+            app.connection = appCon;
+            resolve(app);
+          });
 
-        app.connection = appCon.deref();
-        return Promise.resolve(app);
+          fn.apply(fn, [app.appInfo.id, authGranted, ref.NULL, network_observer_cb, result_cb]);
+        });
       });
     },
     app_free: function (lib, fn) {

@@ -186,16 +186,15 @@ class SAFEApp extends EventEmitter {
     return app.auth.loginFromURI(authUri);
   }
 
-
   /**
   * @private
   * Called from the native library whenever the network state
   * changes.
   */
-  _networkStateUpdated(uData, error, newState) {
+  _networkStateUpdated(uData, result, newState) {
     let state = 'Unknown';
-    if (error.error_code !== 0) {
-      console.error('An error was reported from network state observer: ', error.error_code, error.error_description);
+    if (result.error_code !== 0) {
+      console.error('An error was reported from network state observer: ', result.error_code, result.error_description);
     } else {
       state = NetworkStateEvent[newState];
     }
