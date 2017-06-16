@@ -15,6 +15,6 @@ function makeError(code, name) {
 }
 
 module.exports = function(code, msg) {
-  let cls = makeError(code, null);
+  let cls = makeError(code, code);
   return new cls(msg);
 }

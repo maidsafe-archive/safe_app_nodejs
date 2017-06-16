@@ -13,8 +13,7 @@ function createTestApp(scope) {
 
 function createAnonTestApp(scope) {
   const app = createTestApp(scope);
-  return app.auth.genConnUri()
-    .then((resp) => app.auth.loginFromURI(resp.uri));
+  return app.auth.loginForTest();
 }
 
 function createAuthenticatedTestApp(scope, access) {

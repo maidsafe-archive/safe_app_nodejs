@@ -259,14 +259,20 @@ class AuthInterface {
   /**
   * *ONLY AVAILALBE IF RUN in NODE_ENV='development' || 'testing'*
   *
-  * Generate a _locally_ registered App with the given permissions.
-  * @returns {Promise<SAFEApp>} the locally registered App instance
+  * Generate a _locally_ registered App with the given permissions, or
+  * a local unregistered App if permissions is `null`.
+  * @returns {Promise<SAFEApp>} the locally registered/unregistered App instance
   **/
   loginForTest(access) {
     if (!inTesting) throw Error('Not supported outside of Dev and Testing Environment!');
-    const permissions = makePermissions(access || {});
-    this.app.connection = lib.test_create_app_with_access(permissions);
-    this._registered = true;
+    if (access) {
+      const permissions = makePermissions(access || {});
+      this.app.connection = lib.test_create_app_with_access(permissions);
+      this._registered = true;
+    } else {
+      this.app.connection = lib.test_create_app();
+      this._registered = false;
+    }
     return Promise.resolve(this.app);
   }
 }
