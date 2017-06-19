@@ -20,19 +20,16 @@ describe('Smoke testing', () => {
 
 describe('External API', () => {
   describe('fromAuthURI', () => {
-    it('should authenticate', () => {
-      return fromAuthURI(appInfo, registeredAppUri)
-        .then((app) => should(app.auth.registered).be.true());
-    });
+    it('should authenticate', () => fromAuthURI(appInfo, registeredAppUri)
+        .then((app) => should(app.auth.registered).be.true())
+    );
 
-    it('should refresh containers permissions', () => {
-      return fromAuthURI(appInfo, registeredAppUri)
-        .then((app) => should(app.auth.refreshContainersPermissions()).be.fulfilled());
-    });
+    it('should refresh containers permissions', () => fromAuthURI(appInfo, registeredAppUri)
+        .then((app) => should(app.auth.refreshContainersPermissions()).be.fulfilled())
+    );
 
-    it('should connect unregistered', () => {
-      return fromAuthURI(appInfo, unregisteredAppUri)
-        .then((app) => should(app.auth.registered).not.be.true());
-    });
+    it('should connect unregistered', () => fromAuthURI(appInfo, unregisteredAppUri)
+        .then((app) => should(app.auth.registered).not.be.true())
+    );
   });
 });
