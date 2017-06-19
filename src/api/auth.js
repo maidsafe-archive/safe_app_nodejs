@@ -247,10 +247,9 @@ class AuthInterface {
         const authGranted = resp[1];
         this._registered = true;
         return lib.app_registered(this.app, authGranted);
-        // FIXME: in the future: automatically check for the
-        // containers, too
+        // FIXME: in the future: automatically check for the containers, too
         // .then((app) =>
-        //   this.refreshContainerAccess().then(() => app));
+        //   this.refreshContainersPermissions().then(() => app));
       }
       return Promise.reject(resp);
     });
