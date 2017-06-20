@@ -8,8 +8,8 @@ const AuthGranted = require('./_auth').types.AuthGranted;
 
 module.exports = {
   functions: {
-    app_unregistered: [t.Void ,[t.VoidPtr, t.u8Pointer, t.usize, 'pointer', 'pointer']],
-    app_registered: [t.Void , ['string', ref.refType(AuthGranted), t.VoidPtr, 'pointer', 'pointer']],
+    app_unregistered: [t.Void ,[t.u8Pointer, t.usize, t.VoidPtr, t.VoidPtr, 'pointer', 'pointer']],
+    app_registered: [t.Void , ['string', ref.refType(AuthGranted), t.VoidPtr, t.VoidPtr, 'pointer', 'pointer']],
     app_free: [t.Void, [t.AppPtr]]
   },
   api: {
@@ -27,7 +27,7 @@ module.exports = {
             resolve(app);
           });
 
-          fn.apply(fn, [ref.NULL, uriBuf, uriBuf.length, network_observer_cb, result_cb]);
+          fn.apply(fn, [uriBuf, uriBuf.length, ref.NULL, ref.NULL, network_observer_cb, result_cb]);
         });
       })
     },
@@ -42,7 +42,7 @@ module.exports = {
             resolve(app);
           });
 
-          fn.apply(fn, [app.appInfo.id, authGranted, ref.NULL, network_observer_cb, result_cb]);
+          fn.apply(fn, [app.appInfo.id, authGranted, ref.NULL, ref.NULL, network_observer_cb, result_cb]);
         });
       });
     },
