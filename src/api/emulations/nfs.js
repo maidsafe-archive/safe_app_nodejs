@@ -137,16 +137,16 @@ class NFS {
     const now = nativeH.toSafeLibTime(new Date());
     return this.mData.app.immutableData.create()
       .then((w) => w.write(content)
-        .then(() => w.close()
-          .then((xorAddr) => new File({
-            size: content.length,
-            data_map_name: xorAddr,
-            created_sec: now.now_sec_part,
-            created_nsec: now.now_nsec_part,
-            modified_sec: now.now_sec_part,
-            modified_nsec: now.now_nsec_part,
-          }))
-        )
+        .then(() => this.mData.app.cipherOpt.newPlainText())
+        .then((cipherOpt) => w.close(cipherOpt))
+        .then((xorAddr) => new File({
+          size: content.length,
+          data_map_name: xorAddr,
+          created_sec: now.now_sec_part,
+          created_nsec: now.now_nsec_part,
+          modified_sec: now.now_sec_part,
+          modified_nsec: now.now_nsec_part,
+        }))
     );
   }
 
