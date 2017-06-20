@@ -23,7 +23,8 @@ class SAFEApp extends EventEmitter {
   * authentication URI-handler with the system.
   *
   * @param {AppInfo} appInfo
-  * @param {Function} [networkStateCallBack=null]  optional callback function to receive network state updates
+  * @param {Function} [networkStateCallBack=null] optional callback function
+  * to receive network state updates
   */
   constructor(appInfo, networkStateCallBack) {
     super();
@@ -181,7 +182,8 @@ class SAFEApp extends EventEmitter {
   * Create a SAFEApp and try to login it through the `authUri`
   * @param {AppInfo} appInfo - the AppInfo
   * @param {String} authUri - URI containing the authentication info
-  * @param {Function} [networkStateCallBack=null]  optional callback function to receive network state updates
+  * @param {Function} [networkStateCallBack=null] optional callback function
+  * to receive network state updates
   * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp
   **/
   static fromAuthUri(appInfo, authUri, networkStateCallBack) {
