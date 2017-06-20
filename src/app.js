@@ -23,11 +23,13 @@ class SAFEApp extends EventEmitter {
   * authentication URI-handler with the system.
   *
   * @param {AppInfo} appInfo
+  * @param {Function} [networkStateCallBack=null]  optional callback function to receive network state updates
   */
-  constructor(appInfo) {
+  constructor(appInfo, networkStateCallBack) {
     super();
     this._appInfo = appInfo;
     this._networkState = 'Init';
+    this._networkStateCallBack = networkStateCallBack;
     this._connection = null;
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
@@ -179,10 +181,11 @@ class SAFEApp extends EventEmitter {
   * Create a SAFEApp and try to login it through the `authUri`
   * @param {AppInfo} appInfo - the AppInfo
   * @param {String} authUri - URI containing the authentication info
+  * @param {Function} [networkStateCallBack=null]  optional callback function to receive network state updates
   * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp
   **/
-  static fromAuthUri(appInfo, authUri) {
-    const app = autoref(new SAFEApp(appInfo));
+  static fromAuthUri(appInfo, authUri, networkStateCallBack) {
+    const app = autoref(new SAFEApp(appInfo, networkStateCallBack));
     return app.auth.loginFromURI(authUri);
   }
 
@@ -202,6 +205,9 @@ class SAFEApp extends EventEmitter {
     this.emit('network-state-updated', state, this._networkState);
     this.emit(`network-state-${state}`, this._networkState);
     this._networkState = state;
+    if (this._networkStateCallBack) {
+      this._networkStateCallBack.apply(this._networkStateCallBack, this._networkState);
+    }
   }
 
 

@@ -18,7 +18,8 @@ const version = require('../package.json').version;
 
 /**
  * The main entry point to create a new SAFEApp
- * @arg {AppInfo} appInfo
+ * @param {AppInfo} appInfo
+ * @param {Function} [networkStateCallBack=null]  optional callback function to receive network state updates
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  * @example // Usage Example
  * const safe = require('safe');
@@ -38,8 +39,8 @@ const version = require('../package.json').version;
  *        // or wait for a result url
  *        ))
  */
-function initializeApp(appInfo) {
-  const app = autoref(new App(appInfo));
+function initializeApp(appInfo, networkStateCallBack) {
+  const app = autoref(new App(appInfo, networkStateCallBack));
   return Promise.resolve(app);
 }
 
@@ -51,10 +52,11 @@ function initializeApp(appInfo) {
  * second value.
  * @param {AppInfo} appInfo - the app info
  * @param {String} authUri - the URI coming back from the Authenticator
+ * @param {Function} [networkStateCallBack=null]  optional callback function to receive network state updates
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  */
-function fromAuthURI(appInfo, authUri) {
-  return App.fromAuthUri(appInfo, authUri);
+function fromAuthURI(appInfo, authUri, networkStateCallBack) {
+  return App.fromAuthUri(appInfo, authUri, networkStateCallBack);
 }
 
 module.exports = {
