@@ -56,12 +56,18 @@
       "version": "0.1.0-pre37",
       "targetDir": "src/native",
       "filename": "safe_app",
-      "filePattern": "^.*\\.(dll|so|dylib)$"
+      "filePattern": "^.*\\.(dll|so|dylib)$",
+      "force": true
     },
     "ENV": {
       "dev": {
         "safe_app": {
           "filename": "safe_app-dev"
+        }
+      },
+      "nightly": {
+        "safe_app": {
+          "filename": "safe_app-nightly"
         }
       },
       "win32": {
