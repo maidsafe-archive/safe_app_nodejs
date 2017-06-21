@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/maidsafe/safe_app_nodejs#readme",
   "dependencies": {
-    "deps_downloader": "git+https://github.com/gnunicorn/deps_downloader.git",
+    "deps_downloader": "git+https://github.com/maidsafe/deps_downloader.git",
     "enum": "^2.3.0",
     "ffi": "^2.2.0",
     "ref": "^1.3.3",
@@ -55,10 +55,21 @@
       "mirror": "https://github.com/krishnaIndia/safe_core/releases/download/v",
       "version": "0.1.0-pre37",
       "targetDir": "src/native",
-      "filename": "safe_app-dev",
-      "filePattern": "^.*\\.(dll|so|dylib)$"
+      "filename": "safe_app",
+      "filePattern": "^.*\\.(dll|so|dylib)$",
+      "force": true
     },
     "ENV": {
+      "dev": {
+        "safe_app": {
+          "filename": "safe_app-dev"
+        }
+      },
+      "nightly": {
+        "safe_app": {
+          "filename": "safe_app-nightly"
+        }
+      },
       "win32": {
         "libwinpthread-1": {
           "mirror": "https://github.com/gnunicorn/safe_core/releases/download/v",
