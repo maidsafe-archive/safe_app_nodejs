@@ -53,7 +53,7 @@
     },
     "safe_app": {
       "mirror": "https://github.com/krishnaIndia/safe_core/releases/download/v",
-      "version": "0.1.0-pre37",
+      "version": "0.1.0-pre38",
       "targetDir": "src/native",
       "filename": "safe_app",
       "filePattern": "^.*\\.(dll|so|dylib)$",
