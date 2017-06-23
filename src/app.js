@@ -208,7 +208,7 @@ class SAFEApp extends EventEmitter {
     this.emit(`network-state-${state}`, this._networkState);
     this._networkState = state;
     if (this._networkStateCallBack) {
-      this._networkStateCallBack.apply(this._networkStateCallBack, this._networkState);
+      this._networkStateCallBack.apply(this._networkStateCallBack, [this._networkState]);
     }
   }
 
