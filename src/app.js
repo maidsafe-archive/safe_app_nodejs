@@ -34,7 +34,7 @@ class SAFEApp extends EventEmitter {
     this._logFilename = filename.replace(/[^\w\d_\-\.]/g, "_") + '.log';
     lib.app_init_logging(this._logFilename)
       .then(() => {
-        lib.app_output_log_path(this._logFilename)
+        this.logPath()
           .then((path) => console.log("LOG path: ", path), (err) => console.log("ERR: ", err));
       });
   }
@@ -201,6 +201,15 @@ class SAFEApp extends EventEmitter {
   **/
   get appInfo() {
     return this._appInfo;
+  }
+
+  /**
+  * Returns the location of where the safe_core logfile is being written
+  *
+  * @returns {Promise<String>}
+  **/
+  logPath() {
+    return lib.app_output_log_path(this._logFilename);
   }
 
   /**
