@@ -5,11 +5,6 @@ const lib = require('./native/lib');
 const parseUrl = require('url').parse;
 const consts = require('./consts');
 
-const NetworkStateEvent = {
-  '-1': 'Disconnected',
-  0: 'Connected',
-};
-
 /**
  * Holds one sessions with the network and is the primary interface to interact
  * with the network. As such it also provides all API-Providers connected through
@@ -29,9 +24,9 @@ class SAFEApp extends EventEmitter {
   constructor(appInfo, networkStateCallBack) {
     super();
     this._appInfo = appInfo;
-    this._networkState = 'Init';
+    this.networkState = consts.NET_STATE_INIT;
     this._networkStateCallBack = networkStateCallBack;
-    this._connection = null;
+    this.connection = null;
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
     });
@@ -164,6 +159,29 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
+  * @private
+  * Set the new network state based on the state code provided.
+  *
+  * @param {String} state
+  */
+  set networkState(state) {
+    switch (state) {
+      case consts.NET_STATE_INIT:
+        this._networkState = 'Init';
+        break;
+      case consts.NET_STATE_DISCONNECTED:
+        this._networkState = 'Disconnected';
+        break;
+      case consts.NET_STATE_CONNECTED:
+        this._networkState = 'Connected';
+        break;
+      case consts.NET_STATE_UNKNOWN:
+      default:
+        this._networkState = 'Unknown';
+    }
+  }
+
+  /**
   * The current Network state
   * @returns {String} of latest state
   **/
@@ -197,18 +215,18 @@ class SAFEApp extends EventEmitter {
   * changes.
   */
   _networkStateUpdated(uData, result, newState) {
-    let state = 'Unknown';
+    const prevState = this.networkState;
     if (result.error_code !== 0) {
       console.error('An error was reported from network state observer: ', result.error_code, result.error_description);
+      this.networkState = consts.NET_STATE_UNKNOWN;
     } else {
-      state = NetworkStateEvent[newState];
+      this.networkState = newState;
     }
 
-    this.emit('network-state-updated', state, this._networkState);
-    this.emit(`network-state-${state}`, this._networkState);
-    this._networkState = state;
+    this.emit('network-state-updated', this.networkState, prevState);
+    this.emit(`network-state-${this.networkState}`, prevState);
     if (this._networkStateCallBack) {
-      this._networkStateCallBack.apply(this._networkStateCallBack, [this._networkState]);
+      this._networkStateCallBack.apply(this._networkStateCallBack, [this.networkState]);
     }
   }
 

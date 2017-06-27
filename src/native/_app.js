@@ -5,6 +5,7 @@ const makeFfiError = require('./_error.js');
 const base = require('./_base');
 const t = base.types;
 const AuthGranted = require('./_auth').types.AuthGranted;
+const consts = require('../consts');
 
 module.exports = {
   functions: {
@@ -24,6 +25,7 @@ module.exports = {
             if (result.error_code !== 0) reject(makeFfiError(result.error_code, result.error_description));
 
             app.connection = appCon;
+            app.networkState = consts.NET_STATE_CONNECTED;
             resolve(app);
           });
 
@@ -39,6 +41,7 @@ module.exports = {
             if (result.error_code !== 0) reject(makeFfiError(result.error_code, result.error_description));
 
             app.connection = appCon;
+            app.networkState = consts.NET_STATE_CONNECTED;
             resolve(app);
           });
 
