@@ -5,11 +5,6 @@ const lib = require('./native/lib');
 const parseUrl = require('url').parse;
 const consts = require('./consts');
 
-const NetworkStateEvent = {
-  '-1': 'Disconnected',
-  0: 'Connected',
-};
-
 /**
  * Holds one sessions with the network and is the primary interface to interact
  * with the network. As such it also provides all API-Providers connected through
@@ -23,15 +18,24 @@ class SAFEApp extends EventEmitter {
   * authentication URI-handler with the system.
   *
   * @param {AppInfo} appInfo
+  * @param {Function} [networkStateCallBack=null] optional callback function
+  * to receive network state updates
   */
-  constructor(appInfo) {
+  constructor(appInfo, networkStateCallBack) {
     super();
     this._appInfo = appInfo;
-    this._networkState = 'Init';
-    this._connection = null;
+    this.networkState = consts.NET_STATE_INIT;
+    this._networkStateCallBack = networkStateCallBack;
+    this.connection = null;
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
     });
+    const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
+    this._logFilename = `${filename}.log`;
+    if (consts.inTesting) {
+      return;
+    }
+    lib.app_init_logging(this._logFilename);
   }
 
   /**
@@ -161,6 +165,29 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
+  * @private
+  * Set the new network state based on the state code provided.
+  *
+  * @param {String} state
+  */
+  set networkState(state) {
+    switch (state) {
+      case consts.NET_STATE_INIT:
+        this._networkState = 'Init';
+        break;
+      case consts.NET_STATE_DISCONNECTED:
+        this._networkState = 'Disconnected';
+        break;
+      case consts.NET_STATE_CONNECTED:
+        this._networkState = 'Connected';
+        break;
+      case consts.NET_STATE_UNKNOWN:
+      default:
+        this._networkState = 'Unknown';
+    }
+  }
+
+  /**
   * The current Network state
   * @returns {String} of latest state
   **/
@@ -176,33 +203,46 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
+  * Returns the location of where the safe_core logfile is being written
+  *
+  * @returns {Promise<String>}
+  **/
+  logPath() {
+    return lib.app_output_log_path(this._logFilename);
+  }
+
+  /**
   * Create a SAFEApp and try to login it through the `authUri`
   * @param {AppInfo} appInfo - the AppInfo
   * @param {String} authUri - URI containing the authentication info
+  * @param {Function} [networkStateCallBack=null] optional callback function
+  * to receive network state updates
   * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp
   **/
-  static fromAuthUri(appInfo, authUri) {
-    const app = autoref(new SAFEApp(appInfo));
+  static fromAuthUri(appInfo, authUri, networkStateCallBack) {
+    const app = autoref(new SAFEApp(appInfo, networkStateCallBack));
     return app.auth.loginFromURI(authUri);
   }
-
 
   /**
   * @private
   * Called from the native library whenever the network state
   * changes.
   */
-  _networkStateUpdated(uData, error, newState) {
-    let state = 'Unknown';
-    if (error.error_code !== 0) {
-      console.error('An error was reported from network state observer: ', error.error_code, error.error_description);
+  _networkStateUpdated(uData, result, newState) {
+    const prevState = this.networkState;
+    if (result.error_code !== 0) {
+      console.error('An error was reported from network state observer: ', result.error_code, result.error_description);
+      this.networkState = consts.NET_STATE_UNKNOWN;
     } else {
-      state = NetworkStateEvent[newState];
+      this.networkState = newState;
     }
 
-    this.emit('network-state-updated', state, this._networkState);
-    this.emit(`network-state-${state}`, this._networkState);
-    this._networkState = state;
+    this.emit('network-state-updated', this.networkState, prevState);
+    this.emit(`network-state-${this.networkState}`, prevState);
+    if (this._networkStateCallBack) {
+      this._networkStateCallBack.apply(this._networkStateCallBack, [this.networkState]);
+    }
   }
 
 

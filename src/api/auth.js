@@ -119,6 +119,18 @@ class AuthInterface {
   }
 
   /**
+  * Generate an unregistered connection URI for the app.
+  *
+  * @returns {String} `safe-auth://`-URI
+  * @example // using an Authentication example:
+  * app.auth.genConnUri()
+  **/
+  /* eslint-disable class-methods-use-this */
+  genConnUri() {
+    return lib.encode_unregistered_req();
+  }
+
+  /**
   * Open the given Authentication URI to the authenticator
   **/
   /* eslint-disable class-methods-use-this */
@@ -145,20 +157,6 @@ class AuthInterface {
       containers_len: ctnrs.length,
       containers_cap: ctnrs.length
     }).ref());
-  }
-
-  /**
-  * Create a new, unregistered session (read-only), overwrites any previously
-  * set session.
-  * An application can read public data from the network with an unregistered
-  * session such as web pages.
-  * @returns {Promise<SAFEApp>} same instace but with newly set up connection
-  */
-  connectUnregistered() {
-    return lib.app_unregistered(this.app).then(() => {
-      this._registered = false;
-      return this.app;
-    });
   }
 
   /**
@@ -234,37 +232,47 @@ class AuthInterface {
   }
 
   /**
-  * Create a new authenticated session using the provided IPC response.
+  * Create a new authenticated or unregistered session using the provided IPC response.
   * @arg {String} responseUri the IPC response string given
   * @returns {Promise<SAFEApp>} the given app instance with a newly setup and
   *          authenticated session.
   */
   loginFromURI(responseUri) {
     return lib.decode_ipc_msg(responseUri).then((resp) => {
-      // we can only handle 'granted' request
-      if (resp[0] !== 'granted') return Promise.reject(resp);
-
-      const authGranted = resp[1];
-      this._registered = true;
-      return lib.app_registered(this.app, authGranted);
-      // FIXME: in the future: automatically check for the
-      // containers, too
-      // .then((app) =>
-      //   this.refreshContainerAccess().then(() => app));
+      // we can only handle 'granted' and 'unregistered' request
+      if (resp[0] === 'unregistered') {
+        this._registered = false;
+        return lib.app_unregistered(this.app, resp[1]);
+      } else if (resp[0] === 'granted') {
+        const authGranted = resp[1];
+        this._registered = true;
+        return lib.app_registered(this.app, authGranted);
+        // FIXME: in the future: automatically check for the
+        // containers, too
+        // .then((app) =>
+        //   this.refreshContainerAccess().then(() => app));
+      }
+      return Promise.reject(resp);
     });
   }
 
   /**
   * *ONLY AVAILALBE IF RUN in NODE_ENV='development' || 'testing'*
   *
-  * Generate a _locally_ registered App with the given permissions.
-  * @returns {Promise<SAFEApp>} the locally registered App instance
+  * Generate a _locally_ registered App with the given permissions, or
+  * a local unregistered App if permissions is `null`.
+  * @returns {Promise<SAFEApp>} the locally registered/unregistered App instance
   **/
   loginForTest(access) {
     if (!inTesting) throw Error('Not supported outside of Dev and Testing Environment!');
-    const permissions = makePermissions(access || {});
-    this.app.connection = lib.test_create_app_with_access(permissions);
-    this._registered = true;
+    if (access) {
+      const permissions = makePermissions(access || {});
+      this.app.connection = lib.test_create_app_with_access(permissions);
+      this._registered = true;
+    } else {
+      this.app.connection = lib.test_create_app();
+      this._registered = false;
+    }
     return Promise.resolve(this.app);
   }
 }

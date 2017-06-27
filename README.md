@@ -20,6 +20,8 @@ The documentation for the safe_app Node.js API is available at http://docs.maids
 
 The external libraries will automatically be downloaded when you run `npm install`.
 
+If you are working on a development environment, you can run `NODE_ENV=dev npm install` instead in order to get the `safe_client` libraries which use the `MockVault` file rather than connecting to the SAFE Network.
+
 # License
 
 Licensed under either of

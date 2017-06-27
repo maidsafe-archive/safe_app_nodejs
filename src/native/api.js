@@ -9,5 +9,6 @@ module.exports = [
   require('./_immutable'),
   require('./_mutable'),
   require('./_nfs'),
+  require('./_logging'),
   inTesting ? require("./_testing") : {} // we have some testing helpers
 ];

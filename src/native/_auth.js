@@ -4,6 +4,7 @@ const ArrayType = require('ref-array');
 const ref = require('ref');
 const Struct = require('ref-struct');
 const base = require('./_base.js');
+const makeFfiError = require('./_error.js');
 
 const t = base.types;
 const AppPtr = t.AppPtr;
@@ -144,12 +145,14 @@ module.exports = {
     AppKeys,
   },
   functions: {
-    encode_auth_req: [t.i32, [ ref.refType(AuthReq), 'pointer', 'pointer'] ],
-    encode_containers_req: [t.i32, [ref.refType(ContainerReq), 'pointer', 'pointer'] ],
+    encode_auth_req: [t.Void, [ ref.refType(AuthReq), 'pointer', 'pointer'] ],
+    encode_containers_req: [t.Void, [ref.refType(ContainerReq), 'pointer', 'pointer'] ],
+    encode_unregistered_req: [t.Void, ['pointer', 'pointer'] ],
     decode_ipc_msg: [t.Void, [
                       "string", //  (msg: *const c_char,
                       t.VoidPtr, // user_data: *mut c_void,
                       "pointer", // o_auth: extern "C" fn(*mut c_void, u32, FfiAuthGranted),
+                      "pointer", // o_unregistered: extern "C" fn(*mut c_void, u32, *const u8, usize),
                       "pointer", // o_containers: extern "C" fn(*mut c_void, u32),
                       "pointer", // o_revoked: extern "C" fn(*mut c_void),
                       "pointer"  // o_err: extern "C" fn(*mut c_void, i32, u32)
@@ -189,6 +192,7 @@ module.exports = {
     }, t.bool),
     encode_containers_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_auth_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
+    encode_unregistered_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     decode_ipc_msg: function(lib, fn) {
       return (function(str) {
         return new Promise(function(resolve, reject) {
@@ -197,14 +201,17 @@ module.exports = {
                    ffi.Callback("void", [t.VoidPtr, "uint32", ref.refType(AuthGranted)], function(user_data, req_id, authGranted) {
                       resolve(["granted", authGranted])
                    }),
+                   ffi.Callback("void", [t.VoidPtr, "uint32", t.u8Pointer, t.usize], function(user_data, req_id, connUri, connUriLen) {
+                      resolve(["unregistered", new Buffer(ref.reinterpret(connUri, connUriLen, 0))])
+                   }),
                    ffi.Callback("void", [t.VoidPtr, "uint32"], function(user_data, req_id) {
                       resolve(["containers", req_id])
                    }),
                    ffi.Callback("void", [t.VoidPtr], function(user_data) {
                       resolve(["revoked"])
                    }),
-                   ffi.Callback("void", [t.VoidPtr, t.i32, "uint32"], function(user_data, code, msg) {
-                      reject([code, msg])
+                   ffi.Callback("void", [t.VoidPtr, t.FfiResult, "uint32"], function(user_data, result, req_id) {
+                      reject(makeFfiError(result.error_code, result.error_description))
                    }),
                    function () {}
               )

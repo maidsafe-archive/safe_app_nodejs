@@ -1,9 +1,10 @@
 function makeError(code, name) {
   function E(message) {
-    if (!Error.captureStackTrace)
+    if (!Error.captureStackTrace) {
       this.stack = (new Error()).stack;
-    else
+    } else {
       Error.captureStackTrace(this, this.constructor);
+    }
     this.message = message || name;
   }
   E.prototype = new Error();
@@ -14,6 +15,6 @@ function makeError(code, name) {
 }
 
 module.exports = function(code, msg) {
-  let cls = makeError(code, null);
+  let cls = makeError(code, code);
   return new cls(msg);
 }
