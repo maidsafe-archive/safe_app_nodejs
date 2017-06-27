@@ -32,11 +32,10 @@ class SAFEApp extends EventEmitter {
     });
     const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
     this._logFilename = `${filename}.log`;
-    lib.app_init_logging(this._logFilename)
-      .then(() => {
-        this.logPath()
-          .then((path) => console.log('LOG path: ', path), (err) => console.log('ERR: ', err));
-      });
+    if (consts.inTesting) {
+      return;
+    }
+    lib.app_init_logging(this._logFilename);
   }
 
   /**
