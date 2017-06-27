@@ -30,6 +30,12 @@ class SAFEApp extends EventEmitter {
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
     });
+    const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
+    this._logFilename = `${filename}.log`;
+    if (consts.inTesting) {
+      return;
+    }
+    lib.app_init_logging(this._logFilename);
   }
 
   /**
@@ -194,6 +200,15 @@ class SAFEApp extends EventEmitter {
   **/
   get appInfo() {
     return this._appInfo;
+  }
+
+  /**
+  * Returns the location of where the safe_core logfile is being written
+  *
+  * @returns {Promise<String>}
+  **/
+  logPath() {
+    return lib.app_output_log_path(this._logFilename);
   }
 
   /**
