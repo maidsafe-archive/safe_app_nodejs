@@ -30,6 +30,13 @@ class SAFEApp extends EventEmitter {
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
     });
+    let filename = appInfo.name + '.' + appInfo.vendor;
+    this._logFilename = filename.replace(/[^\w\d_\-\.]/g, "_") + '.log';
+    lib.app_init_logging(this._logFilename)
+      .then(() => {
+        lib.app_output_log_path(this._logFilename)
+          .then((path) => console.log("LOG path: ", path), (err) => console.log("ERR: ", err));
+      });
   }
 
   /**
