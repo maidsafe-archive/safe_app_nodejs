@@ -11,6 +11,7 @@ module.exports = {
   functions: {
     app_unregistered: [t.Void ,[t.u8Pointer, t.usize, t.VoidPtr, t.VoidPtr, 'pointer', 'pointer']],
     app_registered: [t.Void , ['string', ref.refType(AuthGranted), t.VoidPtr, t.VoidPtr, 'pointer', 'pointer']],
+    app_reconnect: [t.void, [t.AppPtr, t.VoidPtr, 'pointer']],
     app_free: [t.Void, [t.AppPtr]]
   },
   api: {
@@ -49,6 +50,7 @@ module.exports = {
         });
       });
     },
+    app_reconnect: base.helpers.Promisified(null, []),
     app_free: function (lib, fn) {
       return (function (app) {
         fn(app.connection);
