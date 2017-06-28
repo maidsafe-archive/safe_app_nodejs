@@ -30,12 +30,11 @@ class SAFEApp extends EventEmitter {
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
     });
-    const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
-    this._logFilename = `${filename}.log`;
-    if (consts.inTesting) {
-      return;
+
+    if (!SAFEApp.loggingInitialised) {
+      lib.app_init_logging(consts.LOG_FILENAME)
+        .then(() => { SAFEApp.loggingInitialised = true; });
     }
-    lib.app_init_logging(this._logFilename);
   }
 
   /**
@@ -207,8 +206,9 @@ class SAFEApp extends EventEmitter {
   *
   * @returns {Promise<String>}
   **/
+  /* eslint-disable class-methods-use-this */
   logPath() {
-    return lib.app_output_log_path(this._logFilename);
+    return lib.app_output_log_path(consts.LOG_FILENAME);
   }
 
   /**
@@ -261,4 +261,7 @@ class SAFEApp extends EventEmitter {
   }
 
 }
+
+SAFEApp.loggingInitialised = false;
+
 module.exports = SAFEApp;

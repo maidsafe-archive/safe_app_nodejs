@@ -10,6 +10,8 @@ const NET_STATE_INIT = -99;
 const NET_STATE_DISCONNECTED = -1;
 const NET_STATE_CONNECTED = 0;
 
+const LOG_FILENAME = 'safe_app.log';
+
 const LIB_FILENAME = {
   win32: 'safe_app.dll',
   darwin: 'libsafe_app.dylib',
@@ -34,6 +36,8 @@ module.exports = {
   NET_STATE_INIT,
   NET_STATE_DISCONNECTED,
   NET_STATE_CONNECTED,
+
+  LOG_FILENAME,
 
   inTesting
 };
