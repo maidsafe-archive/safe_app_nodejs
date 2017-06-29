@@ -1,0 +1,16 @@
+etc
+examples
+test
+.eslintignore
+.eslintrc.json
+.travis.yml
+
+appveyor.yml
+CHANGELOG.md
+CONTRIBUTOR
+COPYING
+README.md
+
+src/native/*.so
+src/native/*.dll
+src/native/*.dylib

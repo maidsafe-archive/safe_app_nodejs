@@ -9,8 +9,6 @@ const api = require('./api');
 
 const ffi = {};
 
-
-
 const RTLD_NOW = FFI.DynamicLibrary.FLAGS.RTLD_NOW;
 const RTLD_GLOBAL = FFI.DynamicLibrary.FLAGS.RTLD_GLOBAL;
 const mode = RTLD_NOW | RTLD_GLOBAL;
