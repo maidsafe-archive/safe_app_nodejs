@@ -11,7 +11,8 @@
     "serve-docs": "documentation serve --config etc/documentation.yml --github true --output docs --format html src/**",
     "test": "mocha",
     "test-coverage": "istanbul cover _mocha --report lcovonly -- -R spec",
-    "publish-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "publish-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "pre-pack": "npm run lint"
   },
   "repository": {
     "type": "git",
@@ -53,7 +54,7 @@
     },
     "safe_app": {
       "mirror": "https://github.com/krishnaIndia/safe_core/releases/download/v",
-      "version": "0.1.0-pre40",
+      "version": "0.1.0-pre41",
       "targetDir": "src/native",
       "filename": "safe_app",
       "filePattern": "^.*\\.(dll|so|dylib)$",
