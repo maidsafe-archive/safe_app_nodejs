@@ -256,11 +256,11 @@ class SAFEApp extends EventEmitter {
     return new Promise((res, rej) => {
       lib.app_reconnect(this.connection)
         .then(() => {
-          this._networkStateUpdated(null, {error_code: 0}, consts.NET_STATE_CONNECTED);
+          this._networkStateUpdated(null, { error_code: 0 }, consts.NET_STATE_CONNECTED);
           res();
         })
-        .catch(e => {
-          this._networkStateUpdated(null, {error_code: 0}, consts.NET_STATE_DISCONNECTED);
+        .catch((e) => {
+          this._networkStateUpdated(null, { error_code: 0 }, consts.NET_STATE_DISCONNECTED);
           rej(e);
         });
     });
