@@ -250,7 +250,7 @@ class SAFEApp extends EventEmitter {
   * Must be invoked when the client decides to connect back after the connection is disconnected.
   */
   reconnect() {
-    return lib.app_reconnect(); 
+    return new Promise((res) => res());//lib.app_reconnect(); 
   }
 
 
