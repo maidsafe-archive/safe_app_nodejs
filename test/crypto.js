@@ -82,7 +82,7 @@ describe('App Crypto Tests', () => {
         })
     ]).then((r) => should(r[0]).not.equal(r[1])));
 
-    it('generate key pair from raw keys', () => {
+    it.skip('generate key pair from raw keys', () => {
       let rawPubKey;
       let rawPubKeyFromRaw;
       let rawSecKey;
