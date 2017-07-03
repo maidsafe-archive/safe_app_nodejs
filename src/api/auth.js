@@ -238,7 +238,11 @@ class AuthInterface {
   *          authenticated session.
   */
   loginFromURI(responseUri) {
-    return lib.decode_ipc_msg(responseUri).then((resp) => {
+    // FIXME: this is a temporary patch to overcome an issue with some OS,
+    // like Fedora, where the URI returned has '/' characters after the ':'
+    // making the URI invalid for decoding.
+    const sanitisedUri = responseUri.replace(/:\/+/g, ':'); // Convert a substring with ':' followed by any number of '/' to ':'
+    return lib.decode_ipc_msg(sanitisedUri).then((resp) => {
       // we can only handle 'granted' and 'unregistered' request
       if (resp[0] === 'unregistered') {
         this._registered = false;
