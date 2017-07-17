@@ -6,7 +6,7 @@ safe_app Node.js library.
 
 |Linux/OS X|Windows|
 |:---:|:--------:|
-|[![Build Status](https://travis-ci.org/maidsafe/safe-app-nodejs.svg?branch=master)](https://travis-ci.org/maidsafe/safe-app-nodejs)|[![Build status](https://ci.appveyor.com/api/projects/status/efktyecwydxrhs5d/branch/master?svg=true)](https://ci.appveyor.com/project/MaidSafe-QA/safe-app-nodejs/branch/master)|
+|[![Build Status](https://travis-ci.org/maidsafe/safe_app_nodejs.svg?branch=master)](https://travis-ci.org/maidsafe/safe_app_nodejs)|[![Build status](https://ci.appveyor.com/api/projects/status/efktyecwydxrhs5d/branch/master?svg=true)](https://ci.appveyor.com/project/MaidSafe-QA/safe-app-nodejs/branch/master)|
 
 |Coverage status|
 |:-----------:|
