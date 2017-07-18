@@ -19,19 +19,28 @@ const File = Struct({
 });
 
 const FilePtr = ref.refType(File);
+const FileContextHandle = t.ObjectHandle;
 
 module.exports = {
   types: {
     File,
-    FilePtr
+    FilePtr,
+    FileContextHandle
   },
   functions: {
-    file_fetch: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', 'pointer', 'pointer']],
-    file_insert: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, 'pointer', 'pointer']],
-    file_update: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, t.u64, 'pointer', 'pointer']]
+    dir_fetch_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', 'pointer', 'pointer']],
+    dir_insert_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, 'pointer', 'pointer']],
+    dir_update_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, t.u64, 'pointer', 'pointer']],
+    dir_delete_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', t.u64, 'pointer', 'pointer']],
+    file_open: [t.Void, [t.AppPtr, FilePtr, t.u64, 'pointer', 'pointer']],
+    file_size: [t.Void, [t.AppPtr, FileContextHandle, 'pointer', 'pointer']],
+    file_read: [t.Void, [t.AppPtr, FileContextHandle, t.u64, t.u64, 'pointer', 'pointer']],
+    file_write: [t.Void, [t.AppPtr, FileContextHandle, t.u8Pointer, t.usize, 'pointer', 'pointer']],
+    file_close: [t.Void, [t.AppPtr, FileContextHandle, 'pointer', 'pointer']]
+
   },
   api: {
-    file_fetch: h.Promisified(null, [FilePtr, t.u64], (res) => {
+    dir_fetch_file: h.Promisified(null, [FilePtr, t.u64], (res) => {
       const file = res[0].deref();
       const data_map_name = file.data_map_name;
       const size = file.size;
@@ -63,7 +72,52 @@ module.exports = {
               modified_nsec,
               version: res[1]}
     }),
-    file_insert: h.Promisified(null, []),
-    file_update: h.Promisified(null, [])
+    dir_insert_file: h.Promisified(null, []),
+    dir_update_file: h.Promisified(null, []),
+    dir_delete_file: h.Promisified(null, []),
+    file_open: h.Promisified(null, FileContextHandle),
+    file_size: h.Promisified(null, t.u64),
+    file_read: h.Promisified(null, [t.u8Pointer, t.usize], (res) => {
+      let fileContents = res[0].deref();
+      let fileSize = res[1];
+
+      return {
+        fileContents,
+        fileSize
+      }
+    }),
+    file_write: h.Promisified(null, []),
+    file_close: h.Promisified(null, FilePtr, (res) => {
+      const file = res.deref();
+      const data_map_name = file.data_map_name;
+      const size = file.size;
+      const created_sec = file.created_sec;
+      const created_nsec = file.created_nsec;
+      const modified_sec = file.modified_sec;
+      const modified_nsec = file.modified_nsec;
+
+      let metadata = file.user_metadata_len > 0
+        ? ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len) : null;
+
+      if (metadata) {
+        // we try to understand it as JSON
+        try {
+          metadata = JSON.parse(metadata);
+        } catch (e) {
+          // we can safely ignore this
+          if (console && console.warn) {
+            console.warn(`Parsing user metadata '${metadata}' of '${data_map_name}' failed: ${e}`)
+          }
+        }
+      }
+      return {metadata,
+              data_map_name,
+              size,
+              created_sec,
+              created_nsec,
+              modified_sec,
+              modified_nsec,
+              version: res[1]}
+    })
   }
 }

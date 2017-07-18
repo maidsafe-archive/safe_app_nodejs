@@ -156,7 +156,7 @@ class NFS {
   * @returns {Promise<File>} - the file found for that path
   **/
   fetch(fileName) {
-    return lib.file_fetch(this.mData.app.connection, this.mData.ref, fileName)
+    return lib.dir_fetch_file(this.mData.app.connection, this.mData.ref, fileName)
       .then((res) => new File(res));
   }
 
@@ -168,7 +168,7 @@ class NFS {
   * @returns {Promise<File>} - the same file
   **/
   insert(fileName, file) {
-    return lib.file_insert(this.mData.app.connection, this.mData.ref, fileName, file.ref.ref())
+    return lib.dir_insert_file(this.mData.app.connection, this.mData.ref, fileName, file.ref.ref())
       .then(() => file);
   }
 
@@ -181,11 +181,76 @@ class NFS {
   * @returns {Promise<File>} - the same file
   **/
   update(fileName, file, version) {
-    return lib.file_update(this.mData.app.connection, this.mData.ref, fileName,
+    return lib.dir_update_file(this.mData.app.connection, this.mData.ref, fileName,
                            file.ref.ref(), version)
       .then(() => { file.version = version; })  // eslint-disable-line no-param-reassign
       .then(() => file);
   }
+
+  /**
+  * Delete a file from path. Directly commit to the network.
+  * @param {(String|Buffer)} fileName
+  * @param {Number} version
+  * @returns {Promise}
+  **/
+  delete(fileName, version) {
+    return lib.dir_delete_file(this.mData.app.connection, this.mData.ref, fileName, version);
+  }
+
+  /**
+  * Open a file for reading or writing.
+  * @param {File} file
+  * @param {Number} openMode
+  *   0: Read entire contents of a file.
+  *   1: Replaces the entire content of the file when writing data.
+  *   2: Appends to existing data in the file.
+  *   4: Open file to read.
+  * @returns {Promise<FileContextHandle>}
+  **/
+  open(file, openMode) {
+    return lib.file_open(this.mData.app.connection, file.ref.ref(), openMode);
+  }
+
+  /**
+  * Get file size
+  * @param {FileContextHandle} fileContextHandle
+  * @returns {Promise<Number>}
+  **/
+  size(fileContextHandle) {
+    return lib.file_size(this.mData.app.connection, fileContextHandle);
+  }
+
+  /**
+  * Read file
+  * @param {FileContextHandle} fileContextHandle
+  * @param {Number} position
+  * @param {Number} len
+  * @returns {Promise<Number>}
+  **/
+  read(fileContextHandle, position, len) {
+    return lib.file_read(this.mData.app.connection, fileContextHandle, position, len);
+  }
+
+  /**
+  * Write file
+  * @param {FileContextHandle} fileContextHandle
+  * @param {Buffer} contentAsBuffer
+  * @returns {Promise}
+  **/
+  write(fileContextHandle, contentAsBuffer) {
+    let fileSize = contentAsBuffer.length;
+    return lib.file_write(this.mData.app.connection, fileContextHandle, contentAsBuffer, fileSize);
+  }
+
+  /**
+  * Close file
+  * @param {FileContextHandle} fileContextHandle
+  * @returns {Promise<File>}
+  **/
+  close(fileContextHandle) {
+    return lib.file_close(this.mData.app.connection, fileContextHandle);
+  }
+
 }
 
 module.exports = NFS;
