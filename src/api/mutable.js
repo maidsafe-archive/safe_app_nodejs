@@ -480,12 +480,15 @@ class MutableData extends h.NetworkObject {
 
   /**
   * Commit this MutableData to the network.
-  * @param {Permission} permissions the permissions to create the mutable data with
-  * @param {Entries} entries data entries to create the mutable data with
+  * @param {Permission|null} permissions the permissions to create the mutable data with
+  * @param {Entries|null} entries data entries to create the mutable data with
   * @returns {Promise}
   **/
   put(permissions, entries) {
-    return lib.mdata_put(this.app.connection, this.ref, permissions.ref, entries.ref);
+    return lib.mdata_put(this.app.connection,
+                          this.ref,
+                          permissions ? permissions.ref : 0,
+                          entries ? entries.ref : 0);
   }
 
 

@@ -176,6 +176,29 @@ describe('Mutable Data', () => {
     );
   });
 
+  describe('Null entries and/or permissions', () => {
+    it('null entries & permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.put(null, null)
+          .then(() => m.getVersion())
+          .then((version) => {
+            should(version).equal(0);
+          })
+          .then(() => m.getNameAndTag())
+          .then((r) => {
+            should(r.name).not.be.undefined();
+            should(r.tag).equal(TAG_TYPE);
+          })
+          .then(() => m.getEntries())
+          .then((entries) => entries.len()
+            .then((len) => {
+              should(len).equal(0);
+            })
+            .then(() => should(entries.insert('newKey', 'newValue')).be.rejected())
+          )
+        )
+    );
+  });
+
   describe('Entries', () => {
     it('get entries and check length', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
