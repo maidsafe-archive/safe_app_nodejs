@@ -197,6 +197,25 @@ describe('Mutable Data', () => {
           )
         )
     );
+
+    it('non-null entries and null permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => app.mutableData.newEntries()
+          .then((entries) => entries.insert('key1', 'value1')
+            .then(() => m.put(null, entries)
+              .then(() => m.getVersion())
+              .then((version) => {
+                should(version).equal(0);
+              })
+              .then(() => m.get('key1'))
+              .then((value) => {
+                should(value).not.be.undefined();
+                should(value.buf.toString()).equal('value1');
+                should(value.version).equal(0);
+              })
+              .then(() => should(entries.insert('newKey', 'newValue')).be.rejected())
+            )
+        ))
+    );
   });
 
   describe('Entries', () => {
