@@ -118,6 +118,8 @@ class SAFEApp extends EventEmitter {
                 let newPath;
                 if (!path || !path.length) {
                   newPath = '/index.html';
+                } else if (path === '/') {
+                  newPath = 'index.html';
                 } else if (path[path.length - 1] === '/') {
                   newPath = `${path}index.html`;
                 } else if (path[0] === '/') {
