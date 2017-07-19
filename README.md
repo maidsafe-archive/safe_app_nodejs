@@ -22,6 +22,12 @@ The external libraries will automatically be downloaded when you run `npm instal
 
 If you are working on a development environment, you can run `NODE_ENV=dev npm install` instead in order to get the `safe_client` libraries which use the `MockVault` file rather than connecting to the SAFE Network.
 
+## Testing
+
+You may possibly be compiling your own [safe_app](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library for testing purposes.
+
+If you are using safe_app_nodejs in development, `NODE_ENV=dev`, it will import extra ffi function for testing. In this case, when compiling `safe_app` in `safe_client_libs` be sure to to include `testing` in your build features, i.e. `cargo build --release --features "use-mock-routing testing"`
+
 # License
 
 Licensed under either of

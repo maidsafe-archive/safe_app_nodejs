@@ -75,8 +75,8 @@ module.exports = {
     dir_insert_file: h.Promisified(null, []),
     dir_update_file: h.Promisified(null, []),
     dir_delete_file: h.Promisified(null, []),
-    file_open: h.Promisified(null, FileContextHandle),
-    file_size: h.Promisified(null, t.u64),
+    file_open: h.Promisified(null, [FileContextHandle]),
+    file_size: h.Promisified(null, [t.u64]),
     file_read: h.Promisified(null, [t.u8Pointer, t.usize], (res) => {
       let fileContents = res[0].deref();
       let fileSize = res[1];
@@ -87,7 +87,7 @@ module.exports = {
       }
     }),
     file_write: h.Promisified(null, []),
-    file_close: h.Promisified(null, FilePtr, (res) => {
+    file_close: h.Promisified(null, [FilePtr], (res) => {
       const file = res.deref();
       const data_map_name = file.data_map_name;
       const size = file.size;
