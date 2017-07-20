@@ -129,8 +129,8 @@ class SAFEApp extends EventEmitter {
                   // try the newly created path
                   return emulation.fetch(newPath).catch((e) => {
                     // and the version without the leading slash
-                    if (e.name === 'ERR_FILE_NOT_FOUND') {
-                      return emulation.fetch(newPath.slice(1, path.length));
+                    if (e.code === -305) {
+                      return emulation.fetch(newPath.slice(1, newPath.length));
                     }
                     return Promise.reject(e);
                   });
