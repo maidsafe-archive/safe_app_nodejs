@@ -36,15 +36,15 @@ class File {
   **/
   get ref() {
     const data = {
+      size: this._ref.size,
       created_sec: this._ref.created_sec,
       created_nsec: this._ref.created_nsec,
       modified_sec: this._ref.modified_sec,
       modified_nsec: this._ref.modified_nsec,
-      size: this._ref.size,
-      data_map_name: this.dataMapName,
       user_metadata_ptr: this.dataMapName.ref(),
       user_metadata_len: 0,
-      user_metadata_cap: 0
+      user_metadata_cap: 0,
+      data_map_name: this.dataMapName,
     };
 
     if (this._ref.metadata) {
@@ -127,27 +127,20 @@ class NFS {
   }
 
   /**
-  * Create a new file with the given content, put the content
-  * on the network via ImmutableData (public) and wrap it into
-  * a File.
-  * @param {(String|Buffer)} content
-  * @returns {Promise<File>} a newly created file
+  * Create a new file
+  * @returns {File} a newly created file
   **/
-  create(content) {
+  new() {
     const now = nativeH.toSafeLibTime(new Date());
-    return this.mData.app.immutableData.create()
-      .then((w) => w.write(content)
-        .then(() => this.mData.app.cipherOpt.newPlainText())
-        .then((cipherOpt) => w.close(cipherOpt))
-        .then((xorAddr) => new File({
-          size: content.length,
-          data_map_name: xorAddr,
-          created_sec: now.now_sec_part,
-          created_nsec: now.now_nsec_part,
-          modified_sec: now.now_sec_part,
-          modified_nsec: now.now_nsec_part,
-        }))
-    );
+    return new File({
+      size: 0,
+      data_map_name: new Array(32).fill(0),
+      created_sec: now.now_sec_part,
+      created_nsec: now.now_nsec_part,
+      modified_sec: now.now_sec_part,
+      modified_nsec: now.now_nsec_part,
+      user_metadata: new Array()
+    })
   }
 
   /**
@@ -168,8 +161,10 @@ class NFS {
   * @returns {Promise<File>} - the same file
   **/
   insert(fileName, file) {
-    return lib.dir_insert_file(this.mData.app.connection, this.mData.ref, fileName, file.ref.ref())
-      .then(() => file);
+    let _file = new File(file);
+    console.log(_file);
+    return lib.dir_insert_file(this.mData.app.connection, this.mData.ref, Buffer.from(fileName), _file.ref.ref())
+      .then(() => _file);
   }
 
   /**
@@ -199,16 +194,24 @@ class NFS {
 
   /**
   * Open a file for reading or writing.
+  *
+  * OPEN MODES:
+  *  /// Replaces the entire content of the file when writing data.
+  *  const OPEN_MODE_OVERWRITE = 1;
+  *  /// Appends to existing data in the file.
+  *  const OPEN_MODE_APPEND = 2;
+  *  /// Open file to read.
+  *  const OPEN_MODE_READ = 4;
+  *  /// Read entire contents of a file.
+  *  const FILE_READ_TO_END = 0;
+  *
   * @param {File} file
   * @param {Number} openMode
-  *   0: Read entire contents of a file.
-  *   1: Replaces the entire content of the file when writing data.
-  *   2: Appends to existing data in the file.
-  *   4: Open file to read.
   * @returns {Promise<FileContextHandle>}
   **/
   open(file, openMode) {
-    return lib.file_open(this.mData.app.connection, file.ref.ref(), openMode);
+    let _file = file.ref ? file.ref.ref() : new File(file).ref.ref();
+    return lib.file_open(this.mData.app.connection, _file, openMode);
   }
 
   /**
@@ -234,12 +237,18 @@ class NFS {
   /**
   * Write file
   * @param {FileContextHandle} fileContextHandle
-  * @param {Buffer} contentAsBuffer
+  * @param {Buffer|String} content
   * @returns {Promise}
   **/
-  write(fileContextHandle, contentAsBuffer) {
-    let fileSize = contentAsBuffer.length;
-    return lib.file_write(this.mData.app.connection, fileContextHandle, contentAsBuffer, fileSize);
+  write(fileContextHandle, content) {
+    if(typeof content === "string") {
+      let stringBuffer = new ArrayBuffer(content.length * 2);
+      let typedArray = new Uint16Array(stringBuffer);
+      content = typedArray.map((elem, i) => content.charCodeAt(i))
+    }
+
+    let fileSize = content.length;
+    return lib.file_write(this.mData.app.connection, fileContextHandle, t.u8Array(content).ref(), fileSize);
   }
 
   /**

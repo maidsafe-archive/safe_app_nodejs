@@ -29,7 +29,7 @@ module.exports = {
   },
   functions: {
     dir_fetch_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', 'pointer', 'pointer']],
-    dir_insert_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, 'pointer', 'pointer']],
+    dir_insert_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', FilePtr, 'pointer', 'pointer']],
     dir_update_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, t.u64, 'pointer', 'pointer']],
     dir_delete_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', t.u64, 'pointer', 'pointer']],
     file_open: [t.Void, [t.AppPtr, FilePtr, t.u64, 'pointer', 'pointer']],
@@ -75,7 +75,7 @@ module.exports = {
     dir_insert_file: h.Promisified(null, []),
     dir_update_file: h.Promisified(null, []),
     dir_delete_file: h.Promisified(null, []),
-    file_open: h.Promisified(null, [FileContextHandle]),
+    file_open: h.Promisified(null, FileContextHandle),
     file_size: h.Promisified(null, [t.u64]),
     file_read: h.Promisified(null, [t.u8Pointer, t.usize], (res) => {
       let fileContents = res[0].deref();
@@ -87,37 +87,47 @@ module.exports = {
       }
     }),
     file_write: h.Promisified(null, []),
-    file_close: h.Promisified(null, [FilePtr], (res) => {
-      const file = res.deref();
-      const data_map_name = file.data_map_name;
+    file_close: h.Promisified(null, FilePtr, (res) => {
+      const file = res[0].deref();
+
       const size = file.size;
       const created_sec = file.created_sec;
       const created_nsec = file.created_nsec;
       const modified_sec = file.modified_sec;
       const modified_nsec = file.modified_nsec;
+      const data_map_name = file.data_map_name;
 
-      let metadata = file.user_metadata_len > 0
-        ? ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len) : null;
 
-      if (metadata) {
-        // we try to understand it as JSON
-        try {
-          metadata = JSON.parse(metadata);
-        } catch (e) {
-          // we can safely ignore this
-          if (console && console.warn) {
-            console.warn(`Parsing user metadata '${metadata}' of '${data_map_name}' failed: ${e}`)
-          }
-        }
-      }
-      return {metadata,
+      const user_metadata_ptr = file.user_metadata_ptr;
+      const user_metadata_len = file.user_metadata_len;
+      const user_metadata_cap = file.user_metadata_cap;
+
+
+      // let metadata = file.user_metadata_len > 0
+      //   ? ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len) : null;
+
+      // if (metadata) {
+      //   // we try to understand it as JSON
+      //   try {
+      //     metadata = JSON.parse(metadata);
+      //   } catch (e) {
+      //     // we can safely ignore this
+      //     if (console && console.warn) {
+      //       console.warn(`Parsing user metadata '${metadata}' of '${data_map_name}' failed: ${e}`)
+      //     }
+      //   }
+      // }
+      return {
               data_map_name,
               size,
               created_sec,
               created_nsec,
               modified_sec,
               modified_nsec,
-              version: res[1]}
+              user_metadata_ptr,
+              user_metadata_len,
+              user_metadata_cap
+            }
     })
   }
 }
