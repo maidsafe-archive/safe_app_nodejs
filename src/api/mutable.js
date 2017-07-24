@@ -259,8 +259,8 @@ class Entries extends h.NetworkObject {
   }
 
   /**
-  * Insert a new entry. Will directly commit that transaction to the network.
-  * Will fail if the entry already exists or the current app doesn't have the
+  * Insert a new entry. Once you call `MutableData.put` with this entry,
+  * it will fail if the entry already exists or the current app doesn't have the
   * permissions to edit that mutable data.
   *
   *

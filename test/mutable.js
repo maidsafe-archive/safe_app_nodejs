@@ -193,7 +193,8 @@ describe('Mutable Data', () => {
             .then((len) => {
               should(len).equal(0);
             })
-            .then(() => should(entries.insert('newKey', 'newValue')).be.rejected())
+            .then(() => entries.insert('newKey', 'newValue'))
+            .then(() => should(m.put(null, entries)).be.rejected())
           )
         )
     );
@@ -212,7 +213,8 @@ describe('Mutable Data', () => {
                 should(value.buf.toString()).equal('value1');
                 should(value.version).equal(0);
               })
-              .then(() => should(entries.insert('newKey', 'newValue')).be.rejected())
+              .then(() => entries.insert('newKey', 'newValue'))
+              .then(() => should(m.put(null, entries)).be.rejected())
             )
         ))
     );
