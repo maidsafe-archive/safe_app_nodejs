@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const should = require('should');
 const h = require('./helpers');
 const consts = require('../src/consts');
+const newFile = require('../src/api/emulations/nfs').newFile;
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
@@ -746,7 +747,7 @@ describe('Mutable Data', () => {
     it('creates new file', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
       .then((nfs) => {
-        const file = nfs.newFile();
+        const file = newFile();
         should(file).have.property('_ref');
         should(file.ref).have.properties(
           [
@@ -764,7 +765,7 @@ describe('Mutable Data', () => {
     it('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
       .then((nfs) => {
-        const file = nfs.newFile();
+        const file = newFile();
         should(consts.OPEN_MODE_OVERWRITE).equal(1);
         return nfs.open(file, consts.OPEN_MODE_OVERWRITE)
           .then((fh) => nfs.write(fh, 'hello, SAFE world!').then(() => nfs.close(fh)))
@@ -779,7 +780,7 @@ describe('Mutable Data', () => {
     it('reads a file and returns file contents', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
       .then((nfs) => {
-        const file = nfs.newFile();
+        const file = newFile();
         return nfs.open(file, consts.OPEN_MODE_OVERWRITE)
           .then((fch) => nfs.write(fch, 'hello, SAFE world!').then(() => nfs.close(fch)))
           .then((outputFile) => nfs.insert('hello.txt', outputFile))

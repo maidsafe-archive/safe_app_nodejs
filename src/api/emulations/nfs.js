@@ -8,6 +8,26 @@ function isString(arg) {
 }
 
 /**
+* Create a new file
+* @returns {File}
+**/
+function newFile() {
+  const now = nativeH.toSafeLibTime(new Date());
+  return new File({
+    size: 0,
+    data_map_name: new Array(32).fill(0),
+    created_sec: now.now_sec_part,
+    created_nsec: now.now_nsec_part,
+    modified_sec: now.now_sec_part,
+    modified_nsec: now.now_nsec_part,
+    user_metadata_ptr: [],
+    user_metadata_len: 0,
+    user_metadata_cap: 0
+
+  });
+}
+
+/**
 * A NFS-style File
 *
 * _Note_: As this application layer, the network does not check any
@@ -130,44 +150,16 @@ class NFS {
   }
 
   /**
-  * Current time in UTC.
-  * @return {Date}
-  **/
-  get now() {
-    return nativeH.toSafeLibTime(new Date());
-  }
-
-  /**
   * Helper function to create and save file to the network
   * @param {String|Buffer} content - file contents
   * @returns {File} a newly created file
   **/
 
   create(content) {
-    const file = this.newFile();
+    const file = newFile();
     return this.open(file, consts.OPEN_MODE_OVERWRITE)
       .then((fh) => this.write(fh, content).then(() => this.close(fh)))
       .then((outputFile) => outputFile);
-  }
-
-  /**
-  * Create a new file
-  * @returns {File} a newly created file
-  **/
-  newFile() {
-    const now = this.now;
-    return new File({
-      size: 0,
-      data_map_name: new Array(32).fill(0),
-      created_sec: now.now_sec_part,
-      created_nsec: now.now_nsec_part,
-      modified_sec: now.now_sec_part,
-      modified_nsec: now.now_nsec_part,
-      user_metadata_ptr: [],
-      user_metadata_len: 0,
-      user_metadata_cap: 0
-
-    });
   }
 
   /**
@@ -285,4 +277,7 @@ class NFS {
 
 }
 
-module.exports = NFS;
+module.exports = {
+  NFS,
+  newFile
+};
