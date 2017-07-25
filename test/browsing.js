@@ -147,8 +147,6 @@ describe('Browsing', () => {
     return createRandomDomain(content, 'index.html', '')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
-          .then((f) => app.immutableData.fetch(f.dataMapName))
-          .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
         ));
   });

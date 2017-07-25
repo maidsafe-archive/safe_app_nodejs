@@ -129,7 +129,7 @@ class SAFEApp extends EventEmitter {
                   // try the newly created path
                   return emulation.fetch(newPath).catch((e) => {
                     // and the version without the leading slash
-                    if (e.code === -305) {
+                    if (e.code === -305 || e.code === -301) {
                       return emulation.fetch(newPath.slice(1, newPath.length));
                     }
                     return Promise.reject(e);
