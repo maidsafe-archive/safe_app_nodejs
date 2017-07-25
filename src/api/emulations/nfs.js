@@ -1,9 +1,30 @@
 const lib = require('../../native/lib');
 const t = require('../../native/types');
 const nativeH = require('../../native/helpers');
+const consts = require('../../consts');
 
 function isString(arg) {
   return typeof arg === 'string' || (arg.toString ? arg.toString() === '[object String]' : false);
+}
+
+/**
+* Create a new file
+* @returns {File}
+**/
+function newFile() {
+  const now = nativeH.toSafeLibTime(new Date());
+  return new File({
+    size: 0,
+    data_map_name: new Array(32).fill(0),
+    created_sec: now.now_sec_part,
+    created_nsec: now.now_nsec_part,
+    modified_sec: now.now_sec_part,
+    modified_nsec: now.now_nsec_part,
+    user_metadata_ptr: [],
+    user_metadata_len: 0,
+    user_metadata_cap: 0
+
+  });
 }
 
 /**
@@ -36,15 +57,12 @@ class File {
   **/
   get ref() {
     const data = {
+      size: this._ref.size,
       created_sec: this._ref.created_sec,
       created_nsec: this._ref.created_nsec,
       modified_sec: this._ref.modified_sec,
       modified_nsec: this._ref.modified_nsec,
-      size: this._ref.size,
       data_map_name: this.dataMapName,
-      user_metadata_ptr: this.dataMapName.ref(),
-      user_metadata_len: 0,
-      user_metadata_cap: 0
     };
 
     if (this._ref.metadata) {
@@ -57,6 +75,11 @@ class File {
       data.user_metadata_ptr = buf.ref();
       data.user_metadata_len = buf.length;
       data.user_metadata_cap = buf.length;
+    } else {
+      const userData = Buffer.from([]);
+      data.user_metadata_ptr = userData;
+      data.user_metadata_len = userData.length;
+      data.user_metadata_cap = userData.byteLength;
     }
     return new t.File(data);
   }
@@ -127,27 +150,16 @@ class NFS {
   }
 
   /**
-  * Create a new file with the given content, put the content
-  * on the network via ImmutableData (public) and wrap it into
-  * a File.
-  * @param {(String|Buffer)} content
-  * @returns {Promise<File>} a newly created file
+  * Helper function to create and save file to the network
+  * @param {String|Buffer} content - file contents
+  * @returns {File} a newly created file
   **/
+
   create(content) {
-    const now = nativeH.toSafeLibTime(new Date());
-    return this.mData.app.immutableData.create()
-      .then((w) => w.write(content)
-        .then(() => this.mData.app.cipherOpt.newPlainText())
-        .then((cipherOpt) => w.close(cipherOpt))
-        .then((xorAddr) => new File({
-          size: content.length,
-          data_map_name: xorAddr,
-          created_sec: now.now_sec_part,
-          created_nsec: now.now_nsec_part,
-          modified_sec: now.now_sec_part,
-          modified_nsec: now.now_nsec_part,
-        }))
-    );
+    const file = newFile();
+    return this.open(file, consts.OPEN_MODE_OVERWRITE)
+      .then((fh) => this.write(fh, content).then(() => this.close(fh)))
+      .then((outputFile) => outputFile);
   }
 
   /**
@@ -156,7 +168,7 @@ class NFS {
   * @returns {Promise<File>} - the file found for that path
   **/
   fetch(fileName) {
-    return lib.file_fetch(this.mData.app.connection, this.mData.ref, fileName)
+    return lib.dir_fetch_file(this.mData.app.connection, this.mData.ref, fileName)
       .then((res) => new File(res));
   }
 
@@ -168,8 +180,11 @@ class NFS {
   * @returns {Promise<File>} - the same file
   **/
   insert(fileName, file) {
-    return lib.file_insert(this.mData.app.connection, this.mData.ref, fileName, file.ref.ref())
-      .then(() => file);
+    const ffiFile = new File(file);
+    return lib.dir_insert_file(
+      this.mData.app.connection, this.mData.ref, fileName, ffiFile.ref.ref()
+    )
+      .then(() => ffiFile);
   }
 
   /**
@@ -181,11 +196,88 @@ class NFS {
   * @returns {Promise<File>} - the same file
   **/
   update(fileName, file, version) {
-    return lib.file_update(this.mData.app.connection, this.mData.ref, fileName,
+    return lib.dir_update_file(this.mData.app.connection, this.mData.ref, fileName,
                            file.ref.ref(), version)
       .then(() => { file.version = version; })  // eslint-disable-line no-param-reassign
       .then(() => file);
   }
+
+  /**
+  * Delete a file from path. Directly commit to the network.
+  * @param {(String|Buffer)} fileName
+  * @param {Number} version
+  * @returns {Promise}
+  **/
+  delete(fileName, version) {
+    return lib.dir_delete_file(this.mData.app.connection, this.mData.ref, fileName, version);
+  }
+
+  /**
+  * Open a file for reading or writing.
+  *
+  * OPEN MODES:
+  *  /// Replaces the entire content of the file when writing data.
+  *  const OPEN_MODE_OVERWRITE = 1;
+  *  /// Appends to existing data in the file.
+  *  const OPEN_MODE_APPEND = 2;
+  *  /// Open file to read.
+  *  const OPEN_MODE_READ = 4;
+  *  /// Read entire contents of a file.
+  *  const FILE_READ_TO_END = 0;
+  *
+  * These constants are declared in ../../consts.js and imported in this module
+  *
+  * @param {File} file
+  * @param {Number} openMode
+  * @returns {Promise<FileContextHandle>}
+  **/
+  open(file, openMode) {
+    const fileRef = file.ref ? file.ref.ref() : new File(file).ref.ref();
+    return lib.file_open(this.mData.app.connection, fileRef, openMode);
+  }
+
+  /**
+  * Get file size
+  * @param {FileContextHandle} fileContextHandle
+  * @returns {Promise<Number>}
+  **/
+  size(fileContextHandle) {
+    return lib.file_size(this.mData.app.connection, fileContextHandle);
+  }
+
+  /**
+  * Read file
+  * @param {FileContextHandle} fileContextHandle
+  * @param {Number} position
+  * @param {Number} len
+  * @returns {Promise<[Data, Size]>}
+  **/
+  read(fileContextHandle, position, len) {
+    return lib.file_read(this.mData.app.connection, fileContextHandle, position, len);
+  }
+
+  /**
+  * Write file
+  * @param {FileContextHandle} fileContextHandle
+  * @param {Buffer|String} content
+  * @returns {Promise}
+  **/
+  write(fileContextHandle, fileContent) {
+    return lib.file_write(this.mData.app.connection, fileContextHandle, fileContent);
+  }
+
+  /**
+  * Close file
+  * @param {FileContextHandle} fileContextHandle
+  * @returns {Promise<File>}
+  **/
+  close(fileContextHandle) {
+    return lib.file_close(this.mData.app.connection, fileContextHandle);
+  }
+
 }
 
-module.exports = NFS;
+module.exports = {
+  NFS,
+  newFile
+};

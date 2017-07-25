@@ -57,8 +57,6 @@ describe('Browsing', () => {
     return createRandomDomain(content, '', '')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
-          .then((f) => app.immutableData.fetch(f.dataMapName))
-          .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
   });
@@ -69,8 +67,6 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/any/path/html', 'whatever')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://whatever.${domain}/any/path/html`)
-          .then((f) => app.immutableData.fetch(f.dataMapName))
-          .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
   });
@@ -81,8 +77,6 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/yumyum.html', 'whatever.valid_service')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://whatever.valid_service.${domain}/yumyum.html`)
-          .then((f) => app.immutableData.fetch(f.dataMapName))
-          .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
   });
@@ -93,8 +87,6 @@ describe('Browsing', () => {
     return createRandomPrivateServiceDomain(content, '/yumyum.html', 'www')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://www.${domain}/yumyum.html`)
-          .then((f) => app.immutableData.fetch(f.dataMapName))
-          .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
   });
@@ -105,8 +97,6 @@ describe('Browsing', () => {
     return createRandomDomain(content, 'test.html', 'whatever.valid_service')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://whatever.valid_service.${domain}/test.html`)
-          .then((f) => app.immutableData.fetch(f.dataMapName))
-          .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
   });
@@ -117,8 +107,6 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/index.html', '')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
-          .then((f) => app.immutableData.fetch(f.dataMapName))
-          .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
   });
@@ -129,8 +117,6 @@ describe('Browsing', () => {
     return createRandomDomain(content, '', 'www')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
-          .then((f) => app.immutableData.fetch(f.dataMapName))
-          .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
   });
@@ -141,8 +127,6 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/index.html', 'www')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
-          .then((f) => app.immutableData.fetch(f.dataMapName))
-          .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
   });
@@ -153,8 +137,6 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/subdir/index.html', 'www')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}/subdir/`)
-          .then((f) => app.immutableData.fetch(f.dataMapName))
-          .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
       ));
   });
@@ -165,8 +147,6 @@ describe('Browsing', () => {
     return createRandomDomain(content, 'index.html', '')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
-          .then((f) => app.immutableData.fetch(f.dataMapName))
-          .then((i) => i.read())
           .then((co) => should(co.toString()).equal(content))
         ));
   });
