@@ -232,7 +232,7 @@ class NFS {
   * @param {FileContextHandle} fileContextHandle
   * @param {Number} position
   * @param {Number} len
-  * @returns {Promise<Number>}
+  * @returns {Promise<[Data, Size]>}
   **/
   read(fileContextHandle, position, len) {
     return lib.file_read(this.mData.app.connection, fileContextHandle, position, len);
@@ -244,15 +244,8 @@ class NFS {
   * @param {Buffer|String} content
   * @returns {Promise}
   **/
-  write(fileContextHandle, content) {
-    if(typeof content === "string") {
-      let stringBuffer = new ArrayBuffer(content.length * 2);
-      let typedArray = new Uint16Array(stringBuffer);
-      content = typedArray.map((elem, i) => content.charCodeAt(i))
-    }
-
-    let fileSize = content.length;
-    return lib.file_write(this.mData.app.connection, fileContextHandle, t.u8Array(content).ref(), fileSize);
+  write(fileContextHandle, fileContent) {
+    return lib.file_write(this.mData.app.connection, fileContextHandle, fileContent);
   }
 
   /**

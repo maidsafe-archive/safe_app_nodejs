@@ -48,29 +48,40 @@ module.exports = {
       const created_nsec = file.created_nsec;
       const modified_sec = file.modified_sec;
       const modified_nsec = file.modified_nsec;
+      const user_metadata_len = file.user_metadata_len;
+      const user_metadata_cap = file.user_metadata_cap;
 
-      let metadata = file.user_metadata_len > 0
-        ? ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len) : null;
+      // QUESTION: What does user in user_metadata_ptr refer to?
 
-      if (metadata) {
-        // we try to understand it as JSON
+      let user_metadata_ptr = ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len);
+
+      if (user_metadata_ptr) {
         try {
-          metadata = JSON.parse(metadata);
+          if(typeof user_metadata_ptr === 'object') {
+            user_metadata_ptr = user_metadata_ptr;
+          } else {
+            user_metadata_ptr = JSON.parse(user_metadata_ptr.toString());
+          }
+
         } catch (e) {
           // we can safely ignore this
           if (console && console.warn) {
-            console.warn(`Parsing user metadata '${metadata}' of '${data_map_name}' failed: ${e}`)
+            console.warn(`Parsing user metadata '${user_metadata_ptr}' of '${data_map_name}' failed: ${e}`)
           }
         }
       }
-      return {metadata,
+      return {
               data_map_name,
               size,
               created_sec,
               created_nsec,
               modified_sec,
               modified_nsec,
-              version: res[1]}
+              user_metadata_ptr,
+              user_metadata_len,
+              user_metadata_cap,
+              version: res[1]
+            }
     }),
     dir_insert_file: h.Promisified(null, []),
     dir_update_file: h.Promisified(null, []),
@@ -78,7 +89,7 @@ module.exports = {
     file_open: h.Promisified(null, FileContextHandle),
     file_size: h.Promisified(null, [t.u64]),
     file_read: h.Promisified(null, [t.u8Pointer, t.usize], (res) => {
-      let fileContents = res[0].deref();
+      let fileContents = res[0].toString();
       let fileSize = res[1];
 
       return {
@@ -86,7 +97,10 @@ module.exports = {
         fileSize
       }
     }),
-    file_write: h.Promisified(null, []),
+    file_write: h.Promisified((appPtr, fileCtxHandle, data) => {
+      let dataAsBuffer = Buffer.isBuffer(data) ? data : Buffer.from(data);
+      return [appPtr, fileCtxHandle, dataAsBuffer, dataAsBuffer.length];
+    }, null),
     file_close: h.Promisified(null, FilePtr, (res) => {
       const file = res[0].deref();
 
@@ -99,7 +113,7 @@ module.exports = {
       const user_metadata_len = file.user_metadata_len;
       const user_metadata_cap = file.user_metadata_cap;
 
-      // QUESTION: What does reinterpret do?
+      // QUESTION: What operation is reinterpret performing on it's arguments?
       let user_metadata_ptr = ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len);
 
       if (user_metadata_ptr) {
