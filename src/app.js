@@ -113,8 +113,8 @@ class SAFEApp extends EventEmitter {
           .then((service) => service.emulateAs('NFS'))
           .then((emulation) => emulation.fetch(path)
             .catch((err) => {
-              // Error code -305 corresponds to 'NfsError::FileNotFound'
-              if (err.code === -305) {
+              // Error codes -305 and -301 correspond to 'NfsError::FileNotFound'
+              if (err.code === -305 || err.code === -301) {
                 let newPath;
                 if (!path || !path.length) {
                   newPath = '/index.html';
@@ -137,7 +137,10 @@ class SAFEApp extends EventEmitter {
                 }
               }
               return Promise.reject(err);
-            }))));
+            })
+            .then(file => emulation.open(file, consts.OPEN_MODE_READ))
+            .then(fileContextHandle => emulation.read(fileContextHandle, consts.FILE_READ_FROM_BEGIN, consts.FILE_READ_TO_END))
+          )));
   }
 
 
