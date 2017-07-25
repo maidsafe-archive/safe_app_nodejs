@@ -141,6 +141,18 @@ describe('Browsing', () => {
       ));
   });
 
+  it('empty subdirectory fallback', function test() {
+    this.timeout(20000);
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    return createRandomDomain(content, 'index.html', '')
+      .then((domain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://${domain}`)
+          .then((f) => app.immutableData.fetch(f.dataMapName))
+          .then((i) => i.read())
+          .then((co) => should(co.toString()).equal(content))
+        ));
+  });
+
   describe('errors', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     let domain; // eslint-disable-line no-unused-vars

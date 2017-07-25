@@ -129,8 +129,8 @@ class SAFEApp extends EventEmitter {
                   // try the newly created path
                   return emulation.fetch(newPath).catch((e) => {
                     // and the version without the leading slash
-                    if (e.name === 'ERR_FILE_NOT_FOUND') {
-                      return emulation.fetch(newPath.slice(1, path.length));
+                    if (e.code === -305) {
+                      return emulation.fetch(newPath.slice(1, newPath.length));
                     }
                     return Promise.reject(e);
                   });
@@ -159,7 +159,7 @@ class SAFEApp extends EventEmitter {
   */
   set connection(con) {
     if (this._connection) {
-      lib.free_app(this._connection);
+      lib.app_free(this._connection);
     }
     this._connection = con;
   }
@@ -283,9 +283,6 @@ class SAFEApp extends EventEmitter {
     // we are freed last, anything you do after this
     // will probably fail.
     lib.app_free(app.connection);
-
-    // in the hopes, this all cleans up,
-    // before we do in a matter of seconds from now
   }
 
 }
