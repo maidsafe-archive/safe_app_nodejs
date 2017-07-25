@@ -41,9 +41,6 @@ class File {
       created_nsec: this._ref.created_nsec,
       modified_sec: this._ref.modified_sec,
       modified_nsec: this._ref.modified_nsec,
-      user_metadata_ptr: this.dataMapName.ref(),
-      user_metadata_len: 0,
-      user_metadata_cap: 0,
       data_map_name: this.dataMapName,
     };
 
@@ -57,6 +54,11 @@ class File {
       data.user_metadata_ptr = buf.ref();
       data.user_metadata_len = buf.length;
       data.user_metadata_cap = buf.length;
+    } else {
+      let userData = Buffer.from([]);
+      data.user_metadata_ptr = userData;
+      data.user_metadata_len = userData.length;
+      data.user_metadata_cap = userData.byteLength;
     }
     return new t.File(data);
   }
@@ -139,7 +141,10 @@ class NFS {
       created_nsec: now.now_nsec_part,
       modified_sec: now.now_sec_part,
       modified_nsec: now.now_nsec_part,
-      user_metadata: new Array()
+      user_metadata_ptr: new Array(),
+      user_metadata_len: 0,
+      user_metadata_cap: 0
+
     })
   }
 
@@ -162,8 +167,7 @@ class NFS {
   **/
   insert(fileName, file) {
     let _file = new File(file);
-    console.log(_file);
-    return lib.dir_insert_file(this.mData.app.connection, this.mData.ref, Buffer.from(fileName), _file.ref.ref())
+    return lib.dir_insert_file(this.mData.app.connection, this.mData.ref, fileName, _file.ref.ref())
       .then(() => _file);
   }
 

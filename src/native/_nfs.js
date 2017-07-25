@@ -29,7 +29,7 @@ module.exports = {
   },
   functions: {
     dir_fetch_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', 'pointer', 'pointer']],
-    dir_insert_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', FilePtr, 'pointer', 'pointer']],
+    dir_insert_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, 'pointer', 'pointer']],
     dir_update_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, t.u64, 'pointer', 'pointer']],
     dir_delete_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', t.u64, 'pointer', 'pointer']],
     file_open: [t.Void, [t.AppPtr, FilePtr, t.u64, 'pointer', 'pointer']],
@@ -96,27 +96,28 @@ module.exports = {
       const modified_sec = file.modified_sec;
       const modified_nsec = file.modified_nsec;
       const data_map_name = file.data_map_name;
-
-
-      const user_metadata_ptr = file.user_metadata_ptr;
       const user_metadata_len = file.user_metadata_len;
       const user_metadata_cap = file.user_metadata_cap;
 
+      // QUESTION: What does reinterpret do?
+      let user_metadata_ptr = ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len);
 
-      // let metadata = file.user_metadata_len > 0
-      //   ? ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len) : null;
+      if (user_metadata_ptr) {
+        try {
+          if(typeof user_metadata_ptr === 'object') {
+            user_metadata_ptr = user_metadata_ptr;
+          } else {
+            user_metadata_ptr = JSON.parse(user_metadata_ptr.toString());
+          }
 
-      // if (metadata) {
-      //   // we try to understand it as JSON
-      //   try {
-      //     metadata = JSON.parse(metadata);
-      //   } catch (e) {
-      //     // we can safely ignore this
-      //     if (console && console.warn) {
-      //       console.warn(`Parsing user metadata '${metadata}' of '${data_map_name}' failed: ${e}`)
-      //     }
-      //   }
-      // }
+        } catch (e) {
+          // we can safely ignore this
+          if (console && console.warn) {
+            console.warn(`Parsing user metadata '${user_metadata_ptr}' of '${data_map_name}' failed: ${e}`)
+          }
+        }
+      }
+
       return {
               data_map_name,
               size,
