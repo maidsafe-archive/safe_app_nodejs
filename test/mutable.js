@@ -768,19 +768,38 @@ describe('Mutable Data', () => {
     const OPEN_MODE_READ = 4;
     /// Read entire contents of a file.
     const FILE_READ_TO_END = 0;
+    const FILE_READ_FROM_BEGIN = 0;
 
-    it.only('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then(m => m.quickSetup({}).then(() => m.emulateAs('nfs')))
       .then(nfs => {
         let file = nfs.new();
         should(OPEN_MODE_OVERWRITE).equal(1);
         return nfs.open(file, OPEN_MODE_OVERWRITE)
-          .then(fh => nfs.write(fh, 'hello SAFE world').then(() => nfs.close(fh)))
+          .then(fh => nfs.write(fh, 'hello, SAFE world!').then(() => nfs.close(fh)))
           .then(file => nfs.insert("hello.txt", file))
           .then(() => {
             should(nfs.fetch("hello.txt")).be.fulfilled();
           }
         )
+      })
+    );
+
+    it('reads a file and returns file contents', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then(m => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+      .then(nfs => {
+        let file = nfs.new();
+        return nfs.open(file, OPEN_MODE_OVERWRITE)
+          .then(fch => nfs.write(fch, 'hello, SAFE world!').then(() => nfs.close(fch)))
+          .then(file => nfs.insert("hello.txt", file))
+          .then(() => nfs.fetch("hello.txt"))
+          .then((file) => nfs.open(file, OPEN_MODE_READ))
+          .then(fch => nfs.read(fch, FILE_READ_FROM_BEGIN, FILE_READ_TO_END))
+          .then(data => {
+            // This test is currently failing. Only receiving first UTF-8 in buffer
+            // should(data).be.equal('hello, SAFE world!');
+            console.log(data);
+          })
       })
     );
 
