@@ -745,8 +745,7 @@ describe('Mutable Data', () => {
     });
 
     it('creates new file', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
-      .then((nfs) => {
+      .then(() => {
         const file = newFile();
         should(file).have.property('_ref');
         should(file.ref).have.properties(
