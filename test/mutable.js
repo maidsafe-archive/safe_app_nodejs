@@ -754,9 +754,6 @@ describe('Mutable Data', () => {
             'created_nsec',
             'modified_sec',
             'modified_nsec',
-            'user_metadata_ptr',
-            'user_metadata_len',
-            'user_metadata_cap',
             'data_map_name'
           ]
         )
@@ -772,76 +769,19 @@ describe('Mutable Data', () => {
     /// Read entire contents of a file.
     const FILE_READ_TO_END = 0;
 
-    it.only('opens file in write mode, writes, and returns file', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it.only('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then(m => m.quickSetup({}).then(() => m.emulateAs('nfs')))
       .then(nfs => {
         let file = nfs.new();
         should(OPEN_MODE_OVERWRITE).equal(1);
         return nfs.open(file, OPEN_MODE_OVERWRITE)
-          .then(fh =>  {
-            return nfs.write(fh, 'hello SAFE world').then(() => nfs.close(fh)).then(file => {
-              console.log(file);
-              return nfs.insert("hello.txt", file)
-              .then(() => {
-                should(nfs.fetch("hello.txt")).be.fulfilled();
-                nfs.fetch("hello.txt").then(file => {
-                  console.log("LKSJDFLKSDJLKFJDSLKFJDSFDSJFDSF");
-                  console.log(file);
-
-                })
-              });
-            });
-          })
-      })
-    );
-
-    it('creates immutable data to store file contents', () => app.mutableData.newRandomPrivate(TAG_TYPE)
-      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
-      .then((nfs) => nfs.create('Hello world'))
-      .then((file) => app.immutableData.fetch(file._ref.data_map_name))
-      .then((reader) => reader.read())
-      .then((res) => {
-        should(res.toString()).equal('Hello world');
-      })
-    );
-
-    it('inserts file in mutable data structure', () => app.mutableData.newRandomPrivate(TAG_TYPE)
-      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs'))
-        .then((nfs) => nfs.create('Hello world')
-          .then((file) => nfs.insert('test.txt', file)
-            .then(() => m.encryptKey('test.txt'))
-            .then((encKey) => {
-              should(m.get(encKey)).be.fulfilled();
-            })
-          )
+          .then(fh => nfs.write(fh, 'hello SAFE world').then(() => nfs.close(fh)))
+          .then(file => nfs.insert("hello.txt", file))
+          .then(() => {
+            should(nfs.fetch("hello.txt")).be.fulfilled();
+          }
         )
-      )
-    );
-
-    it('updates existing file in mutable data structure', () => app.mutableData.newRandomPrivate(TAG_TYPE)
-      // Note we use lowercase 'nfs' below to test that it is case insensitive
-      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
-      .then((nfs) => nfs.create('Hello world')
-        .then((file) => nfs.insert('test.txt', file))
-        .then(() => nfs.fetch('test.txt'))
-        .then((f) => app.immutableData.fetch(f.dataMapName)
-          .then((i) => i.read())
-          .then(() => nfs.create('hello world updated'))
-          .then((file) => nfs.update('test.txt', file, f.version + 1)
-            .then(() => should(file.version).be.equal(f.version + 1))
-          ))
-      )
-    );
-
-    it('fetches file from mutable data', () => app.mutableData.newRandomPrivate(TAG_TYPE)
-      // Note we use lowercase 'nfs' below to test that it is case insensitive
-      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
-      .then((nfs) => nfs.create('Hello world')
-        .then((file) => nfs.insert('test.txt', file))
-        .then(() => {
-          should(nfs.fetch('test.txt')).be.fulfilled();
-        })
-      )
+      })
     );
 
     it('deletes file', () => app.mutableData.newRandomPrivate(TAG_TYPE)
