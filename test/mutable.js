@@ -768,7 +768,7 @@ describe('Mutable Data', () => {
         should(consts.OPEN_MODE_OVERWRITE).equal(1);
         return nfs.open(file, consts.OPEN_MODE_OVERWRITE)
           .then((fh) => nfs.write(fh, 'hello, SAFE world!').then(() => nfs.close(fh)))
-          .then((o_file) => nfs.insert('hello.txt', o_file))
+          .then((outputFile) => nfs.insert('hello.txt', outputFile))
           .then(() => {
             should(nfs.fetch('hello.txt')).be.fulfilled();
           }
@@ -782,9 +782,9 @@ describe('Mutable Data', () => {
         const file = nfs.newFile();
         return nfs.open(file, consts.OPEN_MODE_OVERWRITE)
           .then((fch) => nfs.write(fch, 'hello, SAFE world!').then(() => nfs.close(fch)))
-          .then((o_file) => nfs.insert('hello.txt', o_file))
+          .then((outputFile) => nfs.insert('hello.txt', outputFile))
           .then(() => nfs.fetch('hello.txt'))
-          .then((r_file) => nfs.open(r_file, consts.OPEN_MODE_READ))
+          .then((retrievedFile) => nfs.open(retrievedFile, consts.OPEN_MODE_READ))
           .then((fch) => nfs.read(fch, consts.FILE_READ_FROM_BEGIN, consts.FILE_READ_TO_END))
           .then((data) => {
             should(data.toString()).be.equal('hello, SAFE world!');

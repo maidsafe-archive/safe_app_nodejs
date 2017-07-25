@@ -51,8 +51,6 @@ module.exports = {
       const user_metadata_len = file.user_metadata_len;
       const user_metadata_cap = file.user_metadata_cap;
 
-      // QUESTION: What does user in user_metadata_ptr refer to?
-
       let user_metadata_ptr = ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len);
 
       if (user_metadata_ptr) {
@@ -105,7 +103,6 @@ module.exports = {
       const user_metadata_len = file.user_metadata_len;
       const user_metadata_cap = file.user_metadata_cap;
 
-      // QUESTION: What operation is reinterpret performing on it's arguments?
       let user_metadata_ptr = ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len);
 
       if (user_metadata_ptr) {

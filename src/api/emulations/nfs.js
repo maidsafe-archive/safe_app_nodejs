@@ -130,6 +130,14 @@ class NFS {
   }
 
   /**
+  * Current time in UTC.
+  * @return {Date}
+  **/
+  get now() {
+    return nativeH.toSafeLibTime(new Date());
+  }
+
+  /**
   * Helper function to create and save file to the network
   * @param {String|Buffer} content - file contents
   * @returns {File} a newly created file
@@ -139,7 +147,7 @@ class NFS {
     const file = this.newFile();
     return this.open(file, consts.OPEN_MODE_OVERWRITE)
       .then((fh) => this.write(fh, content).then(() => this.close(fh)))
-      .then((o_file) => o_file);
+      .then((outputFile) => outputFile);
   }
 
   /**
@@ -147,7 +155,7 @@ class NFS {
   * @returns {File} a newly created file
   **/
   newFile() {
-    const now = nativeH.toSafeLibTime(new Date());
+    const now = this.now;
     return new File({
       size: 0,
       data_map_name: new Array(32).fill(0),
@@ -181,7 +189,9 @@ class NFS {
   **/
   insert(fileName, file) {
     const ffiFile = new File(file);
-    return lib.dir_insert_file(this.mData.app.connection, this.mData.ref, fileName, ffiFile.ref.ref())
+    return lib.dir_insert_file(
+      this.mData.app.connection, this.mData.ref, fileName, ffiFile.ref.ref()
+    )
       .then(() => ffiFile);
   }
 
