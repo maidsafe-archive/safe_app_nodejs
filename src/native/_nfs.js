@@ -88,15 +88,7 @@ module.exports = {
     dir_delete_file: h.Promisified(null, []),
     file_open: h.Promisified(null, FileContextHandle),
     file_size: h.Promisified(null, [t.u64]),
-    file_read: h.Promisified(null, [t.u8Pointer, t.usize], (res) => {
-      let fileContents = res[0].toString();
-      let fileSize = res[1];
-
-      return {
-        fileContents,
-        fileSize
-      }
-    }),
+    file_read: h.Promisified(null, [t.u8Pointer, t.usize], h.asBuffer),
     file_write: h.Promisified((appPtr, fileCtxHandle, data) => {
       let dataAsBuffer = Buffer.isBuffer(data) ? data : Buffer.from(data);
       return [appPtr, fileCtxHandle, dataAsBuffer, dataAsBuffer.length];

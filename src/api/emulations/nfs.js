@@ -1,6 +1,7 @@
 const lib = require('../../native/lib');
 const t = require('../../native/types');
 const nativeH = require('../../native/helpers');
+const consts = require('../../consts');
 
 function isString(arg) {
   return typeof arg === 'string' || (arg.toString ? arg.toString() === '[object String]' : false);
@@ -135,10 +136,8 @@ class NFS {
   **/
 
   create(content) {
-    let OPEN_MODE_OVERWRITE = 1;
-
     let file = this.new();
-    return this.open(file, OPEN_MODE_OVERWRITE)
+    return this.open(file, consts.OPEN_MODE_OVERWRITE)
       .then(fh => this.write(fh, content).then(() => this.close(fh)))
       .then(file => file);
   }
@@ -223,6 +222,8 @@ class NFS {
   *  const OPEN_MODE_READ = 4;
   *  /// Read entire contents of a file.
   *  const FILE_READ_TO_END = 0;
+  *
+  * These constants are declared in ../../consts.js and imported in this module
   *
   * @param {File} file
   * @param {Number} openMode

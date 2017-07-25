@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const should = require('should');
 const h = require('./helpers');
+const consts = require('../src/consts');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
@@ -760,22 +761,12 @@ describe('Mutable Data', () => {
       })
     );
 
-    /// Replaces the entire content of the file when writing data.
-    const OPEN_MODE_OVERWRITE = 1;
-    /// Appends to existing data in the file.
-    const OPEN_MODE_APPEND = 2;
-    /// Open file to read.
-    const OPEN_MODE_READ = 4;
-    /// Read entire contents of a file.
-    const FILE_READ_TO_END = 0;
-    const FILE_READ_FROM_BEGIN = 0;
-
     it('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then(m => m.quickSetup({}).then(() => m.emulateAs('nfs')))
       .then(nfs => {
         let file = nfs.new();
-        should(OPEN_MODE_OVERWRITE).equal(1);
-        return nfs.open(file, OPEN_MODE_OVERWRITE)
+        should(consts.OPEN_MODE_OVERWRITE).equal(1);
+        return nfs.open(file, consts.OPEN_MODE_OVERWRITE)
           .then(fh => nfs.write(fh, 'hello, SAFE world!').then(() => nfs.close(fh)))
           .then(file => nfs.insert("hello.txt", file))
           .then(() => {
@@ -789,16 +780,14 @@ describe('Mutable Data', () => {
       .then(m => m.quickSetup({}).then(() => m.emulateAs('nfs')))
       .then(nfs => {
         let file = nfs.new();
-        return nfs.open(file, OPEN_MODE_OVERWRITE)
+        return nfs.open(file, consts.OPEN_MODE_OVERWRITE)
           .then(fch => nfs.write(fch, 'hello, SAFE world!').then(() => nfs.close(fch)))
           .then(file => nfs.insert("hello.txt", file))
           .then(() => nfs.fetch("hello.txt"))
-          .then((file) => nfs.open(file, OPEN_MODE_READ))
-          .then(fch => nfs.read(fch, FILE_READ_FROM_BEGIN, FILE_READ_TO_END))
+          .then((file) => nfs.open(file, consts.OPEN_MODE_READ))
+          .then(fch => nfs.read(fch, consts.FILE_READ_FROM_BEGIN, consts.FILE_READ_TO_END))
           .then(data => {
-            // TODO: This test is currently failing. Only receiving first UTF-8 in buffer
-            // should(data).be.equal('hello, SAFE world!');
-            // console.log(data); to verify the fail
+            should(data.toString()).be.equal('hello, SAFE world!');
           })
       })
     );
