@@ -33,20 +33,27 @@ class NetworkObject {
   }
 }
 
+function freeResources(obj) {
+  return () => {
+    if (obj.app) {
+      return obj.constructor.free(obj.app, obj.ref);
+    }
+    return obj.constructor.free(obj);
+  };
+}
+
 /**
-* Automatically clean up a given object using weak once
+* Automatically clean up a given object's resources using weak once
 * it is garbage collected.
+* Expose an optional function to explicitly clean up underlying resources.
 * @private
 * @abstract
 **/
 function autoref(obj) {
   if (obj.constructor && obj.constructor.free) {
-    return weak(obj, () => {
-      if (obj.app) {
-        return obj.constructor.free(obj.app, obj.ref);
-      }
-      return obj.constructor.free(obj);
-    });
+    const weakObj = weak(obj, freeResources(obj));
+    weakObj.forceCleanUp = freeResources(obj);
+    return weakObj;
   }
 
   console.warn('Can\'t clean up obj. No static "free" function found on obj:', obj);
