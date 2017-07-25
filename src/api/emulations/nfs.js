@@ -56,7 +56,7 @@ class File {
       data.user_metadata_len = buf.length;
       data.user_metadata_cap = buf.length;
     } else {
-      let userData = Buffer.from([]);
+      const userData = Buffer.from([]);
       data.user_metadata_ptr = userData;
       data.user_metadata_len = userData.length;
       data.user_metadata_cap = userData.byteLength;
@@ -136,17 +136,17 @@ class NFS {
   **/
 
   create(content) {
-    let file = this.new();
+    const file = this.newFile();
     return this.open(file, consts.OPEN_MODE_OVERWRITE)
-      .then(fh => this.write(fh, content).then(() => this.close(fh)))
-      .then(file => file);
+      .then((fh) => this.write(fh, content).then(() => this.close(fh)))
+      .then((o_file) => o_file);
   }
 
   /**
   * Create a new file
   * @returns {File} a newly created file
   **/
-  new() {
+  newFile() {
     const now = nativeH.toSafeLibTime(new Date());
     return new File({
       size: 0,
@@ -155,11 +155,11 @@ class NFS {
       created_nsec: now.now_nsec_part,
       modified_sec: now.now_sec_part,
       modified_nsec: now.now_nsec_part,
-      user_metadata_ptr: new Array(),
+      user_metadata_ptr: [],
       user_metadata_len: 0,
       user_metadata_cap: 0
 
-    })
+    });
   }
 
   /**
@@ -180,9 +180,9 @@ class NFS {
   * @returns {Promise<File>} - the same file
   **/
   insert(fileName, file) {
-    let _file = new File(file);
-    return lib.dir_insert_file(this.mData.app.connection, this.mData.ref, fileName, _file.ref.ref())
-      .then(() => _file);
+    const ffiFile = new File(file);
+    return lib.dir_insert_file(this.mData.app.connection, this.mData.ref, fileName, ffiFile.ref.ref())
+      .then(() => ffiFile);
   }
 
   /**
@@ -230,8 +230,8 @@ class NFS {
   * @returns {Promise<FileContextHandle>}
   **/
   open(file, openMode) {
-    let _file = file.ref ? file.ref.ref() : new File(file).ref.ref();
-    return lib.file_open(this.mData.app.connection, _file, openMode);
+    const fileRef = file.ref ? file.ref.ref() : new File(file).ref.ref();
+    return lib.file_open(this.mData.app.connection, fileRef, openMode);
   }
 
   /**

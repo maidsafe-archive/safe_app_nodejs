@@ -744,9 +744,9 @@ describe('Mutable Data', () => {
     });
 
     it('creates new file', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then(m => m.quickSetup({}).then(() => m.emulateAs('nfs')))
-      .then(nfs => {
-        let file = nfs.new();
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+      .then((nfs) => {
+        const file = nfs.newFile();
         should(file).have.property('_ref');
         should(file.ref).have.properties(
           [
@@ -757,44 +757,44 @@ describe('Mutable Data', () => {
             'modified_nsec',
             'data_map_name'
           ]
-        )
+        );
       })
     );
 
     it('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then(m => m.quickSetup({}).then(() => m.emulateAs('nfs')))
-      .then(nfs => {
-        let file = nfs.new();
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+      .then((nfs) => {
+        const file = nfs.newFile();
         should(consts.OPEN_MODE_OVERWRITE).equal(1);
         return nfs.open(file, consts.OPEN_MODE_OVERWRITE)
-          .then(fh => nfs.write(fh, 'hello, SAFE world!').then(() => nfs.close(fh)))
-          .then(file => nfs.insert("hello.txt", file))
+          .then((fh) => nfs.write(fh, 'hello, SAFE world!').then(() => nfs.close(fh)))
+          .then((o_file) => nfs.insert('hello.txt', o_file))
           .then(() => {
-            should(nfs.fetch("hello.txt")).be.fulfilled();
+            should(nfs.fetch('hello.txt')).be.fulfilled();
           }
-        )
+        );
       })
     );
 
     it('reads a file and returns file contents', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then(m => m.quickSetup({}).then(() => m.emulateAs('nfs')))
-      .then(nfs => {
-        let file = nfs.new();
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+      .then((nfs) => {
+        const file = nfs.newFile();
         return nfs.open(file, consts.OPEN_MODE_OVERWRITE)
-          .then(fch => nfs.write(fch, 'hello, SAFE world!').then(() => nfs.close(fch)))
-          .then(file => nfs.insert("hello.txt", file))
-          .then(() => nfs.fetch("hello.txt"))
-          .then((file) => nfs.open(file, consts.OPEN_MODE_READ))
-          .then(fch => nfs.read(fch, consts.FILE_READ_FROM_BEGIN, consts.FILE_READ_TO_END))
-          .then(data => {
+          .then((fch) => nfs.write(fch, 'hello, SAFE world!').then(() => nfs.close(fch)))
+          .then((o_file) => nfs.insert('hello.txt', o_file))
+          .then(() => nfs.fetch('hello.txt'))
+          .then((r_file) => nfs.open(r_file, consts.OPEN_MODE_READ))
+          .then((fch) => nfs.read(fch, consts.FILE_READ_FROM_BEGIN, consts.FILE_READ_TO_END))
+          .then((data) => {
             should(data.toString()).be.equal('hello, SAFE world!');
-          })
+          });
       })
     );
 
     it('provides helper function to create and save file to the network', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then(m => m.quickSetup({}).then(() => m.emulateAs('nfs')))
-      .then(nfs => should(nfs.create("testing")).be.fulfilled())
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+      .then((nfs) => should(nfs.create('testing')).be.fulfilled())
     );
 
     it('deletes file', () => app.mutableData.newRandomPrivate(TAG_TYPE)
@@ -802,15 +802,12 @@ describe('Mutable Data', () => {
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
       .then((nfs) => nfs.create('Hello world')
         .then((file) => nfs.insert('test.txt', file))
-        .then((file) => nfs.delete('test.txt', 1))
+        .then(() => nfs.delete('test.txt', 1))
         .then(() => {
           should(nfs.fetch('test.txt')).be.rejected();
         })
       )
     );
-
-
-
   });
 
   describe.skip('Owners', () => {
