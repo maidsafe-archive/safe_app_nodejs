@@ -33,13 +33,16 @@ class NetworkObject {
   }
 }
 
+/**
+* We need to differentiate between safeApp objects and NetworkObjects
+* @private
+* @abstract
+**/
 function freeResources(obj) {
-  return () => {
-    if (obj.app) {
-      return obj.constructor.free(obj.app, obj.ref);
-    }
-    return obj.constructor.free(obj);
-  };
+  if (obj.app) {
+    return () => obj.constructor.free(obj.app, obj.ref);
+  }
+  return () => obj.constructor.free(obj);
 }
 
 /**

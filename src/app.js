@@ -152,7 +152,7 @@ class SAFEApp extends EventEmitter {
   */
   set connection(con) {
     if (this._connection) {
-      lib.free_app(this._connection);
+      lib.app_free(this._connection);
     }
     this._connection = con;
   }
@@ -276,9 +276,6 @@ class SAFEApp extends EventEmitter {
     // we are freed last, anything you do after this
     // will probably fail.
     lib.app_free(app.connection);
-
-    // in the hopes, this all cleans up,
-    // before we do in a matter of seconds from now
   }
 
 }
