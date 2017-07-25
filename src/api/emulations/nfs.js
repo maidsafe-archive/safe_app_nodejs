@@ -129,6 +129,21 @@ class NFS {
   }
 
   /**
+  * Helper function to create and save file to the network
+  * @param {String|Buffer} content - file contents
+  * @returns {File} a newly created file
+  **/
+
+  create(content) {
+    let OPEN_MODE_OVERWRITE = 1;
+
+    let file = this.new();
+    return this.open(file, OPEN_MODE_OVERWRITE)
+      .then(fh => this.write(fh, content).then(() => this.close(fh)))
+      .then(file => file);
+  }
+
+  /**
   * Create a new file
   * @returns {File} a newly created file
   **/

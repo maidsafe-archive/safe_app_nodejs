@@ -796,11 +796,16 @@ describe('Mutable Data', () => {
           .then((file) => nfs.open(file, OPEN_MODE_READ))
           .then(fch => nfs.read(fch, FILE_READ_FROM_BEGIN, FILE_READ_TO_END))
           .then(data => {
-            // This test is currently failing. Only receiving first UTF-8 in buffer
+            // TODO: This test is currently failing. Only receiving first UTF-8 in buffer
             // should(data).be.equal('hello, SAFE world!');
-            console.log(data);
+            // console.log(data); to verify the fail
           })
       })
+    );
+
+    it('provides helper function to create and save file to the network', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then(m => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+      .then(nfs => should(nfs.create("testing")).be.fulfilled())
     );
 
     it('deletes file', () => app.mutableData.newRandomPrivate(TAG_TYPE)
