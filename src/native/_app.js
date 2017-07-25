@@ -51,11 +51,6 @@ module.exports = {
       });
     },
     app_reconnect: base.helpers.Promisified(null, []),
-    app_free: function (lib, fn) {
-      return (function (app) {
-        fn(app.connection);
-        return Promise.resolve();
-      });
-    }
+    app_free: base.helpers.Promisified(null, [])
   }
 };
