@@ -51,7 +51,7 @@ module.exports = {
       const user_metadata_len = file.user_metadata_len;
       const user_metadata_cap = file.user_metadata_cap;
 
-      let user_metadata_ptr = ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len);
+      let user_metadata_ptr = file.user_metadata_len === 0 ? new Buffer(0) : ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len);
 
       if (user_metadata_ptr) {
         try {
@@ -103,7 +103,7 @@ module.exports = {
       const user_metadata_len = file.user_metadata_len;
       const user_metadata_cap = file.user_metadata_cap;
 
-      let user_metadata_ptr = ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len);
+      let user_metadata_ptr = file.user_metadata_len === 0 ? new Buffer(0) : ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len);
 
       if (user_metadata_ptr) {
         try {
