@@ -139,11 +139,8 @@ class SAFEApp extends EventEmitter {
               return Promise.reject(err);
             })
             .then((file) => emulation.open(file, consts.OPEN_MODE_READ))
-            .then((fileContextHandle) => emulation.read(
-              fileContextHandle,
-              consts.FILE_READ_FROM_BEGIN,
-              consts.FILE_READ_TO_END
-            ))
+            .then((openFile) => openFile.read(
+                consts.FILE_READ_FROM_BEGIN, consts.FILE_READ_TO_END))
           )));
   }
 

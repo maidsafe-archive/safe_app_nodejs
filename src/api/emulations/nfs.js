@@ -8,26 +8,6 @@ function isString(arg) {
 }
 
 /**
-* Create a new file
-* @returns {File}
-**/
-function newFile() {
-  const now = nativeH.toSafeLibTime(new Date());
-  return new File({
-    size: 0,
-    data_map_name: new Array(32).fill(0),
-    created_sec: now.now_sec_part,
-    created_nsec: now.now_nsec_part,
-    modified_sec: now.now_sec_part,
-    modified_nsec: now.now_nsec_part,
-    user_metadata_ptr: [],
-    user_metadata_len: 0,
-    user_metadata_cap: 0
-
-  });
-}
-
-/**
 * A NFS-style File
 *
 * _Note_: As this application layer, the network does not check any
@@ -42,8 +22,10 @@ class File {
   * @param {Object} ref the file's metadata including the XoR-name
   * of ImmutableData containing the file's content.
   **/
-  constructor(ref) {
+  constructor(ref, connection, fileCtx) {
     this._ref = ref;
+    this._fileCtx = fileCtx;
+    this._connection = connection;
     if (Array.isArray(ref.data_map_name)) {
       // translate the incoming array back into a buffer we can use internally
       this._ref.data_map_name = t.XOR_NAME(ref.data_map_name);
@@ -109,11 +91,59 @@ class File {
   }
 
   /**
-  * How big is that file?
-  * @return {Number} size in bytes
+  * Get file size
+  * @returns {Promise<Number>}
   **/
-  get size() {
-    return this._ref.size;
+  size() {
+    if (!this._fileCtx) {
+      return Promise.resolve(this._ref.size);
+    }
+    return lib.file_size(this._connection, this._fileCtx);
+  }
+
+  /**
+  * Read file
+  * @param {Number} position
+  * @param {Number} len
+  * @returns {Promise<[Data, Size]>}
+  **/
+  read(position, len) {
+    if (!this._fileCtx) {
+      return Promise.reject(new Error('File is not open'));
+    }
+    return lib.file_read(this._connection, this._fileCtx, position, len);
+  }
+
+  /**
+  * Write file
+  * @param {Buffer|String} content
+  * @returns {Promise}
+  **/
+  write(fileContent) {
+    if (!this._fileCtx) {
+      return Promise.reject(new Error('File is not open'));
+    }
+    return lib.file_write(this._connection, this._fileCtx, fileContent);
+  }
+
+  /**
+  * Close file
+  * @returns {Promise}
+  **/
+  close() {
+    if (!this._fileCtx) {
+      return Promise.reject(new Error('File is not open'));
+    }
+
+    return lib.file_close(this._connection, this._fileCtx)
+      .then((res) => {
+        this._ref = res;
+        this._fileCtx = null;
+        if (Array.isArray(res.data_map_name)) {
+          // translate the incoming array back into a buffer we can use internally
+          this._ref.data_map_name = t.XOR_NAME(res.data_map_name);
+        }
+      });
   }
 
   /**
@@ -156,10 +186,11 @@ class NFS {
   **/
 
   create(content) {
-    const file = newFile();
-    return this.open(file, consts.OPEN_MODE_OVERWRITE)
-      .then((fh) => this.write(fh, content).then(() => this.close(fh)))
-      .then((outputFile) => outputFile);
+    return this.open(null, consts.OPEN_MODE_OVERWRITE)
+      .then((file) => file.write(content)
+        .then(() => file.close())
+        .then(() => file)
+      );
   }
 
   /**
@@ -169,7 +200,7 @@ class NFS {
   **/
   fetch(fileName) {
     return lib.dir_fetch_file(this.mData.app.connection, this.mData.ref, fileName)
-      .then((res) => new File(res));
+      .then((res) => new File(res, this.mData.app.connection, null));
   }
 
   /**
@@ -180,11 +211,10 @@ class NFS {
   * @returns {Promise<File>} - the same file
   **/
   insert(fileName, file) {
-    const ffiFile = new File(file);
     return lib.dir_insert_file(
-      this.mData.app.connection, this.mData.ref, fileName, ffiFile.ref.ref()
-    )
-      .then(() => ffiFile);
+        this.mData.app.connection, this.mData.ref, fileName, file.ref.ref()
+      )
+      .then(() => file);
   }
 
   /**
@@ -229,55 +259,33 @@ class NFS {
   *
   * @param {File} file
   * @param {Number} openMode
-  * @returns {Promise<FileContextHandle>}
-  **/
-  open(file, openMode) {
-    const fileRef = file.ref ? file.ref.ref() : new File(file).ref.ref();
-    return lib.file_open(this.mData.app.connection, fileRef, openMode);
-  }
-
-  /**
-  * Get file size
-  * @param {FileContextHandle} fileContextHandle
-  * @returns {Promise<Number>}
-  **/
-  size(fileContextHandle) {
-    return lib.file_size(this.mData.app.connection, fileContextHandle);
-  }
-
-  /**
-  * Read file
-  * @param {FileContextHandle} fileContextHandle
-  * @param {Number} position
-  * @param {Number} len
-  * @returns {Promise<[Data, Size]>}
-  **/
-  read(fileContextHandle, position, len) {
-    return lib.file_read(this.mData.app.connection, fileContextHandle, position, len);
-  }
-
-  /**
-  * Write file
-  * @param {FileContextHandle} fileContextHandle
-  * @param {Buffer|String} content
-  * @returns {Promise}
-  **/
-  write(fileContextHandle, fileContent) {
-    return lib.file_write(this.mData.app.connection, fileContextHandle, fileContent);
-  }
-
-  /**
-  * Close file
-  * @param {FileContextHandle} fileContextHandle
   * @returns {Promise<File>}
   **/
-  close(fileContextHandle) {
-    return lib.file_close(this.mData.app.connection, fileContextHandle);
-  }
+  open(file, openMode) {
+    const now = nativeH.toSafeLibTime(new Date());
+    const metadata = {
+      size: 0,
+      data_map_name: new Array(32).fill(0),
+      created_sec: now.now_sec_part,
+      created_nsec: now.now_nsec_part,
+      modified_sec: now.now_sec_part,
+      modified_nsec: now.now_nsec_part,
+      user_metadata_ptr: [],
+      user_metadata_len: 0,
+      user_metadata_cap: 0
+    };
 
+    let fileParam = file;
+    // FIXME: this is temporary as we should be able to pass a null file to the lib
+    if (!file) {
+      fileParam = new File(metadata, null, null);
+    }
+
+    // FIXME: free/discard the file it's already open, we are missing
+    // a function from the lib to perform this.
+    return lib.file_open(this.mData.app.connection, fileParam.ref.ref(), openMode)
+      .then((fileCtx) => new File(metadata, this.mData.app.connection, fileCtx));
+  }
 }
 
-module.exports = {
-  NFS,
-  newFile
-};
+module.exports = NFS;

@@ -2,7 +2,6 @@ const crypto = require('crypto');
 const should = require('should');
 const h = require('./helpers');
 const consts = require('../src/consts');
-const newFile = require('../src/api/emulations/nfs').newFile;
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
@@ -744,31 +743,15 @@ describe('Mutable Data', () => {
       done();
     });
 
-    it('creates new file', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then(() => {
-        const file = newFile();
-        should(file).have.property('_ref');
-        should(file.ref).have.properties(
-          [
-            'size',
-            'created_sec',
-            'created_nsec',
-            'modified_sec',
-            'modified_nsec',
-            'data_map_name'
-          ]
-        );
-      })
-    );
-
     it('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
       .then((nfs) => {
-        const file = newFile();
         should(consts.OPEN_MODE_OVERWRITE).equal(1);
-        return nfs.open(file, consts.OPEN_MODE_OVERWRITE)
-          .then((fh) => nfs.write(fh, 'hello, SAFE world!').then(() => nfs.close(fh)))
-          .then((outputFile) => nfs.insert('hello.txt', outputFile))
+        return nfs.open(null, consts.OPEN_MODE_OVERWRITE)
+          .then((file) => file.write('hello, SAFE world!')
+            .then(() => file.close())
+            .then(() => nfs.insert('hello.txt', file))
+          )
           .then(() => {
             should(nfs.fetch('hello.txt')).be.fulfilled();
           }
@@ -778,18 +761,18 @@ describe('Mutable Data', () => {
 
     it('reads a file and returns file contents', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
-      .then((nfs) => {
-        const file = newFile();
-        return nfs.open(file, consts.OPEN_MODE_OVERWRITE)
-          .then((fch) => nfs.write(fch, 'hello, SAFE world!').then(() => nfs.close(fch)))
-          .then((outputFile) => nfs.insert('hello.txt', outputFile))
-          .then(() => nfs.fetch('hello.txt'))
-          .then((retrievedFile) => nfs.open(retrievedFile, consts.OPEN_MODE_READ))
-          .then((fch) => nfs.read(fch, consts.FILE_READ_FROM_BEGIN, consts.FILE_READ_TO_END))
-          .then((data) => {
-            should(data.toString()).be.equal('hello, SAFE world!');
-          });
-      })
+      .then((nfs) => nfs.open(null, consts.OPEN_MODE_OVERWRITE)
+        .then((file) => file.write('hello, SAFE world!')
+          .then(() => file.close())
+          .then(() => nfs.insert('hello.txt', file))
+        )
+        .then(() => nfs.fetch('hello.txt'))
+        .then((retrievedFile) => nfs.open(retrievedFile, consts.OPEN_MODE_READ))
+        .then((file) => file.read(consts.FILE_READ_FROM_BEGIN, consts.FILE_READ_TO_END))
+        .then((data) => {
+          should(data.toString()).be.equal('hello, SAFE world!');
+        })
+      )
     );
 
     it('provides helper function to create and save file to the network', () => app.mutableData.newRandomPublic(TAG_TYPE)

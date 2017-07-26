@@ -1,4 +1,4 @@
-const NFS = require('./nfs').NFS;
+const NFS = require('./nfs');
 
 /**
 * Emulations are abstraction helpers on top of MData
