@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const should = require('should');
 const h = require('./helpers');
+const consts = require('../src/consts');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
@@ -742,18 +743,52 @@ describe('Mutable Data', () => {
       done();
     });
 
-    it('nfs update', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+    it('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+      .then((nfs) => {
+        should(consts.OPEN_MODE_OVERWRITE).equal(1);
+        return nfs.open(null, consts.OPEN_MODE_OVERWRITE)
+          .then((file) => file.write('hello, SAFE world!')
+            .then(() => file.close())
+            .then(() => nfs.insert('hello.txt', file))
+          )
+          .then(() => {
+            should(nfs.fetch('hello.txt')).be.fulfilled();
+          }
+        );
+      })
+    );
+
+    it('reads a file and returns file contents', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+      .then((nfs) => nfs.open(null, consts.OPEN_MODE_OVERWRITE)
+        .then((file) => file.write('hello, SAFE world!')
+          .then(() => file.close())
+          .then(() => nfs.insert('hello.txt', file))
+        )
+        .then(() => nfs.fetch('hello.txt'))
+        .then((retrievedFile) => nfs.open(retrievedFile, consts.OPEN_MODE_READ))
+        .then((file) => file.read(consts.FILE_READ_FROM_BEGIN, consts.FILE_READ_TO_END))
+        .then((data) => {
+          should(data.toString()).be.equal('hello, SAFE world!');
+        })
+      )
+    );
+
+    it('provides helper function to create and save file to the network', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+      .then((nfs) => should(nfs.create('testing')).be.fulfilled())
+    );
+
+    it('deletes file', () => app.mutableData.newRandomPrivate(TAG_TYPE)
       // Note we use lowercase 'nfs' below to test that it is case insensitive
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
       .then((nfs) => nfs.create('Hello world')
         .then((file) => nfs.insert('test.txt', file))
-        .then(() => nfs.fetch('test.txt'))
-        .then((f) => app.immutableData.fetch(f.dataMapName)
-          .then((i) => i.read())
-          .then(() => nfs.create('hello world updated'))
-          .then((file) => nfs.update('test.txt', file, f.version + 1)
-            .then(() => should(file.version).be.equal(f.version + 1))
-          ))
+        .then(() => nfs.delete('test.txt', 1))
+        .then(() => {
+          should(nfs.fetch('test.txt')).be.rejected();
+        })
       )
     );
   });
