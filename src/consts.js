@@ -12,27 +12,23 @@ const NET_STATE_CONNECTED = 0;
 
 
 // ********
-// ********
 // These constants are used with nfs.open(<fileName>, <OPEN_MODE>)
 // FILE_READ_FROM_BEGIN and FILE_READ_TO_END may be used /
 // with nfs.read(fileContextHandle, FILE_READ_FROM_BEGIN, FILE_READ_TO_END)
 
 //  Replaces the entire content of the file when writing data.
-
 const OPEN_MODE_OVERWRITE = 1;
 
 //  Appends to existing data in the file.
-
 const OPEN_MODE_APPEND = 2;
 
 //  Open file to read.
-
 const OPEN_MODE_READ = 4;
 
+//  Read the file from the beginning.
 const FILE_READ_FROM_BEGIN = 0;
 
 //  Read entire contents of a file.
-
 const FILE_READ_TO_END = 0;
 
 // ********

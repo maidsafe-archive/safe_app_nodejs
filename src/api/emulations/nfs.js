@@ -98,11 +98,18 @@ class File {
     if (!this._fileCtx) {
       return Promise.resolve(this._ref.size);
     }
-    return lib.file_size(this._connection, this._fileCtx);
+    return lib.file_size(this._connection, this._fileCtx)
+      .then((size) => {
+        this._ref.size = size;
+        return size;
+      });
   }
 
   /**
-  * Read file
+  * Read the file.
+  * FILE_READ_FROM_BEGIN and FILE_READ_TO_END may be used
+  * to read the entire content of the file. These constants are
+  * declared in ../../consts.js.
   * @param {Number} position
   * @param {Number} len
   * @returns {Promise<[Data, Size]>}
@@ -184,7 +191,6 @@ class NFS {
   * @param {String|Buffer} content - file contents
   * @returns {File} a newly created file
   **/
-
   create(content) {
     return this.open(null, consts.OPEN_MODE_OVERWRITE)
       .then((file) => file.write(content)
@@ -245,17 +251,10 @@ class NFS {
   /**
   * Open a file for reading or writing.
   *
-  * OPEN MODES:
-  *  /// Replaces the entire content of the file when writing data.
-  *  const OPEN_MODE_OVERWRITE = 1;
-  *  /// Appends to existing data in the file.
-  *  const OPEN_MODE_APPEND = 2;
-  *  /// Open file to read.
-  *  const OPEN_MODE_READ = 4;
-  *  /// Read entire contents of a file.
-  *  const FILE_READ_TO_END = 0;
-  *
-  * These constants are declared in ../../consts.js and imported in this module
+  * Open modes (these constants are declared in ../../consts.js):
+  *  OPEN_MODE_OVERWRITE: Replaces the entire content of the file when writing data.
+  *  OPEN_MODE_APPEND: Appends to existing data in the file.
+  *  OPEN_MODE_READ: Open file to read.
   *
   * @param {File} file
   * @param {Number} openMode
