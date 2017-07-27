@@ -32,11 +32,9 @@ class SAFEApp extends EventEmitter {
     });
 
     if (!SAFEApp.logFilename) {
-      let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
-      filename = `${filename}.log`;
-
-      lib.app_init_logging(filename)
-        .then(() => { SAFEApp.logFilename = filename; });
+      const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
+      SAFEApp.logFilename = `${filename}.log`;
+      lib.app_init_logging(SAFEApp.logFilename);
     }
   }
 
@@ -209,13 +207,20 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
-  * Returns the location of where the safe_core logfile is being written
+  * Generate the log path for the provided filename.
+  * If the filename provided is null, it then returns
+  * the path of where the safe_core log file is located.
+  * @param {String} [logFilename=null] optional log filename to generate the path
   *
   * @returns {Promise<String>}
   **/
   /* eslint-disable class-methods-use-this */
-  logPath() {
-    return lib.app_output_log_path(SAFEApp.logFilename);
+  logPath(logFilename) {
+    let filename = logFilename;
+    if (!logFilename) {
+      filename = SAFEApp.logFilename;
+    }
+    return lib.app_output_log_path(filename);
   }
 
   /**
