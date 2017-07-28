@@ -32,11 +32,9 @@ class SAFEApp extends EventEmitter {
     });
 
     if (!SAFEApp.logFilename) {
-      let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
-      filename = `${filename}.log`;
-
-      lib.app_init_logging(filename)
-        .then(() => { SAFEApp.logFilename = filename; });
+      const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
+      SAFEApp.logFilename = `${filename}.log`;
+      lib.app_init_logging(SAFEApp.logFilename);
     }
   }
 
@@ -113,8 +111,8 @@ class SAFEApp extends EventEmitter {
           .then((service) => service.emulateAs('NFS'))
           .then((emulation) => emulation.fetch(path)
             .catch((err) => {
-              // Error code -305 corresponds to 'NfsError::FileNotFound'
-              if (err.code === -305) {
+              // Error codes -305 and -301 correspond to 'NfsError::FileNotFound'
+              if (err.code === -305 || err.code === -301) {
                 let newPath;
                 if (!path || !path.length) {
                   newPath = '/index.html';
@@ -129,7 +127,7 @@ class SAFEApp extends EventEmitter {
                   // try the newly created path
                   return emulation.fetch(newPath).catch((e) => {
                     // and the version without the leading slash
-                    if (e.code === -305) {
+                    if (e.code === -305 || e.code === -301) {
                       return emulation.fetch(newPath.slice(1, newPath.length));
                     }
                     return Promise.reject(e);
@@ -137,7 +135,11 @@ class SAFEApp extends EventEmitter {
                 }
               }
               return Promise.reject(err);
-            }))));
+            })
+            .then((file) => emulation.open(file, consts.OPEN_MODE_READ))
+            .then((openFile) => openFile.read(
+                consts.FILE_READ_FROM_BEGIN, consts.FILE_READ_TO_END))
+          )));
   }
 
 
@@ -205,13 +207,20 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
-  * Returns the location of where the safe_core logfile is being written
+  * Generate the log path for the provided filename.
+  * If the filename provided is null, it then returns
+  * the path of where the safe_core log file is located.
+  * @param {String} [logFilename=null] optional log filename to generate the path
   *
   * @returns {Promise<String>}
   **/
   /* eslint-disable class-methods-use-this */
-  logPath() {
-    return lib.app_output_log_path(SAFEApp.logFilename);
+  logPath(logFilename) {
+    let filename = logFilename;
+    if (!logFilename) {
+      filename = SAFEApp.logFilename;
+    }
+    return lib.app_output_log_path(filename);
   }
 
   /**
