@@ -793,6 +793,26 @@ describe('Mutable Data', () => {
     );
   });
 
+  describe('forceCleanUp', () => {
+    it('forceCleanUp on MutableData object only', () => {
+      const testXorName = h.createRandomXorName();
+      return app.mutableData.newPublic(testXorName, TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.forceCleanUp())
+        );
+    });
+
+    // We need to solve this issue which seems to be in node-ffi callbacks mechanism
+    it.skip('forceCleanUp on both MutableData and safeApp objects', () => {
+      const testXorName = h.createRandomXorName();
+      return app.mutableData.newPublic(testXorName, TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.forceCleanUp())
+        )
+        .then(() => app.forceCleanUp());
+    });
+  });
+
   describe.skip('Owners', () => {
     it('change ownership', () => {
       throw new Error('Test Not Implemented');
