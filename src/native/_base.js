@@ -16,11 +16,11 @@ const usize = ref.types.size_t;
 const bool = ref.types.bool;
 const NULL = ref.types.NULL;
 
-const u8Array = new ArrayType(u8);
-const XOR_NAME = new ArrayType(u8, 32); // FIXME: use exported const instead
-const KEYBYTES = ArrayType(u8, 32); // FIXME: use exported const instead
+const u8Array = ArrayType(u8);
+const XOR_NAME = ArrayType(u8, 32);
+const KEYBYTES = ArrayType(u8, 32);
 const SIGN_SECRETKEYBYTES = ArrayType(u8, 64);
-const NONCEBYTES = ArrayType(u8, 32); // I'm not sure if this is the right size or if it's 24
+const NONCEBYTES = ArrayType(u8, 24);
 
 const ObjectHandle = u64;
 const App = Struct({});
@@ -35,6 +35,7 @@ module.exports = {
   types: {
     App,
     AppPtr,
+    FfiResult,
     ObjectHandle,
     XOR_NAME,
     KEYBYTES,
@@ -101,7 +102,7 @@ module.exports = {
           args.push(ffi.Callback("void", types,
               function(uctx, err) {
                 // error found, errback with translated error
-                if(err.error_code !== 0) return reject(makeFfiError(err.error_code, err.error_description));
+                if (err.error_code !== 0) return reject(makeFfiError(err.error_code, err.error_description));
 
                 // take off the ctx and error
                 let res = Array.prototype.slice.call(arguments, 2)

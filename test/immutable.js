@@ -10,7 +10,8 @@ describe('Immutable Data', () => {
 
     return app.immutableData.create()
       .then((w) => w.write(testString)
-        .then(() => w.close())
+        .then(() => app.cipherOpt.newPlainText())
+        .then((cipherOpt) => w.close(cipherOpt))
         .then((addr) => app.immutableData.fetch(addr)
            .then((r) => r.read())
            .then((res) => {
@@ -24,7 +25,8 @@ describe('Immutable Data', () => {
 
     return app.immutableData.create()
       .then((w) => w.write(testString)
-        .then(() => w.close())
+        .then(() => app.cipherOpt.newPlainText())
+        .then((cipherOpt) => w.close(cipherOpt))
         .then((addr) => app.mutableData.newPublic(testXorName, TAG_TYPE)
           .then((md) => md.quickSetup({ key1: addr }))
         ))
@@ -43,7 +45,8 @@ describe('Immutable Data', () => {
 
     return app.immutableData.create()
       .then((w) => w.write(testString)
-        .then(() => w.close())
+        .then(() => app.cipherOpt.newPlainText())
+        .then((cipherOpt) => w.close(cipherOpt))
         .then((addr) => app.mutableData.newPublic(testXorName, TAG_TYPE)
           .then((md) => md.quickSetup())
           .then((md) => md.serialise())

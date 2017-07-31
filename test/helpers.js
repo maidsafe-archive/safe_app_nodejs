@@ -13,7 +13,7 @@ function createTestApp(scope) {
 
 function createAnonTestApp(scope) {
   const app = createTestApp(scope);
-  return app.auth.connectUnregistered();
+  return app.auth.loginForTest();
 }
 
 function createAuthenticatedTestApp(scope, access) {
@@ -23,10 +23,14 @@ function createAuthenticatedTestApp(scope, access) {
 }
 
 const createRandomXorName = () => crypto.randomBytes(32);
+const createRandomSecKey = () => crypto.randomBytes(32);
+const createRandomNonce = () => crypto.randomBytes(32);
 
 module.exports = {
   createTestApp,
   createAnonTestApp,
   createAuthenticatedTestApp,
-  createRandomXorName
+  createRandomXorName,
+  createRandomSecKey,
+  createRandomNonce
 };

@@ -38,15 +38,6 @@ class Reader extends helpers.NetworkObject {
   }
 
   /**
-  * Close this handle
-  * @returns {Promise<()>}
-  */
-  close() {
-    // FIXME: Is this even needed in Reading?
-    return lib.idata_close_self_encryptor(this.app.connection, this.ref);
-  }
-
-  /**
   * @private
   * free the reference of reader of the app on the native side
   * used by the autoref feature
@@ -81,7 +72,7 @@ class Writer extends helpers.NetworkObject {
   /**
   * Append the given data to immutable Data.
   *
-  * @param {String} string
+  * @param {String} string the data to write
   * @returns {Promise<()>}
   **/
   write(string) {
@@ -89,23 +80,15 @@ class Writer extends helpers.NetworkObject {
   }
 
   /**
-  * The size of the immutable data on the network
-  * @returns {Promise<Number>} length in bytes
-  **/
-  size() {
-    // FIXME: does this even work on a writer?
-    return lib.idata_size(this.app.connection, this.ref);
-  }
-
-  /**
   * Close and write the immutable Data to the network.
+  *
+  * @param {CipherOpt} the Cipher Opt to encrypt data with
   * @returns {Promise<String>} the address to the data once written to the network
   **/
-  close() {
-    return this.app.cipherOpt.newPlainText().then((opt) =>
-      lib.idata_close_self_encryptor(this.app.connection,
-                                     this.ref,
-                                     opt.ref));
+  close(cipherOpt) {
+    return lib.idata_close_self_encryptor(this.app.connection,
+                                          this.ref,
+                                          cipherOpt.ref);
   }
 
   /**
@@ -119,8 +102,8 @@ class Writer extends helpers.NetworkObject {
   * @private
   * free the reference of writer of the app on the native side.
   * used by the autoref feature
-  * @param {SAFEApp} app - the app the reference belongs to
-  * @param {handle} ref - the reference to free
+  * @param {SAFEApp} app the app the reference belongs to
+  * @param {handle} ref the reference to free
   */
   static free(app, ref) {
     lib.idata_self_encryptor_writer_free(app.connection, ref);
@@ -154,7 +137,7 @@ class ImmutableDataInterface {
 
   /**
   * Look up an existing Immutable Data for the given address
-  * @param {Buffer} address - the XorName on the network
+  * @param {Buffer} address the XorName on the network
   * @returns {Promise<Reader>}
   **/
   fetch(address) {

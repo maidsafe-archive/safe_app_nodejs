@@ -34,14 +34,29 @@ class NetworkObject {
 }
 
 /**
-* Automatically clean up a given object using weak once
+* We need to differentiate between safeApp objects and NetworkObjects
+* @private
+* @abstract
+**/
+function freeResources(obj) {
+  if (obj.app) {
+    return () => obj.constructor.free(obj.app, obj.ref);
+  }
+  return () => obj.constructor.free(obj);
+}
+
+/**
+* Automatically clean up a given object's resources using weak once
 * it is garbage collected.
+* Expose an optional function to explicitly clean up underlying resources.
 * @private
 * @abstract
 **/
 function autoref(obj) {
   if (obj.constructor && obj.constructor.free) {
-    return weak(obj, () => obj.constructor.free(obj.app, obj.ref));
+    const weakObj = weak(obj, freeResources(obj));
+    weakObj.forceCleanUp = freeResources(obj);
+    return weakObj;
   }
 
   console.warn('Can\'t clean up obj. No static "free" function found on obj:', obj);
@@ -53,4 +68,3 @@ module.exports = {
   NetworkObject,
   autoref
 };
-

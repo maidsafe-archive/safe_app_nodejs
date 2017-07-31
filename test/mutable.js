@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const should = require('should');
 const h = require('./helpers');
+const consts = require('../src/consts');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
@@ -26,7 +27,9 @@ describe('Mutable Data', () => {
     );
 
     it.skip('create custom private with reserved tag type', () =>
-      should(app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE_RESERVED)).be.rejected()
+      should(app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE_RESERVED,
+                                          h.createRandomSecKey(),
+                                          h.createRandomNonce())).be.rejected()
     );
 
     it('create random public with invalid tag vaue', () =>
@@ -42,7 +45,9 @@ describe('Mutable Data', () => {
     );
 
     it('create custom private with invalid tag value', () =>
-      should(app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE_INVALID)).be.rejected()
+      should(app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE_INVALID,
+                                          h.createRandomSecKey(),
+                                          h.createRandomNonce())).be.rejected()
     );
 
     it('create custom public with invalid name', () =>
@@ -50,7 +55,9 @@ describe('Mutable Data', () => {
     );
 
     it('create custom private with invalid name', () =>
-      should(app.mutableData.newPrivate(TEST_NAME_INVALID, TAG_TYPE)).be.rejected()
+      should(app.mutableData.newPrivate(TEST_NAME_INVALID, TAG_TYPE,
+                                          h.createRandomSecKey(),
+                                          h.createRandomNonce())).be.rejected()
     );
   });
 
@@ -85,7 +92,8 @@ describe('Mutable Data', () => {
     );
 
     it('create custom private and read its name', () =>
-        app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE)
+        app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE,
+                                    h.createRandomSecKey(), h.createRandomNonce())
             .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
             .then((r) => {
               should(r.name).not.be.undefined();
@@ -122,7 +130,9 @@ describe('Mutable Data', () => {
 
     it('get existing key from private MD', () => {
       const testXorName = h.createRandomXorName();
-      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
+      return app.crypto.generateNonce()
+        .then((nonce) => app.mutableData.newPrivate(testXorName, TAG_TYPE,
+                                        h.createRandomSecKey(), nonce))
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => md.get('key1'))
         .then((value) => {
@@ -134,7 +144,8 @@ describe('Mutable Data', () => {
 
     it('get existing key from serialised private MD', () => {
       const testXorName = h.createRandomXorName();
-      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
+      return app.mutableData.newPrivate(testXorName, TAG_TYPE,
+                                        h.createRandomSecKey(), h.createRandomNonce())
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => md.serialise())
         .then((serial) => app.mutableData.fromSerial(serial))
@@ -418,7 +429,8 @@ describe('Mutable Data', () => {
 
     it('a remove mutation on private MD', () => {
       const testXorName = h.createRandomXorName();
-      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
+      return app.mutableData.newPrivate(testXorName, TAG_TYPE,
+                                        h.createRandomSecKey(), h.createRandomNonce())
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => app.mutableData.newMutation()
           .then((mut) => mut.remove('key1', 1)
@@ -435,7 +447,8 @@ describe('Mutable Data', () => {
 
     it('a remove mutation on a serialised private MD', () => {
       const testXorName = h.createRandomXorName();
-      return app.mutableData.newPrivate(testXorName, TAG_TYPE)
+      return app.mutableData.newPrivate(testXorName, TAG_TYPE,
+                                          h.createRandomSecKey(), h.createRandomNonce())
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => md.serialise())
         .then((serial) => app.mutableData.fromSerial(serial))
@@ -477,6 +490,23 @@ describe('Mutable Data', () => {
               should(value).not.be.undefined();
               should(value.buf.toString()).equal('newValue');
               should(value.version).equal(0);
+            })
+          ))
+    );
+
+    it('an insert mutation on a private MD with encrypted entry', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newMutation()
+            .then((mut) => m.encryptKey('newKey')
+              .then((key) => m.encryptValue('newValue')
+                .then((value) => mut.insert(key, value))
+                .then(() => m.applyEntriesMutation(mut))
+            ))
+            .then(() => m.encryptKey('newKey').then((key) => m.get(key)))
+            .then((value) => m.decrypt(value.buf))
+            .then((d) => {
+              should(d).not.be.undefined();
+              should(d.toString()).equal('newValue');
             })
           ))
     );
@@ -580,15 +610,12 @@ describe('Mutable Data', () => {
       app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getPermissions()
           .then((perms) => app.crypto.getAppPubSignKey()
-            .then((pk) => perms.getPermissionSet(pk).should.be.fulfilled()
-              .then(() => perms.forEach((signkey, pmset) => {
-                pmset.setAllow('Delete').then(() => {
-                  // FIXME: if the number of permissions is > 1
-                  // this would be evaluating only the first forEach iteration
-                  m.delUserPermissions(signkey, 1).then(() => done(), (err) => done(err));
-                }, (err) => done(err));
-              }).then(null, (err) => done(err)))
-            ))));
+            .then((pk) => perms.getPermissionSet(pk).should.be.fulfilled())
+            .then(() => perms.forEach((signkey, pmset) => pmset.setAllow('Delete')
+                .then(() => m.delUserPermissions(signkey, 1).should.be.fulfilled())
+                .catch((err) => done(err))
+            ).then(() => done(), (err) => done(err)))
+          )));
     });
 
     it('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
@@ -673,10 +700,18 @@ describe('Mutable Data', () => {
                   ))))))
     );
 
-    it('insert new permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it('set new permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => app.mutableData.newPermissionSet())
           .then((newPermSet) => newPermSet.setAllow('Insert')
+            .then(() => m.setUserPermissions(null, newPermSet, 1).should.be.fulfilled())
+          ))
+    );
+
+    it('set cleared permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => app.mutableData.newPermissionSet())
+          .then((newPermSet) => newPermSet.clear('Insert')
             .then(() => m.setUserPermissions(null, newPermSet, 1).should.be.fulfilled())
           ))
     );
@@ -708,15 +743,52 @@ describe('Mutable Data', () => {
       done();
     });
 
-    it('nfs update', () => app.mutableData.newRandomPrivate(TAG_TYPE)
-      .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
+    it('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+      .then((nfs) => {
+        should(consts.OPEN_MODE_OVERWRITE).equal(1);
+        return nfs.open(null, consts.OPEN_MODE_OVERWRITE)
+          .then((file) => file.write('hello, SAFE world!')
+            .then(() => file.close())
+            .then(() => nfs.insert('hello.txt', file))
+          )
+          .then(() => {
+            should(nfs.fetch('hello.txt')).be.fulfilled();
+          }
+        );
+      })
+    );
+
+    it('reads a file and returns file contents', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+      .then((nfs) => nfs.open(null, consts.OPEN_MODE_OVERWRITE)
+        .then((file) => file.write('hello, SAFE world!')
+          .then(() => file.close())
+          .then(() => nfs.insert('hello.txt', file))
+        )
+        .then(() => nfs.fetch('hello.txt'))
+        .then((retrievedFile) => nfs.open(retrievedFile, consts.OPEN_MODE_READ))
+        .then((file) => file.read(consts.FILE_READ_FROM_BEGIN, consts.FILE_READ_TO_END))
+        .then((data) => {
+          should(data.toString()).be.equal('hello, SAFE world!');
+        })
+      )
+    );
+
+    it('provides helper function to create and save file to the network', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+      .then((nfs) => should(nfs.create('testing')).be.fulfilled())
+    );
+
+    it('deletes file', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+      // Note we use lowercase 'nfs' below to test that it is case insensitive
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
       .then((nfs) => nfs.create('Hello world')
         .then((file) => nfs.insert('test.txt', file))
-        .then(() => nfs.fetch('test.txt'))
-        .then((f) => app.immutableData.fetch(f.dataMapName)
-          .then((i) => i.read())
-          .then(() => nfs.create('hello world updated'))
-          .then((file) => nfs.update('test.txt', file, f.version + 1)))
+        .then(() => nfs.delete('test.txt', 1))
+        .then(() => {
+          should(nfs.fetch('test.txt')).be.rejected();
+        })
       )
     );
 

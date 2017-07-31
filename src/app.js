@@ -5,7 +5,6 @@ const lib = require('./native/lib');
 const parseUrl = require('url').parse;
 const consts = require('./consts');
 
-
 /**
  * Holds one sessions with the network and is the primary interface to interact
  * with the network. As such it also provides all API-Providers connected through
@@ -19,15 +18,24 @@ class SAFEApp extends EventEmitter {
   * authentication URI-handler with the system.
   *
   * @param {AppInfo} appInfo
+  * @param {Function} [networkStateCallBack=null] optional callback function
+  * to receive network state updates
   */
-  constructor(appInfo) {
+  constructor(appInfo, networkStateCallBack) {
     super();
     this._appInfo = appInfo;
-    this._networkState = 'init';
-    this._connection = null;
+    this.networkState = consts.NET_STATE_INIT;
+    this._networkStateCallBack = networkStateCallBack;
+    this.connection = null;
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
     });
+
+    if (!SAFEApp.logFilename) {
+      const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
+      SAFEApp.logFilename = `${filename}.log`;
+      lib.app_init_logging(SAFEApp.logFilename);
+    }
   }
 
   /**
@@ -92,7 +100,8 @@ class SAFEApp extends EventEmitter {
       .then((address) => this.mutableData.newPublic(address, consts.TAG_TYPE_DNS)
         .then((mdata) => mdata.get(serviceName)
             .catch((err) => {
-              if ((err.name === 'ERR_NO_SUCH_ENTRY') && (!serviceName || !serviceName.length)) {
+              // Error code -106 coresponds to 'Requested entry not found'
+              if ((err.code === -106) && (!serviceName || !serviceName.length)) {
                 return mdata.get('www');
               }
               return Promise.reject(err);
@@ -102,7 +111,8 @@ class SAFEApp extends EventEmitter {
           .then((service) => service.emulateAs('NFS'))
           .then((emulation) => emulation.fetch(path)
             .catch((err) => {
-              if (err.name === 'ERR_FILE_NOT_FOUND') {
+              // Error codes -305 and -301 correspond to 'NfsError::FileNotFound'
+              if (err.code === -305 || err.code === -301) {
                 let newPath;
                 if (!path || !path.length) {
                   newPath = '/index.html';
@@ -117,15 +127,19 @@ class SAFEApp extends EventEmitter {
                   // try the newly created path
                   return emulation.fetch(newPath).catch((e) => {
                     // and the version without the leading slash
-                    if (e.name === 'ERR_FILE_NOT_FOUND') {
-                      return emulation.fetch(newPath.slice(1, path.length));
+                    if (e.code === -305 || e.code === -301) {
+                      return emulation.fetch(newPath.slice(1, newPath.length));
                     }
                     return Promise.reject(e);
                   });
                 }
               }
               return Promise.reject(err);
-            }))));
+            })
+            .then((file) => emulation.open(file, consts.OPEN_MODE_READ))
+            .then((openFile) => openFile.read(
+                consts.FILE_READ_FROM_BEGIN, consts.FILE_READ_TO_END))
+          )));
   }
 
 
@@ -140,7 +154,7 @@ class SAFEApp extends EventEmitter {
   */
   set connection(con) {
     if (this._connection) {
-      lib.free_app(this._connection);
+      lib.app_free(this._connection);
     }
     this._connection = con;
   }
@@ -152,6 +166,29 @@ class SAFEApp extends EventEmitter {
   get connection() {
     if (!this._connection) throw Error('Setup Incomplete. Connection not available yet.');
     return this._connection;
+  }
+
+  /**
+  * @private
+  * Set the new network state based on the state code provided.
+  *
+  * @param {String} state
+  */
+  set networkState(state) {
+    switch (state) {
+      case consts.NET_STATE_INIT:
+        this._networkState = 'Init';
+        break;
+      case consts.NET_STATE_DISCONNECTED:
+        this._networkState = 'Disconnected';
+        break;
+      case consts.NET_STATE_CONNECTED:
+        this._networkState = 'Connected';
+        break;
+      case consts.NET_STATE_UNKNOWN:
+      default:
+        this._networkState = 'Unknown';
+    }
   }
 
   /**
@@ -170,27 +207,72 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
+  * Generate the log path for the provided filename.
+  * If the filename provided is null, it then returns
+  * the path of where the safe_core log file is located.
+  * @param {String} [logFilename=null] optional log filename to generate the path
+  *
+  * @returns {Promise<String>}
+  **/
+  /* eslint-disable class-methods-use-this */
+  logPath(logFilename) {
+    let filename = logFilename;
+    if (!logFilename) {
+      filename = SAFEApp.logFilename;
+    }
+    return lib.app_output_log_path(filename);
+  }
+
+  /**
   * Create a SAFEApp and try to login it through the `authUri`
   * @param {AppInfo} appInfo - the AppInfo
   * @param {String} authUri - URI containing the authentication info
+  * @param {Function} [networkStateCallBack=null] optional callback function
+  * to receive network state updates
   * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp
   **/
-  static fromAuthUri(appInfo, authUri) {
-    const app = autoref(new SAFEApp(appInfo));
+  static fromAuthUri(appInfo, authUri, networkStateCallBack) {
+    const app = autoref(new SAFEApp(appInfo, networkStateCallBack));
     return app.auth.loginFromURI(authUri);
   }
-
 
   /**
   * @private
   * Called from the native library whenever the network state
   * changes.
   */
-  _networkStateUpdated(uData, error, newState) {
-    // FIXME: we need to map the state to strings
-    this.emit('network-state-updated', newState, this._networkState);
-    this.emit(`network-state-${newState}`, this._networkState);
-    this._networkState = newState;
+  _networkStateUpdated(uData, result, newState) {
+    const prevState = this.networkState;
+    if (result.error_code !== 0) {
+      console.error('An error was reported from network state observer: ', result.error_code, result.error_description);
+      this.networkState = consts.NET_STATE_UNKNOWN;
+    } else {
+      this.networkState = newState;
+    }
+
+    this.emit('network-state-updated', this.networkState, prevState);
+    this.emit(`network-state-${this.networkState}`, prevState);
+    if (this._networkStateCallBack) {
+      this._networkStateCallBack.apply(this._networkStateCallBack, [this.networkState]);
+    }
+  }
+
+  /**
+  * Reconnect to the metwork
+  * Must be invoked when the client decides to connect back after the connection is disconnected.
+  */
+  reconnect() {
+    return new Promise((res, rej) => {
+      lib.app_reconnect(this.connection)
+        .then(() => {
+          this._networkStateUpdated(null, { error_code: 0 }, consts.NET_STATE_CONNECTED);
+          res();
+        })
+        .catch((e) => {
+          this._networkStateUpdated(null, { error_code: 0 }, consts.NET_STATE_DISCONNECTED);
+          rej(e);
+        });
+    });
   }
 
 
@@ -202,11 +284,11 @@ class SAFEApp extends EventEmitter {
   static free(app) {
     // we are freed last, anything you do after this
     // will probably fail.
-    lib.free_app(app.connection);
-
-    // in the hopes, this all cleans up,
-    // before we do in a matter of seconds from now
+    lib.app_free(app.connection);
   }
 
 }
+
+SAFEApp.logFilename = null;
+
 module.exports = SAFEApp;

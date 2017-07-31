@@ -1,5 +1,4 @@
 const createSAFEApp = require('../src/').initializeApp;
-const lib = require('../src/native/lib'); // FIXME: url opening should be exposed differently!
 
 const appInfo = {
 	'id': 'net.maidsafe.examples.node-js-test-app',
@@ -13,7 +12,7 @@ const containers = {
 
 createSAFEApp(appInfo).then(app =>
 	app.auth.genAuthUri(containers).then(res => {
-		console.log('trying to open request no ' + res.req_id + ' as ' + res.uri);
-		return lib.openUri(res.uri);
+		console.log('Trying to open request # ' + res.req_id + ' as ' + res.uri);
+		return app.auth.openUri(res.uri);
 	})
 );

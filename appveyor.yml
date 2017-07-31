@@ -1,12 +1,7 @@
 environment:
   nodejs_version: "6.9.1"
-  global:
-    RUST_BACKTRACE: 1
-  matrix:
-    - RUST_VERSION: stable
 
 platform:
-  - x86
   - x64
 
 cache:
@@ -24,6 +19,7 @@ install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - node --version
   - npm --version
+  - SET NODE_ENV=dev
   - npm install
 
 test_script:

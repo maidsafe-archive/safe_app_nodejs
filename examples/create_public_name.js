@@ -107,7 +107,7 @@ authoriseApp()
   })
   .then((data) => (serializedData = data.toString('base64')))
   // Get _publicNames container to store the new Public Name
-  .then(() => appObj.auth.getAccessContainerInfo('_publicNames'))
+  .then(() => appObj.auth.getContainer('_publicNames'))
   .then((mut) => mut.getEntries())
   // Insert serialised new Public Name mutable data into _publicNames container
   .then((entry) => {

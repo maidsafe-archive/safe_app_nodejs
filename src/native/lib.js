@@ -9,24 +9,30 @@ const api = require('./api');
 
 const ffi = {};
 
-
-
 const RTLD_NOW = FFI.DynamicLibrary.FLAGS.RTLD_NOW;
 const RTLD_GLOBAL = FFI.DynamicLibrary.FLAGS.RTLD_GLOBAL;
 const mode = RTLD_NOW | RTLD_GLOBAL;
 
 if (os.platform() === 'win32') {
-  FFI.DynamicLibrary(path.resolve(__dirname, 'libwinpthread-1'), mode);  
+  FFI.DynamicLibrary(path.resolve(__dirname, 'libwinpthread-1'), mode);
 }
 
 const lib = FFI.DynamicLibrary(path.join(dir, LIB_FILENAME), mode);
 
+function retrieveFFI(key) {
+  try {
+    return lib.get(key);
+  } catch(e) {
+    console.log(`The following error occured for looking up function: ${key}. ->`, e);
+  }
+}
 
 api.forEach(function(mod){
   if (mod.functions){
     for (const key in mod.functions) {
       const funcDefinition = mod.functions[key];
-      ffi[key] = FFI.ForeignFunction(lib.get(key),
+
+      ffi[key] = FFI.ForeignFunction(retrieveFFI(key),
                                      funcDefinition[0],
                                      funcDefinition[1])
     }

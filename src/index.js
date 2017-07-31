@@ -18,11 +18,12 @@ const version = require('../package.json').version;
 
 /**
  * The main entry point to create a new SAFEApp
- * @arg {AppInfo} appInfo
+ * @param {AppInfo} appInfo
+ * @param {Function} [networkStateCallBack=null] optional callback function
+ * to receive network state updates
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  * @example // Usage Example
  * const safe = require('safe');
- * const lib = require('safe/native/lib');
  *
  * // starting initialisation
  * let prms = safe.initializeApp({
@@ -34,29 +35,30 @@ const version = require('../package.json').version;
  * // read access to `_videos`:
  * const containers = { '_videos': ['Read'], '_pictures' : ['Read', 'Insert']}
  * prms.then(app => app.auth.genAuthUri(containers
- *           ).then(uri => lib.openUri(uri)
+ *           ).then(uri => app.auth.openUri(uri)
  *        // now we either quit the programm
  *        // or wait for a result url
  *        ))
  */
-function initializeApp(appInfo) {
-    // FIXME: add auto-login features here later
-  const app = autoref(new App(appInfo));
+function initializeApp(appInfo, networkStateCallBack) {
+  const app = autoref(new App(appInfo, networkStateCallBack));
   return Promise.resolve(app);
 }
 
 
 /**
  * If you have received a response URI (which you are allowed
- * to store securely), you can directly get an authenticated app
- * by using this helper function. Just provide said URI as the
+ * to store securely), you can directly get an authenticated or non-authenticated
+ * connection by using this helper function. Just provide said URI as the
  * second value.
  * @param {AppInfo} appInfo - the app info
  * @param {String} authUri - the URI coming back from the Authenticator
+ * @param {Function} [networkStateCallBack=null] optional callback function
+ * to receive network state updates
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  */
-function fromAuthURI(appInfo, authUri) {
-  return App.fromAuthUri(appInfo, authUri);
+function fromAuthURI(appInfo, authUri, networkStateCallBack) {
+  return App.fromAuthUri(appInfo, authUri, networkStateCallBack);
 }
 
 module.exports = {

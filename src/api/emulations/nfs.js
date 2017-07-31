@@ -1,6 +1,7 @@
 const lib = require('../../native/lib');
 const t = require('../../native/types');
 const nativeH = require('../../native/helpers');
+const consts = require('../../consts');
 
 function isString(arg) {
   return typeof arg === 'string' || (arg.toString ? arg.toString() === '[object String]' : false);
@@ -16,26 +17,34 @@ class File {
 
   /**
   * @private
+  * Instantiate a new NFS File instance.
+  *
+  * @param {Object} ref the file's metadata including the XoR-name
+  * of ImmutableData containing the file's content.
   **/
-  constructor(ref) {
+  constructor(ref, connection, fileCtx) {
     this._ref = ref;
+    this._fileCtx = fileCtx;
+    this._connection = connection;
     if (Array.isArray(ref.data_map_name)) {
       // translate the incoming array back into a buffer we can use internally
       this._ref.data_map_name = t.XOR_NAME(ref.data_map_name);
     }
   }
 
+  /**
+  * @private
+  * Return an instance of the underlying File structure used by the safe_app
+  * lib containing the file's metadata.
+  **/
   get ref() {
     const data = {
+      size: this._ref.size,
       created_sec: this._ref.created_sec,
       created_nsec: this._ref.created_nsec,
       modified_sec: this._ref.modified_sec,
       modified_nsec: this._ref.modified_nsec,
-      size: this._ref.size,
       data_map_name: this.dataMapName,
-      user_metadata_ptr: this.dataMapName.ref(),
-      user_metadata_len: 0,
-      user_metadata_cap: 0
     };
 
     if (this._ref.metadata) {
@@ -48,13 +57,18 @@ class File {
       data.user_metadata_ptr = buf.ref();
       data.user_metadata_len = buf.length;
       data.user_metadata_cap = buf.length;
+    } else {
+      const userData = Buffer.from([]);
+      data.user_metadata_ptr = userData;
+      data.user_metadata_len = userData.length;
+      data.user_metadata_cap = userData.byteLength;
     }
     return new t.File(data);
   }
 
   /**
   * The dataMapName to read the immutable data at
-  * @returns {Buffer}
+  * @returns {Buffer} XoR-name
   **/
   get dataMapName() {
     return this._ref.data_map_name;
@@ -77,19 +91,84 @@ class File {
   }
 
   /**
-  * How big is that file?
-  * @return {Number} size in bytes
+  * Get file size
+  * @returns {Promise<Number>}
   **/
-  get size() {
-    return this._ref.size;
+  size() {
+    if (!this._fileCtx) {
+      return Promise.resolve(this._ref.size);
+    }
+    return lib.file_size(this._connection, this._fileCtx)
+      .then((size) => {
+        this._ref.size = size;
+        return size;
+      });
   }
 
   /**
-  * Which version was this? Equals the Mdata-value-version.
+  * Read the file.
+  * FILE_READ_FROM_BEGIN and FILE_READ_TO_END may be used
+  * to read the entire content of the file. These constants are
+  * declared in ../../consts.js.
+  * @param {Number} position
+  * @param {Number} len
+  * @returns {Promise<[Data, Size]>}
+  **/
+  read(position, len) {
+    if (!this._fileCtx) {
+      return Promise.reject(new Error('File is not open'));
+    }
+    return lib.file_read(this._connection, this._fileCtx, position, len);
+  }
+
+  /**
+  * Write file
+  * @param {Buffer|String} content
+  * @returns {Promise}
+  **/
+  write(fileContent) {
+    if (!this._fileCtx) {
+      return Promise.reject(new Error('File is not open'));
+    }
+    return lib.file_write(this._connection, this._fileCtx, fileContent);
+  }
+
+  /**
+  * Close file
+  * @returns {Promise}
+  **/
+  close() {
+    if (!this._fileCtx) {
+      return Promise.reject(new Error('File is not open'));
+    }
+
+    return lib.file_close(this._connection, this._fileCtx)
+      .then((res) => {
+        this._ref = res;
+        this._fileCtx = null;
+        if (Array.isArray(res.data_map_name)) {
+          // translate the incoming array back into a buffer we can use internally
+          this._ref.data_map_name = t.XOR_NAME(res.data_map_name);
+        }
+      });
+  }
+
+  /**
+  * Which version was this? Equals the underlying MutableData's entry version.
   * @return {Number}
   **/
   get version() {
     return this._ref.version;
+  }
+
+  /**
+  * @private
+  * Update the file's version. This shall be only internally used and only
+  * when its underlying entry in the MutableData is updated
+  * @param {Integer} version version to set
+  **/
+  set version(version) {
+    this._ref.version = version;
   }
 }
 
@@ -99,6 +178,8 @@ class File {
 class NFS {
   /**
   * @private
+  * Instantiate the NFS emulation layer rapping a MutableData instance
+  *
   * @param {MutableData} mData - the MutableData to wrap around
   **/
   constructor(mData) {
@@ -106,62 +187,103 @@ class NFS {
   }
 
   /**
-  * Create a new file with the given content, put the content
-  * on the network via immutableData (public) and wrap it into
-  * a File.
-  * @param {(String|Buffer)} content
-  * @returns {Promise<File>} a newly created file
+  * Helper function to create and save file to the network
+  * @param {String|Buffer} content - file contents
+  * @returns {File} a newly created file
   **/
   create(content) {
-    const now = nativeH.toSafeLibTime(new Date());
-    return this.mData.app.immutableData.create()
-      .then((w) => w.write(content)
-        .then(() => w.close()
-          .then((xorAddr) => new File({
-            size: content.length,
-            data_map_name: xorAddr,
-            created_sec: now.now_sec_part,
-            created_nsec: now.now_nsec_part,
-            modified_sec: now.now_sec_part,
-            modified_nsec: now.now_nsec_part,
-          }))
-        )
-    );
+    return this.open(null, consts.OPEN_MODE_OVERWRITE)
+      .then((file) => file.write(content)
+        .then(() => file.close())
+        .then(() => file)
+      );
   }
 
   /**
-  * Find the file of the given filename (aka keyName in the MData)
+  * Find the file of the given filename (aka keyName in the MutableData)
   * @param {String} fileName - the path/file name
   * @returns {Promise<File>} - the file found for that path
   **/
   fetch(fileName) {
-    return lib.file_fetch(this.mData.app.connection, this.mData.ref, fileName)
-      .then((res) => new File(res));
+    return lib.dir_fetch_file(this.mData.app.connection, this.mData.ref, fileName)
+      .then((res) => new File(res, this.mData.app.connection, null));
   }
 
   /**
-  * Insert the given file into the underlying MData, directly commit to the network
+  * Insert the given file into the underlying MutableData, directly commit
+  * to the network.
   * @param {(String|Buffer)} fileName - the path to store the file under
-  * @param {File} file - the file to serialise and store there
+  * @param {File} file - the file to serialise and store
   * @returns {Promise<File>} - the same file
   **/
   insert(fileName, file) {
-    return lib.file_insert(this.mData.app.connection, this.mData.ref, fileName, file.ref.ref())
+    return lib.dir_insert_file(
+        this.mData.app.connection, this.mData.ref, fileName, file.ref.ref()
+      )
       .then(() => file);
   }
 
   /**
   * Replace a path with a new file. Directly commit to the network.
   * @param {(String|Buffer)} fileName - the path to store the file under
-  * @param {File} file - the file to serialise and store there
-  * @param {Number} version - the current version number, to ensure you
+  * @param {File} file - the file to serialise and store
+  * @param {Number} version - the version successor number, to ensure you
            are overwriting the right one
   * @returns {Promise<File>} - the same file
   **/
   update(fileName, file, version) {
-    return lib.file_update(this.mData.app.connection, this.mData.ref, fileName,
+    return lib.dir_update_file(this.mData.app.connection, this.mData.ref, fileName,
                            file.ref.ref(), version)
+      .then(() => { file.version = version; })  // eslint-disable-line no-param-reassign
       .then(() => file);
+  }
+
+  /**
+  * Delete a file from path. Directly commit to the network.
+  * @param {(String|Buffer)} fileName
+  * @param {Number} version
+  * @returns {Promise}
+  **/
+  delete(fileName, version) {
+    return lib.dir_delete_file(this.mData.app.connection, this.mData.ref, fileName, version);
+  }
+
+  /**
+  * Open a file for reading or writing.
+  *
+  * Open modes (these constants are declared in ../../consts.js):
+  *  OPEN_MODE_OVERWRITE: Replaces the entire content of the file when writing data.
+  *  OPEN_MODE_APPEND: Appends to existing data in the file.
+  *  OPEN_MODE_READ: Open file to read.
+  *
+  * @param {File} file
+  * @param {Number} openMode
+  * @returns {Promise<File>}
+  **/
+  open(file, openMode) {
+    const now = nativeH.toSafeLibTime(new Date());
+    const metadata = {
+      size: 0,
+      data_map_name: new Array(32).fill(0),
+      created_sec: now.now_sec_part,
+      created_nsec: now.now_nsec_part,
+      modified_sec: now.now_sec_part,
+      modified_nsec: now.now_nsec_part,
+      user_metadata_ptr: [],
+      user_metadata_len: 0,
+      user_metadata_cap: 0
+    };
+
+    let fileParam = file;
+    // FIXME: this is temporary as we should be able to pass a null file to the lib
+    if (!file) {
+      fileParam = new File(metadata, null, null);
+    }
+
+    // FIXME: free/discard the file it's already open, we are missing
+    // a function from the lib to perform this.
+    return lib.file_open(this.mData.app.connection, fileParam.ref.ref(), openMode)
+      .then((fileCtx) => new File(metadata, this.mData.app.connection, fileCtx));
   }
 }
 

@@ -2,19 +2,31 @@
 
 **Maintainer:** Krishna Kumar (krishna.kumar@maidsafe.net)
 
-safe_app nodejs library.
+safe_app Node.js library.
 
 |Linux/OS X|Windows|
 |:---:|:--------:|
-|[![Build Status](https://travis-ci.org/maidsafe/safe-app-nodejs.svg?branch=master)](https://travis-ci.org/maidsafe/safe-app-nodejs)|[![Build status](https://ci.appveyor.com/api/projects/status/efktyecwydxrhs5d/branch/master?svg=true)](https://ci.appveyor.com/project/MaidSafe-QA/safe-app-nodejs/branch/master)|
+|[![Build Status](https://travis-ci.org/maidsafe/safe_app_nodejs.svg?branch=master)](https://travis-ci.org/maidsafe/safe_app_nodejs)|[![Build status](https://ci.appveyor.com/api/projects/status/efktyecwydxrhs5d/branch/master?svg=true)](https://ci.appveyor.com/project/MaidSafe-QA/safe-app-nodejs/branch/master)|
 
 |Coverage status|
 |:-----------:|
 |[![Coverage Status](https://coveralls.io/repos/github/maidsafe/safe_app_nodejs/badge.svg)](https://coveralls.io/github/maidsafe/safe_app_nodejs)|
 
+## Documentation
+
+The documentation for the safe_app Node.js API is available at http://docs.maidsafe.net/safe_app_nodejs/.
+
 ## External Libraries
 
 The external libraries will automatically be downloaded when you run `npm install`.
+
+If you are working on a development environment, you can run `NODE_ENV=dev npm install` instead in order to get the `safe_client` libraries which use the `MockVault` file rather than connecting to the SAFE Network.
+
+## Testing
+
+To run the tests locally, make sure you installed the `safe_client` libraries with `NODE_ENV=dev npm install`, then you can run them by executing `npm test`.
+
+You may possibly be compiling your own [safe_app](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library for testing purposes. In this case, if you want to be able to run the tests, make sure to include `testing` in your build features when compiling `safe_app` in `safe_client_libs`, i.e. `cargo build --release --features "use-mock-routing testing"`.
 
 # License
 

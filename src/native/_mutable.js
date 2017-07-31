@@ -73,6 +73,31 @@ function permissionsCallBackLastEntry(types) {
             .concat(cb);
 }
 
+function translatePrivMDInput(appPtr, xorname, tag, secKey, nonce) {
+  let name = xorname;
+  if (!Buffer.isBuffer(xorname)) {
+    const b = new Buffer(xorname);
+    if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
+    name = t.XOR_NAME(b).ref().readPointer(0);
+  }
+
+  let sk = secKey;
+  if (!Buffer.isBuffer(secKey)) {
+    const b = new Buffer(secKey);
+    if (b.length != 32) throw Error("Secret Key _must be_ 32 bytes long.")
+    sk = t.KEYBYTES(b).ref().readPointer(0);
+  }
+
+  let n = nonce;
+  if (!Buffer.isBuffer(nonce)) {
+    const b = new Buffer(nonce);
+    if (b.length != 24) throw Error("Nonce _must be_ 24 bytes long.")
+    n = t.NONCEBYTES(b).ref().readPointer(0);
+  }
+
+  return [appPtr, name, tag, sk, n]
+}
+
 function translateXorName(appPtr, str, tag) {
   let name = str;
   if (!Buffer.isBuffer(str)) {
@@ -127,18 +152,20 @@ module.exports = {
   },
   functions: {
     mdata_info_new_public: [t.Void, [t.AppPtr, ref.refType(t.XOR_NAME), t.u64, "pointer", "pointer"]],
-    mdata_info_new_private: [t.Void, [t.AppPtr, ref.refType(t.XOR_NAME), t.u64,  "pointer", "pointer"]],
+    mdata_info_new_private: [t.Void, [t.AppPtr, ref.refType(t.XOR_NAME), t.u64, ref.refType(t.KEYBYTES), ref.refType(t.NONCEBYTES), "pointer", "pointer"]],
     mdata_info_random_public: [t.Void, [t.AppPtr, t.u64, "pointer", "pointer"]],
     mdata_info_random_private: [t.Void, [t.AppPtr, t.u64, "pointer", "pointer"]],
     mdata_info_encrypt_entry_key: [t.Void, [t.AppPtr, MDataInfoHandle, t.u8Pointer, t.usize, "pointer", "pointer"]],
     mdata_info_encrypt_entry_value: [t.Void, [t.AppPtr, MDataInfoHandle, t.u8Pointer, t.usize, "pointer", "pointer"]],
     mdata_info_extract_name_and_type_tag: [t.Void ,[t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
+    mdata_info_decrypt: [t.Void, [t.AppPtr, MDataInfoHandle, t.u8Pointer, t.usize, "pointer", "pointer"]],
     mdata_info_serialise: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_info_deserialise: [t.Void, [t.AppPtr, t.u8Array, t.usize, 'pointer', 'pointer']],
+    mdata_info_free: [t.Void, [t.AppPtr, MDataInfoHandle, 'pointer', 'pointer']],
     mdata_permission_set_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
     mdata_permissions_set_allow: [t.Void, [t.AppPtr, MDataPermissionSetHandle, t.i32, 'pointer', 'pointer']],
     mdata_permissions_set_deny: [t.Void, [t.AppPtr, MDataPermissionSetHandle, t.i32, 'pointer', 'pointer']],
-    mdata_permissions_set_clear: [t.Void, [t.AppPtr, MDataPermissionSetHandle, 'pointer', 'pointer']],
+    mdata_permissions_set_clear: [t.Void, [t.AppPtr, MDataPermissionSetHandle, t.i32, 'pointer', 'pointer']],
     mdata_permissions_set_free: [t.Void, [t.AppPtr, MDataPermissionSetHandle, 'pointer', 'pointer']],
     mdata_permissions_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
     mdata_permissions_len: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
@@ -179,17 +206,19 @@ module.exports = {
   api: {
     // creation
     mdata_info_new_public: Promisified(translateXorName, MDataInfoHandle),
-    mdata_info_new_private: Promisified(translateXorName, MDataInfoHandle),
+    mdata_info_new_private: Promisified(translatePrivMDInput, MDataInfoHandle),
     mdata_info_random_public: Promisified(null, MDataInfoHandle),
     mdata_info_random_private: Promisified(null, MDataInfoHandle),
     mdata_info_encrypt_entry_key: Promisified(bufferLastEntry, bufferTypes, h.asBuffer),
     mdata_info_encrypt_entry_value: Promisified(bufferLastEntry, bufferTypes, h.asBuffer),
+    mdata_info_decrypt: Promisified(bufferLastEntry, bufferTypes, h.asBuffer),
     mdata_info_extract_name_and_type_tag: Promisified(null, ['pointer', t.u64],
       // make sure to create a copy of this as it might be overwritten
       // after the callback finishes
       resp => { return { name: t.XOR_NAME(ref.reinterpret(resp[0], 32)), tag: resp[1] } }),
     mdata_info_serialise: Promisified(null, bufferTypes, h.asBuffer),
     mdata_info_deserialise: Promisified(bufferLastEntry, MDataInfoHandle),
+    mdata_info_free: Promisified(null, []),
     mdata_permission_set_new: Promisified(null, MDataPermissionSetHandle),
     mdata_permissions_set_allow: Promisified((appPtr, handle, action) => {
       const mA = MDataAction.get(action);
