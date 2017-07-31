@@ -791,6 +791,22 @@ describe('Mutable Data', () => {
         })
       )
     );
+
+    it('create, delete, update, fetch and finally open to read a file', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs'))
+        .then((nfs) => nfs.create('Hello world')
+          .then((file) => nfs.insert('test.txt', file))
+          .then(() => nfs.delete('test.txt', 1))
+          .then(() => nfs.create('Hello world'))
+          .then((file) => m.get('test.txt').then((value) => nfs.update('test.txt', file, value.version + 1)))
+          .then(() => nfs.fetch('test.txt'))
+          .then((file) => nfs.open(file, 4))
+          .then((f) => f.read(0, 0))
+          .then((co) => {
+            should(co.toString()).be.equal('Hello world');
+          })
+        ))
+    );
   });
 
   describe.skip('Owners', () => {
