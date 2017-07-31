@@ -138,7 +138,7 @@ class File {
       return Promise.reject(new Error('File is not open'));
     }
 
-    let version = this._ref.version;
+    const version = this._ref.version;
     return lib.file_close(this._connection, this._fileCtx)
       .then((res) => {
         this._ref = res;
@@ -215,8 +215,9 @@ class NFS {
         this.mData.app.connection, this.mData.ref, fileName, file.ref.ref()
       )
       .then(() => {
-        file.version = 0;
-        return file;
+        const fileObj = file;
+        fileObj.version = 0;
+        return fileObj;
       });
   }
 
