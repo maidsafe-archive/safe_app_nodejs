@@ -792,8 +792,7 @@ describe('Mutable Data', () => {
       )
     );
 
-    // Awaiting for resolution from safe_app libs as if timestamps are set in safe_app lib layer
-    it.skip('nfs creation and modification dates', () => {
+    it('nfs creation and modification date for read', () => {
       let creationDate;
       return app.mutableData.newRandomPrivate(TAG_TYPE)
         .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
@@ -801,12 +800,32 @@ describe('Mutable Data', () => {
           .then((file) => nfs.insert('test.txt', file))
           .then((fileInserted) => { creationDate = fileInserted.created; })
           .then(() => nfs.fetch('test.txt'))
-          .then((file) => nfs.update('test.txt', file, file.version + 1))
-          .then((fileUpdated) => {
-            // console.log('UPDATED ', creationDate, fileUpdated.created, fileUpdated.modified);
-            should(creationDate).be.equal(fileUpdated.created);
-            should(creationDate).not.equal(fileUpdated.modified);
-          })
+          .then((file) => nfs.open(file, consts.OPEN_MODE_READ))
+          .then((fileToRead) => fileToRead.close()
+            .then(() => {
+              should(creationDate.getTime()).be.equal(fileToRead.created.getTime());
+              should(creationDate.getTime()).be.belowOrEqual(fileToRead.modified.getTime());
+            })
+          )
+        );
+    });
+
+    it('nfs creation and modification dates for write', () => {
+      let creationDate;
+      return app.mutableData.newRandomPrivate(TAG_TYPE)
+        .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
+        .then((nfs) => nfs.create('Hello world')
+          .then((file) => nfs.insert('test.txt', file))
+          .then((fileInserted) => { creationDate = fileInserted.created; })
+          .then(() => nfs.fetch('test.txt'))
+          .then((file) => nfs.open(file, consts.OPEN_MODE_OVERWRITE))
+          .then((fileToUpdate) => fileToUpdate.write('Hello again!')
+            .then(() => fileToUpdate.close())
+            .then(() => {
+              should(creationDate.getTime()).be.equal(fileToUpdate.created.getTime());
+              should(creationDate.getTime()).be.belowOrEqual(fileToUpdate.modified.getTime());
+            })
+          )
         );
     });
   });
