@@ -21,6 +21,53 @@ const File = Struct({
 const FilePtr = ref.refType(File);
 const FileContextHandle = t.ObjectHandle;
 
+const readFileInfo = (fileInfo) => {
+  const file = fileInfo[0].deref();
+  const data_map_name = file.data_map_name;
+  const size = file.size;
+  const created_sec = file.created_sec;
+  const created_nsec = file.created_nsec;
+  const modified_sec = file.modified_sec;
+  const modified_nsec = file.modified_nsec;
+  const user_metadata_len = file.user_metadata_len;
+  const user_metadata_cap = file.user_metadata_cap;
+
+  let user_metadata_ptr = file.user_metadata_len === 0 ? new Buffer(0) : ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len);
+
+  if (user_metadata_ptr) {
+    try {
+      if(typeof user_metadata_ptr === 'object') {
+        user_metadata_ptr = user_metadata_ptr;
+      } else {
+        user_metadata_ptr = JSON.parse(user_metadata_ptr.toString());
+      }
+
+    } catch (e) {
+      // we can safely ignore this
+      if (console && console.warn) {
+        console.warn(`Parsing user metadata '${user_metadata_ptr}' of '${data_map_name}' failed: ${e}`)
+      }
+    }
+  }
+
+  let retFile = {
+    data_map_name,
+    size,
+    created_sec,
+    created_nsec,
+    modified_sec,
+    modified_nsec,
+    user_metadata_ptr,
+    user_metadata_len,
+    user_metadata_cap
+  }
+  if (fileInfo[1]) {
+    retFile.version = fileInfo[1];
+  }
+
+  return retFile;
+}
+
 module.exports = {
   types: {
     File,
@@ -40,47 +87,7 @@ module.exports = {
 
   },
   api: {
-    dir_fetch_file: h.Promisified(null, [FilePtr, t.u64], (res) => {
-      const file = res[0].deref();
-      const data_map_name = file.data_map_name;
-      const size = file.size;
-      const created_sec = file.created_sec;
-      const created_nsec = file.created_nsec;
-      const modified_sec = file.modified_sec;
-      const modified_nsec = file.modified_nsec;
-      const user_metadata_len = file.user_metadata_len;
-      const user_metadata_cap = file.user_metadata_cap;
-
-      let user_metadata_ptr = file.user_metadata_len === 0 ? new Buffer(0) : ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len);
-
-      if (user_metadata_ptr) {
-        try {
-          if(typeof user_metadata_ptr === 'object') {
-            user_metadata_ptr = user_metadata_ptr;
-          } else {
-            user_metadata_ptr = JSON.parse(user_metadata_ptr.toString());
-          }
-
-        } catch (e) {
-          // we can safely ignore this
-          if (console && console.warn) {
-            console.warn(`Parsing user metadata '${user_metadata_ptr}' of '${data_map_name}' failed: ${e}`)
-          }
-        }
-      }
-      return {
-              data_map_name,
-              size,
-              created_sec,
-              created_nsec,
-              modified_sec,
-              modified_nsec,
-              user_metadata_ptr,
-              user_metadata_len,
-              user_metadata_cap,
-              version: res[1]
-            }
-    }),
+    dir_fetch_file: h.Promisified(null, [FilePtr, t.u64], readFileInfo),
     dir_insert_file: h.Promisified(null, []),
     dir_update_file: h.Promisified(null, []),
     dir_delete_file: h.Promisified(null, []),
@@ -91,47 +98,6 @@ module.exports = {
       let dataAsBuffer = Buffer.isBuffer(data) ? data : Buffer.from(data);
       return [appPtr, fileCtxHandle, dataAsBuffer, dataAsBuffer.length];
     }, null),
-    file_close: h.Promisified(null, FilePtr, (res) => {
-      const file = res[0].deref();
-
-      const size = file.size;
-      const created_sec = file.created_sec;
-      const created_nsec = file.created_nsec;
-      const modified_sec = file.modified_sec;
-      const modified_nsec = file.modified_nsec;
-      const data_map_name = file.data_map_name;
-      const user_metadata_len = file.user_metadata_len;
-      const user_metadata_cap = file.user_metadata_cap;
-
-      let user_metadata_ptr = file.user_metadata_len === 0 ? new Buffer(0) : ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len);
-
-      if (user_metadata_ptr) {
-        try {
-          if(typeof user_metadata_ptr === 'object') {
-            user_metadata_ptr = user_metadata_ptr;
-          } else {
-            user_metadata_ptr = JSON.parse(user_metadata_ptr.toString());
-          }
-
-        } catch (e) {
-          // we can safely ignore this
-          if (console && console.warn) {
-            console.warn(`Parsing user metadata '${user_metadata_ptr}' of '${data_map_name}' failed: ${e}`)
-          }
-        }
-      }
-
-      return {
-              data_map_name,
-              size,
-              created_sec,
-              created_nsec,
-              modified_sec,
-              modified_nsec,
-              user_metadata_ptr,
-              user_metadata_len,
-              user_metadata_cap
-            }
-    })
+    file_close: h.Promisified(null, FilePtr, readFileInfo)
   }
 }
