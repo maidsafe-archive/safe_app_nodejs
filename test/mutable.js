@@ -177,6 +177,50 @@ describe('Mutable Data', () => {
     );
   });
 
+  describe('Null entries and/or permissions', () => {
+    it('null entries & permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.put(null, null)
+          .then(() => m.getVersion())
+          .then((version) => {
+            should(version).equal(0);
+          })
+          .then(() => m.getNameAndTag())
+          .then((r) => {
+            should(r.name).not.be.undefined();
+            should(r.tag).equal(TAG_TYPE);
+          })
+          .then(() => m.getEntries())
+          .then((entries) => entries.len()
+            .then((len) => {
+              should(len).equal(0);
+            })
+            .then(() => entries.insert('newKey', 'newValue'))
+            .then(() => should(m.put(null, entries)).be.rejected())
+          )
+        )
+    );
+
+    it('non-null entries and null permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => app.mutableData.newEntries()
+          .then((entries) => entries.insert('key1', 'value1')
+            .then(() => m.put(null, entries)
+              .then(() => m.getVersion())
+              .then((version) => {
+                should(version).equal(0);
+              })
+              .then(() => m.get('key1'))
+              .then((value) => {
+                should(value).not.be.undefined();
+                should(value.buf.toString()).equal('value1');
+                should(value.version).equal(0);
+              })
+              .then(() => entries.insert('newKey', 'newValue'))
+              .then(() => should(m.put(null, entries)).be.rejected())
+            )
+        ))
+    );
+  });
+
   describe('Entries', () => {
     it('get entries and check length', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
@@ -807,6 +851,26 @@ describe('Mutable Data', () => {
           })
         ))
     );
+  });
+
+  describe('forceCleanUp', () => {
+    it('forceCleanUp on MutableData object only', () => {
+      const testXorName = h.createRandomXorName();
+      return app.mutableData.newPublic(testXorName, TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.forceCleanUp())
+        );
+    });
+
+    // We need to solve this issue which seems to be in node-ffi callbacks mechanism
+    it.skip('forceCleanUp on both MutableData and safeApp objects', () => {
+      const testXorName = h.createRandomXorName();
+      return app.mutableData.newPublic(testXorName, TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.forceCleanUp())
+        )
+        .then(() => app.forceCleanUp());
+    });
   });
 
   describe.skip('Owners', () => {
