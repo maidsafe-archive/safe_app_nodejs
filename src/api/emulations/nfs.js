@@ -26,10 +26,6 @@ class File {
     this._ref = ref;
     this._fileCtx = fileCtx;
     this._connection = connection;
-    if (Array.isArray(ref.data_map_name)) {
-      // translate the incoming array back into a buffer we can use internally
-      this._ref.data_map_name = t.XOR_NAME(ref.data_map_name);
-    }
   }
 
   /**
@@ -146,10 +142,6 @@ class File {
       .then((res) => {
         this._ref = res;
         this._fileCtx = null;
-        if (Array.isArray(res.data_map_name)) {
-          // translate the incoming array back into a buffer we can use internally
-          this._ref.data_map_name = t.XOR_NAME(res.data_map_name);
-        }
       });
   }
 
