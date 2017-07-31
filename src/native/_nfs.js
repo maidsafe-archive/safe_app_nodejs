@@ -62,9 +62,7 @@ const readFileInfo = (fileInfo) => {
     user_metadata_len,
     user_metadata_cap
   }
-  if (fileInfo[1]) {
-    retFile.version = fileInfo[1];
-  }
+  retFile.version = fileInfo[1] || 0;
 
   return retFile;
 }
