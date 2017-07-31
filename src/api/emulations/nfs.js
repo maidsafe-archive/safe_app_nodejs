@@ -138,9 +138,11 @@ class File {
       return Promise.reject(new Error('File is not open'));
     }
 
+    let version = this._ref.version;
     return lib.file_close(this._connection, this._fileCtx)
       .then((res) => {
         this._ref = res;
+        this._ref.version = version;
         this._fileCtx = null;
       });
   }
@@ -212,7 +214,10 @@ class NFS {
     return lib.dir_insert_file(
         this.mData.app.connection, this.mData.ref, fileName, file.ref.ref()
       )
-      .then(() => file);
+      .then(() => {
+        file.version = 0;
+        return file;
+      });
   }
 
   /**
@@ -249,7 +254,7 @@ class NFS {
   *  OPEN_MODE_READ: Open file to read.
   *
   * @param {File} file
-  * @param {Number} openMode
+  * @param {Number} [openMode=OPEN_MODE_OVERWRITE]
   * @returns {Promise<File>}
   **/
   open(file, openMode) {
@@ -267,14 +272,16 @@ class NFS {
     };
 
     let fileParam = file;
+    let mode = openMode;
     // FIXME: this is temporary as we should be able to pass a null file to the lib
     if (!file) {
       fileParam = new File(metadata, null, null);
+      mode = consts.OPEN_MODE_OVERWRITE;
     }
 
     // FIXME: free/discard the file it's already open, we are missing
     // a function from the lib to perform this.
-    return lib.file_open(this.mData.app.connection, fileParam.ref.ref(), openMode)
+    return lib.file_open(this.mData.app.connection, fileParam.ref.ref(), mode)
       .then((fileCtx) => new File(metadata, this.mData.app.connection, fileCtx));
   }
 }
