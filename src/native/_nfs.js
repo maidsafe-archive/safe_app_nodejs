@@ -80,7 +80,7 @@ module.exports = {
     dir_insert_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, 'pointer', 'pointer']],
     dir_update_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, t.u64, 'pointer', 'pointer']],
     dir_delete_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', t.u64, 'pointer', 'pointer']],
-    file_open: [t.Void, [t.AppPtr, FilePtr, t.u64, 'pointer', 'pointer']],
+    file_open: [t.Void, [t.AppPtr, MDataInfoHandle, FilePtr, t.u64, 'pointer', 'pointer']],
     file_size: [t.Void, [t.AppPtr, FileContextHandle, 'pointer', 'pointer']],
     file_read: [t.Void, [t.AppPtr, FileContextHandle, t.u64, t.u64, 'pointer', 'pointer']],
     file_write: [t.Void, [t.AppPtr, FileContextHandle, t.u8Pointer, t.usize, 'pointer', 'pointer']],
