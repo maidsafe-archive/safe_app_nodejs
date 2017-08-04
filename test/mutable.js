@@ -177,6 +177,50 @@ describe('Mutable Data', () => {
     );
   });
 
+  describe('Null entries and/or permissions', () => {
+    it('null entries & permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.put(null, null)
+          .then(() => m.getVersion())
+          .then((version) => {
+            should(version).equal(0);
+          })
+          .then(() => m.getNameAndTag())
+          .then((r) => {
+            should(r.name).not.be.undefined();
+            should(r.tag).equal(TAG_TYPE);
+          })
+          .then(() => m.getEntries())
+          .then((entries) => entries.len()
+            .then((len) => {
+              should(len).equal(0);
+            })
+            .then(() => entries.insert('newKey', 'newValue'))
+            .then(() => should(m.put(null, entries)).be.rejected())
+          )
+        )
+    );
+
+    it('non-null entries and null permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => app.mutableData.newEntries()
+          .then((entries) => entries.insert('key1', 'value1')
+            .then(() => m.put(null, entries)
+              .then(() => m.getVersion())
+              .then((version) => {
+                should(version).equal(0);
+              })
+              .then(() => m.get('key1'))
+              .then((value) => {
+                should(value).not.be.undefined();
+                should(value.buf.toString()).equal('value1');
+                should(value.version).equal(0);
+              })
+              .then(() => entries.insert('newKey', 'newValue'))
+              .then(() => should(m.put(null, entries)).be.rejected())
+            )
+        ))
+    );
+  });
+
   describe('Entries', () => {
     it('get entries and check length', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
@@ -792,7 +836,7 @@ describe('Mutable Data', () => {
       )
     );
 
-    it('nfs creation and modification date for read', () => {
+    it.only('nfs creation and modification date for read', () => {
       let creationDate;
       return app.mutableData.newRandomPrivate(TAG_TYPE)
         .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
@@ -810,7 +854,7 @@ describe('Mutable Data', () => {
         );
     });
 
-    it('nfs creation and modification dates for write', () => {
+    it.only('nfs creation and modification dates for write', () => {
       let creationDate;
       return app.mutableData.newRandomPrivate(TAG_TYPE)
         .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
@@ -827,6 +871,42 @@ describe('Mutable Data', () => {
             })
           )
         );
+    });
+
+    it('create, delete, update, fetch and finally open to read a file', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs'))
+        .then((nfs) => nfs.create('Hello world')
+          .then((file) => nfs.insert('test.txt', file))
+          .then(() => nfs.delete('test.txt', 1))
+          .then(() => nfs.create('Hello world'))
+          .then((file) => m.get('test.txt').then((value) => nfs.update('test.txt', file, value.version + 1)))
+          .then(() => nfs.fetch('test.txt'))
+          .then((file) => nfs.open(file, 4))
+          .then((f) => f.read(0, 0))
+          .then((co) => {
+            should(co.toString()).be.equal('Hello world');
+          })
+        ))
+    );
+  });
+
+  describe('forceCleanUp', () => {
+    it('forceCleanUp on MutableData object only', () => {
+      const testXorName = h.createRandomXorName();
+      return app.mutableData.newPublic(testXorName, TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.forceCleanUp())
+        );
+    });
+
+    // We need to solve this issue which seems to be in node-ffi callbacks mechanism
+    it.skip('forceCleanUp on both MutableData and safeApp objects', () => {
+      const testXorName = h.createRandomXorName();
+      return app.mutableData.newPublic(testXorName, TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES)
+          .then(() => m.forceCleanUp())
+        )
+        .then(() => app.forceCleanUp());
     });
   });
 

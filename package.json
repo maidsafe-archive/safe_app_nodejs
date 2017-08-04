@@ -1,6 +1,6 @@
 {
   "name": "safe-app",
-  "version": "0.1.0-dev.0",
+  "version": "0.1.0-dev.1",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -54,7 +54,7 @@
     },
     "safe_app": {
       "mirror": "https://github.com/krishnaIndia/safe_core/releases/download/v",
-      "version": "0.1.0-pre44",
+      "version": "0.1.0-pre45",
       "targetDir": "src/native",
       "filename": "safe_app",
       "filePattern": "^.*\\.(dll|so|dylib)$",

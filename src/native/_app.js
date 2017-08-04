@@ -23,7 +23,10 @@ module.exports = {
 
           const uriBuf = Buffer.isBuffer(uri) ? uri : (uri.buffer || new Buffer(uri));
           const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.AppPtr], function(user_data, result, appCon) {
-            if (result.error_code !== 0) reject(makeFfiError(result.error_code, result.error_description));
+            if (result.error_code !== 0) {
+              reject(makeFfiError(result.error_code, result.error_description));
+              return;
+            }
 
             app.connection = appCon;
             app.networkState = consts.NET_STATE_CONNECTED;
@@ -39,7 +42,10 @@ module.exports = {
         const network_observer_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.i32], (user_data, result, state) => app._networkStateUpdated(user_data, result, state));
         return new Promise((resolve, reject) => {
           const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.AppPtr], function(user_data, result, appCon) {
-            if (result.error_code !== 0) reject(makeFfiError(result.error_code, result.error_description));
+            if (result.error_code !== 0) {
+              reject(makeFfiError(result.error_code, result.error_description));
+              return;
+            }
 
             app.connection = appCon;
             app.networkState = consts.NET_STATE_CONNECTED;

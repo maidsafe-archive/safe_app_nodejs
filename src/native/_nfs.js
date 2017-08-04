@@ -23,7 +23,8 @@ const FileContextHandle = t.ObjectHandle;
 
 const readFileInfo = (fileInfo) => {
   const file = fileInfo[0].deref();
-  const data_map_name = file.data_map_name;
+  let b = new Buffer(file.data_map_name);
+  const data_map_name = t.XOR_NAME(b);
   const size = file.size;
   const created_sec = file.created_sec;
   const created_nsec = file.created_nsec;
@@ -32,7 +33,7 @@ const readFileInfo = (fileInfo) => {
   const user_metadata_len = file.user_metadata_len;
   const user_metadata_cap = file.user_metadata_cap;
 
-  let user_metadata_ptr = file.user_metadata_len === 0 ? new Buffer(0) : ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len);
+  let user_metadata_ptr = file.user_metadata_len === 0 ? new Buffer(0) : new Buffer(ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len));
 
   if (user_metadata_ptr) {
     try {
@@ -61,7 +62,7 @@ const readFileInfo = (fileInfo) => {
     user_metadata_len,
     user_metadata_cap
   }
-  if (fileInfo[1]) {
+  if (typeof fileInfo[1] === 'number') {
     retFile.version = fileInfo[1];
   }
 
@@ -79,7 +80,7 @@ module.exports = {
     dir_insert_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, 'pointer', 'pointer']],
     dir_update_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', FilePtr, t.u64, 'pointer', 'pointer']],
     dir_delete_file: [t.Void, [t.AppPtr, MDataInfoHandle, 'string', t.u64, 'pointer', 'pointer']],
-    file_open: [t.Void, [t.AppPtr, FilePtr, t.u64, 'pointer', 'pointer']],
+    file_open: [t.Void, [t.AppPtr, MDataInfoHandle, FilePtr, t.u64, 'pointer', 'pointer']],
     file_size: [t.Void, [t.AppPtr, FileContextHandle, 'pointer', 'pointer']],
     file_read: [t.Void, [t.AppPtr, FileContextHandle, t.u64, t.u64, 'pointer', 'pointer']],
     file_write: [t.Void, [t.AppPtr, FileContextHandle, t.u8Pointer, t.usize, 'pointer', 'pointer']],
