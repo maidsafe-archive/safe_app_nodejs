@@ -12,14 +12,23 @@ const ffi = {};
 const RTLD_NOW = FFI.DynamicLibrary.FLAGS.RTLD_NOW;
 const RTLD_GLOBAL = FFI.DynamicLibrary.FLAGS.RTLD_GLOBAL;
 const mode = RTLD_NOW | RTLD_GLOBAL;
+let lib = null;
 
-if (os.platform() === 'win32') {
-  FFI.DynamicLibrary(path.resolve(__dirname, 'libwinpthread-1'), mode);
+try {
+  if (os.platform() === 'win32') {
+    FFI.DynamicLibrary(path.resolve(__dirname, 'libwinpthread-1'), mode);
+  }
+  lib = FFI.DynamicLibrary(path.join(dir, LIB_FILENAME), mode);
+  ffi['isLibLoadErr'] = null;
+} catch (err) {
+  console.error(`Error while loading binary => ${err}`);
+  ffi['isLibLoadErr'] = err;
 }
 
-const lib = FFI.DynamicLibrary(path.join(dir, LIB_FILENAME), mode);
-
 function retrieveFFI(key) {
+  if (!lib) {
+    return;
+  }
   try {
     return lib.get(key);
   } catch(e) {
@@ -28,6 +37,9 @@ function retrieveFFI(key) {
 }
 
 api.forEach(function(mod){
+  if (!lib) {
+    return;
+  }
   if (mod.functions){
     for (const key in mod.functions) {
       const funcDefinition = mod.functions[key];

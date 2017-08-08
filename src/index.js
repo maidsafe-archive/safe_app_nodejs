@@ -1,6 +1,8 @@
 
 const App = require('./app');
 const autoref = require('./helpers').autoref;
+const makeFfiError = require('./native/_error.js');
+const errConst = require('./error_const');
 const version = require('../package.json').version;
 
 /**
@@ -14,7 +16,7 @@ const version = require('../package.json').version;
 * @param {String=} scope - an optional scope of this instance
 * @param {String=} customExecPath - an optional customised execution path
 *        to use when registering the URI with the system.
-**/
+*/
 
 /**
  * The main entry point to create a new SAFEApp
@@ -41,6 +43,12 @@ const version = require('../package.json').version;
  *        ))
  */
 function initializeApp(appInfo, networkStateCallBack) {
+  const libLoadErr = App.failedToLoadLibs();
+  if (libLoadErr) {
+    return Promise.reject(
+      makeFfiError(errConst.FAILED_TO_LOAD_LIB.code,
+        errConst.FAILED_TO_LOAD_LIB.msg(libLoadErr)));
+  }
   const app = autoref(new App(appInfo, networkStateCallBack));
   return Promise.resolve(app);
 }
