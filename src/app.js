@@ -91,13 +91,16 @@ class SAFEApp extends EventEmitter {
     const hostname = parsedUrl.hostname;
     let path = parsedUrl.pathname || '';
 
-    if(path.split('.').length === 1) {
-      if(path[path.length - 1] === '/') {
-        path = path + 'index.html';
-      } else {
-        path = path + '/index.html';
-      }
+    const tokens = path.split('/');
+    if(!tokens[tokens.length - 1].split('.')[1]) {
+          tokens.push('index.html');
+          path = tokens.join('/');
+          let doubleSeparatorRegExp = new RegExp('//');
+          if(doubleSeparatorRegExp.test(path)) {
+            path = path.replace(doubleSeparatorRegExp, '/');
+          }
     }
+
     // lets' unpack
     const hostParts = hostname.split('.');
     const lookupName = hostParts.pop(); // last one is 'domain'
