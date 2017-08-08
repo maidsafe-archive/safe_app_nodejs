@@ -92,13 +92,13 @@ class SAFEApp extends EventEmitter {
     let path = parsedUrl.pathname || '';
 
     const tokens = path.split('/');
-    if(!tokens[tokens.length - 1].split('.')[1]) {
-          tokens.push('index.html');
-          path = tokens.join('/');
-          let doubleSeparatorRegExp = new RegExp('//');
-          if(doubleSeparatorRegExp.test(path)) {
-            path = path.replace(doubleSeparatorRegExp, '/');
-          }
+    if (!tokens[tokens.length - 1].split('.')[1]) {
+      tokens.push('index.html');
+      path = tokens.join('/');
+      const doubleSeparatorRegExp = new RegExp('//');
+      if (doubleSeparatorRegExp.test(path)) {
+        path = path.replace(doubleSeparatorRegExp, '/');
+      }
     }
 
     // lets' unpack
@@ -131,9 +131,9 @@ class SAFEApp extends EventEmitter {
                 } else if (path[0] === '/') {
                   // directly try the non-slash version
                   return emulation.fetch(path.slice(1, path.length))
-                  .catch(e => {
-                    let pathArray = path.split('/');
-                    if(pathArray[pathArray.length - 1] == 'index.html') {
+                  .catch(_ => {
+                    const pathArray = path.split('/');
+                    if (pathArray[pathArray.length - 1] === 'index.html') {
                       pathArray.pop();
                       return emulation.fetch(pathArray.join('/'));
                     }
