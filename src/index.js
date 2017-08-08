@@ -1,6 +1,8 @@
 
 const App = require('./app');
 const autoref = require('./helpers').autoref;
+const makeFfiError = require('./native/_error.js');
+const errConst = require('./error_const');
 const version = require('../package.json').version;
 
 /**
@@ -42,7 +44,7 @@ const version = require('../package.json').version;
  */
 function initializeApp(appInfo, networkStateCallBack) {
   if (!App.isLibLoaded()) {
-    return Promise.reject(new Error('Failed to load libraries'));
+    return Promise.reject(makeFfiError(errConst.FAILED_TO_LOAD_LIB, 'Failed to load native libraries.'));
   }
   const app = autoref(new App(appInfo, networkStateCallBack));
   return Promise.resolve(app);
