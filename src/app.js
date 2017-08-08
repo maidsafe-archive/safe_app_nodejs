@@ -288,7 +288,7 @@ class SAFEApp extends EventEmitter {
   }
 
   static isLibLoaded() {
-    return (lib.isLibLoaded && lib.isSysUriLibLoaded)
+    return (lib.isLibLoaded && lib.isSysUriLibLoaded);
   }
 }
 
