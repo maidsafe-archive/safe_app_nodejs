@@ -131,7 +131,7 @@ class SAFEApp extends EventEmitter {
                 } else if (path[0] === '/') {
                   // directly try the non-slash version
                   return emulation.fetch(path.slice(1, path.length))
-                  .catch(_ => {
+                  .catch(() => {
                     const pathArray = path.split('/');
                     if (pathArray[pathArray.length - 1] === 'index.html') {
                       pathArray.pop();
