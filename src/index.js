@@ -41,6 +41,9 @@ const version = require('../package.json').version;
  *        ))
  */
 function initializeApp(appInfo, networkStateCallBack) {
+  if (!App.isLibLoaded()) {
+    return Promise.reject(new Error('Failed to load libraries'));
+  }
   const app = autoref(new App(appInfo, networkStateCallBack));
   return Promise.resolve(app);
 }

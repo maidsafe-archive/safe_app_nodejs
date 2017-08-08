@@ -287,6 +287,9 @@ class SAFEApp extends EventEmitter {
     lib.app_free(app.connection);
   }
 
+  static isLibLoaded() {
+    return (lib.isLibLoaded && lib.isSysUriLibLoaded)
+  }
 }
 
 SAFEApp.logFilename = null;
