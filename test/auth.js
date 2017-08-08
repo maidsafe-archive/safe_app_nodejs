@@ -17,8 +17,8 @@ describe('Access Container', () => {
       should(names).containEql('_public');
     })));
 
-  it('get home container', () => app.auth.refreshContainersPermissions().then(() =>
-    app.auth.getHomeContainer().then((mdata) => {
+  it('get own container', () => app.auth.refreshContainersPermissions().then(() =>
+    app.auth.getOwnContainer().then((mdata) => {
       should(mdata).is.not.undefined();
     })));
 
@@ -57,14 +57,14 @@ describe('Access Container', () => {
           })
   ));
 
-  it('mutate info of home container', () => app.auth.refreshContainersPermissions().then(() =>
-      app.auth.getHomeContainer()
+  it('mutate info of own container', () => app.auth.refreshContainersPermissions().then(() =>
+      app.auth.getOwnContainer()
         .then((md) => md.getEntries()
           .then((entries) => entries.mutate()
             .then((mut) => mut.insert('key1', 'value1')
               .then(() => md.applyEntriesMutation(mut))
             )))
-        .then(() => app.auth.getHomeContainer())
+        .then(() => app.auth.getOwnContainer())
           .then((md) => md.get('key1'))
           .then((value) => {
             should(value.buf).not.be.undefined();
