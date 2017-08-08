@@ -16,7 +16,7 @@ const version = require('../package.json').version;
 * @param {String=} scope - an optional scope of this instance
 * @param {String=} customExecPath - an optional customised execution path
 *        to use when registering the URI with the system.
-**/
+*/
 
 /**
  * The main entry point to create a new SAFEApp
