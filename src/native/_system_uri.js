@@ -7,7 +7,7 @@ const t = require('./types');
 
 const dir = path.dirname(__filename);
 let ffi = null;
-let isSysUriLibLoaded = false;
+let isSysUriLibLoadErr = null;
 
 try {
   ffi = FFI.Library(path.join(dir, SYSTEM_URI_LIB_FILENAME), {
@@ -20,10 +20,9 @@ try {
       'string', //schemes
     ] ],
   });
-  isSysUriLibLoaded = true;
 } catch (err) {
   console.error(`Failed to load system_uri binary => ${err}`);
-  isSysUriLibLoaded = false;
+  isSysUriLibLoadErr = err;
 }
 
 function openUri(uri) {
@@ -60,5 +59,5 @@ function registerUriScheme(appInfo, schemes) {
 module.exports = function(other) {
   other.openUri = openUri;
   other.registerUriScheme = registerUriScheme;
-  other.isSysUriLibLoaded = isSysUriLibLoaded;
+  other.isSysUriLibLoadErr = isSysUriLibLoadErr;
 }

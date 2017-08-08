@@ -43,8 +43,11 @@ const version = require('../package.json').version;
  *        ))
  */
 function initializeApp(appInfo, networkStateCallBack) {
-  if (!App.isLibLoaded()) {
-    return Promise.reject(makeFfiError(errConst.FAILED_TO_LOAD_LIB, 'Failed to load native libraries.'));
+  const libLoadErr = App.failedToLoadLibs();
+  if (libLoadErr) {
+    return Promise.reject(
+      makeFfiError(errConst.FAILED_TO_LOAD_LIB.code,
+        errConst.FAILED_TO_LOAD_LIB.msg(libLoadErr)));
   }
   const app = autoref(new App(appInfo, networkStateCallBack));
   return Promise.resolve(app);

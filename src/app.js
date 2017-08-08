@@ -287,8 +287,12 @@ class SAFEApp extends EventEmitter {
     lib.app_free(app.connection);
   }
 
-  static isLibLoaded() {
-    return (lib.isLibLoaded && lib.isSysUriLibLoaded);
+  static failedToLoadLibs() {
+    if (lib.isLibLoadErr) {
+      return lib.isLibLoadErr;
+    } else if (lib.isSysUriLibLoadErr) {
+      return lib.isSysUriLibLoadErr;
+    }
   }
 }
 

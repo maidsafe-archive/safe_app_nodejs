@@ -19,10 +19,10 @@ try {
     FFI.DynamicLibrary(path.resolve(__dirname, 'libwinpthread-1'), mode);
   }
   lib = FFI.DynamicLibrary(path.join(dir, LIB_FILENAME), mode);
-  ffi['isLibLoaded'] = true;
+  ffi['isLibLoadErr'] = null;
 } catch (err) {
   console.error(`Error while loading binary => ${err}`);
-  ffi['isLibLoaded'] = false;
+  ffi['isLibLoadErr'] = err;
 }
 
 function retrieveFFI(key) {
