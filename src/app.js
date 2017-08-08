@@ -41,7 +41,7 @@ class SAFEApp extends EventEmitter {
   /**
   * get the AuthInterface instance connected to this session
   * @returns {AuthInterface}
-  **/
+  */
   get auth() {
     return this._auth;
   }
@@ -49,7 +49,7 @@ class SAFEApp extends EventEmitter {
   /**
   * get the Crypto instance connected to this session
   * @returns {CryptoInterface}
-  **/
+  */
   get crypto() {
     return this._crypto;
   }
@@ -57,7 +57,7 @@ class SAFEApp extends EventEmitter {
   /**
   * get the CipherOptInterface instance connected to this session
   * @returns {CipherOptInterface}
-  **/
+  */
   get cipherOpt() {
     return this._cipherOpt;
   }
@@ -65,7 +65,7 @@ class SAFEApp extends EventEmitter {
   /**
   * get the ImmutableDataInterface instance connected to this session
   * @returns {ImmutableDataInterface}
-  **/
+  */
   get immutableData() {
     return this._immutableData;
   }
@@ -73,7 +73,7 @@ class SAFEApp extends EventEmitter {
   /**
   * get the MutableDataInterface instance connected to this session
   * @returns {MutableDataInterface}
-  **/
+  */
   get mutableData() {
     return this._mutableData;
   }
@@ -179,7 +179,7 @@ class SAFEApp extends EventEmitter {
   /**
   * The current connection object hold on the Rust-Side
   * @returns {Pointer}
-  **/
+  */
   get connection() {
     if (!this._connection) throw Error('Setup Incomplete. Connection not available yet.');
     return this._connection;
@@ -211,14 +211,14 @@ class SAFEApp extends EventEmitter {
   /**
   * The current Network state
   * @returns {String} of latest state
-  **/
+  */
   get networkState() {
     return this._networkState;
   }
 
   /**
   * The current appInfo
-  **/
+  */
   get appInfo() {
     return this._appInfo;
   }
@@ -230,7 +230,7 @@ class SAFEApp extends EventEmitter {
   * @param {String} [logFilename=null] optional log filename to generate the path
   *
   * @returns {Promise<String>}
-  **/
+  */
   /* eslint-disable class-methods-use-this */
   logPath(logFilename) {
     let filename = logFilename;
@@ -247,7 +247,7 @@ class SAFEApp extends EventEmitter {
   * @param {Function} [networkStateCallBack=null] optional callback function
   * to receive network state updates
   * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp
-  **/
+  */
   static fromAuthUri(appInfo, authUri, networkStateCallBack) {
     const app = autoref(new SAFEApp(appInfo, networkStateCallBack));
     return app.auth.loginFromURI(authUri);
@@ -304,6 +304,13 @@ class SAFEApp extends EventEmitter {
     lib.app_free(app.connection);
   }
 
+  static failedToLoadLibs() {
+    if (lib.isLibLoadErr) {
+      return lib.isLibLoadErr;
+    } else if (lib.isSysUriLibLoadErr) {
+      return lib.isSysUriLibLoadErr;
+    }
+  }
 }
 
 SAFEApp.logFilename = null;

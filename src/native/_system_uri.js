@@ -6,19 +6,29 @@ const h = require('./helpers');
 const t = require('./types');
 
 const dir = path.dirname(__filename);
+let ffi = null;
+let isSysUriLibLoadErr = null;
 
-const ffi = FFI.Library(path.join(dir, SYSTEM_URI_LIB_FILENAME), {
-  open: [t.i32, ['string'] ],
-  install: [t.i32, ['string', //bundle
-                    'string', //vendor
-                    'string', //name
-                    'string', //exec
-                    'string', //icon
-                    'string', //schemes
-                    ] ],
-});
+try {
+  ffi = FFI.Library(path.join(dir, SYSTEM_URI_LIB_FILENAME), {
+    open: [t.i32, ['string'] ],
+    install: [t.i32, ['string', //bundle
+      'string', //vendor
+      'string', //name
+      'string', //exec
+      'string', //icon
+      'string', //schemes
+    ] ],
+  });
+} catch (err) {
+  console.error(`Failed to load system_uri binary => ${err}`);
+  isSysUriLibLoadErr = err;
+}
 
 function openUri(uri) {
+  if (!ffi) {
+    return;
+  }
   const ret = ffi.open(uri.uri || uri);
   if (ret === -1) {
     throw new Error("Error occured opening " + str + " : " + ret);
@@ -33,7 +43,9 @@ function registerUriScheme(appInfo, schemes) {
   const name = appInfo.name;
   const icon = appInfo.icon;
   const joinedSchemes = schemes.join ? schemes.join(',') : schemes;
-
+  if (!ffi) {
+    return;
+  }
   const ret = ffi.install(bundle, vendor, name, exec, icon, joinedSchemes);
   if (ret === -1) {
     throw new Error("Error occured installing: " + ret);
@@ -47,4 +59,5 @@ function registerUriScheme(appInfo, schemes) {
 module.exports = function(other) {
   other.openUri = openUri;
   other.registerUriScheme = registerUriScheme;
+  other.isSysUriLibLoadErr = isSysUriLibLoadErr;
 }
