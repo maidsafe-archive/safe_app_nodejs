@@ -181,7 +181,7 @@ class AuthInterface {
   * When run in tests, this falls back to the randomly generated version
   * @return {Promise<[String]}
   */
-  getHomeContainer() {
+  getOwnContainer() {
     const appInfo = this.app.appInfo;
     let containerName = `apps/${appInfo.id}`;
     if (appInfo.scope) {
