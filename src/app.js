@@ -88,9 +88,16 @@ class SAFEApp extends EventEmitter {
   webFetch(url) {
     const parsedUrl = parseUrl(url);
     if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
-
     const hostname = parsedUrl.hostname;
-    const path = parsedUrl.pathname || '';
+    let path = parsedUrl.pathname || '';
+
+    if(path.split('.').length === 1) {
+      if(path[path.length - 1] === '/') {
+        path = path + 'index.html';
+      } else {
+        path = path + '/index.html';
+      }
+    }
     // lets' unpack
     const hostParts = hostname.split('.');
     const lookupName = hostParts.pop(); // last one is 'domain'
@@ -120,7 +127,14 @@ class SAFEApp extends EventEmitter {
                   newPath = `${path}index.html`;
                 } else if (path[0] === '/') {
                   // directly try the non-slash version
-                  return emulation.fetch(path.slice(1, path.length));
+                  return emulation.fetch(path.slice(1, path.length))
+                  .catch(e => {
+                    let pathArray = path.split('/');
+                    if(pathArray[pathArray.length - 1] == 'index.html') {
+                      pathArray.pop();
+                      return emulation.fetch(pathArray.join('/'));
+                    }
+                  });
                 }
 
                 if (newPath) {
