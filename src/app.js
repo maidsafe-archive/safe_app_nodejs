@@ -4,6 +4,8 @@ const api = require('./api');
 const lib = require('./native/lib');
 const parseUrl = require('url').parse;
 const consts = require('./consts');
+const makeFfiError = require('./native/_error.js');
+const errConst = require('./error_const');
 
 /**
  * Holds one sessions with the network and is the primary interface to interact
@@ -23,6 +25,16 @@ class SAFEApp extends EventEmitter {
   */
   constructor(appInfo, networkStateCallBack) {
     super();
+
+    const appInfoMustHaveProperties = ['id', 'name', 'vendor', 'scope'];
+    let hasCorrectProperties = appInfoMustHaveProperties.every(prop => {
+      return Object.hasOwnProperty(prop)
+    });
+
+    if(!hasCorrectProperties) {
+      return makeFfiError(errConst.MALFORMED_APP_INFO.code, errConst.MALFORMED_APP_INFO.msg);
+    }
+
     this._appInfo = appInfo;
     this.networkState = consts.NET_STATE_INIT;
     this._networkStateCallBack = networkStateCallBack;

@@ -1,5 +1,7 @@
 const should = require('should');
 const h = require('./helpers');
+const App = require('../src/app');
+const appHelpers = require('../src/helpers');
 
 const createTestApp = h.createTestApp;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
@@ -44,4 +46,21 @@ describe('Smoke test', () => {
             });
       });
   });
+
+  it.only('should throw informative error, if appInfo is malformed', () => {
+
+    const malformedApp = appHelpers.autoref(new App({
+      info: {
+        id: 'net.maidsafe.test.javascript.id',
+        name: 'JS Test',
+        vendor: 'MaidSafe Ltd.',
+        scope: null
+      }
+    }));
+
+    // console.log(malformedApp);
+
+
+  })
+
 });
