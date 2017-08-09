@@ -3,13 +3,13 @@ const weak = require('weak');
 /**
 * General purpose interface to link a native handle
 * @private
-**/
+*/
 class NetworkObject {
   /**
   * Create a new Object holding the handle
   * @param {SAFEApp} app
   * @param {handle} ref - the objects handle or reference
-  **/
+  */
   constructor(app, ref) {
     this._app = app;
     this._ref = ref;
@@ -18,7 +18,7 @@ class NetworkObject {
   /**
   * The app this belongs to
   * @returns {SAFEApp}
-  **/
+  */
   get app() {
     return this._app;
   }
@@ -27,7 +27,7 @@ class NetworkObject {
   * The reference or object handle to reference
   * the object on the native side with
   * @returns {(Number|Pointer})}
-  **/
+  */
   get ref() {
     return this._ref;
   }
@@ -37,7 +37,7 @@ class NetworkObject {
 * We need to differentiate between safeApp objects and NetworkObjects
 * @private
 * @abstract
-**/
+*/
 function freeResources(obj) {
   if (obj.app) {
     return () => obj.constructor.free(obj.app, obj.ref);
@@ -51,7 +51,7 @@ function freeResources(obj) {
 * Expose an optional function to explicitly clean up underlying resources.
 * @private
 * @abstract
-**/
+*/
 function autoref(obj) {
   if (obj.constructor && obj.constructor.free) {
     const weakObj = weak(obj, freeResources(obj));

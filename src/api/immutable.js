@@ -12,7 +12,7 @@ class Reader extends helpers.NetworkObject {
   * @param {Object=} options
   * @param {Number} [options.offset=0] start position
   * @param {Number} [options.end=size] end position or end of data
-  **/
+  */
   read(options) {
     const opts = Object.assign({}, options);
     let prms;
@@ -32,7 +32,7 @@ class Reader extends helpers.NetworkObject {
   /**
   * The size of the mutable data on the network
   * @returns {Promise<Number>} length in bytes
-  **/
+  */
   size() {
     return lib.idata_size(this.app.connection, this.ref);
   }
@@ -66,7 +66,7 @@ class Reader extends helpers.NetworkObject {
 *     ))
 * })
 *
-**/
+*/
 class Writer extends helpers.NetworkObject {
 
   /**
@@ -74,7 +74,7 @@ class Writer extends helpers.NetworkObject {
   *
   * @param {String} string the data to write
   * @returns {Promise<()>}
-  **/
+  */
   write(string) {
     return lib.idata_write_to_self_encryptor(this.app.connection, this.ref, string);
   }
@@ -84,7 +84,7 @@ class Writer extends helpers.NetworkObject {
   *
   * @param {CipherOpt} the Cipher Opt to encrypt data with
   * @returns {Promise<String>} the address to the data once written to the network
-  **/
+  */
   close(cipherOpt) {
     return lib.idata_close_self_encryptor(this.app.connection,
                                           this.ref,
@@ -93,7 +93,7 @@ class Writer extends helpers.NetworkObject {
 
   /**
   * Proxy to `close`.
-  **/
+  */
   save() {
     return this.close();
   }
@@ -121,7 +121,7 @@ class ImmutableDataInterface {
   /**
   * @private
   * @param {SAFEApp} app
-  **/
+  */
   constructor(app) {
     this.app = app;
   }
@@ -129,7 +129,7 @@ class ImmutableDataInterface {
   /**
   * Create a new ImmutableDataInterface
   * @returns {Promise<Writer>}
-  **/
+  */
   create() {
     return lib.idata_new_self_encryptor(this.app.connection)
       .then((ref) => helpers.autoref(new Writer(this.app, ref)));
@@ -139,7 +139,7 @@ class ImmutableDataInterface {
   * Look up an existing Immutable Data for the given address
   * @param {Buffer} address the XorName on the network
   * @returns {Promise<Reader>}
-  **/
+  */
   fetch(address) {
     return lib.idata_fetch_self_encryptor(this.app.connection, address)
       .then((ref) => helpers.autoref(new Reader(this.app, ref)));

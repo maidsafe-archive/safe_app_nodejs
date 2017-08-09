@@ -25,13 +25,13 @@ const h = require('../helpers');
 
 /**
 * Holds signature key
-**/
+*/
 class SignKey extends h.NetworkObject {
 
   /**
   * generate raw string copy of signature key
   * @returns {Promise<String>}
-  **/
+  */
   getRaw() {
     return lib.sign_key_get(this.app.connection, this.ref);
   }
@@ -41,7 +41,7 @@ class SignKey extends h.NetworkObject {
   * used by autoref to clean the reference
   * @param {SAFEApp} app
   * @param {handle} ref
-  **/
+  */
   static free(app, ref) {
     return lib.sign_key_free(app.connection, ref);
   }
@@ -49,13 +49,13 @@ class SignKey extends h.NetworkObject {
 
 /**
 * Holds a the public part of an encryption key
-**/
+*/
 class PubEncKey extends h.NetworkObject {
 
   /**
   * generate raw string copy of encryption key
   * @returns {Promise<String>}
-  **/
+  */
   getRaw() {
     return lib.enc_pub_key_get(this.app.connection, this.ref);
   }
@@ -65,7 +65,7 @@ class PubEncKey extends h.NetworkObject {
   * used by autoref to clean the reference
   * @param {SAFEApp} app
   * @param {handle} ref
-  **/
+  */
   static free(app, ref) {
     return lib.enc_key_free(app.connection, ref);
   }
@@ -73,7 +73,7 @@ class PubEncKey extends h.NetworkObject {
   /**
   * Encrypt the input (buffer or string) using the private and public key with a seal
   * @returns {Promise<Buffer>} Ciphertext
-  **/
+  */
   encryptSealed(str) {
     return lib.encrypt_sealed_box(this.app.connection, str, this.ref);
   }
@@ -82,7 +82,7 @@ class PubEncKey extends h.NetworkObject {
   /**
   * Encrypt the input (buffer or string) using the private and public key and the given privateKey
   * @returns {Promise<Buffer>} Ciphertext
-  **/
+  */
   encrypt(str, secretKey) {
     return lib.encrypt(this.app.connection, str, this.ref, secretKey.ref);
   }
@@ -91,13 +91,13 @@ class PubEncKey extends h.NetworkObject {
 
 /**
 * Holds a the secret part of an encryption key
-**/
+*/
 class SecEncKey extends h.NetworkObject {
 
   /**
   * generate raw string copy of encryption key
   * @returns {Promise<String>}
-  **/
+  */
   getRaw() {
     return lib.enc_secret_key_get(this.app.connection, this.ref);
   }
@@ -107,7 +107,7 @@ class SecEncKey extends h.NetworkObject {
   * used by autoref to clean the reference
   * @param {SAFEApp} app
   * @param {handle} ref
-  **/
+  */
   static free(app, ref) {
     return lib.enc_key_free(app.connection, ref);
   }
@@ -116,7 +116,7 @@ class SecEncKey extends h.NetworkObject {
   * Decrypt the given ciphertext (buffer or string) using the private and public key
   * @arg theirPubKey {PubEncKey} the others public key
   * @returns {Promise<Buffer>} Plaintext
-  **/
+  */
   decrypt(cipher, theirPubKey) {
     return lib.decrypt(this.app.connection, cipher, theirPubKey.ref, this.ref);
   }
@@ -125,7 +125,7 @@ class SecEncKey extends h.NetworkObject {
 
 /**
 * Holds an asymmetrict keypair
-**/
+*/
 class KeyPair {
 
   constructor(app, pub, secret) {
@@ -138,7 +138,7 @@ class KeyPair {
   /**
   * get the Public Encryption key instance of this keypair
   * @returns {PubEncKey}
-  **/
+  */
   get pubEncKey() {
     return this._public;
   }
@@ -147,7 +147,7 @@ class KeyPair {
   /**
   * get the Secrect Encryption key instance of this keypair
   * @returns {secEncKey}
-  **/
+  */
   get secEncKey() {
     return this._secret;
   }
@@ -155,7 +155,7 @@ class KeyPair {
   /**
   * Decrypt the given ciphertext with a seal (buffer or string) using the private and public key
   * @returns {Promise<Buffer>} Plaintext
-  **/
+  */
   decryptSealed(cipher) {
     return lib.decrypt_sealed_box(this.app.connection, cipher,
                                   this.pubEncKey.ref, this.secEncKey.ref);
@@ -174,7 +174,7 @@ class CryptoInterface {
   /**
   * @private
   * @param {SAFEApp} app
-  **/
+  */
   constructor(app) {
     this.app = app;
   }
@@ -182,7 +182,7 @@ class CryptoInterface {
   /**
   * Hash the given input with SHA3 Hash
   * @returns {Promise<Buffer>}
-  **/
+  */
   /* eslint-disable class-methods-use-this */
   sha3Hash(inpt) {
     return lib.sha3_hash(inpt);
@@ -194,7 +194,7 @@ class CryptoInterface {
   /**
   * Get the public signing key of this session
   * @returns {Promise<SignKey>}
-  **/
+  */
   getAppPubSignKey() {
     return lib.app_pub_sign_key(this.app.connection)
         .then((c) => h.autoref(new SignKey(this.app, c)));
@@ -203,7 +203,7 @@ class CryptoInterface {
   /**
   * Get the public encryption key of this session
   * @returns {Promise<PubEncKey>}
-  **/
+  */
   getAppPubEncKey() {
     return lib.app_pub_enc_key(this.app.connection)
         .then((c) => h.autoref(new PubEncKey(this.app, c)));
@@ -212,7 +212,7 @@ class CryptoInterface {
   /**
   * Generate a new Asymmetric EncryptionKeyPair
   * @returns {Promise<KeyPair>}
-  **/
+  */
   generateEncKeyPair() {
     return lib.enc_generate_key_pair(this.app.connection)
         .then((r) => new KeyPair(this.app,
@@ -224,7 +224,7 @@ class CryptoInterface {
   /**
   * Generate a new Asymmetric EncryptionKeyPair from raw secret and public keys
   * @returns {Promise<KeyPair>}
-  **/
+  */
   generateEncKeyPairFromRaw(rawPublicKey, rawSecretkey) {
     let pubKey;
     return this.pubEncKeyKeyFromRaw(rawPublicKey)
@@ -237,7 +237,7 @@ class CryptoInterface {
   * Interprete the SignKey from a given raw string
   * @param {String} raw sign key raw bytes as string
   * @returns {Promise<SignKey>}
-  **/
+  */
   getSignKeyFromRaw(raw) {
     return lib.sign_key_new(this.app.connection, raw)
         .then((c) => h.autoref(new SignKey(this.app, c)));
@@ -247,7 +247,7 @@ class CryptoInterface {
   * Interprete the public encryption Key from a given raw string
   * @arg {String} raw public encryption key raw bytes as string
   * @returns {Promise<PubEncKey>}
-  **/
+  */
   pubEncKeyKeyFromRaw(raw) {
     return lib.enc_pub_key_new(this.app.connection, raw)
         .then((c) => h.autoref(new PubEncKey(this.app, c)));
@@ -257,7 +257,7 @@ class CryptoInterface {
   * Interprete the secret encryption Key from a given raw string
   * @arg {String} raw secret encryption key raw bytes as string
   * @returns {Promise<SecEncKey>}
-  **/
+  */
   secEncKeyKeyFromRaw(raw) {
     return lib.enc_secret_key_new(this.app.connection, raw)
         .then((c) => h.autoref(new SecEncKey(this.app, c)));
@@ -266,7 +266,7 @@ class CryptoInterface {
   /**
   * Generate a nonce that can be used when creating private MutableData
   * @returns {Promise<Nonce>} the nonce generated
-  **/
+  */
   /* eslint-disable class-methods-use-this */
   generateNonce() {
     return lib.generate_nonce();

@@ -33,7 +33,7 @@ const makeShareMDataPermissions = nativeH.makeShareMDataPermissions;
 * @private
 * Convert a string into a base64 format and remove
 * characters or symbols which are not valid for a URL like '=' sign.
-**/
+*/
 function urlsafeBase64(str) {
   return (new Buffer(str))
           .toString('base64')
@@ -49,7 +49,7 @@ function urlsafeBase64(str) {
 * authentitcation protocol.
 *
 * Access your instance through ypur {SAFEApp} instance under `.auth`.
-**/
+*/
 class AuthInterface {
 
   /**
@@ -58,7 +58,7 @@ class AuthInterface {
   *
   * @param {SAFEApp} app - the SAFEApp instance that is wired to which
   * is also used to fetch the app's information from.
-  **/
+  */
   constructor(app) {
     this.app = app;
     this._registered = false;
@@ -69,7 +69,7 @@ class AuthInterface {
   * @private
   * Generate the app's URI for the IPC protocol using the app's id
   * and register the URI scheme.
-  **/
+  */
   setupUri() {
     const appInfo = this.app.appInfo;
     const schema = `safe-${urlsafeBase64(appInfo.id).toLowerCase()}`;
@@ -84,7 +84,7 @@ class AuthInterface {
   * Whether or not this is a registered/authenticated session.
   *
   * @returns {Boolean} true if this is an authenticated session
-  **/
+  */
   get registered() {
     return this._registered;
   }
@@ -106,7 +106,7 @@ class AuthInterface {
   *  _public: ['Insert'], // request to insert into public
   *  _other: ['Insert', 'Update'] // request to insert and update
   * }, {own_container: true}) // and we want our own container, too
-  **/
+  */
   genAuthUri(permissions, opts) {
     const perm = makePermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
@@ -155,7 +155,7 @@ class AuthInterface {
   * @returns {String} `safe-auth://`-URI
   * @example // using an Authentication example:
   * app.auth.genConnUri()
-  **/
+  */
   /* eslint-disable class-methods-use-this */
   genConnUri() {
     return lib.encode_unregistered_req();
@@ -163,7 +163,7 @@ class AuthInterface {
 
   /**
   * Open the given Authentication URI to the authenticator
-  **/
+  */
   /* eslint-disable class-methods-use-this */
   openUri(uri) {
     return lib.openUri(uri);
@@ -179,7 +179,7 @@ class AuthInterface {
   * })
   * @returns {String}
   * @arg {Object} containers mapping container name to list of permissions
-  **/
+  */
   genContainerAuthUri(containers) {
     const ctnrs = makePermissions(containers);
     const appInfo = makeAppInfo(this.app.appInfo);
@@ -213,7 +213,7 @@ class AuthInterface {
   * When run in tests, this falls back to the randomly generated version
   * @return {Promise<[String]}
   */
-  getHomeContainer() {
+  getOwnContainer() {
     const appInfo = this.app.appInfo;
     let containerName = `apps/${appInfo.id}`;
     if (appInfo.scope) {
@@ -240,7 +240,7 @@ class AuthInterface {
   * @arg {String} name  name of the container, e.g. `'_public'`
   * @arg {(String||Array<String>)} [permissions=['Read']] permissions to check for
   * @returns {Promise<bool>}
-  **/
+  */
   canAccessContainer(name, permissions) {
     let perms = ['Read'];
     if (permissions) {
@@ -310,7 +310,7 @@ class AuthInterface {
   * Generate a _locally_ registered App with the given permissions, or
   * a local unregistered App if permissions is `null`.
   * @returns {Promise<SAFEApp>} the locally registered/unregistered App instance
-  **/
+  */
   loginForTest(access) {
     if (!inTesting) throw Error('Not supported outside of Dev and Testing Environment!');
     if (access) {
