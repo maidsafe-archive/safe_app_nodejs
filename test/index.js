@@ -15,7 +15,8 @@ describe('External API', () => {
       const appInfo = {
         id: 'net.maidsafe.example.tests',
         name: 'Example Test',
-        vendor: 'MaidSafe Ltd.'
+        vendor: 'MaidSafe Ltd.',
+        scope: null
       };
 
       return fromAuthURI(appInfo, uri)
@@ -27,7 +28,8 @@ describe('External API', () => {
       const appInfo = {
         id: 'net.maidsafe.example.tests',
         name: 'Example Test',
-        vendor: 'MaidSafe Ltd.'
+        vendor: 'MaidSafe Ltd.',
+        scope: null
       };
 
       return fromAuthURI(appInfo, uri)

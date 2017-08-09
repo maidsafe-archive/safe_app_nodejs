@@ -47,9 +47,8 @@ describe('Smoke test', () => {
       });
   });
 
-  it.only('should throw informative error, if appInfo is malformed', () => {
-
-    const malformedApp = appHelpers.autoref(new App({
+  it('should throw informative error, if appInfo is malformed', () => {
+    appHelpers.autoref(new App({
       info: {
         id: 'net.maidsafe.test.javascript.id',
         name: 'JS Test',
@@ -57,10 +56,5 @@ describe('Smoke test', () => {
         scope: null
       }
     }));
-
-    // console.log(malformedApp);
-
-
-  })
-
+  });
 });
