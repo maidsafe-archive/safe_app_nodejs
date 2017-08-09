@@ -27,9 +27,8 @@ class SAFEApp extends EventEmitter {
     super();
 
     const appInfoMustHaveProperties = ['id', 'name', 'vendor', 'scope'];
-    const hasCorrectProperties = appInfoMustHaveProperties.every((prop) => {
-      return Object.prototype.hasOwnProperty.call(appInfo, prop);
-    });
+    const hasCorrectProperties = appInfoMustHaveProperties.every(
+      (prop) => Object.prototype.hasOwnProperty.call(appInfo, prop));
 
     if (!hasCorrectProperties) {
       return makeFfiError(errConst.MALFORMED_APP_INFO.code, errConst.MALFORMED_APP_INFO.msg);
