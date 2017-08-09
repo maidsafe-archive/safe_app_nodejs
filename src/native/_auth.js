@@ -40,6 +40,25 @@ const ContainerPermissions = Struct({
 
 const ContainerPermissionsArray = new ArrayType(ContainerPermissions);
 
+const ShareMDataPermission = new Enum({
+  Insert: 0,
+  Update: 1,
+  Delete: 2,
+  ManagePermissions: 3
+});
+
+const ShareMDataPermissions = new ArrayType(ShareMDataPermission);
+
+/// For use in `ShareMDataReq`. Represents a specific `MutableData` that is being shared.
+const ShareMData = Struct({
+  type_tag: t.u64,
+  name: t.XOR_NAME,
+  access: ShareMDataPermissions,
+  access_len: t.usize,
+});
+
+const ShareMDataArray = new ArrayType(ShareMData);
+
 const AuthReq = Struct({
   app: AppExchangeInfo,
   app_container: ref.types.bool,
@@ -54,6 +73,16 @@ const ContainerReq = Struct({
   containers_len: t.usize,
   containers_cap: t.usize
 });
+
+/// Represents a request to share mutable data
+const ShareMDataReq = Struct({
+  /// Info about the app requesting shared access
+  app: AppExchangeInfo,
+  /// List of MD names & type tags and permissions that need to be shared
+  mdata: ShareMDataArray,
+  /// Length of the mdata array
+  mdata_len: t.usize,
+}
 
 const AppKeys = Struct({
   // /// Owner signing public key
@@ -127,6 +156,29 @@ function makePermissions(perms) {
   }));
 }
 
+function translateXorName(str) {
+  let name = str;
+  if (!Buffer.isBuffer(str)) {
+    const b = new Buffer(str);
+    if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
+    name = t.XOR_NAME(b).ref().readPointer(0);
+  }
+  return name;
+}
+
+function makeShareMDataPermissions(permissions) {
+  return new ShareMDataArray(permissions.map((perm) => {
+    // map to the proper enum
+    const permsArray = new ShareMDataPermissions(perm.perms.map((x) => ShareMDataPermission.get(x)));
+    return ShareMData({
+      type_tag: perm.type_tag,
+      name: translateXorName(perm.name),
+      access: permsArray,
+      access_len: permsArray.length,
+    });
+  }));
+}
+
 function remapEncodeValues(resp) {
   return {
     'req_id': resp[0],
@@ -139,6 +191,7 @@ module.exports = {
     // request
     AuthReq,
     ContainerReq,
+    ShareMDataReq,
     // response
     AuthGranted,
     AccessContInfo,
@@ -147,6 +200,7 @@ module.exports = {
   functions: {
     encode_auth_req: [t.Void, [ ref.refType(AuthReq), 'pointer', 'pointer'] ],
     encode_containers_req: [t.Void, [ref.refType(ContainerReq), 'pointer', 'pointer'] ],
+    encode_share_mdata_req: [t.Void, [ref.refType(ShareMDataReq), 'pointer', 'pointer'] ],
     encode_unregistered_req: [t.Void, ['pointer', 'pointer'] ],
     decode_ipc_msg: [t.Void, [
                       "string", //  (msg: *const c_char,
@@ -154,6 +208,7 @@ module.exports = {
                       "pointer", // o_auth: extern "C" fn(*mut c_void, u32, FfiAuthGranted),
                       "pointer", // o_unregistered: extern "C" fn(*mut c_void, u32, *const u8, usize),
                       "pointer", // o_containers: extern "C" fn(*mut c_void, u32),
+                      "pointer", // o_share_mdata: extern "C" fn(*mut c_void, u32),
                       "pointer", // o_revoked: extern "C" fn(*mut c_void),
                       "pointer"  // o_err: extern "C" fn(*mut c_void, i32, u32)
                       ] ],
@@ -170,6 +225,7 @@ module.exports = {
   helpers: {
     makeAppInfo,
     makePermissions,
+    makeShareMDataPermissions,
   },
   api: {
     access_container_get_names: helpers.Promisified(null, ["pointer", 'uint32'], (args) => {
@@ -192,6 +248,7 @@ module.exports = {
     }, t.bool),
     encode_containers_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_auth_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
+    encode_share_mdata_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_unregistered_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     decode_ipc_msg: function(lib, fn) {
       return (function(str) {
@@ -206,6 +263,9 @@ module.exports = {
                    }),
                    ffi.Callback("void", [t.VoidPtr, "uint32"], function(user_data, req_id) {
                       resolve(["containers", req_id])
+                   }),
+                   ffi.Callback("void", [t.VoidPtr, "uint32"], function(user_data, req_id) {
+                      resolve(["share_mdata", req_id])
                    }),
                    ffi.Callback("void", [t.VoidPtr], function(user_data) {
                       resolve(["revoked"])
