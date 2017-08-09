@@ -92,13 +92,11 @@ class SAFEApp extends EventEmitter {
     let path = parsedUrl.pathname || '';
 
     const tokens = path.split('/');
+    if (!tokens[tokens.length - 1] && tokens.length > 1) {tokens.pop()}
+
     if (!tokens[tokens.length - 1].split('.')[1]) {
       tokens.push('index.html');
       path = tokens.join('/');
-      const doubleSeparatorRegExp = new RegExp('//');
-      if (doubleSeparatorRegExp.test(path)) {
-        path = path.replace(doubleSeparatorRegExp, '/');
-      }
     }
 
     // lets' unpack
