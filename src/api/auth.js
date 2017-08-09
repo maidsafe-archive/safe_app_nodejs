@@ -27,6 +27,7 @@ const inTesting = require('../consts').inTesting;
 
 const makeAppInfo = nativeH.makeAppInfo;
 const makePermissions = nativeH.makePermissions;
+const makeShareMDataPermissions = nativeH.makeShareMDataPermissions;
 
 /**
 * @private
@@ -119,6 +120,36 @@ class AuthInterface {
   }
 
   /**
+  * Generate a `'safe-auth'`-URI to request permissions
+  * on arbitrary owned MutableData's.
+  *
+  * @param {Object} permissions - mapping the MutableData's XoR names
+  *                  to a list of permissions you want to request
+  *
+  * @returns {String} `safe-auth://`-URI
+  * @example // example of requesting permissions for a couple of MutableData's:
+  * app.auth.genShareMDataUri([
+  *  { type_tag: 15001,   // request for MD with tag 15001
+  *    name: 'XoRname1',  // request for MD located at address 'XoRname1'
+  *    perms: ['Insert'], // request for inserting into the referenced MD
+  *  },
+  *  { type_tag: 15020,   // request for MD with tag 15020
+  *    name: 'XoRname2',  // request for MD located at address 'XoRname2'
+  *    perms: ['Insert', `Update`], // request for updating and inserting into the referenced MD
+  *  }
+  * ])
+  **/
+  genShareMDataUri(permissions) {
+    const mdatasPerms = makeShareMDataPermissions(permissions);
+    const appInfo = makeAppInfo(this.app.appInfo);
+    return lib.encode_share_mdata_req(new types.ShareMDataReq({
+      app: appInfo,
+      mdata: mdatasPerms,
+      mdata_len: mdatasPerms.length
+    }).ref());
+  }
+
+  /**
   * Generate an unregistered connection URI for the app.
   *
   * @returns {String} `safe-auth://`-URI
@@ -141,6 +172,7 @@ class AuthInterface {
 
   /**
   * Generate a `'safe-auth'`-URI to request further container permissions
+  *
   * @example // generating a container authorisation URI:
   * app.auth.genContainerAuthUri(
   *  _publicNames: ['Insert'], // request to insert into publicNames
@@ -243,20 +275,32 @@ class AuthInterface {
     // making the URI invalid for decoding.
     const sanitisedUri = responseUri.replace(/:\/+/g, ':'); // Convert a substring with ':' followed by any number of '/' to ':'
     return lib.decode_ipc_msg(sanitisedUri).then((resp) => {
-      // we can only handle 'granted' and 'unregistered' request
-      if (resp[0] === 'unregistered') {
-        this._registered = false;
-        return lib.app_unregistered(this.app, resp[1]);
-      } else if (resp[0] === 'granted') {
-        const authGranted = resp[1];
-        this._registered = true;
-        return lib.app_registered(this.app, authGranted);
-        // FIXME: in the future: automatically check for the
-        // containers, too
-        // .then((app) =>
-        //   this.refreshContainerAccess().then(() => app));
+      const ipcMsgType = resp[0];
+      // we handle 'granted', 'unregistered', 'containers' and 'share_mdata' types
+      switch(ipcMsgType) {
+        case 'unregistered': {
+          this._registered = false;
+          return lib.app_unregistered(this.app, resp[1]);
+          break;
+        }
+        case 'granted': {
+          const authGranted = resp[1];
+          this._registered = true;
+          return lib.app_registered(this.app, authGranted)
+            .then((app) => this.refreshContainersPermissions()
+              .then(() => app)
+            );
+          break;
+        }
+        case 'containers':
+          return this.refreshContainersPermissions();
+          break;
+        case 'share_mdata':
+          return Promise.resolve();
+          break;
+        default:
+          return Promise.reject(resp);
       }
-      return Promise.reject(resp);
     });
   }
 
