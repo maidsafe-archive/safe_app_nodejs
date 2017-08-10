@@ -138,7 +138,7 @@ class AuthInterface {
   *    perms: ['Insert', `Update`], // request for updating and inserting into the referenced MD
   *  }
   * ])
-  **/
+  */
   genShareMDataUri(permissions) {
     const mdatasPerms = makeShareMDataPermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
@@ -277,27 +277,28 @@ class AuthInterface {
     return lib.decode_ipc_msg(sanitisedUri).then((resp) => {
       const ipcMsgType = resp[0];
       // we handle 'granted', 'unregistered', 'containers' and 'share_mdata' types
-      switch(ipcMsgType) {
+      switch (ipcMsgType) {
         case 'unregistered': {
           this._registered = false;
           return lib.app_unregistered(this.app, resp[1]);
-          break;
         }
         case 'granted': {
           const authGranted = resp[1];
           this._registered = true;
-          return lib.app_registered(this.app, authGranted)
-            .then((app) => this.refreshContainersPermissions()
-              .then(() => app)
-            );
-          break;
+          return lib.app_registered(this.app, authGranted);
+            // TODO: in the future: automatically refresh permissions
+            //  .then((app) => this.refreshContainersPermissions()
+            //    .then(() => app)
+            //  );
         }
         case 'containers':
-          return this.refreshContainersPermissions();
-          break;
+          this._registered = true;
+          return Promise.resolve(this.app);
+          // TODO: in the future: automatically refresh permissions
+          //  return this.refreshContainersPermissions();
         case 'share_mdata':
-          return Promise.resolve();
-          break;
+          this._registered = true;
+          return Promise.resolve(this.app);
         default:
           return Promise.reject(resp);
       }
