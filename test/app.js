@@ -47,14 +47,27 @@ describe('Smoke test', () => {
       });
   });
 
-  it('should throw informative error, if appInfo is malformed', () => {
-    appHelpers.autoref(new App({
-      info: {
+  it('should throw informative error, if App info is malformed', () => {
+    should.throws((function() {
+      return appHelpers.autoref(new App({
+        info: {
+          id: 'net.maidsafe.test.javascript.id',
+          name: 'JS Test',
+          vendor: 'MaidSafe Ltd.',
+          scope: null
+        }
+      }));
+    }));
+  });
+
+  it('should throw informative error, if App properties, excepting scope, are empty', () => {
+    should.throws((function() {
+      return appHelpers.autoref(new App({
         id: 'net.maidsafe.test.javascript.id',
         name: 'JS Test',
-        vendor: 'MaidSafe Ltd.',
+        vendor: '',
         scope: null
-      }
+      }));
     }));
   });
 });
