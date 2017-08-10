@@ -26,9 +26,8 @@ class SAFEApp extends EventEmitter {
   constructor(appInfo, networkStateCallBack) {
     super();
 
-    this.validateAppInfo(appInfo);
-
     this._appInfo = appInfo;
+    this.validateAppInfo();
     this.networkState = consts.NET_STATE_INIT;
     this._networkStateCallBack = networkStateCallBack;
     this.connection = null;
@@ -86,18 +85,17 @@ class SAFEApp extends EventEmitter {
   /*
   * Validates appInfo and properly handles error
   */
-  validateAppInfo(appInfo) {
+  validateAppInfo() {
+    const appInfo = this._appInfo;
     const appInfoMustHaveProperties = ['id', 'name', 'vendor', 'scope'];
     const hasCorrectProperties = appInfoMustHaveProperties.every((prop) => {
-      if(prop === 'scope') {
+      if (prop === 'scope') {
         const bool = Object.prototype.hasOwnProperty.call(appInfo, prop);
         return bool;
       }
       const bool = Object.prototype.hasOwnProperty.call(appInfo, prop) && appInfo[prop];
       return bool;
     });
-
-
 
     if (!hasCorrectProperties) {
       throw makeFfiError(errConst.MALFORMED_APP_INFO.code, errConst.MALFORMED_APP_INFO.msg);

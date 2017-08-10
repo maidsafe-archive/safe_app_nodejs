@@ -48,7 +48,7 @@ describe('Smoke test', () => {
   });
 
   it('should throw informative error, if App info is malformed', () => {
-    should.throws((function() {
+    should.throws((() => {
       return appHelpers.autoref(new App({
         info: {
           id: 'net.maidsafe.test.javascript.id',
@@ -61,7 +61,7 @@ describe('Smoke test', () => {
   });
 
   it('should throw informative error, if App properties, excepting scope, are empty', () => {
-    should.throws((function() {
+    should.throws((() => {
       return appHelpers.autoref(new App({
         id: 'net.maidsafe.test.javascript.id',
         name: 'JS Test',
