@@ -49,24 +49,24 @@ describe('Smoke test', () => {
 
   it('should throw informative error, if App info is malformed', () => {
     const test = () => appHelpers.autoref(new App({
-        info: {
-          id: 'net.maidsafe.test.javascript.id',
-          name: 'JS Test',
-          vendor: 'MaidSafe Ltd.',
-          scope: null
-        }
-      }));
+      info: {
+        id: 'net.maidsafe.test.javascript.id',
+        name: 'JS Test',
+        vendor: 'MaidSafe Ltd.',
+        scope: null
+      }
+    }));
 
     should.throws(test);
   });
 
   it('should throw informative error, if App properties, excepting scope, are empty', () => {
     const test = () => appHelpers.autoref(new App({
-        id: 'net.maidsafe.test.javascript.id',
-        name: 'JS Test',
-        vendor: '',
-        scope: null
-      }));
+      id: 'net.maidsafe.test.javascript.id',
+      name: 'JS Test',
+      vendor: '',
+      scope: null
+    }));
 
     should.throws(test);
   });
