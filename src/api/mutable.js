@@ -3,6 +3,7 @@ const lib = require('../native/lib');
 const t = require('../native/types');
 const emulations = require('./emulations');
 const { SignKey } = require('./crypto');
+const CONST = require('../consts');
 
 /**
 * @private
@@ -276,8 +277,7 @@ class Entries extends h.NetworkObject {
     const userMetaData = new t.UserMetadata({name, description});
     return lib.mdata_encode_metadata(userMetaData)
       .then((encodedMeta) => {
-        console.log('encodedMeta', encodedMeta)
-        return this.insert('_metadata', encodedMeta);
+        return this.insert(CONST.MD_META_KEY, encodedMeta);
       });
   }
 
