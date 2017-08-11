@@ -87,13 +87,10 @@ class SAFEApp extends EventEmitter {
   */
   validateAppInfo() {
     const appInfo = this._appInfo;
-    const appInfoMustHaveProperties = ['id', 'name', 'vendor', 'scope'];
+    const appInfoMustHaveProperties = ['id', 'name', 'vendor'];
+    let bool = false;
     const hasCorrectProperties = appInfoMustHaveProperties.every((prop) => {
-      if (prop === 'scope') {
-        const bool = Object.prototype.hasOwnProperty.call(appInfo, prop);
-        return bool;
-      }
-      const bool = Object.prototype.hasOwnProperty.call(appInfo, prop) && appInfo[prop];
+      bool = Object.prototype.hasOwnProperty.call(appInfo, prop) && appInfo[prop];
       return bool;
     });
 
