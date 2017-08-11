@@ -15,6 +15,7 @@ const VoidPtr = ref.refType(Void);
 const usize = ref.types.size_t;
 const bool = ref.types.bool;
 const NULL = ref.types.NULL;
+const CString = ref.types.CString;
 
 const u8Array = ArrayType(u8);
 const XOR_NAME = ArrayType(u8, 32);
@@ -52,7 +53,8 @@ module.exports = {
     u8Pointer,
     Void,
     usize,
-    NULL
+    NULL,
+    CString
   },
   helpers: {
     fromCString: (cstr) => cstr.readCString(),

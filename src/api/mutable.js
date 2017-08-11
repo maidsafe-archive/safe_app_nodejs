@@ -272,6 +272,15 @@ class Entries extends h.NetworkObject {
     return lib.mdata_entries_insert(this.app.connection, this.ref, keyName, value);
   }
 
+  setMetaData(name, description) {
+    const userMetaData = new t.UserMetadata({name, description});
+    return lib.mdata_encode_metadata(userMetaData)
+      .then((encodedMeta) => {
+        console.log('encodedMeta', encodedMeta)
+        return this.insert('_metadata', encodedMeta);
+      });
+  }
+
   /**
   * Create a new mutation transaction for the entries
   * @return {Promise<EntryMutationTransaction>} the mutation transaction object

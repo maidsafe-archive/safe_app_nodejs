@@ -40,21 +40,18 @@ const ContainerPermissions = Struct({
 
 const ContainerPermissionsArray = new ArrayType(ContainerPermissions);
 
-const ShareMDataPermission = new Enum({
-  Insert: 0,
-  Update: 1,
-  Delete: 2,
-  ManagePermissions: 3
+const ShareMDataPermissionSet = Struct({
+  Insert: t.bool,
+  Update: t.bool,
+  Delete: t.bool,
+  ManagePermissions: t.bool
 });
-
-const ShareMDataPermissions = new ArrayType(ShareMDataPermission);
 
 /// For use in `ShareMDataReq`. Represents a specific `MutableData` that is being shared.
 const ShareMData = Struct({
   type_tag: t.u64,
   name: t.XOR_NAME,
-  access: ShareMDataPermissions,
-  access_len: t.usize,
+  access: ShareMDataPermissionSet
 });
 
 const ShareMDataArray = new ArrayType(ShareMData);
@@ -165,12 +162,15 @@ function translateXorName(str) {
 function makeShareMDataPermissions(permissions) {
   return new ShareMDataArray(permissions.map((perm) => {
     // map to the proper enum
-    const permsArray = new ShareMDataPermissions(perm.perms.map((x) => ShareMDataPermission.get(x)));
+    const permsObj = {};
+    perm.perms.map((x) => {
+      permsObj[x] = true;
+    });
+    const permsArray = new ShareMDataPermissionSet(permsObj);
     return ShareMData({
       type_tag: perm.type_tag,
       name: translateXorName(perm.name),
-      access: permsArray,
-      access_len: permsArray.length,
+      access: permsArray
     });
   }));
 }
