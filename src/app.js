@@ -20,10 +20,13 @@ class SAFEApp extends EventEmitter {
   * @param {AppInfo} appInfo
   * @param {Function} [networkStateCallBack=null] optional callback function
   * to receive network state updates
+  * @param {InitOptions} initilalisation options
   */
-  constructor(appInfo, networkStateCallBack) {
+  constructor(appInfo, networkStateCallBack, options = {log: true, registerScheme: true}) {
     super();
+    lib.init(options);
     this._appInfo = appInfo;
+    this._options = options;
     this.networkState = consts.NET_STATE_INIT;
     this._networkStateCallBack = networkStateCallBack;
     this.connection = null;
@@ -31,7 +34,7 @@ class SAFEApp extends EventEmitter {
       this[`_${key}`] = new api[key](this);
     });
 
-    if (!SAFEApp.logFilename) {
+    if (!SAFEApp.logFilename && options.log) {
       const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
       SAFEApp.logFilename = `${filename}.log`;
       lib.app_init_logging(SAFEApp.logFilename);
@@ -218,7 +221,7 @@ class SAFEApp extends EventEmitter {
   logPath(logFilename) {
     let filename = logFilename;
     if (!logFilename) {
-      filename = SAFEApp.logFilename;
+      return SAFEApp.logFilename;
     }
     return lib.app_output_log_path(filename);
   }
@@ -229,10 +232,11 @@ class SAFEApp extends EventEmitter {
   * @param {String} authUri - URI containing the authentication info
   * @param {Function} [networkStateCallBack=null] optional callback function
   * to receive network state updates
+  * @param {InitOptions}  initialisation options
   * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp
   */
-  static fromAuthUri(appInfo, authUri, networkStateCallBack) {
-    const app = autoref(new SAFEApp(appInfo, networkStateCallBack));
+  static fromAuthUri(appInfo, authUri, networkStateCallBack, options) {
+    const app = autoref(new SAFEApp(appInfo, networkStateCallBack, options));
     return app.auth.loginFromURI(authUri);
   }
 
@@ -287,13 +291,6 @@ class SAFEApp extends EventEmitter {
     lib.app_free(app.connection);
   }
 
-  static failedToLoadLibs() {
-    if (lib.isLibLoadErr) {
-      return lib.isLibLoadErr;
-    } else if (lib.isSysUriLibLoadErr) {
-      return lib.isSysUriLibLoadErr;
-    }
-  }
 }
 
 SAFEApp.logFilename = null;

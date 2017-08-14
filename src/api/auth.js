@@ -57,10 +57,14 @@ class AuthInterface {
   *
   * @param {SAFEApp} app - the SAFEApp instance that is wired to which
   * is also used to fetch the app's information from.
+  * @param {InitOptions} initialisation options
   */
   constructor(app) {
     this.app = app;
     this._registered = false;
+    if (app._options.hasOwnProperty('registerScheme') && !app._options.registerScheme) {
+      return;
+    }
     this.setupUri();
   }
 
