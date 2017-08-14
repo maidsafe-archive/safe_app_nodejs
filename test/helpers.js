@@ -8,7 +8,7 @@ function createTestApp(scope) {
     name: 'JS Test',
     vendor: 'MaidSafe Ltd.',
     scope
-  }));
+  }, null, {log: false}));
 }
 
 function createAnonTestApp(scope) {
