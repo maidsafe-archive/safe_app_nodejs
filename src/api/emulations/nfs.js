@@ -12,7 +12,7 @@ function isString(arg) {
 *
 * _Note_: As this application layer, the network does not check any
 * of the metadata provided.
-**/
+*/
 class File {
 
   /**
@@ -21,7 +21,7 @@ class File {
   *
   * @param {Object} ref the file's metadata including the XoR-name
   * of ImmutableData containing the file's content.
-  **/
+  */
   constructor(ref, connection, fileCtx) {
     this._ref = ref;
     this._fileCtx = fileCtx;
@@ -32,7 +32,7 @@ class File {
   * @private
   * Return an instance of the underlying File structure used by the safe_app
   * lib containing the file's metadata.
-  **/
+  */
   get ref() {
     const data = {
       size: this._ref.size,
@@ -65,7 +65,7 @@ class File {
   /**
   * The dataMapName to read the immutable data at
   * @returns {Buffer} XoR-name
-  **/
+  */
   get dataMapName() {
     return this._ref.data_map_name;
   }
@@ -73,7 +73,7 @@ class File {
   /**
   * When was this created? in UTC.
   * @return {Date}
-  **/
+  */
   get created() {
     return nativeH.fromSafeLibTime(this._ref.created_sec, this._ref.created_nsec);
   }
@@ -81,7 +81,7 @@ class File {
   /**
   * When was this last modified? in UTC.
   * @return {Date}
-  **/
+  */
   get modified() {
     return nativeH.fromSafeLibTime(this._ref.modified_sec, this._ref.modified_nsec);
   }
@@ -89,7 +89,7 @@ class File {
   /**
   * Get file size
   * @returns {Promise<Number>}
-  **/
+  */
   size() {
     if (!this._fileCtx) {
       return Promise.resolve(this._ref.size);
@@ -109,7 +109,7 @@ class File {
   * @param {Number} position
   * @param {Number} len
   * @returns {Promise<[Data, Size]>}
-  **/
+  */
   read(position, len) {
     if (!this._fileCtx) {
       return Promise.reject(new Error('File is not open'));
@@ -121,7 +121,7 @@ class File {
   * Write file
   * @param {Buffer|String} content
   * @returns {Promise}
-  **/
+  */
   write(fileContent) {
     if (!this._fileCtx) {
       return Promise.reject(new Error('File is not open'));
@@ -132,7 +132,7 @@ class File {
   /**
   * Close file
   * @returns {Promise}
-  **/
+  */
   close() {
     if (!this._fileCtx) {
       return Promise.reject(new Error('File is not open'));
@@ -150,7 +150,7 @@ class File {
   /**
   * Which version was this? Equals the underlying MutableData's entry version.
   * @return {Number}
-  **/
+  */
   get version() {
     return this._ref.version;
   }
@@ -160,7 +160,7 @@ class File {
   * Update the file's version. This shall be only internally used and only
   * when its underlying entry in the MutableData is updated
   * @param {Integer} version version to set
-  **/
+  */
   set version(version) {
     this._ref.version = version;
   }
@@ -168,14 +168,14 @@ class File {
 
 /**
 * NFS Emulation on top of an MData
-**/
+*/
 class NFS {
   /**
   * @private
   * Instantiate the NFS emulation layer rapping a MutableData instance
   *
   * @param {MutableData} mData - the MutableData to wrap around
-  **/
+  */
   constructor(mData) {
     this.mData = mData;
   }
@@ -184,7 +184,7 @@ class NFS {
   * Helper function to create and save file to the network
   * @param {String|Buffer} content - file contents
   * @returns {File} a newly created file
-  **/
+  */
   create(content) {
     return this.open(null, consts.OPEN_MODE_OVERWRITE)
       .then((file) => file.write(content)
@@ -197,7 +197,7 @@ class NFS {
   * Find the file of the given filename (aka keyName in the MutableData)
   * @param {String} fileName - the path/file name
   * @returns {Promise<File>} - the file found for that path
-  **/
+  */
   fetch(fileName) {
     return lib.dir_fetch_file(this.mData.app.connection, this.mData.ref, fileName)
       .then((res) => new File(res, this.mData.app.connection, null));
@@ -209,7 +209,7 @@ class NFS {
   * @param {(String|Buffer)} fileName - the path to store the file under
   * @param {File} file - the file to serialise and store
   * @returns {Promise<File>} - the same file
-  **/
+  */
   insert(fileName, file) {
     return lib.dir_insert_file(
         this.mData.app.connection, this.mData.ref, fileName, file.ref.ref()
@@ -228,7 +228,7 @@ class NFS {
   * @param {Number} version - the version successor number, to ensure you
            are overwriting the right one
   * @returns {Promise<File>} - the same file
-  **/
+  */
   update(fileName, file, version) {
     return lib.dir_update_file(this.mData.app.connection, this.mData.ref, fileName,
                            file.ref.ref(), version)
@@ -241,7 +241,7 @@ class NFS {
   * @param {(String|Buffer)} fileName
   * @param {Number} version
   * @returns {Promise}
-  **/
+  */
   delete(fileName, version) {
     return lib.dir_delete_file(this.mData.app.connection, this.mData.ref, fileName, version);
   }
@@ -257,7 +257,7 @@ class NFS {
   * @param {File} file
   * @param {Number} [openMode=OPEN_MODE_OVERWRITE]
   * @returns {Promise<File>}
-  **/
+  */
   open(file, openMode) {
     const now = nativeH.toSafeLibTime(new Date());
     const metadata = {
