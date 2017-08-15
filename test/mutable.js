@@ -779,6 +779,13 @@ describe('Mutable Data', () => {
     );
   });
 
+  describe('Metadata', () => {
+    it('set metadata', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES, 'name of MD', 'description of MD'))
+        .then((md) => should(md.get(consts.MD_META_KEY)).be.fulfilled())
+    );
+  });
+
   describe('NFS emulation', () => {
     before(function bfore(done) {
       // Let's get a new instance of the app to not hit the PUTs limit
