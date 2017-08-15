@@ -22,14 +22,15 @@ class SAFEApp extends EventEmitter {
   * to receive network state updates
   * @param {InitOptions} initilalisation options
   */
-  constructor(appInfo, networkStateCallBack, options = {
-    log: true,
-    registerScheme: true
-  }) {
+  constructor(appInfo, networkStateCallBack, options) {
     super();
-    lib.init(options);
+    this.options = Object.assign({
+      log: true,
+      registerScheme: true
+    }, options);
+    console.log(this.options);
+    lib.init(this.options);
     this._appInfo = appInfo;
-    this.options = options;
     this.networkState = consts.NET_STATE_INIT;
     this._networkStateCallBack = networkStateCallBack;
     this.connection = null;
@@ -38,7 +39,7 @@ class SAFEApp extends EventEmitter {
       this[`_${key}`] = new api[key](this);
     });
 
-    if (options.log) {
+    if (this.options.log) {
       let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
       filename = `${filename}.log`;
       lib.app_init_logging(filename)
