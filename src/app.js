@@ -25,7 +25,9 @@ class SAFEApp extends EventEmitter {
     super();
     this._appInfo = appInfo;
     this.networkState = consts.NET_STATE_INIT;
-    this._networkStateCallBack = networkStateCallBack;
+    if (networkStateCallBack) {
+      this._networkStateCallBack = networkStateCallBack;
+    }
     this.connection = null;
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
