@@ -28,7 +28,6 @@ class SAFEApp extends EventEmitter {
       log: true,
       registerScheme: true
     }, options);
-    console.log(this.options);
     lib.init(this.options);
     this._appInfo = appInfo;
     this.networkState = consts.NET_STATE_INIT;
