@@ -1,6 +1,5 @@
 const App = require('./app');
 const autoref = require('./helpers').autoref;
-const errConst = require('./error_const');
 const version = require('../package.json').version;
 
 /**
@@ -21,7 +20,7 @@ const version = require('../package.json').version;
 * holds the additional intialisation options for the App.
 * @param {Boolean=} registerScheme to register auth scheme with the OS. Defaults to true
 * @param {Boolean=} log to enable or disable back end logging. Defaults to true
-* @param {String=} libPath path to the folder where the native libs can 
+* @param {String=} libPath path to the folder where the native libs can
 *        be found. Defaults to current folder path.
 */
 
@@ -31,7 +30,7 @@ const version = require('../package.json').version;
  * @param {Function} [networkStateCallBack=null] callback function
  *        to receive network state updates
  * @param {InitOptions=} options initialisation options
- * 
+ *
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  * @example // Usage Example
  * const safe = require('safe');
@@ -54,8 +53,8 @@ const version = require('../package.json').version;
 function initializeApp(appInfo, networkStateCallBack, options) {
   try {
     const app = autoref(new App(appInfo, networkStateCallBack, options));
-    return Promise.resolve(app);   
-  } catch(e) {
+    return Promise.resolve(app);
+  } catch (e) {
     return Promise.reject(e);
   }
 }

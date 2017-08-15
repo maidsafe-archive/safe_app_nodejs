@@ -18,7 +18,7 @@ describe('External API', () => {
         vendor: 'MaidSafe Ltd.'
       };
 
-      return fromAuthURI(appInfo, uri, {log: false})
+      return fromAuthURI(appInfo, uri, { log: false })
         .then((app) => should(app.auth.registered).be.true());
     });
 
@@ -30,7 +30,7 @@ describe('External API', () => {
         vendor: 'MaidSafe Ltd.'
       };
 
-      return fromAuthURI(appInfo, uri, {log: false})
+      return fromAuthURI(appInfo, uri, { log: false })
         .then((app) => should(app.auth.registered).not.be.true());
     });
   });

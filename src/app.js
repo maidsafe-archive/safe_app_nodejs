@@ -22,11 +22,14 @@ class SAFEApp extends EventEmitter {
   * to receive network state updates
   * @param {InitOptions} initilalisation options
   */
-  constructor(appInfo, networkStateCallBack, options = {log: true, registerScheme: true}) {
+  constructor(appInfo, networkStateCallBack, options = {
+    log: true,
+    registerScheme: true
+  }) {
     super();
     lib.init(options);
     this._appInfo = appInfo;
-    this._options = options;
+    this.options = options;
     this.networkState = consts.NET_STATE_INIT;
     this._networkStateCallBack = networkStateCallBack;
     this.connection = null;
@@ -40,8 +43,8 @@ class SAFEApp extends EventEmitter {
       filename = `${filename}.log`;
       lib.app_init_logging(filename)
         .then(() => lib.app_output_log_path(filename))
-        .then((logPath) => this.logFilePath = logPath)
-        .catch(err => console.error('Logger initilalisation failed', err));
+        .then((logPath) => { this.logFilePath = logPath; })
+        .catch((err) => { console.error('Logger initilalisation failed', err); });
     }
   }
 
@@ -223,7 +226,7 @@ class SAFEApp extends EventEmitter {
   */
   /* eslint-disable class-methods-use-this */
   logPath(logFilename) {
-    let filename = logFilename;
+    const filename = logFilename;
     if (!logFilename) {
       return this.logPath;
     }

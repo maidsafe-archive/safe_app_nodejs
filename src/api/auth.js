@@ -62,7 +62,7 @@ class AuthInterface {
   constructor(app) {
     this.app = app;
     this._registered = false;
-    if (app._options.hasOwnProperty('registerScheme') && !app._options.registerScheme) {
+    if (app.options.registerScheme === false) {
       return;
     }
     this.setupUri();
