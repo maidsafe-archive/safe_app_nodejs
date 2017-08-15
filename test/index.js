@@ -17,19 +17,19 @@ describe('Smoke testing', () => {
 
 describe('External API', () => {
   describe('fromAuthURI', () => {
-    it('should connect registered', () => fromAuthURI(appInfo, h.authUris.registeredUri)
+    it('should connect registered', () => fromAuthURI(appInfo, h.authUris.registeredUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
 
-    it('should connect unregistered', () => fromAuthURI(appInfo, h.authUris.unregisteredUri)
+    it('should connect unregistered', () => fromAuthURI(appInfo, h.authUris.unregisteredUri, null, { log: false })
         .then((app) => should(app.auth.registered).not.be.true())
     );
 
-    it('should connect with authorised containers', () => fromAuthURI(appInfo, h.authUris.containersUri)
+    it('should connect with authorised containers', () => fromAuthURI(appInfo, h.authUris.containersUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
 
-    it('should connect with authorised shared MD', () => fromAuthURI(appInfo, h.authUris.sharedMdataUri)
+    it('should connect with authorised shared MD', () => fromAuthURI(appInfo, h.authUris.sharedMdataUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
   });

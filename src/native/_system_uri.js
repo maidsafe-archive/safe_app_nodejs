@@ -9,8 +9,8 @@ const dir = path.dirname(__filename);
 let ffi = null;
 let isSysUriLibLoadErr = null;
 
-try {
-  ffi = FFI.Library(path.join(dir, SYSTEM_URI_LIB_FILENAME), {
+const init = (options) => {
+  ffi = FFI.Library(path.join(options.libPath || dir, SYSTEM_URI_LIB_FILENAME), {
     open: [t.i32, ['string'] ],
     install: [t.i32, ['string', //bundle
       'string', //vendor
@@ -20,10 +20,7 @@ try {
       'string', //schemes
     ] ],
   });
-} catch (err) {
-  console.error(`Failed to load system_uri binary => ${err}`);
-  isSysUriLibLoadErr = err;
-}
+};
 
 function openUri(uri) {
   if (!ffi) {
@@ -56,8 +53,8 @@ function registerUriScheme(appInfo, schemes) {
 // FIXME: As long as `safe-app` doesn't expose system uri itself, we'll
 // patch it directly on it. This should later move into its own sub-module
 // and take care of mobile support for other platforms, too.
-module.exports = function(other) {
+module.exports = function(other, options) {
   other.openUri = openUri;
   other.registerUriScheme = registerUriScheme;
-  other.isSysUriLibLoadErr = isSysUriLibLoadErr;
+  init(options);
 }
