@@ -31,7 +31,9 @@ class SAFEApp extends EventEmitter {
     lib.init(this.options);
     this._appInfo = appInfo;
     this.networkState = consts.NET_STATE_INIT;
-    this._networkStateCallBack = networkStateCallBack;
+    if (networkStateCallBack) {
+      this._networkStateCallBack = networkStateCallBack;
+    }
     this.connection = null;
     this.logFilePath = null;
     Object.getOwnPropertyNames(api).forEach((key) => {
@@ -228,7 +230,7 @@ class SAFEApp extends EventEmitter {
   logPath(logFilename) {
     const filename = logFilename;
     if (!logFilename) {
-      return this.logPath;
+      return this.logFilePath;
     }
     return lib.app_output_log_path(filename);
   }

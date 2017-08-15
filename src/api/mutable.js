@@ -3,6 +3,7 @@ const lib = require('../native/lib');
 const t = require('../native/types');
 const emulations = require('./emulations');
 const { SignKey } = require('./crypto');
+const CONST = require('../consts');
 
 /**
 * @private
@@ -382,18 +383,27 @@ class MutableData extends h.NetworkObject {
   /**
   * Easily set up a newly (not yet created) MutableData with
   * the app having full-access permissions (and no other).
+  * The name and description parameters are metadata for the MutableData which
+  * can be used to identify what this MutablaData contains.
+  * The metadata is particularly used by the Authenticator when another application
+  * has requested mutation permissions on this MutableData, so the user
+  * can make a better decision to either allow or deny such a request based on
+  * this information.
   *
   * @param {Object} data a key-value payload it should
   *        create the data with
+  * @param {(String|Buffer)} name a descriptive name for the MutableData
+  * @param {(String|Buffer)} description a detailed description for the MutableData content
+  *
   * @returns {Promise<MutableData>} self
   * @example
   * app.mutableData.newRandomPublic(tagtype)
   *   .then((md) => md.quickSetup({
   *        key1: 'value1',
   *        key2: 'value2'
-  *      }))
+  *      }, 'My MutableData', 'To store my app\'s data'))
   */
-  quickSetup(data) {
+  quickSetup(data, name, description) {
     return this.app.mutableData.newEntries()
       .then((entries) => {
         if (!data) {
@@ -401,6 +411,15 @@ class MutableData extends h.NetworkObject {
         }
         return Promise.all(Object.getOwnPropertyNames(data).map((key) =>
           entries.insert(key, data[key]))).then(() => entries);
+      })
+      .then((entries) => {
+        if (!name && !description) {
+          return entries;
+        }
+        const userMetadata = new t.UserMetadata({ name, description });
+        return lib.mdata_encode_metadata(userMetadata)
+          .then((encodedMeta) => entries.insert(CONST.MD_META_KEY, encodedMeta))
+          .then(() => entries);
       })
       .then((entries) => this.app.crypto.getAppPubSignKey()
         .then((key) => this.app.mutableData.newPermissionSet()

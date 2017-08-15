@@ -31,6 +31,13 @@ const MDataAction = new Enum({
   ManagePermissions: 3
 });
 
+const UserMetadata = Struct({
+  name: t.CString,
+  description: t.CString
+});
+
+const UserMetadataHandle = ref.refType(UserMetadata);
+
 function bufferLastEntry() {
   let str = new Buffer(arguments[arguments.length - 1]);
   return Array.prototype.slice.call(arguments, 0, arguments.length - 1)
@@ -70,7 +77,7 @@ function permissionsCallBackLastEntry(types) {
   });
 
   return Array.prototype.slice.call(arguments, 1, arguments.length - 1)
-            .concat(cb);
+    .concat(cb);
 }
 
 function translatePrivMDInput(appPtr, xorname, tag, secKey, nonce) {
@@ -148,7 +155,9 @@ module.exports = {
     MDataEntriesHandle,
     MDataKeysHandle,
     MDataValuesHandle,
-    MDataEntryActionsHandle
+    MDataEntryActionsHandle,
+    UserMetadata,
+    UserMetadataHandle
   },
   functions: {
     mdata_info_new_public: [t.Void, [t.AppPtr, ref.refType(t.XOR_NAME), t.u64, "pointer", "pointer"]],
@@ -202,6 +211,7 @@ module.exports = {
     mdata_values_len: [t.Void, [t.AppPtr, MDataValuesHandle, 'pointer', 'pointer']],
     mdata_values_for_each: [t.Void, [t.AppPtr, MDataValuesHandle, 'pointer', 'pointer', 'pointer']],
     mdata_values_free: [t.Void, [t.AppPtr, MDataValuesHandle, 'pointer', 'pointer']],
+    mdata_encode_metadata: [t.Void, [UserMetadataHandle, 'pointer', 'pointer']]
   },
   api: {
     // creation
@@ -267,5 +277,10 @@ module.exports = {
     mdata_values_for_each: Promisified(keyValueCallBackLastEntry.bind(null,
           ['pointer', t.u8Pointer, t.usize, t.u64]), []),
     mdata_values_free: Promisified(null, []),
+    mdata_encode_metadata: Promisified((metaHandle) => {
+      return [ref.alloc(UserMetadata, metaHandle)];
+    }, [t.u8Pointer, t.usize], (args) => {
+      return ref.isNull(args[0]) ? args[0] : new Buffer(ref.reinterpret(args[0], args[1], 0))
+    }),
   }
 };
