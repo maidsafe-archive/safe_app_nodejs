@@ -130,6 +130,11 @@ class SAFEApp extends EventEmitter {
                   // directly try the non-slash version
                   return emulation.fetch(path.slice(1, path.length))
                   .catch(() => {
+                    // NOTE: This catch block handles the cases where a user intends/
+                    // to fetch a path without index.html
+                    // For clarification, comment out lines 132 through 143/
+                    // then run mocha in ../test/browsing.js to see which/
+                    // cases fail.
                     const pathArray = path.split('/');
                     if (pathArray[pathArray.length - 1] === 'index.html') {
                       pathArray.pop();
