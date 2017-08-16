@@ -20,7 +20,6 @@ const File = Struct({
 
 const FilePtr = ref.refType(File);
 const FileContextHandle = t.ObjectHandle;
-
 const readFileInfo = (fileInfo) => {
   const file = fileInfo[0].deref();
   let b = new Buffer(file.data_map_name);

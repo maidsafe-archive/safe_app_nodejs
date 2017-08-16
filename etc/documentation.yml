@@ -5,6 +5,7 @@ toc:
   - initializeApp
   - fromAuthURI
   - AppInfo
+  - InitOptions
 
   - name: App Interface
     description: the App and the API it exposes

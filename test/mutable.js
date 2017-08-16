@@ -779,6 +779,13 @@ describe('Mutable Data', () => {
     );
   });
 
+  describe('Metadata', () => {
+    it('set metadata', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES, 'name of MD', 'description of MD'))
+        .then((md) => should(md.get(consts.MD_META_KEY)).be.fulfilled())
+    );
+  });
+
   describe('NFS emulation', () => {
     before(function bfore(done) {
       // Let's get a new instance of the app to not hit the PUTs limit
@@ -835,6 +842,43 @@ describe('Mutable Data', () => {
         })
       )
     );
+
+    it.skip('nfs creation and modification date for read', () => {
+      let creationDate;
+      return app.mutableData.newRandomPrivate(TAG_TYPE)
+        .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
+        .then((nfs) => nfs.create('Hello world')
+          .then((file) => nfs.insert('test.txt', file))
+          .then((fileInserted) => { creationDate = fileInserted.created; })
+          .then(() => nfs.fetch('test.txt'))
+          .then((file) => nfs.open(file, consts.OPEN_MODE_READ))
+          .then((fileToRead) => fileToRead.close()
+            .then(() => {
+              should(creationDate.getTime()).be.equal(fileToRead.created.getTime());
+              should(creationDate.getTime()).be.belowOrEqual(fileToRead.modified.getTime());
+            })
+          )
+        );
+    });
+
+    it('nfs creation and modification dates for write', () => {
+      let creationDate;
+      return app.mutableData.newRandomPrivate(TAG_TYPE)
+        .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
+        .then((nfs) => nfs.create('Hello world')
+          .then((file) => nfs.insert('test.txt', file))
+          .then((fileInserted) => { creationDate = fileInserted.created; })
+          .then(() => nfs.fetch('test.txt'))
+          .then((file) => nfs.open(file, consts.OPEN_MODE_OVERWRITE))
+          .then((fileToUpdate) => fileToUpdate.write('Hello again!')
+            .then(() => fileToUpdate.close())
+            .then(() => {
+              should(creationDate.getTime()).be.equal(fileToUpdate.created.getTime());
+              should(creationDate.getTime()).be.belowOrEqual(fileToUpdate.modified.getTime());
+            })
+          )
+        );
+    });
 
     it('create, delete, update, fetch and finally open to read a file', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs'))

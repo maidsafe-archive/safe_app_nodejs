@@ -1,8 +1,5 @@
-
 const App = require('./app');
 const autoref = require('./helpers').autoref;
-const makeFfiError = require('./native/_error.js');
-const errConst = require('./error_const');
 const version = require('../package.json').version;
 
 /**
@@ -19,10 +16,21 @@ const version = require('../package.json').version;
 */
 
 /**
+* @typedef {Object} InitOptions
+* holds the additional intialisation options for the App.
+* @param {Boolean=} registerScheme to register auth scheme with the OS. Defaults to true
+* @param {Boolean=} log to enable or disable back end logging. Defaults to true
+* @param {String=} libPath path to the folder where the native libs can
+*        be found. Defaults to current folder path.
+*/
+
+/**
  * The main entry point to create a new SAFEApp
  * @param {AppInfo} appInfo
- * @param {Function} [networkStateCallBack=null] optional callback function
- * to receive network state updates
+ * @param {Function} [networkStateCallBack=null] callback function
+ *        to receive network state updates
+ * @param {InitOptions=} options initialisation options
+ *
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  * @example // Usage Example
  * const safe = require('safe');
@@ -42,17 +50,14 @@ const version = require('../package.json').version;
  *        // or wait for a result url
  *        ))
  */
-function initializeApp(appInfo, networkStateCallBack) {
-  const libLoadErr = App.failedToLoadLibs();
-  if (libLoadErr) {
-    return Promise.reject(
-      makeFfiError(errConst.FAILED_TO_LOAD_LIB.code,
-        errConst.FAILED_TO_LOAD_LIB.msg(libLoadErr)));
+function initializeApp(appInfo, networkStateCallBack, options) {
+  try {
+    const app = autoref(new App(appInfo, networkStateCallBack, options));
+    return Promise.resolve(app);
+  } catch (e) {
+    return Promise.reject(e);
   }
-  const app = autoref(new App(appInfo, networkStateCallBack));
-  return Promise.resolve(app);
 }
-
 
 /**
  * If you have received a response URI (which you are allowed
@@ -63,10 +68,11 @@ function initializeApp(appInfo, networkStateCallBack) {
  * @param {String} authUri - the URI coming back from the Authenticator
  * @param {Function} [networkStateCallBack=null] optional callback function
  * to receive network state updates
+ * @param {InitOptions=} options initialisation options
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  */
-function fromAuthURI(appInfo, authUri, networkStateCallBack) {
-  return App.fromAuthUri(appInfo, authUri, networkStateCallBack);
+function fromAuthURI(appInfo, authUri, networkStateCallBack, options) {
+  return App.fromAuthUri(appInfo, authUri, networkStateCallBack, options);
 }
 
 module.exports = {

@@ -20,21 +20,32 @@ class SAFEApp extends EventEmitter {
   * @param {AppInfo} appInfo
   * @param {Function} [networkStateCallBack=null] optional callback function
   * to receive network state updates
+  * @param {InitOptions} initilalisation options
   */
-  constructor(appInfo, networkStateCallBack) {
+  constructor(appInfo, networkStateCallBack, options) {
     super();
+    this.options = Object.assign({
+      log: true,
+      registerScheme: true
+    }, options);
+    lib.init(this.options);
     this._appInfo = appInfo;
     this.networkState = consts.NET_STATE_INIT;
-    this._networkStateCallBack = networkStateCallBack;
+    if (networkStateCallBack) {
+      this._networkStateCallBack = networkStateCallBack;
+    }
     this.connection = null;
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
     });
 
-    if (!SAFEApp.logFilename) {
-      const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
-      SAFEApp.logFilename = `${filename}.log`;
-      lib.app_init_logging(SAFEApp.logFilename);
+    if (this.options.log && !SAFEApp.logFilePath) {
+      let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
+      filename = `${filename}.log`;
+      lib.app_init_logging(filename)
+        .then(() => lib.app_output_log_path(filename))
+        .then((logPath) => { SAFEApp.logFilePath = logPath; })
+        .catch((err) => { console.error('Logger initilalisation failed', err); });
     }
   }
 
@@ -236,9 +247,9 @@ class SAFEApp extends EventEmitter {
   */
   /* eslint-disable class-methods-use-this */
   logPath(logFilename) {
-    let filename = logFilename;
+    const filename = logFilename;
     if (!logFilename) {
-      filename = SAFEApp.logFilename;
+      return SAFEApp.logFilePath;
     }
     return lib.app_output_log_path(filename);
   }
@@ -249,10 +260,11 @@ class SAFEApp extends EventEmitter {
   * @param {String} authUri - URI containing the authentication info
   * @param {Function} [networkStateCallBack=null] optional callback function
   * to receive network state updates
+  * @param {InitOptions}  initialisation options
   * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp
   */
-  static fromAuthUri(appInfo, authUri, networkStateCallBack) {
-    const app = autoref(new SAFEApp(appInfo, networkStateCallBack));
+  static fromAuthUri(appInfo, authUri, networkStateCallBack, options) {
+    const app = autoref(new SAFEApp(appInfo, networkStateCallBack, options));
     return app.auth.loginFromURI(authUri);
   }
 
@@ -307,13 +319,6 @@ class SAFEApp extends EventEmitter {
     lib.app_free(app.connection);
   }
 
-  static failedToLoadLibs() {
-    if (lib.isLibLoadErr) {
-      return lib.isLibLoadErr;
-    } else if (lib.isSysUriLibLoadErr) {
-      return lib.isSysUriLibLoadErr;
-    }
-  }
 }
 
 SAFEApp.logFilename = null;

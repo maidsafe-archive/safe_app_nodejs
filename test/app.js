@@ -26,6 +26,14 @@ describe('Smoke test', () => {
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
+  it('should build some shared MD uri', () => {
+    const app = createTestApp();
+    const sharedMdXorName = h.createRandomXorName();
+    const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
+    return app.auth.genShareMDataUri(perms)
+        .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  });
+
   it('creates registered for testing', function testingCreated() {
     this.timeout(20000);
     const app = createAuthenticatedTestApp();
