@@ -98,6 +98,6 @@ module.exports = {
       let dataAsBuffer = Buffer.isBuffer(data) ? data : Buffer.from(data);
       return [appPtr, fileCtxHandle, dataAsBuffer, dataAsBuffer.length];
     }, null),
-    file_close: h.Promisified(null, [FilePtr], readFileInfo)
+    file_close: h.Promisified(null, FilePtr, readFileInfo)
   }
 }
