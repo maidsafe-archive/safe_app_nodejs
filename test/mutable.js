@@ -843,6 +843,43 @@ describe('Mutable Data', () => {
       )
     );
 
+    it.only('nfs creation and modification date for read', () => {
+      let creationDate;
+      return app.mutableData.newRandomPrivate(TAG_TYPE)
+        .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
+        .then((nfs) => nfs.create('Hello world')
+          .then((file) => nfs.insert('test.txt', file))
+          .then((fileInserted) => { creationDate = fileInserted.created; })
+          .then(() => nfs.fetch('test.txt'))
+          .then((file) => nfs.open(file, consts.OPEN_MODE_READ))
+          .then((fileToRead) => fileToRead.close()
+            .then(() => {
+              should(creationDate.getTime()).be.equal(fileToRead.created.getTime());
+              should(creationDate.getTime()).be.belowOrEqual(fileToRead.modified.getTime());
+            })
+          )
+        );
+    });
+
+    it('nfs creation and modification dates for write', () => {
+      let creationDate;
+      return app.mutableData.newRandomPrivate(TAG_TYPE)
+        .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
+        .then((nfs) => nfs.create('Hello world')
+          .then((file) => nfs.insert('test.txt', file))
+          .then((fileInserted) => { creationDate = fileInserted.created; })
+          .then(() => nfs.fetch('test.txt'))
+          .then((file) => nfs.open(file, consts.OPEN_MODE_OVERWRITE))
+          .then((fileToUpdate) => fileToUpdate.write('Hello again!')
+            .then(() => fileToUpdate.close())
+            .then(() => {
+              should(creationDate.getTime()).be.equal(fileToUpdate.created.getTime());
+              should(creationDate.getTime()).be.belowOrEqual(fileToUpdate.modified.getTime());
+            })
+          )
+        );
+    });
+
     it('create, delete, update, fetch and finally open to read a file', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs'))
         .then((nfs) => nfs.create('Hello world')
