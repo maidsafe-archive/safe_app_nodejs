@@ -62,13 +62,13 @@ module.exports = {
     toSafeLibTime: (now) => {
       const now_msec = now.getTime();
       const now_msec_part = (now_msec % 1000);
-      const now_sec_part = now_msec - now_msec_part;
-      const now_nsec_part = 1000 * now_msec_part;
+      const now_sec_part = (now_msec - now_msec_part) / 1000;
+      const now_nsec_part = 1000000 * now_msec_part;
       return {now_sec_part, now_nsec_part};
     },
     fromSafeLibTime: (sec, nsec_part) => {
       let d = new Date();
-      d.setTime(sec + (nsec_part / 1000));
+      d.setTime((sec * 1000) + (nsec_part / 1000000));
       return d;
     },
     Promisified: function(formatter, rTypes, after) {
