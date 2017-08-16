@@ -780,9 +780,26 @@ describe('Mutable Data', () => {
   });
 
   describe('Metadata', () => {
-    it('set metadata', () => app.mutableData.newRandomPublic(TAG_TYPE)
+    it('set metadata with quickSetup', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES, 'name of MD', 'description of MD'))
         .then((md) => should(md.get(consts.MD_META_KEY)).be.fulfilled())
+    );
+
+    it('set & update metadata', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES))
+        .then((md) => md.setMetadata('name of MD', 'description of MD')
+          .then(() => md.setMetadata('update name', 'update description'))
+          .then(() => should(md.get(consts.MD_META_KEY)).be.fulfilled())
+        )
+    );
+
+    it('empty metadata', () => app.mutableData.newRandomPublic(TAG_TYPE)
+        .then((m) => m.quickSetup(TEST_ENTRIES))
+        .then((md) => md.setMetadata()
+          .then(() => md.setMetadata('name of MD'))
+          .then(() => md.setMetadata(null, 'description of MD'))
+          .then(() => should(md.get(consts.MD_META_KEY)).be.fulfilled())
+        )
     );
   });
 
