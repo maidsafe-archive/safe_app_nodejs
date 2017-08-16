@@ -20,24 +20,7 @@ const File = Struct({
 
 const FilePtr = ref.refType(File);
 const FileContextHandle = t.ObjectHandle;
-
-// NOTE: readFileInfo is called three times when running the only test/
-// in test/mutable.js
-// On the last call for `file.close` on line 855 in test/mutable.js/
-// fileInfo is equal to an empty buffer, throwing the error:/
-// `Uncaught AssertionError: Buffer instance must be at least 96 bytes to back this struct type`/
-// when a deref is attempted
-
-// In test/mutable.js, readFileInfo is called the first time for the first `file.close`,/
-// during the `nfs.create`, it's called the second time for `nfs.fetch`, and/
-// then a third time for the `file.close` on line 855
-
-// QUESTION: Both times `lib.file_close` is being called. Why does the first return/
-// an expected reference to a File struct and the last returns an empty Buffer?
-// See `console.log(fileInfo[0]);` two lines below
-// I can't tell if this is related to our timestamp issue or if they are separate.
 const readFileInfo = (fileInfo) => {
-  console.log(fileInfo[0]);
   const file = fileInfo[0].deref();
   let b = new Buffer(file.data_map_name);
   const data_map_name = t.XOR_NAME(b);
@@ -48,14 +31,6 @@ const readFileInfo = (fileInfo) => {
   const modified_nsec = file.modified_nsec;
   const user_metadata_len = file.user_metadata_len;
   const user_metadata_cap = file.user_metadata_cap;
-
-  console.log(created_sec);
-  // NOTE: When logging modified_sec here, which I'm assuming is only obtained/
-  // from the dereferenced file value returned from safe_client_libs/safe_app, it is/
-  // short by 3 decimal places.
-  // QUESTION: Where else are we manipulating the dates on the front-end/
-  // where the timestamp may be miscalculated?
-  console.log(modified_sec);
 
   let user_metadata_ptr = file.user_metadata_len === 0 ? new Buffer(0) : new Buffer(ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len));
 
@@ -123,6 +98,6 @@ module.exports = {
       let dataAsBuffer = Buffer.isBuffer(data) ? data : Buffer.from(data);
       return [appPtr, fileCtxHandle, dataAsBuffer, dataAsBuffer.length];
     }, null),
-    file_close: h.Promisified(null, FilePtr, readFileInfo)
+    file_close: h.Promisified(null, [FilePtr], readFileInfo)
   }
 }

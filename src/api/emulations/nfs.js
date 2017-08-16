@@ -140,16 +140,11 @@ class File {
 
     const version = this._ref.version;
     return lib.file_close(this._connection, this._fileCtx)
-    // NOTE: Try running a test on test/mutable.js with 5 lines below the end/
-    // of this note both commented and uncommented. See the difference/
-    // between error and value outputs.
-    // This is as far as I can get for the evening.
-    
-      // .then((res) => {
-      //   this._ref = res;
-      //   this._ref.version = version;
-      //   this._fileCtx = null;
-      // });
+      .then((res) => {
+        this._ref = res;
+        this._ref.version = version;
+        this._fileCtx = null;
+      });
   }
 
   /**
