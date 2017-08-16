@@ -35,17 +35,16 @@ class SAFEApp extends EventEmitter {
       this._networkStateCallBack = networkStateCallBack;
     }
     this.connection = null;
-    this.logFilePath = null;
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
     });
 
-    if (this.options.log) {
+    if (this.options.log && !SAFEApp.logFilePath) {
       let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
       filename = `${filename}.log`;
       lib.app_init_logging(filename)
         .then(() => lib.app_output_log_path(filename))
-        .then((logPath) => { this.logFilePath = logPath; })
+        .then((logPath) => { SAFEApp.logFilePath = logPath; })
         .catch((err) => { console.error('Logger initilalisation failed', err); });
     }
   }
@@ -230,7 +229,7 @@ class SAFEApp extends EventEmitter {
   logPath(logFilename) {
     const filename = logFilename;
     if (!logFilename) {
-      return this.logFilePath;
+      return SAFEApp.logFilePath;
     }
     return lib.app_output_log_path(filename);
   }
@@ -301,5 +300,7 @@ class SAFEApp extends EventEmitter {
   }
 
 }
+
+SAFEApp.logFilename = null;
 
 module.exports = SAFEApp;
