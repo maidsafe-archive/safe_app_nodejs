@@ -229,7 +229,7 @@ class SAFEApp extends EventEmitter {
   logPath(logFilename) {
     const filename = logFilename;
     if (!logFilename) {
-      return SAFEApp.logFilePath;
+      return Promise.resolve(SAFEApp.logFilePath);
     }
     return lib.app_output_log_path(filename);
   }
