@@ -385,10 +385,10 @@ class MutableData extends h.NetworkObject {
   * the app having full-access permissions (and no other).
   * The name and description parameters are metadata for the MutableData which
   * can be used to identify what this MutablaData contains.
-  * The metadata is particularly used by the Authenticator when another application
-  * has requested mutation permissions on this MutableData, so the user
-  * can make a better decision to either allow or deny such a request based on
-  * this information.
+  * The metadata is particularly used by the Authenticator when another
+  * application has requested mutation permissions on this MutableData,
+  * so the user can make a better decision to either allow or deny such a
+  * request based on this information.
   *
   * @param {Object} data a key-value payload it should
   *        create the data with
@@ -432,6 +432,33 @@ class MutableData extends h.NetworkObject {
                 .then((pm) => pm.insertPermissionSet(key, pmSet)
                   .then(() => this.put(pm, entries))))))
         .then(() => this));
+  }
+
+  /**
+  * Set the metadata information in the MutableData. Note this can be used
+  * only if the MutableData was already committed to the network, .i.e either
+  * with `put`, with `quickSetup`, or if it is an already existing MutableData
+  * just fetched from the network.
+  * The metadata is particularly used by the Authenticator when another
+  * application has requested mutation permissions on this MutableData,
+  * displaying this information to the user, so the user can make a better
+  * decision to either allow or deny such a request based on it.
+  *
+  * @param {(String|Buffer)} name a descriptive name for the MutableData
+  * @param {(String|Buffer)} description a detailed description for the MutableData content
+  *
+  * @returns {Promise} resolves once finished
+  */
+  setMetadata(name, description) {
+    const userMetadata = new t.UserMetadata({ name, description });
+    return lib.mdata_encode_metadata(userMetadata)
+      .then((encodedMeta) => this.app.mutableData.newMutation()
+        .then((mut) => this.get(CONST.MD_META_KEY)
+          .then((metadata) => mut.update(CONST.MD_META_KEY, encodedMeta, metadata.version + 1)
+            , () => mut.insert(CONST.MD_META_KEY, encodedMeta)
+          )
+          .then(() => this.applyEntriesMutation(mut))
+        ));
   }
 
   /**
@@ -735,7 +762,6 @@ class MutableDataInterface {
     return lib.mdata_entries_new(this.app.connection)
         .then((r) => h.autoref(new Entries(this.app, r)));
   }
-
 
   /**
   * Create a new Mutuable Data object from its serial
