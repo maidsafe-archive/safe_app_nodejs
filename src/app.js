@@ -106,7 +106,7 @@ class SAFEApp extends EventEmitter {
     if (!tokens[tokens.length - 1] && tokens.length > 1) { tokens.pop(); }
 
     if (!tokens[tokens.length - 1].split('.')[1]) {
-      tokens.push('index.html');
+      tokens.push(consts.INDEX_HTML);
       path = tokens.join('/');
     }
 
@@ -134,9 +134,9 @@ class SAFEApp extends EventEmitter {
               if (err.code === -305 || err.code === -301) {
                 let newPath;
                 if (!path || !path.length) {
-                  newPath = '/index.html';
+                  newPath = `/${consts.INDEX_HTML}`;
                 } else if (path[path.length - 1] === '/') {
-                  newPath = `${path}index.html`;
+                  newPath = `${path}${consts.INDEX_HTML}`;
                 } else if (path[0] === '/') {
                   // directly try the non-slash version
                   return emulation.fetch(path.slice(1, path.length))
@@ -147,7 +147,7 @@ class SAFEApp extends EventEmitter {
                     // then run mocha in ../test/browsing.js to see which/
                     // cases fail.
                     const pathArray = path.split('/');
-                    if (pathArray[pathArray.length - 1] === 'index.html') {
+                    if (pathArray[pathArray.length - 1] === consts.INDEX_HTML) {
                       pathArray.pop();
                       return emulation.fetch(pathArray.join('/'));
                     }
