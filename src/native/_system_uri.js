@@ -1,5 +1,6 @@
 const path = require('path');
 const FFI = require('ffi');
+const ref = require('ref');
 const SYSTEM_URI_LIB_FILENAME = require('../consts').SYSTEM_URI_LIB_FILENAME;
 
 const h = require('./helpers');
@@ -11,24 +12,38 @@ let isSysUriLibLoadErr = null;
 
 const init = (options) => {
   ffi = FFI.Library(path.join(options.libPath || dir, SYSTEM_URI_LIB_FILENAME), {
-    open: [t.i32, ['string'] ],
-    install: [t.i32, ['string', //bundle
+    open: ["void", ['string', 'pointer', 'pointer'] ],
+    install: ["void", ['string', //bundle
       'string', //vendor
       'string', //name
       'string', //exec
       'string', //icon
-      'string', //schemes
+      'string', //schemes,
+      'pointer', // userdata
+      'pointer'
     ] ],
   });
 };
+
+function _handleError() {
+  return FFI.Callback("void", [t.VoidPtr, t.FfiResult],
+    (userData, result) => {
+      if (result.error_code !== 0) {
+        throw new Error(result.description);
+      }
+    }
+  );
+}
 
 function openUri(uri) {
   if (!ffi) {
     return;
   }
-  const ret = ffi.open(uri.uri || uri);
-  if (ret === -1) {
-    throw new Error("Error occured opening " + str + " : " + ret);
+  try {
+    const cb = _handleError();
+    ffi.open(uri.uri || uri, ref.NULL, cb);
+  } catch (err) {
+    console.error(`Error while opening URI :: ${err}`);
   }
 }
 
@@ -43,11 +58,12 @@ function registerUriScheme(appInfo, schemes) {
   if (!ffi) {
     return;
   }
-  const ret = ffi.install(bundle, vendor, name, exec, icon, joinedSchemes);
-  if (ret === -1) {
-    throw new Error("Error occured installing: " + ret);
+  try {
+    const cb = _handleError();
+    ffi.install(bundle, vendor, name, exec, icon, joinedSchemes, ref.NULL, cb);
+  } catch (err) {
+    console.error(`Error while installing :: ${err}`);
   }
-
 }
 
 // FIXME: As long as `safe-app` doesn't expose system uri itself, we'll
