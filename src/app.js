@@ -99,9 +99,17 @@ class SAFEApp extends EventEmitter {
   webFetch(url) {
     const parsedUrl = parseUrl(url);
     if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
-
     const hostname = parsedUrl.hostname;
-    const path = parsedUrl.pathname || '';
+    let path = parsedUrl.pathname || '';
+
+    const tokens = path.split('/');
+    if (!tokens[tokens.length - 1] && tokens.length > 1) { tokens.pop(); }
+
+    if (!tokens[tokens.length - 1].split('.')[1]) {
+      tokens.push(consts.INDEX_HTML);
+      path = tokens.join('/');
+    }
+
     // lets' unpack
     const hostParts = hostname.split('.');
     const lookupName = hostParts.pop(); // last one is 'domain'
@@ -126,12 +134,24 @@ class SAFEApp extends EventEmitter {
               if (err.code === -305 || err.code === -301) {
                 let newPath;
                 if (!path || !path.length) {
-                  newPath = '/index.html';
+                  newPath = `/${consts.INDEX_HTML}`;
                 } else if (path[path.length - 1] === '/') {
-                  newPath = `${path}index.html`;
+                  newPath = `${path}${consts.INDEX_HTML}`;
                 } else if (path[0] === '/') {
                   // directly try the non-slash version
-                  return emulation.fetch(path.slice(1, path.length));
+                  return emulation.fetch(path.slice(1, path.length))
+                  .catch(() => {
+                    // NOTE: This catch block handles the cases where a user intends/
+                    // to fetch a path without index.html
+                    // For clarification, comment out lines 132 through 143/
+                    // then run mocha in ../test/browsing.js to see which/
+                    // cases fail.
+                    const pathArray = path.split('/');
+                    if (pathArray[pathArray.length - 1] === consts.INDEX_HTML) {
+                      pathArray.pop();
+                      return emulation.fetch(pathArray.join('/'));
+                    }
+                  });
                 }
 
                 if (newPath) {

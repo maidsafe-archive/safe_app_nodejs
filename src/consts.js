@@ -48,6 +48,8 @@ const SYSTEM_URI_LIB_FILENAME = {
 
 const MD_META_KEY = '_metadata';
 
+const INDEX_HTML = 'index.html';
+
 module.exports = {
   LIB_FILENAME,
   SYSTEM_URI_LIB_FILENAME,
@@ -66,6 +68,6 @@ module.exports = {
   FILE_READ_FROM_BEGIN,
   FILE_READ_TO_END,
   MD_META_KEY,
-
+  INDEX_HTML,
   inTesting
 };
