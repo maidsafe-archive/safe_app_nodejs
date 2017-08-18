@@ -47,14 +47,14 @@
   },
   "download_deps": {
     "system_uri": {
-      "mirror": "https://github.com/gnunicorn/system_uri/releases/download/v",
-      "version": "1.0.0-pre",
+      "mirror": "https://s3.eu-west-2.amazonaws.com/system-uri/031c3de7900111cc9ed59d43244836dbdc4ff4dc",
+      "version": "0.0.1",
       "targetDir": "src/native",
       "filePattern": "^.*\\.(dll|so|dylib)$"
     },
     "safe_app": {
-      "mirror": "https://github.com/krishnaIndia/safe_core/releases/download/v",
-      "version": "0.1.0-pre46",
+      "mirror": "https://s3.eu-west-2.amazonaws.com/safe-client-libs/d1464cfd77e6baab0b59fcccd5fb05fa9ebd223b",
+      "version": "0.2.1",
       "targetDir": "src/native",
       "filename": "safe_app",
       "filePattern": "^.*\\.(dll|so|dylib)$",
@@ -63,7 +63,7 @@
     "ENV": {
       "dev": {
         "safe_app": {
-          "filename": "safe_app-dev"
+          "filename": "safe_app-mock"
         }
       },
       "nightly": {
@@ -73,8 +73,8 @@
       },
       "win32": {
         "libwinpthread-1": {
-          "mirror": "https://github.com/gnunicorn/safe_core/releases/download/v",
-          "version": "0.1.0-pre3",
+          "mirror": "https://s3.eu-west-2.amazonaws.com/libwinpthread/v0.1.0",
+          "version": "0.1.0",
           "targetDir": "src/native",
           "filePattern": "^libwinpthread-1.dll$"
         }
