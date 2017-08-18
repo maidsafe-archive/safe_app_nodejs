@@ -47,14 +47,14 @@
   },
   "download_deps": {
     "system_uri": {
-      "mirror": "https://s3.eu-west-2.amazonaws.com/system-uri/031c3de7900111cc9ed59d43244836dbdc4ff4dc",
-      "version": "0.0.1",
+      "mirror": "https://s3.eu-west-2.amazonaws.com/system-uri",
+      "version": "031c3de",
       "targetDir": "src/native",
       "filePattern": "^.*\\.(dll|so|dylib)$"
     },
     "safe_app": {
-      "mirror": "https://s3.eu-west-2.amazonaws.com/safe-client-libs/d1464cfd77e6baab0b59fcccd5fb05fa9ebd223b",
-      "version": "0.2.1",
+      "mirror": "https://s3.eu-west-2.amazonaws.com/safe-client-libs",
+      "version": "f576719",
       "targetDir": "src/native",
       "filename": "safe_app",
       "filePattern": "^.*\\.(dll|so|dylib)$",
@@ -73,8 +73,8 @@
       },
       "win32": {
         "libwinpthread-1": {
-          "mirror": "https://s3.eu-west-2.amazonaws.com/libwinpthread/v0.1.0",
-          "version": "0.1.0",
+          "mirror": "https://s3.eu-west-2.amazonaws.com/libwinpthread",
+          "version": "v0.1.0",
           "targetDir": "src/native",
           "filePattern": "^libwinpthread-1.dll$"
         }
