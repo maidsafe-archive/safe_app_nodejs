@@ -25,12 +25,13 @@ const init = (options) => {
   });
 };
 
-function _handleError() {
+function _handleError(resolve,  reject) {
   return FFI.Callback("void", [t.VoidPtr, t.FfiResult],
     (userData, result) => {
       if (result.error_code !== 0) {
-        throw new Error(result.description);
+        return reject(new Error(result.description));
       }
+      return resolve();
     }
   );
 }
@@ -39,12 +40,14 @@ function openUri(uri) {
   if (!ffi) {
     return;
   }
-  try {
-    const cb = _handleError();
-    ffi.open(uri.uri || uri, ref.NULL, cb);
-  } catch (err) {
-    console.error(`Error while opening URI :: ${err}`);
-  }
+  return new Promise((resolve,  reject) => {
+    try {
+      const cb = _handleError(resolve,  reject);
+      ffi.open(uri.uri || uri, ref.NULL, cb);
+    } catch (err) {
+      return reject(err);
+    }
+  });
 }
 
 
@@ -58,12 +61,14 @@ function registerUriScheme(appInfo, schemes) {
   if (!ffi) {
     return;
   }
-  try {
-    const cb = _handleError();
-    ffi.install(bundle, vendor, name, exec, icon, joinedSchemes, ref.NULL, cb);
-  } catch (err) {
-    console.error(`Error while installing :: ${err}`);
-  }
+  return new Promise((resolve, reject) => {
+    try {
+      const cb = _handleError(resolve, reject);
+      ffi.install(bundle, vendor, name, exec, icon, joinedSchemes, ref.NULL, cb);
+    } catch (err) {
+      return reject(err);
+    }
+  });
 }
 
 // FIXME: As long as `safe-app` doesn't expose system uri itself, we'll
