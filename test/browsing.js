@@ -51,6 +51,17 @@ function createRandomPrivateServiceDomain(content, path, service) {
 }
 
 describe('Browsing', () => {
+  it('returns rejected promise if no url is provided', function test() {
+    this.timeout(20000);
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    return createRandomDomain(content, '', '')
+      .then(() => createAnonTestApp()
+        .then((app) => {
+          should(app.webFetch()).be.rejected();
+        }
+      ));
+  });
+
   it('fetch content', function test() {
     this.timeout(20000);
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
@@ -149,6 +160,46 @@ describe('Browsing', () => {
         .then((app) => app.webFetch(`safe://${domain}`)
           .then((co) => should(co.toString()).equal(content))
         ));
+  });
+
+  it('/my.folder/index.html', function test() {
+    this.timeout(20000);
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    return createRandomDomain(content, '/my.folder/index.html', '')
+      .then((domain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://${domain}/my.folder/index.html`)
+          .then((co) => should(co.toString()).equal(content))
+        ));
+  });
+
+  it('/my.folder/', function test() {
+    this.timeout(20000);
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    return createRandomDomain(content, '/my.folder/index.html', '')
+      .then((domain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://${domain}/my.folder/`)
+          .then((co) => should(co.toString()).equal(content))
+        ));
+  });
+
+  it('/path/my.file', function test() {
+    this.timeout(20000);
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    return createRandomDomain(content, '/path/my.file', '')
+      .then((domain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://${domain}/path/my.file`)
+          .then((co) => should(co.toString()).equal(content))
+        ));
+  });
+
+  it('trailing slash after domain', function test() {
+    this.timeout(20000);
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    return createRandomDomain(content, '/index.html', 'www')
+      .then((domain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://${domain}/`)
+          .then((co) => should(co.toString()).equal(content))
+      ));
   });
 
   describe('errors', () => {

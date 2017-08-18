@@ -6,6 +6,10 @@ const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 describe('Access Container', () => {
   const app = createAuthenticatedTestApp('_test_scope', { _public: ['Read'], _publicNames: ['Read', 'Insert'] });
 
+  it('should have a connection object after completing app authentication', () => {
+    should.exist(app.connection);
+  });
+
   it('is authenticated for testing', () => {
     should(app.auth.registered).be.true();
   });

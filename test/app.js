@@ -3,6 +3,8 @@ const h = require('./helpers');
 
 const createTestApp = h.createTestApp;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
+const createTestAppWithNetworkCB = h.createTestAppWithNetworkCB;
+const createTestAppWithOptions = h.createTestAppWithOptions;
 
 describe('Smoke test', () => {
   it('unauthorised connection', () => {
@@ -18,6 +20,31 @@ describe('Smoke test', () => {
     const app = createTestApp();
     return app.auth.genAuthUri({ _public: ['Read'] })
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  });
+
+  it('can take a network state callback', () => {
+    const networkCb = (state) => `NETWORK STATE: ${state}`;
+    const app = createTestAppWithNetworkCB(
+      null,
+      networkCb
+    );
+    should.exist(app._networkStateCallBack); // eslint-disable-line no-underscore-dangle
+  });
+
+  it('can take an options object to configure logging and scheme registration', () => {
+    const optionsObject = {
+      log: false,
+      registerScheme: false
+    };
+    const app = createTestAppWithOptions(
+      null,
+      optionsObject
+    );
+
+    const optionsObjectsEqual = Object.keys(app.options).every(
+      (option) => app.options[option] === optionsObject[option]
+    );
+    should(optionsObjectsEqual).be.true();
   });
 
   it('should build some containers uri', () => {

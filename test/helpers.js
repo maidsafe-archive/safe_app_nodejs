@@ -18,6 +18,24 @@ function createTestApp(scope) {
   }, null, { log: false }));
 }
 
+function createTestAppWithNetworkCB(scope, networkCB) {
+  return h.autoref(new App({
+    id: 'net.maidsafe.test.javascript.id',
+    name: 'JS Test',
+    vendor: 'MaidSafe Ltd.',
+    scope
+  }, networkCB, { log: false }));
+}
+
+function createTestAppWithOptions(scope, options) {
+  return h.autoref(new App({
+    id: 'net.maidsafe.test.javascript.id',
+    name: 'JS Test',
+    vendor: 'MaidSafe Ltd.',
+    scope
+  }, null, options));
+}
+
 function createAnonTestApp(scope) {
   const app = createTestApp(scope);
   return app.auth.loginForTest();
@@ -40,5 +58,7 @@ module.exports = {
   createAuthenticatedTestApp,
   createRandomXorName,
   createRandomSecKey,
-  createRandomNonce
+  createRandomNonce,
+  createTestAppWithNetworkCB,
+  createTestAppWithOptions
 };
