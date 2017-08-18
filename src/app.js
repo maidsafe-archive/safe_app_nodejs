@@ -97,6 +97,7 @@ class SAFEApp extends EventEmitter {
   * @returns {Promise<File>} the file object found for that URL
   */
   webFetch(url) {
+    if (!url) return Promise.reject(new Error('No URL provided.'));
     const parsedUrl = parseUrl(url);
     if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
     const hostname = parsedUrl.hostname;
@@ -133,9 +134,7 @@ class SAFEApp extends EventEmitter {
               // Error codes -305 and -301 correspond to 'NfsError::FileNotFound'
               if (err.code === -305 || err.code === -301) {
                 let newPath;
-                if (!path || !path.length) {
-                  newPath = `/${consts.INDEX_HTML}`;
-                } else if (path[path.length - 1] === '/') {
+                if (path[path.length - 1] === '/') {
                   newPath = `${path}${consts.INDEX_HTML}`;
                 } else if (path[0] === '/') {
                   // directly try the non-slash version

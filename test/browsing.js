@@ -51,6 +51,17 @@ function createRandomPrivateServiceDomain(content, path, service) {
 }
 
 describe('Browsing', () => {
+  it('returns rejected promise if no url is provided', function test() {
+    this.timeout(20000);
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    return createRandomDomain(content, '', '')
+      .then(() => createAnonTestApp()
+        .then((app) => {
+          should(app.webFetch()).be.rejected();
+        }
+      ));
+  });
+
   it('fetch content', function test() {
     this.timeout(20000);
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
