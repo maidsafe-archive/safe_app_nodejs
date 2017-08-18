@@ -27,7 +27,8 @@ describe('Access Container', () => {
         should(hasAccess).be.true();
       })));
 
-  it('has read access to `_public` for `Read` and Insert`', () => app.auth.refreshContainersPermissions().then(() =>
+  // This is blocked by an issue in safe_app lib: MAID-2265
+  it.skip('has read access to `_public` for `Read` and Insert`', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.canAccessContainer('_public', ['Read', 'Insert']).then((hasAccess) => {
         should(hasAccess).be.false();
       })));
