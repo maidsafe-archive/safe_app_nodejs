@@ -10,14 +10,6 @@ const t = base.types;
 const AppPtr = t.AppPtr;
 const helpers = base.helpers;
 
-const Permission = new Enum({
-  Read: 0,
-  Insert: 1,
-  Update: 2,
-  Delete: 3,
-  ManagePermissions: 4
-});
-
 const AppExchangeInfo = Struct({
   id: 'string',
   scope: 'string',
@@ -27,31 +19,26 @@ const AppExchangeInfo = Struct({
 
 const ContainerNames = new ArrayType('char *');
 
-const Permissions = new ArrayType(Permission);
-
-const ContainerPermissions = Struct({
-  cont_name: 'string',
-  access: Permissions,
-  // /// Number of elements
-  access_len: t.usize,
-  // /// Reserved by Rust allocator
-  access_cap: t.usize
-});
-
-const ContainerPermissionsArray = new ArrayType(ContainerPermissions);
-
-const ShareMDataPermissionSet = Struct({
+const PermissionSet = Struct({
+  Read: t.bool,
   Insert: t.bool,
   Update: t.bool,
   Delete: t.bool,
   ManagePermissions: t.bool
 });
 
+const ContainerPermissions = Struct({
+  cont_name: 'string',
+  access: PermissionSet
+});
+
+const ContainerPermissionsArray = new ArrayType(ContainerPermissions);
+
 /// For use in `ShareMDataReq`. Represents a specific `MutableData` that is being shared.
 const ShareMData = Struct({
   type_tag: t.u64,
   name: t.XOR_NAME,
-  access: ShareMDataPermissionSet
+  access: PermissionSet
 });
 
 const ShareMDataArray = new ArrayType(ShareMData);
@@ -140,33 +127,39 @@ function makeAppInfo(appInfo) {
   });
 }
 
-function makePermissions(perms) {
-  return new ContainerPermissionsArray(Object.getOwnPropertyNames(perms).map((key) => {
-    // map to the proper enum
-    const permArray = new Permissions(perms[key].map((x) => Permission.get(x)));
-    return ContainerPermissions({
-      cont_name: key,
-      access: permArray,
-      access_len: permArray.length,
-      access_cap: permArray.length
-    });
-  }));
-}
-
 function translateXorName(str) {
   const b = new Buffer(str);
   if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
   return t.XOR_NAME(b);
 }
 
+function makePermissionsSet(perms) {
+  const permsObj = new PermissionSet({
+    Read: false,
+    Insert: false,
+    Update: false,
+    Delete: false,
+    ManagePermissions: false
+  });
+  perms.map((x) => {
+    permsObj[x] = true;
+  });
+  return permsObj;
+}
+
+function makePermissions(perms) {
+  return new ContainerPermissionsArray(Object.getOwnPropertyNames(perms).map((key) => {
+    const permArray = makePermissionsSet(perms[key]);
+    return ContainerPermissions({
+      cont_name: key,
+      access: permArray
+    });
+  }));
+}
+
 function makeShareMDataPermissions(permissions) {
   return new ShareMDataArray(permissions.map((perm) => {
-    // map to the proper enum
-    const permsObj = {};
-    perm.perms.map((x) => {
-      permsObj[x] = true;
-    });
-    const permsArray = new ShareMDataPermissionSet(permsObj);
+    const permsArray = makePermissionsSet(perm.perms);
     return ShareMData({
       type_tag: perm.type_tag,
       name: translateXorName(perm.name),
@@ -239,7 +232,7 @@ module.exports = {
     access_container_get_container_mdata_info: helpers.Promisified((app, str) =>
       [app, str], 'pointer'),
     access_container_is_permitted: helpers.Promisified((app, str, perms) => {
-      const permArray = new Permissions((perms, ['Read']).map((x) => Permission.get(x)));
+      const permArray = makePermissionsSet(perms);
       return [app, str, permArray]
     }, t.bool),
     encode_containers_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
