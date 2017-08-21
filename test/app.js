@@ -99,7 +99,7 @@ describe('Smoke test', () => {
     const test = () => appHelpers.autoref(new App({
       id: 'net.maidsafe.test.javascript.id',
       name: 'JS Test',
-      vendor: '',
+      vendor: ' ',
       scope: null
     }));
 
