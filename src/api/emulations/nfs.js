@@ -283,7 +283,7 @@ class NFS {
     // FIXME: free/discard the file it's already open, we are missing
     // a function from the lib to perform this.
     return lib.file_open(this.mData.app.connection, this.mData.ref, fileParam.ref.ref(), mode)
-      .then((fileCtx) => new File(metadata, this.mData.app.connection, fileCtx));
+      .then((fileCtx) => new File(fileParam.ref, this.mData.app.connection, fileCtx));
   }
 }
 

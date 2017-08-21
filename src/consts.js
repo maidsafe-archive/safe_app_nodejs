@@ -46,6 +46,9 @@ const SYSTEM_URI_LIB_FILENAME = {
   linux: './libsystem_uri.so'
 }[os.platform()];
 
+const MD_META_KEY = '_metadata';
+
+const INDEX_HTML = 'index.html';
 
 module.exports = {
   LIB_FILENAME,
@@ -64,6 +67,7 @@ module.exports = {
   OPEN_MODE_READ,
   FILE_READ_FROM_BEGIN,
   FILE_READ_TO_END,
-
+  MD_META_KEY,
+  INDEX_HTML,
   inTesting
 };

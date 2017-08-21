@@ -22,23 +22,33 @@ class SAFEApp extends EventEmitter {
   * @param {AppInfo} appInfo
   * @param {Function} [networkStateCallBack=null] optional callback function
   * to receive network state updates
+  * @param {InitOptions} initilalisation options
   */
-  constructor(appInfo, networkStateCallBack) {
+  constructor(appInfo, networkStateCallBack, options) {
     super();
-
+    this.options = Object.assign({
+      log: true,
+      registerScheme: true
+    }, options);
+    lib.init(this.options);
     this._appInfo = appInfo;
     this.validateAppInfo();
     this.networkState = consts.NET_STATE_INIT;
-    this._networkStateCallBack = networkStateCallBack;
+    if (networkStateCallBack) {
+      this._networkStateCallBack = networkStateCallBack;
+    }
     this.connection = null;
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
     });
 
-    if (!SAFEApp.logFilename) {
-      const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
-      SAFEApp.logFilename = `${filename}.log`;
-      lib.app_init_logging(SAFEApp.logFilename);
+    if (this.options.log && !SAFEApp.logFilePath) {
+      let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
+      filename = `${filename}.log`;
+      lib.app_init_logging(filename)
+        .then(() => lib.app_output_log_path(filename))
+        .then((logPath) => { SAFEApp.logFilePath = logPath; })
+        .catch((err) => { console.error('Logger initilalisation failed', err); });
     }
   }
 
@@ -107,11 +117,20 @@ class SAFEApp extends EventEmitter {
   * @returns {Promise<File>} the file object found for that URL
   */
   webFetch(url) {
+    if (!url) return Promise.reject(new Error('No URL provided.'));
     const parsedUrl = parseUrl(url);
     if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
-
     const hostname = parsedUrl.hostname;
-    const path = parsedUrl.pathname || '';
+    let path = parsedUrl.pathname || '';
+
+    const tokens = path.split('/');
+    if (!tokens[tokens.length - 1] && tokens.length > 1) { tokens.pop(); }
+
+    if (!tokens[tokens.length - 1].split('.')[1]) {
+      tokens.push(consts.INDEX_HTML);
+      path = tokens.join('/');
+    }
+
     // lets' unpack
     const hostParts = hostname.split('.');
     const lookupName = hostParts.pop(); // last one is 'domain'
@@ -135,13 +154,23 @@ class SAFEApp extends EventEmitter {
               // Error codes -305 and -301 correspond to 'NfsError::FileNotFound'
               if (err.code === -305 || err.code === -301) {
                 let newPath;
-                if (!path || !path.length) {
-                  newPath = '/index.html';
-                } else if (path[path.length - 1] === '/') {
-                  newPath = `${path}index.html`;
+                if (path[path.length - 1] === '/') {
+                  newPath = `${path}${consts.INDEX_HTML}`;
                 } else if (path[0] === '/') {
                   // directly try the non-slash version
-                  return emulation.fetch(path.slice(1, path.length));
+                  return emulation.fetch(path.slice(1, path.length))
+                  .catch(() => {
+                    // NOTE: This catch block handles the cases where a user intends/
+                    // to fetch a path without index.html
+                    // For clarification, comment out lines 132 through 143/
+                    // then run mocha in ../test/browsing.js to see which/
+                    // cases fail.
+                    const pathArray = path.split('/');
+                    if (pathArray[pathArray.length - 1] === consts.INDEX_HTML) {
+                      pathArray.pop();
+                      return emulation.fetch(pathArray.join('/'));
+                    }
+                  });
                 }
 
                 if (newPath) {
@@ -237,9 +266,9 @@ class SAFEApp extends EventEmitter {
   */
   /* eslint-disable class-methods-use-this */
   logPath(logFilename) {
-    let filename = logFilename;
+    const filename = logFilename;
     if (!logFilename) {
-      filename = SAFEApp.logFilename;
+      return Promise.resolve(SAFEApp.logFilePath);
     }
     return lib.app_output_log_path(filename);
   }
@@ -250,10 +279,11 @@ class SAFEApp extends EventEmitter {
   * @param {String} authUri - URI containing the authentication info
   * @param {Function} [networkStateCallBack=null] optional callback function
   * to receive network state updates
+  * @param {InitOptions}  initialisation options
   * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp
   */
-  static fromAuthUri(appInfo, authUri, networkStateCallBack) {
-    const app = autoref(new SAFEApp(appInfo, networkStateCallBack));
+  static fromAuthUri(appInfo, authUri, networkStateCallBack, options) {
+    const app = autoref(new SAFEApp(appInfo, networkStateCallBack, options));
     return app.auth.loginFromURI(authUri);
   }
 
@@ -308,13 +338,6 @@ class SAFEApp extends EventEmitter {
     lib.app_free(app.connection);
   }
 
-  static failedToLoadLibs() {
-    if (lib.isLibLoadErr) {
-      return lib.isLibLoadErr;
-    } else if (lib.isSysUriLibLoadErr) {
-      return lib.isSysUriLibLoadErr;
-    }
-  }
 }
 
 SAFEApp.logFilename = null;

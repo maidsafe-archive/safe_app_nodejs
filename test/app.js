@@ -5,6 +5,8 @@ const appHelpers = require('../src/helpers');
 
 const createTestApp = h.createTestApp;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
+const createTestAppWithNetworkCB = h.createTestAppWithNetworkCB;
+const createTestAppWithOptions = h.createTestAppWithOptions;
 
 describe('Smoke test', () => {
   it('unauthorised connection', () => {
@@ -22,9 +24,42 @@ describe('Smoke test', () => {
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
+  it('can take a network state callback', () => {
+    const networkCb = (state) => `NETWORK STATE: ${state}`;
+    const app = createTestAppWithNetworkCB(
+      null,
+      networkCb
+    );
+    should.exist(app._networkStateCallBack); // eslint-disable-line no-underscore-dangle
+  });
+
+  it('can take an options object to configure logging and scheme registration', () => {
+    const optionsObject = {
+      log: false,
+      registerScheme: false
+    };
+    const app = createTestAppWithOptions(
+      null,
+      optionsObject
+    );
+
+    const optionsObjectsEqual = Object.keys(app.options).every(
+      (option) => app.options[option] === optionsObject[option]
+    );
+    should(optionsObjectsEqual).be.true();
+  });
+
   it('should build some containers uri', () => {
     const app = createTestApp();
     return app.auth.genContainerAuthUri({ private: ['Insert'] })
+        .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  });
+
+  it('should build some shared MD uri', () => {
+    const app = createTestApp();
+    const sharedMdXorName = h.createRandomXorName();
+    const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
+    return app.auth.genShareMDataUri(perms)
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 

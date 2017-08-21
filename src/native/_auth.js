@@ -10,14 +10,6 @@ const t = base.types;
 const AppPtr = t.AppPtr;
 const helpers = base.helpers;
 
-const Permission = new Enum({
-  Read: 0,
-  Insert: 1,
-  Update: 2,
-  Delete: 3,
-  ManagePermissions: 4
-});
-
 const AppExchangeInfo = Struct({
   id: 'string',
   scope: 'string',
@@ -27,18 +19,29 @@ const AppExchangeInfo = Struct({
 
 const ContainerNames = new ArrayType('char *');
 
-const Permissions = new ArrayType(Permission);
+const PermissionSet = Struct({
+  Read: t.bool,
+  Insert: t.bool,
+  Update: t.bool,
+  Delete: t.bool,
+  ManagePermissions: t.bool
+});
 
 const ContainerPermissions = Struct({
   cont_name: 'string',
-  access: Permissions,
-  // /// Number of elements
-  access_len: t.usize,
-  // /// Reserved by Rust allocator
-  access_cap: t.usize
+  access: PermissionSet
 });
 
 const ContainerPermissionsArray = new ArrayType(ContainerPermissions);
+
+/// For use in `ShareMDataReq`. Represents a specific `MutableData` that is being shared.
+const ShareMData = Struct({
+  type_tag: t.u64,
+  name: t.XOR_NAME,
+  access: PermissionSet
+});
+
+const ShareMDataArray = new ArrayType(ShareMData);
 
 const AuthReq = Struct({
   app: AppExchangeInfo,
@@ -53,6 +56,16 @@ const ContainerReq = Struct({
   containers: ContainerPermissionsArray,
   containers_len: t.usize,
   containers_cap: t.usize
+});
+
+/// Represents a request to share mutable data
+const ShareMDataReq = Struct({
+  /// Info about the app requesting shared access
+  app: AppExchangeInfo,
+  /// List of MD names & type tags and permissions that need to be shared
+  mdata: ShareMDataArray,
+  /// Length of the mdata array
+  mdata_len: t.usize,
 });
 
 const AppKeys = Struct({
@@ -114,15 +127,43 @@ function makeAppInfo(appInfo) {
   });
 }
 
+function translateXorName(str) {
+  const b = new Buffer(str);
+  if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
+  return t.XOR_NAME(b);
+}
+
+function makePermissionsSet(perms) {
+  const permsObj = new PermissionSet({
+    Read: false,
+    Insert: false,
+    Update: false,
+    Delete: false,
+    ManagePermissions: false
+  });
+  perms.map((x) => {
+    permsObj[x] = true;
+  });
+  return permsObj;
+}
+
 function makePermissions(perms) {
   return new ContainerPermissionsArray(Object.getOwnPropertyNames(perms).map((key) => {
-    // map to the proper enum
-    const permArray = new Permissions(perms[key].map((x) => Permission.get(x)));
+    const permArray = makePermissionsSet(perms[key]);
     return ContainerPermissions({
       cont_name: key,
-      access: permArray,
-      access_len: permArray.length,
-      access_cap: permArray.length
+      access: permArray
+    });
+  }));
+}
+
+function makeShareMDataPermissions(permissions) {
+  return new ShareMDataArray(permissions.map((perm) => {
+    const permsArray = makePermissionsSet(perm.perms);
+    return ShareMData({
+      type_tag: perm.type_tag,
+      name: translateXorName(perm.name),
+      access: permsArray
     });
   }));
 }
@@ -139,6 +180,7 @@ module.exports = {
     // request
     AuthReq,
     ContainerReq,
+    ShareMDataReq,
     // response
     AuthGranted,
     AccessContInfo,
@@ -147,6 +189,7 @@ module.exports = {
   functions: {
     encode_auth_req: [t.Void, [ ref.refType(AuthReq), 'pointer', 'pointer'] ],
     encode_containers_req: [t.Void, [ref.refType(ContainerReq), 'pointer', 'pointer'] ],
+    encode_share_mdata_req: [t.Void, [ref.refType(ShareMDataReq), 'pointer', 'pointer'] ],
     encode_unregistered_req: [t.Void, ['pointer', 'pointer'] ],
     decode_ipc_msg: [t.Void, [
                       "string", //  (msg: *const c_char,
@@ -154,6 +197,7 @@ module.exports = {
                       "pointer", // o_auth: extern "C" fn(*mut c_void, u32, FfiAuthGranted),
                       "pointer", // o_unregistered: extern "C" fn(*mut c_void, u32, *const u8, usize),
                       "pointer", // o_containers: extern "C" fn(*mut c_void, u32),
+                      "pointer", // o_share_mdata: extern "C" fn(*mut c_void, u32),
                       "pointer", // o_revoked: extern "C" fn(*mut c_void),
                       "pointer"  // o_err: extern "C" fn(*mut c_void, i32, u32)
                       ] ],
@@ -170,6 +214,7 @@ module.exports = {
   helpers: {
     makeAppInfo,
     makePermissions,
+    makeShareMDataPermissions,
   },
   api: {
     access_container_get_names: helpers.Promisified(null, ["pointer", 'uint32'], (args) => {
@@ -187,11 +232,12 @@ module.exports = {
     access_container_get_container_mdata_info: helpers.Promisified((app, str) =>
       [app, str], 'pointer'),
     access_container_is_permitted: helpers.Promisified((app, str, perms) => {
-      const permArray = new Permissions((perms, ['Read']).map((x) => Permission.get(x)));
+      const permArray = makePermissionsSet(perms);
       return [app, str, permArray]
     }, t.bool),
     encode_containers_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_auth_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
+    encode_share_mdata_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_unregistered_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     decode_ipc_msg: function(lib, fn) {
       return (function(str) {
@@ -206,6 +252,9 @@ module.exports = {
                    }),
                    ffi.Callback("void", [t.VoidPtr, "uint32"], function(user_data, req_id) {
                       resolve(["containers", req_id])
+                   }),
+                   ffi.Callback("void", [t.VoidPtr, "uint32"], function(user_data, req_id) {
+                      resolve(["share_mdata", req_id])
                    }),
                    ffi.Callback("void", [t.VoidPtr], function(user_data) {
                       resolve(["revoked"])
