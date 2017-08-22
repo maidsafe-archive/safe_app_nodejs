@@ -17,8 +17,6 @@ const AppExchangeInfo = Struct({
   vendor: 'string'
 });
 
-const ContainerNames = new ArrayType('char *');
-
 const PermissionSet = Struct({
   Read: t.bool,
   Insert: t.bool,
@@ -192,24 +190,22 @@ module.exports = {
     encode_share_mdata_req: [t.Void, [ref.refType(ShareMDataReq), 'pointer', 'pointer'] ],
     encode_unregistered_req: [t.Void, ['pointer', 'pointer'] ],
     decode_ipc_msg: [t.Void, [
-                      "string", //  (msg: *const c_char,
+                      'string', //  (msg: *const c_char,
                       t.VoidPtr, // user_data: *mut c_void,
-                      "pointer", // o_auth: extern "C" fn(*mut c_void, u32, FfiAuthGranted),
-                      "pointer", // o_unregistered: extern "C" fn(*mut c_void, u32, *const u8, usize),
-                      "pointer", // o_containers: extern "C" fn(*mut c_void, u32),
-                      "pointer", // o_share_mdata: extern "C" fn(*mut c_void, u32),
-                      "pointer", // o_revoked: extern "C" fn(*mut c_void),
-                      "pointer"  // o_err: extern "C" fn(*mut c_void, i32, u32)
+                      'pointer', // o_auth: extern "C" fn(*mut c_void, u32, FfiAuthGranted),
+                      'pointer', // o_unregistered: extern "C" fn(*mut c_void, u32, *const u8, usize),
+                      'pointer', // o_containers: extern "C" fn(*mut c_void, u32),
+                      'pointer', // o_share_mdata: extern "C" fn(*mut c_void, u32),
+                      'pointer', // o_revoked: extern "C" fn(*mut c_void),
+                      'pointer'  // o_err: extern "C" fn(*mut c_void, i32, u32)
                       ] ],
     // access container:
-    // app: *const App, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32, *const *const c_char, u32))
-    access_container_get_names: [t.Void, [AppPtr, "pointer", "pointer"]],
+    // app: *const App, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32, *const ContainerPermissions, usize))
+    access_container_fetch: [t.Void, [AppPtr, 'pointer', 'pointer']],
     // app: *const App, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32)
-    access_container_refresh_access_info: [t.Void, [AppPtr, "pointer", "pointer"]],
+    access_container_refresh_access_info: [t.Void, [AppPtr, 'pointer', 'pointer']],
     // app: *const App, name: FfiString, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32, MDataInfoHandle)
-    access_container_get_container_mdata_info: [t.Void, [AppPtr, 'string', "pointer", "pointer"]],
-    // (app: *const App, name: FfiString, permission: Permission, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32, bool)) {
-    access_container_is_permitted: [t.Void, [AppPtr, 'string', ContainerPermissionsArray, "pointer", "pointer"]],
+    access_container_get_container_mdata_info: [t.Void, [AppPtr, 'string', 'pointer', 'pointer']],
   },
   helpers: {
     makeAppInfo,
@@ -217,24 +213,27 @@ module.exports = {
     makeShareMDataPermissions,
   },
   api: {
-    access_container_get_names: helpers.Promisified(null, ["pointer", 'uint32'], (args) => {
+    access_container_fetch: helpers.Promisified(null, [ref.refType(ContainerPermissions), t.usize], (args) => {
       const ptr = args[0];
       const len = args[1];
-      const names = [];
-      const PTR_SIZE = ptr.ref().length;
-      for (let i = 0; i < len; i++) {
-         let name = ref.readCString(ref.readPointer(ptr, i* PTR_SIZE , (i + 1) * PTR_SIZE));
-         names.push(name);
+      let arrPtr = ref.reinterpret(ptr, ContainerPermissions.size * len);
+      let arr = ContainerPermissionsArray(arrPtr)
+      const contsPerms = {};
+      for (let i = 0; i < len ; i++) {
+        let cont = arr[i];
+        contsPerms[cont.cont_name] = {
+          Read: cont.access.Read,
+          Insert: cont.access.Insert,
+          Update: cont.access.Update,
+          Delete: cont.access.Delete,
+          ManagePermissions: cont.access.ManagePermissions
+        }
       }
-      return names;
+      return contsPerms;
     }),
     access_container_refresh_access_info: helpers.Promisified(),
     access_container_get_container_mdata_info: helpers.Promisified((app, str) =>
       [app, str], 'pointer'),
-    access_container_is_permitted: helpers.Promisified((app, str, perms) => {
-      const permArray = makePermissionsSet(perms);
-      return [app, str, permArray]
-    }, t.bool),
     encode_containers_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_auth_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_share_mdata_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
@@ -244,22 +243,22 @@ module.exports = {
         return new Promise(function(resolve, reject) {
           fn.async(str,
                    ref.NULL,
-                   ffi.Callback("void", [t.VoidPtr, "uint32", ref.refType(AuthGranted)], function(user_data, req_id, authGranted) {
+                   ffi.Callback('void', [t.VoidPtr, 'uint32', ref.refType(AuthGranted)], function(user_data, req_id, authGranted) {
                       resolve(["granted", authGranted])
                    }),
-                   ffi.Callback("void", [t.VoidPtr, "uint32", t.u8Pointer, t.usize], function(user_data, req_id, connUri, connUriLen) {
+                   ffi.Callback('void', [t.VoidPtr, 'uint32', t.u8Pointer, t.usize], function(user_data, req_id, connUri, connUriLen) {
                       resolve(["unregistered", new Buffer(ref.reinterpret(connUri, connUriLen, 0))])
                    }),
-                   ffi.Callback("void", [t.VoidPtr, "uint32"], function(user_data, req_id) {
+                   ffi.Callback('void', [t.VoidPtr, 'uint32'], function(user_data, req_id) {
                       resolve(["containers", req_id])
                    }),
-                   ffi.Callback("void", [t.VoidPtr, "uint32"], function(user_data, req_id) {
+                   ffi.Callback('void', [t.VoidPtr, 'uint32'], function(user_data, req_id) {
                       resolve(["share_mdata", req_id])
                    }),
-                   ffi.Callback("void", [t.VoidPtr], function(user_data) {
+                   ffi.Callback('void', [t.VoidPtr], function(user_data) {
                       resolve(["revoked"])
                    }),
-                   ffi.Callback("void", [t.VoidPtr, t.FfiResult, "uint32"], function(user_data, result, req_id) {
+                   ffi.Callback('void', [t.VoidPtr, t.FfiResult, 'uint32'], function(user_data, result, req_id) {
                       reject(makeFfiError(result.error_code, result.error_description))
                    }),
                    function () {}

@@ -4,7 +4,8 @@ const h = require('./helpers');
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
 describe('Access Container', () => {
-  const app = createAuthenticatedTestApp('_test_scope', { _public: ['Read'], _publicNames: ['Read', 'Insert'] });
+  const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
+  const app = createAuthenticatedTestApp('_test_scope', containersPermissions);
 
   it('should have a connection object after completing app authentication', () => {
     should.exist(app.connection);
@@ -14,11 +15,25 @@ describe('Access Container', () => {
     should(app.auth.registered).be.true();
   });
 
+  /* eslint-disable dot-notation */
   it('get container names', () => app.auth.refreshContainersPermissions().then(() =>
-    app.auth.getContainersNames().then((names) => {
-      // we always get a our own sandboxed container in tests")
-      should(names.length).be.equal(3);
-      should(names).containEql('_public');
+    app.auth.getContainersPermissions().then((contsPerms) => {
+      // we always get a our own sandboxed container in tests
+      should(Object.keys(contsPerms).length).be.equal(3);
+      should(contsPerms['_public']).be.eql({
+        Read: true,
+        Insert: false,
+        Delete: false,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms['_publicNames']).be.eql({
+        Read: true,
+        Insert: true,
+        Delete: false,
+        Update: false,
+        ManagePermissions: true
+      });
     })));
 
   it('get own container', () => app.auth.refreshContainersPermissions().then(() =>
@@ -31,14 +46,13 @@ describe('Access Container', () => {
         should(hasAccess).be.true();
       })));
 
-  // This is blocked by issue MAID-2265
-  it.skip('has read access to `_public` for `Read` and Insert`', () => app.auth.refreshContainersPermissions().then(() =>
+  it('has read access to `_public` for `Read` and Insert`', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.canAccessContainer('_public', ['Read', 'Insert']).then((hasAccess) => {
         should(hasAccess).be.false();
       })));
 
-  it('has read access to `_publicNames` for `Read` and Insert`', () => app.auth.refreshContainersPermissions().then(() =>
-      app.auth.canAccessContainer('_publicNames', ['Read', 'Insert']).then((hasAccess) => {
+  it('has read access to `_publicNames` for `Read` and ManagePermissions`', () => app.auth.refreshContainersPermissions().then(() =>
+      app.auth.canAccessContainer('_publicNames', ['Read', 'ManagePermissions']).then((hasAccess) => {
         should(hasAccess).be.true();
       })));
 
@@ -52,7 +66,7 @@ describe('Access Container', () => {
         should(resp.tag).equal(15000);
       })));
 
-  it('mutate info of `_public` container', () => app.auth.refreshContainersPermissions().then(() =>
+  it('mutate info of `_publicNames` container', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.getContainer('_publicNames')
         .then((md) => md.getEntries()
           .then((entries) => entries.mutate()
