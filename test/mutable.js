@@ -860,7 +860,7 @@ describe('Mutable Data', () => {
       )
     );
 
-    it.skip('nfs creation and modification date for read', () => {
+    it('nfs creation and modification date for read', () => {
       let creationDate;
       return app.mutableData.newRandomPrivate(TAG_TYPE)
         .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
