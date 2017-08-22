@@ -4,6 +4,8 @@ const api = require('./api');
 const lib = require('./native/lib');
 const parseUrl = require('url').parse;
 const consts = require('./consts');
+const makeFfiError = require('./native/_error.js');
+const errConst = require('./error_const');
 
 /**
  * Holds one sessions with the network and is the primary interface to interact
@@ -30,6 +32,7 @@ class SAFEApp extends EventEmitter {
     }, options);
     lib.init(this.options);
     this._appInfo = appInfo;
+    this.validateAppInfo();
     this.networkState = consts.NET_STATE_INIT;
     if (networkStateCallBack) {
       this._networkStateCallBack = networkStateCallBack;
@@ -87,6 +90,24 @@ class SAFEApp extends EventEmitter {
   */
   get mutableData() {
     return this._mutableData;
+  }
+
+  /*
+  * Validates appInfo and properly handles error
+  */
+  validateAppInfo() {
+    const appInfo = this._appInfo;
+    const appInfoMustHaveProperties = ['id', 'name', 'vendor'];
+    let bool = false;
+    const hasCorrectProperties = appInfoMustHaveProperties.every((prop) => {
+      appInfo[prop] = appInfo[prop].trim();
+      bool = Object.prototype.hasOwnProperty.call(appInfo, prop) && appInfo[prop];
+      return bool;
+    });
+
+    if (!hasCorrectProperties) {
+      throw makeFfiError(errConst.MALFORMED_APP_INFO.code, errConst.MALFORMED_APP_INFO.msg);
+    }
   }
 
   /**
