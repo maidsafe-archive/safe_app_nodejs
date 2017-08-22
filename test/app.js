@@ -1,5 +1,7 @@
 const should = require('should');
 const h = require('./helpers');
+const App = require('../src/app');
+const appHelpers = require('../src/helpers');
 
 const createTestApp = h.createTestApp;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
@@ -78,5 +80,29 @@ describe('Smoke test', () => {
               should(secondResp.uri).not.equal(firstResp.uri);
             });
       });
+  });
+
+  it('should throw informative error, if App info is malformed', () => {
+    const test = () => appHelpers.autoref(new App({
+      info: {
+        id: 'net.maidsafe.test.javascript.id',
+        name: 'JS Test',
+        vendor: 'MaidSafe Ltd.',
+        scope: null
+      }
+    }));
+
+    should.throws(test);
+  });
+
+  it('should throw informative error, if App properties, excepting scope, are empty', () => {
+    const test = () => appHelpers.autoref(new App({
+      id: 'net.maidsafe.test.javascript.id',
+      name: 'JS Test',
+      vendor: ' ',
+      scope: null
+    }));
+
+    should.throws(test);
   });
 });
