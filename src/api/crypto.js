@@ -30,7 +30,7 @@ class SignKey extends h.NetworkObject {
 
   /**
   * generate raw string copy of signature key
-  * @returns {Promise<String>}
+  * @returns {Promise<Buffer>}
   */
   getRaw() {
     return lib.sign_key_get(this.app.connection, this.ref);
@@ -54,7 +54,7 @@ class PubEncKey extends h.NetworkObject {
 
   /**
   * generate raw string copy of encryption key
-  * @returns {Promise<String>}
+  * @returns {Promise<Buffer>}
   */
   getRaw() {
     return lib.enc_pub_key_get(this.app.connection, this.ref);
@@ -96,7 +96,7 @@ class SecEncKey extends h.NetworkObject {
 
   /**
   * generate raw string copy of encryption key
-  * @returns {Promise<String>}
+  * @returns {Promise<Buffer>}
   */
   getRaw() {
     return lib.enc_secret_key_get(this.app.connection, this.ref);
