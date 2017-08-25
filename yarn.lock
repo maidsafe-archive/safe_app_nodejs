@@ -1427,12 +1427,12 @@ delegates@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delegates/-/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
 
-"deps_downloader@git+https://github.com/maidsafe/deps_downloader.git":
+"deps_downloader@https://s3.eu-west-2.amazonaws.com/deps-downloader/deps_downloader-0.1.0.tgz":
   version "0.1.0"
-  resolved "git+https://github.com/maidsafe/deps_downloader.git#ba86649cf95c1978b53d3ccd837317b06e0109d7"
+  resolved "https://s3.eu-west-2.amazonaws.com/deps-downloader/deps_downloader-0.1.0.tgz#5d2dacd4b2810b72dba5c56e51b1b37d140defb9"
   dependencies:
     async "^2.1.5"
-    electron-download "git+https://github.com/krishnaIndia/electron-download#dev"
+    electron-download-fork "https://s3.eu-west-2.amazonaws.com/electron-download-fork/electron-download-fork-4.1.0.tgz"
     extend "^3.0.0"
     minimalist "^1.0.0"
     unzip "^0.1.11"
@@ -1567,9 +1567,9 @@ ecc-jsbn@~0.1.1:
   dependencies:
     jsbn "~0.1.0"
 
-"electron-download@git+https://github.com/krishnaIndia/electron-download#dev":
+"electron-download-fork@https://s3.eu-west-2.amazonaws.com/electron-download-fork/electron-download-fork-4.1.0.tgz":
   version "4.1.0"
-  resolved "git+https://github.com/krishnaIndia/electron-download#9af1e2351bb07ff96aabe4742365d5b5d2ebd437"
+  resolved "https://s3.eu-west-2.amazonaws.com/electron-download-fork/electron-download-fork-4.1.0.tgz#905bb52bb17bc9e52fd8dd0206523cfdbe78566b"
   dependencies:
     debug "^2.2.0"
     env-paths "^1.0.0"
@@ -1615,8 +1615,8 @@ error@^7.0.0:
     xtend "~4.0.0"
 
 es5-ext@^0.10.14, es5-ext@^0.10.9, es5-ext@~0.10.14:
-  version "0.10.29"
-  resolved "https://registry.yarnpkg.com/es5-ext/-/es5-ext-0.10.29.tgz#768eb2dfc4957bcf35fa0568f193ab71ede53fd8"
+  version "0.10.30"
+  resolved "https://registry.yarnpkg.com/es5-ext/-/es5-ext-0.10.30.tgz#7141a16836697dbabfaaaeee41495ce29f52c939"
   dependencies:
     es6-iterator "2"
     es6-symbol "~3.1"
