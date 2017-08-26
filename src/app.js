@@ -122,7 +122,7 @@ class SAFEApp extends EventEmitter {
     const parsedUrl = parseUrl(url);
     if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
     const hostname = parsedUrl.hostname;
-    let path = parsedUrl.pathname || '';
+    let path = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
 
     const tokens = path.split('/');
     if (!tokens[tokens.length - 1] && tokens.length > 1) { tokens.pop(); }

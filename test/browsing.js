@@ -202,6 +202,16 @@ describe('Browsing', () => {
       ));
   });
 
+  it('url encoded filename', function test() {
+    this.timeout(20000);
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    return createRandomDomain(content, '/spa ce.ht"ml', '')
+      .then((domain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://${domain}/spa ce.ht"ml`)
+          .then((co) => should(co.toString()).equal(content))
+      ));
+  });
+
   describe('errors', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     let domain; // eslint-disable-line no-unused-vars
