@@ -142,8 +142,11 @@ class SAFEApp extends EventEmitter {
         .then((mdata) => mdata.get(serviceName)
             .catch((err) => {
               // Error code -106 coresponds to 'Requested entry not found'
-              if ((err.code === -106) && (!serviceName || !serviceName.length)) {
-                return mdata.get('www');
+              if (err.code === -106) {
+                if (!serviceName || !serviceName.length) {
+                  return mdata.get('www');
+                }
+                return Promise.reject(new Error('Service not found'));
               }
               return Promise.reject(err);
             })

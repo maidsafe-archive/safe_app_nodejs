@@ -229,28 +229,28 @@ describe('Browsing', () => {
     });
 
     it('should not find dns', () =>
-      client.webFetch('safe://$domain_doesnt_exist')
+      client.webFetch('safe://domain_doesnt_exist')
         .should.be.rejectedWith('Core error: Routing client error -> Requested data not found')
     );
 
     it('should be case sensitive', () =>
-      client.webFetch('safe://$domain/SUBDIR/index.html')
-        .should.be.rejectedWith('Core error: Routing client error -> Requested data not found')
+      client.webFetch(`safe://${domain}/SUBDIR/index.html`)
+        .should.be.rejectedWith('NFS error: File not found')
     );
 
     it('should not find service', () =>
-      client.webFetch('safe://faulty_service.$domain')
-        .should.be.rejectedWith('Core error: Routing client error -> Requested data not found')
+      client.webFetch(`safe://faulty_service.${domain}`)
+        .should.be.rejectedWith('Service not found')
     );
 
     it('should not find file', () =>
-      client.webFetch('safe://www.$domain/404.html')
-        .should.be.rejectedWith('Core error: Routing client error -> Requested data not found')
+      client.webFetch(`safe://www.${domain}/404.html`)
+        .should.be.rejectedWith('NFS error: File not found')
     );
 
     it('should not find file in subdirectory', () =>
-      client.webFetch('safe://www.$domain/subdir/404.html')
-        .should.be.rejectedWith('Core error: Routing client error -> Requested data not found')
+      client.webFetch(`safe://www.${domain}/subdir/404.html`)
+        .should.be.rejectedWith('NFS error: File not found')
     );
   });
 });
