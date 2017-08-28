@@ -122,7 +122,7 @@ class SAFEApp extends EventEmitter {
     const parsedUrl = parseUrl(url);
     if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
     const hostname = parsedUrl.hostname;
-    let path = parsedUrl.pathname || '';
+    let path = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
 
     const tokens = path.split('/');
     if (!tokens[tokens.length - 1] && tokens.length > 1) { tokens.pop(); }
@@ -142,8 +142,11 @@ class SAFEApp extends EventEmitter {
         .then((mdata) => mdata.get(serviceName)
             .catch((err) => {
               // Error code -106 coresponds to 'Requested entry not found'
-              if ((err.code === -106) && (!serviceName || !serviceName.length)) {
-                return mdata.get('www');
+              if (err.code === -106) {
+                if (!serviceName || !serviceName.length) {
+                  return mdata.get('www');
+                }
+                return Promise.reject(new Error('Service not found'));
               }
               return Promise.reject(err);
             })
@@ -160,7 +163,7 @@ class SAFEApp extends EventEmitter {
                 } else if (path[0] === '/') {
                   // directly try the non-slash version
                   return emulation.fetch(path.slice(1, path.length))
-                  .catch(() => {
+                  .catch((e) => {
                     // NOTE: This catch block handles the cases where a user intends/
                     // to fetch a path without index.html
                     // For clarification, comment out lines 132 through 143/
@@ -171,6 +174,7 @@ class SAFEApp extends EventEmitter {
                       pathArray.pop();
                       return emulation.fetch(pathArray.join('/'));
                     }
+                    return Promise.reject(e);
                   });
                 }
 
