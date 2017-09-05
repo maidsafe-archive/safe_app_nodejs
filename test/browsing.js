@@ -72,6 +72,16 @@ describe('Browsing', () => {
       ));
   });
 
+  it('fetch empty content', function test() {
+    this.timeout(20000);
+    const content = '';
+    return createRandomDomain(content, 'emptyfile.txt', '')
+      .then((domain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://${domain}/emptyfile.txt`)
+          .then((co) => should(co.toString()).equal(content))
+      ));
+  });
+
   it('fetch any path on any url', function test() {
     this.timeout(20000);
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
