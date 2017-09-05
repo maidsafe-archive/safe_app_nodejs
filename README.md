@@ -14,19 +14,19 @@ The documentation for the safe_app Node.js API is available at <http://docs.maid
 
 ## Development
 
-### Prerequisites
+1. Prerequisites
 
-  * Node.js 6.5.0 (we recommend installing it via [nvm](https://github.com/creationix/nvm))
-  * [Git](https://git-scm.com/)
-  * [Yarn](https://yarnpkg.com) (as a replacement for `npm`).
+    * Node.js 6.5.0 (we recommend installing it via [nvm](https://github.com/creationix/nvm))
+    * [Git](https://git-scm.com/)
+    * [Yarn](https://yarnpkg.com) (as a replacement for `npm`).
 
-1. Clone this GitHub repository:
+2. Clone this GitHub repository:
 
     ```bash
     git clone https://github.com/maidsafe/safe_app_nodejs.git
     ```
 
-2. Install the dependencies:
+3. Install the dependencies:
 
     ``` bash
     cd safe_app_nodejs
@@ -35,18 +35,18 @@ The documentation for the safe_app Node.js API is available at <http://docs.maid
 
     If you are working on a development environment, you can run `NODE_ENV=dev yarn` instead in order to get the `safe_client` libraries which use the `MockVault` file rather than connecting to the SAFE Network.
 
-## Testing
+### Testing
 
 To run the tests locally, make sure you installed the `safe_client` libraries with `NODE_ENV=dev yarn`, then you can run them by executing `yarn test`.
 
 Note: If you are compiling your own [safe_app](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library for testing purposes, and if you want to be able to run the tests, make sure to include `testing` in your build features when compiling `safe_app` in `safe_client_libs`, i.e. `cargo build --release --features "use-mock-routing testing"`.
 
-# Further Help
+## Further Help
 
 You can discuss development-related questions on the [SAFE Dev Forum](https://forum.safedev.org/).
 Here's a good post to get started: [How to develop for the SAFE Network](https://forum.safedev.org/t/how-to-develop-for-the-safe-network-draft/843).
 
-# License
+## License
 
 Licensed under either of
 
@@ -55,7 +55,7 @@ Licensed under either of
 
 at your option.
 
-# Contribution
+## Contribution
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the
 work by you, as defined in the MaidSafe Contributor Agreement, version 1.1 ([CONTRIBUTOR](CONTRIBUTOR)),
