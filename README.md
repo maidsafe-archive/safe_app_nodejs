@@ -20,13 +20,13 @@ The documentation for the safe_app Node.js API is available at <http://docs.maid
   * [Git](https://git-scm.com/)
   * [Yarn](https://yarnpkg.com) (as a replacement for `npm`).
 
-1. Clone this GitHub repository.
+1. Clone this GitHub repository:
 
     ```bash
     git clone https://github.com/maidsafe/safe_app_nodejs.git
     ```
 
-2. Install the dependencies.
+2. Install the dependencies:
 
     ``` bash
     cd safe_app_nodejs
