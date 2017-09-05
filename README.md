@@ -45,6 +45,11 @@ To run the tests locally, make sure you installed the `safe_client` libraries wi
 
 Note: If you are compiling your own [safe_app](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library for testing purposes, and if you want to be able to run the tests, make sure to include `testing` in your build features when compiling `safe_app` in `safe_client_libs`, i.e. `cargo build --release --features "use-mock-routing testing"`.
 
+# Further Help
+
+You can discuss development-related questions on the [SAFE Dev Forum](https://forum.safedev.org/).
+Here's a good post to get started: [How to develop for the SAFE Network](https://forum.safedev.org/t/how-to-develop-for-the-safe-network-draft/843).
+
 # License
 
 Licensed under either of
