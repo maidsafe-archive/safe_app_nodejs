@@ -1,8 +1,8 @@
 # safe_app_nodejs
 
-**Maintainer:** Krishna Kumar (krishna.kumar@maidsafe.net)
+A safe_app library for [Node.js](https://nodejs.org/).
 
-safe_app Node.js library.
+**Maintainer:** Krishna Kumar (krishna.kumar@maidsafe.net)
 
 |Linux/OS X|Windows|
 |:---:|:--------:|
