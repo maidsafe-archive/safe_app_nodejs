@@ -58,7 +58,10 @@ module.exports = {
   },
   helpers: {
     fromCString: (cstr) => cstr.readCString(),
-    asBuffer: (res) => new Buffer(ref.reinterpret(res[0], res[1])),
+    asBuffer: (res) => {
+      let b = ref.isNull(res[0]) ? new Buffer(0) : new Buffer(ref.reinterpret(res[0], res[1]));
+      return b;
+    },
     toSafeLibTime: (now) => {
       const now_msec = now.getTime();
       const now_msec_part = (now_msec % 1000);
