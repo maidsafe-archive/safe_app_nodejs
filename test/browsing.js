@@ -39,7 +39,7 @@ function createRandomPrivateServiceDomain(content, path, service) {
         return nfs.create(content)
           .then((file) => nfs.insert(path || '', file))
           .then(() => app.crypto.sha3Hash(domain)
-            .then((dnsName) =>  app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS) )
+            .then((dnsName) => app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS))
               .then((dnsData) => serviceMdata.serialise()
                   .then((serial) => {
                     const payload = {};
@@ -55,7 +55,7 @@ function createRandomPrivateServiceDomain(content, path, service) {
  * @param publicName
  * @param serviceName
  */
-function deleteService( app, domain, service ) {
+function deleteService(app, domain, service) {
   return app.crypto.sha3Hash(domain)
     .then((hashedPubName) => app.mutableData.newPublic(hashedPubName, consts.TAG_TYPE_DNS))
     .then((md) => removeFromMData(md, service));
@@ -119,7 +119,7 @@ describe('Browsing', () => {
     return createRandomPrivateServiceDomain(content, '/yumyum.html', 'www')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://www.${domain}/yumyum.html`)
-          .then((co) => should(co.toString()).equal(content) )));
+          .then((co) => should(co.toString()).equal(content))));
   });
 
   it('find missing slash fallback', function test() {
@@ -254,15 +254,15 @@ describe('Browsing', () => {
       this.timeout(20000);
 
       const deletedService = 'nonexistant';
-      let domain;
+      let testDomain;
 
-      return createRandomDomain(content, '', deletedService, app )
-          .then((testDomain) =>{
-            domain = testDomain;
-            return deleteService(app, domain, deletedService )
+      return createRandomDomain(content, '', deletedService, app)
+          .then((returnedDomain) => {
+            testDomain = returnedDomain;
+            return deleteService(app, testDomain, deletedService);
           })
-          .then(()=> app.webFetch(`safe://${deletedService}.${domain}`)
-          .should.be.rejectedWith('Service not found'))
+          .then(() => app.webFetch(`safe://${deletedService}.${testDomain}`)
+          .should.be.rejectedWith('Service not found'));
     });
 
     it('should not find dns', () =>
