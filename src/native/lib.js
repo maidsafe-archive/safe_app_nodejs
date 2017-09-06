@@ -51,7 +51,7 @@ ffi.init = (options) => {
     require('./_system_uri')(ffi, options);  
   } catch(e) {
     throw makeFfiError(errConst.FAILED_TO_LOAD_LIB.code,
-        errConst.FAILED_TO_LOAD_LIB.msg(libLoadErr));
+        errConst.FAILED_TO_LOAD_LIB.msg(e.toString()));
   }
 };
 
