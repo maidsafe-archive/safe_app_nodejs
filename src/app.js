@@ -140,6 +140,16 @@ class SAFEApp extends EventEmitter {
     return this.crypto.sha3Hash(lookupName)
       .then((address) => this.mutableData.newPublic(address, consts.TAG_TYPE_DNS)
         .then((mdata) => mdata.get(serviceName)
+            .then((serviceBuffer) => {
+              const service = serviceBuffer.buf.toString();
+
+              if (service.length < 1) {
+                const error = new Error();
+                error.code = -106;
+                throw error;
+              }
+              return serviceBuffer;
+            })
             .catch((err) => {
               // Error code -106 coresponds to 'Requested entry not found'
               if (err.code === -106) {
