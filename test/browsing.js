@@ -5,9 +5,9 @@ const consts = require('../src/consts');
 const createAnonTestApp = h.createAnonTestApp;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
-function createRandomDomain(content, path, service) {
+function createRandomDomain(content, path, service, authedApp) {
   const domain = `test_${Math.round(Math.random() * 100000)}`;
-  const app = createAuthenticatedTestApp();
+  const app = authedApp || createAuthenticatedTestApp();
   return app.mutableData.newRandomPublic(consts.TAG_TYPE_WWW)
     .then((serviceMdata) => serviceMdata.quickSetup()
       .then(() => {
@@ -39,16 +39,37 @@ function createRandomPrivateServiceDomain(content, path, service) {
         return nfs.create(content)
           .then((file) => nfs.insert(path || '', file))
           .then(() => app.crypto.sha3Hash(domain)
-            .then((dnsName) => app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS)
+            .then((dnsName) => app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS))
               .then((dnsData) => serviceMdata.serialise()
                   .then((serial) => {
                     const payload = {};
                     payload[service || ''] = serial;
                     return dnsData.quickSetup(payload);
-                  }))));
+                  })));
       }))
     .then(() => domain);
 }
+
+/**
+ * Delete Service
+ * @param publicName
+ * @param serviceName
+ */
+function deleteService(app, domain, service) {
+  return app.crypto.sha3Hash(domain)
+    .then((hashedPubName) => app.mutableData.newPublic(hashedPubName, consts.TAG_TYPE_DNS))
+    .then((md) => removeFromMData(md, service));
+}
+
+
+function removeFromMData(md, key) {
+  return md.getEntries()
+    .then((entries) => entries.get(key)
+      .then((value) => entries.mutate()
+        .then((mut) => mut.remove(key, value.version + 1)
+          .then(() => md.applyEntriesMutation(mut)))));
+}
+
 
 describe('Browsing', () => {
   it('returns rejected promise if no url is provided', function test() {
@@ -68,6 +89,16 @@ describe('Browsing', () => {
     return createRandomDomain(content, '', '')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
+          .then((co) => should(co.toString()).equal(content))
+      ));
+  });
+
+  it('fetch empty content', function test() {
+    this.timeout(20000);
+    const content = '';
+    return createRandomDomain(content, 'emptyfile.txt', '')
+      .then((domain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://${domain}/emptyfile.txt`)
           .then((co) => should(co.toString()).equal(content))
       ));
   });
@@ -98,8 +129,7 @@ describe('Browsing', () => {
     return createRandomPrivateServiceDomain(content, '/yumyum.html', 'www')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://www.${domain}/yumyum.html`)
-          .then((co) => should(co.toString()).equal(content))
-      ));
+          .then((co) => should(co.toString()).equal(content))));
   });
 
   it('find missing slash fallback', function test() {
@@ -212,6 +242,7 @@ describe('Browsing', () => {
       ));
   });
 
+
   describe('errors', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     let domain; // eslint-disable-line no-unused-vars
@@ -226,6 +257,22 @@ describe('Browsing', () => {
             client = app;
           });
         });
+    });
+
+    it('should throw error when a previously existing service is removed', function test() {
+      const app = createAuthenticatedTestApp();
+      this.timeout(20000);
+
+      const deletedService = 'nonexistant';
+      let testDomain;
+
+      return createRandomDomain(content, '', deletedService, app)
+          .then((returnedDomain) => {
+            testDomain = returnedDomain;
+            return deleteService(app, testDomain, deletedService);
+          })
+          .then(() => app.webFetch(`safe://${deletedService}.${testDomain}`)
+          .should.be.rejectedWith('Service not found'));
     });
 
     it('should not find dns', () =>
