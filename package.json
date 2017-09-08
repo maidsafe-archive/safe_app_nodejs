@@ -1,6 +1,6 @@
 {
-  "name": "safe-app",
-  "version": "0.2.0",
+  "name": "@maidsafe/safe-node-app",
+  "version": "0.2.1-5",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -12,14 +12,19 @@
     "test": "mocha",
     "test-coverage": "istanbul cover _mocha --report lcovonly -- -R spec",
     "publish-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "pre-pack": "npm run lint"
+    "pre-pack": "yarn run lint",
+    "prepush": "yarn run test && yarn run lint",
+    "prepublish": "yarn run test && yarn run lint"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/maidsafe/safe_app_nodejs.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "MaidSafe",
+    "email": "qa@maidsafe.net",
+    "url": "https://github.com/maidsafe"
+  },
   "bugs": {
     "url": "https://github.com/maidsafe/safe_app_nodejs/issues"
   },
@@ -39,6 +44,7 @@
     "eslint": "^3.12.2",
     "eslint-config-airbnb-base": "^11.0.0",
     "eslint-plugin-import": "^2.2.0",
+    "husky": "^0.14.3",
     "istanbul": "^0.4.5",
     "jsdoc": "^3.4.3",
     "mocha": "^3.2.0",

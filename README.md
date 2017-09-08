@@ -1,4 +1,6 @@
-# safe_app_nodejs
+#safe-node-app
+
+A nodejs API for the [SAFE Network](http://maidsafe.net).
 
 **Maintainer:** Krishna Kumar (krishna.kumar@maidsafe.net)
 
@@ -14,17 +16,21 @@ safe_app Node.js library.
 
 ## Documentation
 
-The documentation for the safe_app Node.js API is available at http://docs.maidsafe.net/safe_app_nodejs/.
+The documentation for the safe-node-app Node.js API is available at http://docs.maidsafe.net/safe_app_nodejs/.
+
+## Installation
+
+`yarn add @maidsafe/safe-node-app`
 
 ## External Libraries
 
-The external libraries will automatically be downloaded when you run `npm install`.
+The external libraries will automatically be downloaded when you run `yarn install`.
 
-If you are working on a development environment, you can run `NODE_ENV=dev npm install` instead in order to get the `safe_client` libraries which use the `MockVault` file rather than connecting to the SAFE Network.
+If you are working on a development environment, you can run `NODE_ENV=dev yarn install` instead in order to get the `safe_client` libraries which use the `MockVault` file rather than connecting to the SAFE Network.
 
 ## Testing
 
-To run the tests locally, make sure you installed the `safe_client` libraries with `NODE_ENV=dev npm install`, then you can run them by executing `npm test`.
+To run the tests locally, make sure you installed the `safe_client` libraries with `NODE_ENV=dev yarn install`, then you can run them by executing `yarn test`.
 
 You may possibly be compiling your own [safe_app](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library for testing purposes. In this case, if you want to be able to run the tests, make sure to include `testing` in your build features when compiling `safe_app` in `safe_client_libs`, i.e. `cargo build --release --features "use-mock-routing testing"`.
 
