@@ -100,7 +100,10 @@ class SAFEApp extends EventEmitter {
     const appInfoMustHaveProperties = ['id', 'name', 'vendor'];
     let bool = false;
     const hasCorrectProperties = appInfoMustHaveProperties.every((prop) => {
-      appInfo[prop] = appInfo[prop].trim();
+      if (appInfo[prop]) {
+        appInfo[prop] = appInfo[prop].trim();
+      }
+
       bool = Object.prototype.hasOwnProperty.call(appInfo, prop) && appInfo[prop];
       return bool;
     });
