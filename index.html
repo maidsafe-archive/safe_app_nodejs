@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>safe-app 0.1.0-dev.1 | Documentation</title>
+  <title>safe-app 0.2.1 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div class='fixed xs-hide fix-3 overflow-auto max-height-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>safe-app</h3>
-          <div class='mb1'><code>0.1.0-dev.1</code></div>
+          <div class='mb1'><code>0.2.1</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -65,6 +65,16 @@
               
                 
                 <li><a
+                  href='#initoptions'
+                  class="">
+                  InitOptions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#app-interface'
                   class="h5 bold black caps">
                   App Interface
@@ -87,7 +97,7 @@
                     <li class='h5'><span>Static members</span></li>
                     
                       <li><a
-                        href='#SAFEApp.fromAuthUri'
+                        href='#safeappfromauthuri'
                         class='regular pre-open'>
                         .fromAuthUri
                       </a></li>
@@ -99,67 +109,67 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#SAFEApp#auth'
+                        href='#safeappauth'
                         class='regular pre-open'>
                         #auth
                       </a></li>
                       
                       <li><a
-                        href='#SAFEApp#crypto'
+                        href='#safeappcrypto'
                         class='regular pre-open'>
                         #crypto
                       </a></li>
                       
                       <li><a
-                        href='#SAFEApp#cipherOpt'
+                        href='#safeappcipheropt'
                         class='regular pre-open'>
                         #cipherOpt
                       </a></li>
                       
                       <li><a
-                        href='#SAFEApp#immutableData'
+                        href='#safeappimmutabledata'
                         class='regular pre-open'>
                         #immutableData
                       </a></li>
                       
                       <li><a
-                        href='#SAFEApp#mutableData'
+                        href='#safeappmutabledata'
                         class='regular pre-open'>
                         #mutableData
                       </a></li>
                       
                       <li><a
-                        href='#SAFEApp#webFetch'
+                        href='#safeappwebfetch'
                         class='regular pre-open'>
                         #webFetch
                       </a></li>
                       
                       <li><a
-                        href='#SAFEApp#connection'
+                        href='#safeappconnection'
                         class='regular pre-open'>
                         #connection
                       </a></li>
                       
                       <li><a
-                        href='#SAFEApp#networkState'
+                        href='#safeappnetworkstate'
                         class='regular pre-open'>
                         #networkState
                       </a></li>
                       
                       <li><a
-                        href='#SAFEApp#appInfo'
+                        href='#safeappappinfo'
                         class='regular pre-open'>
                         #appInfo
                       </a></li>
                       
                       <li><a
-                        href='#SAFEApp#logPath'
+                        href='#safeapplogpath'
                         class='regular pre-open'>
                         #logPath
                       </a></li>
                       
                       <li><a
-                        href='#SAFEApp#reconnect'
+                        href='#safeappreconnect'
                         class='regular pre-open'>
                         #reconnect
                       </a></li>
@@ -187,55 +197,55 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#CryptoInterface#sha3Hash'
+                        href='#cryptointerfacesha3hash'
                         class='regular pre-open'>
                         #sha3Hash
                       </a></li>
                       
                       <li><a
-                        href='#CryptoInterface#getAppPubSignKey'
+                        href='#cryptointerfacegetapppubsignkey'
                         class='regular pre-open'>
                         #getAppPubSignKey
                       </a></li>
                       
                       <li><a
-                        href='#CryptoInterface#getAppPubEncKey'
+                        href='#cryptointerfacegetapppubenckey'
                         class='regular pre-open'>
                         #getAppPubEncKey
                       </a></li>
                       
                       <li><a
-                        href='#CryptoInterface#generateEncKeyPair'
+                        href='#cryptointerfacegenerateenckeypair'
                         class='regular pre-open'>
                         #generateEncKeyPair
                       </a></li>
                       
                       <li><a
-                        href='#CryptoInterface#generateEncKeyPairFromRaw'
+                        href='#cryptointerfacegenerateenckeypairfromraw'
                         class='regular pre-open'>
                         #generateEncKeyPairFromRaw
                       </a></li>
                       
                       <li><a
-                        href='#CryptoInterface#getSignKeyFromRaw'
+                        href='#cryptointerfacegetsignkeyfromraw'
                         class='regular pre-open'>
                         #getSignKeyFromRaw
                       </a></li>
                       
                       <li><a
-                        href='#CryptoInterface#pubEncKeyKeyFromRaw'
+                        href='#cryptointerfacepubenckeykeyfromraw'
                         class='regular pre-open'>
                         #pubEncKeyKeyFromRaw
                       </a></li>
                       
                       <li><a
-                        href='#CryptoInterface#secEncKeyKeyFromRaw'
+                        href='#cryptointerfacesecenckeykeyfromraw'
                         class='regular pre-open'>
                         #secEncKeyKeyFromRaw
                       </a></li>
                       
                       <li><a
-                        href='#CryptoInterface#generateNonce'
+                        href='#cryptointerfacegeneratenonce'
                         class='regular pre-open'>
                         #generateNonce
                       </a></li>
@@ -263,73 +273,79 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#AuthInterface#registered'
+                        href='#authinterfaceregistered'
                         class='regular pre-open'>
                         #registered
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#genAuthUri'
+                        href='#authinterfacegenauthuri'
                         class='regular pre-open'>
                         #genAuthUri
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#genConnUri'
+                        href='#authinterfacegensharemdatauri'
+                        class='regular pre-open'>
+                        #genShareMDataUri
+                      </a></li>
+                      
+                      <li><a
+                        href='#authinterfacegenconnuri'
                         class='regular pre-open'>
                         #genConnUri
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#openUri'
+                        href='#authinterfaceopenuri'
                         class='regular pre-open'>
                         #openUri
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#genContainerAuthUri'
+                        href='#authinterfacegencontainerauthuri'
                         class='regular pre-open'>
                         #genContainerAuthUri
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#refreshContainersPermissions'
+                        href='#authinterfacerefreshcontainerspermissions'
                         class='regular pre-open'>
                         #refreshContainersPermissions
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#getContainersNames'
+                        href='#authinterfacegetcontainerspermissions'
                         class='regular pre-open'>
-                        #getContainersNames
+                        #getContainersPermissions
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#getHomeContainer'
+                        href='#authinterfacegetowncontainer'
                         class='regular pre-open'>
-                        #getHomeContainer
+                        #getOwnContainer
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#canAccessContainer'
+                        href='#authinterfacecanaccesscontainer'
                         class='regular pre-open'>
                         #canAccessContainer
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#getContainer'
+                        href='#authinterfacegetcontainer'
                         class='regular pre-open'>
                         #getContainer
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#loginFromURI'
+                        href='#authinterfaceloginfromuri'
                         class='regular pre-open'>
                         #loginFromURI
                       </a></li>
                       
                       <li><a
-                        href='#AuthInterface#loginForTest'
+                        href='#authinterfaceloginfortest'
                         class='regular pre-open'>
                         #loginForTest
                       </a></li>
@@ -357,19 +373,19 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#CipherOptInterface#newPlainText'
+                        href='#cipheroptinterfacenewplaintext'
                         class='regular pre-open'>
                         #newPlainText
                       </a></li>
                       
                       <li><a
-                        href='#CipherOptInterface#newSymmetric'
+                        href='#cipheroptinterfacenewsymmetric'
                         class='regular pre-open'>
                         #newSymmetric
                       </a></li>
                       
                       <li><a
-                        href='#CipherOptInterface#newAsymmetric'
+                        href='#cipheroptinterfacenewasymmetric'
                         class='regular pre-open'>
                         #newAsymmetric
                       </a></li>
@@ -397,13 +413,13 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#ImmutableDataInterface#create'
+                        href='#immutabledatainterfacecreate'
                         class='regular pre-open'>
                         #create
                       </a></li>
                       
                       <li><a
-                        href='#ImmutableDataInterface#fetch'
+                        href='#immutabledatainterfacefetch'
                         class='regular pre-open'>
                         #fetch
                       </a></li>
@@ -431,55 +447,55 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#MutableDataInterface#newRandomPrivate'
+                        href='#mutabledatainterfacenewrandomprivate'
                         class='regular pre-open'>
                         #newRandomPrivate
                       </a></li>
                       
                       <li><a
-                        href='#MutableDataInterface#newRandomPublic'
+                        href='#mutabledatainterfacenewrandompublic'
                         class='regular pre-open'>
                         #newRandomPublic
                       </a></li>
                       
                       <li><a
-                        href='#MutableDataInterface#newPrivate'
+                        href='#mutabledatainterfacenewprivate'
                         class='regular pre-open'>
                         #newPrivate
                       </a></li>
                       
                       <li><a
-                        href='#MutableDataInterface#newPublic'
+                        href='#mutabledatainterfacenewpublic'
                         class='regular pre-open'>
                         #newPublic
                       </a></li>
                       
                       <li><a
-                        href='#MutableDataInterface#newPermissions'
+                        href='#mutabledatainterfacenewpermissions'
                         class='regular pre-open'>
                         #newPermissions
                       </a></li>
                       
                       <li><a
-                        href='#MutableDataInterface#newPermissionSet'
+                        href='#mutabledatainterfacenewpermissionset'
                         class='regular pre-open'>
                         #newPermissionSet
                       </a></li>
                       
                       <li><a
-                        href='#MutableDataInterface#newMutation'
+                        href='#mutabledatainterfacenewmutation'
                         class='regular pre-open'>
                         #newMutation
                       </a></li>
                       
                       <li><a
-                        href='#MutableDataInterface#newEntries'
+                        href='#mutabledatainterfacenewentries'
                         class='regular pre-open'>
                         #newEntries
                       </a></li>
                       
                       <li><a
-                        href='#MutableDataInterface#fromSerial'
+                        href='#mutabledatainterfacefromserial'
                         class='regular pre-open'>
                         #fromSerial
                       </a></li>
@@ -517,13 +533,13 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#Reader#read'
+                        href='#readerread'
                         class='regular pre-open'>
                         #read
                       </a></li>
                       
                       <li><a
-                        href='#Reader#size'
+                        href='#readersize'
                         class='regular pre-open'>
                         #size
                       </a></li>
@@ -551,19 +567,19 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#Writer#write'
+                        href='#writerwrite'
                         class='regular pre-open'>
                         #write
                       </a></li>
                       
                       <li><a
-                        href='#Writer#close'
+                        href='#writerclose'
                         class='regular pre-open'>
                         #close
                       </a></li>
                       
                       <li><a
-                        href='#Writer#save'
+                        href='#writersave'
                         class='regular pre-open'>
                         #save
                       </a></li>
@@ -601,109 +617,115 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#MutableData#quickSetup'
+                        href='#mutabledataquicksetup'
                         class='regular pre-open'>
                         #quickSetup
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#encryptKey'
+                        href='#mutabledatasetmetadata'
+                        class='regular pre-open'>
+                        #setMetadata
+                      </a></li>
+                      
+                      <li><a
+                        href='#mutabledataencryptkey'
                         class='regular pre-open'>
                         #encryptKey
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#encryptValue'
+                        href='#mutabledataencryptvalue'
                         class='regular pre-open'>
                         #encryptValue
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#decrypt'
+                        href='#mutabledatadecrypt'
                         class='regular pre-open'>
                         #decrypt
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#getNameAndTag'
+                        href='#mutabledatagetnameandtag'
                         class='regular pre-open'>
                         #getNameAndTag
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#getVersion'
+                        href='#mutabledatagetversion'
                         class='regular pre-open'>
                         #getVersion
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#get'
+                        href='#mutabledataget'
                         class='regular pre-open'>
                         #get
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#put'
+                        href='#mutabledataput'
                         class='regular pre-open'>
                         #put
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#getEntries'
+                        href='#mutabledatagetentries'
                         class='regular pre-open'>
                         #getEntries
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#getKeys'
+                        href='#mutabledatagetkeys'
                         class='regular pre-open'>
                         #getKeys
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#getValues'
+                        href='#mutabledatagetvalues'
                         class='regular pre-open'>
                         #getValues
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#getPermissions'
+                        href='#mutabledatagetpermissions'
                         class='regular pre-open'>
                         #getPermissions
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#getUserPermissions'
+                        href='#mutabledatagetuserpermissions'
                         class='regular pre-open'>
                         #getUserPermissions
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#delUserPermissions'
+                        href='#mutabledatadeluserpermissions'
                         class='regular pre-open'>
                         #delUserPermissions
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#setUserPermissions'
+                        href='#mutabledatasetuserpermissions'
                         class='regular pre-open'>
                         #setUserPermissions
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#applyEntriesMutation'
+                        href='#mutabledataapplyentriesmutation'
                         class='regular pre-open'>
                         #applyEntriesMutation
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#serialise'
+                        href='#mutabledataserialise'
                         class='regular pre-open'>
                         #serialise
                       </a></li>
                       
                       <li><a
-                        href='#MutableData#emulateAs'
+                        href='#mutabledataemulateas'
                         class='regular pre-open'>
                         #emulateAs
                       </a></li>
@@ -731,31 +753,31 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#Entries#len'
+                        href='#entrieslen'
                         class='regular pre-open'>
                         #len
                       </a></li>
                       
                       <li><a
-                        href='#Entries#get'
+                        href='#entriesget'
                         class='regular pre-open'>
                         #get
                       </a></li>
                       
                       <li><a
-                        href='#Entries#forEach'
+                        href='#entriesforeach'
                         class='regular pre-open'>
                         #forEach
                       </a></li>
                       
                       <li><a
-                        href='#Entries#insert'
+                        href='#entriesinsert'
                         class='regular pre-open'>
                         #insert
                       </a></li>
                       
                       <li><a
-                        href='#Entries#mutate'
+                        href='#entriesmutate'
                         class='regular pre-open'>
                         #mutate
                       </a></li>
@@ -783,13 +805,13 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#Keys#len'
+                        href='#keyslen'
                         class='regular pre-open'>
                         #len
                       </a></li>
                       
                       <li><a
-                        href='#Keys#forEach'
+                        href='#keysforeach'
                         class='regular pre-open'>
                         #forEach
                       </a></li>
@@ -817,13 +839,13 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#Values#len'
+                        href='#valueslen'
                         class='regular pre-open'>
                         #len
                       </a></li>
                       
                       <li><a
-                        href='#Values#forEach'
+                        href='#valuesforeach'
                         class='regular pre-open'>
                         #forEach
                       </a></li>
@@ -851,19 +873,19 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#EntryMutationTransaction#insert'
+                        href='#entrymutationtransactioninsert'
                         class='regular pre-open'>
                         #insert
                       </a></li>
                       
                       <li><a
-                        href='#EntryMutationTransaction#remove'
+                        href='#entrymutationtransactionremove'
                         class='regular pre-open'>
                         #remove
                       </a></li>
                       
                       <li><a
-                        href='#EntryMutationTransaction#update'
+                        href='#entrymutationtransactionupdate'
                         class='regular pre-open'>
                         #update
                       </a></li>
@@ -901,25 +923,25 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#Permissions#len'
+                        href='#permissionslen'
                         class='regular pre-open'>
                         #len
                       </a></li>
                       
                       <li><a
-                        href='#Permissions#getPermissionSet'
+                        href='#permissionsgetpermissionset'
                         class='regular pre-open'>
                         #getPermissionSet
                       </a></li>
                       
                       <li><a
-                        href='#Permissions#insertPermissionSet'
+                        href='#permissionsinsertpermissionset'
                         class='regular pre-open'>
                         #insertPermissionSet
                       </a></li>
                       
                       <li><a
-                        href='#Permissions#forEach'
+                        href='#permissionsforeach'
                         class='regular pre-open'>
                         #forEach
                       </a></li>
@@ -947,19 +969,19 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#PermissionsSet#setAllow'
+                        href='#permissionssetsetallow'
                         class='regular pre-open'>
                         #setAllow
                       </a></li>
                       
                       <li><a
-                        href='#PermissionsSet#setDeny'
+                        href='#permissionssetsetdeny'
                         class='regular pre-open'>
                         #setDeny
                       </a></li>
                       
                       <li><a
-                        href='#PermissionsSet#clear'
+                        href='#permissionssetclear'
                         class='regular pre-open'>
                         #clear
                       </a></li>
@@ -997,37 +1019,37 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#NFS#create'
+                        href='#nfscreate'
                         class='regular pre-open'>
                         #create
                       </a></li>
                       
                       <li><a
-                        href='#NFS#fetch'
+                        href='#nfsfetch'
                         class='regular pre-open'>
                         #fetch
                       </a></li>
                       
                       <li><a
-                        href='#NFS#insert'
+                        href='#nfsinsert'
                         class='regular pre-open'>
                         #insert
                       </a></li>
                       
                       <li><a
-                        href='#NFS#update'
+                        href='#nfsupdate'
                         class='regular pre-open'>
                         #update
                       </a></li>
                       
                       <li><a
-                        href='#NFS#delete'
+                        href='#nfsdelete'
                         class='regular pre-open'>
                         #delete
                       </a></li>
                       
                       <li><a
-                        href='#NFS#open'
+                        href='#nfsopen'
                         class='regular pre-open'>
                         #open
                       </a></li>
@@ -1055,49 +1077,49 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#File#dataMapName'
+                        href='#filedatamapname'
                         class='regular pre-open'>
                         #dataMapName
                       </a></li>
                       
                       <li><a
-                        href='#File#created'
+                        href='#filecreated'
                         class='regular pre-open'>
                         #created
                       </a></li>
                       
                       <li><a
-                        href='#File#modified'
+                        href='#filemodified'
                         class='regular pre-open'>
                         #modified
                       </a></li>
                       
                       <li><a
-                        href='#File#size'
+                        href='#filesize'
                         class='regular pre-open'>
                         #size
                       </a></li>
                       
                       <li><a
-                        href='#File#read'
+                        href='#fileread'
                         class='regular pre-open'>
                         #read
                       </a></li>
                       
                       <li><a
-                        href='#File#write'
+                        href='#filewrite'
                         class='regular pre-open'>
                         #write
                       </a></li>
                       
                       <li><a
-                        href='#File#close'
+                        href='#fileclose'
                         class='regular pre-open'>
                         #close
                       </a></li>
                       
                       <li><a
-                        href='#File#version'
+                        href='#fileversion'
                         class='regular pre-open'>
                         #version
                       </a></li>
@@ -1135,7 +1157,7 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#SignKey#getRaw'
+                        href='#signkeygetraw'
                         class='regular pre-open'>
                         #getRaw
                       </a></li>
@@ -1163,19 +1185,19 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#KeyPair#pubEncKey'
+                        href='#keypairpubenckey'
                         class='regular pre-open'>
                         #pubEncKey
                       </a></li>
                       
                       <li><a
-                        href='#KeyPair#secEncKey'
+                        href='#keypairsecenckey'
                         class='regular pre-open'>
                         #secEncKey
                       </a></li>
                       
                       <li><a
-                        href='#KeyPair#decryptSealed'
+                        href='#keypairdecryptsealed'
                         class='regular pre-open'>
                         #decryptSealed
                       </a></li>
@@ -1203,13 +1225,13 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#SecEncKey#getRaw'
+                        href='#secenckeygetraw'
                         class='regular pre-open'>
                         #getRaw
                       </a></li>
                       
                       <li><a
-                        href='#SecEncKey#decrypt'
+                        href='#secenckeydecrypt'
                         class='regular pre-open'>
                         #decrypt
                       </a></li>
@@ -1237,19 +1259,19 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#PubEncKey#getRaw'
+                        href='#pubenckeygetraw'
                         class='regular pre-open'>
                         #getRaw
                       </a></li>
                       
                       <li><a
-                        href='#PubEncKey#encryptSealed'
+                        href='#pubenckeyencryptsealed'
                         class='regular pre-open'>
                         #encryptSealed
                       </a></li>
                       
                       <li><a
-                        href='#PubEncKey#encrypt'
+                        href='#pubenckeyencrypt'
                         class='regular pre-open'>
                         #encrypt
                       </a></li>
@@ -1337,7 +1359,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/index.js#L43-L46'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/index.js#L53-L60'>
       <span>src/index.js</span>
       </a>
     
@@ -1347,7 +1369,7 @@
   <p>The main entry point to create a new SAFEApp</p>
 
 
-  <div class='pre p1 fill-light mt0'>initializeApp(appInfo: <a href="#appinfo">AppInfo</a>, networkStateCallBack: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
+  <div class='pre p1 fill-light mt0'>initializeApp(appInfo: <a href="#appinfo">AppInfo</a>, networkStateCallBack: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a>, options: <a href="#initoptions">InitOptions</a>?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
   
   
 
@@ -1374,8 +1396,17 @@
           <div>
             <span class='code bold'>networkStateCallBack</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a>
             = <code>null</code>)</code>
-	    optional callback function
+	    callback function
 to receive network state updates
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#initoptions">InitOptions</a>?)</code>
+	    initialisation options
 
           </div>
           
@@ -1442,7 +1473,7 @@ prms.then(<span class="hljs-function"><span class="hljs-params">app</span> =&gt;
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/index.js#L60-L62'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/index.js#L74-L76'>
       <span>src/index.js</span>
       </a>
     
@@ -1455,7 +1486,7 @@ connection by using this helper function. Just provide said URI as the
 second value.</p>
 
 
-  <div class='pre p1 fill-light mt0'>fromAuthURI(appInfo: <a href="#appinfo">AppInfo</a>, authUri: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, networkStateCallBack: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
+  <div class='pre p1 fill-light mt0'>fromAuthURI(appInfo: <a href="#appinfo">AppInfo</a>, authUri: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, networkStateCallBack: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a>, options: <a href="#initoptions">InitOptions</a>?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
   
   
 
@@ -1494,6 +1525,15 @@ second value.</p>
             = <code>null</code>)</code>
 	    optional callback function
 to receive network state updates
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#initoptions">InitOptions</a>?)</code>
+	    initialisation options
 
           </div>
           
@@ -1538,7 +1578,7 @@ to receive network state updates
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/index.js#L43-L46'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/index.js#L53-L60'>
       <span>src/index.js</span>
       </a>
     
@@ -1578,6 +1618,14 @@ to receive network state updates
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>networkStateCallBack</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
 	    
           </div>
           
@@ -1652,6 +1700,118 @@ to use when registering the URI with the system.
           
         
           
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='initoptions'>
+      InitOptions
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/index.js#L53-L60'>
+      <span>src/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>InitOptions</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>appInfo</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>networkStateCallBack</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>registerScheme</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>?)</code>
+	    to register auth scheme with the OS. Defaults to true
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>log</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>?)</code>
+	    to enable or disable back end logging. Defaults to true
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>libPath</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?)</code>
+	    path to the folder where the native libs can
+be found. Defaults to current folder path.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
   <h2 id='app-interface' class='mt0'>
@@ -1677,7 +1837,7 @@ to use when registering the URI with the system.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/app.js#L13-L290'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/app.js#L15-L359'>
       <span>src/app.js</span>
       </a>
     
@@ -1689,7 +1849,7 @@ with the network. As such it also provides all API-Providers connected through
 this session.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new SAFEApp(appInfo: any, networkStateCallBack: any)</div>
+  <div class='pre p1 fill-light mt0'>new SAFEApp(appInfo: any, networkStateCallBack: any, options: any)</div>
   
   
     <p>
@@ -1727,6 +1887,14 @@ this session.</p>
           
         </div>
       
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
     </div>
   
 
@@ -1742,11 +1910,11 @@ this session.</p>
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='SAFEApp.fromAuthUri'>
+    <div class='border-bottom' id='safeappfromauthuri'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>fromAuthUri(appInfo, authUri, networkStateCallBack)</span>
+            <span class='code strong strong truncate'>fromAuthUri(appInfo, authUri, networkStateCallBack, options, initialisation)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -1756,7 +1924,7 @@ this session.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/app.js#L234-L237'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/app.js#L303-L306'>
       <span>src/app.js</span>
       </a>
     
@@ -1766,7 +1934,7 @@ this session.</p>
   <p>Create a SAFEApp and try to login it through the <code>authUri</code></p>
 
 
-  <div class='pre p1 fill-light mt0'>fromAuthUri(appInfo: <a href="#appinfo">AppInfo</a>, authUri: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, networkStateCallBack: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
+  <div class='pre p1 fill-light mt0'>fromAuthUri(appInfo: <a href="#appinfo">AppInfo</a>, authUri: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, networkStateCallBack: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a>, options: any, initialisation: <a href="#initoptions">InitOptions</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
   
   
 
@@ -1810,6 +1978,23 @@ to receive network state updates
           
         </div>
       
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>initialisation</span> <code class='quiet'>(<a href="#initoptions">InitOptions</a>)</code>
+	    options
+
+          </div>
+          
+        </div>
+      
     </div>
   
 
@@ -1847,7 +2032,7 @@ to receive network state updates
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='SAFEApp#auth'>
+    <div class='border-bottom' id='safeappauth'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1861,7 +2046,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/app.js#L45-L47'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/app.js#L59-L61'>
       <span>src/app.js</span>
       </a>
     
@@ -1910,7 +2095,7 @@ to receive network state updates
       </div>
     </div>
   
-    <div class='border-bottom' id='SAFEApp#crypto'>
+    <div class='border-bottom' id='safeappcrypto'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1924,7 +2109,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/app.js#L53-L55'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/app.js#L67-L69'>
       <span>src/app.js</span>
       </a>
     
@@ -1973,7 +2158,7 @@ to receive network state updates
       </div>
     </div>
   
-    <div class='border-bottom' id='SAFEApp#cipherOpt'>
+    <div class='border-bottom' id='safeappcipheropt'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1987,7 +2172,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/app.js#L61-L63'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/app.js#L75-L77'>
       <span>src/app.js</span>
       </a>
     
@@ -2036,7 +2221,7 @@ to receive network state updates
       </div>
     </div>
   
-    <div class='border-bottom' id='SAFEApp#immutableData'>
+    <div class='border-bottom' id='safeappimmutabledata'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2050,7 +2235,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/app.js#L69-L71'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/app.js#L83-L85'>
       <span>src/app.js</span>
       </a>
     
@@ -2099,7 +2284,7 @@ to receive network state updates
       </div>
     </div>
   
-    <div class='border-bottom' id='SAFEApp#mutableData'>
+    <div class='border-bottom' id='safeappmutabledata'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2113,7 +2298,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/app.js#L77-L79'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/app.js#L91-L93'>
       <span>src/app.js</span>
       </a>
     
@@ -2162,7 +2347,7 @@ to receive network state updates
       </div>
     </div>
   
-    <div class='border-bottom' id='SAFEApp#webFetch'>
+    <div class='border-bottom' id='safeappwebfetch'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2176,7 +2361,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/app.js#L88-L143'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/app.js#L123-L211'>
       <span>src/app.js</span>
       </a>
     
@@ -2240,7 +2425,7 @@ convention and find the requested object.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='SAFEApp#connection'>
+    <div class='border-bottom' id='safeappconnection'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2254,7 +2439,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/app.js#L166-L169'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/app.js#L234-L237'>
       <span>src/app.js</span>
       </a>
     
@@ -2303,7 +2488,7 @@ convention and find the requested object.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='SAFEApp#networkState'>
+    <div class='border-bottom' id='safeappnetworkstate'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2317,7 +2502,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/app.js#L198-L200'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/app.js#L266-L268'>
       <span>src/app.js</span>
       </a>
     
@@ -2366,7 +2551,7 @@ convention and find the requested object.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='SAFEApp#appInfo'>
+    <div class='border-bottom' id='safeappappinfo'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2380,7 +2565,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/app.js#L205-L207'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/app.js#L273-L275'>
       <span>src/app.js</span>
       </a>
     
@@ -2421,7 +2606,7 @@ convention and find the requested object.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='SAFEApp#logPath'>
+    <div class='border-bottom' id='safeapplogpath'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2435,7 +2620,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/app.js#L218-L224'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/app.js#L286-L292'>
       <span>src/app.js</span>
       </a>
     
@@ -2501,7 +2686,7 @@ the path of where the safe_core log file is located.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='SAFEApp#reconnect'>
+    <div class='border-bottom' id='safeappreconnect'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2515,7 +2700,7 @@ the path of where the safe_core log file is located.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/app.js#L264-L276'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/app.js#L333-L345'>
       <span>src/app.js</span>
       </a>
     
@@ -2577,7 +2762,7 @@ Must be invoked when the client decides to connect back after the connection is 
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L172-L274'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L172-L274'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2628,7 +2813,7 @@ Must be invoked when the client decides to connect back after the connection is 
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='CryptoInterface#sha3Hash'>
+    <div class='border-bottom' id='cryptointerfacesha3hash'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2642,7 +2827,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L187-L189'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L187-L189'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2704,7 +2889,7 @@ Must be invoked when the client decides to connect back after the connection is 
       </div>
     </div>
   
-    <div class='border-bottom' id='CryptoInterface#getAppPubSignKey'>
+    <div class='border-bottom' id='cryptointerfacegetapppubsignkey'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2718,7 +2903,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L198-L201'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L198-L201'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2767,7 +2952,7 @@ Must be invoked when the client decides to connect back after the connection is 
       </div>
     </div>
   
-    <div class='border-bottom' id='CryptoInterface#getAppPubEncKey'>
+    <div class='border-bottom' id='cryptointerfacegetapppubenckey'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2781,7 +2966,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L207-L210'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L207-L210'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2830,7 +3015,7 @@ Must be invoked when the client decides to connect back after the connection is 
       </div>
     </div>
   
-    <div class='border-bottom' id='CryptoInterface#generateEncKeyPair'>
+    <div class='border-bottom' id='cryptointerfacegenerateenckeypair'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2844,7 +3029,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L216-L222'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L216-L222'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2893,7 +3078,7 @@ Must be invoked when the client decides to connect back after the connection is 
       </div>
     </div>
   
-    <div class='border-bottom' id='CryptoInterface#generateEncKeyPairFromRaw'>
+    <div class='border-bottom' id='cryptointerfacegenerateenckeypairfromraw'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2907,7 +3092,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L228-L234'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L228-L234'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2977,7 +3162,7 @@ Must be invoked when the client decides to connect back after the connection is 
       </div>
     </div>
   
-    <div class='border-bottom' id='CryptoInterface#getSignKeyFromRaw'>
+    <div class='border-bottom' id='cryptointerfacegetsignkeyfromraw'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2991,7 +3176,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L241-L244'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L241-L244'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3054,7 +3239,7 @@ Must be invoked when the client decides to connect back after the connection is 
       </div>
     </div>
   
-    <div class='border-bottom' id='CryptoInterface#pubEncKeyKeyFromRaw'>
+    <div class='border-bottom' id='cryptointerfacepubenckeykeyfromraw'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -3068,7 +3253,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L251-L254'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L251-L254'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3131,7 +3316,7 @@ Must be invoked when the client decides to connect back after the connection is 
       </div>
     </div>
   
-    <div class='border-bottom' id='CryptoInterface#secEncKeyKeyFromRaw'>
+    <div class='border-bottom' id='cryptointerfacesecenckeykeyfromraw'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -3145,7 +3330,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L261-L264'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L261-L264'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3208,7 +3393,7 @@ Must be invoked when the client decides to connect back after the connection is 
       </div>
     </div>
   
-    <div class='border-bottom' id='CryptoInterface#generateNonce'>
+    <div class='border-bottom' id='cryptointerfacegeneratenonce'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -3222,7 +3407,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L271-L273'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L271-L273'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3291,7 +3476,7 @@ Must be invoked when the client decides to connect back after the connection is 
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/auth.js#L52-L282'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L53-L339'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3345,7 +3530,7 @@ authentitcation protocol.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='AuthInterface#registered'>
+    <div class='border-bottom' id='authinterfaceregistered'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -3359,7 +3544,7 @@ authentitcation protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/auth.js#L87-L89'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L92-L94'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3408,7 +3593,7 @@ authentitcation protocol.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#genAuthUri'>
+    <div class='border-bottom' id='authinterfacegenauthuri'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -3422,7 +3607,7 @@ authentitcation protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/auth.js#L109-L119'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L114-L124'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3534,7 +3719,103 @@ app.auth.genAuthUri({
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#genConnUri'>
+    <div class='border-bottom' id='authinterfacegensharemdatauri'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>genShareMDataUri(permissions)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L146-L154'>
+      <span>src/api/auth.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Generate a <code>'safe-auth'</code>-URI to request permissions
+on arbitrary owned MutableData's.</p>
+
+
+  <div class='pre p1 fill-light mt0'>genShareMDataUri(permissions: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>permissions</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    mapping the MutableData's XoR names
+to a list of permissions you want to request
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>:
+        <code>safe-auth://</code>
+-URI
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// example of requesting permissions for a couple of MutableData's:</span>
+app.auth.genShareMDataUri([
+ { <span class="hljs-attr">type_tag</span>: <span class="hljs-number">15001</span>,   <span class="hljs-comment">// request for MD with tag 15001</span>
+   name: <span class="hljs-string">'XoRname1'</span>,  <span class="hljs-comment">// request for MD located at address 'XoRname1'</span>
+   perms: [<span class="hljs-string">'Insert'</span>], <span class="hljs-comment">// request for inserting into the referenced MD</span>
+ },
+ { <span class="hljs-attr">type_tag</span>: <span class="hljs-number">15020</span>,   <span class="hljs-comment">// request for MD with tag 15020</span>
+   name: <span class="hljs-string">'XoRname2'</span>,  <span class="hljs-comment">// request for MD located at address 'XoRname2'</span>
+   perms: [<span class="hljs-string">'Insert'</span>, <span class="hljs-string">`Update`</span>], <span class="hljs-comment">// request for updating and inserting into the referenced MD</span>
+ }
+])</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='authinterfacegenconnuri'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -3548,7 +3829,7 @@ app.auth.genAuthUri({
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/auth.js#L129-L131'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L164-L166'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3605,7 +3886,7 @@ app.auth.genConnUri()</pre>
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#openUri'>
+    <div class='border-bottom' id='authinterfaceopenuri'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -3619,7 +3900,7 @@ app.auth.genConnUri()</pre>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/auth.js#L137-L139'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L172-L174'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3673,7 +3954,7 @@ app.auth.genConnUri()</pre>
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#genContainerAuthUri'>
+    <div class='border-bottom' id='authinterfacegencontainerauthuri'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -3687,7 +3968,7 @@ app.auth.genConnUri()</pre>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/auth.js#L151-L160'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L187-L196'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3759,7 +4040,7 @@ app.auth.genContainerAuthUri(
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#refreshContainersPermissions'>
+    <div class='border-bottom' id='authinterfacerefreshcontainerspermissions'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -3773,7 +4054,7 @@ app.auth.genContainerAuthUri(
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/auth.js#L167-L169'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L203-L205'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3823,11 +4104,11 @@ connected or received a response from the authenticator in the IPC protocol.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#getContainersNames'>
+    <div class='border-bottom' id='authinterfacegetcontainerspermissions'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getContainersNames()</span>
+            <span class='code strong strong truncate'>getContainersPermissions()</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3837,17 +4118,18 @@ connected or received a response from the authenticator in the IPC protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/auth.js#L175-L177'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L212-L214'>
       <span>src/api/auth.js</span>
       </a>
     
   </div>
   
 
-  <p>Get the names of all containers found.</p>
+  <p>Get the names of all containers found and the app's granted
+permissions for each of them.</p>
 
 
-  <div class='pre p1 fill-light mt0'>getContainersNames(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>]></div>
+  <div class='pre p1 fill-light mt0'>getContainersPermissions(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;[ContainersPerms]></div>
   
   
 
@@ -3865,7 +4147,7 @@ connected or received a response from the authenticator in the IPC protocol.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>]></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;[ContainersPerms]></code>:
         
 
       
@@ -3886,11 +4168,11 @@ connected or received a response from the authenticator in the IPC protocol.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#getHomeContainer'>
+    <div class='border-bottom' id='authinterfacegetowncontainer'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getHomeContainer()</span>
+            <span class='code strong strong truncate'>getOwnContainer()</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3900,7 +4182,7 @@ connected or received a response from the authenticator in the IPC protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/auth.js#L184-L204'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L221-L242'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3911,7 +4193,7 @@ connected or received a response from the authenticator in the IPC protocol.</p>
 When run in tests, this falls back to the randomly generated version</p>
 
 
-  <div class='pre p1 fill-light mt0'>getHomeContainer()</div>
+  <div class='pre p1 fill-light mt0'>getOwnContainer(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#mutabledata">MutableData</a>></div>
   
   
 
@@ -3926,6 +4208,14 @@ When run in tests, this falls back to the randomly generated version</p>
 
   
 
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#mutabledata">MutableData</a>></code>:
+        
+
+      
+    
   
 
   
@@ -3942,7 +4232,7 @@ When run in tests, this falls back to the randomly generated version</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#canAccessContainer'>
+    <div class='border-bottom' id='authinterfacecanaccesscontainer'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -3956,7 +4246,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/auth.js#L212-L222'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L250-L266'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4028,7 +4318,7 @@ When run in tests, this falls back to the randomly generated version</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#getContainer'>
+    <div class='border-bottom' id='authinterfacegetcontainer'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4042,7 +4332,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/auth.js#L229-L232'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L273-L276'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4106,7 +4396,7 @@ When run in tests, this falls back to the randomly generated version</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#loginFromURI'>
+    <div class='border-bottom' id='authinterfaceloginfromuri'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4120,7 +4410,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/auth.js#L240-L261'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L284-L318'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4184,7 +4474,7 @@ authenticated session.
       </div>
     </div>
   
-    <div class='border-bottom' id='AuthInterface#loginForTest'>
+    <div class='border-bottom' id='authinterfaceloginfortest'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4198,7 +4488,7 @@ authenticated session.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/auth.js#L270-L281'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/auth.js#L327-L338'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4282,7 +4572,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/cipher_opt.js#L17-L51'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/cipher_opt.js#L17-L51'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -4332,7 +4622,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='CipherOptInterface#newPlainText'>
+    <div class='border-bottom' id='cipheroptinterfacenewplaintext'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4346,7 +4636,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/cipher_opt.js#L27-L30'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/cipher_opt.js#L27-L30'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -4395,7 +4685,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='CipherOptInterface#newSymmetric'>
+    <div class='border-bottom' id='cipheroptinterfacenewsymmetric'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4409,7 +4699,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/cipher_opt.js#L36-L39'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/cipher_opt.js#L36-L39'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -4458,7 +4748,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='CipherOptInterface#newAsymmetric'>
+    <div class='border-bottom' id='cipheroptinterfacenewasymmetric'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4472,7 +4762,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/cipher_opt.js#L46-L49'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/cipher_opt.js#L46-L49'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -4554,7 +4844,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/immutable.js#L119-L147'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/immutable.js#L119-L147'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -4605,7 +4895,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='ImmutableDataInterface#create'>
+    <div class='border-bottom' id='immutabledatainterfacecreate'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4619,7 +4909,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/immutable.js#L133-L136'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/immutable.js#L133-L136'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -4668,7 +4958,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='ImmutableDataInterface#fetch'>
+    <div class='border-bottom' id='immutabledatainterfacefetch'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4682,7 +4972,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/immutable.js#L143-L146'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/immutable.js#L143-L146'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -4765,7 +5055,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L625-L742'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L671-L787'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -4832,7 +5122,7 @@ app.mutableData.newRandomPublic(<span class="hljs-number">15001</span>)
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='MutableDataInterface#newRandomPrivate'>
+    <div class='border-bottom' id='mutabledatainterfacenewrandomprivate'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4846,7 +5136,7 @@ app.mutableData.newRandomPublic(<span class="hljs-number">15001</span>)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L641-L644'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L687-L690'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -4910,7 +5200,7 @@ access.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableDataInterface#newRandomPublic'>
+    <div class='border-bottom' id='mutabledatainterfacenewrandompublic'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4924,7 +5214,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L653-L656'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L699-L702'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -4988,7 +5278,7 @@ access.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableDataInterface#newPrivate'>
+    <div class='border-bottom' id='mutabledatainterfacenewprivate'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5002,7 +5292,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L667-L670'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L713-L716'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5090,7 +5380,7 @@ access.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableDataInterface#newPublic'>
+    <div class='border-bottom' id='mutabledatainterfacenewpublic'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5104,7 +5394,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L679-L682'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L725-L728'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5176,7 +5466,7 @@ access.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableDataInterface#newPermissions'>
+    <div class='border-bottom' id='mutabledatainterfacenewpermissions'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5190,7 +5480,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L688-L691'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L734-L737'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5239,7 +5529,7 @@ access.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableDataInterface#newPermissionSet'>
+    <div class='border-bottom' id='mutabledatainterfacenewpermissionset'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5253,7 +5543,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L697-L700'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L743-L746'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5302,7 +5592,7 @@ access.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableDataInterface#newMutation'>
+    <div class='border-bottom' id='mutabledatainterfacenewmutation'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5316,7 +5606,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L706-L709'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L752-L755'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5365,7 +5655,7 @@ access.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableDataInterface#newEntries'>
+    <div class='border-bottom' id='mutabledatainterfacenewentries'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5379,7 +5669,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L715-L718'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L761-L764'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5428,7 +5718,7 @@ access.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableDataInterface#fromSerial'>
+    <div class='border-bottom' id='mutabledatainterfacefromserial'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5442,7 +5732,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L725-L728'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L770-L773'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5536,7 +5826,7 @@ access.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/immutable.js#L8-L51'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/immutable.js#L8-L51'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5580,7 +5870,7 @@ access.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Reader#read'>
+    <div class='border-bottom' id='readerread'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5594,7 +5884,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/immutable.js#L16-L30'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/immutable.js#L16-L30'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5682,7 +5972,7 @@ access.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Reader#size'>
+    <div class='border-bottom' id='readersize'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5696,7 +5986,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/immutable.js#L36-L38'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/immutable.js#L36-L38'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5765,7 +6055,7 @@ access.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/immutable.js#L70-L112'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/immutable.js#L70-L112'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5826,7 +6116,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Writer#write'>
+    <div class='border-bottom' id='writerwrite'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5840,7 +6130,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/immutable.js#L78-L80'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/immutable.js#L78-L80'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5903,7 +6193,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
       </div>
     </div>
   
-    <div class='border-bottom' id='Writer#close'>
+    <div class='border-bottom' id='writerclose'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5917,7 +6207,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/immutable.js#L88-L92'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/immutable.js#L88-L92'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5988,7 +6278,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
       </div>
     </div>
   
-    <div class='border-bottom' id='Writer#save'>
+    <div class='border-bottom' id='writersave'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -6002,7 +6292,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/immutable.js#L97-L99'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/immutable.js#L97-L99'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6075,7 +6365,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L370-L606'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L371-L652'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6119,11 +6409,11 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='MutableData#quickSetup'>
+    <div class='border-bottom' id='mutabledataquicksetup'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>quickSetup(data)</span>
+            <span class='code strong strong truncate'>quickSetup(data, name, description)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -6133,7 +6423,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L396-L416'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L406-L435'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6141,10 +6431,16 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   
 
   <p>Easily set up a newly (not yet created) MutableData with
-the app having full-access permissions (and no other).</p>
+the app having full-access permissions (and no other).
+The name and description parameters are metadata for the MutableData which
+can be used to identify what this MutablaData contains.
+The metadata is particularly used by the Authenticator when another
+application has requested mutation permissions on this MutableData,
+so the user can make a better decision to either allow or deny such a
+request based on this information.</p>
 
 
-  <div class='pre p1 fill-light mt0'>quickSetup(data: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#mutabledata">MutableData</a>></div>
+  <div class='pre p1 fill-light mt0'>quickSetup(data: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, name: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), description: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#mutabledata">MutableData</a>></div>
   
   
 
@@ -6164,6 +6460,24 @@ the app having full-access permissions (and no other).</p>
             <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
 	    a key-value payload it should
 create the data with
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>))</code>
+	    a descriptive name for the MutableData
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>description</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>))</code>
+	    a detailed description for the MutableData content
 
           </div>
           
@@ -6194,7 +6508,7 @@ create the data with
   .then(<span class="hljs-function">(<span class="hljs-params">md</span>) =&gt;</span> md.quickSetup({
        <span class="hljs-attr">key1</span>: <span class="hljs-string">'value1'</span>,
        <span class="hljs-attr">key2</span>: <span class="hljs-string">'value2'</span>
-     }))</pre>
+     }, <span class="hljs-string">'My MutableData'</span>, <span class="hljs-string">'To store my app\'s data'</span>))</pre>
     
   
 
@@ -6208,7 +6522,100 @@ create the data with
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#encryptKey'>
+    <div class='border-bottom' id='mutabledatasetmetadata'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setMetadata(name, description)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L452-L462'>
+      <span>src/api/mutable.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Set the metadata information in the MutableData. Note this can be used
+only if the MutableData was already committed to the network, .i.e either
+with <code>put</code>, with <code>quickSetup</code>, or if it is an already existing MutableData
+just fetched from the network.
+The metadata is particularly used by the Authenticator when another
+application has requested mutation permissions on this MutableData,
+displaying this information to the user, so the user can make a better
+decision to either allow or deny such a request based on it.</p>
+
+
+  <div class='pre p1 fill-light mt0'>setMetadata(name: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), description: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>))</code>
+	    a descriptive name for the MutableData
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>description</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>))</code>
+	    a detailed description for the MutableData content
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        resolves once finished
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='mutabledataencryptkey'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -6222,7 +6629,7 @@ create the data with
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L426-L428'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L472-L474'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6287,7 +6694,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#encryptValue'>
+    <div class='border-bottom' id='mutabledataencryptvalue'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -6301,7 +6708,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L438-L440'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L484-L486'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6366,7 +6773,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#decrypt'>
+    <div class='border-bottom' id='mutabledatadecrypt'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -6380,7 +6787,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L449-L451'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L495-L497'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6444,7 +6851,7 @@ contained in a Private MutableData.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#getNameAndTag'>
+    <div class='border-bottom' id='mutabledatagetnameandtag'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -6458,7 +6865,7 @@ contained in a Private MutableData.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L459-L461'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L505-L507'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6508,7 +6915,7 @@ up on the network.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#getVersion'>
+    <div class='border-bottom' id='mutabledatagetversion'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -6522,7 +6929,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L468-L470'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L514-L516'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6571,7 +6978,7 @@ up on the network.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#get'>
+    <div class='border-bottom' id='mutabledataget'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -6585,7 +6992,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L477-L479'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L523-L525'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6647,7 +7054,7 @@ up on the network.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#put'>
+    <div class='border-bottom' id='mutabledataput'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -6661,7 +7068,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L487-L492'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L533-L538'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6733,7 +7140,7 @@ up on the network.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#getEntries'>
+    <div class='border-bottom' id='mutabledatagetentries'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -6747,7 +7154,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L499-L502'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L545-L548'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6796,7 +7203,7 @@ up on the network.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#getKeys'>
+    <div class='border-bottom' id='mutabledatagetkeys'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -6810,7 +7217,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L508-L511'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L554-L557'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6859,7 +7266,7 @@ up on the network.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#getValues'>
+    <div class='border-bottom' id='mutabledatagetvalues'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -6873,7 +7280,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L517-L520'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L563-L566'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6922,7 +7329,7 @@ up on the network.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#getPermissions'>
+    <div class='border-bottom' id='mutabledatagetpermissions'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -6936,7 +7343,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L526-L529'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L572-L575'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6985,7 +7392,7 @@ up on the network.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#getUserPermissions'>
+    <div class='border-bottom' id='mutabledatagetuserpermissions'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -6999,7 +7406,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L539-L543'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L585-L589'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7065,7 +7472,7 @@ assummed as <code>USER_ANYONE</code>.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#delUserPermissions'>
+    <div class='border-bottom' id='mutabledatadeluserpermissions'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7079,7 +7486,7 @@ assummed as <code>USER_ANYONE</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L555-L560'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L601-L606'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7155,7 +7562,7 @@ actually asking for the right one
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#setUserPermissions'>
+    <div class='border-bottom' id='mutabledatasetuserpermissions'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7169,7 +7576,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L573-L579'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L619-L625'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7254,7 +7661,7 @@ actually asking for the right one
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#applyEntriesMutation'>
+    <div class='border-bottom' id='mutabledataapplyentriesmutation'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7268,7 +7675,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L586-L588'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L632-L634'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7331,7 +7738,7 @@ actually asking for the right one
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#serialise'>
+    <div class='border-bottom' id='mutabledataserialise'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7345,7 +7752,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L594-L596'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L640-L642'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7394,7 +7801,7 @@ actually asking for the right one
       </div>
     </div>
   
-    <div class='border-bottom' id='MutableData#emulateAs'>
+    <div class='border-bottom' id='mutabledataemulateas'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7408,7 +7815,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L603-L605'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L649-L651'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7491,7 +7898,7 @@ actually asking for the right one
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L222-L284'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L223-L285'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7535,7 +7942,7 @@ actually asking for the right one
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Entries#len'>
+    <div class='border-bottom' id='entrieslen'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7549,7 +7956,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L228-L230'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L229-L231'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7598,7 +8005,7 @@ actually asking for the right one
       </div>
     </div>
   
-    <div class='border-bottom' id='Entries#get'>
+    <div class='border-bottom' id='entriesget'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7612,7 +8019,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L248-L250'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L249-L251'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7675,7 +8082,7 @@ actually asking for the right one
       </div>
     </div>
   
-    <div class='border-bottom' id='Entries#forEach'>
+    <div class='border-bottom' id='entriesforeach'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7689,7 +8096,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L257-L259'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L258-L260'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7752,7 +8159,7 @@ actually asking for the right one
       </div>
     </div>
   
-    <div class='border-bottom' id='Entries#insert'>
+    <div class='border-bottom' id='entriesinsert'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7766,7 +8173,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L271-L273'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L272-L274'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7840,7 +8247,7 @@ permissions to edit that mutable data.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Entries#mutate'>
+    <div class='border-bottom' id='entriesmutate'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7854,7 +8261,7 @@ permissions to edit that mutable data.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L279-L282'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L280-L283'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7923,7 +8330,7 @@ permissions to edit that mutable data.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L289-L317'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L290-L318'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7967,7 +8374,7 @@ permissions to edit that mutable data.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Keys#len'>
+    <div class='border-bottom' id='keyslen'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7981,7 +8388,7 @@ permissions to edit that mutable data.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L295-L297'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L296-L298'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8030,7 +8437,7 @@ permissions to edit that mutable data.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Keys#forEach'>
+    <div class='border-bottom' id='keysforeach'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -8044,7 +8451,7 @@ permissions to edit that mutable data.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L304-L306'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L305-L307'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8127,7 +8534,7 @@ permissions to edit that mutable data.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L322-L350'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L323-L351'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8171,7 +8578,7 @@ permissions to edit that mutable data.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Values#len'>
+    <div class='border-bottom' id='valueslen'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -8185,7 +8592,7 @@ permissions to edit that mutable data.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L328-L330'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L329-L331'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8234,7 +8641,7 @@ permissions to edit that mutable data.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Values#forEach'>
+    <div class='border-bottom' id='valuesforeach'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -8248,7 +8655,7 @@ permissions to edit that mutable data.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L337-L339'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L338-L340'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8331,7 +8738,7 @@ permissions to edit that mutable data.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L152-L216'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L153-L217'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8392,7 +8799,7 @@ app.mutableData.newPublic(somename, tagtype)
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='EntryMutationTransaction#insert'>
+    <div class='border-bottom' id='entrymutationtransactioninsert'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -8406,7 +8813,7 @@ app.mutableData.newPublic(somename, tagtype)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L172-L179'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L173-L180'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8478,7 +8885,7 @@ app.mutableData.newPublic(somename, tagtype)
       </div>
     </div>
   
-    <div class='border-bottom' id='EntryMutationTransaction#remove'>
+    <div class='border-bottom' id='entrymutationtransactionremove'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -8492,7 +8899,7 @@ app.mutableData.newPublic(somename, tagtype)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L189-L196'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L190-L197'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8565,7 +8972,7 @@ actually asking for the right version
       </div>
     </div>
   
-    <div class='border-bottom' id='EntryMutationTransaction#update'>
+    <div class='border-bottom' id='entrymutationtransactionupdate'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -8579,7 +8986,7 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L207-L215'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L208-L216'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8681,7 +9088,7 @@ actually asking for the right version
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/native/_mutable.js#L27-L32'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/native/_mutable.js#L27-L32'>
       <span>src/native/_mutable.js</span>
       </a>
     
@@ -8737,7 +9144,7 @@ actually asking for the right version
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L69-L133'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L70-L134'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8781,7 +9188,7 @@ actually asking for the right version
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Permissions#len'>
+    <div class='border-bottom' id='permissionslen'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -8795,7 +9202,7 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L75-L77'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L76-L78'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8844,7 +9251,7 @@ actually asking for the right version
       </div>
     </div>
   
-    <div class='border-bottom' id='Permissions#getPermissionSet'>
+    <div class='border-bottom' id='permissionsgetpermissionset'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -8858,7 +9265,7 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L96-L100'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L97-L101'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8923,7 +9330,7 @@ assumed to be <code>USER_ANYONE</code>.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Permissions#insertPermissionSet'>
+    <div class='border-bottom' id='permissionsinsertpermissionset'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -8937,7 +9344,7 @@ assumed to be <code>USER_ANYONE</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L112-L117'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L113-L118'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9021,7 +9428,7 @@ set for <code>USER_ANYONE</code>.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Permissions#forEach'>
+    <div class='border-bottom' id='permissionsforeach'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -9035,7 +9442,7 @@ set for <code>USER_ANYONE</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L125-L131'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L126-L132'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9119,7 +9526,7 @@ and return a promise that resolves once iteration is finished.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L23-L64'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L24-L65'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9164,7 +9571,7 @@ allowed or denied</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='PermissionsSet#setAllow'>
+    <div class='border-bottom' id='permissionssetsetallow'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -9178,7 +9585,7 @@ allowed or denied</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L30-L33'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L31-L34'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9241,7 +9648,7 @@ allowed or denied</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='PermissionsSet#setDeny'>
+    <div class='border-bottom' id='permissionssetsetdeny'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -9255,7 +9662,7 @@ allowed or denied</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L40-L43'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L41-L44'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9318,7 +9725,7 @@ allowed or denied</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='PermissionsSet#clear'>
+    <div class='border-bottom' id='permissionssetclear'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -9332,7 +9739,7 @@ allowed or denied</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L50-L53'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L51-L54'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9430,7 +9837,7 @@ allowed or denied</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L172-L288'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L172-L288'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9480,7 +9887,7 @@ allowed or denied</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='NFS#create'>
+    <div class='border-bottom' id='nfscreate'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -9494,7 +9901,7 @@ allowed or denied</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L188-L194'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L188-L194'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9557,7 +9964,7 @@ allowed or denied</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='NFS#fetch'>
+    <div class='border-bottom' id='nfsfetch'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -9571,7 +9978,7 @@ allowed or denied</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L201-L204'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L201-L204'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9634,7 +10041,7 @@ allowed or denied</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='NFS#insert'>
+    <div class='border-bottom' id='nfsinsert'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -9648,7 +10055,7 @@ allowed or denied</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L213-L222'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L213-L222'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9721,7 +10128,7 @@ to the network.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='NFS#update'>
+    <div class='border-bottom' id='nfsupdate'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -9735,7 +10142,7 @@ to the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L232-L237'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L232-L237'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9817,7 +10224,7 @@ are overwriting the right one
       </div>
     </div>
   
-    <div class='border-bottom' id='NFS#delete'>
+    <div class='border-bottom' id='nfsdelete'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -9831,7 +10238,7 @@ are overwriting the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L245-L247'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L245-L247'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9901,7 +10308,7 @@ are overwriting the right one
       </div>
     </div>
   
-    <div class='border-bottom' id='NFS#open'>
+    <div class='border-bottom' id='nfsopen'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -9915,7 +10322,7 @@ are overwriting the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L261-L287'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L261-L287'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10010,7 +10417,7 @@ OPEN_MODE_READ: Open file to read.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L16-L167'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L16-L167'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10078,7 +10485,7 @@ of the metadata provided.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='File#dataMapName'>
+    <div class='border-bottom' id='filedatamapname'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -10092,7 +10499,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L69-L71'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L69-L71'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10141,7 +10548,7 @@ of the metadata provided.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='File#created'>
+    <div class='border-bottom' id='filecreated'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -10155,7 +10562,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L77-L79'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L77-L79'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10204,7 +10611,7 @@ of the metadata provided.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='File#modified'>
+    <div class='border-bottom' id='filemodified'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -10218,7 +10625,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L85-L87'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L85-L87'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10267,7 +10674,7 @@ of the metadata provided.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='File#size'>
+    <div class='border-bottom' id='filesize'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -10281,7 +10688,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L93-L102'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L93-L102'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10330,7 +10737,7 @@ of the metadata provided.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='File#read'>
+    <div class='border-bottom' id='fileread'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -10344,7 +10751,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L113-L118'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L113-L118'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10417,7 +10824,7 @@ declared in ../../consts.js.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='File#write'>
+    <div class='border-bottom' id='filewrite'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -10431,7 +10838,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L125-L130'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L125-L130'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10501,7 +10908,7 @@ declared in ../../consts.js.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='File#close'>
+    <div class='border-bottom' id='fileclose'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -10515,7 +10922,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L136-L148'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L136-L148'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10564,7 +10971,7 @@ declared in ../../consts.js.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='File#version'>
+    <div class='border-bottom' id='fileversion'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -10578,7 +10985,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/nfs.js#L154-L156'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/nfs.js#L154-L156'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10659,7 +11066,7 @@ declared in ../../consts.js.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L29-L48'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L29-L48'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -10703,7 +11110,7 @@ declared in ../../consts.js.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='SignKey#getRaw'>
+    <div class='border-bottom' id='signkeygetraw'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -10717,7 +11124,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L35-L37'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L35-L37'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -10727,7 +11134,7 @@ declared in ../../consts.js.</p>
   <p>generate raw string copy of signature key</p>
 
 
-  <div class='pre p1 fill-light mt0'>getRaw(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>></div>
+  <div class='pre p1 fill-light mt0'>getRaw(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
   
   
 
@@ -10745,7 +11152,7 @@ declared in ../../consts.js.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></code>:
         
 
       
@@ -10786,7 +11193,7 @@ declared in ../../consts.js.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L129-L164'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L129-L164'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -10852,7 +11259,7 @@ declared in ../../consts.js.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='KeyPair#pubEncKey'>
+    <div class='border-bottom' id='keypairpubenckey'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -10866,7 +11273,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L142-L144'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L142-L144'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -10915,7 +11322,7 @@ declared in ../../consts.js.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='KeyPair#secEncKey'>
+    <div class='border-bottom' id='keypairsecenckey'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -10929,7 +11336,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L151-L153'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L151-L153'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -10978,7 +11385,7 @@ declared in ../../consts.js.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='KeyPair#decryptSealed'>
+    <div class='border-bottom' id='keypairdecryptsealed'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -10992,7 +11399,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L159-L162'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L159-L162'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11074,7 +11481,7 @@ declared in ../../consts.js.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L95-L123'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L95-L123'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11118,7 +11525,7 @@ declared in ../../consts.js.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='SecEncKey#getRaw'>
+    <div class='border-bottom' id='secenckeygetraw'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -11132,7 +11539,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L101-L103'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L101-L103'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11142,7 +11549,7 @@ declared in ../../consts.js.</p>
   <p>generate raw string copy of encryption key</p>
 
 
-  <div class='pre p1 fill-light mt0'>getRaw(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>></div>
+  <div class='pre p1 fill-light mt0'>getRaw(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
   
   
 
@@ -11160,7 +11567,7 @@ declared in ../../consts.js.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></code>:
         
 
       
@@ -11181,7 +11588,7 @@ declared in ../../consts.js.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='SecEncKey#decrypt'>
+    <div class='border-bottom' id='secenckeydecrypt'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -11195,7 +11602,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L120-L122'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L120-L122'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11286,7 +11693,7 @@ declared in ../../consts.js.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L53-L89'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L53-L89'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11330,7 +11737,7 @@ declared in ../../consts.js.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='PubEncKey#getRaw'>
+    <div class='border-bottom' id='pubenckeygetraw'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -11344,7 +11751,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L59-L61'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L59-L61'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11354,7 +11761,7 @@ declared in ../../consts.js.</p>
   <p>generate raw string copy of encryption key</p>
 
 
-  <div class='pre p1 fill-light mt0'>getRaw(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>></div>
+  <div class='pre p1 fill-light mt0'>getRaw(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
   
   
 
@@ -11372,7 +11779,7 @@ declared in ../../consts.js.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></code>:
         
 
       
@@ -11393,7 +11800,7 @@ declared in ../../consts.js.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='PubEncKey#encryptSealed'>
+    <div class='border-bottom' id='pubenckeyencryptsealed'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -11407,7 +11814,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L77-L79'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L77-L79'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11469,7 +11876,7 @@ declared in ../../consts.js.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='PubEncKey#encrypt'>
+    <div class='border-bottom' id='pubenckeyencrypt'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -11483,7 +11890,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/crypto.js#L86-L88'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/crypto.js#L86-L88'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11573,7 +11980,7 @@ declared in ../../consts.js.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/cipher_opt.js#L8-L12'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/cipher_opt.js#L8-L12'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -11632,7 +12039,7 @@ either PlainText, Symmetric or Asymmetric</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L370-L606'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L371-L652'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -11717,7 +12124,7 @@ either PlainText, Symmetric or Asymmetric</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/mutable.js#L370-L606'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/mutable.js#L371-L652'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -11803,7 +12210,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/krishnaIndia/safe_app_nodejs/blob/e57458ab5f3724cb229d5287f214f6ac68647384/src/api/emulations/index.js#L8-L10'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/122b52791c3ebbc9b211e4ba64906c0ae9b2e4b7/src/api/emulations/index.js#L8-L10'>
       <span>src/api/emulations/index.js</span>
       </a>
     
