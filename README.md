@@ -1,4 +1,4 @@
-# safe-node-app
+# safe_app_nodejs
 
 A safe_app library for [Node.js](https://nodejs.org/).
 
