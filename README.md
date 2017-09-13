@@ -1,6 +1,4 @@
-#safe-node-app
-
-A nodejs API for the [SAFE Network](http://maidsafe.net).
+# safe-node-app
 
 A safe_app library for [Node.js](https://nodejs.org/).
 
