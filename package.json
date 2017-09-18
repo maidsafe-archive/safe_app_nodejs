@@ -1,6 +1,6 @@
 {
   "name": "@maidsafe/safe-node-app",
-  "version": "0.2.1-6",
+  "version": "0.2.2",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -60,7 +60,7 @@
     },
     "safe_app": {
       "mirror": "https://s3.eu-west-2.amazonaws.com/safe-client-libs",
-      "version": "v0.3.2",
+      "version": "v0.3.3",
       "targetDir": "src/native",
       "filename": "safe_app",
       "filePattern": "^.*\\.(dll|so|dylib)$",
