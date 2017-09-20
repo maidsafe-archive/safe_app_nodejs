@@ -44,7 +44,7 @@ class CipherOptInterface {
   * @returns {CipherOpt}
   */
   newAsymmetric(key) {
-    return lib.cipher_opt_new_symmetric(this.app.connection, key.ref)
+    return lib.cipher_opt_new_asymmetric(this.app.connection, key.ref)
         .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }
 
