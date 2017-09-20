@@ -48,7 +48,7 @@ class SignKey extends h.NetworkObject {
 }
 
 /**
-* Holds a the public part of an encryption key
+* Holds the public part of an encryption key
 */
 class PubEncKey extends h.NetworkObject {
 
@@ -90,7 +90,7 @@ class PubEncKey extends h.NetworkObject {
 
 
 /**
-* Holds a the secret part of an encryption key
+* Holds the secret part of an encryption key
 */
 class SecEncKey extends h.NetworkObject {
 
@@ -124,7 +124,7 @@ class SecEncKey extends h.NetworkObject {
 
 
 /**
-* Holds an asymmetrict keypair
+* Holds an asymmetric keypair
 */
 class KeyPair {
 
