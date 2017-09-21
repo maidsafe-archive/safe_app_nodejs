@@ -61,7 +61,7 @@ class Reader extends helpers.NetworkObject {
 *   .then((address) => app.immutableData.fetch(address)
 *     .then((reader) => reader.read()
 *       .then( (payload) => {
-*         should(payload).equals("some string\msecond string");
+*         should(payload).equals("some string\nsecond string");
 *       })
 *     ))
 * })
