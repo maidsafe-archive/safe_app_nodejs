@@ -1,6 +1,6 @@
 {
   "name": "@maidsafe/safe-node-app",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -54,7 +54,7 @@
   "download_deps": {
     "system_uri": {
       "mirror": "https://s3.eu-west-2.amazonaws.com/system-uri",
-      "version": "v0.2.0",
+      "version": "v0.2.2",
       "targetDir": "src/native",
       "filePattern": "^.*\\.(dll|so|dylib)$"
     },
