@@ -29,7 +29,7 @@ class PermissionsSet extends h.NetworkObject {
   * @returns {Promise}
   */
   setAllow(action) {
-    return lib.mdata_permissions_set_allow(this.app.connection,
+    return lib.mdata_permission_set_allow(this.app.connection,
           this.ref, toAction(action));
   }
 
@@ -39,7 +39,7 @@ class PermissionsSet extends h.NetworkObject {
   * @returns {Promise}
   */
   setDeny(action) {
-    return lib.mdata_permissions_set_deny(this.app.connection,
+    return lib.mdata_permission_set_deny(this.app.connection,
           this.ref, toAction(action));
   }
 
@@ -49,7 +49,7 @@ class PermissionsSet extends h.NetworkObject {
   * @returns {Promise}
   */
   clear(action) {
-    return lib.mdata_permissions_set_clear(this.app.connection,
+    return lib.mdata_permission_set_clear(this.app.connection,
           this.ref, toAction(action));
   }
 
@@ -60,7 +60,7 @@ class PermissionsSet extends h.NetworkObject {
   * @param {handle} ref
   */
   static free(app, ref) {
-    return lib.mdata_permissions_set_free(app.connection, ref);
+    return lib.mdata_permission_set_free(app.connection, ref);
   }
 }
 

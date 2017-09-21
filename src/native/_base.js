@@ -74,15 +74,13 @@ module.exports = {
       d.setTime((sec * 1000) + (nsec_part / 1000000));
       return d;
     },
-    Promisified: function(formatter, rTypes, after) {
+    Promisified: function(formatter, rTypes, after, isLastArgCb) {
       // create internal function that will be
       // invoked ontop of the direct binding
       // mixing a callback into the arguments
       // and returning a promise
       return (lib, fn) => (function() {
-        // the internal function that wraps the
-        // actual function call
-
+        // the internal function that wraps the actual function call
         // compile the callback-types-definiton
         let args;
         let types = ['pointer', FfiResult]; // we always have: user_context and FfiResult
@@ -94,16 +92,29 @@ module.exports = {
         return new Promise((resolve, reject) => {
           // if there is a formatter, we are reformatting
           // the incoming arguments first
-          try {
-            args = formatter ? formatter.apply(formatter, arguments): Array.prototype.slice.call(arguments);
-          } catch(err) {
-            // reject promise if error is thrown by the formatter
-            return reject(err);
+          if (formatter) {
+            try {
+              args = formatter.apply(formatter, arguments);
+            } catch(err) {
+              // reject promise if error is thrown by the formatter
+              return reject(err);
+            }
+          } else {
+            args = Array.prototype.slice.call(arguments);
           }
 
-          // append user-context and callback
-          // to the arguments
-          args.push(ref.NULL);
+          // append user-context and callbacks to the arguments
+          if (isLastArgCb) {
+            // the last argument we received is the callback function
+            // to be passed as argument right after the user_data pointer
+            // but before the result calback
+            let forEachCb = args[args.length - 1];
+            args = Array.prototype.slice.call(args, 0, args.length - 1);
+            args.push(ref.NULL);
+            args.push(forEachCb);
+          } else {
+            args.push(ref.NULL);
+          }
           args.push(ffi.Callback("void", types,
               function(uctx, err) {
                 // error found, errback with translated error

@@ -278,11 +278,13 @@ describe('Browsing', () => {
     it('should not find dns', () =>
       client.webFetch('safe://domain_doesnt_exist')
         .should.be.rejectedWith('Core error: Routing client error -> Requested data not found')
+        .then((err) => should(err.code).be.equal(-103))
     );
 
     it('should be case sensitive', () =>
       client.webFetch(`safe://${domain}/SUBDIR/index.html`)
         .should.be.rejectedWith('NFS error: File not found')
+        .then((err) => should(err.code).be.equal(-301))
     );
 
     it('should not find service', () =>
@@ -293,11 +295,13 @@ describe('Browsing', () => {
     it('should not find file', () =>
       client.webFetch(`safe://www.${domain}/404.html`)
         .should.be.rejectedWith('NFS error: File not found')
+        .then((err) => should(err.code).be.equal(-301))
     );
 
     it('should not find file in subdirectory', () =>
       client.webFetch(`safe://www.${domain}/subdir/404.html`)
         .should.be.rejectedWith('NFS error: File not found')
+        .then((err) => should(err.code).be.equal(-301))
     );
   });
 });
