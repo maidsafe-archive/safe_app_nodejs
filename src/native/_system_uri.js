@@ -2,7 +2,7 @@ const path = require('path');
 const FFI = require('ffi');
 const ref = require('ref');
 const SYSTEM_URI_LIB_FILENAME = require('../consts').SYSTEM_URI_LIB_FILENAME;
-
+const makeFfiError = require('./_error.js');
 const h = require('./helpers');
 const t = require('./types');
 
@@ -29,7 +29,7 @@ function _handleError(resolve,  reject) {
   return FFI.Callback("void", [t.VoidPtr, t.FfiResult],
     (userData, result) => {
       if (result.error_code !== 0) {
-        return reject(new Error(result.description));
+        return reject(makeFfiError(err.error_code, err.error_description));
       }
       return resolve();
     }
