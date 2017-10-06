@@ -66,7 +66,7 @@ class AuthInterface {
     if (app.options.registerScheme === false) {
       return;
     }
-    this.setupUri();
+    this.setupUri(app.options.joinSchemes);
   }
 
   /**
@@ -74,9 +74,12 @@ class AuthInterface {
   * Generate the app's URI for the IPC protocol using the app's id
   * and register the URI scheme.
   */
-  setupUri() {
+  setupUri(joinSchemes) {
     const appInfo = this.app.appInfo;
-    const schema = `safe-${urlsafeBase64(appInfo.id).toLowerCase()}`;
+    let schema = `safe-${urlsafeBase64(appInfo.id).toLowerCase()}`;
+    if (joinSchemes && joinSchemes.length > 0) {
+      schema = [schema].concat(joinSchemes);
+    }
     lib.registerUriScheme({ bundle: appInfo.id,
       vendor: appInfo.vendor,
       name: appInfo.name,
