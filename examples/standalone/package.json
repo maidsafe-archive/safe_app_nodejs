@@ -1,0 +1,20 @@
+{
+  "name": "quick_example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install": "cross-env NODE_ENV=dev npm i @maidsafe/safe-node-app",
+  	"idata_asymmetric": "cross-env NODE_ENV=dev node scripts/idata_asymmetric",
+    "idata_plain": "cross-env NODE_ENV=dev node scripts/idata_plain",
+  	"idata_symmetric": "cross-env NODE_ENV=dev node scripts/idata_symmetric",
+  	"mdata_private": "cross-env NODE_ENV=dev node scripts/mdata_private",
+  	"mdata_public": "cross-env NODE_ENV=dev node scripts/mdata_public",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^5.0.5"
+  }
+}
