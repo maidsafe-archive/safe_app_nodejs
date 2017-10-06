@@ -84,7 +84,7 @@ class AuthInterface {
       vendor: appInfo.vendor,
       name: appInfo.name,
       icon: 'test',
-      exec: appInfo.customAuthExecPath }, schema);
+      exec: appInfo.customExecPath }, schema);
   }
 
   /**
