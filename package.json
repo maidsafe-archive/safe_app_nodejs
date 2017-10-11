@@ -54,7 +54,7 @@
   "download_deps": {
     "system_uri": {
       "mirror": "https://s3.eu-west-2.amazonaws.com/system-uri",
-      "version": "v0.2.2",
+      "version": "v0.2.3",
       "targetDir": "src/native",
       "filePattern": "^.*\\.(dll|so|dylib)$"
     },
