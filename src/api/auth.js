@@ -82,7 +82,8 @@ class AuthInterface {
       scheme = scheme ? [scheme].concat(opts.joinSchemes) : opts.joinSchemes;
     }
     if (scheme) {
-      lib.registerUriScheme({ bundle: appInfo.id,
+      lib.registerUriScheme({
+        bundle: appInfo.bundle ? appInfo.bundle : appInfo.id,
         vendor: appInfo.vendor,
         name: appInfo.name,
         icon: 'test',
