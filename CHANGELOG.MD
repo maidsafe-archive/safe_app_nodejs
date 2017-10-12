@@ -1,5 +1,14 @@
 # safe_app nodejs Change Log
 
+## 0.4.0
+
+- Compatible with safe_app v0.4.0
+- New set of standalone API Examples Using Mock Routing
+- Automatically remove white spaces from appInfo vendor and name to create the .desktop files when registering the URI scheme
+- Add an option to allow registration of additional custom protocols in the system URI scheme.
+- Support for passing the bundle id in the appInfo object upon initialisation needed for OSX system URI registration
+- Upgrade system_uri to v0.2.3
+
 ## 0.3.0
 
 - Compatible with safe_app v0.4.0
