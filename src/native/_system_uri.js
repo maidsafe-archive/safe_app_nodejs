@@ -54,8 +54,8 @@ function openUri(uri) {
 function registerUriScheme(appInfo, schemes) {
   const bundle = appInfo.bundle || appInfo.id;
   const exec = appInfo.exec ? appInfo.exec : process.execPath;
-  const vendor = appInfo.vendor;
-  const name = appInfo.name;
+  const vendor = appInfo.vendor.replace(/\s/g, '-');
+  const name = appInfo.name.replace(/\s/g, '-');
   const icon = appInfo.icon;
   const joinedSchemes = schemes.join ? schemes.join(',') : schemes;
   if (!ffi) {

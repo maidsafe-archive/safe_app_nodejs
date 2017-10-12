@@ -19,6 +19,7 @@ const version = require('../package.json').version;
 * @typedef {Object} InitOptions
 * holds the additional intialisation options for the App.
 * @param {Boolean=} registerScheme to register auth scheme with the OS. Defaults to true
+* @param {Array=} joinSchemes to additionally register custom protocol schemes
 * @param {Boolean=} log to enable or disable back end logging. Defaults to true
 * @param {String=} libPath path to the folder where the native libs can
 *        be found. Defaults to current folder path.

@@ -63,9 +63,6 @@ class AuthInterface {
   constructor(app) {
     this.app = app;
     this._registered = false;
-    if (app.options.registerScheme === false) {
-      return;
-    }
     this.setupUri();
   }
 
@@ -76,12 +73,22 @@ class AuthInterface {
   */
   setupUri() {
     const appInfo = this.app.appInfo;
-    const schema = `safe-${urlsafeBase64(appInfo.id).toLowerCase()}`;
-    lib.registerUriScheme({ bundle: appInfo.id,
-      vendor: appInfo.vendor,
-      name: appInfo.name,
-      icon: 'test',
-      exec: appInfo.customAuthExecPath }, schema);
+    const opts = this.app.options;
+    let scheme;
+    if (opts.registerScheme) {
+      scheme = `safe-${urlsafeBase64(appInfo.id).toLowerCase()}`;
+    }
+    if (opts.joinSchemes && opts.joinSchemes.length > 0) {
+      scheme = scheme ? [scheme].concat(opts.joinSchemes) : opts.joinSchemes;
+    }
+    if (scheme) {
+      lib.registerUriScheme({
+        bundle: appInfo.bundle ? appInfo.bundle : appInfo.id,
+        vendor: appInfo.vendor,
+        name: appInfo.name,
+        icon: 'test',
+        exec: appInfo.customExecPath }, scheme);
+    }
   }
 
   /**

@@ -36,7 +36,8 @@ describe('Smoke test', () => {
   it('can take an options object to configure logging and scheme registration', () => {
     const optionsObject = {
       log: false,
-      registerScheme: false
+      registerScheme: false,
+      joinSchemes: ['proto']
     };
     const app = createTestAppWithOptions(
       null,
