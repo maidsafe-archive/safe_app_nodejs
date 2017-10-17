@@ -6,6 +6,7 @@ toc:
   - fromAuthURI
   - AppInfo
   - InitOptions
+  - CONSTANTS
 
   - name: App Interface
     description: the App and the API it exposes

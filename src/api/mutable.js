@@ -3,7 +3,7 @@ const lib = require('../native/lib');
 const t = require('../native/types');
 const emulations = require('./emulations');
 const { SignKey } = require('./crypto');
-const CONST = require('../consts');
+const CONST = require('../consts').pubConsts;
 
 /**
 * @private

@@ -1,6 +1,7 @@
 const App = require('./app');
 const autoref = require('./helpers').autoref;
 const version = require('../package.json').version;
+const pubConsts = require('./consts.js').pubConsts;
 
 /**
 * @typedef {Object} AppInfo
@@ -79,5 +80,6 @@ function fromAuthURI(appInfo, authUri, networkStateCallBack, options) {
 module.exports = {
   VERSION: version,
   initializeApp,
-  fromAuthURI
+  fromAuthURI,
+  CONSTANTS: pubConsts
 };
