@@ -15,42 +15,61 @@ const NET_STATE_CONNECTED = 0;
 
 /**
 * @typedef {Object} CONSTANTS
-* holds the information about this app, needed for authentication.
-* @param {Number} NFS_FILE_MODE_OVERWRITE NFS File open in overwrite mode
-* When used the param for nfs.open(<fileName>, <OPEN_MODE>) the entire content
+* Constants available for the applications to be used in a few cases
+* as values of input parameters.
+*
+* @param {Number} NFS_FILE_MODE_OVERWRITE NFS File open in overwrite mode.
+* When used as the `openMode` parameter for `nfs.open(<fileName>, <openMode>)` the entire content
 * of the file will be replaced when writing data to it.
-* @param {Number} NFS_FILE_MODE_APPEND NFS File open in append mode
-* When used the param for nfs.open(<fileName>, <OPEN_MODE>) any new content
+*
+* @param {Number} NFS_FILE_MODE_APPEND NFS File open in append mode.
+* When used as the `openMode` param for `nfs.open(<fileName>, <openMode>)` any new content
 * written to the file will be appended to the end without modifying existing data.
-* @param {Number} NFS_FILE_MODE_READ NFS File open in read-only mode
-* When used the param for nfs.open(<fileName>, <OPEN_MODE>) only read
+*
+* @param {Number} NFS_FILE_MODE_READ NFS File open in read-only mode.
+* When used as the `openMode` param for `nfs.open(<fileName>, <openMode>)` only the read
 * operation is allowed.
+*
 * @param {Number} NFS_FILE_START Read the file from the beginning.
-* @param {Number} NFS_FILE_END Read entire contents of a file.
-* @param {Number} MD_PERM_ANYONE MutableData's permissions for anyone.
-* @param {Number} MD_META_KEY MutableData entry key for its metadata.
+* When used as the `position` param for the NFS `file.read(<position>, <length>)`
+* function, the file will be read from the beginning.
+*
+* @param {Number} NFS_FILE_END Read until the end of a file.
+* When used as the `length` param for the NFS `file.read(<position>, <length>)`
+* function, the file will be read from the position provided until the end
+* of its content. E.g. if `NFS_FILE_START` and `NFS_FILE_END` are passed in as
+* the `position` and `length` parameters respectively, then the whole content of the
+* file will be read.
+*
+* @param {Number} USER_ANYONE Any user.
+* When used as the `signkey` param in any of the MutableData functions to
+* manipulate user permissions, like `getUserPermissions`, `setUserPermissions`,
+* `delUserPermissions`, etc., this will associate the permissions operation to
+* any user rather than to a particular sign key.
+* E.g. if this constant is used as the `signkey` param of
+* the `setUserPermissions(<signKey>, <permissionSet>, <version>)` function,
+* the permissions in the `permissionSet` provided will be granted to anyone
+* rather to a specific user's/aplication's sign key.
+*
+* @param {Number} MD_METADATA_KEY MutableData's entry key where its metadata is stored.
+* The MutableData's metadata can be set either when invoking the `quickSetup`
+* function or by invking the `setMetadata` function.
+* The metadata is stored as an encoded entry in the MutableData which key
+* is `MD_METADATA_KEY`, thus this constant can be used to realise which of the
+* entries is not application's data but the MutableData's metadata instead.
+* The metadata is particularly used by the Authenticator when another
+* application has requested mutation permissions on a MutableData,
+* displaying this information to the user, so the user can make a better
+* decision to either allow or deny such a request based on it.
 */
 const pubConsts = {
-  // Overwrites existing data in the file.
   NFS_FILE_MODE_OVERWRITE: 1,
-
-  // Appends to existing data in the file.
   NFS_FILE_MODE_APPEND: 2,
-
-  // Open file to read.
   NFS_FILE_MODE_READ: 4,
-
-  // Read the file from the beginning.
   NFS_FILE_START: 0,
-
-  // Read entire contents of a file.
   NFS_FILE_END: 0,
-
-  // MutableData's permissions for anyone
-  MD_PERM_ANYONE: 0,
-
-  // MutableData entry key for its metadata
-  MD_META_KEY: '_metadata',
+  USER_ANYONE: 0,
+  MD_METADATA_KEY: '_metadata',
 };
 
 const LIB_FILENAME = {

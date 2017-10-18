@@ -106,8 +106,8 @@ class File {
   * CONSTANTS.NFS_FILE_START and CONSTANTS.NFS_FILE_END may be used
   * to read the entire content of the file. These constants are
   * exposed by the safe-app-nodejs package.
-  * @param {Number} position
-  * @param {Number} len
+  * @param {Number|CONSTANTS.NFS_FILE_START} position
+  * @param {Number|CONSTANTS.NFS_FILE_END} len
   * @returns {Promise<[Data, Size]>}
   */
   read(position, len) {
@@ -250,12 +250,17 @@ class NFS {
   * Open a file for reading or writing.
   *
   * Open modes (these constants are exported by the safe-app-nodejs package):
-  *  CONSTANTS.NFS_FILE_MODE_OVERWRITE: Replaces the entire content of the file when writing data.
-  *  CONSTANTS.NFS_FILE_MODE_APPEND: Appends to existing data in the file.
-  *  CONSTANTS.NFS_FILE_MODE_READ: Open file to read.
+  *
+  * CONSTANTS.NFS_FILE_MODE_OVERWRITE: Replaces the entire content of the file when writing data.
+  *
+  * CONSTANTS.NFS_FILE_MODE_APPEND: Appends to existing data in the file.
+  *
+  * CONSTANTS.NFS_FILE_MODE_READ: Open file to read.
   *
   * @param {File} file
-  * @param {CONSTANTS} [openMode=CONSTANTS.NFS_FILE_MODE_OVERWRITE]
+  * @param {Number|CONSTANTS.NFS_FILE_MODE_OVERWRITE|
+  *         CONSTANTS.NFS_FILE_MODE_APPEND|
+  *         CONSTANTS.NFS_FILE_MODE_READ} [openMode=CONSTANTS.NFS_FILE_MODE_OVERWRITE]
   * @returns {Promise<File>}
   */
   open(file, openMode) {
