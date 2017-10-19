@@ -2,7 +2,8 @@ const ffi = require('ffi');
 const ref = require("ref");
 const Struct = require('ref-struct');
 const base = require('./_base');
-const EncryptKeyHandle = require('./_crypto').types.EncryptKeyHandle;
+const { types } = require('./_crypto');
+const EncryptKeyHandle = types.EncryptKeyHandle;
 const t = base.types;
 const h = base.helpers;
 

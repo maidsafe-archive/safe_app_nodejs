@@ -1,4 +1,4 @@
-const inTesting = require('../consts').inTesting;
+const { inTesting } = require('../consts');
 
 module.exports = [
   require('./_base'),

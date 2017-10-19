@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const should = require('should');
 const h = require('./helpers');
-const consts = require('../src/consts').pubConsts;
+const { pubConsts: CONSTANTS } = require('../src/consts');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
@@ -782,14 +782,14 @@ describe('Mutable Data', () => {
   describe('Metadata', () => {
     it('set metadata with quickSetup', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES, 'name of MD', 'description of MD'))
-        .then((md) => should(md.get(consts.MD_METADATA_KEY)).be.fulfilled())
+        .then((md) => should(md.get(CONSTANTS.MD_METADATA_KEY)).be.fulfilled())
     );
 
     it('set & update metadata', () => app.mutableData.newRandomPublic(TAG_TYPE)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => md.setMetadata('name of MD', 'description of MD')
           .then(() => md.setMetadata('update name', 'update description'))
-          .then(() => should(md.get(consts.MD_METADATA_KEY)).be.fulfilled())
+          .then(() => should(md.get(CONSTANTS.MD_METADATA_KEY)).be.fulfilled())
         )
     );
 
@@ -798,7 +798,7 @@ describe('Mutable Data', () => {
         .then((md) => md.setMetadata()
           .then(() => md.setMetadata('name of MD'))
           .then(() => md.setMetadata(null, 'description of MD'))
-          .then(() => should(md.get(consts.MD_METADATA_KEY)).be.fulfilled())
+          .then(() => should(md.get(CONSTANTS.MD_METADATA_KEY)).be.fulfilled())
         )
     );
   });
@@ -814,8 +814,8 @@ describe('Mutable Data', () => {
     it('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
       .then((nfs) => {
-        should(consts.NFS_FILE_MODE_OVERWRITE).equal(1);
-        return nfs.open(null, consts.NFS_FILE_MODE_OVERWRITE)
+        should(CONSTANTS.NFS_FILE_MODE_OVERWRITE).equal(1);
+        return nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)
           .then((file) => file.write('hello, SAFE world!')
             .then(() => file.close())
             .then(() => nfs.insert('hello.txt', file))
@@ -829,14 +829,14 @@ describe('Mutable Data', () => {
 
     it('reads a file and returns file contents', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
-      .then((nfs) => nfs.open(null, consts.NFS_FILE_MODE_OVERWRITE)
+      .then((nfs) => nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)
         .then((file) => file.write('hello, SAFE world!')
           .then(() => file.close())
           .then(() => nfs.insert('hello.txt', file))
         )
         .then(() => nfs.fetch('hello.txt'))
-        .then((retrievedFile) => nfs.open(retrievedFile, consts.NFS_FILE_MODE_READ))
-        .then((file) => file.read(consts.NFS_FILE_START, consts.NFS_FILE_END))
+        .then((retrievedFile) => nfs.open(retrievedFile, CONSTANTS.NFS_FILE_MODE_READ))
+        .then((file) => file.read(CONSTANTS.NFS_FILE_START, CONSTANTS.NFS_FILE_END))
         .then((data) => {
           should(data.toString()).be.equal('hello, SAFE world!');
         })
@@ -868,7 +868,7 @@ describe('Mutable Data', () => {
           .then((file) => nfs.insert('test.txt', file))
           .then((fileInserted) => { creationDate = fileInserted.created; })
           .then(() => nfs.fetch('test.txt'))
-          .then((file) => nfs.open(file, consts.NFS_FILE_MODE_READ))
+          .then((file) => nfs.open(file, CONSTANTS.NFS_FILE_MODE_READ))
           .then((fileToRead) => fileToRead.close()
             .then(() => {
               should(creationDate.getTime()).be.equal(fileToRead.created.getTime());
@@ -886,7 +886,7 @@ describe('Mutable Data', () => {
           .then((file) => nfs.insert('test.txt', file))
           .then((fileInserted) => { creationDate = fileInserted.created; })
           .then(() => nfs.fetch('test.txt'))
-          .then((file) => nfs.open(file, consts.NFS_FILE_MODE_OVERWRITE))
+          .then((file) => nfs.open(file, CONSTANTS.NFS_FILE_MODE_OVERWRITE))
           .then((fileToUpdate) => fileToUpdate.write('Hello again!')
             .then(() => fileToUpdate.close())
             .then(() => {

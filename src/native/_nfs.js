@@ -2,7 +2,9 @@ const ffi = require('ffi');
 const ref = require("ref");
 const Struct = require('ref-struct');
 const base = require('./_base');
-const MDataInfoHandle = require('./_mutable').types.MDataInfoHandle;
+const { types } = require('./_mutable');
+
+const MDataInfoHandle = types.MDataInfoHandle;
 const t = base.types;
 const h = base.helpers;
 

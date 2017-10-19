@@ -10,9 +10,6 @@ const NET_STATE_INIT = -99;
 const NET_STATE_DISCONNECTED = -1;
 const NET_STATE_CONNECTED = 0;
 
-// NFS_FILE_START and NFS_FILE_END may be used /
-// with nfs.read(fileContextHandle, NFS_FILE_START, NFS_FILE_END)
-
 /**
 * @typedef {Object} CONSTANTS
 * Constants available for the applications to be used in a few cases

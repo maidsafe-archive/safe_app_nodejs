@@ -3,7 +3,7 @@ const lib = require('../native/lib');
 const t = require('../native/types');
 const emulations = require('./emulations');
 const { SignKey } = require('./crypto');
-const CONST = require('../consts').pubConsts;
+const { pubConsts: CONSTANTS } = require('../consts');
 
 /**
 * @private
@@ -96,7 +96,7 @@ class Permissions extends h.NetworkObject {
     return lib.mdata_permissions_get(this.app.connection, this.ref,
                                                       signKey
                                                         ? signKey.ref
-                                                        : CONST.USER_ANYONE)
+                                                        : CONSTANTS.USER_ANYONE)
         .then((c) => h.autoref(new PermissionsSet(this.app, c)));
   }
 
@@ -113,7 +113,7 @@ class Permissions extends h.NetworkObject {
                                         this.ref,
                                         signKey
                                           ? signKey.ref
-                                          : CONST.USER_ANYONE,
+                                          : CONSTANTS.USER_ANYONE,
                                         permissionSet.ref);
   }
 
@@ -418,7 +418,7 @@ class MutableData extends h.NetworkObject {
         }
         const userMetadata = new t.UserMetadata({ name, description });
         return lib.mdata_encode_metadata(userMetadata)
-          .then((encodedMeta) => entries.insert(CONST.MD_METADATA_KEY, encodedMeta))
+          .then((encodedMeta) => entries.insert(CONSTANTS.MD_METADATA_KEY, encodedMeta))
           .then(() => entries);
       })
       .then((entries) => this.app.crypto.getAppPubSignKey()
@@ -453,9 +453,10 @@ class MutableData extends h.NetworkObject {
     const userMetadata = new t.UserMetadata({ name, description });
     return lib.mdata_encode_metadata(userMetadata)
       .then((encodedMeta) => this.app.mutableData.newMutation()
-        .then((mut) => this.get(CONST.MD_METADATA_KEY)
-          .then((metadata) => mut.update(CONST.MD_METADATA_KEY, encodedMeta, metadata.version + 1)
-            , () => mut.insert(CONST.MD_METADATA_KEY, encodedMeta)
+        .then((mut) => this.get(CONSTANTS.MD_METADATA_KEY)
+          .then((metadata) => mut.update(CONSTANTS.MD_METADATA_KEY,
+                                          encodedMeta, metadata.version + 1)
+            , () => mut.insert(CONSTANTS.MD_METADATA_KEY, encodedMeta)
           )
           .then(() => this.applyEntriesMutation(mut))
         ));
@@ -584,7 +585,7 @@ class MutableData extends h.NetworkObject {
     return lib.mdata_list_user_permissions(this.app.connection, this.ref,
                                                       signKey
                                                         ? signKey.ref
-                                                        : CONST.USER_ANYONE)
+                                                        : CONSTANTS.USER_ANYONE)
       .then((r) => h.autoref(new PermissionsSet(this.app, r, this)));
   }
 
@@ -601,7 +602,7 @@ class MutableData extends h.NetworkObject {
                                           this.ref,
                                           signKey
                                             ? signKey.ref
-                                            : CONST.USER_ANYONE,
+                                            : CONSTANTS.USER_ANYONE,
                                           version);
   }
 
@@ -619,7 +620,7 @@ class MutableData extends h.NetworkObject {
                                           this.ref,
                                           signKey
                                             ? signKey.ref
-                                            : CONST.USER_ANYONE,
+                                            : CONSTANTS.USER_ANYONE,
                                           permissionSet.ref,
                                           version);
   }

@@ -1,8 +1,8 @@
-const EventEmitter = require('events').EventEmitter;
-const autoref = require('./helpers').autoref;
+const { EventEmitter } = require('events');
+const { autoref } = require('./helpers');
 const api = require('./api');
 const lib = require('./native/lib');
-const parseUrl = require('url').parse;
+const { parse: parseUrl } = require('url');
 const consts = require('./consts');
 const makeFfiError = require('./native/_error.js');
 const errConst = require('./error_const');

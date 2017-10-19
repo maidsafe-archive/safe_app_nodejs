@@ -1,7 +1,7 @@
 const lib = require('../../native/lib');
 const t = require('../../native/types');
 const nativeH = require('../../native/helpers');
-const consts = require('../../consts').pubConsts;
+const { pubConsts: CONSTANTS } = require('../../consts');
 
 function isString(arg) {
   return typeof arg === 'string' || (arg.toString ? arg.toString() === '[object String]' : false);
@@ -186,7 +186,7 @@ class NFS {
   * @returns {File} a newly created file
   */
   create(content) {
-    return this.open(null, consts.NFS_FILE_MODE_OVERWRITE)
+    return this.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)
       .then((file) => file.write(content)
         .then(() => file.close())
         .then(() => file)
@@ -282,7 +282,7 @@ class NFS {
     // FIXME: this is temporary as we should be able to pass a null file to the lib
     if (!file) {
       fileParam = new File(metadata, null, null);
-      mode = consts.NFS_FILE_MODE_OVERWRITE;
+      mode = CONSTANTS.NFS_FILE_MODE_OVERWRITE;
     }
 
     // FIXME: free/discard the file it's already open, we are missing

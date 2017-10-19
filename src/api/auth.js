@@ -23,7 +23,7 @@
 const lib = require('../native/lib');
 const nativeH = require('../native/helpers');
 const types = require('../native/types');
-const inTesting = require('../consts').inTesting;
+const { inTesting } = require('../consts');
 
 const makeAppInfo = nativeH.makeAppInfo;
 const makePermissions = nativeH.makePermissions;
