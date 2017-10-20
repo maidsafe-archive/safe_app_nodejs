@@ -1,6 +1,6 @@
 const lib = require('../src/native/lib');
 const should = require('should');
-const fromAuthURI = require('../src').fromAuthURI;
+const { fromAuthURI, CONSTANTS } = require('../src');
 const h = require('./helpers');
 
 const appInfo = {
@@ -12,6 +12,10 @@ const appInfo = {
 describe('Smoke testing', () => {
   it('confirms there is a lib', () => {
     should(lib).be.Object();
+  });
+
+  it('confirms the CONSTANTS are exposed', () => {
+    should(CONSTANTS).be.Object();
   });
 });
 

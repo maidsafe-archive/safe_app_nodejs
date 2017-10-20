@@ -4,7 +4,8 @@ const Struct = require('ref-struct');
 const makeFfiError = require('./_error.js');
 const base = require('./_base');
 const t = base.types;
-const AuthGranted = require('./_auth').types.AuthGranted;
+const { types } = require('./_auth');
+const AuthGranted = types.AuthGranted;
 const consts = require('../consts');
 
 module.exports = {

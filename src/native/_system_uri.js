@@ -1,7 +1,7 @@
 const path = require('path');
 const FFI = require('ffi');
 const ref = require('ref');
-const SYSTEM_URI_LIB_FILENAME = require('../consts').SYSTEM_URI_LIB_FILENAME;
+const { SYSTEM_URI_LIB_FILENAME } = require('../consts');
 const makeFfiError = require('./_error.js');
 const h = require('./helpers');
 const t = require('./types');

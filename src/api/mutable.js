@@ -3,7 +3,7 @@ const lib = require('../native/lib');
 const t = require('../native/types');
 const emulations = require('./emulations');
 const { SignKey } = require('./crypto');
-const CONST = require('../consts');
+const { pubConsts: CONSTANTS } = require('../consts');
 
 /**
 * @private
@@ -89,14 +89,14 @@ class Permissions extends h.NetworkObject {
 
   /**
   * Lookup the permissions of a specifc key
-  * If the signKey provided is `null` the permission set will be then
-  * assumed to be `USER_ANYONE`.
-  * @param {SignKey|null} signKey the key to lookup for
+  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
   * @returns {Promise<PermissionSet>} the permission set for that key
   */
   getPermissionSet(signKey) {
     return lib.mdata_permissions_get(this.app.connection, this.ref,
-                                                      signKey ? signKey.ref : 0)
+                                                      signKey
+                                                        ? signKey.ref
+                                                        : CONSTANTS.USER_ANYONE)
         .then((c) => h.autoref(new PermissionsSet(this.app, c)));
   }
 
@@ -104,16 +104,16 @@ class Permissions extends h.NetworkObject {
   * Insert a new permission set mapped to a specifc key. Directly commits
   * to the network.
   * Requires 'ManagePermissions'-Permission for the app.
-  * If the signKey provided is `null` the permission set will be then
-  * set for `USER_ANYONE`.
-  * @param {SignKey|null} signKey the key to map to
-  * @param {PermissionSet} pmset - the permission set to insert
-  * @returns {Promise} - once finished
+  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to map to
+  * @param {PermissionSet} permissionSet the permission set to insert
+  * @returns {Promise} once finished
   */
   insertPermissionSet(signKey, permissionSet) {
     return lib.mdata_permissions_insert(this.app.connection,
                                         this.ref,
-                                        signKey ? signKey.ref : 0,
+                                        signKey
+                                          ? signKey.ref
+                                          : CONSTANTS.USER_ANYONE,
                                         permissionSet.ref);
   }
 
@@ -418,7 +418,7 @@ class MutableData extends h.NetworkObject {
         }
         const userMetadata = new t.UserMetadata({ name, description });
         return lib.mdata_encode_metadata(userMetadata)
-          .then((encodedMeta) => entries.insert(CONST.MD_META_KEY, encodedMeta))
+          .then((encodedMeta) => entries.insert(CONSTANTS.MD_METADATA_KEY, encodedMeta))
           .then(() => entries);
       })
       .then((entries) => this.app.crypto.getAppPubSignKey()
@@ -453,9 +453,10 @@ class MutableData extends h.NetworkObject {
     const userMetadata = new t.UserMetadata({ name, description });
     return lib.mdata_encode_metadata(userMetadata)
       .then((encodedMeta) => this.app.mutableData.newMutation()
-        .then((mut) => this.get(CONST.MD_META_KEY)
-          .then((metadata) => mut.update(CONST.MD_META_KEY, encodedMeta, metadata.version + 1)
-            , () => mut.insert(CONST.MD_META_KEY, encodedMeta)
+        .then((mut) => this.get(CONSTANTS.MD_METADATA_KEY)
+          .then((metadata) => mut.update(CONSTANTS.MD_METADATA_KEY,
+                                          encodedMeta, metadata.version + 1)
+            , () => mut.insert(CONSTANTS.MD_METADATA_KEY, encodedMeta)
           )
           .then(() => this.applyEntriesMutation(mut))
         ));
@@ -577,23 +578,21 @@ class MutableData extends h.NetworkObject {
   /**
   * Get a Handle to the permissions associated with this MutableData for
   * a specifc key
-  * If the signKey provided is `null` the permission set will be then
-  * assummed as `USER_ANYONE`.
-  * @param {SignKey|null} signKey the key to look up
+  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to look up
   * @returns {Promise<(Permissions)>} the permissions set associated to the key
   */
   getUserPermissions(signKey) {
     return lib.mdata_list_user_permissions(this.app.connection, this.ref,
-                                                      signKey ? signKey.ref : 0)
+                                                      signKey
+                                                        ? signKey.ref
+                                                        : CONSTANTS.USER_ANYONE)
       .then((r) => h.autoref(new PermissionsSet(this.app, r, this)));
   }
 
   /**
   * Delete the permissions of a specifc key. Directly commits to the network.
   * Requires 'ManagePermissions'-Permission for the app.
-  * If the signKey provided is `null` the permission set will be then
-  * assummed for `USER_ANYONE`.
-  * @param {SignKey|null} signKey the key to lookup for
+  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
   * @param {Number} version the version successor, to confirm you are
   *        actually asking for the right one
   * @returns {Promise} once finished
@@ -601,26 +600,28 @@ class MutableData extends h.NetworkObject {
   delUserPermissions(signKey, version) {
     return lib.mdata_del_user_permissions(this.app.connection,
                                           this.ref,
-                                          signKey ? signKey.ref : 0,
+                                          signKey
+                                            ? signKey.ref
+                                            : CONSTANTS.USER_ANYONE,
                                           version);
   }
 
   /**
   * Set the permissions of a specifc key. Directly commits to the network.
   * Requires 'ManagePermissions'-Permission for the app.
-  * If the signKey provided is `null` the permission set will be then
-  * set for `USER_ANYONE`.
-  * @param {SignKey|null} signKey the key to lookup for
-  * @param {PermissionSet} pmset the permission set to set to
+  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
+  * @param {PermissionSet} permissionSet the permission set to set to
   * @param {Number} version the version successor, to confirm you are
   *        actually asking for the right one
   * @returns {Promise} resolves once finished
   */
-  setUserPermissions(signKey, pmset, version) {
+  setUserPermissions(signKey, permissionSet, version) {
     return lib.mdata_set_user_permissions(this.app.connection,
                                           this.ref,
-                                          signKey ? signKey.ref : 0,
-                                          pmset.ref,
+                                          signKey
+                                            ? signKey.ref
+                                            : CONSTANTS.USER_ANYONE,
+                                          permissionSet.ref,
                                           version);
   }
 

@@ -1,6 +1,6 @@
 const path = require('path');
 const FFI = require('ffi');
-const LIB_FILENAME = require('../consts').LIB_FILENAME;
+const { LIB_FILENAME } = require('../consts');
 const os = require('os');
 
 const dir = path.dirname(__filename);
@@ -21,7 +21,7 @@ ffi.init = (options) => {
       FFI.DynamicLibrary(path.resolve(options.libPath || __dirname, 'libwinpthread-1'), mode);
     }
     lib = FFI.DynamicLibrary(path.join(options.libPath || dir, LIB_FILENAME), mode);
-    
+
     api.forEach(function(mod){
       if (!lib) {
         throw new Error('Native library not initialised');
@@ -48,7 +48,7 @@ ffi.init = (options) => {
     // FIXME: As long as `safe-app` doesn't expose system uri itself, we'll
     // patch it directly on it. This should later move into its own sub-module
     // and take care of mobile support for other platforms, too.
-    require('./_system_uri')(ffi, options);  
+    require('./_system_uri')(ffi, options);
   } catch(e) {
     throw makeFfiError(errConst.FAILED_TO_LOAD_LIB.code,
         errConst.FAILED_TO_LOAD_LIB.msg(e.toString()));

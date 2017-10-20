@@ -1,8 +1,8 @@
-const EventEmitter = require('events').EventEmitter;
-const autoref = require('./helpers').autoref;
+const { EventEmitter } = require('events');
+const { autoref } = require('./helpers');
 const api = require('./api');
 const lib = require('./native/lib');
-const parseUrl = require('url').parse;
+const { parse: parseUrl } = require('url');
 const consts = require('./consts');
 const makeFfiError = require('./native/_error.js');
 const errConst = require('./error_const');
@@ -204,9 +204,9 @@ class SAFEApp extends EventEmitter {
               }
               return Promise.reject(err);
             })
-            .then((file) => emulation.open(file, consts.OPEN_MODE_READ))
+            .then((file) => emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ))
             .then((openFile) => openFile.read(
-                consts.FILE_READ_FROM_BEGIN, consts.FILE_READ_TO_END))
+                consts.pubConsts.NFS_FILE_START, consts.pubConsts.NFS_FILE_END))
           )));
   }
 

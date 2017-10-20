@@ -1,7 +1,7 @@
 const lib = require('../../native/lib');
 const t = require('../../native/types');
 const nativeH = require('../../native/helpers');
-const consts = require('../../consts');
+const { pubConsts: CONSTANTS } = require('../../consts');
 
 function isString(arg) {
   return typeof arg === 'string' || (arg.toString ? arg.toString() === '[object String]' : false);
@@ -103,11 +103,11 @@ class File {
 
   /**
   * Read the file.
-  * FILE_READ_FROM_BEGIN and FILE_READ_TO_END may be used
+  * CONSTANTS.NFS_FILE_START and CONSTANTS.NFS_FILE_END may be used
   * to read the entire content of the file. These constants are
-  * declared in ../../consts.js.
-  * @param {Number} position
-  * @param {Number} len
+  * exposed by the safe-app-nodejs package.
+  * @param {Number|CONSTANTS.NFS_FILE_START} position
+  * @param {Number|CONSTANTS.NFS_FILE_END} len
   * @returns {Promise<[Data, Size]>}
   */
   read(position, len) {
@@ -186,7 +186,7 @@ class NFS {
   * @returns {File} a newly created file
   */
   create(content) {
-    return this.open(null, consts.OPEN_MODE_OVERWRITE)
+    return this.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)
       .then((file) => file.write(content)
         .then(() => file.close())
         .then(() => file)
@@ -249,13 +249,18 @@ class NFS {
   /**
   * Open a file for reading or writing.
   *
-  * Open modes (these constants are declared in ../../consts.js):
-  *  OPEN_MODE_OVERWRITE: Replaces the entire content of the file when writing data.
-  *  OPEN_MODE_APPEND: Appends to existing data in the file.
-  *  OPEN_MODE_READ: Open file to read.
+  * Open modes (these constants are exported by the safe-app-nodejs package):
+  *
+  * CONSTANTS.NFS_FILE_MODE_OVERWRITE: Replaces the entire content of the file when writing data.
+  *
+  * CONSTANTS.NFS_FILE_MODE_APPEND: Appends to existing data in the file.
+  *
+  * CONSTANTS.NFS_FILE_MODE_READ: Open file to read.
   *
   * @param {File} file
-  * @param {Number} [openMode=OPEN_MODE_OVERWRITE]
+  * @param {Number|CONSTANTS.NFS_FILE_MODE_OVERWRITE|
+  *         CONSTANTS.NFS_FILE_MODE_APPEND|
+  *         CONSTANTS.NFS_FILE_MODE_READ} [openMode=CONSTANTS.NFS_FILE_MODE_OVERWRITE]
   * @returns {Promise<File>}
   */
   open(file, openMode) {
@@ -277,7 +282,7 @@ class NFS {
     // FIXME: this is temporary as we should be able to pass a null file to the lib
     if (!file) {
       fileParam = new File(metadata, null, null);
-      mode = consts.OPEN_MODE_OVERWRITE;
+      mode = CONSTANTS.NFS_FILE_MODE_OVERWRITE;
     }
 
     // FIXME: free/discard the file it's already open, we are missing

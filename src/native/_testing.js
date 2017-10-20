@@ -1,6 +1,6 @@
 
 const ref = require('ref');
-const t = require("./_base").types;
+const { types: t } = require("./_base");
 
 module.exports = {
   functions: {
