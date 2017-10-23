@@ -7,7 +7,7 @@ let run = async () => {
         info: {
             id: 'net.safe.md.demo.app',
             name: 'safe-api-tutorial',
-            vendor: 'MaidSafe.net'
+            vendor: 'MaidSafe.net Ltd'
         },
         permissions: {}
     };

@@ -76,24 +76,25 @@ module.exports = {
     },
     Promisified: function(formatter, rTypes, after) {
       // create internal function that will be
-      // invoked ontop of the direct binding
+      // invoked on top of the direct binding
       // mixing a callback into the arguments
       // and returning a promise
-      return (lib, fn) => (function() {
+      return (lib, fn) => (function(...varArgs) {
         // the internal function that wraps the actual function call
         // compile the callback-types-definiton
         let args;
         let types = ['pointer', FfiResult]; // we always have: user_context and FfiResult
         if (Array.isArray(rTypes)) {
-          types = types.concat(rTypes);
+          types = [...types, ...rTypes];
         } else if (rTypes) {
           types.push(rTypes);
         }
+
         return new Promise((resolve, reject) => {
           // if there is a formatter, we are reformatting
           // the incoming arguments first
           try {
-            args = formatter ? formatter.apply(formatter, arguments): Array.prototype.slice.call(arguments);
+            args = formatter ? formatter(...varArgs): [...varArgs];
           } catch(err) {
             // reject promise if error is thrown by the formatter
             return reject(err);
@@ -102,54 +103,50 @@ module.exports = {
           // append user-context and callbacks to the arguments
           args.push(ref.NULL);
           args.push(ffi.Callback("void", types,
-              function(uctx, err) {
+              function(uctx, err, ...restArgs) {
                 // error found, errback with translated error
-                if (err.error_code !== 0) return reject(makeFfiError(err.error_code, err.error_description));
+                if (err.error_code !== 0) {
+                  return reject(makeFfiError(err.error_code, err.error_description));
+                }
 
-                // take off the ctx and error
-                let res = Array.prototype.slice.call(arguments, 2)
+                let res;
                 if (after) {
                   // we are post-processing the entry
-                  res = after(res);
+                  res = after(restArgs);
                 } else if (types.length === 3){
                   // no post-processing but given only one
                   // item given, use instead of array.
-                  res = arguments[2]
+                  res = restArgs[0];
+                } else {
+                  res = [...restArgs];
                 }
                 resolve(res);
               }));
           // and call the function
-          fn.apply(fn, args);
+          fn(...args);
         });
       });
     },
-    PromisifiedForEachCb: function(formatter, rTypes, after) {
-      // create internal function that will be
-      // invoked ontop of the direct binding
-      // mixing a callback into the arguments
-      // and returning a promise
-      return (lib, fn) => (function() {
+    PromisifiedForEachCb: function(formatter, rTypes) {
+      // This is similar to the function returned by the Promisifed function
+      // above, with the difference being that it expects a callback function
+      // as the last parameter which is passed down to the lib's function
+      // as the next to last parameter, and it doesn't support a post-processing
+      // function for the returned values.
+      return (lib, fn) => (function(...varArgs) {
         // the internal function that wraps the actual function call
         // compile the callback-types-definiton
         let args;
-        let types = ['pointer', FfiResult]; // we always have: user_context and FfiResult
-        if (Array.isArray(rTypes)) {
-          types = types.concat(rTypes);
-        } else if (rTypes) {
-          types.push(rTypes);
-        }
+        let types = ['pointer', FfiResult, ...rTypes]; // we always have: user_context and FfiResult
+
         return new Promise((resolve, reject) => {
           // if there is a formatter, we are reformatting
           // the incoming arguments first
-          if (formatter) {
-            try {
-              args = formatter.apply(formatter, arguments);
-            } catch(err) {
-              // reject promise if error is thrown by the formatter
-              return reject(err);
-            }
-          } else {
-            args = Array.prototype.slice.call(arguments);
+          try {
+            args = formatter ? formatter(...varArgs): [...varArgs];
+          } catch(err) {
+            // reject promise if error is thrown by the formatter
+            return reject(err);
           }
 
           // append user-context and callbacks to the arguments
@@ -161,24 +158,24 @@ module.exports = {
           args.push(ref.NULL);
           args.push(callback);
           args.push(ffi.Callback("void", types,
-              function(uctx, err) {
+              function(uctx, err, ...restArgs) {
                 // error found, errback with translated error
-                if (err.error_code !== 0) return reject(makeFfiError(err.error_code, err.error_description));
+                if (err.error_code !== 0) {
+                  return reject(makeFfiError(err.error_code, err.error_description));
+                }
 
-                // take off the ctx and error
-                let res = Array.prototype.slice.call(arguments, 2)
-                if (after) {
-                  // we are post-processing the entry
-                  res = after(res);
-                } else if (types.length === 3){
-                  // no post-processing but given only one
-                  // item given, use instead of array.
-                  res = arguments[2]
+                let res;
+                if (types.length === 3){
+                  // only one item given, return it
+                  // alone instead of in an array.
+                  res = restArgs[0];
+                } else {
+                  res = [...restArgs];
                 }
                 resolve(res);
               }));
           // and call the function
-          fn.apply(fn, args);
+          fn(...args);
         });
       });
     }
