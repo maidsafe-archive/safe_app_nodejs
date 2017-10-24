@@ -32,6 +32,45 @@ const FfiResult = Struct({
   error_description: 'string'
 });
 
+// Internal helper functions
+const normaliseTypes = (rTypes) => {
+  let types = ['pointer', FfiResult]; // we always have: user_context and FfiResult
+  if (Array.isArray(rTypes)) {
+    types = [...types, ...rTypes];
+  } else if (rTypes) {
+    types.push(rTypes);
+  }
+  return types;
+}
+
+const callLibFn = (fn, args, types, postProcess) => {
+  return new Promise((resolve, reject) => {
+    // append the callback to receive the result to the args
+    args.push(ffi.Callback("void", types,
+        function(uctx, err, ...restArgs) {
+          // error found, errback with translated error
+          if (err.error_code !== 0) {
+            return reject(makeFfiError(err.error_code, err.error_description));
+          }
+
+          let res;
+          if (postProcess) {
+            // we are post-processing the entry
+            res = postProcess(restArgs);
+          } else if (types.length === 3){
+            // no post-processing but given only one
+            // item given, use instead of array.
+            res = restArgs[0];
+          } else {
+            res = [...restArgs];
+          }
+          resolve(res);
+        }));
+
+    // and call the function
+    fn(...args);
+  });
+}
 module.exports = {
   types: {
     App,
@@ -83,12 +122,7 @@ module.exports = {
         // the internal function that wraps the actual function call
         // compile the callback-types-definiton
         let args;
-        let types = ['pointer', FfiResult]; // we always have: user_context and FfiResult
-        if (Array.isArray(rTypes)) {
-          types = [...types, ...rTypes];
-        } else if (rTypes) {
-          types.push(rTypes);
-        }
+        let types = normaliseTypes(rTypes);
 
         return new Promise((resolve, reject) => {
           // if there is a formatter, we are reformatting
@@ -100,30 +134,12 @@ module.exports = {
             return reject(err);
           }
 
-          // append user-context and callbacks to the arguments
+          // append just user-context to the argument since the
+          // result callback is appended and handled by callLibFn
           args.push(ref.NULL);
-          args.push(ffi.Callback("void", types,
-              function(uctx, err, ...restArgs) {
-                // error found, errback with translated error
-                if (err.error_code !== 0) {
-                  return reject(makeFfiError(err.error_code, err.error_description));
-                }
-
-                let res;
-                if (after) {
-                  // we are post-processing the entry
-                  res = after(restArgs);
-                } else if (types.length === 3){
-                  // no post-processing but given only one
-                  // item given, use instead of array.
-                  res = restArgs[0];
-                } else {
-                  res = [...restArgs];
-                }
-                resolve(res);
-              }));
-          // and call the function
-          fn(...args);
+          return callLibFn(fn, args, types, after)
+            .then(resolve)
+            .catch(reject);
         });
       });
     },
@@ -137,7 +153,7 @@ module.exports = {
         // the internal function that wraps the actual function call
         // compile the callback-types-definiton
         let args;
-        let types = ['pointer', FfiResult, ...rTypes]; // we always have: user_context and FfiResult
+        let types = normaliseTypes(rTypes);
 
         return new Promise((resolve, reject) => {
           // if there is a formatter, we are reformatting
@@ -149,33 +165,17 @@ module.exports = {
             return reject(err);
           }
 
-          // append user-context and callbacks to the arguments
-          // the last argument we received is the callback function
-          // to be passed as argument right after the user_data pointer
-          // but before the result calback
+          // append user-context and callbacks to the arguments,
+          // and the last argument we receive is the callback function
+          // to be passed as argument right after the user-context pointer but
+          // before the result calback (which is added and handlded by callLibFn)
           let callback = args[args.length - 1];
           args = Array.prototype.slice.call(args, 0, args.length - 1);
           args.push(ref.NULL);
           args.push(callback);
-          args.push(ffi.Callback("void", types,
-              function(uctx, err, ...restArgs) {
-                // error found, errback with translated error
-                if (err.error_code !== 0) {
-                  return reject(makeFfiError(err.error_code, err.error_description));
-                }
-
-                let res;
-                if (types.length === 3){
-                  // only one item given, return it
-                  // alone instead of in an array.
-                  res = restArgs[0];
-                } else {
-                  res = [...restArgs];
-                }
-                resolve(res);
-              }));
-          // and call the function
-          fn(...args);
+          return callLibFn(fn, args, types, null)
+            .then(resolve)
+            .catch(reject);
         });
       });
     }
