@@ -303,5 +303,14 @@ describe('Browsing', () => {
         .should.be.rejectedWith('NFS error: File not found')
         .then((err) => should(err.code).be.equal(-301))
     );
+
+    it('wrong path', function test() {
+      this.timeout(20000);
+      return createRandomDomain(content, '/my.file', '')
+        .then((newdomain) => createAnonTestApp()
+          .then((app) => app.webFetch(`safe://${newdomain}/my.file/`)
+            .should.be.rejectedWith('NFS error: File not found')
+          ));
+    });
   });
 });

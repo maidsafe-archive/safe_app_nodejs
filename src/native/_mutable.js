@@ -2,12 +2,11 @@ const ffi = require('ffi');
 const ref = require("ref");
 const Struct = require('ref-struct');
 const Enum = require('enum');
-const base = require('./_base');
+const { SignKeyHandle } = require('./_crypto').types;
+const { types: t, helpers: h } = require('./_base');
 
-const t = base.types;
-const h = base.helpers;
-const Promisified = base.helpers.Promisified;
-const SignKeyHandle = require('./_crypto').types.SignKeyHandle;
+const PromisifiedForEachCb = h.PromisifiedForEachCb;
+const Promisified = h.Promisified;
 
 const MDataInfo = Struct({});
 const MDataInfoHandle = ref.refType(MDataInfo);
@@ -241,8 +240,8 @@ module.exports = {
     mdata_permissions_new: Promisified(null, MDataPermissionsHandle),
     mdata_permissions_len: Promisified(null, t.usize),
     mdata_permissions_get: Promisified(null, MDataPermissionSetHandle),
-    mdata_permissions_for_each: Promisified(permissionsCallBackLastEntry.bind(null,
-          ['pointer', SignKeyHandle, MDataPermissionSetHandle]), [], null, true),
+    mdata_permissions_for_each: PromisifiedForEachCb(permissionsCallBackLastEntry.bind(null,
+          ['pointer', SignKeyHandle, MDataPermissionSetHandle]), []),
     mdata_permissions_insert: Promisified(null, []),
     mdata_permissions_free: Promisified(null, []),
     mdata_put: Promisified(null, []),
@@ -266,16 +265,16 @@ module.exports = {
     mdata_entries_insert: Promisified(strToBuffer, []),
     mdata_entries_len: Promisified(null, t.usize),
     mdata_entries_get: Promisified(strToBuffer, valueVersionType, readValueToBuffer),
-    mdata_entries_for_each: Promisified(keyValueCallBackLastEntry.bind(null,
-          ['pointer', t.u8Pointer, t.usize, t.u8Pointer, t.usize, t.u64]), [], null, true),
+    mdata_entries_for_each: PromisifiedForEachCb(keyValueCallBackLastEntry.bind(null,
+          ['pointer', t.u8Pointer, t.usize, t.u8Pointer, t.usize, t.u64]), []),
     mdata_entries_free: Promisified(null, []),
     mdata_keys_len: Promisified(null, t.usize),
-    mdata_keys_for_each: Promisified(keyValueCallBackLastEntry.bind(null,
-          ['pointer', t.u8Pointer, t.usize]), [], null, true),
+    mdata_keys_for_each: PromisifiedForEachCb(keyValueCallBackLastEntry.bind(null,
+          ['pointer', t.u8Pointer, t.usize]), []),
     mdata_keys_free: Promisified(null, []),
     mdata_values_len: Promisified(null, t.usize),
-    mdata_values_for_each: Promisified(keyValueCallBackLastEntry.bind(null,
-          ['pointer', t.u8Pointer, t.usize, t.u64]), [], null, true),
+    mdata_values_for_each: PromisifiedForEachCb(keyValueCallBackLastEntry.bind(null,
+          ['pointer', t.u8Pointer, t.usize, t.u64]), []),
     mdata_values_free: Promisified(null, []),
     mdata_encode_metadata: Promisified((metaHandle) => {
       return [ref.alloc(UserMetadata, metaHandle)];

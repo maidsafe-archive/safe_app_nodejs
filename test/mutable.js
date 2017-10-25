@@ -308,6 +308,23 @@ describe('Mutable Data', () => {
     });
   });
 
+  describe('Errors', () => {
+    it('missing callback in keys.forEach', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup().then(() => m.getKeys()))
+      .then((keys) => keys.forEach().should.be.rejectedWith('A function parameter _must be_ provided'))
+    );
+
+    it('missing callback in values.forEach', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup().then(() => m.getValues()))
+      .then((values) => values.forEach().should.be.rejectedWith('A function parameter _must be_ provided'))
+    );
+
+    it('missing callback in entries.forEach', () => app.mutableData.newRandomPublic(TAG_TYPE)
+      .then((m) => m.quickSetup().then(() => m.getEntries()))
+      .then((entries) => entries.forEach().should.be.rejectedWith('A function parameter _must be_ provided'))
+    );
+  });
+
   describe('Encrypt entry key/value', () => {
     it('encrypt entry key on public md', () => app.mutableData.newRandomPublic(TAG_TYPE)
       .then((m) => m.quickSetup(TEST_ENTRIES)
@@ -675,7 +692,8 @@ describe('Mutable Data', () => {
           .then(() => app.mutableData.newPermissionSet()
             .then((newPermSet) => newPermSet.setAllow('Delete')
               .then(() => m.getPermissions()
-              .then((perm) => perm.insertPermissionSet(null, newPermSet).should.be.fulfilled())
+              .then((perm) => perm.insertPermissionSet(CONSTANTS.USER_ANYONE,
+                                                       newPermSet).should.be.fulfilled())
             ))))
     );
 
@@ -684,8 +702,8 @@ describe('Mutable Data', () => {
           .then(() => app.mutableData.newPermissionSet()
             .then((newPermSet) => newPermSet.setAllow('Delete')
               .then(() => m.getPermissions()
-              .then((perm) => perm.insertPermissionSet(null, newPermSet)
-                .then(() => perm.getPermissionSet(null).should.be.fulfilled())
+              .then((perm) => perm.insertPermissionSet(CONSTANTS.USER_ANYONE, newPermSet)
+                .then(() => perm.getPermissionSet(CONSTANTS.USER_ANYONE).should.be.fulfilled())
               )))))
     );
 
@@ -748,7 +766,8 @@ describe('Mutable Data', () => {
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => app.mutableData.newPermissionSet())
           .then((newPermSet) => newPermSet.setAllow('Insert')
-            .then(() => m.setUserPermissions(null, newPermSet, 1).should.be.fulfilled())
+            .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE,
+                                             newPermSet, 1).should.be.fulfilled())
           ))
     );
 
@@ -756,7 +775,8 @@ describe('Mutable Data', () => {
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => app.mutableData.newPermissionSet())
           .then((newPermSet) => newPermSet.clear('Insert')
-            .then(() => m.setUserPermissions(null, newPermSet, 1).should.be.fulfilled())
+            .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE,
+                                             newPermSet, 1).should.be.fulfilled())
           ))
     );
 
@@ -764,8 +784,8 @@ describe('Mutable Data', () => {
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => app.mutableData.newPermissionSet())
           .then((newPermSet) => newPermSet.setAllow('Insert')
-            .then(() => m.setUserPermissions(null, newPermSet, 1)))
-          .then(() => m.getUserPermissions(null).should.be.fulfilled())
+            .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE, newPermSet, 1)))
+          .then(() => m.getUserPermissions(CONSTANTS.USER_ANYONE).should.be.fulfilled())
         )
     );
 
@@ -773,8 +793,8 @@ describe('Mutable Data', () => {
         .then((m) => m.quickSetup(TEST_ENTRIES)
           .then(() => app.mutableData.newPermissionSet())
           .then((newPermSet) => newPermSet.setAllow('Insert')
-            .then(() => m.setUserPermissions(null, newPermSet, 1)))
-          .then(() => m.delUserPermissions(null, 2).should.be.fulfilled())
+            .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE, newPermSet, 1)))
+          .then(() => m.delUserPermissions(CONSTANTS.USER_ANYONE, 2).should.be.fulfilled())
         )
     );
   });

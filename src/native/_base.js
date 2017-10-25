@@ -32,6 +32,45 @@ const FfiResult = Struct({
   error_description: 'string'
 });
 
+// Internal helper functions
+const normaliseTypes = (rTypes) => {
+  let types = ['pointer', FfiResult]; // we always have: user_context and FfiResult
+  if (Array.isArray(rTypes)) {
+    types = [...types, ...rTypes];
+  } else if (rTypes) {
+    types.push(rTypes);
+  }
+  return types;
+}
+
+const callLibFn = (fn, args, types, postProcess) => {
+  return new Promise((resolve, reject) => {
+    // append the callback to receive the result to the args
+    args.push(ffi.Callback("void", types,
+        function(uctx, err, ...restArgs) {
+          // error found, errback with translated error
+          if (err.error_code !== 0) {
+            return reject(makeFfiError(err.error_code, err.error_description));
+          }
+
+          let res;
+          if (postProcess) {
+            // we are post-processing the entry
+            res = postProcess(restArgs);
+          } else if (types.length === 3){
+            // no post-processing but given only one
+            // item given, use instead of array.
+            res = restArgs[0];
+          } else {
+            res = [...restArgs];
+          }
+          resolve(res);
+        }));
+
+    // and call the function
+    fn(...args);
+  });
+}
 module.exports = {
   types: {
     App,
@@ -74,66 +113,69 @@ module.exports = {
       d.setTime((sec * 1000) + (nsec_part / 1000000));
       return d;
     },
-    Promisified: function(formatter, rTypes, after, isLastArgCb) {
+    Promisified: function(formatter, rTypes, after) {
       // create internal function that will be
-      // invoked ontop of the direct binding
+      // invoked on top of the direct binding
       // mixing a callback into the arguments
       // and returning a promise
-      return (lib, fn) => (function() {
+      return (lib, fn) => (function(...varArgs) {
         // the internal function that wraps the actual function call
         // compile the callback-types-definiton
         let args;
-        let types = ['pointer', FfiResult]; // we always have: user_context and FfiResult
-        if (Array.isArray(rTypes)) {
-          types = types.concat(rTypes);
-        } else if (rTypes) {
-          types.push(rTypes);
-        }
+        let types = normaliseTypes(rTypes);
+
         return new Promise((resolve, reject) => {
           // if there is a formatter, we are reformatting
           // the incoming arguments first
-          if (formatter) {
-            try {
-              args = formatter.apply(formatter, arguments);
-            } catch(err) {
-              // reject promise if error is thrown by the formatter
-              return reject(err);
-            }
-          } else {
-            args = Array.prototype.slice.call(arguments);
+          try {
+            args = formatter ? formatter(...varArgs): [...varArgs];
+          } catch(err) {
+            // reject promise if error is thrown by the formatter
+            return reject(err);
           }
 
-          // append user-context and callbacks to the arguments
-          if (isLastArgCb) {
-            // the last argument we received is the callback function
-            // to be passed as argument right after the user_data pointer
-            // but before the result calback
-            let forEachCb = args[args.length - 1];
-            args = Array.prototype.slice.call(args, 0, args.length - 1);
-            args.push(ref.NULL);
-            args.push(forEachCb);
-          } else {
-            args.push(ref.NULL);
-          }
-          args.push(ffi.Callback("void", types,
-              function(uctx, err) {
-                // error found, errback with translated error
-                if (err.error_code !== 0) return reject(makeFfiError(err.error_code, err.error_description));
+          // append just user-context to the argument since the
+          // result callback is appended and handled by callLibFn
+          args.push(ref.NULL);
+          return callLibFn(fn, args, types, after)
+            .then(resolve)
+            .catch(reject);
+        });
+      });
+    },
+    PromisifiedForEachCb: function(formatter, rTypes) {
+      // This is similar to the function returned by the Promisifed function
+      // above, with the difference being that it expects a callback function
+      // as the last parameter which is passed down to the lib's function
+      // as the next to last parameter, and it doesn't support a post-processing
+      // function for the returned values.
+      return (lib, fn) => (function(...varArgs) {
+        // the internal function that wraps the actual function call
+        // compile the callback-types-definiton
+        let args;
+        let types = normaliseTypes(rTypes);
 
-                // take off the ctx and error
-                let res = Array.prototype.slice.call(arguments, 2)
-                if (after) {
-                  // we are post-processing the entry
-                  res = after(res);
-                } else if (types.length === 3){
-                  // no post-processing but given only one
-                  // item given, use instead of array.
-                  res = arguments[2]
-                }
-                resolve(res);
-              }));
-          // and call the function
-          fn.apply(fn, args);
+        return new Promise((resolve, reject) => {
+          // if there is a formatter, we are reformatting
+          // the incoming arguments first
+          try {
+            args = formatter ? formatter(...varArgs): [...varArgs];
+          } catch(err) {
+            // reject promise if error is thrown by the formatter
+            return reject(err);
+          }
+
+          // append user-context and callbacks to the arguments,
+          // and the last argument we receive is the callback function
+          // to be passed as argument right after the user-context pointer but
+          // before the result calback (which is added and handlded by callLibFn)
+          let callback = args[args.length - 1];
+          args = Array.prototype.slice.call(args, 0, args.length - 1);
+          args.push(ref.NULL);
+          args.push(callback);
+          return callLibFn(fn, args, types, null)
+            .then(resolve)
+            .catch(reject);
         });
       });
     }
