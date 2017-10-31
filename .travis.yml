@@ -1,49 +1,27 @@
-env:
-  global:
-    - RUST_BACKTRACE=1
-    - PATH=$PATH:$HOME/.cargo/bin:$HOME/rust/bin
-
 sudo: true
 dist: trusty
-
 os:
-  - linux
-  - osx
-osx_image: xcode8.2
-
-compiler:
-  - gcc
-  - clang
-
+- linux
 language: node_js
-
 node_js:
-  - "7"
-
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.8
-      - desktop-file-utils
-      - xdg-utils
-
+- '7'
 cache:
-  cargo: true
+  yarn: true
   directories:
-    - node_modules
-
-before_install:
-  - "[[ ${TRAVIS_OS_NAME} = linux ]] && export CXX=g++-4.8 || echo 'skipped'"
-
+  - node_modules
 install:
-  - node --version
-  - npm --version
-  # also downloads the build for release version
-  - NODE_ENV=dev npm install
-
+- NODE_ENV=dev yarn
 script:
-  - npm run lint
-  - npm run test-coverage
-  - npm run publish-coverage
+- yarn lint
+- yarn test-coverage
+- yarn publish-coverage
+before_deploy:
+- rm -f src/native/*.so
+deploy:
+  provider: npm
+  skip_cleanup: true
+  email: krishna.kumar@maidsafe.net 
+  api_key: $NPM_API_KEY
+  tag: next
+  on:
+    tags: true
