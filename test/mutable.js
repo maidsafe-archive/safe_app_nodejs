@@ -5,7 +5,8 @@ const { pubConsts: CONSTANTS } = require('../src/consts');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
-describe('Mutable Data', () => {
+describe('Mutable Data', function test() { // eslint-disable-line prefer-arrow-callback
+  this.timeout(30000);
   let app = createAuthenticatedTestApp();
   const TAG_TYPE = 15639;
   const TAG_TYPE_RESERVED = 10000;
