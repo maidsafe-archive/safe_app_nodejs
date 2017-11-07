@@ -8,14 +8,24 @@ const { types } = require('./_auth');
 const AuthGranted = types.AuthGranted;
 const consts = require('../consts');
 
+const AccountInfo = Struct({
+  mutations_done: t.u64,
+  mutations_available: t.u64
+});
+
 module.exports = {
   functions: {
+    app_account_info: [t.Void, [t.AppPtr, t.VoidPtr, 'pointer']],
     app_unregistered: [t.Void ,[t.u8Pointer, t.usize, t.VoidPtr, t.VoidPtr, 'pointer', 'pointer']],
     app_registered: [t.Void , ['string', ref.refType(AuthGranted), t.VoidPtr, t.VoidPtr, 'pointer', 'pointer']],
     app_reconnect: [t.Void, [t.AppPtr, t.VoidPtr, 'pointer']],
     app_free: [t.Void, [t.AppPtr]]
   },
   api: {
+    app_account_info: base.helpers.Promisified(null, ref.refType(AccountInfo), (accInfoPtr) => {
+      const accInfo = accInfoPtr[0].deref();
+      return { mutations_done: accInfo.mutations_done, mutations_available: accInfo.mutations_available }
+    }),
     app_unregistered: function(lib, fn) {
       return (function(app, uri) {
         const network_observer_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.i32], (user_data, result, state) => app._networkStateUpdated(user_data, result, state));

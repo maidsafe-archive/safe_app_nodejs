@@ -291,6 +291,10 @@ class SAFEApp extends EventEmitter {
     return lib.app_output_log_path(filename);
   }
 
+  getAccountInfo() {
+    return lib.app_account_info(this.connection);
+  }
+
   /**
   * Create a SAFEApp and try to login it through the `authUri`
   * @param {AppInfo} appInfo - the AppInfo

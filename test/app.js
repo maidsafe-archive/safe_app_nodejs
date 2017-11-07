@@ -106,4 +106,32 @@ describe('Smoke test', () => {
 
     should.throws(test);
   });
+
+  it('should return account information', async function test() { // eslint-disable-line prefer-arrow-callback
+    this.timeout(10000);
+    const app = createAuthenticatedTestApp();
+    const accInfo = await app.getAccountInfo();
+    should(accInfo).have.properties(['mutations_done', 'mutations_available']);
+  });
+
+  it('should increment/decrement mutation values', async function test() { // eslint-disable-line prefer-arrow-callback
+    this.timeout(10000);
+    const app = createAuthenticatedTestApp();
+    const accInfoBefore = await app.getAccountInfo();
+    const idWriter = await app.immutableData.create();
+    const testString = `test-${Math.random()}`;
+    await idWriter.write(testString);
+    const cipherOpt = await app.cipherOpt.newPlainText();
+    await idWriter.close(cipherOpt);
+    const accInfoAfter = await app.getAccountInfo();
+    should(accInfoAfter.mutations_done).be.equal(accInfoBefore.mutations_done + 1);
+    should(accInfoAfter.mutations_available).be.equal(accInfoBefore.mutations_available - 1);
+  });
+
+  it('should throw error if getAccountInfo called on unregistered app', async function test() {
+    this.timeout(10000);
+    const app = h.createTestApp();
+    await app.auth.loginFromURI(h.authUris.unregisteredUri);
+    should(app.getAccountInfo()).be.rejected();
+  });
 });
