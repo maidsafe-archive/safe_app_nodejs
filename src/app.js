@@ -243,20 +243,7 @@ class SAFEApp extends EventEmitter {
   * @param {String} state
   */
   set networkState(state) {
-    switch (state) {
-      case consts.NET_STATE_INIT:
-        this._networkState = 'Init';
-        break;
-      case consts.NET_STATE_DISCONNECTED:
-        this._networkState = 'Disconnected';
-        break;
-      case consts.NET_STATE_CONNECTED:
-        this._networkState = 'Connected';
-        break;
-      case consts.NET_STATE_UNKNOWN:
-      default:
-        this._networkState = 'Unknown';
-    }
+    this._networkState = state;
   }
 
   /**
@@ -272,6 +259,44 @@ class SAFEApp extends EventEmitter {
   */
   get appInfo() {
     return this._appInfo;
+  }
+
+  get CONSTANTS() { // eslint-disable-line class-methods-use-this
+    return {
+      INIT: consts.NET_STATE_INIT,
+      CONNECTED: consts.NET_STATE_CONNECTED,
+      DISCONNECTED: consts.NET_STATE_DISCONNECTED,
+      UNKNOWN: consts.NET_STATE_UNKNOWN
+    };
+  }
+
+  /**
+   * Returns boolean for network state: INIT
+   */
+  isNetStateInit() {
+    return this.networkState === this.CONSTANTS.INIT;
+  }
+
+  /**
+   * Returns boolean for network state: CONNECTED
+   */
+  isNetStateConnected() {
+    return this.networkState === this.CONSTANTS.CONNECTED;
+  }
+
+  /**
+  /**
+   * Returns boolean for network state: DISCONNECTED
+   */
+  isNetStateDisconnected() {
+    return this.networkState === this.CONSTANTS.DISCONNECTED;
+  }
+
+  /**
+   * Returns boolean for network state: UNKNOWN
+   */
+  isNetStateUnknown() {
+    return this.networkState === this.CONSTANTS.UNKNOWN;
   }
 
   /**
