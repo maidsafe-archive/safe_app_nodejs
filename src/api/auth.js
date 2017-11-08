@@ -325,6 +325,22 @@ class AuthInterface {
   }
 
   /**
+  * View granted app permissions without connecting to network
+  * @arg {String} responseUri from genAuthUri
+  * @retuns {Promise<array>} array of app permsions
+  */
+  async readAppPermissions(responseUri) {
+    const sanitisedUri = responseUri.replace(/:\/+/g, ':'); // Convert a substring with ':' followed by any number of '/' to ':'
+    const resp = await lib.decode_ipc_msg(sanitisedUri);
+    const ipcMsgType = resp[0];
+    if (ipcMsgType === 'granted') {
+      const authGranted = resp[1].deref();
+      return authGranted;
+    }
+    return [];
+  }
+
+  /**
   * *ONLY AVAILALBE IF RUN in NODE_ENV='development' || 'testing'*
   *
   * Generate a _locally_ registered App with the given permissions, or
