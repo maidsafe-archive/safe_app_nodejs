@@ -48,9 +48,9 @@ module.exports = {
   },
   functions: {
     app_pub_sign_key: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
-    sign_key_new: [t.Void, [t.AppPtr, ref.refType(t.KEYBYTES), 'pointer', 'pointer']],
-    sign_key_get: [t.Void, [t.AppPtr, SignKeyHandle, 'pointer', 'pointer']],
-    sign_key_free: [t.Void, [t.AppPtr, SignKeyHandle, 'pointer', 'pointer']],
+    sign_pub_key_new: [t.Void, [t.AppPtr, ref.refType(t.KEYBYTES), 'pointer', 'pointer']],
+    sign_pub_key_get: [t.Void, [t.AppPtr, SignKeyHandle, 'pointer', 'pointer']],
+    sign_pub_key_free: [t.Void, [t.AppPtr, SignKeyHandle, 'pointer', 'pointer']],
 
     app_pub_enc_key: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
     enc_generate_key_pair: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
@@ -74,9 +74,9 @@ module.exports = {
   },
   api: {
     app_pub_sign_key: h.Promisified(null, SignKeyHandle),
-    sign_key_new: h.Promisified(toBuffer, SignKeyHandle),
-    sign_key_get: h.Promisified(null, ['pointer'], copyKeyBytesArray),
-    sign_key_free: h.Promisified(null, []),
+    sign_pub_key_new: h.Promisified(toBuffer, SignKeyHandle),
+    sign_pub_key_get: h.Promisified(null, ['pointer'], copyKeyBytesArray),
+    sign_pub_key_free: h.Promisified(null, []),
 
     app_pub_enc_key: h.Promisified(null, EncryptKeyHandle),
     enc_generate_key_pair: h.Promisified(null, [EncryptPubKeyHandle, EncryptSecKeyHandle]),

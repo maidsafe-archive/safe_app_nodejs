@@ -33,7 +33,7 @@ class SignKey extends h.NetworkObject {
   * @returns {Promise<Buffer>}
   */
   getRaw() {
-    return lib.sign_key_get(this.app.connection, this.ref);
+    return lib.sign_pub_key_get(this.app.connection, this.ref);
   }
 
   /**
@@ -43,7 +43,7 @@ class SignKey extends h.NetworkObject {
   * @param {handle} ref
   */
   static free(app, ref) {
-    return lib.sign_key_free(app.connection, ref);
+    return lib.sign_pub_key_free(app.connection, ref);
   }
 }
 
@@ -239,7 +239,7 @@ class CryptoInterface {
   * @returns {Promise<SignKey>}
   */
   getSignKeyFromRaw(raw) {
-    return lib.sign_key_new(this.app.connection, raw)
+    return lib.sign_pub_key_new(this.app.connection, raw)
         .then((c) => h.autoref(new SignKey(this.app, c)));
   }
 

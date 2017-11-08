@@ -58,6 +58,11 @@ const NET_STATE_CONNECTED = 0;
 * application has requested mutation permissions on a MutableData,
 * displaying this information to the user, so the user can make a better
 * decision to either allow or deny such a request based on it.
+*
+* @param {Number} MD_ENTRIES_EMPTY TODO
+* @param {Number} MD_PERMISSION_EMPTY TODO
+* TODO
+*
 */
 const pubConsts = {
   NFS_FILE_MODE_OVERWRITE: 1,
@@ -67,6 +72,8 @@ const pubConsts = {
   NFS_FILE_END: 0,
   USER_ANYONE: 0,
   MD_METADATA_KEY: '_metadata',
+  MD_ENTRIES_EMPTY: 0,
+  MD_PERMISSION_EMPTY: 0,
 };
 
 const LIB_FILENAME = {
