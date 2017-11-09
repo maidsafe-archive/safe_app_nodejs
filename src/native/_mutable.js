@@ -348,7 +348,7 @@ module.exports = {
     }),
     mdata_mutate_entries: Promisified(toMDataInfo, []),
     mdata_list_permissions: Promisified(toMDataInfo, MDataPermissionsHandle),
-    mdata_list_user_permissions: Promisified(toMDataInfo, t.PermissionSet),
+    mdata_list_user_permissions: Promisified(toMDataInfo, t.PermissionSetPtr, readPermissionSetPtr),
     mdata_set_user_permissions: Promisified((appPtr, mDataInfoObj, signKeyHandle, permSet, version) => {
         const permSetObj = h.makePermissionSet(permSet);
         const mDataInfo = makeMDataInfo(mDataInfoObj);
