@@ -9,6 +9,12 @@ const authUris = {
   sharedMdataUri: 'safe-bmV0Lm1haWRzYWZlLmV4YW1wbGVzLnRlc3QtYXBw:AQAAADvUUzgDAAAAAAAAAA=='
 };
 
+const appInfo = {
+  id: 'net.maidsafe.test.javascript.id',
+  name: 'JS Test',
+  vendor: 'MaidSafe Ltd.'
+};
+
 function createTestApp(scope) {
   return h.autoref(new App({
     id: 'net.maidsafe.test.javascript.id',
@@ -52,6 +58,8 @@ const createRandomSecKey = () => crypto.randomBytes(32);
 const createRandomNonce = () => crypto.randomBytes(32);
 
 module.exports = {
+  App,
+  appInfo,
   authUris,
   createTestApp,
   createAnonTestApp,

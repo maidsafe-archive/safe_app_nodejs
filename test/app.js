@@ -8,21 +8,8 @@ const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 const createTestAppWithNetworkCB = h.createTestAppWithNetworkCB;
 const createTestAppWithOptions = h.createTestAppWithOptions;
 
-describe('Smoke test', () => {
-  it('unauthorised connection', () => {
-    const app = createTestApp();
-    return app.auth.genConnUri()
-      .then((resp) => {
-        should(resp.uri).is.not.undefined();
-        should(resp.uri).startWith('safe-auth:');
-      });
-  });
-
-  it('should build some authentication uri', () => {
-    const app = createTestApp();
-    return app.auth.genAuthUri({ _public: ['Read'] })
-        .then((resp) => should(resp.uri).startWith('safe-auth:'));
-  });
+describe('Smoke test', function testContainer() {
+  this.timeout(15000);
 
   it('can take a network state callback', () => {
     const networkCb = (state) => `NETWORK STATE: ${state}`;
@@ -48,20 +35,6 @@ describe('Smoke test', () => {
       (option) => app.options[option] === optionsObject[option]
     );
     should(optionsObjectsEqual).be.true();
-  });
-
-  it('should build some containers uri', () => {
-    const app = createTestApp();
-    return app.auth.genContainerAuthUri({ private: ['Insert'] })
-        .then((resp) => should(resp.uri).startWith('safe-auth:'));
-  });
-
-  it('should build some shared MD uri', () => {
-    const app = createTestApp();
-    const sharedMdXorName = h.createRandomXorName();
-    const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
-    return app.auth.genShareMDataUri(perms)
-        .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
   it('creates registered for testing', function testingCreated() {
@@ -133,5 +106,14 @@ describe('Smoke test', () => {
     const app = h.createTestApp();
     await app.auth.loginFromURI(h.authUris.unregisteredUri);
     should(app.getAccountInfo()).be.rejected();
+  });
+
+  it('returns safe_client_libs log path', async () => {
+    const app = createAuthenticatedTestApp();
+    app.logPath().should.be.fulfilled();
+  });
+
+  it('logs in to netowrk from existing authUri', async () => {
+    h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri).should.be.fulfilled();
   });
 });

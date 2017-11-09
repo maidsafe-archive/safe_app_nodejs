@@ -1,6 +1,6 @@
 const lib = require('../src/native/lib');
 const should = require('should');
-const { fromAuthURI, CONSTANTS } = require('../src');
+const { fromAuthURI, CONSTANTS, initializeApp } = require('../src');
 const h = require('./helpers');
 
 const appInfo = {
@@ -20,6 +20,13 @@ describe('Smoke testing', () => {
 });
 
 describe('External API', () => {
+  describe('initializeApp', () => {
+    it('creates and returns new App instance to interface with network', async () => {
+      const app = await initializeApp(appInfo);
+      should(app).have.properties(['auth', 'appInfo', 'crypto', 'cipherOpt', 'mutableData', 'immutableData', 'networkState']);
+    });
+  });
+
   describe('fromAuthURI', () => {
     it('should connect registered', () => fromAuthURI(appInfo, h.authUris.registeredUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())

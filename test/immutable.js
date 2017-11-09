@@ -5,18 +5,65 @@ describe('Immutable Data', () => {
   const app = h.createAuthenticatedTestApp();
   const TAG_TYPE = 15639;
 
-  it('write read simple ', () => {
+  it('returns Reader for corresponding operations', async () => {
     const testString = `test-${Math.random()}`;
+    const idWriter = await app.immutableData.create();
+    await idWriter.write(testString);
+    const cipherOpt = await app.cipherOpt.newPlainText();
+    const idAddress = await idWriter.close(cipherOpt);
+    await app.immutableData.fetch(idAddress).should.be.fulfilled();
+  });
 
-    return app.immutableData.create()
-      .then((w) => w.write(testString)
-        .then(() => app.cipherOpt.newPlainText())
-        .then((cipherOpt) => w.close(cipherOpt))
-        .then((addr) => app.immutableData.fetch(addr)
-           .then((r) => r.read())
-           .then((res) => {
-             should(res.toString()).equal(testString);
-           })));
+  it('returns Writer for corresponding operations', async () => {
+    await app.immutableData.create().should.be.fulfilled();
+  });
+
+  describe('Reader', () => {
+    it('reads content', async () => {
+      const testString = `test-${Math.random()}`;
+      const idWriter = await app.immutableData.create();
+      await idWriter.write(testString);
+      const cipherOpt = await app.cipherOpt.newPlainText();
+      const idAddress = await idWriter.close(cipherOpt);
+      const idReader = await app.immutableData.fetch(idAddress);
+      const idData = await idReader.read();
+      should(idData.toString()).equal(testString);
+    });
+
+    it('reads size of data', async () => {
+      const testString = 'test-string';
+      const idWriter = await app.immutableData.create();
+      await idWriter.write(testString);
+      const cipherOpt = await app.cipherOpt.newPlainText();
+      const idAddress = await idWriter.close(cipherOpt);
+      const idReader = await app.immutableData.fetch(idAddress);
+      should(await idReader.size()).equal(11);
+    });
+  });
+
+  describe('Writer', () => {
+    it('writes data', async () => {
+      const testString = `test-${Math.random()}`;
+      const idWriter = await app.immutableData.create();
+      await idWriter.write(testString).should.be.fulfilled();
+    });
+
+    it('closes itself, writes Immutable Data to network, and returns network address', async () => {
+      const testString = `test-${Math.random()}`;
+      const idWriter = await app.immutableData.create();
+      await idWriter.write(testString);
+      const cipherOpt = await app.cipherOpt.newPlainText();
+      const idAddress = await idWriter.close(cipherOpt);
+      should(idAddress.length).be.equal(32);
+    });
+
+    it('provides a proxy function behaving same as close function, however it sets a plain text cipherOpt by default', async () => {
+      const testString = `test-${Math.random()}`;
+      const idWriter = await app.immutableData.create();
+      await idWriter.write(testString);
+      const idAddress = await idWriter.save();
+      should(idAddress.length).be.equal(32);
+    });
   });
 
   it('store address in a MD', () => {

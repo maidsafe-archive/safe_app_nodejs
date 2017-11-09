@@ -30,7 +30,7 @@ class Reader extends helpers.NetworkObject {
   }
 
   /**
-  * The size of the mutable data on the network
+  * The size of the immutable data on the network
   * @returns {Promise<Number>} length in bytes
   */
   size() {
@@ -94,8 +94,9 @@ class Writer extends helpers.NetworkObject {
   /**
   * Proxy to `close`.
   */
-  save() {
-    return this.close();
+  async save() {
+    const cipherOpt = await this.app.cipherOpt.newPlainText();
+    return this.close(cipherOpt);
   }
 
   /**
