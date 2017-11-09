@@ -152,29 +152,11 @@ describe('Smoke test', function testContainer() { // eslint-disable-line prefer-
     should(app.getAccountInfo()).be.rejected();
   });
 
-  it('exposes network state constants', () => {
+  it('returns boolean for network state', () => {
     const app = createAuthenticatedTestApp();
-    should(app.CONSTANTS).have.properties(['INIT', 'CONNECTED', 'DISCONNECTED', 'UNKNOWN']);
-  });
-
-  it('returns boolean for network state: INIT', () => {
-    const app = createAuthenticatedTestApp();
-    should.exist(app.isNetStateInit);
-  });
-
-  it('returns boolean for network state: CONNECTED', () => {
-    const app = createAuthenticatedTestApp();
-    should.exist(app.isNetStateConnected);
-  });
-
-
-  it('returns boolean for network state: DISCONNECTED', () => {
-    const app = createAuthenticatedTestApp();
-    should.exist(app.isNetStateDisconnected);
-  });
-
-  it('returns boolean for network state: UNKNOWN', () => {
-    const app = createAuthenticatedTestApp();
-    should.exist(app.isNetStateUnknown);
+    should(app.isNetStateInit()).be.true();
+    should(app.isNetStateConnected()).be.false();
+    should(app.isNetStateDisconnected()).be.false();
+    should(app.networkState).be.equal('Init');
   });
 });

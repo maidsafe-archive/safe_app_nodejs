@@ -235,18 +235,64 @@ class SAFEApp extends EventEmitter {
   * @private
   * Set the new network state based on the state code provided.
   *
-  * @param {String} state
+  * @param {Number} state
   */
   set networkState(state) {
     this._networkState = state;
   }
 
   /**
-  * The current Network state
-  * @returns {String} of latest state
+  * Textual representation of the current network connection state.
+  *
+  * @returns {String} current network connection state
   */
   get networkState() {
-    return this._networkState;
+    // Although it should never happen, if the state code is invalid
+    // we return the current network conn state as 'Unknown'.
+    let currentState = 'Unknown';
+    switch (this._networkState) {
+      case consts.NET_STATE_INIT:
+        currentState = 'Init';
+        break;
+      case consts.NET_STATE_DISCONNECTED:
+        currentState = 'Disconnected';
+        break;
+      case consts.NET_STATE_CONNECTED:
+        currentState = 'Connected';
+        break;
+      default:
+        break;
+    }
+    return currentState;
+  }
+
+  /**
+  * Returns true if current network connection state is INIT.
+  * This is state means the library has been initialised but there is no
+  * connection made with the network yet.
+  *
+  * @returns {Boolean}
+  */
+  isNetStateInit() {
+    return this._networkState === consts.NET_STATE_INIT;
+  }
+
+  /**
+  * Returns true if current network connection state is CONNECTED.
+  *
+  * @returns {Boolean}
+  */
+  isNetStateConnected() {
+    return this._networkState === consts.NET_STATE_CONNECTED;
+  }
+
+  /**
+  * Returns true if current network connection state is DISCONNECTED.
+  *
+  * @returns {Boolean}
+  */
+  isNetStateDisconnected() {
+    return this._networkState === consts.NET_STATE_DISCONNECTED;
   }
 
   /**
@@ -254,44 +300,6 @@ class SAFEApp extends EventEmitter {
   */
   get appInfo() {
     return this._appInfo;
-  }
-
-  get CONSTANTS() { // eslint-disable-line class-methods-use-this
-    return {
-      INIT: consts.NET_STATE_INIT,
-      CONNECTED: consts.NET_STATE_CONNECTED,
-      DISCONNECTED: consts.NET_STATE_DISCONNECTED,
-      UNKNOWN: consts.NET_STATE_UNKNOWN
-    };
-  }
-
-  /**
-   * Returns boolean for network state: INIT
-   */
-  isNetStateInit() {
-    return this.networkState === this.CONSTANTS.INIT;
-  }
-
-  /**
-   * Returns boolean for network state: CONNECTED
-   */
-  isNetStateConnected() {
-    return this.networkState === this.CONSTANTS.CONNECTED;
-  }
-
-  /**
-  /**
-   * Returns boolean for network state: DISCONNECTED
-   */
-  isNetStateDisconnected() {
-    return this.networkState === this.CONSTANTS.DISCONNECTED;
-  }
-
-  /**
-   * Returns boolean for network state: UNKNOWN
-   */
-  isNetStateUnknown() {
-    return this.networkState === this.CONSTANTS.UNKNOWN;
   }
 
   /**
