@@ -69,15 +69,30 @@ const MDataInfo = Struct({
 const MDataInfoPtr = ref.refType(MDataInfo);
 
 const makeMDataInfo = (mDataInfoObj) => {
+  // let's make sure we send empty arrays if there is no enc key
+  let enc_key = t.SYM_SECRET_KEY(Buffer.alloc(64));
+  let enc_nonce = t.SYM_NONCE(Buffer.alloc(24));
+  if (mDataInfoObj.has_enc_info) {
+    enc_key = mDataInfoObj.enc_key;
+    enc_nonce = mDataInfoObj.enc_nonce;
+  }
+
+  // let's make sure we send empty arrays if there is no new enc info
+  let new_enc_key = t.SYM_SECRET_KEY(Buffer.alloc(64));
+  let new_enc_nonce = t.SYM_NONCE(Buffer.alloc(24));
+  if (mDataInfoObj.has_new_enc_info) {
+    new_enc_key = mDataInfoObj.new_enc_key;
+    new_enc_nonce = mDataInfoObj.new_enc_nonce;
+  }
   return new MDataInfo({
     name: mDataInfoObj.name,
     type_tag: mDataInfoObj.type_tag,
     has_enc_info: mDataInfoObj.has_enc_info,
-    enc_key: mDataInfoObj.enc_key,
-    enc_nonce: mDataInfoObj.enc_nonce,
+    enc_key,
+    enc_nonce,
     has_new_enc_info: mDataInfoObj.has_new_enc_info,
-    new_enc_key: mDataInfoObj.new_enc_key,
-    new_enc_nonce: mDataInfoObj.new_enc_nonce,
+    new_enc_key,
+    new_enc_nonce,
   });
 }
 
