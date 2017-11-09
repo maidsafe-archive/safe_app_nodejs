@@ -59,9 +59,13 @@ const NET_STATE_CONNECTED = 0;
 * displaying this information to the user, so the user can make a better
 * decision to either allow or deny such a request based on it.
 *
-* @param {Number} MD_ENTRIES_EMPTY TODO
-* @param {Number} MD_PERMISSION_EMPTY TODO
-* TODO
+* @param {Number} MD_ENTRIES_EMPTY Represents an empty set of MutableData's entries.
+* This can be used when invoking the `put` function of the MutableData API to
+* signal that it should be committed to the network with an empty set of entries.
+*
+* @param {Number} MD_PERMISSION_EMPTY Represents an empty set of MutableData's permissions.
+* This can be used when invoking the `put` function of the MutableData API to
+* signal that it should be committed to the network with an empty set of permissions.
 *
 */
 const pubConsts = {
