@@ -147,6 +147,7 @@ class SAFEApp extends EventEmitter {
               const service = serviceBuffer.buf.toString();
 
               if (service.length < 1) {
+                // this means the service was soft-deleted
                 const error = new Error();
                 error.code = -106;
                 throw error;
@@ -172,31 +173,25 @@ class SAFEApp extends EventEmitter {
               if (err.code === -305 || err.code === -301) {
                 let newPath;
                 if (path[path.length - 1] === '/') {
+                  // try with appending the index.html at the end then
                   newPath = `${path}${consts.INDEX_HTML}`;
-                } else if (path[0] === '/') {
-                  // directly try the non-slash version
-                  return emulation.fetch(path.slice(1, path.length))
-                  .catch((e) => {
-                    // NOTE: This catch block handles the cases where a user intends/
-                    // to fetch a path without index.html
-                    // For clarification, comment out lines 132 through 143/
-                    // then run mocha in ../test/browsing.js to see which/
-                    // cases fail.
-                    const pathArray = path.split('/');
-                    if (pathArray[pathArray.length - 1] === consts.INDEX_HTML) {
-                      pathArray.pop();
-                      return emulation.fetch(pathArray.join('/'));
-                    }
-                    return Promise.reject(e);
-                  });
-                }
-
-                if (newPath) {
-                  // try the newly created path
                   return emulation.fetch(newPath).catch((e) => {
                     // and the version without the leading slash
                     if (e.code === -305 || e.code === -301) {
                       return emulation.fetch(newPath.slice(1, newPath.length));
+                    }
+                    return Promise.reject(e);
+                  });
+                } else if (path[0] === '/') {
+                  // directly try the non-slash version
+                  return emulation.fetch(path.slice(1, path.length))
+                  .catch((e) => {
+                    // This catch block handles the cases where a user intends
+                    // to fetch a path without index.html
+                    const pathArray = path.split('/');
+                    if (pathArray[pathArray.length - 1] === consts.INDEX_HTML) {
+                      pathArray.pop();
+                      return emulation.fetch(pathArray.join('/'));
                     }
                     return Promise.reject(e);
                   });
@@ -314,15 +309,9 @@ class SAFEApp extends EventEmitter {
   * Called from the native library whenever the network state
   * changes.
   */
-  _networkStateUpdated(uData, result, newState) {
+  _networkStateUpdated(userData, newState) {
     const prevState = this.networkState;
-    if (result.error_code !== 0) {
-      console.error('An error was reported from network state observer: ', result.error_code, result.error_description);
-      this.networkState = consts.NET_STATE_UNKNOWN;
-    } else {
-      this.networkState = newState;
-    }
-
+    this.networkState = newState;
     this.emit('network-state-updated', this.networkState, prevState);
     this.emit(`network-state-${this.networkState}`, prevState);
     if (this._networkStateCallBack) {
@@ -332,12 +321,12 @@ class SAFEApp extends EventEmitter {
 
   /**
   * Reconnect to the metwork
-  * Must be invoked when the client decides to connect back after the connection is disconnected.
+  * Must be invoked when the client decides to connect back after the connection was lost.
   */
   reconnect() {
-    return lib.app_reconnect(this.connection);
+    return lib.app_reconnect(this.connection)
+      .then(() => this._networkStateUpdated(null, consts.NET_STATE_CONNECTED));
   }
-
 
   /**
   * @private
@@ -350,6 +339,19 @@ class SAFEApp extends EventEmitter {
     lib.app_free(app.connection);
   }
 
+  /**
+  * Resets the object cache kept by the underlyging library.
+  */
+  clearObjectCache() {
+    return lib.app_reset_object_cache(this.connection);
+  }
+
+  /**
+  * Retuns true if the underlyging library was compiled against mock-routing.
+  */
+  isMockBuild() {
+    return lib.is_mock_build();
+  }
 }
 
 SAFEApp.logFilename = null;

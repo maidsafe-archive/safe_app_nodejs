@@ -3,17 +3,17 @@ const App = require('../src/app');
 const h = require('../src/helpers');
 
 const authUris = {
-  registeredUri: 'safe-bmV0Lm1haWRzYWZlLnRlc3Qud2ViYXBwLmlk:AQAAAGSv7oQAAAAAAAAAACAAAAAAAAAAGQ1zYg9iFKof2TVkAPp0R2kjU9DDWmmR_uAXBYvaeIAgAAAAAAAAAKecZc5pOSeoU53v43RdoTscGQbuAO0hF6HA_4ou9GJnIAAAAAAAAADsycX-1RCaNJxnYf6ka1pLncSez4w4PmPIS5lau_IblkAAAAAAAAAAbZdkFJ6Ydhh_OwA7mfYcnta_95k2xRazJsDSeMFGj3vsycX-1RCaNJxnYf6ka1pLncSez4w4PmPIS5lau_IbliAAAAAAAAAAx559E774w-6AWnIXBSm0NWOBW2zr8TOPThmdIeEsoFEgAAAAAAAAAHRNdser-WDOLIBGsDfRbNI304vnYILXI1JZC96tiFvzAAAAAAAAAAAAAAAAAAAAAG7Di2O1ssjN0izb88iclOKj7WD5LtaVriMIrLBbVRHimDoAAAAAAAAYAAAAAAAAAH2p2f2I4yuQPLkSJE_u9-PtM1WD7E65ZA==',
-  unregisteredUri: 'safe-dW5yZWdpc3RlcmVk:AQAAAMga9SYCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=',
-  containersUri: 'safe-bmV0Lm1haWRzYWZlLnRlc3Qud2ViYXBwLmlk:AQAAALDJZuUBAAAAAAAAAA==',
-  sharedMdataUri: 'safe-bmV0Lm1haWRzYWZlLmV4YW1wbGVzLnRlc3QtYXBw:AQAAADvUUzgDAAAAAAAAAA=='
+  registeredUri: 'safe-AQAAAAQdJS4AAAAAAAAAACAAAAAAAAAAZo2G3zY3q52OQL1_9In7M9jujAIavTKmMml_v7IQ0mAgAAAAAAAAAGJYu0R7JyyeobQoCoR3VVWIc_ciSYn9kPzj75hPuodUIAAAAAAAAAAOWz5mjD1eP0HdlT22CbBsEp2cLwkUwrS5QSUNAwex-EAAAAAAAAAAUGIEwjV6_CT-P_30nroGmXN_MinaOCFTXjII46_olOkOWz5mjD1eP0HdlT22CbBsEp2cLwkUwrS5QSUNAwex-CAAAAAAAAAAJkjqVVunp75YdSaeXGKZ2mMProFxrzo0GtXRWL7mlgogAAAAAAAAAFJWkWMDattkgwIygjD-f5n1y8S0der9LxD3uRFtrOIHAAAAAAAAAAAAAAAAAAAAAMLOsjjOSCqP8BXfhDQl52PCI_QZ2oiIz3r8uglu3aZsmDoAAAAAAAAYAAAAAAAAAPe6QVR0hjbwQmMinbmWLcfuNu2yBkIGuwEAAAAAAAAABwAAAAAAAABfcHVibGljjtxY0RVCujnnT1iy_YqKlAcwhusHiPgpH1RZAUX-YDCYOgAAAAAAAAAABQAAAAAAAAAAAAAAAQAAAAIAAAADAAAABAAAAA',
+  unregisteredUri: 'safe-AQAAANdBP4gCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+  containersUri: 'safe-AQAAANZtpGIBAAAAAAAAAA',
+  sharedMdataUri: 'safe-'
 };
 
 function createTestApp(scope) {
   return h.autoref(new App({
     id: 'net.maidsafe.test.javascript.id',
-    name: 'JS Test',
-    vendor: 'MaidSafe Ltd.',
+    name: 'NodeJS Test',
+    vendor: 'MaidSafe.net Ltd',
     scope
   }, null, { log: false }));
 }
@@ -21,8 +21,8 @@ function createTestApp(scope) {
 function createTestAppWithNetworkCB(scope, networkCB) {
   return h.autoref(new App({
     id: 'net.maidsafe.test.javascript.id',
-    name: 'JS Test',
-    vendor: 'MaidSafe Ltd.',
+    name: 'NodeJS Test',
+    vendor: 'MaidSafe.net Ltd',
     scope
   }, networkCB, { log: false }));
 }
@@ -30,8 +30,8 @@ function createTestAppWithNetworkCB(scope, networkCB) {
 function createTestAppWithOptions(scope, options) {
   return h.autoref(new App({
     id: 'net.maidsafe.test.javascript.id',
-    name: 'JS Test',
-    vendor: 'MaidSafe Ltd.',
+    name: 'NodeJS Test',
+    vendor: 'MaidSafe.net Ltd',
     scope
   }, null, options));
 }

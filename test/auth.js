@@ -63,7 +63,13 @@ describe('Access Container', () => {
   it('read info of `_public`', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.getContainer('_public').then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
         should(resp.name).is.not.undefined();
-        should(resp.tag).equal(15000);
+        should(resp.type_tag).equal(15000);
+      })));
+
+  it('read info of own container', () => app.auth.refreshContainersPermissions().then(() =>
+      app.auth.getOwnContainer().then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
+        should(resp.name).is.not.undefined();
+        should(resp.type_tag).equal(15000);
       })));
 
   it('mutate info of `_publicNames` container', () => app.auth.refreshContainersPermissions().then(() =>

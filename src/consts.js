@@ -58,6 +58,15 @@ const NET_STATE_CONNECTED = 0;
 * application has requested mutation permissions on a MutableData,
 * displaying this information to the user, so the user can make a better
 * decision to either allow or deny such a request based on it.
+*
+* @param {Number} MD_ENTRIES_EMPTY Represents an empty set of MutableData's entries.
+* This can be used when invoking the `put` function of the MutableData API to
+* signal that it should be committed to the network with an empty set of entries.
+*
+* @param {Number} MD_PERMISSION_EMPTY Represents an empty set of MutableData's permissions.
+* This can be used when invoking the `put` function of the MutableData API to
+* signal that it should be committed to the network with an empty set of permissions.
+*
 */
 const pubConsts = {
   NFS_FILE_MODE_OVERWRITE: 1,
@@ -67,6 +76,8 @@ const pubConsts = {
   NFS_FILE_END: 0,
   USER_ANYONE: 0,
   MD_METADATA_KEY: '_metadata',
+  MD_ENTRIES_EMPTY: 0,
+  MD_PERMISSION_EMPTY: 0,
 };
 
 const LIB_FILENAME = {
