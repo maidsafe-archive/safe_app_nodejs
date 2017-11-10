@@ -8,7 +8,8 @@ const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 const createTestAppWithNetworkCB = h.createTestAppWithNetworkCB;
 const createTestAppWithOptions = h.createTestAppWithOptions;
 
-describe('Smoke test', () => {
+describe('Smoke test', function testContainer() { // eslint-disable-line prefer-arrow-callback
+  this.timeout(15000);
   it('unauthorised connection', () => {
     const app = createTestApp();
     return app.auth.genConnUri()
@@ -149,5 +150,31 @@ describe('Smoke test', () => {
     const app = h.createTestApp();
     await app.auth.loginFromURI(h.authUris.unregisteredUri);
     should(app.getAccountInfo()).be.rejected();
+  });
+
+  it('exposes network state constants', () => {
+    const app = createAuthenticatedTestApp();
+    should(app.CONSTANTS).have.properties(['INIT', 'CONNECTED', 'DISCONNECTED', 'UNKNOWN']);
+  });
+
+  it('returns boolean for network state: INIT', () => {
+    const app = createAuthenticatedTestApp();
+    should.exist(app.isNetStateInit);
+  });
+
+  it('returns boolean for network state: CONNECTED', () => {
+    const app = createAuthenticatedTestApp();
+    should.exist(app.isNetStateConnected);
+  });
+
+
+  it('returns boolean for network state: DISCONNECTED', () => {
+    const app = createAuthenticatedTestApp();
+    should.exist(app.isNetStateDisconnected);
+  });
+
+  it('returns boolean for network state: UNKNOWN', () => {
+    const app = createAuthenticatedTestApp();
+    should.exist(app.isNetStateUnknown);
   });
 });
