@@ -7,25 +7,20 @@ const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 describe('NFS emulation', function testContainer() {
   this.timeout(30000);
   const app = createAuthenticatedTestApp();
-  const TAG_TYPE = 15639;
+  const TYPE_TAG = 15639;
 
-  it('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TYPE_TAG)
     .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
-    .then((nfs) => {
-      should(CONSTANTS.NFS_FILE_MODE_OVERWRITE).equal(1);
-      return nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)
+    .then((nfs) => nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)
         .then((file) => file.write('hello, SAFE world!')
           .then(() => file.close())
           .then(() => nfs.insert('hello.txt', file))
         )
-        .then(() => {
-          should(nfs.fetch('hello.txt')).be.fulfilled();
-        }
-      );
-    })
+        .then(() => should(nfs.fetch('hello.txt')).be.fulfilled())
+      )
   );
 
-  it('reads a file and returns file contents', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('reads a file and returns file contents', () => app.mutableData.newRandomPublic(TYPE_TAG)
     .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
     .then((nfs) => nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)
       .then((file) => file.write('hello, SAFE world!')
@@ -41,12 +36,12 @@ describe('NFS emulation', function testContainer() {
     )
   );
 
-  it('provides helper function to create and save file to the network', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('provides helper function to create and save file to the network', () => app.mutableData.newRandomPublic(TYPE_TAG)
     .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
     .then((nfs) => should(nfs.create('testing')).be.fulfilled())
   );
 
-  it('deletes file', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+  it('deletes file', () => app.mutableData.newRandomPrivate(TYPE_TAG)
     // Note we use lowercase 'nfs' below to test that it is case insensitive
     .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
     .then((nfs) => nfs.create('Hello world')
@@ -60,7 +55,7 @@ describe('NFS emulation', function testContainer() {
 
   it('nfs creation and modification date for read', () => {
     let creationDate;
-    return app.mutableData.newRandomPrivate(TAG_TYPE)
+    return app.mutableData.newRandomPrivate(TYPE_TAG)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
       .then((nfs) => nfs.create('Hello world')
         .then((file) => nfs.insert('test.txt', file))
@@ -78,7 +73,7 @@ describe('NFS emulation', function testContainer() {
 
   it('nfs creation and modification dates for write', () => {
     let creationDate;
-    return app.mutableData.newRandomPrivate(TAG_TYPE)
+    return app.mutableData.newRandomPrivate(TYPE_TAG)
       .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
       .then((nfs) => nfs.create('Hello world')
         .then((file) => nfs.insert('test.txt', file))
@@ -95,7 +90,7 @@ describe('NFS emulation', function testContainer() {
       );
   });
 
-  it('create, delete, update, fetch and finally open to read a file', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('create, delete, update, fetch and finally open to read a file', () => app.mutableData.newRandomPublic(TYPE_TAG)
     .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs'))
       .then((nfs) => nfs.create('Hello world')
         .then((file) => nfs.insert('test.txt', file))

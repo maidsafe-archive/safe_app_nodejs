@@ -43,6 +43,22 @@ describe('Smoke test', function testContainer() {
     should(app.auth.registered).be.true();
   });
 
+  it('clears object cache invalidating objects', function testingCreated() {
+    this.timeout(20000);
+    const app = createAuthenticatedTestApp();
+    return app.mutableData.newMutation()
+      .then((mut) => should(mut.insert('key1', 'value1')).be.fulfilled()
+        .then(() => should(app.clearObjectCache()).be.fulfilled())
+        .then(() => should(mut.insert('key2', 'value2')).be.rejectedWith('Invalid MutableData entry actions handle'))
+      )
+      .then(() => should(app.mutableData.newMutation()).be.fulfilled());
+  });
+
+  it('validate is mock build', () => {
+    const app = createTestApp();
+    should(app.isMockBuild()).be.true();
+  });
+
   it('should build an alternative if there is a scope', () => {
     const firstApp = createTestApp();
     return firstApp.auth.genAuthUri({ _public: ['Insert'] })

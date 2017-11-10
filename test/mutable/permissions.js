@@ -1,4 +1,3 @@
-
 const should = require('should');
 const h = require('../helpers');
 const { pubConsts: CONSTANTS } = require('../../src/consts');
@@ -8,10 +7,10 @@ const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 describe('Permissions', function testContainer() {
   this.timeout(30000);
   const app = createAuthenticatedTestApp();
-  const TAG_TYPE = 15639;
+  const TYPE_TAG = 15639;
   const TEST_ENTRIES = { key1: 'value1', key2: 'value2' };
 
-  it('get list of permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('get list of permissions', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => m.getPermissions()
           .then((perm) => perm.len())
@@ -21,19 +20,19 @@ describe('Permissions', function testContainer() {
         ))
   );
 
-  it('forEach on list of permissions', (done) => {
-    app.mutableData.newRandomPublic(TAG_TYPE)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getPermissions()
-        .then((perms) => app.crypto.getAppPubSignKey()
-          .then((pk) => perms.getPermissionSet(pk).should.be.fulfilled())
-          .then(() => perms.forEach((signkey, pmset) => pmset.setAllow('Delete')
-              .then(() => m.delUserPermissions(signkey, 1).should.be.fulfilled())
-              .catch((err) => done(err))
-          ).then(() => done(), (err) => done(err)))
-        )));
+  it('list permission sets and remove them', (done) => {
+    app.mutableData.newRandomPublic(TYPE_TAG)
+      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getPermissions())
+        .then((perms) => perms.listPermissionSets()
+          .then((permSets) => Promise.all(permSets.map((userPermSet) =>
+            m.delUserPermissions(userPermSet.signKey, 1).should.be.fulfilled()
+          )))
+          .then(() => done(), (err) => done(err))
+        )
+      );
   });
 
-  it('get permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('get permissions set', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => m.getPermissions()
           .then((perm) => app.crypto.getAppPubSignKey()
@@ -41,113 +40,85 @@ describe('Permissions', function testContainer() {
           )))
   );
 
-  it('insert permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('insert permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
-        .then(() => app.mutableData.newPermissionSet()
-          .then((newPermSet) => newPermSet.setAllow('Delete')
-            .then(() => m.getPermissions()
-            .then((perm) => perm.insertPermissionSet(CONSTANTS.USER_ANYONE,
-                                                     newPermSet).should.be.fulfilled())
-          ))))
+        .then(() => m.getPermissions())
+        .then((perm) => perm.insertPermissionSet(CONSTANTS.USER_ANYONE,
+                                                 ['Delete']).should.be.fulfilled()))
   );
 
-  it('get permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('get permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
-        .then(() => app.mutableData.newPermissionSet()
-          .then((newPermSet) => newPermSet.setAllow('Delete')
-            .then(() => m.getPermissions()
-            .then((perm) => perm.insertPermissionSet(CONSTANTS.USER_ANYONE, newPermSet)
-              .then(() => perm.getPermissionSet(CONSTANTS.USER_ANYONE).should.be.fulfilled())
-            )))))
-  );
-
-  it('insert new permissions set', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then((m) => m.quickSetup(TEST_ENTRIES)
-        .then(() => app.crypto.getAppPubSignKey()
-          .then((pk) => app.mutableData.newPermissionSet()
-            .then((newPermSet) => newPermSet.setAllow('Delete')
-              .then(() => m.setUserPermissions(pk, newPermSet, 1)
-                .then(() => app.mutableData.newMutation()
-                  .then((mut) => mut.update('key2', 'updatedValue', 1)
-                    .then(() => should(m.applyEntriesMutation(mut)).be.rejected())
-                  )))))))
-  );
-
-  it('update user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then((m) => m.quickSetup(TEST_ENTRIES)
-        .then(() => app.crypto.getAppPubSignKey()
-          .then((pk) => m.getUserPermissions(pk)
-            .then((permSet) => permSet.setDeny('Update')
-              .then(() => m.setUserPermissions(pk, permSet, 1)
-              .then(() => app.mutableData.newMutation()
-                .then((mut) => mut.update('key2', 'updatedValue', 1)
-                  .then(() => should(m.applyEntriesMutation(mut)).be.rejected())
-                )))))))
-  );
-
-  it('get user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then((m) => m.quickSetup(TEST_ENTRIES)
-        .then(() => app.crypto.getAppPubSignKey()
-          .then((pk) => m.getUserPermissions(pk).should.be.fulfilled())
-          // we should be testing something more here...
+        .then(() => m.getPermissions())
+        .then((perm) => perm.insertPermissionSet(CONSTANTS.USER_ANYONE, ['Delete'])
+          .then(() => perm.getPermissionSet(CONSTANTS.USER_ANYONE).should.be.fulfilled())
         ))
   );
 
-  it('remove user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('insert new permissions set', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => app.crypto.getAppPubSignKey()
-          .then((pk) => m.delUserPermissions(pk, 1))
+          .then((pk) => m.setUserPermissions(pk, ['Delete'], 1)
+            .then(() => app.mutableData.newMutation()
+              .then((mut) => mut.update('key2', 'updatedValue', 1)
+                .then(() => should(m.applyEntriesMutation(mut)).be.rejected())
+              )))))
+  );
+
+  it('update user\'s permissions', () => app.mutableData.newRandomPublic(TYPE_TAG)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => app.crypto.getAppPubSignKey()
+          .then((pk) => m.setUserPermissions(pk, ['Insert'], 1)
           .then(() => app.mutableData.newMutation()
             .then((mut) => mut.update('key2', 'updatedValue', 1)
               .then(() => should(m.applyEntriesMutation(mut)).be.rejected())
+            )))))
+  );
+
+  it('get user\'s permissions', () => app.mutableData.newRandomPublic(TYPE_TAG)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => app.crypto.getAppPubSignKey()
+          .then((pk) => m.getUserPermissions(pk).should.be.fulfilled())
+        ))
+  );
+
+  it('remove user\'s permissions', () => app.mutableData.newRandomPublic(TYPE_TAG)
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => app.crypto.getAppPubSignKey()
+          .then((pk) => should(m.delUserPermissions(pk, 1)).be.fulfilled())
+          .then(() => app.mutableData.newMutation()
+            .then((mut) => mut.update('key2', 'updatedValue', 1)
+              .then(() => should(m.applyEntriesMutation(mut))
+                .be.rejectedWith('Core error: Routing client error -> Access denied'))
             ))))
   );
 
-  it('update user\'s permissions', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('set new permissions for `Anyone`', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
-        .then(() => app.crypto.getAppPubSignKey()
-          .then((pk) => app.mutableData.newPermissionSet()
-            .then((newPerm) => newPerm.setAllow('Insert')
-              .then(() => m.setUserPermissions(pk, newPerm, 1))
-              .then(() => app.mutableData.newMutation()
-                .then((mut) => mut.update('key2', 'updatedValue', 1)
-                  .then(() => should(m.applyEntriesMutation(mut))
-                                .be.rejected())
-                ))))))
+        .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE,
+                                           ['Insert'], 1).should.be.fulfilled())
+        )
   );
 
-  it('set new permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('deny all permissions to `Anyone`', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
-        .then(() => app.mutableData.newPermissionSet())
-        .then((newPermSet) => newPermSet.setAllow('Insert')
           .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE,
-                                           newPermSet, 1).should.be.fulfilled())
-        ))
+                                           null, 1).should.be.fulfilled())
+        )
   );
 
-  it('set cleared permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('get user permissions for `Anyone`', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
-        .then(() => app.mutableData.newPermissionSet())
-        .then((newPermSet) => newPermSet.clear('Insert')
-          .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE,
-                                           newPermSet, 1).should.be.fulfilled())
-        ))
-  );
-
-  it('get user permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
-      .then((m) => m.quickSetup(TEST_ENTRIES)
-        .then(() => app.mutableData.newPermissionSet())
-        .then((newPermSet) => newPermSet.setAllow('Insert')
-          .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE, newPermSet, 1)))
+        .then(() => m.getUserPermissions(CONSTANTS.USER_ANYONE).should.be.rejected())
+        .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE, ['Insert'], 1))
         .then(() => m.getUserPermissions(CONSTANTS.USER_ANYONE).should.be.fulfilled())
       )
   );
 
-  it('remove user permissions for `Anyone`', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('remove user permissions for `Anyone`', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
-        .then(() => app.mutableData.newPermissionSet())
-        .then((newPermSet) => newPermSet.setAllow('Insert')
-          .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE, newPermSet, 1)))
+        .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE, ['Insert'], 1))
+        .then(() => m.delUserPermissions(CONSTANTS.USER_ANYONE, 1).should.be.rejected())
         .then(() => m.delUserPermissions(CONSTANTS.USER_ANYONE, 2).should.be.fulfilled())
       )
   );

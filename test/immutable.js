@@ -3,7 +3,7 @@ const h = require('./helpers');
 
 describe('Immutable Data', () => {
   const app = h.createAuthenticatedTestApp();
-  const TAG_TYPE = 15639;
+  const TYPE_TAG = 15639;
 
   it('returns Reader for corresponding operations', async () => {
     const testString = `test-${Math.random()}`;
@@ -74,10 +74,10 @@ describe('Immutable Data', () => {
       .then((w) => w.write(testString)
         .then(() => app.cipherOpt.newPlainText())
         .then((cipherOpt) => w.close(cipherOpt))
-        .then((addr) => app.mutableData.newPublic(testXorName, TAG_TYPE)
+        .then((addr) => app.mutableData.newPublic(testXorName, TYPE_TAG)
           .then((md) => md.quickSetup({ key1: addr }))
         ))
-      .then(() => app.mutableData.newPublic(testXorName, TAG_TYPE))
+      .then(() => app.mutableData.newPublic(testXorName, TYPE_TAG))
       .then((md) => md.get('key1'))
       .then((value) => app.immutableData.fetch(value.buf))
       .then((r) => r.read())
@@ -94,7 +94,7 @@ describe('Immutable Data', () => {
       .then((w) => w.write(testString)
         .then(() => app.cipherOpt.newPlainText())
         .then((cipherOpt) => w.close(cipherOpt))
-        .then((addr) => app.mutableData.newPublic(testXorName, TAG_TYPE)
+        .then((addr) => app.mutableData.newPublic(testXorName, TYPE_TAG)
           .then((md) => md.quickSetup())
           .then((md) => md.serialise())
           .then((serial) => app.mutableData.fromSerial(serial))
@@ -105,7 +105,7 @@ describe('Immutable Data', () => {
             ))
           )
         )
-      .then(() => app.mutableData.newPublic(testXorName, TAG_TYPE))
+      .then(() => app.mutableData.newPublic(testXorName, TYPE_TAG))
       .then((md) => md.getEntries())
       .then((entries) => entries.forEach((key, value) => {
         app.immutableData.fetch(value.buf)

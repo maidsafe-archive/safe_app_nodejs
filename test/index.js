@@ -6,7 +6,7 @@ const h = require('./helpers');
 const appInfo = {
   id: 'net.maidsafe.example.tests',
   name: 'Example Test',
-  vendor: 'MaidSafe Ltd.'
+  vendor: 'MaidSafe.net Ltd'
 };
 
 describe('Smoke testing', () => {
@@ -40,7 +40,7 @@ describe('External API', () => {
         .then((app) => should(app.auth.registered).be.true())
     );
 
-    it('should connect with authorised shared MD', () => fromAuthURI(appInfo, h.authUris.sharedMdataUri, null, { log: false })
+    it.skip('should connect with authorised shared MD', () => fromAuthURI(appInfo, h.authUris.sharedMdataUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
   });

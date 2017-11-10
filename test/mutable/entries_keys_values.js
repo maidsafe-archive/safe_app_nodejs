@@ -6,10 +6,10 @@ const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 describe('Mutable Data Entries', function testContainer() {
   this.timeout(30000);
   const app = createAuthenticatedTestApp();
-  const TAG_TYPE = 15639;
+  const TYPE_TAG = 15639;
   const TEST_ENTRIES = { key1: 'value1', key2: 'value2' };
 
-  it('get entries and check length', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('get entries and check length', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
       .then((entries) => entries.len())
       .then((len) => {
@@ -17,7 +17,7 @@ describe('Mutable Data Entries', function testContainer() {
       })
   );
 
-  it('get entries and get a value', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('get entries and get a value', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
       .then((entries) => entries.get('key1'))
       .then((value) => {
@@ -27,7 +27,7 @@ describe('Mutable Data Entries', function testContainer() {
       })
   );
 
-  it('insert & get a single value', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('insert & get a single value', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
       .then((entries) => entries.insert('newKey', 'newValue')
         .then(entries.get('newKey')
@@ -38,7 +38,7 @@ describe('Mutable Data Entries', function testContainer() {
         }))
   ));
 
-  it('insert & get a single value from private MD', () => app.mutableData.newRandomPrivate(TAG_TYPE)
+  it('insert & get a single value from private MD', () => app.mutableData.newRandomPrivate(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
       .then((entries) => entries.insert('newKey', 'newValue')
         .then(entries.get('newKey')
@@ -50,7 +50,7 @@ describe('Mutable Data Entries', function testContainer() {
   ));
 
   it('forEach on list of entries', (done) => {
-    app.mutableData.newRandomPublic(TAG_TYPE)
+    app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
       .then((entries) => entries.forEach((key, value) => {
         should(value.version).be.equal(0);
@@ -59,38 +59,32 @@ describe('Mutable Data Entries', function testContainer() {
       }).then(() => done(), (err) => done(err)));
   });
 
-  it('get list of keys', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('get list of keys', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
-      .then((keys) => keys.len())
-      .then((len) => {
-        should(len).equal(Object.keys(TEST_ENTRIES).length);
-      })
+      .then((keys) => should(keys.length).equal(Object.keys(TEST_ENTRIES).length))
   );
 
-  it('forEach on list of keys', (done) => {
-    app.mutableData.newRandomPublic(TAG_TYPE)
+  it('check list of keys', (done) => {
+    app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
-      .then((keys) => keys.forEach((key) => {
-        should(TEST_ENTRIES).have.ownProperty(key.toString());
-      }).then(() => done(), (err) => done(err)));
+      .then((keys) => Promise.all(keys.map((key) =>
+        should(TEST_ENTRIES).have.ownProperty(key.toString())
+      )).then(() => done(), (err) => done(err)));
   });
 
-  it('get list of values', () => app.mutableData.newRandomPublic(TAG_TYPE)
+  it('get list of values', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
-      .then((values) => values.len())
-      .then((len) => {
-        should(len).equal(Object.keys(TEST_ENTRIES).length);
-      })
+      .then((values) => should(values.length).equal(Object.keys(TEST_ENTRIES).length))
   );
 
-  it('forEach on list of values', (done) => {
-    app.mutableData.newRandomPublic(TAG_TYPE)
+  it('check list of values', (done) => {
+    app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
-      .then((values) => values.forEach((value) => {
+      .then((values) => Promise.all(values.map((value) =>
         should(TEST_ENTRIES).matchAny((v) => {
           should(v).be.eql(value.buf.toString());
           should(value.version).be.equal(0);
-        });
-      }).then(() => done(), (err) => done(err)));
+        })
+      )).then(() => done(), (err) => done(err)));
   });
 });
