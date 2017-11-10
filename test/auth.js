@@ -15,6 +15,13 @@ describe('Access Container', () => {
     should(app.auth.registered).be.true();
   });
 
+  it.only('reads granted permissions without network connection', async () => {
+    const appNoConnect = h.createTestApp();
+    const authUri = 'safe-bmV0Lm1haWRzYWZlLmFwaV9wbGF5Z3JvdW5kLndlYmNsaWVudC4xMA==:AQAAAK4SycQAAAAAAAAAACAAAAAAAAAAcbeJ6i_3Q8A-1MlwBi_87TwUHeOEiJzUhULZ6lfMjLQgAAAAAAAAAMfippWOIGUmdYzynm_s7pl5ZelwmQEAYSRz3xwcicM_IAAAAAAAAADOWrxc8lCkknb3gBgHc85H9qYqhkUxNfV0KriqwD3lAkAAAAAAAAAAtNPwIs89bpwGT1BzW_KCedL_dCb25SYsNbRVl4jifHDOWrxc8lCkknb3gBgHc85H9qYqhkUxNfV0KriqwD3lAiAAAAAAAAAAUBCtrEXCliKQImiI0csHnA2fXvEqE0tyWDLjSkd1px0gAAAAAAAAALIhZpBN8TSftDJuRlxjsHy6YSR0jsVEErkuDp7YfYzJAAAAAAAAAAAAAAAAAAAAAC6vLdfnemaARQZRGJGDpz3yHw-AGueI6g0nzfzOl9DEmDoAAAAAAAAYAAAAAAAAAFCiBwTgnm67yF_hTXi7gaakYQ7J2I9NCg==';
+    const permissions = await appNoConnect.auth.readAppPermissions(authUri);
+    console.log(permissions); // eslint-disable-line
+  });
+
   /* eslint-disable dot-notation */
   it('get container names', () => app.auth.refreshContainersPermissions().then(() =>
     app.auth.getContainersPermissions().then((contsPerms) => {
