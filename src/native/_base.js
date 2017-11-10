@@ -1,6 +1,7 @@
 const makeFfiError = require('./_error.js');
 const ffi = require('ffi');
 const ref = require('ref');
+const Enum = require('enum');
 const Struct = require('ref-struct');
 const ArrayType = require('ref-array');
 
@@ -22,19 +23,53 @@ const XOR_NAME = ArrayType(u8, 32);
 const KEYBYTES = ArrayType(u8, 32);
 const SIGN_SECRETKEYBYTES = ArrayType(u8, 64);
 const NONCEBYTES = ArrayType(u8, 24);
+const SYM_SECRET_KEY = ArrayType(u8, 64);
+const SYM_NONCE = ArrayType(u8, 24);
 
 const ObjectHandle = u64;
 const App = Struct({});
 const AppPtr = ref.refType(App);
+
+const validPerms = new Enum({
+  Read: 0,
+  Insert: 1,
+  Update: 2,
+  Delete: 3,
+  ManagePermissions: 4
+});
+
+function validatePermission(perm) {
+  if (!validPerms.get(perm)) throw Error(`'${perm}' is not a valid permission`);
+}
 
 const FfiResult = Struct({
   error_code: i32,
   error_description: 'string'
 });
 
+const FfiResultPtr = ref.refType(FfiResult);
+
+const PermissionSet = Struct({
+  Read: bool,
+  Insert: bool,
+  Update: bool,
+  Delete: bool,
+  ManagePermissions: bool
+});
+
+const PermissionSetPtr = ref.refType(PermissionSet);
+
+const makeFfiResult = (resultPtr) => {
+  const ffiResult = resultPtr.deref();
+  return {
+    error_code: ffiResult.error_code,
+    error_description: ffiResult.error_description
+  };
+}
+
 // Internal helper functions
 const normaliseTypes = (rTypes) => {
-  let types = ['pointer', FfiResult]; // we always have: user_context and FfiResult
+  let types = ['pointer', FfiResultPtr]; // we always have: user_data and FfiResultPtr
   if (Array.isArray(rTypes)) {
     types = [...types, ...rTypes];
   } else if (rTypes) {
@@ -47,10 +82,11 @@ const callLibFn = (fn, args, types, postProcess) => {
   return new Promise((resolve, reject) => {
     // append the callback to receive the result to the args
     args.push(ffi.Callback("void", types,
-        function(uctx, err, ...restArgs) {
-          // error found, errback with translated error
-          if (err.error_code !== 0) {
-            return reject(makeFfiError(err.error_code, err.error_description));
+        function(uctx, resultPtr, ...restArgs) {
+          const result = makeFfiResult(resultPtr);
+          if (result.error_code !== 0) {
+            // error found, errback with translated error
+            return reject(makeFfiError(result.error_code, result.error_description));
           }
 
           let res;
@@ -76,11 +112,16 @@ module.exports = {
     App,
     AppPtr,
     FfiResult,
+    FfiResultPtr,
+    PermissionSet,
+    PermissionSetPtr,
     ObjectHandle,
     XOR_NAME,
     KEYBYTES,
     SIGN_SECRETKEYBYTES,
     NONCEBYTES,
+    SYM_SECRET_KEY,
+    SYM_NONCE,
     VoidPtr,
     i32,
     u32,
@@ -113,6 +154,21 @@ module.exports = {
       d.setTime((sec * 1000) + (nsec_part / 1000000));
       return d;
     },
+    makePermissionSet: (perms) => {
+      const permsObj = new PermissionSet({
+        Read: false,
+        Insert: false,
+        Update: false,
+        Delete: false,
+        ManagePermissions: false
+      });
+      perms.map((perm) => {
+        validatePermission(perm);
+        permsObj[perm] = true;
+      });
+      return permsObj;
+    },
+    makeFfiResult,
     Promisified: function(formatter, rTypes, after) {
       // create internal function that will be
       // invoked on top of the direct binding

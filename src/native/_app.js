@@ -4,6 +4,7 @@ const Struct = require('ref-struct');
 const makeFfiError = require('./_error.js');
 const base = require('./_base');
 const t = base.types;
+const helpers = base.helpers;
 const { types } = require('./_auth');
 const AuthGranted = types.AuthGranted;
 const consts = require('../consts');
@@ -16,10 +17,12 @@ const AccountInfo = Struct({
 module.exports = {
   functions: {
     app_account_info: [t.Void, [t.AppPtr, t.VoidPtr, 'pointer']],
-    app_unregistered: [t.Void ,[t.u8Pointer, t.usize, t.VoidPtr, t.VoidPtr, 'pointer', 'pointer']],
-    app_registered: [t.Void , ['string', ref.refType(AuthGranted), t.VoidPtr, t.VoidPtr, 'pointer', 'pointer']],
+    app_unregistered: [t.Void ,[t.u8Pointer, t.usize, t.VoidPtr, 'pointer', 'pointer']],
+    app_registered: [t.Void , ['string', ref.refType(AuthGranted), t.VoidPtr, 'pointer', 'pointer']],
     app_reconnect: [t.Void, [t.AppPtr, t.VoidPtr, 'pointer']],
-    app_free: [t.Void, [t.AppPtr]]
+    app_free: [t.Void, [t.AppPtr]],
+    app_reset_object_cache: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
+    is_mock_build: [t.bool, []]
   },
   api: {
     app_account_info: base.helpers.Promisified(null, ref.refType(AccountInfo), (accInfoPtr) => {
@@ -28,12 +31,13 @@ module.exports = {
     }),
     app_unregistered: function(lib, fn) {
       return (function(app, uri) {
-        const network_observer_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.i32], (user_data, result, state) => app._networkStateUpdated(user_data, result, state));
+        const disconnect_notifier_cb = ffi.Callback("void", [t.VoidPtr], (user_data) => app._networkStateUpdated(user_data, consts.NET_STATE_DISCONNECTED));
         return new Promise((resolve, reject) => {
           if (!uri) reject(makeFfiError(-1, "Missing connection URI"));
 
           const uriBuf = Buffer.isBuffer(uri) ? uri : (uri.buffer || new Buffer(uri));
-          const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.AppPtr], function(user_data, result, appCon) {
+          const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResultPtr, t.AppPtr], function(user_data, resultPtr, appCon) {
+            const result = helpers.makeFfiResult(resultPtr);
             if (result.error_code !== 0) {
               reject(makeFfiError(result.error_code, result.error_description));
               return;
@@ -44,15 +48,16 @@ module.exports = {
             resolve(app);
           });
 
-          fn.apply(fn, [uriBuf, uriBuf.length, ref.NULL, ref.NULL, network_observer_cb, result_cb]);
+          fn.apply(fn, [uriBuf, uriBuf.length, ref.NULL, disconnect_notifier_cb, result_cb]);
         });
       })
     },
     app_registered: function(lib, fn) {
       return (function(app, authGranted) {
-        const network_observer_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.i32], (user_data, result, state) => app._networkStateUpdated(user_data, result, state));
+        const disconnect_notifier_cb = ffi.Callback("void", [t.VoidPtr], (user_data) => app._networkStateUpdated(user_data, consts.NET_STATE_DISCONNECTED));
         return new Promise((resolve, reject) => {
-          const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResult, t.AppPtr], function(user_data, result, appCon) {
+          const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResultPtr, t.AppPtr], function(user_data, resultPtr, appCon) {
+            const result = helpers.makeFfiResult(resultPtr);
             if (result.error_code !== 0) {
               reject(makeFfiError(result.error_code, result.error_description));
               return;
@@ -63,7 +68,7 @@ module.exports = {
             resolve(app);
           });
 
-          fn.apply(fn, [app.appInfo.id, authGranted, ref.NULL, ref.NULL, network_observer_cb, result_cb]);
+          fn.apply(fn, [app.appInfo.id, authGranted, ref.NULL, disconnect_notifier_cb, result_cb]);
         });
       });
     },
@@ -73,6 +78,8 @@ module.exports = {
         fn(app);
         return Promise.resolve();
       });
-    }
+    },
+    app_reset_object_cache: base.helpers.Promisified(null, []),
+    is_mock_build: (lib, fn) => (function() { return fn(); })
   }
 };
