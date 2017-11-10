@@ -103,17 +103,17 @@ const UserMetadata = Struct({
 
 const UserMetadataPtr = ref.refType(UserMetadata);
 
-function bufferLastEntry(...varArgs) {
+const bufferLastEntry = (...varArgs) => {
   let str = new Buffer(varArgs[varArgs.length - 1]);
   return Array.prototype.slice.call(varArgs, 0, varArgs.length - 1)
         .concat([str, str.length]);
 }
 
-function keyValueCallBackLastEntry(types, ...varArgs) {
+const keyValueCallBackLastEntry = (types, ...varArgs) => {
   let fn = varArgs[varArgs.length - 1];
   if (typeof fn !== 'function') throw Error('A function parameter _must be_ provided')
 
-  let cb = ffi.Callback("void", types, function(uctx, ...cbVarArgs) {
+  let cb = ffi.Callback("void", types, (uctx, ...cbVarArgs) => {
     let args = [];
     args.push(ref.reinterpret(cbVarArgs[0], cbVarArgs[1], 0));
     args.push(readValueToBuffer([cbVarArgs[2], cbVarArgs[3], cbVarArgs[4]]));
@@ -124,7 +124,7 @@ function keyValueCallBackLastEntry(types, ...varArgs) {
             .concat(cb);
 }
 
-function translatePrivMDInput(xorname, tag, secKey, nonce) {
+const translatePrivMDInput = (xorname, tag, secKey, nonce) => {
   let name = xorname;
   if (!Buffer.isBuffer(xorname)) {
     const b = new Buffer(xorname);
@@ -149,22 +149,22 @@ function translatePrivMDInput(xorname, tag, secKey, nonce) {
   return [name, tag, sk, n]
 }
 
-function toMDataInfo(appPtr, mDataInfoObj, ...varArgs) {
+const toMDataInfo = (appPtr, mDataInfoObj, ...varArgs) => {
   const mDataInfo = makeMDataInfo(mDataInfoObj);
   return [appPtr, mDataInfo.ref(), ...varArgs]
 }
 
-function firstToMDataInfo(mDataInfoObj, ...varArgs) {
+const firstToMDataInfo = (mDataInfoObj, ...varArgs) => {
   const mDataInfo = makeMDataInfo(mDataInfoObj);
   return [mDataInfo.ref(), ...varArgs]
 }
 
-function firstToMDataInfoLastToBuffer(...varArgs) {
+const firstToMDataInfoLastToBuffer = (...varArgs) => {
   const mDataInfo = firstToMDataInfo(...varArgs);
   return bufferLastEntry(...mDataInfo);
 }
 
-function strToBuffer(appPtr, mdata, ...varArgs) {
+const strToBuffer = (appPtr, mdata, ...varArgs) => {
     const args = [appPtr, mdata];
     varArgs.forEach(item => {
       const buf = Buffer.isBuffer(item) ? item : (item.buffer || new Buffer(item));
@@ -175,7 +175,7 @@ function strToBuffer(appPtr, mdata, ...varArgs) {
 }
 
 // keep last entry as is
-function strToBufferButLastEntry(appPtr, mdata, ...varArgs) {
+const strToBufferButLastEntry = (appPtr, mdata, ...varArgs) => {
     let lastArg = varArgs[varArgs.length - 1];
     const args = [appPtr, mdata];
     Array.prototype.slice.call(varArgs, 0, varArgs.length - 1).forEach(item => {
@@ -187,14 +187,14 @@ function strToBufferButLastEntry(appPtr, mdata, ...varArgs) {
     return args;
 }
 
-function readValueToBuffer(argsArr) {
+const readValueToBuffer = (argsArr) => {
     return {
         buf: ref.isNull(argsArr[0]) ? argsArr[0] : new Buffer(ref.reinterpret(argsArr[0], argsArr[1], 0)),
         version: argsArr[2] // argsArr[2] is expected to be the content's version in the container
     }
 }
 
-function lastToPermissionSet(...varArgs) {
+const lastToPermissionSet = (...varArgs) => {
   let permsList = varArgs[varArgs.length - 1];
   const permSet = h.makePermissionSet(permsList);
   return Array.prototype.slice.call(varArgs, 0, varArgs.length - 1)

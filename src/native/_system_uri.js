@@ -25,7 +25,7 @@ const init = (options) => {
   });
 };
 
-function _handleError(resolve,  reject) {
+const _handleError = (resolve,  reject) => {
   return FFI.Callback("void", [t.VoidPtr, t.FfiResult],
     (userData, result) => {
       if (result.error_code !== 0) {
@@ -36,7 +36,7 @@ function _handleError(resolve,  reject) {
   );
 }
 
-function openUri(uri) {
+const openUri = (uri) => {
   if (!ffi) {
     return;
   }
@@ -51,7 +51,7 @@ function openUri(uri) {
 }
 
 
-function registerUriScheme(appInfo, schemes) {
+const registerUriScheme = (appInfo, schemes) => {
   const bundle = appInfo.bundle || appInfo.id;
   const exec = appInfo.exec ? appInfo.exec : process.execPath;
   const vendor = appInfo.vendor.replace(/\s/g, '-');
@@ -74,7 +74,7 @@ function registerUriScheme(appInfo, schemes) {
 // FIXME: As long as `safe-app` doesn't expose system uri itself, we'll
 // patch it directly on it. This should later move into its own sub-module
 // and take care of mobile support for other platforms, too.
-module.exports = function(other, options) {
+module.exports = (other, options) => {
   other.openUri = openUri;
   other.registerUriScheme = registerUriScheme;
   init(options);

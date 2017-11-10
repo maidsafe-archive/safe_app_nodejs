@@ -38,7 +38,7 @@ const validPerms = new Enum({
   ManagePermissions: 4
 });
 
-function validatePermission(perm) {
+const validatePermission = (perm) => {
   if (!validPerms.get(perm)) throw Error(`'${perm}' is not a valid permission`);
 }
 
@@ -82,7 +82,7 @@ const callLibFn = (fn, args, types, postProcess) => {
   return new Promise((resolve, reject) => {
     // append the callback to receive the result to the args
     args.push(ffi.Callback("void", types,
-        function(uctx, resultPtr, ...restArgs) {
+        (uctx, resultPtr, ...restArgs) => {
           const result = makeFfiResult(resultPtr);
           if (result.error_code !== 0) {
             // error found, errback with translated error
@@ -169,12 +169,12 @@ module.exports = {
       return permsObj;
     },
     makeFfiResult,
-    Promisified: function(formatter, rTypes, after) {
+    Promisified: (formatter, rTypes, after) => {
       // create internal function that will be
       // invoked on top of the direct binding
       // mixing a callback into the arguments
       // and returning a promise
-      return (lib, fn) => (function(...varArgs) {
+      return (lib, fn) => ((...varArgs) => {
         // the internal function that wraps the actual function call
         // compile the callback-types-definiton
         let args;
@@ -199,13 +199,13 @@ module.exports = {
         });
       });
     },
-    PromisifiedForEachCb: function(formatter, rTypes) {
+    PromisifiedForEachCb: (formatter, rTypes) => {
       // This is similar to the function returned by the Promisifed function
       // above, with the difference being that it expects a callback function
       // as the last parameter which is passed down to the lib's function
       // as the next to last parameter, and it doesn't support a post-processing
       // function for the returned values.
-      return (lib, fn) => (function(...varArgs) {
+      return (lib, fn) => ((...varArgs) => {
         // the internal function that wraps the actual function call
         // compile the callback-types-definiton
         let args;

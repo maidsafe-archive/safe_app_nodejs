@@ -59,7 +59,7 @@ let run = async () => {
 
 run()
 
-function wait () {
+const wait = () => {
    if (!EXIT_CONDITION)
         setTimeout(wait, 1000);
 };

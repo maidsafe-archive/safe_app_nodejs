@@ -11,7 +11,7 @@ const EncryptSecKeyHandle = t.ObjectHandle;
 const EncryptKeyHandle = t.ObjectHandle;
 
 
-function strToBuffer(str) {
+const strToBuffer = (str) => {
   let res = str;
   if (!Buffer.isBuffer(str)) {
     res = new Buffer(str);
@@ -19,7 +19,7 @@ function strToBuffer(str) {
   return [res, res.length]
 }
 
-function toBuffer(app, key) {
+const toBuffer = (app, key) => {
   let keyArr = key;
   if (!Buffer.isBuffer(key)) {
     const b = new Buffer(key);
@@ -29,15 +29,14 @@ function toBuffer(app, key) {
   return [app, keyArr];
 }
 
-function appStrToBuffer(appPtr, str) {
-  return [appPtr].concat(strToBuffer(str)).concat(Array.prototype.slice.call(arguments, 2))
+const appStrToBuffer = (appPtr, str, ...varArgs) => {
+  const buf = strToBuffer(str);
+  return [appPtr, ...buf, ...varArgs];
 }
 
 // Helper to create a copy of the received KEYBYTES array as it might
 // be overwritten after the callback finishes.
-function copyKeyBytesArray(res) {
-  return t.KEYBYTES(ref.reinterpret(res[0], 32));
-}
+const copyKeyBytesArray = (res) => t.KEYBYTES(ref.reinterpret(res[0], 32));
 
 module.exports = {
   types: {

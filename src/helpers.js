@@ -38,12 +38,12 @@ class NetworkObject {
 * @private
 * @abstract
 */
-function freeResources(obj) {
+const freeResources = (obj) => {
   if (obj.app) {
     return () => obj.constructor.free(obj.app, obj.ref);
   }
   return () => obj.constructor.free(obj);
-}
+};
 
 /**
 * Automatically clean up a given object's resources using weak once
@@ -52,7 +52,7 @@ function freeResources(obj) {
 * @private
 * @abstract
 */
-function autoref(obj) {
+const autoref = (obj) => {
   if (obj.constructor && obj.constructor.free) {
     const weakObj = weak(obj, freeResources(obj));
     weakObj.forceCleanUp = freeResources(obj);
@@ -61,7 +61,7 @@ function autoref(obj) {
 
   console.warn('Can\'t clean up obj. No static "free" function found on obj:', obj);
   return obj;
-}
+};
 
 
 module.exports = {
