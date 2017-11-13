@@ -1,8 +1,9 @@
 const safeApp = require('@maidsafe/safe-node-app');
+const { waitUntil } = require('wait');
 
 let EXIT_CONDITION = false;
 
-let run = async () => {
+const run = async () => {
 	const APP = {
         info: {
             id: 'net.safe.md.demo.app',
@@ -27,40 +28,40 @@ let run = async () => {
         let app = await safeApp.initializeApp(APP.info);
 
         // Used for testing purpose; this function is only available if run in NODE_ENV=dev
-        await app.auth.loginForTest(APP.permissions); 
+        await app.auth.loginForTest(APP.permissions);
         console.log("Application Initialised and Logged in successfully");
 
 
         //----------------Create Mutable Data with Private Access---------------------------//
 
         // Mutable data created at random address with private access
-        let mData = await app.mutableData.newRandomPrivate(typeTag); 
+        let mData = await app.mutableData.newRandomPrivate(typeTag);
 
         // Setup MD with the app having full access permission easily
-        await mData.quickSetup(data); 
+        await mData.quickSetup(data);
         console.log('Quick Setup Completed');
-        
+
 
         //----------------Insert New Mutable Data Entry-------------------------------------//
-        
+
         console.log();
         console.log('***** Insert new mutable data entries *****');
         console.log();
 
         //Creates a new EntryMutationTransaction object, which allows to insert multiple entries
-        let m = await app.mutableData.newMutation(); 
-        
+        let m = await app.mutableData.newMutation();
+
         await m.insert('English', 'Hello');
         await m.insert('French', 'Bonjure');
         await m.insert('Spanish', 'Hola');
 
         //Commit the Insert transaction to the network (Saves the changes to the network)
-        await mData.applyEntriesMutation(m); 
+        await mData.applyEntriesMutation(m);
 
         console.log('New MD entries are inserted and saved to the network successfully')
 
         let entries = await mData.getEntries();
-        
+
         console.log('----------------------------');
         console.log('List of Inserted MD Entries');
         console.log('----------------------------');
@@ -68,16 +69,16 @@ let run = async () => {
         let mdEntries = await entries.forEach((k,v) => {
             let key = k.toString()
             let value = v.buf.toString();
-            
+
             //Shows the list of entries inserted
             console.log(key + ': ' + value);
         });
         console.log('----------------------------');
         console.log('Iteration Completed. Value "Hello" retrieved for key "English" ');
-        
-        
+
+
         //-----------------Update a Mutable Data Entry-------------------------------------//
-        
+
         console.log();
         console.log('***** Update existing mutable data entries *****');
         console.log();
@@ -89,14 +90,14 @@ let run = async () => {
         await m.update('Spanish', 'Hola Mundo', version+1);
         await m.update('English', 'Hello World', version+1);
         await m.update('French', 'Bonjure Monde', version+1);
-        
+
         //Saves the changes to the network
-        await mData.applyEntriesMutation(m); 
+        await mData.applyEntriesMutation(m);
 
         console.log('Existing MD entries are updated and saved to the network successfully');
 
         entries = await mData.getEntries();
-        
+
         console.log('--------------------------');
         console.log('List of Updated MD Entries');
         console.log('--------------------------');
@@ -104,27 +105,27 @@ let run = async () => {
         mdEntries = await entries.forEach((k,v) => {
             let key = k.toString();
             let value = v.buf.toString();
-            
+
             //Shows the list of entries
-            console.log(key + ': ' + value); 
+            console.log(key + ': ' + value);
         });
         console.log('--------------------------');
         console.log('Iteration Completed. Value "Hello" of the key "English" updated to "Hello World" ');
-       
-        
+
+
         //---------------- Encrypt and Decrypt the entry key/value --------------------------//
 
         console.log();
         console.log('***** Encrypt and Decrypt the entry key/value *****');
         console.log();
 
-        /* Encrypts the entry key provided as a parameter in Private MD. If the mutable data is Public, 
+        /* Encrypts the entry key provided as a parameter in Private MD. If the mutable data is Public,
          * the same value (unencrypted) is returned */
-        let encrData = await mData.encryptKey(data.key); 
+        let encrData = await mData.encryptKey(data.key);
         console.log('The encrypted entry value: ', encrData.toString('hex'));
 
         /* Decrypts the encrypted entry key/value provided as a parameter in Private MD.*/
-        let decrData = await mData.decrypt(encrData); 
+        let decrData = await mData.decrypt(encrData);
         console.log('The decrypted value: ', decrData.toString());
         console.log('---------------------------');
 
@@ -135,7 +136,7 @@ let run = async () => {
         console.log();
 
         /* Serialise the Mutable Data */
-        let serial = await mData.serialise(); 
+        let serial = await mData.serialise();
 
         /* Encode serialised mutable data to hexadecimal characters. */
         console.log('The serialised Mutable Data in hexadecimal characters: ', serial.toString('hex'));
@@ -148,7 +149,7 @@ let run = async () => {
         console.log('The deserialised Mutable Data entry value of key "Spanish": ', value.buf.toString());
 
         entries = await deserial.getEntries();
-        
+
         console.log('--------------------------------');
         console.log('List of Deserialised MD Entries');
         console.log('--------------------------------');
@@ -156,22 +157,18 @@ let run = async () => {
         deserialisedMD = await entries.forEach((k,v) => {
             let key = k.toString()
             let value = v.buf.toString();
-            
+
             //Shows the list of entries deserialised
-            console.log(key + ': ' + value); 
+            console.log(key + ': ' + value);
         });
         console.log('--------------------------------');
-        
+
 	} catch(e) {
 		console.log("Execution failed", e);
 	}
 	EXIT_CONDITION = true;
 };
 
-run()
+run();
 
-const wait = () => {
-   if (!EXIT_CONDITION)
-        setTimeout(wait, 1000);
-};
-wait();
+waitUntil(() => EXIT_CONDITION === true, 1000, () => {});

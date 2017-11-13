@@ -18,7 +18,7 @@ describe('Smoke testing', () => {
     should(CONSTANTS).be.Object();
   });
 
-  it('confirms the full list of contants', () => {
+  it('confirms the full list of constants', () => {
     // let's check all contants to make sure we don't break any app
     // by accidentally changing a constant's name or value
     const expectedConsts = {
