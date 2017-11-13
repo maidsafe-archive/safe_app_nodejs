@@ -5,6 +5,17 @@ describe('CipherOpt', function test() {
   this.timeout(15000);
   const app = h.createAuthenticatedTestApp();
 
+  it('provides a plain text cipher opt to write immutable structure', async () => {
+    const testString = 'information to be encrypted';
+    const idWriter = await app.immutableData.create();
+    await idWriter.write(testString);
+    const cipherOpt = await app.cipherOpt.newPlainText();
+    const idAddress = await idWriter.close(cipherOpt);
+    const idReader = await app.immutableData.fetch(idAddress);
+    const idData = await idReader.read();
+    should(idData.toString()).equal(testString);
+  });
+
   it('symmetrically encrypts data to be written to immutable structure', async () => {
     const testString = 'information to be encrypted';
     const idWriter = await app.immutableData.create();
@@ -16,16 +27,20 @@ describe('CipherOpt', function test() {
     should(idData.toString()).equal(testString);
   });
 
-  it.only('asymmetrically encrypts data to be written to immutable structure', async () => {
-    const keyPair = await app.crypto.generateEncKeyPair();
-    const pubEncryptionKey = keyPair.pubEncKey;
+  it('asymmetrically encrypts data to be written to immutable structure', async () => {
+    const differentApp = h.createAltAuthTestApp();
+    const pubEncKey = await differentApp.crypto.getAppPubEncKey();
+    const rawKey = await pubEncKey.getRaw();
+
+    const pubKey = await app.crypto.pubEncKeyKeyFromRaw(rawKey);
     const testString = 'information to be encrypted';
     const idWriter = await app.immutableData.create();
     await idWriter.write(testString);
-    const cipherOpt = await app.cipherOpt.newAsymmetric(pubEncryptionKey);
+    const cipherOpt = await app.cipherOpt.newAsymmetric(pubKey);
     const idAddress = await idWriter.close(cipherOpt);
-    const idReader = await app.immutableData.fetch(idAddress);
-    // const idData = await idReader.read();
-    // should(idData.toString()).equal(testString);
+
+    const idReader = await differentApp.immutableData.fetch(idAddress);
+    const idData = await idReader.read();
+    should(idData.toString()).equal(testString);
   });
 });

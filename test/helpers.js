@@ -24,6 +24,17 @@ function createTestApp(scope) {
   }, null, { log: false }));
 }
 
+function createAltAuthTestApp(scope, access) {
+  const app = h.autoref(new App({
+    id: 'alt-net.maidsafe.test.javascript.id',
+    name: 'alt-NodeJS Test',
+    vendor: 'alt-MaidSafe.net Ltd',
+    scope
+  }, null, { log: false }));
+  app.auth.loginForTest(access || {}); // Promise, but immediate
+  return app;
+}
+
 function createTestAppWithNetworkCB(scope, networkCB) {
   return h.autoref(new App({
     id: 'net.maidsafe.test.javascript.id',
@@ -68,5 +79,6 @@ module.exports = {
   createRandomSecKey,
   createRandomNonce,
   createTestAppWithNetworkCB,
-  createTestAppWithOptions
+  createTestAppWithOptions,
+  createAltAuthTestApp
 };
