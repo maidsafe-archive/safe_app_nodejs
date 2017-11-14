@@ -335,7 +335,7 @@ class CryptoInterface {
   }
 
   /**
-  * Generate a new Asymmetric Encryption KeyPair from raw secret and public keys
+  * Generate a new Asymmetric Encryption Key Pair from raw secret and public keys
   * @returns {Promise<EncKeyPair>}
   */
   generateEncKeyPairFromRaw(rawPublicKey, rawSecretkey) {
@@ -344,6 +344,18 @@ class CryptoInterface {
         .then((pk) => { pubKey = pk; })
         .then(() => this.secEncKeyFromRaw(rawSecretkey))
         .then((sk) => new EncKeyPair(this.app, pubKey, sk));
+  }
+
+  /**
+  * Generate a new Sign Key Pair from raw secret and public keys
+  * @returns {Promise<SignKeyPair>}
+  */
+  generateSignKeyPairFromRaw(rawPublicKey, rawSecretkey) {
+    let pubKey;
+    return this.pubSignKeyFromRaw(rawPublicKey)
+        .then((pk) => { pubKey = pk; })
+        .then(() => this.secSignKeyFromRaw(rawSecretkey))
+        .then((sk) => new SignKeyPair(this.app, pubKey, sk));
   }
 
   /**
