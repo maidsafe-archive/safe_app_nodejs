@@ -3,14 +3,13 @@ const ref = require("ref");
 const Struct = require('ref-struct');
 const Enum = require('enum');
 const ArrayType = require('ref-array');
-const { SignKeyHandle } = require('./_crypto').types;
+const { SignPubKeyHandle } = require('./_crypto').types;
 const { types: t, helpers: h } = require('./_base');
 
 const PromisifiedForEachCb = h.PromisifiedForEachCb;
 const Promisified = h.Promisified;
 
 const MDataPermissionsHandle = t.ObjectHandle;
-const SignPubKeyHandle = t.ObjectHandle;
 const MDataEntriesHandle = t.ObjectHandle;
 const MDataEntryActionsHandle = t.ObjectHandle;
 const bufferTypes = [t.u8Pointer, t.usize, t.usize];
@@ -266,9 +265,9 @@ module.exports = {
     mdata_serialised_size: [t.Void, [t.AppPtr, MDataInfoPtr, 'pointer', 'pointer']],
     mdata_permissions_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
     mdata_permissions_len: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
-    mdata_permissions_get: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignKeyHandle, 'pointer', 'pointer']],
+    mdata_permissions_get: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignPubKeyHandle, 'pointer', 'pointer']],
     mdata_list_permission_sets: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
-    mdata_permissions_insert: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignKeyHandle, t.PermissionSetPtr, 'pointer', 'pointer']],
+    mdata_permissions_insert: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignPubKeyHandle, t.PermissionSetPtr, 'pointer', 'pointer']],
     mdata_permissions_free: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
     mdata_put: [t.Void, [t.AppPtr, MDataInfoPtr, MDataPermissionsHandle, MDataEntriesHandle, 'pointer', 'pointer']],
     mdata_get_version: [t.Void, [t.AppPtr, MDataInfoPtr, 'pointer', 'pointer']],
@@ -278,9 +277,9 @@ module.exports = {
     mdata_list_values: [t.Void, [t.AppPtr, MDataInfoPtr, 'pointer', 'pointer']],
     mdata_mutate_entries: [t.Void, [t.AppPtr, MDataInfoPtr, MDataEntryActionsHandle, 'pointer', 'pointer']],
     mdata_list_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, 'pointer', 'pointer']],
-    mdata_list_user_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, SignKeyHandle, 'pointer', 'pointer']],
-    mdata_set_user_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, SignKeyHandle, t.PermissionSetPtr, t.u64, 'pointer', 'pointer']],
-    mdata_del_user_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, SignKeyHandle, t.u64, 'pointer', 'pointer']],
+    mdata_list_user_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, SignPubKeyHandle, 'pointer', 'pointer']],
+    mdata_set_user_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, SignPubKeyHandle, t.PermissionSetPtr, t.u64, 'pointer', 'pointer']],
+    mdata_del_user_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, SignPubKeyHandle, t.u64, 'pointer', 'pointer']],
     mdata_entry_actions_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
     mdata_entry_actions_insert: [t.Void, [t.AppPtr, MDataEntryActionsHandle, t.u8Pointer, t.usize, t.u8Pointer, t.usize, 'pointer', 'pointer']],
     mdata_entry_actions_update: [t.Void, [t.AppPtr, MDataEntryActionsHandle, t.u8Pointer, t.usize, t.u8Pointer, t.usize, t.u64, 'pointer', 'pointer']],

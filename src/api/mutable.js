@@ -2,7 +2,7 @@ const h = require('../helpers');
 const lib = require('../native/lib');
 const t = require('../native/types');
 const emulations = require('./emulations');
-const { SignKey } = require('./crypto');
+const { PubSignKey } = require('./crypto');
 const { pubConsts: CONSTANTS } = require('../consts');
 
 /**
@@ -30,7 +30,7 @@ class Permissions extends h.NetworkObject {
 
   /**
   * Lookup the permissions of a specifc key
-  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
+  * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
   * @returns {Promise<Object>} the permission set for that key
   */
   getPermissionSet(signKey) {
@@ -43,7 +43,7 @@ class Permissions extends h.NetworkObject {
   * Insert a new permission set mapped to a specifc key. Directly commits
   * to the network.
   * Requires 'ManagePermissions'-Permission for the app.
-  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to map to
+  * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to map to
   * @param {Object} permissionSet the permission set to insert
   * @returns {Promise} once finished
   */
@@ -63,7 +63,7 @@ class Permissions extends h.NetworkObject {
   listPermissionSets() {
     return lib.mdata_list_permission_sets(this.app.connection, this.ref)
         .then((permSets) => permSets.map((userPermSet) =>
-          ({ signKey: new SignKey(this.app, userPermSet.signKey),
+          ({ signKey: new PubSignKey(this.app, userPermSet.signKey),
             permSet: userPermSet.permSet
           })
         ));
@@ -438,7 +438,7 @@ class MutableData extends h.NetworkObject {
   /**
   * Get a Handle to the permissions associated with this MutableData for
   * a specifc key
-  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to look up
+  * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to look up
   * @returns {Promise<(Permissions)>} the permissions set associated to the key
   */
   getUserPermissions(signKey) {
@@ -451,7 +451,7 @@ class MutableData extends h.NetworkObject {
   /**
   * Delete the permissions of a specifc key. Directly commits to the network.
   * Requires 'ManagePermissions'-Permission for the app.
-  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
+  * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
   * @param {Number} version the version successor, to confirm you are
   *        actually asking for the right one
   * @returns {Promise} once finished
@@ -468,7 +468,7 @@ class MutableData extends h.NetworkObject {
   /**
   * Set the permissions of a specifc key. Directly commits to the network.
   * Requires 'ManagePermissions'-Permission for the app.
-  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
+  * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
   * @param {PermissionSet} permissionSet the permission set to set to
   * @param {Number} version the version successor, to confirm you are
   *        actually asking for the right one

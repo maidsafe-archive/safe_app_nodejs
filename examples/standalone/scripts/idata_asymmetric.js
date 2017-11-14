@@ -47,7 +47,7 @@ const run = async () => {
 
         // Get Asymmetric public encryption key
         let key = await appB.crypto.getAppPubEncKey();
-        let encKey = await appA.crypto.pubEncKeyKeyFromRaw(await key.getRaw());
+        let encKey = await appA.crypto.pubEncKeyFromRaw(await key.getRaw());
         console.log("Asymmetric Encryption Key obtained");
 
         // Create an Asymmetric CipherOpt with generated encryption key

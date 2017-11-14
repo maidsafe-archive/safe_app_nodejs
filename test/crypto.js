@@ -47,35 +47,35 @@ describe('App Crypto Tests', () => {
     should(nonce.length).be.equal(24);
   }));
 
-  describe('custom key pair', () => {
-    let keyPair;
+  describe('custom encryption key pair', () => {
+    let encKeyPair;
 
     beforeEach(() => app.crypto.generateEncKeyPair()
           .then((kp) => {
-            keyPair = kp;
-            should(keyPair).not.be.undefined();
+            encKeyPair = kp;
+            should(encKeyPair).not.be.undefined();
           }));
 
     it('generation creates appropriate keys', () => Promise.all([
-      keyPair.pubEncKey.getRaw().then((r) => {
+      encKeyPair.pubEncKey.getRaw().then((r) => {
         should(r).not.be.undefined();
         return r;
       }),
-      keyPair.secEncKey.getRaw().then((r) => {
+      encKeyPair.secEncKey.getRaw().then((r) => {
         should(r).not.be.undefined();
         return r;
       })
     ]).then((r) => should(r[0]).not.equal(r[1])));
 
     it('get keys from raw', () => Promise.all([
-      keyPair.pubEncKey.getRaw()
-        .then((r) => app.crypto.pubEncKeyKeyFromRaw(r))
+      encKeyPair.pubEncKey.getRaw()
+        .then((r) => app.crypto.pubEncKeyFromRaw(r))
         .then((pk) => {
           should(pk).not.be.undefined();
           return pk;
         }),
-      keyPair.secEncKey.getRaw()
-        .then((r) => app.crypto.secEncKeyKeyFromRaw(r))
+      encKeyPair.secEncKey.getRaw()
+        .then((r) => app.crypto.secEncKeyFromRaw(r))
         .then((sk) => {
           should(sk).not.be.undefined();
           return sk;
@@ -86,9 +86,9 @@ describe('App Crypto Tests', () => {
       let rawPubKey;
       let rawPubKeyFromRaw;
       let rawSecKey;
-      return keyPair.pubEncKey.getRaw()
+      return encKeyPair.pubEncKey.getRaw()
         .then((r) => { rawPubKey = r; })
-        .then(() => keyPair.secEncKey.getRaw())
+        .then(() => encKeyPair.secEncKey.getRaw())
         .then((r) => { rawSecKey = r; })
         .then(() => app.crypto.generateEncKeyPairFromRaw(rawPubKey, rawSecKey))
         .then((kp) => kp.pubEncKey.getRaw()
@@ -125,14 +125,14 @@ describe('App Crypto Tests', () => {
             })])
       .then(() => Promise.all([
         myKeys.pubEncKey.getRaw()
-            .then((r) => other.crypto.pubEncKeyKeyFromRaw(r)
+            .then((r) => other.crypto.pubEncKeyFromRaw(r)
               .then((w) => {
                 theirHandleOnMyPubKey = w;
                 should(theirHandleOnMyPubKey).not.be.undefined();
               })),
 
         theirKeys.pubEncKey.getRaw()
-            .then((r) => me.crypto.pubEncKeyKeyFromRaw(r)
+            .then((r) => me.crypto.pubEncKeyFromRaw(r)
               .then((w) => {
                 myHandleOnTheirPubKey = w;
                 should(myHandleOnTheirPubKey).not.be.undefined();
