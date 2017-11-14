@@ -2,7 +2,7 @@ const api = require('./api');
 
 let helpers = { };
 
-api.forEach(function(mod){
+api.forEach((mod) => {
 	if (mod.helpers){
 		Object.assign(helpers, mod.helpers);
 	}

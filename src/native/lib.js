@@ -22,7 +22,7 @@ ffi.init = (options) => {
     }
     lib = FFI.DynamicLibrary(path.join(options.libPath || dir, LIB_FILENAME), mode);
 
-    api.forEach(function(mod){
+    api.forEach((mod) => {
       if (!lib) {
         throw new Error('Native library not initialised');
       }

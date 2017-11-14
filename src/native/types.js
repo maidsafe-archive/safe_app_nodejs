@@ -3,7 +3,7 @@ const api = require('./api');
 
 let types = { };
 
-api.forEach(function(mod){
+api.forEach((mod) => {
   if (mod.types){
     Object.assign(types, mod.types);
   }

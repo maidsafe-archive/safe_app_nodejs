@@ -17,6 +17,23 @@ describe('Smoke testing', () => {
   it('confirms the CONSTANTS are exposed', () => {
     should(CONSTANTS).be.Object();
   });
+
+  it('confirms the full list of constants', () => {
+    // let's check all contants to make sure we don't break any app
+    // by accidentally changing a constant's name or value
+    const expectedConsts = {
+      NFS_FILE_MODE_OVERWRITE: 1,
+      NFS_FILE_MODE_APPEND: 2,
+      NFS_FILE_MODE_READ: 4,
+      NFS_FILE_START: 0,
+      NFS_FILE_END: 0,
+      USER_ANYONE: 0,
+      MD_METADATA_KEY: '_metadata',
+      MD_ENTRIES_EMPTY: 0,
+      MD_PERMISSION_EMPTY: 0
+    };
+    should(CONSTANTS).be.eql(expectedConsts);
+  });
 });
 
 describe('External API', () => {

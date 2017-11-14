@@ -52,14 +52,14 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
  *        // or wait for a result url
  *        ))
  */
-function initializeApp(appInfo, networkStateCallBack, options) {
+const initializeApp = (appInfo, networkStateCallBack, options) => {
   try {
     const app = autoref(new App(appInfo, networkStateCallBack, options));
     return Promise.resolve(app);
   } catch (e) {
     return Promise.reject(e);
   }
-}
+};
 
 /**
  * If you have received a response URI (which you are allowed
@@ -73,9 +73,8 @@ function initializeApp(appInfo, networkStateCallBack, options) {
  * @param {InitOptions=} options initialisation options
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  */
-function fromAuthURI(appInfo, authUri, networkStateCallBack, options) {
-  return App.fromAuthUri(appInfo, authUri, networkStateCallBack, options);
-}
+const fromAuthURI = (appInfo, authUri, networkStateCallBack, options) =>
+  App.fromAuthUri(appInfo, authUri, networkStateCallBack, options);
 
 module.exports = {
   VERSION: version,

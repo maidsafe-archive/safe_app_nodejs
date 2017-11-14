@@ -5,8 +5,7 @@ const inTesting = (process.env.NODE_ENV || '').match(/dev|development|testing|te
 const TAG_TYPE_DNS = 15001;
 const TAG_TYPE_WWW = 15002;
 
-const NET_STATE_UNKNOWN = -100;
-const NET_STATE_INIT = -99;
+const NET_STATE_INIT = -100;
 const NET_STATE_DISCONNECTED = -1;
 const NET_STATE_CONNECTED = 0;
 
@@ -48,7 +47,7 @@ const NET_STATE_CONNECTED = 0;
 * the permissions in the `permissionSet` provided will be granted to anyone
 * rather to a specific user's/aplication's sign key.
 *
-* @param {Number} MD_METADATA_KEY MutableData's entry key where its metadata is stored.
+* @param {String} MD_METADATA_KEY MutableData's entry key where its metadata is stored.
 * The MutableData's metadata can be set either when invoking the `quickSetup`
 * function or by invking the `setMetadata` function.
 * The metadata is stored as an encoded entry in the MutableData which key
@@ -101,7 +100,6 @@ module.exports = {
   TAG_TYPE_DNS,
   TAG_TYPE_WWW,
 
-  NET_STATE_UNKNOWN,
   NET_STATE_INIT,
   NET_STATE_DISCONNECTED,
   NET_STATE_CONNECTED,

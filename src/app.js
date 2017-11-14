@@ -235,31 +235,64 @@ class SAFEApp extends EventEmitter {
   * @private
   * Set the new network state based on the state code provided.
   *
-  * @param {String} state
+  * @param {Number} state
   */
   set networkState(state) {
-    switch (state) {
-      case consts.NET_STATE_INIT:
-        this._networkState = 'Init';
-        break;
-      case consts.NET_STATE_DISCONNECTED:
-        this._networkState = 'Disconnected';
-        break;
-      case consts.NET_STATE_CONNECTED:
-        this._networkState = 'Connected';
-        break;
-      case consts.NET_STATE_UNKNOWN:
-      default:
-        this._networkState = 'Unknown';
-    }
+    this._networkState = state;
   }
 
   /**
-  * The current Network state
-  * @returns {String} of latest state
+  * Textual representation of the current network connection state.
+  *
+  * @returns {String} current network connection state
   */
   get networkState() {
-    return this._networkState;
+    // Although it should never happen, if the state code is invalid
+    // we return the current network conn state as 'Unknown'.
+    let currentState = 'Unknown';
+    switch (this._networkState) {
+      case consts.NET_STATE_INIT:
+        currentState = 'Init';
+        break;
+      case consts.NET_STATE_DISCONNECTED:
+        currentState = 'Disconnected';
+        break;
+      case consts.NET_STATE_CONNECTED:
+        currentState = 'Connected';
+        break;
+      default:
+        break;
+    }
+    return currentState;
+  }
+
+  /**
+  * Returns true if current network connection state is INIT.
+  * This is state means the library has been initialised but there is no
+  * connection made with the network yet.
+  *
+  * @returns {Boolean}
+  */
+  isNetStateInit() {
+    return this._networkState === consts.NET_STATE_INIT;
+  }
+
+  /**
+  * Returns true if current network connection state is CONNECTED.
+  *
+  * @returns {Boolean}
+  */
+  isNetStateConnected() {
+    return this._networkState === consts.NET_STATE_CONNECTED;
+  }
+
+  /**
+  * Returns true if current network connection state is DISCONNECTED.
+  *
+  * @returns {Boolean}
+  */
+  isNetStateDisconnected() {
+    return this._networkState === consts.NET_STATE_DISCONNECTED;
   }
 
   /**
