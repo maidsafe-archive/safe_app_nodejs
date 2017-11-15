@@ -22,7 +22,8 @@ module.exports = {
     app_reconnect: [t.Void, [t.AppPtr, t.VoidPtr, 'pointer']],
     app_free: [t.Void, [t.AppPtr]],
     app_reset_object_cache: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
-    is_mock_build: [t.bool, []]
+    is_mock_build: [t.bool, []],
+    app_set_additional_search_path: [t.Void, ['string', 'pointer', 'pointer']]
   },
   api: {
     app_account_info: base.helpers.Promisified(null, ref.refType(AccountInfo), (accInfoPtr) => {
@@ -80,6 +81,7 @@ module.exports = {
       });
     },
     app_reset_object_cache: base.helpers.Promisified(null, []),
-    is_mock_build: (lib, fn) => (() => { return fn(); })
+    is_mock_build: (lib, fn) => (() => { return fn(); }),
+    app_set_additional_search_path: base.helpers.Promisified(null, [])
   }
 };

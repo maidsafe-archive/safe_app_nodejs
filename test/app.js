@@ -37,7 +37,8 @@ describe('Smoke test', () => {
     const optionsObject = {
       log: false,
       registerScheme: false,
-      joinSchemes: ['proto']
+      joinSchemes: ['proto'],
+      configPath: '/home'
     };
     const app = createTestAppWithOptions(
       null,

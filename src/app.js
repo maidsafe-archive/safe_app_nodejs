@@ -28,7 +28,8 @@ class SAFEApp extends EventEmitter {
     super();
     this.options = Object.assign({
       log: true,
-      registerScheme: true
+      registerScheme: true,
+      configPath: null
     }, options);
     lib.init(this.options);
     this._appInfo = appInfo;
@@ -42,6 +43,7 @@ class SAFEApp extends EventEmitter {
       this[`_${key}`] = new api[key](this);
     });
 
+    // Init logging on the underlying library only if it wasn't done already
     if (this.options.log && !SAFEApp.logFilePath) {
       let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
       filename = `${filename}.log`;
@@ -49,6 +51,14 @@ class SAFEApp extends EventEmitter {
         .then(() => lib.app_output_log_path(filename))
         .then((logPath) => { SAFEApp.logFilePath = logPath; })
         .catch((err) => { console.error('Logger initilalisation failed', err); });
+    }
+
+    // Set additional search path for the config files if it was requested in
+    // the options. E.g. log.toml and crust.config files will be search
+    // in this additional search path.
+    if (this.options.configPath) {
+      lib.app_set_additional_search_path(this.options.configPath)
+        .catch((err) => { console.error('Faled to set additional config search path', err); });
     }
   }
 

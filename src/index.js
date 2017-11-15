@@ -24,6 +24,10 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
 * @param {Boolean=} log to enable or disable back end logging. Defaults to true
 * @param {String=} libPath path to the folder where the native libs can
 *        be found. Defaults to current folder path.
+* @param {String=} configPath set additional search path for the config files.
+*        E.g. `log.toml` and `crust.config` files will be also searched not only
+*        in the same folder where the native library is, but also in this
+*        additional search path.
 */
 
 /**
