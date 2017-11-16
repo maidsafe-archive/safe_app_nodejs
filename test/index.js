@@ -54,4 +54,33 @@ describe('External API', () => {
         .then((app) => should(app.auth.registered).be.true())
     );
   });
+
+  describe('fromAuthURI with URI variations', () => {
+    it('URI == safe-:<auth info>', () => {
+      const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe-:');
+      return fromAuthURI(appInfo, uri, null, { log: false })
+        .then((app) => should(app.auth.registered).be.true());
+    });
+
+    it('URI == <auth info>', () => {
+      const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, '');
+      return fromAuthURI(appInfo, uri, null, { log: false })
+        .then((app) => should(app.auth.registered).be.true());
+    });
+
+    it('fail with safe-<app info>://<auth info>', () => {
+      const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, '$&//$\'');
+      return should(fromAuthURI(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+    });
+
+    it('fail with safe-<auth info>', () => {
+      const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe-');
+      return should(fromAuthURI(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+    });
+
+    it('fail with safe:<auth info>', () => {
+      const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe:');
+      return should(fromAuthURI(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+    });
+  });
 });
