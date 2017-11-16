@@ -23,12 +23,8 @@ toc:
   - name: Mutable
   - MutableData
   - Entries
-  - Keys
-  - Values
   - EntryMutationTransaction
-  - MDataAction
   - Permissions
-  - PermissionsSet
 
   - name: Emulations
     description: Emulations and Abstractions on top of MData
@@ -37,10 +33,12 @@ toc:
 
   - name: Types
   # - Types
-  - SignKey
-  - KeyPair
+  - EncKeyPair
   - SecEncKey
   - PubEncKey
+  - SignKeyPair
+  - SecSignKey
+  - PubSignKey
   - CipherOpt
   - NameAndTag
   - ValueVersion
