@@ -58,7 +58,7 @@ const addSafeAuthProtocol = (response) => {
 * @private
 * Remove 'safe' protocol from URI in order to be able to decode it
 */
-const removeSafeProcol = (uri) => uri.replace(/^safe-/g, '');
+const removeSafeProcol = (uri) => uri.replace(/^safe-[^:]*:?/g, '');
 
 /**
 * The AuthInterface contains all authentication related
