@@ -1,6 +1,8 @@
 etc
 examples
 test
+docs
+coverage
 .eslintignore
 .eslintrc.json
 .travis.yml

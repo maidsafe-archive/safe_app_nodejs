@@ -1,4 +1,4 @@
-function makeError(code, name) {
+const makeError = (code, name) => {
   function E(message) {
     if (!Error.captureStackTrace) {
       this.stack = (new Error()).stack;
@@ -14,7 +14,7 @@ function makeError(code, name) {
   return E;
 }
 
-module.exports = function(code, msg) {
+module.exports = (code, msg) => {
   let cls = makeError(code, code);
   return new cls(msg);
 }

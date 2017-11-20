@@ -35,7 +35,7 @@ const makeShareMDataPermissions = nativeH.makeShareMDataPermissions;
 * characters or symbols which are not valid for a URL like '=' sign,
 * and making it lower case.
 */
-function genAppUri(str) {
+const genAppUri = (str) => {
   const urlSafeBase64 = (new Buffer(str))
                           .toString('base64')
                           .replace(/\+/g, '-') // Convert '+' to '-'
@@ -43,24 +43,22 @@ function genAppUri(str) {
                           .replace(/=+$/, '') // Remove ending '='
                           .toLowerCase();
   return `safe-${urlSafeBase64}`;
-}
+};
 
 /**
 * @private
 * Prefix the URI with 'safe-auth' protocol
 */
-function addSafeAuthProtocol(r) {
-  r.uri = `safe-auth:${r.uri}`; // eslint-disable-line no-param-reassign
-  return r;
-}
+const addSafeAuthProtocol = (response) => {
+  response.uri = `safe-auth:${response.uri}`; // eslint-disable-line no-param-reassign
+  return response;
+};
 
 /**
 * @private
 * Remove 'safe' protocol from URI in order to be able to decode it
 */
-function removeSafeProcol(uri) {
-  return uri.replace(/^safe-/g, '');
-}
+const removeSafeProcol = (uri) => uri.replace(/^safe-[^:]*:?/g, '');
 
 /**
 * The AuthInterface contains all authentication related

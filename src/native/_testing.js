@@ -8,7 +8,7 @@ module.exports = {
     test_create_app_with_access: [t.i32 , ['pointer', t.usize, t.AppPtr]],
   },
   api: {
-    test_create_app: function(lib, fn) {
+    test_create_app: (lib, fn) => {
       return () => {
         const appCon = ref.alloc(t.AppPtr);
         const ret = fn(appCon);
@@ -16,7 +16,7 @@ module.exports = {
         return appCon.deref();
       }
     },
-    test_create_app_with_access: function(lib, fn) {
+    test_create_app_with_access: (lib, fn) => {
       return (permissions) => {
         const appCon = ref.alloc(t.AppPtr);
         const ret = fn(permissions.buffer, permissions.length, appCon);

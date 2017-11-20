@@ -24,6 +24,10 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
 * @param {Boolean=} log to enable or disable back end logging. Defaults to true
 * @param {String=} libPath path to the folder where the native libs can
 *        be found. Defaults to current folder path.
+* @param {String=} configPath set additional search path for the config files.
+*        E.g. `log.toml` and `crust.config` files will be also searched not only
+*        in the same folder where the native library is, but also in this
+*        additional search path.
 */
 
 /**
@@ -52,14 +56,14 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
  *        // or wait for a result url
  *        ))
  */
-function initializeApp(appInfo, networkStateCallBack, options) {
+const initializeApp = (appInfo, networkStateCallBack, options) => {
   try {
     const app = autoref(new App(appInfo, networkStateCallBack, options));
     return Promise.resolve(app);
   } catch (e) {
     return Promise.reject(e);
   }
-}
+};
 
 /**
  * If you have received a response URI (which you are allowed
@@ -73,9 +77,8 @@ function initializeApp(appInfo, networkStateCallBack, options) {
  * @param {InitOptions=} options initialisation options
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  */
-function fromAuthURI(appInfo, authUri, networkStateCallBack, options) {
-  return App.fromAuthUri(appInfo, authUri, networkStateCallBack, options);
-}
+const fromAuthURI = (appInfo, authUri, networkStateCallBack, options) =>
+  App.fromAuthUri(appInfo, authUri, networkStateCallBack, options);
 
 module.exports = {
   VERSION: version,
