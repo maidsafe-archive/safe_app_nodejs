@@ -309,19 +309,21 @@ module.exports = {
     mdata_list_permission_sets: Promisified(null, [ref.refType(UserPermissionSetArray), t.usize], (args) => {
       const ptr = args[0];
       const len = args[1];
-      let arrPtr = ref.reinterpret(ptr, UserPermissionSet.size * len);
-      let arr = UserPermissionSetArray(arrPtr);
       const userPermList = [];
-      for (let i = 0; i < len ; i++) {
-        const currUserPerm = arr[i];
-        const permSet =  {
-          Read: currUserPerm.perm_set.Read,
-          Insert: currUserPerm.perm_set.Insert,
-          Update: currUserPerm.perm_set.Update,
-          Delete: currUserPerm.perm_set.Delete,
-          ManagePermissions: currUserPerm.perm_set.ManagePermissions
+      if (len > 0) {
+        let arrPtr = ref.reinterpret(ptr, UserPermissionSet.size * len);
+        let arr = UserPermissionSetArray(arrPtr);
+        for (let i = 0; i < len ; i++) {
+          const currUserPerm = arr[i];
+          const permSet =  {
+            Read: currUserPerm.perm_set.Read,
+            Insert: currUserPerm.perm_set.Insert,
+            Update: currUserPerm.perm_set.Update,
+            Delete: currUserPerm.perm_set.Delete,
+            ManagePermissions: currUserPerm.perm_set.ManagePermissions
+          }
+          userPermList.push({ signKey: currUserPerm.user_h, permSet });
         }
-        userPermList.push({ signKey: currUserPerm.user_h, permSet });
       }
       return userPermList;
     }),
@@ -337,26 +339,30 @@ module.exports = {
     mdata_list_keys: Promisified(toMDataInfo, [ref.refType(MDataKeysArray), t.usize], (args) => {
       const ptr = args[0];
       const len = args[1];
-      let arrPtr = ref.reinterpret(ptr, MDataKey.size * len);
-      let arr = MDataKeysArray(arrPtr);
       const keysList = [];
-      for (let i = 0; i < len ; i++) {
-        const currKey = arr[i];
-        const keyStr = ref.reinterpret(currKey.val_ptr, currKey.val_len, 0);
-        keysList.push(keyStr);
+      if (len > 0) {
+        let arrPtr = ref.reinterpret(ptr, MDataKey.size * len);
+        let arr = MDataKeysArray(arrPtr);
+        for (let i = 0; i < len ; i++) {
+          const currKey = arr[i];
+          const keyStr = ref.reinterpret(currKey.val_ptr, currKey.val_len, 0);
+          keysList.push(keyStr);
+        }
       }
       return keysList;
     }),
     mdata_list_values: Promisified(toMDataInfo, [ref.refType(MDataValuesArray), t.usize], (args) => {
       const ptr = args[0];
       const len = args[1];
-      let arrPtr = ref.reinterpret(ptr, MDataValue.size * len);
-      let arr = MDataValuesArray(arrPtr);
       const valuesList = [];
-      for (let i = 0; i < len ; i++) {
-        const currValue = arr[i];
-        const valueStr = ref.reinterpret(currValue.content_ptr, currValue.content_len, 0);
-        valuesList.push({ buf: valueStr, version: currValue.entry_version });
+      if (len > 0) {
+        let arrPtr = ref.reinterpret(ptr, MDataValue.size * len);
+        let arr = MDataValuesArray(arrPtr);
+        for (let i = 0; i < len ; i++) {
+          const currValue = arr[i];
+          const valueStr = ref.reinterpret(currValue.content_ptr, currValue.content_len, 0);
+          valuesList.push({ buf: valueStr, version: currValue.entry_version });
+        }
       }
       return valuesList;
     }),
