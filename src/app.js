@@ -28,7 +28,8 @@ class SAFEApp extends EventEmitter {
     super();
     this.options = Object.assign({
       log: true,
-      registerScheme: true
+      registerScheme: true,
+      configPath: null
     }, options);
     lib.init(this.options);
     this._appInfo = appInfo;
@@ -42,6 +43,7 @@ class SAFEApp extends EventEmitter {
       this[`_${key}`] = new api[key](this);
     });
 
+    // Init logging on the underlying library only if it wasn't done already
     if (this.options.log && !SAFEApp.logFilePath) {
       let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
       filename = `${filename}.log`;
@@ -49,6 +51,14 @@ class SAFEApp extends EventEmitter {
         .then(() => lib.app_output_log_path(filename))
         .then((logPath) => { SAFEApp.logFilePath = logPath; })
         .catch((err) => { console.error('Logger initilalisation failed', err); });
+    }
+
+    // Set additional search path for the config files if it was requested in
+    // the options. E.g. log.toml and crust.config files will be search
+    // in this additional search path.
+    if (this.options.configPath) {
+      lib.app_set_additional_search_path(this.options.configPath)
+        .catch((err) => { console.error('Faled to set additional config search path', err); });
     }
   }
 
@@ -147,6 +157,7 @@ class SAFEApp extends EventEmitter {
               const service = serviceBuffer.buf.toString();
 
               if (service.length < 1) {
+                // this means the service was soft-deleted
                 const error = new Error();
                 error.code = -106;
                 throw error;
@@ -172,31 +183,25 @@ class SAFEApp extends EventEmitter {
               if (err.code === -305 || err.code === -301) {
                 let newPath;
                 if (path[path.length - 1] === '/') {
+                  // try with appending the index.html at the end then
                   newPath = `${path}${consts.INDEX_HTML}`;
-                } else if (path[0] === '/') {
-                  // directly try the non-slash version
-                  return emulation.fetch(path.slice(1, path.length))
-                  .catch((e) => {
-                    // NOTE: This catch block handles the cases where a user intends/
-                    // to fetch a path without index.html
-                    // For clarification, comment out lines 132 through 143/
-                    // then run mocha in ../test/browsing.js to see which/
-                    // cases fail.
-                    const pathArray = path.split('/');
-                    if (pathArray[pathArray.length - 1] === consts.INDEX_HTML) {
-                      pathArray.pop();
-                      return emulation.fetch(pathArray.join('/'));
-                    }
-                    return Promise.reject(e);
-                  });
-                }
-
-                if (newPath) {
-                  // try the newly created path
                   return emulation.fetch(newPath).catch((e) => {
                     // and the version without the leading slash
                     if (e.code === -305 || e.code === -301) {
                       return emulation.fetch(newPath.slice(1, newPath.length));
+                    }
+                    return Promise.reject(e);
+                  });
+                } else if (path[0] === '/') {
+                  // directly try the non-slash version
+                  return emulation.fetch(path.slice(1, path.length))
+                  .catch((e) => {
+                    // This catch block handles the cases where a user intends
+                    // to fetch a path without index.html
+                    const pathArray = path.split('/');
+                    if (pathArray[pathArray.length - 1] === consts.INDEX_HTML) {
+                      pathArray.pop();
+                      return emulation.fetch(pathArray.join('/'));
                     }
                     return Promise.reject(e);
                   });
@@ -240,31 +245,64 @@ class SAFEApp extends EventEmitter {
   * @private
   * Set the new network state based on the state code provided.
   *
-  * @param {String} state
+  * @param {Number} state
   */
   set networkState(state) {
-    switch (state) {
-      case consts.NET_STATE_INIT:
-        this._networkState = 'Init';
-        break;
-      case consts.NET_STATE_DISCONNECTED:
-        this._networkState = 'Disconnected';
-        break;
-      case consts.NET_STATE_CONNECTED:
-        this._networkState = 'Connected';
-        break;
-      case consts.NET_STATE_UNKNOWN:
-      default:
-        this._networkState = 'Unknown';
-    }
+    this._networkState = state;
   }
 
   /**
-  * The current Network state
-  * @returns {String} of latest state
+  * Textual representation of the current network connection state.
+  *
+  * @returns {String} current network connection state
   */
   get networkState() {
-    return this._networkState;
+    // Although it should never happen, if the state code is invalid
+    // we return the current network conn state as 'Unknown'.
+    let currentState = 'Unknown';
+    switch (this._networkState) {
+      case consts.NET_STATE_INIT:
+        currentState = 'Init';
+        break;
+      case consts.NET_STATE_DISCONNECTED:
+        currentState = 'Disconnected';
+        break;
+      case consts.NET_STATE_CONNECTED:
+        currentState = 'Connected';
+        break;
+      default:
+        break;
+    }
+    return currentState;
+  }
+
+  /**
+  * Returns true if current network connection state is INIT.
+  * This is state means the library has been initialised but there is no
+  * connection made with the network yet.
+  *
+  * @returns {Boolean}
+  */
+  isNetStateInit() {
+    return this._networkState === consts.NET_STATE_INIT;
+  }
+
+  /**
+  * Returns true if current network connection state is CONNECTED.
+  *
+  * @returns {Boolean}
+  */
+  isNetStateConnected() {
+    return this._networkState === consts.NET_STATE_CONNECTED;
+  }
+
+  /**
+  * Returns true if current network connection state is DISCONNECTED.
+  *
+  * @returns {Boolean}
+  */
+  isNetStateDisconnected() {
+    return this._networkState === consts.NET_STATE_DISCONNECTED;
   }
 
   /**
@@ -314,15 +352,9 @@ class SAFEApp extends EventEmitter {
   * Called from the native library whenever the network state
   * changes.
   */
-  _networkStateUpdated(uData, result, newState) {
+  _networkStateUpdated(userData, newState) {
     const prevState = this.networkState;
-    if (result.error_code !== 0) {
-      console.error('An error was reported from network state observer: ', result.error_code, result.error_description);
-      this.networkState = consts.NET_STATE_UNKNOWN;
-    } else {
-      this.networkState = newState;
-    }
-
+    this.networkState = newState;
     this.emit('network-state-updated', this.networkState, prevState);
     this.emit(`network-state-${this.networkState}`, prevState);
     if (this._networkStateCallBack) {
@@ -332,12 +364,12 @@ class SAFEApp extends EventEmitter {
 
   /**
   * Reconnect to the metwork
-  * Must be invoked when the client decides to connect back after the connection is disconnected.
+  * Must be invoked when the client decides to connect back after the connection was lost.
   */
   reconnect() {
-    return lib.app_reconnect(this.connection);
+    return lib.app_reconnect(this.connection)
+      .then(() => this._networkStateUpdated(null, consts.NET_STATE_CONNECTED));
   }
-
 
   /**
   * @private
@@ -350,6 +382,19 @@ class SAFEApp extends EventEmitter {
     lib.app_free(app.connection);
   }
 
+  /**
+  * Resets the object cache kept by the underlyging library.
+  */
+  clearObjectCache() {
+    return lib.app_reset_object_cache(this.connection);
+  }
+
+  /**
+  * Retuns true if the underlyging library was compiled against mock-routing.
+  */
+  isMockBuild() {
+    return lib.is_mock_build();
+  }
 }
 
 SAFEApp.logFilename = null;

@@ -11,7 +11,7 @@ const SEWriteHandle = t.ObjectHandle;
 const SEReadHandle = t.ObjectHandle;
 
 
-function translateXorName(appPtr, str) {
+const translateXorName = (appPtr, str) => {
   let name = str;
   if (str.buffer) {
     if (str.buffer.buffer) {
@@ -29,7 +29,7 @@ function translateXorName(appPtr, str) {
   return [appPtr, name]
 }
 
-function copyFromRefArray(refArray){
+const copyFromRefArray = (refArray) => {
   let target = [];
   for (var i = 0; i < refArray.length; i++) {
     target.push(refArray[i])

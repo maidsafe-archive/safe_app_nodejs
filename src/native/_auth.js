@@ -5,7 +5,11 @@ const ref = require('ref');
 const Struct = require('ref-struct');
 const base = require('./_base.js');
 const makeFfiError = require('./_error.js');
+const { helpersToExport, types: MDtypes } = require('./_mutable.js');
 
+const readMDataInfoPtr = helpersToExport.readMDataInfoPtr;
+const MDataInfo = MDtypes.MDataInfo;
+const MDataInfoPtr = MDtypes.MDataInfoPtr;
 const t = base.types;
 const AppPtr = t.AppPtr;
 const helpers = base.helpers;
@@ -17,17 +21,9 @@ const AppExchangeInfo = Struct({
   vendor: 'string'
 });
 
-const PermissionSet = Struct({
-  Read: t.bool,
-  Insert: t.bool,
-  Update: t.bool,
-  Delete: t.bool,
-  ManagePermissions: t.bool
-});
-
 const ContainerPermissions = Struct({
   cont_name: 'string',
-  access: PermissionSet
+  access: t.PermissionSet
 });
 
 const ContainerPermissionsArray = new ArrayType(ContainerPermissions);
@@ -36,7 +32,7 @@ const ContainerPermissionsArray = new ArrayType(ContainerPermissions);
 const ShareMData = Struct({
   type_tag: t.u64,
   name: t.XOR_NAME,
-  access: PermissionSet
+  access: t.PermissionSet
 });
 
 const ShareMDataArray = new ArrayType(ShareMData);
@@ -67,56 +63,76 @@ const ShareMDataReq = Struct({
 });
 
 const AppKeys = Struct({
-  // /// Owner signing public key
+  /// Owner signing public key
   // pub owner_key: [u8; sign::PUBLICKEYBYTES],
   owner_key: t.KEYBYTES,
-  // /// Data symmetric encryption key
+  /// Data symmetric encryption key
   // pub enc_key: [u8; secretbox::KEYBYTES],
   enc_key: t.KEYBYTES,
-  // /// Asymmetric sign public key.
-  // ///
-  // /// This is the identity of the App in the Network.
+  /// Asymmetric sign public key.
+  /// This is the identity of the App in the Network.
   // pub sign_pk: [u8; sign::PUBLICKEYBYTES],
   sign_pk: t.KEYBYTES,
-  // /// Asymmetric sign private key.
+  /// Asymmetric sign private key.
   // pub sign_sk: [u8; sign::SECRETKEYBYTES],
   sign_sk: t.SIGN_SECRETKEYBYTES,
-  // /// Asymmetric enc public key.
+  /// Asymmetric enc public key.
   // pub enc_pk: [u8; box_::PUBLICKEYBYTES],
   enc_pk: t.KEYBYTES,
-  // /// Asymmetric enc private key.
+  /// Asymmetric enc private key.
   // pub enc_sk: [u8; box_::SECRETKEYBYTES],
   enc_sk: t.KEYBYTES
 })
 
 const AccessContInfo = Struct({
-  // /// ID
+  /// ID
   // pub id: [u8; XOR_NAME_LEN],
   id: t.XOR_NAME,
-  // /// Type tag
+  /// Type tag
   // pub tag: u64,
   tag: t.u64,
-  // /// Nonce
+  /// Nonce
   // pub nonce: [u8; secretbox::NONCEBYTES],
   nonce: t.NONCEBYTES
+});
 
+const ContainerInfo = Struct({
+  /// Container name as UTF-8 encoded null-terminated string.
+  name: 'string',
+  /// Container's `MDataInfo`
+  mdata_info: MDataInfo,
+  /// App's permissions in the container.
+  permissions: t.PermissionSet
+});
+
+const ContainerInfoArray = new ArrayType(ContainerInfo);
+
+const AccessContainerEntry = Struct({
+  /// Pointer to the array of `ContainerInfo`.
+  ptr: ContainerInfoArray,
+  /// Size of the array.
+  len: t.usize,
+  /// Internal field used by rust memory allocator.
+  cap: t.usize
 });
 
 const AuthGranted = Struct({
+  /// The access keys.
   app_keys: AppKeys,
+  /// Access container info
   access_container: AccessContInfo,
-  // /// Crust's bootstrap config
-  //pub bootstrap_config_ptr: *mut u8,
+  /// Access container entry
+  access_container_entry: AccessContainerEntry,
+
+  /// Crust's bootstrap config
   bootstrap_config_ptr: t.u8Pointer,
-  // /// `bootstrap_config`'s length
-  //pub bootstrap_config_len: usize,
+  /// `bootstrap_config`'s length
   bootstrap_config_len: t.usize,
-  // /// Used by Rust memory allocator
-  //pub bootstrap_config_cap: usize,
+  /// Used by Rust memory allocator
   bootstrap_config_cap: t.usize
 });
 
-function makeAppInfo(appInfo) {
+const makeAppInfo = (appInfo) => {
   return new AppExchangeInfo({
     id: appInfo.id,
     scope: appInfo.scope || ref.NULL,
@@ -125,29 +141,15 @@ function makeAppInfo(appInfo) {
   });
 }
 
-function translateXorName(str) {
+const translateXorName = (str) => {
   const b = new Buffer(str);
   if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
   return t.XOR_NAME(b);
 }
 
-function makePermissionsSet(perms) {
-  const permsObj = new PermissionSet({
-    Read: false,
-    Insert: false,
-    Update: false,
-    Delete: false,
-    ManagePermissions: false
-  });
-  perms.map((x) => {
-    permsObj[x] = true;
-  });
-  return permsObj;
-}
-
-function makePermissions(perms) {
+const makePermissions = (perms) => {
   return new ContainerPermissionsArray(Object.getOwnPropertyNames(perms).map((key) => {
-    const permArray = makePermissionsSet(perms[key]);
+    const permArray = helpers.makePermissionSet(perms[key]);
     return ContainerPermissions({
       cont_name: key,
       access: permArray
@@ -155,9 +157,9 @@ function makePermissions(perms) {
   }));
 }
 
-function makeShareMDataPermissions(permissions) {
+const makeShareMDataPermissions = (permissions) => {
   return new ShareMDataArray(permissions.map((perm) => {
-    const permsArray = makePermissionsSet(perm.perms);
+    const permsArray = helpers.makePermissionSet(perm.perms);
     return ShareMData({
       type_tag: perm.type_tag,
       name: translateXorName(perm.name),
@@ -166,7 +168,7 @@ function makeShareMDataPermissions(permissions) {
   }));
 }
 
-function remapEncodeValues(resp) {
+const remapEncodeValues = (resp) => {
   return {
     'req_id': resp[0],
     'uri': helpers.fromCString(resp[1])
@@ -199,12 +201,8 @@ module.exports = {
                       'pointer', // o_revoked: extern "C" fn(*mut c_void),
                       'pointer'  // o_err: extern "C" fn(*mut c_void, i32, u32)
                       ] ],
-    // access container:
-    // app: *const App, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32, *const ContainerPermissions, usize))
     access_container_fetch: [t.Void, [AppPtr, 'pointer', 'pointer']],
-    // app: *const App, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32)
     access_container_refresh_access_info: [t.Void, [AppPtr, 'pointer', 'pointer']],
-    // app: *const App, name: FfiString, user_data: *mut c_void, o_cb: extern "C" fn(*mut c_void, i32, MDataInfoHandle)
     access_container_get_container_mdata_info: [t.Void, [AppPtr, 'string', 'pointer', 'pointer']],
   },
   helpers: {
@@ -232,36 +230,36 @@ module.exports = {
       return contsPerms;
     }),
     access_container_refresh_access_info: helpers.Promisified(),
-    access_container_get_container_mdata_info: helpers.Promisified((app, str) =>
-      [app, str], 'pointer'),
+    access_container_get_container_mdata_info: helpers.Promisified(null, MDataInfoPtr, readMDataInfoPtr),
     encode_containers_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_auth_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_share_mdata_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_unregistered_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
-    decode_ipc_msg: function(lib, fn) {
-      return (function(str) {
-        return new Promise(function(resolve, reject) {
+    decode_ipc_msg: (lib, fn) => {
+      return ((str) => {
+        return new Promise((resolve, reject) => {
           fn.async(str,
                    ref.NULL,
-                   ffi.Callback('void', [t.VoidPtr, 'uint32', ref.refType(AuthGranted)], function(user_data, req_id, authGranted) {
+                   ffi.Callback('void', [t.VoidPtr, 'uint32', ref.refType(AuthGranted)], (user_data, req_id, authGranted) => {
                       resolve(["granted", authGranted])
                    }),
-                   ffi.Callback('void', [t.VoidPtr, 'uint32', t.u8Pointer, t.usize], function(user_data, req_id, connUri, connUriLen) {
+                   ffi.Callback('void', [t.VoidPtr, 'uint32', t.u8Pointer, t.usize], (user_data, req_id, connUri, connUriLen) => {
                       resolve(["unregistered", new Buffer(ref.reinterpret(connUri, connUriLen, 0))])
                    }),
-                   ffi.Callback('void', [t.VoidPtr, 'uint32'], function(user_data, req_id) {
+                   ffi.Callback('void', [t.VoidPtr, 'uint32'], (user_data, req_id) => {
                       resolve(["containers", req_id])
                    }),
-                   ffi.Callback('void', [t.VoidPtr, 'uint32'], function(user_data, req_id) {
+                   ffi.Callback('void', [t.VoidPtr, 'uint32'], (user_data, req_id) => {
                       resolve(["share_mdata", req_id])
                    }),
-                   ffi.Callback('void', [t.VoidPtr], function(user_data) {
+                   ffi.Callback('void', [t.VoidPtr], (user_data) => {
                       resolve(["revoked"])
                    }),
-                   ffi.Callback('void', [t.VoidPtr, t.FfiResult, 'uint32'], function(user_data, result, req_id) {
+                   ffi.Callback('void', [t.VoidPtr, t.FfiResultPtr, 'uint32'], (user_data, resultPtr, req_id) => {
+                      const result = helpers.makeFfiResult(resultPtr);
                       reject(makeFfiError(result.error_code, result.error_description))
                    }),
-                   function () {}
+                   () => {}
               )
         })
       })

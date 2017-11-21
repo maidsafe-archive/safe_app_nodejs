@@ -5,8 +5,7 @@ const inTesting = (process.env.NODE_ENV || '').match(/dev|development|testing|te
 const TAG_TYPE_DNS = 15001;
 const TAG_TYPE_WWW = 15002;
 
-const NET_STATE_UNKNOWN = -100;
-const NET_STATE_INIT = -99;
+const NET_STATE_INIT = -100;
 const NET_STATE_DISCONNECTED = -1;
 const NET_STATE_CONNECTED = 0;
 
@@ -48,7 +47,7 @@ const NET_STATE_CONNECTED = 0;
 * the permissions in the `permissionSet` provided will be granted to anyone
 * rather to a specific user's/aplication's sign key.
 *
-* @param {Number} MD_METADATA_KEY MutableData's entry key where its metadata is stored.
+* @param {String} MD_METADATA_KEY MutableData's entry key where its metadata is stored.
 * The MutableData's metadata can be set either when invoking the `quickSetup`
 * function or by invking the `setMetadata` function.
 * The metadata is stored as an encoded entry in the MutableData which key
@@ -58,6 +57,15 @@ const NET_STATE_CONNECTED = 0;
 * application has requested mutation permissions on a MutableData,
 * displaying this information to the user, so the user can make a better
 * decision to either allow or deny such a request based on it.
+*
+* @param {Number} MD_ENTRIES_EMPTY Represents an empty set of MutableData's entries.
+* This can be used when invoking the `put` function of the MutableData API to
+* signal that it should be committed to the network with an empty set of entries.
+*
+* @param {Number} MD_PERMISSION_EMPTY Represents an empty set of MutableData's permissions.
+* This can be used when invoking the `put` function of the MutableData API to
+* signal that it should be committed to the network with an empty set of permissions.
+*
 */
 const pubConsts = {
   NFS_FILE_MODE_OVERWRITE: 1,
@@ -67,6 +75,8 @@ const pubConsts = {
   NFS_FILE_END: 0,
   USER_ANYONE: 0,
   MD_METADATA_KEY: '_metadata',
+  MD_ENTRIES_EMPTY: 0,
+  MD_PERMISSION_EMPTY: 0,
 };
 
 const LIB_FILENAME = {
@@ -90,7 +100,6 @@ module.exports = {
   TAG_TYPE_DNS,
   TAG_TYPE_WWW,
 
-  NET_STATE_UNKNOWN,
   NET_STATE_INIT,
   NET_STATE_DISCONNECTED,
   NET_STATE_CONNECTED,

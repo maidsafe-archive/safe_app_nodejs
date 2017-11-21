@@ -31,16 +31,34 @@ const makeShareMDataPermissions = nativeH.makeShareMDataPermissions;
 
 /**
 * @private
-* Convert a string into a base64 format and remove
-* characters or symbols which are not valid for a URL like '=' sign.
+* Generates the app's URI converting the string into a base64 format, removing
+* characters or symbols which are not valid for a URL like '=' sign,
+* and making it lower case.
 */
-function urlsafeBase64(str) {
-  return (new Buffer(str))
-          .toString('base64')
-              .replace(/\+/g, '-') // Convert '+' to '-'
-              .replace(/\//g, '_') // Convert '/' to '_'
-              .replace(/=+$/, ''); // Remove ending '='
-}
+const genAppUri = (str) => {
+  const urlSafeBase64 = (new Buffer(str))
+                          .toString('base64')
+                          .replace(/\+/g, '-') // Convert '+' to '-'
+                          .replace(/\//g, '_') // Convert '/' to '_'
+                          .replace(/=+$/, '') // Remove ending '='
+                          .toLowerCase();
+  return `safe-${urlSafeBase64}`;
+};
+
+/**
+* @private
+* Prefix the URI with 'safe-auth' protocol
+*/
+const addSafeAuthProtocol = (response) => {
+  response.uri = `safe-auth:${response.uri}`; // eslint-disable-line no-param-reassign
+  return response;
+};
+
+/**
+* @private
+* Remove 'safe' protocol from URI in order to be able to decode it
+*/
+const removeSafeProcol = (uri) => uri.replace(/^safe-[^:]*:?/g, '');
 
 /**
 * The AuthInterface contains all authentication related
@@ -76,7 +94,7 @@ class AuthInterface {
     const opts = this.app.options;
     let scheme;
     if (opts.registerScheme) {
-      scheme = `safe-${urlsafeBase64(appInfo.id).toLowerCase()}`;
+      scheme = genAppUri(appInfo.id);
     }
     if (opts.joinSchemes && opts.joinSchemes.length > 0) {
       scheme = scheme ? [scheme].concat(opts.joinSchemes) : opts.joinSchemes;
@@ -127,7 +145,8 @@ class AuthInterface {
       containers: perm,
       containers_len: perm.length,
       containers_cap: perm.length
-    }).ref());
+    }).ref())
+    .then(addSafeAuthProtocol);
   }
 
   /**
@@ -157,7 +176,8 @@ class AuthInterface {
       app: appInfo,
       mdata: mdatasPerms,
       mdata_len: mdatasPerms.length
-    }).ref());
+    }).ref())
+    .then(addSafeAuthProtocol);
   }
 
   /**
@@ -169,7 +189,8 @@ class AuthInterface {
   */
   /* eslint-disable class-methods-use-this */
   genConnUri() {
-    return lib.encode_unregistered_req();
+    return lib.encode_unregistered_req()
+      .then(addSafeAuthProtocol);
   }
 
   /**
@@ -199,7 +220,8 @@ class AuthInterface {
       containers: ctnrs,
       containers_len: ctnrs.length,
       containers_cap: ctnrs.length
-    }).ref());
+    }).ref())
+    .then(addSafeAuthProtocol);
   }
 
   /**
@@ -284,15 +306,12 @@ class AuthInterface {
 
   /**
   * Create a new authenticated or unregistered session using the provided IPC response.
-  * @arg {String} responseUri the IPC response string given
+  * @arg {String} uri the IPC response string given
   * @returns {Promise<SAFEApp>} the given app instance with a newly setup and
   *          authenticated session.
   */
-  loginFromURI(responseUri) {
-    // FIXME: this is a temporary patch to overcome an issue with some OS,
-    // like Fedora, where the URI returned has '/' characters after the ':'
-    // making the URI invalid for decoding.
-    const sanitisedUri = responseUri.replace(/:\/+/g, ':'); // Convert a substring with ':' followed by any number of '/' to ':'
+  loginFromURI(uri) {
+    const sanitisedUri = removeSafeProcol(uri);
     return lib.decode_ipc_msg(sanitisedUri).then((resp) => {
       const ipcMsgType = resp[0];
       // we handle 'granted', 'unregistered', 'containers' and 'share_mdata' types

@@ -37,7 +37,8 @@ describe('Smoke test', () => {
     const optionsObject = {
       log: false,
       registerScheme: false,
-      joinSchemes: ['proto']
+      joinSchemes: ['proto'],
+      configPath: '/home'
     };
     const app = createTestAppWithOptions(
       null,
@@ -64,10 +65,24 @@ describe('Smoke test', () => {
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
-  it('creates registered for testing', function testingCreated() {
-    this.timeout(20000);
+  it('creates registered for testing', () => {
     const app = createAuthenticatedTestApp();
     should(app.auth.registered).be.true();
+  }).timeout(20000);
+
+  it('clears object cache invalidating objects', () => {
+    const app = createAuthenticatedTestApp();
+    return app.mutableData.newMutation()
+      .then((mut) => should(mut.insert('key1', 'value1')).be.fulfilled()
+        .then(() => should(app.clearObjectCache()).be.fulfilled())
+        .then(() => should(mut.insert('key2', 'value2')).be.rejectedWith('Invalid MutableData entry actions handle'))
+      )
+      .then(() => should(app.mutableData.newMutation()).be.fulfilled());
+  }).timeout(20000);
+
+  it('validate is mock build', () => {
+    const app = createTestApp();
+    should(app.isMockBuild()).be.true();
   });
 
   it('should build an alternative if there is a scope', () => {
@@ -107,15 +122,13 @@ describe('Smoke test', () => {
     should.throws(test);
   });
 
-  it('should return account information', async function test() { // eslint-disable-line prefer-arrow-callback
-    this.timeout(10000);
+  it('should return account information', async () => {
     const app = createAuthenticatedTestApp();
     const accInfo = await app.getAccountInfo();
     should(accInfo).have.properties(['mutations_done', 'mutations_available']);
-  });
+  }).timeout(10000);
 
-  it('should increment/decrement mutation values', async function test() { // eslint-disable-line prefer-arrow-callback
-    this.timeout(10000);
+  it('should increment/decrement mutation values', async () => {
     const app = createAuthenticatedTestApp();
     const accInfoBefore = await app.getAccountInfo();
     const idWriter = await app.immutableData.create();
@@ -126,12 +139,19 @@ describe('Smoke test', () => {
     const accInfoAfter = await app.getAccountInfo();
     should(accInfoAfter.mutations_done).be.equal(accInfoBefore.mutations_done + 1);
     should(accInfoAfter.mutations_available).be.equal(accInfoBefore.mutations_available - 1);
-  });
+  }).timeout(20000);
 
-  it('should throw error if getAccountInfo called on unregistered app', async function test() {
-    this.timeout(10000);
+  it('should throw error if getAccountInfo called on unregistered app', async () => {
     const app = h.createTestApp();
     await app.auth.loginFromURI(h.authUris.unregisteredUri);
     should(app.getAccountInfo()).be.rejected();
-  });
-});
+  }).timeout(10000);
+
+  it('returns boolean for network state', () => {
+    const app = createAuthenticatedTestApp();
+    should(app.isNetStateInit()).be.true();
+    should(app.isNetStateConnected()).be.false();
+    should(app.isNetStateDisconnected()).be.false();
+    should(app.networkState).be.equal('Init');
+  }).timeout(10000);
+}).timeout(15000);

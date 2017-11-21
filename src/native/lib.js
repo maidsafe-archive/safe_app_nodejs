@@ -22,7 +22,7 @@ ffi.init = (options) => {
     }
     lib = FFI.DynamicLibrary(path.join(options.libPath || dir, LIB_FILENAME), mode);
 
-    api.forEach(function(mod){
+    api.forEach((mod) => {
       if (!lib) {
         throw new Error('Native library not initialised');
       }
@@ -44,12 +44,20 @@ ffi.init = (options) => {
         }
       //   Object.assign(mappings, mod.api);
       }
+      if (mod.helpersToExport) {
+        for (const key in mod.helpersToExport) {
+          let fn = mod.helpersToExport[key];
+          fn.fn_name = "[mapped]" + key;
+          ffi[key] = fn;
+        }
+      }
     });
     // FIXME: As long as `safe-app` doesn't expose system uri itself, we'll
     // patch it directly on it. This should later move into its own sub-module
     // and take care of mobile support for other platforms, too.
     require('./_system_uri')(ffi, options);
   } catch(e) {
+    console.error("ERROR: ", e)
     throw makeFfiError(errConst.FAILED_TO_LOAD_LIB.code,
         errConst.FAILED_TO_LOAD_LIB.msg(e.toString()));
   }

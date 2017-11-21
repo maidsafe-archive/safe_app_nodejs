@@ -3,9 +3,7 @@ const t = require('../../native/types');
 const nativeH = require('../../native/helpers');
 const { pubConsts: CONSTANTS } = require('../../consts');
 
-function isString(arg) {
-  return typeof arg === 'string' || (arg.toString ? arg.toString() === '[object String]' : false);
-}
+const isString = (arg) => typeof arg === 'string' || (arg.toString ? arg.toString() === '[object String]' : false);
 
 /**
 * A NFS-style File

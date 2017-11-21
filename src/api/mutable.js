@@ -2,67 +2,8 @@ const h = require('../helpers');
 const lib = require('../native/lib');
 const t = require('../native/types');
 const emulations = require('./emulations');
-const { SignKey } = require('./crypto');
+const { PubSignKey } = require('./crypto');
 const { pubConsts: CONSTANTS } = require('../consts');
-
-/**
-* @private
-* Create a MDataAction from its string representation
-* @param {String} action
-* @return {MDataAction}
-*/
-function toAction(action) {
-  const a = t.MDataAction.get(action);
-  if (!a) throw Error(`'${action}' is not a valid action!`);
-  return a;
-}
-
-/**
-* A Set of Permissions per Sign key. Each action might either be
-* allowed or denied
-*/
-class PermissionsSet extends h.NetworkObject {
-
-  /**
-  * Set the action as allowed
-  * @param {String} action the action to be set as allowed
-  * @returns {Promise}
-  */
-  setAllow(action) {
-    return lib.mdata_permission_set_allow(this.app.connection,
-          this.ref, toAction(action));
-  }
-
-  /**
-  * Set the action as denied
-  * @param {String} action the action to be set as denied
-  * @returns {Promise}
-  */
-  setDeny(action) {
-    return lib.mdata_permission_set_deny(this.app.connection,
-          this.ref, toAction(action));
-  }
-
-  /**
-  * Remove action from the set
-  * @param {String} action the action to clear permissions on
-  * @returns {Promise}
-  */
-  clear(action) {
-    return lib.mdata_permission_set_clear(this.app.connection,
-          this.ref, toAction(action));
-  }
-
-  /**
-  * @private
-  * used by autoref to clean the reference
-  * @param {SAFEApp} app
-  * @param {handle} ref
-  */
-  static free(app, ref) {
-    return lib.mdata_permission_set_free(app.connection, ref);
-  }
-}
 
 /**
 * Holds the permissions of a MutableData object
@@ -89,23 +30,21 @@ class Permissions extends h.NetworkObject {
 
   /**
   * Lookup the permissions of a specifc key
-  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
-  * @returns {Promise<PermissionSet>} the permission set for that key
+  * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
+  * @returns {Promise<Object>} the permission set for that key
   */
   getPermissionSet(signKey) {
-    return lib.mdata_permissions_get(this.app.connection, this.ref,
-                                                      signKey
-                                                        ? signKey.ref
-                                                        : CONSTANTS.USER_ANYONE)
-        .then((c) => h.autoref(new PermissionsSet(this.app, c)));
+    return lib.mdata_permissions_get(this.app.connection,
+                                     this.ref,
+                                     signKey ? signKey.ref : CONSTANTS.USER_ANYONE);
   }
 
   /**
   * Insert a new permission set mapped to a specifc key. Directly commits
   * to the network.
   * Requires 'ManagePermissions'-Permission for the app.
-  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to map to
-  * @param {PermissionSet} permissionSet the permission set to insert
+  * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to map to
+  * @param {Object} permissionSet the permission set to insert
   * @returns {Promise} once finished
   */
   insertPermissionSet(signKey, permissionSet) {
@@ -114,21 +53,20 @@ class Permissions extends h.NetworkObject {
                                         signKey
                                           ? signKey.ref
                                           : CONSTANTS.USER_ANYONE,
-                                        permissionSet.ref);
+                                        permissionSet);
   }
 
   /**
-  * Iterate over the entries, execute the function provided for each of entry,
-  * and return a promise that resolves once iteration is finished.
-  * @param {function(Buffer, ValueVersion)} fn the function to call
-  * @returns {Promise} resolves once the iteration is done
+  * Return the list of all associated permission sets.
+  * @returns {Promise<Array>} the list of permission sets
   */
-  forEach(fn) {
-    return lib.mdata_permissions_for_each(
-      this.app.connection,
-      this.ref,
-      (s, p) => fn(h.autoref(new SignKey(this.app, s)),
-                    h.autoref(new PermissionsSet(this.app, p))));
+  listPermissionSets() {
+    return lib.mdata_list_permission_sets(this.app.connection, this.ref)
+        .then((permSets) => permSets.map((userPermSet) =>
+          ({ signKey: new PubSignKey(this.app, userPermSet.signKey),
+            permSet: userPermSet.permSet
+          })
+        ));
   }
 
 }
@@ -285,100 +223,22 @@ class Entries extends h.NetworkObject {
 }
 
 /**
-* Represent the keys of a MutableData network object
-*/
-class Keys extends h.NetworkObject {
-
-  /**
-  * Get the total number of keys in the MutableData
-  * @returns {Promise<Number>} number of keys
-  */
-  len() {
-    return lib.mdata_keys_len(this.app.connection, this.ref);
-  }
-
-  /**
-  * Iterate over the keys, execute the function for each entry.
-  * @param {function(Buffer)} fn the function to call with the key in the buffer
-  * @returns {Promise} resolves once the iteration is done
-  */
-  forEach(fn) {
-    return lib.mdata_keys_for_each(this.app.connection, this.ref, fn);
-  }
-
-  /**
-  * @private
-  * used by autoref to clean the mdata keys reference
-  * @param {SAFEApp} app
-  * @param {handle} ref
-  */
-  static free(app, ref) {
-    return lib.mdata_keys_free(app.connection, ref);
-  }
-}
-
-/**
-* Represent the values of a MutableData network object
-*/
-class Values extends h.NetworkObject {
-
-  /**
-  * Get the total number of values in the MutableData
-  * @returns {Promise<Number>} number of values
-  */
-  len() {
-    return lib.mdata_values_len(this.app.connection, this.ref);
-  }
-
-  /**
-  * Iterate over the values, execute the function for each entry.
-  * @param {function(Buffer, ValueVersion)} fn the function to call
-  * @returns {Promise} resolves once the iteration is done
-  */
-  forEach(fn) {
-    return lib.mdata_values_for_each(this.app.connection, this.ref, fn);
-  }
-
-  /**
-  * @private
-  * used by autoref to clean the mdata values reference
-  * @param {SAFEApp} app
-  * @param {handle} ref
-  */
-  static free(app, ref) {
-    return lib.mdata_values_free(app.connection, ref);
-  }
-}
-
-
-/**
 * @typedef {Object} ValueVersion
 * @param {Buffer} buf the buffer with the value
 * @param {Number} version the version
 * Holds the informatation of a value of a MutableData
 */
 
-
 /**
 * @typedef {Object} NameAndTag
 * @param {Buffer} name - the XoR-name/address on the network
-* @param {Number} tag - the type tag
+* @param {Number} type_tag - the type tag
 */
 
 /**
 * Holds the reference to a MutableData
 */
 class MutableData extends h.NetworkObject {
-
-  /**
-  * @private
-  * used by autoref to clean the mutable data reference
-  * @param {SAFEApp} app
-  * @param {handle} ref
-  */
-  static free(app, ref) {
-    return lib.mdata_info_free(app.connection, ref);
-  }
 
   /**
   * Easily set up a newly (not yet created) MutableData with
@@ -404,6 +264,8 @@ class MutableData extends h.NetworkObject {
   *      }, 'My MutableData', 'To store my app\'s data'))
   */
   quickSetup(data, name, description) {
+    const pmSet = ['Insert', 'Update', 'Delete', 'ManagePermissions'];
+
     return this.app.mutableData.newEntries()
       .then((entries) => {
         if (!data) {
@@ -422,16 +284,11 @@ class MutableData extends h.NetworkObject {
           .then(() => entries);
       })
       .then((entries) => this.app.crypto.getAppPubSignKey()
-        .then((key) => this.app.mutableData.newPermissionSet()
-          .then((pmSet) =>
-            pmSet.setAllow('Insert')
-              .then(() => pmSet.setAllow('Update'))
-              .then(() => pmSet.setAllow('Delete'))
-              .then(() => pmSet.setAllow('ManagePermissions'))
-              .then(() => this.app.mutableData.newPermissions()
-                .then((pm) => pm.insertPermissionSet(key, pmSet)
-                  .then(() => this.put(pm, entries))))))
-        .then(() => this));
+        .then((key) => this.app.mutableData.newPermissions()
+            .then((pm) => pm.insertPermissionSet(key, pmSet)
+              .then(() => this.put(pm, entries))))
+      )
+      .then(() => this);
   }
 
   /**
@@ -471,7 +328,7 @@ class MutableData extends h.NetworkObject {
   * @returns {Promise<Key>} the encrypted entry key
   */
   encryptKey(key) {
-    return lib.mdata_info_encrypt_entry_key(this.app.connection, this.ref, key);
+    return lib.mdata_info_encrypt_entry_key(this.ref, key);
   }
 
   /**
@@ -483,7 +340,7 @@ class MutableData extends h.NetworkObject {
   * @returns {Promise<Value>} the encrypted entry value
   */
   encryptValue(value) {
-    return lib.mdata_info_encrypt_entry_value(this.app.connection, this.ref, value);
+    return lib.mdata_info_encrypt_entry_value(this.ref, value);
   }
 
   /**
@@ -494,7 +351,7 @@ class MutableData extends h.NetworkObject {
   * @returns {Promise<Value>} the decrypted value
   */
   decrypt(value) {
-    return lib.mdata_info_decrypt(this.app.connection, this.ref, value);
+    return lib.mdata_info_decrypt(this.ref, value);
   }
 
   /**
@@ -504,7 +361,10 @@ class MutableData extends h.NetworkObject {
   * @returns {Promise<NameAndTag>} the XoR-name and type tag
   */
   getNameAndTag() {
-    return lib.mdata_info_extract_name_and_type_tag(this.app.connection, this.ref);
+    return Promise.resolve({
+      name: this.ref.name,
+      type_tag: this.ref.type_tag
+    });
   }
 
   /**
@@ -527,15 +387,17 @@ class MutableData extends h.NetworkObject {
 
   /**
   * Commit this MutableData to the network.
-  * @param {Permission|null} permissions the permissions to create the mutable data with
-  * @param {Entries|null} entries data entries to create the mutable data with
+  * @param {Permission|CONSTANTS.MD_PERMISSION_EMPTY} permissions
+  * the permissions to create the mutable data with
+  * @param {Entries|CONSTANTS.MD_ENTRIES_EMPTY} entries
+  * data entries to create the mutable data with
   * @returns {Promise}
   */
   put(permissions, entries) {
     return lib.mdata_put(this.app.connection,
                           this.ref,
-                          permissions ? permissions.ref : 0,
-                          entries ? entries.ref : 0);
+                          permissions ? permissions.ref : CONSTANTS.MD_PERMISSION_EMPTY,
+                          entries ? entries.ref : CONSTANTS.MD_ENTRIES_EMPTY);
   }
 
 
@@ -549,21 +411,19 @@ class MutableData extends h.NetworkObject {
   }
 
   /**
-  * Get a Handle to the keys associated with this MutableData
-  * @returns {Promise<(Keys)>} the keys representation object
+  * Get a list with the keys contained in this MutableData
+  * @returns {Promise<(Array)>} the keys list
   */
   getKeys() {
-    return lib.mdata_list_keys(this.app.connection, this.ref)
-        .then((r) => h.autoref(new Keys(this.app, r)));
+    return lib.mdata_list_keys(this.app.connection, this.ref);
   }
 
   /**
-  * Get a Handle to the values associated with this MutableData
-  * @returns {Promise<(Values)>} the values representation object
+  * Get the list of values contained in this MutableData
+  * @returns {Promise<(Array)>} the list of values
   */
   getValues() {
-    return lib.mdata_list_values(this.app.connection, this.ref)
-        .then((r) => h.autoref(new Values(this.app, r)));
+    return lib.mdata_list_values(this.app.connection, this.ref);
   }
 
   /**
@@ -578,21 +438,20 @@ class MutableData extends h.NetworkObject {
   /**
   * Get a Handle to the permissions associated with this MutableData for
   * a specifc key
-  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to look up
+  * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to look up
   * @returns {Promise<(Permissions)>} the permissions set associated to the key
   */
   getUserPermissions(signKey) {
     return lib.mdata_list_user_permissions(this.app.connection, this.ref,
                                                       signKey
                                                         ? signKey.ref
-                                                        : CONSTANTS.USER_ANYONE)
-      .then((r) => h.autoref(new PermissionsSet(this.app, r, this)));
+                                                        : CONSTANTS.USER_ANYONE);
   }
 
   /**
   * Delete the permissions of a specifc key. Directly commits to the network.
   * Requires 'ManagePermissions'-Permission for the app.
-  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
+  * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
   * @param {Number} version the version successor, to confirm you are
   *        actually asking for the right one
   * @returns {Promise} once finished
@@ -609,7 +468,7 @@ class MutableData extends h.NetworkObject {
   /**
   * Set the permissions of a specifc key. Directly commits to the network.
   * Requires 'ManagePermissions'-Permission for the app.
-  * @param {SignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
+  * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
   * @param {PermissionSet} permissionSet the permission set to set to
   * @param {Number} version the version successor, to confirm you are
   *        actually asking for the right one
@@ -621,7 +480,7 @@ class MutableData extends h.NetworkObject {
                                           signKey
                                             ? signKey.ref
                                             : CONSTANTS.USER_ANYONE,
-                                          permissionSet.ref,
+                                          permissionSet || [],
                                           version);
   }
 
@@ -639,7 +498,15 @@ class MutableData extends h.NetworkObject {
   * @returns {Promise<(String)>} the serialilsed version of the MutableData
   */
   serialise() {
-    return lib.mdata_info_serialise(this.app.connection, this.ref);
+    return lib.mdata_info_serialise(this.ref);
+  }
+
+  /**
+  * Get serialised size of current MutableData
+  * @returns {Promise<(Number)>} the serialilsed size of the MutableData
+  */
+  getSerialisedSize() {
+    return lib.mdata_serialised_size(this.app.connection, this.ref);
   }
 
   /**
@@ -686,8 +553,8 @@ class MutableDataInterface {
   * @returns {Promise<MutableData>}
   */
   newRandomPrivate(typeTag) {
-    return lib.mdata_info_random_private(this.app.connection, typeTag)
-          .then((m) => h.autoref(new MutableData(this.app, m)));
+    return lib.mdata_info_random_private(typeTag)
+          .then((mDataInfo) => this.wrapMdata(mDataInfo));
   }
 
 
@@ -698,8 +565,8 @@ class MutableDataInterface {
   * @returns {Promise<MutableData>}
   */
   newRandomPublic(typeTag) {
-    return lib.mdata_info_random_public(this.app.connection, typeTag)
-          .then((m) => h.autoref(new MutableData(this.app, m)));
+    return lib.mdata_info_random_public(typeTag)
+          .then((mDataInfo) => this.wrapMdata(mDataInfo));
   }
 
   /**
@@ -712,20 +579,23 @@ class MutableDataInterface {
   * @returns {Promise<MutableData>}
   */
   newPrivate(name, typeTag, secKey, nonce) {
-    return lib.mdata_info_new_private(this.app.connection, name, typeTag, secKey, nonce)
-          .then((m) => h.autoref(new MutableData(this.app, m)));
+    return lib.mdata_info_new_private(name, typeTag, secKey, nonce)
+          .then((mDataInfo) => this.wrapMdata(mDataInfo));
   }
 
   /**
   * Initiate a mutuable data at the given address with public
   * access.
   * @param {Buffer|String}
-  * @param {Number} typeTag - the typeTag to use
+  * @param {Number} typeTag the typeTag to use
   * @returns {Promise<MutableData>}
   */
   newPublic(name, typeTag) {
-    return lib.mdata_info_new_public(this.app.connection, name, typeTag)
-          .then((m) => h.autoref(new MutableData(this.app, m)));
+    if (name.length !== 32) {
+      return Promise.reject(Error('XOR Names _must be_ 32 bytes long'));
+    }
+    const mDataInfo = lib.makeMDataInfoObj({ name, type_tag: typeTag });
+    return Promise.resolve(this.wrapMdata(mDataInfo));
   }
 
   /**
@@ -735,15 +605,6 @@ class MutableDataInterface {
   newPermissions() {
     return lib.mdata_permissions_new(this.app.connection)
         .then((r) => h.autoref(new Permissions(this.app, r)));
-  }
-
-  /**
-  * Create a new PermissionsSet object.
-  * @returns {Promise<PermissionsSet>}
-  */
-  newPermissionSet() {
-    return lib.mdata_permission_set_new(this.app.connection)
-        .then((c) => h.autoref(new PermissionsSet(this.app, c)));
   }
 
   /**
@@ -769,8 +630,8 @@ class MutableDataInterface {
   * @returns {Promise<MutableData>}
   */
   fromSerial(serial) {
-    return lib.mdata_info_deserialise(this.app.connection, serial)
-          .then((m) => h.autoref(new MutableData(this.app, m)));
+    return lib.mdata_info_deserialise(serial)
+        .then((mDataInfo) => this.wrapMdata(mDataInfo));
   }
 
   /**
@@ -778,11 +639,11 @@ class MutableDataInterface {
   * Helper to create a new autorefence MutableData for a given
   * mdata reference from the native layer
   *
-  * @param {handle} mdata - the native handle
+  * @param {handle} mDataInfo - the native handle
   * @returns {MutableData} - wrapped
   */
-  wrapMdata(mdata) {
-    return h.autoref(new MutableData(this.app, mdata));
+  wrapMdata(mDataInfo) {
+    return new MutableData(this.app, mDataInfo);
   }
 
 }
