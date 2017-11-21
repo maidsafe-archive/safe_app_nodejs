@@ -15,8 +15,6 @@ script:
 - yarn lint
 - yarn test-coverage
 - yarn publish-coverage
-before_deploy:
-- rm -f src/native/*.so
 deploy:
   provider: npm
   skip_cleanup: true
