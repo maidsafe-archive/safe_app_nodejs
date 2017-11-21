@@ -1,5 +1,14 @@
 # safe_app nodejs Change Log
 
+## 0.5.0
+
+- Add function to retrieve account information
+- Adapt to API changes from safe_client_libs to upgrade to latest version
+- Add functions to verify network connection state
+- Add API to manage signing keys (sign/verify functions included)
+- Automate npm publish process triggered upon tag push
+- Upgrade system_uri to v0.3.0
+
 ## 0.4.1
 
 - Expose Constants which can be used by Apps
