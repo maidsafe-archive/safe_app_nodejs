@@ -12,7 +12,7 @@ let isSysUriLibLoadErr = null;
 
 const init = (options) => {
   ffi = FFI.Library(path.join(options.libPath || dir, SYSTEM_URI_LIB_FILENAME), {
-    open: ["void", ['string', 'pointer', 'pointer'] ],
+    open_uri: ["void", ['string', 'pointer', 'pointer'] ],
     install: ["void", ['string', //bundle
       'string', //vendor
       'string', //name
@@ -43,7 +43,7 @@ const openUri = (uri) => {
   return new Promise((resolve,  reject) => {
     try {
       const cb = _handleError(resolve,  reject);
-      ffi.open(uri.uri || uri, ref.NULL, cb);
+      ffi.open_uri(uri.uri || uri, ref.NULL, cb);
     } catch (err) {
       return reject(err);
     }

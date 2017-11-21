@@ -50,7 +50,7 @@ describe('External API', () => {
         .then((app) => should(app.auth.registered).be.true())
     );
 
-    it.skip('should connect with authorised shared MD', () => fromAuthURI(appInfo, h.authUris.sharedMdataUri, null, { log: false })
+    it('should connect with authorised shared MD', () => fromAuthURI(appInfo, h.authUris.sharedMdataUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
   });
