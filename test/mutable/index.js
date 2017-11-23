@@ -4,8 +4,7 @@ const { pubConsts: CONSTANTS } = require('../../src/consts');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
-describe('Mutable Data', function test() { // eslint-disable-line prefer-arrow-callback
-  this.timeout(30000);
+describe('Mutable Data', () => {
   const app = createAuthenticatedTestApp();
   const TYPE_TAG = 15639;
   const TAG_TYPE_INVALID = '_invalid_tag';
@@ -98,7 +97,7 @@ describe('Mutable Data', function test() { // eslint-disable-line prefer-arrow-c
       const permissions = await app.mutableData.newPermissions();
       const signingKey = await app.crypto.getAppPubSignKey();
       await permissions.insertPermissionSet(signingKey, permissionSet);
-      await mutableData.put(permissions, entries).should.be.fulfilled();
+      should(mutableData.put(permissions, entries)).be.fulfilled();
     });
   });
 
@@ -319,4 +318,4 @@ describe('Mutable Data', function test() { // eslint-disable-line prefer-arrow-c
       throw new Error('Test Not Implemented');
     });
   });
-});
+}).timeout(30000);

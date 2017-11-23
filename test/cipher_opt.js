@@ -1,8 +1,7 @@
 const should = require('should');
 const h = require('./helpers');
 
-describe('CipherOpt', function test() {
-  this.timeout(15000);
+describe('CipherOpt', () => {
   const app = h.createAuthenticatedTestApp();
 
   it('provides a plain text cipher opt to write immutable structure', async () => {
@@ -43,4 +42,4 @@ describe('CipherOpt', function test() {
     const idData = await idReader.read();
     should(idData.toString()).equal(testString);
   });
-});
+}).timeout(15000);

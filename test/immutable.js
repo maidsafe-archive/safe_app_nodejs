@@ -56,14 +56,6 @@ describe('Immutable Data', () => {
       const idAddress = await idWriter.close(cipherOpt);
       should(idAddress.length).be.equal(32);
     });
-
-    it('provides a proxy function behaving same as close function, however it sets a plain text cipherOpt by default', async () => {
-      const testString = `test-${Math.random()}`;
-      const idWriter = await app.immutableData.create();
-      await idWriter.write(testString);
-      const idAddress = await idWriter.save();
-      should(idAddress.length).be.equal(32);
-    });
   });
 
   it('store address in a MD', () => {

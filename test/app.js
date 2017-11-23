@@ -134,11 +134,11 @@ describe('Smoke test', () => {
 
   it('returns safe_client_libs log path', async () => {
     const app = createAuthenticatedTestApp();
-    app.logPath().should.be.fulfilled();
+    should(app.logPath()).be.fulfilled();
   });
 
   it('logs in to netowrk from existing authUri', async () => {
-    h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri).should.be.fulfilled();
+    should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri)).be.fulfilled();
   });
 
   it('returns boolean for network state', () => {

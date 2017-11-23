@@ -4,8 +4,7 @@ const h = require('../helpers');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
-describe('Applying EntryMutationTransaction', function testContainer() {
-  this.timeout(30000);
+describe('Applying EntryMutationTransaction', () => {
   const app = createAuthenticatedTestApp();
   const TYPE_TAG = 15639;
   const TEST_ENTRIES = { key1: 'value1', key2: 'value2' };
@@ -333,4 +332,4 @@ describe('Applying EntryMutationTransaction', function testContainer() {
               })
           ))))
   );
-});
+}).timeout(30000);

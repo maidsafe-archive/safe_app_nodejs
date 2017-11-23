@@ -92,14 +92,6 @@ class Writer extends helpers.NetworkObject {
   }
 
   /**
-  * Proxy to `close`.
-  */
-  async save() {
-    const cipherOpt = await this.app.cipherOpt.newPlainText();
-    return this.close(cipherOpt);
-  }
-
-  /**
   * @private
   * free the reference of writer of the app on the native side.
   * used by the autoref feature

@@ -4,8 +4,7 @@ const { pubConsts: CONSTANTS } = require('../src/consts');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
-describe('NFS emulation', function testContainer() {
-  this.timeout(30000);
+describe('NFS emulation', () => {
   const app = createAuthenticatedTestApp();
   const TYPE_TAG = 15639;
 
@@ -105,4 +104,4 @@ describe('NFS emulation', function testContainer() {
         })
       ))
   );
-});
+}).timeout(30000);

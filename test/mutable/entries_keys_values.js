@@ -3,8 +3,7 @@ const h = require('../helpers');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
-describe('Mutable Data Entries', function testContainer() {
-  this.timeout(30000);
+describe('Mutable Data Entries', () => {
   const app = createAuthenticatedTestApp();
   const TYPE_TAG = 15639;
   const TEST_ENTRIES = { key1: 'value1', key2: 'value2' };
@@ -87,4 +86,4 @@ describe('Mutable Data Entries', function testContainer() {
         })
       )).then(() => done(), (err) => done(err)));
   });
-});
+}).timeout(30000);

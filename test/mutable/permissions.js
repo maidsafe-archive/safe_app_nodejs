@@ -4,8 +4,7 @@ const { pubConsts: CONSTANTS } = require('../../src/consts');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
-describe('Permissions', function testContainer() {
-  this.timeout(30000);
+describe('Permissions', () => {
   const app = createAuthenticatedTestApp();
   const TYPE_TAG = 15639;
   const TEST_ENTRIES = { key1: 'value1', key2: 'value2' };
@@ -25,7 +24,7 @@ describe('Permissions', function testContainer() {
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getPermissions())
         .then((perms) => perms.listPermissionSets()
           .then((permSets) => Promise.all(permSets.map((userPermSet) =>
-            m.delUserPermissions(userPermSet.signKey, 1).should.be.fulfilled()
+            should(m.delUserPermissions(userPermSet.signKey, 1)).be.fulfilled()
           )))
           .then(() => done(), (err) => done(err))
         )
@@ -36,22 +35,22 @@ describe('Permissions', function testContainer() {
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => m.getPermissions()
           .then((perm) => app.crypto.getAppPubSignKey()
-            .then((pk) => perm.getPermissionSet(pk).should.be.fulfilled())
+            .then((pk) => should(perm.getPermissionSet(pk)).be.fulfilled())
           )))
   );
 
   it('insert permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => m.getPermissions())
-        .then((perm) => perm.insertPermissionSet(CONSTANTS.USER_ANYONE,
-                                                 ['Delete']).should.be.fulfilled()))
+        .then((perm) => should(perm.insertPermissionSet(CONSTANTS.USER_ANYONE,
+                                                 ['Delete'])).be.fulfilled()))
   );
 
   it('get permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => m.getPermissions())
         .then((perm) => perm.insertPermissionSet(CONSTANTS.USER_ANYONE, ['Delete'])
-          .then(() => perm.getPermissionSet(CONSTANTS.USER_ANYONE).should.be.fulfilled())
+          .then(() => should(perm.getPermissionSet(CONSTANTS.USER_ANYONE)).be.fulfilled())
         ))
   );
 
@@ -109,17 +108,17 @@ describe('Permissions', function testContainer() {
 
   it('get user permissions for `Anyone`', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
-        .then(() => m.getUserPermissions(CONSTANTS.USER_ANYONE).should.be.rejected())
+        .then(() => should(m.getUserPermissions(CONSTANTS.USER_ANYONE)).be.rejected())
         .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE, ['Insert'], 1))
-        .then(() => m.getUserPermissions(CONSTANTS.USER_ANYONE).should.be.fulfilled())
+        .then(() => should(m.getUserPermissions(CONSTANTS.USER_ANYONE)).be.fulfilled())
       )
   );
 
   it('remove user permissions for `Anyone`', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE, ['Insert'], 1))
-        .then(() => m.delUserPermissions(CONSTANTS.USER_ANYONE, 1).should.be.rejected())
-        .then(() => m.delUserPermissions(CONSTANTS.USER_ANYONE, 2).should.be.fulfilled())
+        .then(() => should(m.delUserPermissions(CONSTANTS.USER_ANYONE, 1)).be.rejected())
+        .then(() => should(m.delUserPermissions(CONSTANTS.USER_ANYONE, 2)).be.fulfilled())
       )
   );
-});
+}).timeout(30000);

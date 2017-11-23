@@ -4,8 +4,7 @@ const h = require('./helpers');
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
 /* eslint-disable no-shadow */
-describe('auth interface', function testContainer() {
-  this.timeout(15000);
+describe('auth interface', () => {
   const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
   const app = createAuthenticatedTestApp('_test_scope', containersPermissions);
   it('should build some authentication uri', () => {
@@ -41,14 +40,14 @@ describe('auth interface', function testContainer() {
       });
   });
 
-  it('logs in to network with URI response from authenticator', async () => {
+  it('logs in to network with URI response from authenticator', () => {
     const app = h.createTestApp();
-    app.auth.loginFromURI(h.authUris.registeredUri).should.be.fulfilled();
+    should(app.auth.loginFromURI(h.authUris.registeredUri)).be.fulfilled();
   });
 
-  it('creates an authenticated session just for testing', async () => {
+  it('creates an authenticated session just for testing', () => {
     const app = h.createTestApp();
-    app.auth.loginForTest().should.be.fulfilled();
+    should(app.auth.loginForTest()).be.fulfilled();
   });
 });
 
@@ -146,4 +145,4 @@ describe('Access Container', () => {
             should(value.buf.toString()).equal('value1');
           })
   ));
-});
+}).timeout(15000);
