@@ -24,36 +24,12 @@ const lib = require('../native/lib');
 const h = require('../helpers');
 
 /**
-* Holds signature key
-*/
-class SignKey extends h.NetworkObject {
-
-  /**
-  * generate raw string copy of signature key
-  * @returns {Promise<Buffer>}
-  */
-  getRaw() {
-    return lib.sign_pub_key_get(this.app.connection, this.ref);
-  }
-
-  /**
-  * @private
-  * used by autoref to clean the reference
-  * @param {SAFEApp} app
-  * @param {handle} ref
-  */
-  static free(app, ref) {
-    return lib.sign_pub_key_free(app.connection, ref);
-  }
-}
-
-/**
 * Holds the public part of an encryption key
 */
 class PubEncKey extends h.NetworkObject {
 
   /**
-  * generate raw string copy of encryption key
+  * generate raw string copy of public encryption key
   * @returns {Promise<Buffer>}
   */
   getRaw() {
@@ -67,7 +43,7 @@ class PubEncKey extends h.NetworkObject {
   * @param {handle} ref
   */
   static free(app, ref) {
-    return lib.enc_key_free(app.connection, ref);
+    return lib.enc_pub_key_free(app.connection, ref);
   }
 
   /**
@@ -78,13 +54,28 @@ class PubEncKey extends h.NetworkObject {
     return lib.encrypt_sealed_box(this.app.connection, str, this.ref);
   }
 
+  /**
+  * Decrypt the given cipher text (buffer or string) using this public
+  * encryption key and the given secret key
+  *
+  * @arg {Buffer} cipher to decrypt
+  * @arg {SecEncKey} secretEncKey secret encryption key
+  * @returns {Promise<Buffer>} plain text
+  */
+  decrypt(cipher, secretEncKey) {
+    return lib.decrypt(this.app.connection, cipher, this.ref, secretEncKey.ref);
+  }
 
   /**
-  * Encrypt the input (buffer or string) using the private and public key and the given privateKey
-  * @returns {Promise<Buffer>} Ciphertext
+  * Encrypt the input (buffer or string) using this public encryption key
+  * and the given secret key.
+  *
+  * @param {Buffer} data to be encrypted
+  * @param {SecEncKey} secretEncKey secret encrpytion key
+  * @returns {Promise<Buffer>} cipher text
   */
-  encrypt(str, secretKey) {
-    return lib.encrypt(this.app.connection, str, this.ref, secretKey.ref);
+  encrypt(data, secretEncKey) {
+    return lib.encrypt(this.app.connection, data, this.ref, secretEncKey.ref);
   }
 }
 
@@ -95,7 +86,7 @@ class PubEncKey extends h.NetworkObject {
 class SecEncKey extends h.NetworkObject {
 
   /**
-  * generate raw string copy of encryption key
+  * generate raw string copy of secret encryption key
   * @returns {Promise<Buffer>}
   */
   getRaw() {
@@ -109,24 +100,39 @@ class SecEncKey extends h.NetworkObject {
   * @param {handle} ref
   */
   static free(app, ref) {
-    return lib.enc_key_free(app.connection, ref);
+    return lib.enc_secret_key_free(app.connection, ref);
   }
 
   /**
-  * Decrypt the given ciphertext (buffer or string) using the private and public key
-  * @arg theirPubKey {PubEncKey} the others public key
-  * @returns {Promise<Buffer>} Plaintext
+  * Decrypt the given cipher text (buffer or string) using this secret
+  * encryption key and the given public key
+  *
+  * @arg {Buffer} cipher to decrypt
+  * @arg {PubEncKey} publicEncKey public encryption key
+  * @returns {Promise<Buffer>} plain text
   */
-  decrypt(cipher, theirPubKey) {
-    return lib.decrypt(this.app.connection, cipher, theirPubKey.ref, this.ref);
+  decrypt(cipher, publicEncKey) {
+    return lib.decrypt(this.app.connection, cipher, publicEncKey.ref, this.ref);
+  }
+
+  /**
+  * Encrypt the input (buffer or string) using this secret encryption key
+  * and the recipient's public key
+  *
+  * @param {Buffer} data to be encrypted
+  * @param {PubEncKey} recipientPubKey recipient's public encryption key
+  * @returns {Promise<Buffer>} cipher text
+  */
+  encrypt(data, recipientPubKey) {
+    return lib.encrypt(this.app.connection, data, recipientPubKey.ref, this.ref);
   }
 }
 
 
 /**
-* Holds an asymmetric keypair
+* Holds an asymmetric encryption keypair
 */
-class KeyPair {
+class EncKeyPair {
 
   constructor(app, pub, secret) {
     this.app = app;
@@ -153,16 +159,111 @@ class KeyPair {
   }
 
   /**
-  * Decrypt the given ciphertext with a seal (buffer or string) using the private and public key
-  * @returns {Promise<Buffer>} Plaintext
+  * Decrypt the given cipher text with a seal (buffer or string) using
+  * this encryption key pair
+  * @returns {Promise<Buffer>} plain text
   */
   decryptSealed(cipher) {
     return lib.decrypt_sealed_box(this.app.connection, cipher,
                                   this.pubEncKey.ref, this.secEncKey.ref);
   }
-
 }
 
+/**
+* Holds the public part of a sign key
+*/
+class PubSignKey extends h.NetworkObject {
+
+  /**
+  * generate raw string copy of public sign key
+  * @returns {Promise<Buffer>}
+  */
+  getRaw() {
+    return lib.sign_pub_key_get(this.app.connection, this.ref);
+  }
+
+  /**
+  * @private
+  * used by autoref to clean the reference
+  * @param {SAFEApp} app
+  * @param {handle} ref
+  */
+  static free(app, ref) {
+    return lib.sign_pub_key_free(app.connection, ref);
+  }
+
+  /**
+  * Verify the given signed data (buffer or string) using the public sign key
+  * @param {Buffer} data to verify signature
+  * @returns {Promise<Buffer>}
+  */
+  verify(data) {
+    return lib.verify(this.app.connection, data, this.ref);
+  }
+}
+
+/**
+* Holds the secret part of a sign key
+*/
+class SecSignKey extends h.NetworkObject {
+
+  /**
+  * generate raw string copy of secret sign key
+  * @returns {Promise<Buffer>}
+  */
+  getRaw() {
+    return lib.sign_sec_key_get(this.app.connection, this.ref);
+  }
+
+  /**
+  * @private
+  * used by autoref to clean the reference
+  * @param {SAFEApp} app
+  * @param {handle} ref
+  */
+  static free(app, ref) {
+    return lib.sign_sec_key_free(app.connection, ref);
+  }
+
+  /**
+  * Sign the given data (buffer or string) using the secret sign key
+  * @param {Buffer} data to sign
+  * @returns {Promise<Buffer>} signed data
+  */
+  sign(data) {
+    return lib.sign(this.app.connection, data, this.ref);
+  }
+}
+
+/**
+* Holds a sign key pair
+*/
+class SignKeyPair {
+
+  constructor(app, pub, secret) {
+    this.app = app;
+    this._public = pub;
+    this._secret = secret;
+  }
+
+
+  /**
+  * get the public sign key instance of this key pair
+  * @returns {PubSignKey}
+  */
+  get pubSignKey() {
+    return this._public;
+  }
+
+
+  /**
+  * get the secrect sign key instance of this key pair
+  * @returns {SecSignKey}
+  */
+  get secSignKey() {
+    return this._secret;
+  }
+}
 
 /**
 * Encryption functionality for the app
@@ -184,8 +285,8 @@ class CryptoInterface {
   * @returns {Promise<Buffer>}
   */
   /* eslint-disable class-methods-use-this */
-  sha3Hash(inpt) {
-    return lib.sha3_hash(inpt);
+  sha3Hash(data) {
+    return lib.sha3_hash(data);
   }
 
   /* eslint-enable class-methods-use-this */
@@ -197,7 +298,7 @@ class CryptoInterface {
   */
   getAppPubSignKey() {
     return lib.app_pub_sign_key(this.app.connection)
-        .then((c) => h.autoref(new SignKey(this.app, c)));
+        .then((c) => h.autoref(new PubSignKey(this.app, c)));
   }
 
   /**
@@ -210,37 +311,71 @@ class CryptoInterface {
   }
 
   /**
-  * Generate a new Asymmetric EncryptionKeyPair
-  * @returns {Promise<KeyPair>}
+  * Generate a new Asymmetric Encryption Key Pair
+  * @returns {Promise<EncKeyPair>}
   */
   generateEncKeyPair() {
     return lib.enc_generate_key_pair(this.app.connection)
-        .then((r) => new KeyPair(this.app,
+        .then((r) => new EncKeyPair(this.app,
             h.autoref(new PubEncKey(this.app, r[0])),
             h.autoref(new SecEncKey(this.app, r[1]))
           ));
   }
 
   /**
-  * Generate a new Asymmetric EncryptionKeyPair from raw secret and public keys
-  * @returns {Promise<KeyPair>}
+  * Generate a new Sign Key Pair (public & private keys).
+  * @returns {Promise<SignKeyPair>}
   */
-  generateEncKeyPairFromRaw(rawPublicKey, rawSecretkey) {
-    let pubKey;
-    return this.pubEncKeyKeyFromRaw(rawPublicKey)
-        .then((pk) => { pubKey = pk; })
-        .then(() => this.secEncKeyKeyFromRaw(rawSecretkey))
-        .then((sk) => new KeyPair(this.app, pubKey, sk));
+  generateSignKeyPair() {
+    return lib.sign_generate_key_pair(this.app.connection)
+        .then((r) => new SignKeyPair(this.app,
+            h.autoref(new PubSignKey(this.app, r[0])),
+            h.autoref(new SecSignKey(this.app, r[1]))
+          ));
   }
 
   /**
-  * Interprete the SignKey from a given raw string
-  * @param {String} raw sign key raw bytes as string
-  * @returns {Promise<SignKey>}
+  * Generate a new Asymmetric Encryption Key Pair from raw secret and public keys
+  * @returns {Promise<EncKeyPair>}
   */
-  getSignKeyFromRaw(raw) {
+  generateEncKeyPairFromRaw(rawPublicKey, rawSecretkey) {
+    let pubKey;
+    return this.pubEncKeyFromRaw(rawPublicKey)
+        .then((pk) => { pubKey = pk; })
+        .then(() => this.secEncKeyFromRaw(rawSecretkey))
+        .then((sk) => new EncKeyPair(this.app, pubKey, sk));
+  }
+
+  /**
+  * Generate a new Sign Key Pair from raw secret and public keys
+  * @returns {Promise<SignKeyPair>}
+  */
+  generateSignKeyPairFromRaw(rawPublicKey, rawSecretkey) {
+    let pubKey;
+    return this.pubSignKeyFromRaw(rawPublicKey)
+        .then((pk) => { pubKey = pk; })
+        .then(() => this.secSignKeyFromRaw(rawSecretkey))
+        .then((sk) => new SignKeyPair(this.app, pubKey, sk));
+  }
+
+  /**
+  * Interprete the Public Sign Key from a given raw string
+  * @param {String} raw public sign key raw bytes as string
+  * @returns {Promise<PubSignKey>}
+  */
+  pubSignKeyFromRaw(raw) {
     return lib.sign_pub_key_new(this.app.connection, raw)
-        .then((c) => h.autoref(new SignKey(this.app, c)));
+        .then((c) => h.autoref(new PubSignKey(this.app, c)));
+  }
+
+  /**
+  * Interprete the Secret Sign Key from a given raw string
+  * @param {String} raw secret sign key raw bytes as string
+  * @returns {Promise<SecSignKey>}
+  */
+  secSignKeyFromRaw(raw) {
+    return lib.sign_sec_key_new(this.app.connection, raw)
+        .then((c) => h.autoref(new SecSignKey(this.app, c)));
   }
 
   /**
@@ -248,7 +383,7 @@ class CryptoInterface {
   * @arg {String} raw public encryption key raw bytes as string
   * @returns {Promise<PubEncKey>}
   */
-  pubEncKeyKeyFromRaw(raw) {
+  pubEncKeyFromRaw(raw) {
     return lib.enc_pub_key_new(this.app.connection, raw)
         .then((c) => h.autoref(new PubEncKey(this.app, c)));
   }
@@ -258,7 +393,7 @@ class CryptoInterface {
   * @arg {String} raw secret encryption key raw bytes as string
   * @returns {Promise<SecEncKey>}
   */
-  secEncKeyKeyFromRaw(raw) {
+  secEncKeyFromRaw(raw) {
     return lib.enc_secret_key_new(this.app.connection, raw)
         .then((c) => h.autoref(new SecEncKey(this.app, c)));
   }
@@ -275,9 +410,11 @@ class CryptoInterface {
 
 
 module.exports = {
-  SignKey,
   PubEncKey,
   SecEncKey,
-  KeyPair,
+  EncKeyPair,
+  PubSignKey,
+  SecSignKey,
+  SignKeyPair,
   CryptoInterface
 };

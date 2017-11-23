@@ -132,7 +132,7 @@ const AuthGranted = Struct({
   bootstrap_config_cap: t.usize
 });
 
-function makeAppInfo(appInfo) {
+const makeAppInfo = (appInfo) => {
   return new AppExchangeInfo({
     id: appInfo.id,
     scope: appInfo.scope || ref.NULL,
@@ -141,13 +141,13 @@ function makeAppInfo(appInfo) {
   });
 }
 
-function translateXorName(str) {
+const translateXorName = (str) => {
   const b = new Buffer(str);
   if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
   return t.XOR_NAME(b);
 }
 
-function makePermissions(perms) {
+const makePermissions = (perms) => {
   return new ContainerPermissionsArray(Object.getOwnPropertyNames(perms).map((key) => {
     const permArray = helpers.makePermissionSet(perms[key]);
     return ContainerPermissions({
@@ -157,7 +157,7 @@ function makePermissions(perms) {
   }));
 }
 
-function makeShareMDataPermissions(permissions) {
+const makeShareMDataPermissions = (permissions) => {
   return new ShareMDataArray(permissions.map((perm) => {
     const permsArray = helpers.makePermissionSet(perm.perms);
     return ShareMData({
@@ -168,7 +168,7 @@ function makeShareMDataPermissions(permissions) {
   }));
 }
 
-function remapEncodeValues(resp) {
+const remapEncodeValues = (resp) => {
   return {
     'req_id': resp[0],
     'uri': helpers.fromCString(resp[1])
@@ -235,31 +235,31 @@ module.exports = {
     encode_auth_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_share_mdata_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_unregistered_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
-    decode_ipc_msg: function(lib, fn) {
-      return (function(str) {
-        return new Promise(function(resolve, reject) {
+    decode_ipc_msg: (lib, fn) => {
+      return ((str) => {
+        return new Promise((resolve, reject) => {
           fn.async(str,
                    ref.NULL,
-                   ffi.Callback('void', [t.VoidPtr, 'uint32', ref.refType(AuthGranted)], function(user_data, req_id, authGranted) {
+                   ffi.Callback('void', [t.VoidPtr, 'uint32', ref.refType(AuthGranted)], (user_data, req_id, authGranted) => {
                       resolve(["granted", authGranted])
                    }),
-                   ffi.Callback('void', [t.VoidPtr, 'uint32', t.u8Pointer, t.usize], function(user_data, req_id, connUri, connUriLen) {
+                   ffi.Callback('void', [t.VoidPtr, 'uint32', t.u8Pointer, t.usize], (user_data, req_id, connUri, connUriLen) => {
                       resolve(["unregistered", new Buffer(ref.reinterpret(connUri, connUriLen, 0))])
                    }),
-                   ffi.Callback('void', [t.VoidPtr, 'uint32'], function(user_data, req_id) {
+                   ffi.Callback('void', [t.VoidPtr, 'uint32'], (user_data, req_id) => {
                       resolve(["containers", req_id])
                    }),
-                   ffi.Callback('void', [t.VoidPtr, 'uint32'], function(user_data, req_id) {
+                   ffi.Callback('void', [t.VoidPtr, 'uint32'], (user_data, req_id) => {
                       resolve(["share_mdata", req_id])
                    }),
-                   ffi.Callback('void', [t.VoidPtr], function(user_data) {
+                   ffi.Callback('void', [t.VoidPtr], (user_data) => {
                       resolve(["revoked"])
                    }),
-                   ffi.Callback('void', [t.VoidPtr, t.FfiResultPtr, 'uint32'], function(user_data, resultPtr, req_id) {
+                   ffi.Callback('void', [t.VoidPtr, t.FfiResultPtr, 'uint32'], (user_data, resultPtr, req_id) => {
                       const result = helpers.makeFfiResult(resultPtr);
                       reject(makeFfiError(result.error_code, result.error_description))
                    }),
-                   function () {}
+                   () => {}
               )
         })
       })

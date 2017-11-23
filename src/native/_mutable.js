@@ -3,14 +3,13 @@ const ref = require("ref");
 const Struct = require('ref-struct');
 const Enum = require('enum');
 const ArrayType = require('ref-array');
-const { SignKeyHandle } = require('./_crypto').types;
+const { SignPubKeyHandle } = require('./_crypto').types;
 const { types: t, helpers: h } = require('./_base');
 
 const PromisifiedForEachCb = h.PromisifiedForEachCb;
 const Promisified = h.Promisified;
 
 const MDataPermissionsHandle = t.ObjectHandle;
-const SignPubKeyHandle = t.ObjectHandle;
 const MDataEntriesHandle = t.ObjectHandle;
 const MDataEntryActionsHandle = t.ObjectHandle;
 const bufferTypes = [t.u8Pointer, t.usize, t.usize];
@@ -103,17 +102,17 @@ const UserMetadata = Struct({
 
 const UserMetadataPtr = ref.refType(UserMetadata);
 
-function bufferLastEntry(...varArgs) {
+const bufferLastEntry = (...varArgs) => {
   let str = new Buffer(varArgs[varArgs.length - 1]);
   return Array.prototype.slice.call(varArgs, 0, varArgs.length - 1)
         .concat([str, str.length]);
 }
 
-function keyValueCallBackLastEntry(types, ...varArgs) {
+const keyValueCallBackLastEntry = (types, ...varArgs) => {
   let fn = varArgs[varArgs.length - 1];
   if (typeof fn !== 'function') throw Error('A function parameter _must be_ provided')
 
-  let cb = ffi.Callback("void", types, function(uctx, ...cbVarArgs) {
+  let cb = ffi.Callback("void", types, (uctx, ...cbVarArgs) => {
     let args = [];
     args.push(ref.reinterpret(cbVarArgs[0], cbVarArgs[1], 0));
     args.push(readValueToBuffer([cbVarArgs[2], cbVarArgs[3], cbVarArgs[4]]));
@@ -124,7 +123,7 @@ function keyValueCallBackLastEntry(types, ...varArgs) {
             .concat(cb);
 }
 
-function translatePrivMDInput(xorname, tag, secKey, nonce) {
+const translatePrivMDInput = (xorname, tag, secKey, nonce) => {
   let name = xorname;
   if (!Buffer.isBuffer(xorname)) {
     const b = new Buffer(xorname);
@@ -149,22 +148,22 @@ function translatePrivMDInput(xorname, tag, secKey, nonce) {
   return [name, tag, sk, n]
 }
 
-function toMDataInfo(appPtr, mDataInfoObj, ...varArgs) {
+const toMDataInfo = (appPtr, mDataInfoObj, ...varArgs) => {
   const mDataInfo = makeMDataInfo(mDataInfoObj);
   return [appPtr, mDataInfo.ref(), ...varArgs]
 }
 
-function firstToMDataInfo(mDataInfoObj, ...varArgs) {
+const firstToMDataInfo = (mDataInfoObj, ...varArgs) => {
   const mDataInfo = makeMDataInfo(mDataInfoObj);
   return [mDataInfo.ref(), ...varArgs]
 }
 
-function firstToMDataInfoLastToBuffer(...varArgs) {
+const firstToMDataInfoLastToBuffer = (...varArgs) => {
   const mDataInfo = firstToMDataInfo(...varArgs);
   return bufferLastEntry(...mDataInfo);
 }
 
-function strToBuffer(appPtr, mdata, ...varArgs) {
+const strToBuffer = (appPtr, mdata, ...varArgs) => {
     const args = [appPtr, mdata];
     varArgs.forEach(item => {
       const buf = Buffer.isBuffer(item) ? item : (item.buffer || new Buffer(item));
@@ -175,7 +174,7 @@ function strToBuffer(appPtr, mdata, ...varArgs) {
 }
 
 // keep last entry as is
-function strToBufferButLastEntry(appPtr, mdata, ...varArgs) {
+const strToBufferButLastEntry = (appPtr, mdata, ...varArgs) => {
     let lastArg = varArgs[varArgs.length - 1];
     const args = [appPtr, mdata];
     Array.prototype.slice.call(varArgs, 0, varArgs.length - 1).forEach(item => {
@@ -187,14 +186,14 @@ function strToBufferButLastEntry(appPtr, mdata, ...varArgs) {
     return args;
 }
 
-function readValueToBuffer(argsArr) {
+const readValueToBuffer = (argsArr) => {
     return {
         buf: ref.isNull(argsArr[0]) ? argsArr[0] : new Buffer(ref.reinterpret(argsArr[0], argsArr[1], 0)),
         version: argsArr[2] // argsArr[2] is expected to be the content's version in the container
     }
 }
 
-function lastToPermissionSet(...varArgs) {
+const lastToPermissionSet = (...varArgs) => {
   let permsList = varArgs[varArgs.length - 1];
   const permSet = h.makePermissionSet(permsList);
   return Array.prototype.slice.call(varArgs, 0, varArgs.length - 1)
@@ -266,9 +265,9 @@ module.exports = {
     mdata_serialised_size: [t.Void, [t.AppPtr, MDataInfoPtr, 'pointer', 'pointer']],
     mdata_permissions_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
     mdata_permissions_len: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
-    mdata_permissions_get: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignKeyHandle, 'pointer', 'pointer']],
+    mdata_permissions_get: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignPubKeyHandle, 'pointer', 'pointer']],
     mdata_list_permission_sets: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
-    mdata_permissions_insert: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignKeyHandle, t.PermissionSetPtr, 'pointer', 'pointer']],
+    mdata_permissions_insert: [t.Void, [t.AppPtr, MDataPermissionsHandle, SignPubKeyHandle, t.PermissionSetPtr, 'pointer', 'pointer']],
     mdata_permissions_free: [t.Void, [t.AppPtr, MDataPermissionsHandle, 'pointer', 'pointer']],
     mdata_put: [t.Void, [t.AppPtr, MDataInfoPtr, MDataPermissionsHandle, MDataEntriesHandle, 'pointer', 'pointer']],
     mdata_get_version: [t.Void, [t.AppPtr, MDataInfoPtr, 'pointer', 'pointer']],
@@ -278,9 +277,9 @@ module.exports = {
     mdata_list_values: [t.Void, [t.AppPtr, MDataInfoPtr, 'pointer', 'pointer']],
     mdata_mutate_entries: [t.Void, [t.AppPtr, MDataInfoPtr, MDataEntryActionsHandle, 'pointer', 'pointer']],
     mdata_list_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, 'pointer', 'pointer']],
-    mdata_list_user_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, SignKeyHandle, 'pointer', 'pointer']],
-    mdata_set_user_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, SignKeyHandle, t.PermissionSetPtr, t.u64, 'pointer', 'pointer']],
-    mdata_del_user_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, SignKeyHandle, t.u64, 'pointer', 'pointer']],
+    mdata_list_user_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, SignPubKeyHandle, 'pointer', 'pointer']],
+    mdata_set_user_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, SignPubKeyHandle, t.PermissionSetPtr, t.u64, 'pointer', 'pointer']],
+    mdata_del_user_permissions: [t.Void, [t.AppPtr, MDataInfoPtr, SignPubKeyHandle, t.u64, 'pointer', 'pointer']],
     mdata_entry_actions_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
     mdata_entry_actions_insert: [t.Void, [t.AppPtr, MDataEntryActionsHandle, t.u8Pointer, t.usize, t.u8Pointer, t.usize, 'pointer', 'pointer']],
     mdata_entry_actions_update: [t.Void, [t.AppPtr, MDataEntryActionsHandle, t.u8Pointer, t.usize, t.u8Pointer, t.usize, t.u64, 'pointer', 'pointer']],
@@ -310,19 +309,21 @@ module.exports = {
     mdata_list_permission_sets: Promisified(null, [ref.refType(UserPermissionSetArray), t.usize], (args) => {
       const ptr = args[0];
       const len = args[1];
-      let arrPtr = ref.reinterpret(ptr, UserPermissionSet.size * len);
-      let arr = UserPermissionSetArray(arrPtr);
       const userPermList = [];
-      for (let i = 0; i < len ; i++) {
-        const currUserPerm = arr[i];
-        const permSet =  {
-          Read: currUserPerm.perm_set.Read,
-          Insert: currUserPerm.perm_set.Insert,
-          Update: currUserPerm.perm_set.Update,
-          Delete: currUserPerm.perm_set.Delete,
-          ManagePermissions: currUserPerm.perm_set.ManagePermissions
+      if (len > 0) {
+        let arrPtr = ref.reinterpret(ptr, UserPermissionSet.size * len);
+        let arr = UserPermissionSetArray(arrPtr);
+        for (let i = 0; i < len ; i++) {
+          const currUserPerm = arr[i];
+          const permSet =  {
+            Read: currUserPerm.perm_set.Read,
+            Insert: currUserPerm.perm_set.Insert,
+            Update: currUserPerm.perm_set.Update,
+            Delete: currUserPerm.perm_set.Delete,
+            ManagePermissions: currUserPerm.perm_set.ManagePermissions
+          }
+          userPermList.push({ signKey: currUserPerm.user_h, permSet });
         }
-        userPermList.push({ signKey: currUserPerm.user_h, permSet });
       }
       return userPermList;
     }),
@@ -338,26 +339,30 @@ module.exports = {
     mdata_list_keys: Promisified(toMDataInfo, [ref.refType(MDataKeysArray), t.usize], (args) => {
       const ptr = args[0];
       const len = args[1];
-      let arrPtr = ref.reinterpret(ptr, MDataKey.size * len);
-      let arr = MDataKeysArray(arrPtr);
       const keysList = [];
-      for (let i = 0; i < len ; i++) {
-        const currKey = arr[i];
-        const keyStr = ref.reinterpret(currKey.val_ptr, currKey.val_len, 0);
-        keysList.push(keyStr);
+      if (len > 0) {
+        let arrPtr = ref.reinterpret(ptr, MDataKey.size * len);
+        let arr = MDataKeysArray(arrPtr);
+        for (let i = 0; i < len ; i++) {
+          const currKey = arr[i];
+          const keyStr = ref.reinterpret(currKey.val_ptr, currKey.val_len, 0);
+          keysList.push(keyStr);
+        }
       }
       return keysList;
     }),
     mdata_list_values: Promisified(toMDataInfo, [ref.refType(MDataValuesArray), t.usize], (args) => {
       const ptr = args[0];
       const len = args[1];
-      let arrPtr = ref.reinterpret(ptr, MDataValue.size * len);
-      let arr = MDataValuesArray(arrPtr);
       const valuesList = [];
-      for (let i = 0; i < len ; i++) {
-        const currValue = arr[i];
-        const valueStr = ref.reinterpret(currValue.content_ptr, currValue.content_len, 0);
-        valuesList.push({ buf: valueStr, version: currValue.entry_version });
+      if (len > 0) {
+        let arrPtr = ref.reinterpret(ptr, MDataValue.size * len);
+        let arr = MDataValuesArray(arrPtr);
+        for (let i = 0; i < len ; i++) {
+          const currValue = arr[i];
+          const valueStr = ref.reinterpret(currValue.content_ptr, currValue.content_len, 0);
+          valuesList.push({ buf: valueStr, version: currValue.entry_version });
+        }
       }
       return valuesList;
     }),

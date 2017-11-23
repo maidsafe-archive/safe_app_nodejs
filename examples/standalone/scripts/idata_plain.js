@@ -1,8 +1,9 @@
 const safeApp = require('@maidsafe/safe-node-app');
+const { waitUntil } = require('wait');
 
 let EXIT_CONDITION = false;
 
-let run = async () => {
+const run = async () => {
 	const APP = {
         info: {
             id: 'net.safe.imd.demo.app',
@@ -13,7 +14,7 @@ let run = async () => {
     };
 
     try {
-        
+
         //----------- Immutable Data with Plain CypherOpt ------------------//
 
         console.log();
@@ -32,7 +33,7 @@ let run = async () => {
         // Append the given data to Immutatble Data
         await writer.write("Hello World");
         console.log('Given text "Hello World" wrote successfully to the immutable data');
-        
+
         // CipherOpt is Plain and can be read by anyone who has the address of the DataMap.
         let plain = await app.cipherOpt.newPlainText();
         console.log('Plain CipherOpt created successfully');
@@ -51,17 +52,13 @@ let run = async () => {
         // Reads the data from the network
         let data = await reader.read();
         console.log('Reads the data from the network:', data.toString());
-        
+
 	} catch(e) {
 		console.log("Execution failed", e);
 	}
 	EXIT_CONDITION = true;
 };
 
-run()
+run();
 
-function wait () {
-   if (!EXIT_CONDITION)
-        setTimeout(wait, 1000);
-};
-wait();
+waitUntil(() => EXIT_CONDITION === true, 1000, () => {});

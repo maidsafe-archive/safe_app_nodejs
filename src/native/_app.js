@@ -22,21 +22,22 @@ module.exports = {
     app_reconnect: [t.Void, [t.AppPtr, t.VoidPtr, 'pointer']],
     app_free: [t.Void, [t.AppPtr]],
     app_reset_object_cache: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
-    is_mock_build: [t.bool, []]
+    is_mock_build: [t.bool, []],
+    app_set_additional_search_path: [t.Void, ['string', 'pointer', 'pointer']]
   },
   api: {
     app_account_info: base.helpers.Promisified(null, ref.refType(AccountInfo), (accInfoPtr) => {
       const accInfo = accInfoPtr[0].deref();
       return { mutations_done: accInfo.mutations_done, mutations_available: accInfo.mutations_available }
     }),
-    app_unregistered: function(lib, fn) {
-      return (function(app, uri) {
+    app_unregistered: (lib, fn) => {
+      return ((app, uri) => {
         const disconnect_notifier_cb = ffi.Callback("void", [t.VoidPtr], (user_data) => app._networkStateUpdated(user_data, consts.NET_STATE_DISCONNECTED));
         return new Promise((resolve, reject) => {
           if (!uri) reject(makeFfiError(-1, "Missing connection URI"));
 
           const uriBuf = Buffer.isBuffer(uri) ? uri : (uri.buffer || new Buffer(uri));
-          const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResultPtr, t.AppPtr], function(user_data, resultPtr, appCon) {
+          const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResultPtr, t.AppPtr], (user_data, resultPtr, appCon) => {
             const result = helpers.makeFfiResult(resultPtr);
             if (result.error_code !== 0) {
               reject(makeFfiError(result.error_code, result.error_description));
@@ -52,11 +53,11 @@ module.exports = {
         });
       })
     },
-    app_registered: function(lib, fn) {
-      return (function(app, authGranted) {
+    app_registered: (lib, fn) => {
+      return ((app, authGranted) => {
         const disconnect_notifier_cb = ffi.Callback("void", [t.VoidPtr], (user_data) => app._networkStateUpdated(user_data, consts.NET_STATE_DISCONNECTED));
         return new Promise((resolve, reject) => {
-          const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResultPtr, t.AppPtr], function(user_data, resultPtr, appCon) {
+          const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResultPtr, t.AppPtr], (user_data, resultPtr, appCon) => {
             const result = helpers.makeFfiResult(resultPtr);
             if (result.error_code !== 0) {
               reject(makeFfiError(result.error_code, result.error_description));
@@ -73,13 +74,14 @@ module.exports = {
       });
     },
     app_reconnect: base.helpers.Promisified(null, []),
-    app_free: function (lib, fn) {
-      return (function (app) {
+    app_free: (lib, fn) => {
+      return ((app) => {
         fn(app);
         return Promise.resolve();
       });
     },
     app_reset_object_cache: base.helpers.Promisified(null, []),
-    is_mock_build: (lib, fn) => (function() { return fn(); })
+    is_mock_build: (lib, fn) => (() => { return fn(); }),
+    app_set_additional_search_path: base.helpers.Promisified(null, [])
   }
 };

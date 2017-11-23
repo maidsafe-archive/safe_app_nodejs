@@ -18,64 +18,63 @@ describe('Crypto Smoke Test', () => {
 describe('App Crypto Tests', () => {
   const app = h.createAuthenticatedTestApp();
 
-  it('can hash nicely', () => app.crypto.sha3Hash('testing input').then((resp) => {
+  it('can hash nicely', () => app.crypto.sha3Hash('testing input').then((resp) =>
     should(resp.toString())
-        .equal(Buffer('97bc11468af46662f6df912b8d47edb7652e5209062c1588046bccfc7ac2dd7d', 'hex').toString());
-  }));
+        .equal(Buffer('97bc11468af46662f6df912b8d47edb7652e5209062c1588046bccfc7ac2dd7d', 'hex').toString())
+  ));
 
-  it('can hash nicely unauthorised', () => h.createTestApp().crypto.sha3Hash('testing input').then((resp) => {
+  it('can hash nicely unauthorised', () => h.createTestApp().crypto.sha3Hash('testing input').then((resp) =>
     should(resp.toString())
-        .equal(Buffer('97bc11468af46662f6df912b8d47edb7652e5209062c1588046bccfc7ac2dd7d', 'hex').toString());
+        .equal(Buffer('97bc11468af46662f6df912b8d47edb7652e5209062c1588046bccfc7ac2dd7d', 'hex').toString())
+  ));
+
+  it('can get app public sign key', () => app.crypto.getAppPubSignKey().then((key) => {
+    should(key).not.be.undefined();
+    return key.getRaw().then((raw) => should(raw).not.be.undefined());
   }));
 
-  it('can get sign key', () => app.crypto.getAppPubSignKey().then((key) => {
+  it('can get app public encryption key', () => app.crypto.getAppPubEncKey().then((key) => {
     should(key).not.be.undefined();
-    return key.getRaw().then((raw) => {
-      should(raw).not.be.undefined();
-    });
-  }));
-
-  it('can get public key', () => app.crypto.getAppPubEncKey().then((key) => {
-    should(key).not.be.undefined();
-    return key.getRaw().then((raw) => {
-      should(raw).not.be.undefined();
-    });
+    return key.getRaw().then((raw) => should(raw).not.be.undefined());
   }));
 
   it('generate nonce', () => app.crypto.generateNonce().then((nonce) => {
     should(nonce).not.be.undefined();
     should(nonce.length).be.equal(24);
   }));
+});
 
-  describe('custom key pair', () => {
-    let keyPair;
+describe('Encryption keys', () => {
+  describe('custom encryption key pair', () => {
+    const app = h.createAuthenticatedTestApp();
+    let encKeyPair;
 
     beforeEach(() => app.crypto.generateEncKeyPair()
           .then((kp) => {
-            keyPair = kp;
-            should(keyPair).not.be.undefined();
+            encKeyPair = kp;
+            should(encKeyPair).not.be.undefined();
           }));
 
     it('generation creates appropriate keys', () => Promise.all([
-      keyPair.pubEncKey.getRaw().then((r) => {
+      encKeyPair.pubEncKey.getRaw().then((r) => {
         should(r).not.be.undefined();
         return r;
       }),
-      keyPair.secEncKey.getRaw().then((r) => {
+      encKeyPair.secEncKey.getRaw().then((r) => {
         should(r).not.be.undefined();
         return r;
       })
     ]).then((r) => should(r[0]).not.equal(r[1])));
 
     it('get keys from raw', () => Promise.all([
-      keyPair.pubEncKey.getRaw()
-        .then((r) => app.crypto.pubEncKeyKeyFromRaw(r))
+      encKeyPair.pubEncKey.getRaw()
+        .then((r) => app.crypto.pubEncKeyFromRaw(r))
         .then((pk) => {
           should(pk).not.be.undefined();
           return pk;
         }),
-      keyPair.secEncKey.getRaw()
-        .then((r) => app.crypto.secEncKeyKeyFromRaw(r))
+      encKeyPair.secEncKey.getRaw()
+        .then((r) => app.crypto.secEncKeyFromRaw(r))
         .then((sk) => {
           should(sk).not.be.undefined();
           return sk;
@@ -86,9 +85,9 @@ describe('App Crypto Tests', () => {
       let rawPubKey;
       let rawPubKeyFromRaw;
       let rawSecKey;
-      return keyPair.pubEncKey.getRaw()
+      return encKeyPair.pubEncKey.getRaw()
         .then((r) => { rawPubKey = r; })
-        .then(() => keyPair.secEncKey.getRaw())
+        .then(() => encKeyPair.secEncKey.getRaw())
         .then((r) => { rawSecKey = r; })
         .then(() => app.crypto.generateEncKeyPairFromRaw(rawPubKey, rawSecKey))
         .then((kp) => kp.pubEncKey.getRaw()
@@ -101,9 +100,8 @@ describe('App Crypto Tests', () => {
     });
   });
 
-
   describe('two app encryption', () => {
-    const me = app;
+    const me = h.createAuthenticatedTestApp();
     const other = h.createAuthenticatedTestApp();
 
     let myKeys;
@@ -125,14 +123,14 @@ describe('App Crypto Tests', () => {
             })])
       .then(() => Promise.all([
         myKeys.pubEncKey.getRaw()
-            .then((r) => other.crypto.pubEncKeyKeyFromRaw(r)
+            .then((r) => other.crypto.pubEncKeyFromRaw(r)
               .then((w) => {
                 theirHandleOnMyPubKey = w;
                 should(theirHandleOnMyPubKey).not.be.undefined();
               })),
 
         theirKeys.pubEncKey.getRaw()
-            .then((r) => me.crypto.pubEncKeyKeyFromRaw(r)
+            .then((r) => me.crypto.pubEncKeyFromRaw(r)
               .then((w) => {
                 myHandleOnTheirPubKey = w;
                 should(myHandleOnTheirPubKey).not.be.undefined();
@@ -141,26 +139,114 @@ describe('App Crypto Tests', () => {
     );
 
     it('encrypts and decrypts', () => {
-      const INPT = `all the ${Math.random()} times where I've been`;
-      return myHandleOnTheirPubKey.encrypt(INPT, myKeys.secEncKey)
+      const plaintext = `all the ${Math.random()} places where I've been`;
+      return myHandleOnTheirPubKey.encrypt(plaintext, myKeys.secEncKey)
         .then((cipher) => {
-          should(cipher.toString()).not.equal(INPT);
+          should(cipher.toString()).not.equal(plaintext);
           return theirKeys.secEncKey.decrypt(cipher, theirHandleOnMyPubKey)
             .then((raw) => {
-              should(INPT).equal(raw.toString());
+              should(plaintext).equal(raw.toString());
             });
         });
     });
 
     it('encrypts and decrypts with seal', () => {
-      const INPT = `all the ${Math.random()} times where I've been`;
-      return myHandleOnTheirPubKey.encryptSealed(INPT)
+      const plaintext = `all the ${Math.random()} places where I've been`;
+      return myHandleOnTheirPubKey.encryptSealed(plaintext)
         .then((cipher) => {
-          should(cipher.toString()).not.equal(INPT);
+          should(cipher.toString()).not.equal(plaintext);
           return theirKeys.decryptSealed(cipher)
             .then((raw) => {
-              should(INPT).equal(raw.toString());
+              should(plaintext).equal(raw.toString());
             });
+        });
+    });
+  });
+});
+
+describe('Sign keys', () => {
+  describe('custom sign key pair', () => {
+    const app = h.createAuthenticatedTestApp();
+    let signKeyPair;
+
+    beforeEach(() => app.crypto.generateSignKeyPair()
+          .then((kp) => {
+            signKeyPair = kp;
+            should(signKeyPair).not.be.undefined();
+          }));
+
+    it('generation creates appropriate keys', () => Promise.all([
+      signKeyPair.pubSignKey.getRaw().then((r) => {
+        should(r).not.be.undefined();
+        return r;
+      }),
+      signKeyPair.secSignKey.getRaw().then((r) => {
+        should(r).not.be.undefined();
+        return r;
+      })
+    ]).then((r) => should(r[0]).not.equal(r[1])));
+
+    it('get keys from raw', () => Promise.all([
+      signKeyPair.pubSignKey.getRaw()
+        .then((r) => app.crypto.pubSignKeyFromRaw(r))
+        .then((pk) => {
+          should(pk).not.be.undefined();
+          return pk;
+        }),
+      signKeyPair.secSignKey.getRaw()
+        .then((r) => app.crypto.secSignKeyFromRaw(r))
+        .then((sk) => {
+          should(sk).not.be.undefined();
+          return sk;
+        })
+    ]).then((r) => should(r[0]).not.equal(r[1])));
+
+    it('generate key pair from raw keys', () => {
+      let rawPubKey;
+      let rawPubKeyFromRaw;
+      let rawSecKey;
+      return signKeyPair.pubSignKey.getRaw()
+        .then((r) => { rawPubKey = r; })
+        .then(() => signKeyPair.secSignKey.getRaw())
+        .then((r) => { rawSecKey = r; })
+        .then(() => app.crypto.generateSignKeyPairFromRaw(rawPubKey, rawSecKey))
+        .then((kp) => kp.pubSignKey.getRaw()
+          .then((r) => { rawPubKeyFromRaw = r; })
+          .then(() => kp.secSignKey.getRaw())
+          .then((rawSecKeyFromRaw) => {
+            should(rawSecKeyFromRaw.toString()).be.equal(rawSecKey.toString());
+            should(rawPubKeyFromRaw.toString()).be.equal(rawPubKey.toString());
+          }));
+    });
+  });
+
+  describe('signing messages between two app encryption', () => {
+    const me = h.createAuthenticatedTestApp();
+    const other = h.createAuthenticatedTestApp();
+
+    let myKeys;
+    let theirHandleOnMyPubKey;
+
+    before(() => me.crypto.generateSignKeyPair().then((kp) => {
+      myKeys = kp;
+      should(myKeys).not.be.undefined();
+    })
+    .then(() => myKeys.pubSignKey.getRaw()
+      .then((r) => other.crypto.pubSignKeyFromRaw(r)
+        .then((w) => {
+          theirHandleOnMyPubKey = w;
+          should(theirHandleOnMyPubKey).not.be.undefined();
+        }))
+      )
+    );
+
+    it('sign and verify', () => {
+      const plaintext = `random ${Math.random()} plain text`;
+      return myKeys.secSignKey.sign(plaintext)
+        .then((signed) => {
+          should(signed.toString()).not.equal(plaintext);
+          return theirHandleOnMyPubKey.verify(signed)
+            .then((raw) => should(plaintext).equal(raw.toString()));
         });
     });
   });
