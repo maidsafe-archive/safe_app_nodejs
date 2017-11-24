@@ -39,13 +39,30 @@ describe('Immutable Data', () => {
       const idReader = await app.immutableData.fetch(idAddress);
       should(await idReader.size()).equal(11);
     });
+
+    it.skip('frees Reader object from memory', async () => {
+      const testString = `test-${Math.random()}`;
+      const idWriter = await app.immutableData.create();
+      await idWriter.write(testString);
+      const cipherOpt = await app.cipherOpt.newPlainText();
+      const idAddress = await idWriter.close(cipherOpt);
+      const idReader = await app.immutableData.fetch(idAddress);
+      idReader.free();
+      should(idReader.read()).be.rejected();
+    });
   });
 
   describe('Writer', () => {
-    it('writes data', async () => {
+    it('writes data from string', async () => {
       const testString = `test-${Math.random()}`;
       const idWriter = await app.immutableData.create();
       await idWriter.write(testString).should.be.fulfilled();
+    });
+
+    it('writes data from buffer', async () => {
+      const testString = `test-${Math.random()}`;
+      const idWriter = await app.immutableData.create();
+      await idWriter.write(Buffer.from(testString)).should.be.fulfilled();
     });
 
     it('closes itself, writes Immutable Data to network, and returns network address', async () => {
@@ -56,6 +73,28 @@ describe('Immutable Data', () => {
       const idAddress = await idWriter.close(cipherOpt);
       should(idAddress.length).be.equal(32);
     });
+  });
+
+  it('takes immutable data address as parsed JSON object', async () => {
+    const testString = `test-${Math.random()}`;
+    const idWriter = await app.immutableData.create();
+    await idWriter.write(testString);
+    const cipherOpt = await app.cipherOpt.newPlainText();
+    const idAddress = await idWriter.close(cipherOpt);
+    const addressAsString = JSON.stringify(idAddress);
+    const idReader = await app.immutableData.fetch(JSON.parse(addressAsString));
+    const idData = await idReader.read();
+    should(idData.toString()).equal(testString);
+  });
+
+  it('throws error if immutable address is not 32 bytes', async () => {
+    const testString = `test-${Math.random()}`;
+    const idWriter = await app.immutableData.create();
+    await idWriter.write(testString);
+    const cipherOpt = await app.cipherOpt.newPlainText();
+    const idAddress = await idWriter.close(cipherOpt);
+    const addressAsString = idAddress.toString();
+    should(app.immutableData.fetch(addressAsString)).be.rejectedWith(Error, { message: 'XOR Names _must be_ 32 bytes long.' });
   });
 
   it('store address in a MD', () => {

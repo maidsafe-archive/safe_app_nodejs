@@ -104,4 +104,80 @@ describe('NFS emulation', () => {
         })
       ))
   );
+
+  it('reads file size', async () => {
+    const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await mData.quickSetup({});
+    const nfs = await mData.emulateAs('nfs');
+    let file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
+    await file.write('hello, SAFE world!');
+    await file.close();
+    await nfs.insert('hello.txt', file);
+    file = await nfs.fetch('hello.txt');
+    await nfs.open(file, CONSTANTS.NFS_FILE_MODE_READ);
+    const size = await file.size();
+    should(size).be.equal(18);
+  });
+
+  it('returns file version from underlying mutable data entry version', async () => {
+    const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await mData.quickSetup({});
+    const nfs = await mData.emulateAs('nfs');
+    let file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
+    await file.write('hello, SAFE world!');
+    await file.close();
+    await nfs.insert('hello.txt', file);
+    file = await nfs.fetch('hello.txt');
+    await nfs.open(file, CONSTANTS.NFS_FILE_MODE_READ);
+    should(file.version).be.equal(0);
+  });
+
+  it('throws error if close is called on a non-open file', async () => {
+    const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await mData.quickSetup({});
+    const nfs = await mData.emulateAs('nfs');
+    const file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
+    await file.write('hello, SAFE world!');
+    await file.close();
+    should(file.close()).be.rejectedWith(Error, { message: 'File is not open' });
+  });
+
+  it('throws error if write is called on a non-open file', async () => {
+    const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await mData.quickSetup({});
+    const nfs = await mData.emulateAs('nfs');
+    const file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
+    await file.write('hello, SAFE world!');
+    await file.close();
+    should(file.write('hello')).be.rejectedWith(Error, { message: 'File is not open' });
+  });
+
+  it('throws error if read is called on a non-open file', async () => {
+    const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await mData.quickSetup({});
+    const nfs = await mData.emulateAs('nfs');
+    const file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
+    await file.write('hello, SAFE world!');
+    await file.close();
+    should(file.read()).be.rejectedWith(Error, { message: 'File is not open' });
+  });
+
+  it('resolves file size if file is not open', async () => {
+    const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await mData.quickSetup({});
+    const nfs = await mData.emulateAs('nfs');
+    const file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
+    await file.write('hello, SAFE world!');
+    await file.close();
+    const size = await file.size();
+    should(size).be.equal(18);
+  });
+//  describe('internal function', () => {
+//    it.only('verifies if file meta data is String instance', async () => {
+//      const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
+//      await mData.quickSetup({});
+//      const nfs = await mData.emulateAs('nfs');
+//      const file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
+//    });
+//  });
 }).timeout(30000);

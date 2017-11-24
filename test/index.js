@@ -2,6 +2,11 @@ const lib = require('../src/native/lib');
 const should = require('should');
 const { fromAuthURI, CONSTANTS, initializeApp } = require('../src');
 const h = require('./helpers');
+const api = require('../src/native/api');
+const fs = require('fs');
+const LIB_CONSTANTS = require('../src/consts');
+const path = require('path');
+const errConst = require('../src/error_const');
 
 const appInfo = {
   id: 'net.maidsafe.example.tests',
@@ -34,6 +39,34 @@ describe('Smoke testing', () => {
     };
     should(CONSTANTS).be.eql(expectedConsts);
   });
+
+  it('requires additional functions for testing, if in non-production', () => {
+    const testingApi = api[api.length - 1];
+    should(LIB_CONSTANTS.inTesting).be.true; // eslint-disable-line
+    should.exist(testingApi.functions.test_create_app);
+    should.exist(testingApi.functions.test_create_app_with_access);
+  });
+
+  it('requires console and console.warn', () => {
+    should.exist(console);
+    should.exist(console.warn);
+  });
+
+  it('system uri openUri function returns a promise', () => {
+    const app = h.createTestApp();
+    app.auth.openUri('').should.be.Promise();
+  });
+
+  it('throws error if lib fails to load', () => {
+    fs.renameSync(path.join(__dirname, `../src/native/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`), path.join(__dirname, '../src/native/hideLib.so'));
+    try {
+      h.createAuthenticatedTestApp();
+    } catch (err) {
+      const errArray = err.message.split('libraries: ');
+      should(errConst.FAILED_TO_LOAD_LIB.msg(errArray[1])).be.equal(err.message);
+    }
+    fs.renameSync(path.join(__dirname, '../src/native/hideLib.so'), path.join(__dirname, `../src/native/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`));
+  }).timeout(10000);
 });
 
 describe('External API', () => {

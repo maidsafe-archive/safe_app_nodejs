@@ -2,6 +2,7 @@ const should = require('should');
 const h = require('./helpers');
 const App = require('../src/app');
 const appHelpers = require('../src/helpers');
+const errConst = require('../src/error_const');
 
 const createTestApp = h.createTestApp;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
@@ -92,8 +93,7 @@ describe('Smoke test', () => {
         scope: null
       }
     }));
-
-    should.throws(test);
+    should(test).throw(errConst.MALFORMED_APP_INFO.msg);
   });
 
   it('should throw informative error, if App properties, excepting scope, are empty', () => {
@@ -135,7 +135,7 @@ describe('Smoke test', () => {
   it('returns safe_client_libs log path', async () => {
     const app = createAuthenticatedTestApp();
     should(app.logPath()).be.fulfilled();
-  });
+  }).timeout(10000);
 
   it('logs in to netowrk from existing authUri', async () => {
     should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri)).be.fulfilled();

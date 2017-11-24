@@ -31,7 +31,7 @@ describe('CipherOpt', () => {
     const pubEncKey = await differentApp.crypto.getAppPubEncKey();
     const rawKey = await pubEncKey.getRaw();
 
-    const pubKey = await app.crypto.pubEncKeyKeyFromRaw(rawKey);
+    const pubKey = await app.crypto.pubEncKeyFromRaw(rawKey);
     const testString = 'information to be encrypted';
     const idWriter = await app.immutableData.create();
     await idWriter.write(testString);
@@ -41,5 +41,5 @@ describe('CipherOpt', () => {
     const idReader = await differentApp.immutableData.fetch(idAddress);
     const idData = await idReader.read();
     should(idData.toString()).equal(testString);
-  });
+  }).timeout(10000);
 }).timeout(15000);
