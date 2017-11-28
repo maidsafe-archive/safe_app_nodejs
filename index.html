@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@maidsafe/safe-node-app 0.3.0 | Documentation</title>
+  <title>@maidsafe/safe-node-app 0.5.0 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@maidsafe/safe-node-app</h3>
-          <div class='mb1'><code>0.3.0</code></div>
+          <div class='mb1'><code>0.5.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -68,6 +68,16 @@
                   href='#initoptions'
                   class="">
                   InitOptions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#constants'
+                  class="">
+                  CONSTANTS
                   
                 </a>
                 
@@ -157,6 +167,24 @@
                       </a></li>
                       
                       <li><a
+                        href='#safeappisnetstateinit'
+                        class='regular pre-open'>
+                        #isNetStateInit
+                      </a></li>
+                      
+                      <li><a
+                        href='#safeappisnetstateconnected'
+                        class='regular pre-open'>
+                        #isNetStateConnected
+                      </a></li>
+                      
+                      <li><a
+                        href='#safeappisnetstatedisconnected'
+                        class='regular pre-open'>
+                        #isNetStateDisconnected
+                      </a></li>
+                      
+                      <li><a
                         href='#safeappappinfo'
                         class='regular pre-open'>
                         #appInfo
@@ -172,6 +200,18 @@
                         href='#safeappreconnect'
                         class='regular pre-open'>
                         #reconnect
+                      </a></li>
+                      
+                      <li><a
+                        href='#safeappclearobjectcache'
+                        class='regular pre-open'>
+                        #clearObjectCache
+                      </a></li>
+                      
+                      <li><a
+                        href='#safeappismockbuild'
+                        class='regular pre-open'>
+                        #isMockBuild
                       </a></li>
                       
                     </ul>
@@ -221,27 +261,45 @@
                       </a></li>
                       
                       <li><a
+                        href='#cryptointerfacegeneratesignkeypair'
+                        class='regular pre-open'>
+                        #generateSignKeyPair
+                      </a></li>
+                      
+                      <li><a
                         href='#cryptointerfacegenerateenckeypairfromraw'
                         class='regular pre-open'>
                         #generateEncKeyPairFromRaw
                       </a></li>
                       
                       <li><a
-                        href='#cryptointerfacegetsignkeyfromraw'
+                        href='#cryptointerfacegeneratesignkeypairfromraw'
                         class='regular pre-open'>
-                        #getSignKeyFromRaw
+                        #generateSignKeyPairFromRaw
                       </a></li>
                       
                       <li><a
-                        href='#cryptointerfacepubenckeykeyfromraw'
+                        href='#cryptointerfacepubsignkeyfromraw'
                         class='regular pre-open'>
-                        #pubEncKeyKeyFromRaw
+                        #pubSignKeyFromRaw
                       </a></li>
                       
                       <li><a
-                        href='#cryptointerfacesecenckeykeyfromraw'
+                        href='#cryptointerfacesecsignkeyfromraw'
                         class='regular pre-open'>
-                        #secEncKeyKeyFromRaw
+                        #secSignKeyFromRaw
+                      </a></li>
+                      
+                      <li><a
+                        href='#cryptointerfacepubenckeyfromraw'
+                        class='regular pre-open'>
+                        #pubEncKeyFromRaw
+                      </a></li>
+                      
+                      <li><a
+                        href='#cryptointerfacesecenckeyfromraw'
+                        class='regular pre-open'>
+                        #secEncKeyFromRaw
                       </a></li>
                       
                       <li><a
@@ -474,12 +532,6 @@
                         href='#mutabledatainterfacenewpermissions'
                         class='regular pre-open'>
                         #newPermissions
-                      </a></li>
-                      
-                      <li><a
-                        href='#mutabledatainterfacenewpermissionset'
-                        class='regular pre-open'>
-                        #newPermissionSet
                       </a></li>
                       
                       <li><a
@@ -725,6 +777,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#mutabledatagetserialisedsize'
+                        class='regular pre-open'>
+                        #getSerialisedSize
+                      </a></li>
+                      
+                      <li><a
                         href='#mutabledataemulateas'
                         class='regular pre-open'>
                         #emulateAs
@@ -792,74 +850,6 @@
               
                 
                 <li><a
-                  href='#keys'
-                  class=" toggle-sibling">
-                  Keys
-                  <span class='icon'>▸</span>
-                </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#keyslen'
-                        class='regular pre-open'>
-                        #len
-                      </a></li>
-                      
-                      <li><a
-                        href='#keysforeach'
-                        class='regular pre-open'>
-                        #forEach
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                  
-                </div>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#values'
-                  class=" toggle-sibling">
-                  Values
-                  <span class='icon'>▸</span>
-                </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#valueslen'
-                        class='regular pre-open'>
-                        #len
-                      </a></li>
-                      
-                      <li><a
-                        href='#valuesforeach'
-                        class='regular pre-open'>
-                        #forEach
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                  
-                </div>
-                
-                </li>
-              
-                
-                <li><a
                   href='#entrymutationtransaction'
                   class=" toggle-sibling">
                   EntryMutationTransaction
@@ -900,16 +890,6 @@
               
                 
                 <li><a
-                  href='#mdataaction'
-                  class="">
-                  MDataAction
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#permissions'
                   class=" toggle-sibling">
                   Permissions
@@ -941,49 +921,9 @@
                       </a></li>
                       
                       <li><a
-                        href='#permissionsforeach'
+                        href='#permissionslistpermissionsets'
                         class='regular pre-open'>
-                        #forEach
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                  
-                </div>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#permissionsset'
-                  class=" toggle-sibling">
-                  PermissionsSet
-                  <span class='icon'>▸</span>
-                </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#permissionssetsetallow'
-                        class='regular pre-open'>
-                        #setAllow
-                      </a></li>
-                      
-                      <li><a
-                        href='#permissionssetsetdeny'
-                        class='regular pre-open'>
-                        #setDeny
-                      </a></li>
-                      
-                      <li><a
-                        href='#permissionssetclear'
-                        class='regular pre-open'>
-                        #clear
+                        #listPermissionSets
                       </a></li>
                       
                     </ul>
@@ -1144,9 +1084,9 @@
               
                 
                 <li><a
-                  href='#signkey'
+                  href='#enckeypair'
                   class=" toggle-sibling">
-                  SignKey
+                  EncKeyPair
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -1157,47 +1097,19 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#signkeygetraw'
-                        class='regular pre-open'>
-                        #getRaw
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                  
-                </div>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#keypair'
-                  class=" toggle-sibling">
-                  KeyPair
-                  <span class='icon'>▸</span>
-                </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#keypairpubenckey'
+                        href='#enckeypairpubenckey'
                         class='regular pre-open'>
                         #pubEncKey
                       </a></li>
                       
                       <li><a
-                        href='#keypairsecenckey'
+                        href='#enckeypairsecenckey'
                         class='regular pre-open'>
                         #secEncKey
                       </a></li>
                       
                       <li><a
-                        href='#keypairdecryptsealed'
+                        href='#enckeypairdecryptsealed'
                         class='regular pre-open'>
                         #decryptSealed
                       </a></li>
@@ -1236,6 +1148,12 @@
                         #decrypt
                       </a></li>
                       
+                      <li><a
+                        href='#secenckeyencrypt'
+                        class='regular pre-open'>
+                        #encrypt
+                      </a></li>
+                      
                     </ul>
                   
                   
@@ -1271,9 +1189,117 @@
                       </a></li>
                       
                       <li><a
+                        href='#pubenckeydecrypt'
+                        class='regular pre-open'>
+                        #decrypt
+                      </a></li>
+                      
+                      <li><a
                         href='#pubenckeyencrypt'
                         class='regular pre-open'>
                         #encrypt
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#signkeypair'
+                  class=" toggle-sibling">
+                  SignKeyPair
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#signkeypairpubsignkey'
+                        class='regular pre-open'>
+                        #pubSignKey
+                      </a></li>
+                      
+                      <li><a
+                        href='#signkeypairsecsignkey'
+                        class='regular pre-open'>
+                        #secSignKey
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#secsignkey'
+                  class=" toggle-sibling">
+                  SecSignKey
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#secsignkeygetraw'
+                        class='regular pre-open'>
+                        #getRaw
+                      </a></li>
+                      
+                      <li><a
+                        href='#secsignkeysign'
+                        class='regular pre-open'>
+                        #sign
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#pubsignkey'
+                  class=" toggle-sibling">
+                  PubSignKey
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#pubsignkeygetraw'
+                        class='regular pre-open'>
+                        #getRaw
+                      </a></li>
+                      
+                      <li><a
+                        href='#pubsignkeyverify'
+                        class='regular pre-open'>
+                        #verify
                       </a></li>
                       
                     </ul>
@@ -1359,7 +1385,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/index.js#L53-L60'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/index.js#L59-L66'>
       <span>src/index.js</span>
       </a>
     
@@ -1369,7 +1395,7 @@
   <p>The main entry point to create a new SAFEApp</p>
 
 
-  <div class='pre p1 fill-light mt0'>initializeApp(appInfo: <a href="#appinfo">AppInfo</a>, networkStateCallBack: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a>, options: <a href="#initoptions">InitOptions</a>?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
+  <div class='pre p1 fill-light mt0'>initializeApp</div>
   
   
 
@@ -1473,7 +1499,7 @@ prms.then(<span class="hljs-function"><span class="hljs-params">app</span> =&gt;
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/index.js#L74-L76'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/index.js#L80-L81'>
       <span>src/index.js</span>
       </a>
     
@@ -1486,7 +1512,7 @@ connection by using this helper function. Just provide said URI as the
 second value.</p>
 
 
-  <div class='pre p1 fill-light mt0'>fromAuthURI(appInfo: <a href="#appinfo">AppInfo</a>, authUri: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, networkStateCallBack: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a>, options: <a href="#initoptions">InitOptions</a>?): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
+  <div class='pre p1 fill-light mt0'>fromAuthURI</div>
   
   
 
@@ -1578,7 +1604,7 @@ to receive network state updates
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/index.js#L53-L60'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/index.js#L59-L66'>
       <span>src/index.js</span>
       </a>
     
@@ -1686,7 +1712,7 @@ to use when registering the URI with the system.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/index.js#L53-L60'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/index.js#L59-L66'>
       <span>src/index.js</span>
       </a>
     
@@ -1726,6 +1752,15 @@ to use when registering the URI with the system.
       
         <div class='space-bottom0'>
           <div>
+            <span class='code bold'>joinSchemes</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>?)</code>
+	    to additionally register custom protocol schemes
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
             <span class='code bold'>log</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>?)</code>
 	    to enable or disable back end logging. Defaults to true
 
@@ -1738,6 +1773,249 @@ to use when registering the URI with the system.
             <span class='code bold'>libPath</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?)</code>
 	    path to the folder where the native libs can
 be found. Defaults to current folder path.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>configPath</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?)</code>
+	    set additional search path for the config files.
+E.g. 
+<code>log.toml</code>
+ and 
+<code>crust.config</code>
+ files will be also searched not only
+in the same folder where the native library is, but also in this
+additional search path.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='constants'>
+      CONSTANTS
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/consts.js#L70-L80'>
+      <span>src/consts.js</span>
+      </a>
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>CONSTANTS</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>NFS_FILE_MODE_OVERWRITE</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    NFS File open in overwrite mode.
+When used as the 
+<code>openMode</code>
+ parameter for 
+<code>nfs.open(&#x3C;fileName>, &#x3C;openMode>)</code>
+ the entire content
+of the file will be replaced when writing data to it.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>NFS_FILE_MODE_APPEND</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    NFS File open in append mode.
+When used as the 
+<code>openMode</code>
+ param for 
+<code>nfs.open(&#x3C;fileName>, &#x3C;openMode>)</code>
+ any new content
+written to the file will be appended to the end without modifying existing data.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>NFS_FILE_MODE_READ</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    NFS File open in read-only mode.
+When used as the 
+<code>openMode</code>
+ param for 
+<code>nfs.open(&#x3C;fileName>, &#x3C;openMode>)</code>
+ only the read
+operation is allowed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>NFS_FILE_START</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    Read the file from the beginning.
+When used as the 
+<code>position</code>
+ param for the NFS 
+<code>file.read(&#x3C;position>, &#x3C;length>)</code>
+
+function, the file will be read from the beginning.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>NFS_FILE_END</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    Read until the end of a file.
+When used as the 
+<code>length</code>
+ param for the NFS 
+<code>file.read(&#x3C;position>, &#x3C;length>)</code>
+
+function, the file will be read from the position provided until the end
+of its content. E.g. if 
+<code>NFS_FILE_START</code>
+ and 
+<code>NFS_FILE_END</code>
+ are passed in as
+the 
+<code>position</code>
+ and 
+<code>length</code>
+ parameters respectively, then the whole content of the
+file will be read.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>USER_ANYONE</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    Any user.
+When used as the 
+<code>signkey</code>
+ param in any of the MutableData functions to
+manipulate user permissions, like 
+<code>getUserPermissions</code>
+, 
+<code>setUserPermissions</code>
+,
+
+<code>delUserPermissions</code>
+, etc., this will associate the permissions operation to
+any user rather than to a particular sign key.
+E.g. if this constant is used as the 
+<code>signkey</code>
+ param of
+the 
+<code>setUserPermissions(&#x3C;signKey>, &#x3C;permissionSet>, &#x3C;version>)</code>
+ function,
+the permissions in the 
+<code>permissionSet</code>
+ provided will be granted to anyone
+rather to a specific user's/aplication's sign key.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>MD_METADATA_KEY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    MutableData's entry key where its metadata is stored.
+The MutableData's metadata can be set either when invoking the 
+<code>quickSetup</code>
+
+function or by invking the 
+<code>setMetadata</code>
+ function.
+The metadata is stored as an encoded entry in the MutableData which key
+is 
+<code>MD_METADATA_KEY</code>
+, thus this constant can be used to realise which of the
+entries is not application's data but the MutableData's metadata instead.
+The metadata is particularly used by the Authenticator when another
+application has requested mutation permissions on a MutableData,
+displaying this information to the user, so the user can make a better
+decision to either allow or deny such a request based on it.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>MD_ENTRIES_EMPTY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    Represents an empty set of MutableData's entries.
+This can be used when invoking the 
+<code>put</code>
+ function of the MutableData API to
+signal that it should be committed to the network with an empty set of entries.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>MD_PERMISSION_EMPTY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    Represents an empty set of MutableData's permissions.
+This can be used when invoking the 
+<code>put</code>
+ function of the MutableData API to
+signal that it should be committed to the network with an empty set of permissions.
 
           </div>
           
@@ -1789,7 +2067,7 @@ be found. Defaults to current folder path.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/app.js#L15-L359'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L15-L398'>
       <span>src/app.js</span>
       </a>
     
@@ -1876,7 +2154,7 @@ this session.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/app.js#L303-L306'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L345-L348'>
       <span>src/app.js</span>
       </a>
     
@@ -1998,7 +2276,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/app.js#L59-L61'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L69-L71'>
       <span>src/app.js</span>
       </a>
     
@@ -2061,7 +2339,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/app.js#L67-L69'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L77-L79'>
       <span>src/app.js</span>
       </a>
     
@@ -2124,7 +2402,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/app.js#L75-L77'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L85-L87'>
       <span>src/app.js</span>
       </a>
     
@@ -2187,7 +2465,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/app.js#L83-L85'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L93-L95'>
       <span>src/app.js</span>
       </a>
     
@@ -2250,7 +2528,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/app.js#L91-L93'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L101-L103'>
       <span>src/app.js</span>
       </a>
     
@@ -2313,7 +2591,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/app.js#L123-L211'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L133-L216'>
       <span>src/app.js</span>
       </a>
     
@@ -2391,7 +2669,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/app.js#L234-L237'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L239-L242'>
       <span>src/app.js</span>
       </a>
     
@@ -2454,14 +2732,14 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/app.js#L266-L268'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L259-L277'>
       <span>src/app.js</span>
       </a>
     
   </div>
   
 
-  <p>The current Network state</p>
+  <p>Textual representation of the current network connection state.</p>
 
 
   <div class='pre p1 fill-light mt0'>networkState</div>
@@ -2483,7 +2761,198 @@ convention and find the requested object.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>:
-        of latest state
+        current network connection state
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='safeappisnetstateinit'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isNetStateInit()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L286-L288'>
+      <span>src/app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns true if current network connection state is INIT.
+This is state means the library has been initialised but there is no
+connection made with the network yet.</p>
+
+
+  <div class='pre p1 fill-light mt0'>isNetStateInit(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='safeappisnetstateconnected'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isNetStateConnected()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L295-L297'>
+      <span>src/app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns true if current network connection state is CONNECTED.</p>
+
+
+  <div class='pre p1 fill-light mt0'>isNetStateConnected(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='safeappisnetstatedisconnected'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isNetStateDisconnected()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L304-L306'>
+      <span>src/app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns true if current network connection state is DISCONNECTED.</p>
+
+
+  <div class='pre p1 fill-light mt0'>isNetStateDisconnected(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
+        
 
       
     
@@ -2517,7 +2986,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/app.js#L273-L275'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L311-L313'>
       <span>src/app.js</span>
       </a>
     
@@ -2572,7 +3041,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/app.js#L286-L292'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L324-L330'>
       <span>src/app.js</span>
       </a>
     
@@ -2652,7 +3121,7 @@ the path of where the safe_core log file is located.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/app.js#L333-L345'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L369-L372'>
       <span>src/app.js</span>
       </a>
     
@@ -2660,10 +3129,120 @@ the path of where the safe_core log file is located.</p>
   
 
   <p>Reconnect to the metwork
-Must be invoked when the client decides to connect back after the connection is disconnected.</p>
+Must be invoked when the client decides to connect back after the connection was lost.</p>
 
 
   <div class='pre p1 fill-light mt0'>reconnect()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='safeappclearobjectcache'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>clearObjectCache()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L388-L390'>
+      <span>src/app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Resets the object cache kept by the underlyging library.</p>
+
+
+  <div class='pre p1 fill-light mt0'>clearObjectCache()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='safeappismockbuild'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isMockBuild()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/app.js#L395-L397'>
+      <span>src/app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Retuns true if the underlyging library was compiled against mock-routing.</p>
+
+
+  <div class='pre p1 fill-light mt0'>isMockBuild()</div>
   
   
 
@@ -2714,7 +3293,7 @@ Must be invoked when the client decides to connect back after the connection is 
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L172-L274'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L273-L409'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2769,7 +3348,7 @@ Must be invoked when the client decides to connect back after the connection is 
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>sha3Hash(inpt)</span>
+            <span class='code strong strong truncate'>sha3Hash(data)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -2779,7 +3358,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L187-L189'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L288-L290'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2789,7 +3368,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <p>Hash the given input with SHA3 Hash</p>
 
 
-  <div class='pre p1 fill-light mt0'>sha3Hash(inpt: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
+  <div class='pre p1 fill-light mt0'>sha3Hash(data: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
   
   
 
@@ -2806,7 +3385,7 @@ Must be invoked when the client decides to connect back after the connection is 
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>inpt</span> <code class='quiet'>(any)</code>
+            <span class='code bold'>data</span> <code class='quiet'>(any)</code>
 	    
           </div>
           
@@ -2855,7 +3434,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L198-L201'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L299-L302'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2865,7 +3444,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <p>Get the public signing key of this session</p>
 
 
-  <div class='pre p1 fill-light mt0'>getAppPubSignKey(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#signkey">SignKey</a>></div>
+  <div class='pre p1 fill-light mt0'>getAppPubSignKey(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;SignKey></div>
   
   
 
@@ -2883,7 +3462,7 @@ Must be invoked when the client decides to connect back after the connection is 
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#signkey">SignKey</a>></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;SignKey></code>:
         
 
       
@@ -2918,7 +3497,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L207-L210'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L308-L311'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -2981,17 +3560,17 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L216-L222'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L317-L323'>
       <span>src/api/crypto.js</span>
       </a>
     
   </div>
   
 
-  <p>Generate a new Asymmetric EncryptionKeyPair</p>
+  <p>Generate a new Asymmetric Encryption Key Pair</p>
 
 
-  <div class='pre p1 fill-light mt0'>generateEncKeyPair(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#keypair">KeyPair</a>></div>
+  <div class='pre p1 fill-light mt0'>generateEncKeyPair(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#enckeypair">EncKeyPair</a>></div>
   
   
 
@@ -3009,7 +3588,70 @@ Must be invoked when the client decides to connect back after the connection is 
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#keypair">KeyPair</a>></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#enckeypair">EncKeyPair</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='cryptointerfacegeneratesignkeypair'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>generateSignKeyPair()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L329-L335'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Generate a new Sign Key Pair (public &#x26; private keys).</p>
+
+
+  <div class='pre p1 fill-light mt0'>generateSignKeyPair(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#signkeypair">SignKeyPair</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#signkeypair">SignKeyPair</a>></code>:
         
 
       
@@ -3044,17 +3686,17 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L228-L234'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L341-L347'>
       <span>src/api/crypto.js</span>
       </a>
     
   </div>
   
 
-  <p>Generate a new Asymmetric EncryptionKeyPair from raw secret and public keys</p>
+  <p>Generate a new Asymmetric Encryption Key Pair from raw secret and public keys</p>
 
 
-  <div class='pre p1 fill-light mt0'>generateEncKeyPairFromRaw(rawPublicKey: any, rawSecretkey: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#keypair">KeyPair</a>></div>
+  <div class='pre p1 fill-light mt0'>generateEncKeyPairFromRaw(rawPublicKey: any, rawSecretkey: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#enckeypair">EncKeyPair</a>></div>
   
   
 
@@ -3093,7 +3735,7 @@ Must be invoked when the client decides to connect back after the connection is 
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#keypair">KeyPair</a>></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#enckeypair">EncKeyPair</a>></code>:
         
 
       
@@ -3114,11 +3756,11 @@ Must be invoked when the client decides to connect back after the connection is 
       </div>
     </div>
   
-    <div class='border-bottom' id='cryptointerfacegetsignkeyfromraw'>
+    <div class='border-bottom' id='cryptointerfacegeneratesignkeypairfromraw'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getSignKeyFromRaw(raw)</span>
+            <span class='code strong strong truncate'>generateSignKeyPairFromRaw(rawPublicKey, rawSecretkey)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3128,17 +3770,101 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L241-L244'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L353-L359'>
       <span>src/api/crypto.js</span>
       </a>
     
   </div>
   
 
-  <p>Interprete the SignKey from a given raw string</p>
+  <p>Generate a new Sign Key Pair from raw secret and public keys</p>
 
 
-  <div class='pre p1 fill-light mt0'>getSignKeyFromRaw(raw: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#signkey">SignKey</a>></div>
+  <div class='pre p1 fill-light mt0'>generateSignKeyPairFromRaw(rawPublicKey: any, rawSecretkey: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#signkeypair">SignKeyPair</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>rawPublicKey</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>rawSecretkey</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#signkeypair">SignKeyPair</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='cryptointerfacepubsignkeyfromraw'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>pubSignKeyFromRaw(raw)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L366-L369'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Interprete the Public Sign Key from a given raw string</p>
+
+
+  <div class='pre p1 fill-light mt0'>pubSignKeyFromRaw(raw: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#pubsignkey">PubSignKey</a>></div>
   
   
 
@@ -3156,7 +3882,7 @@ Must be invoked when the client decides to connect back after the connection is 
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>raw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    sign key raw bytes as string
+	    public sign key raw bytes as string
 
           </div>
           
@@ -3170,7 +3896,7 @@ Must be invoked when the client decides to connect back after the connection is 
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#signkey">SignKey</a>></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#pubsignkey">PubSignKey</a>></code>:
         
 
       
@@ -3191,11 +3917,11 @@ Must be invoked when the client decides to connect back after the connection is 
       </div>
     </div>
   
-    <div class='border-bottom' id='cryptointerfacepubenckeykeyfromraw'>
+    <div class='border-bottom' id='cryptointerfacesecsignkeyfromraw'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>pubEncKeyKeyFromRaw(raw)</span>
+            <span class='code strong strong truncate'>secSignKeyFromRaw(raw)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3205,7 +3931,84 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L251-L254'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L376-L379'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Interprete the Secret Sign Key from a given raw string</p>
+
+
+  <div class='pre p1 fill-light mt0'>secSignKeyFromRaw(raw: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#secsignkey">SecSignKey</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>raw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    secret sign key raw bytes as string
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#secsignkey">SecSignKey</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='cryptointerfacepubenckeyfromraw'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>pubEncKeyFromRaw(raw)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L386-L389'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3215,7 +4018,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <p>Interprete the public encryption Key from a given raw string</p>
 
 
-  <div class='pre p1 fill-light mt0'>pubEncKeyKeyFromRaw(raw: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#pubenckey">PubEncKey</a>></div>
+  <div class='pre p1 fill-light mt0'>pubEncKeyFromRaw(raw: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#pubenckey">PubEncKey</a>></div>
   
   
 
@@ -3268,11 +4071,11 @@ Must be invoked when the client decides to connect back after the connection is 
       </div>
     </div>
   
-    <div class='border-bottom' id='cryptointerfacesecenckeykeyfromraw'>
+    <div class='border-bottom' id='cryptointerfacesecenckeyfromraw'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>secEncKeyKeyFromRaw(raw)</span>
+            <span class='code strong strong truncate'>secEncKeyFromRaw(raw)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3282,7 +4085,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L261-L264'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L396-L399'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3292,7 +4095,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <p>Interprete the secret encryption Key from a given raw string</p>
 
 
-  <div class='pre p1 fill-light mt0'>secEncKeyKeyFromRaw(raw: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#secenckey">SecEncKey</a>></div>
+  <div class='pre p1 fill-light mt0'>secEncKeyFromRaw(raw: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#secenckey">SecEncKey</a>></div>
   
   
 
@@ -3359,7 +4162,7 @@ Must be invoked when the client decides to connect back after the connection is 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L271-L273'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L406-L408'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3428,7 +4231,7 @@ Must be invoked when the client decides to connect back after the connection is 
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L53-L339'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L71-L365'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3496,7 +4299,7 @@ authentitcation protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L92-L94'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L117-L119'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3559,7 +4362,7 @@ authentitcation protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L114-L124'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L139-L150'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3685,7 +4488,7 @@ app.auth.genAuthUri({
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L146-L154'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L172-L181'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3781,7 +4584,7 @@ app.auth.genShareMDataUri([
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L164-L166'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L191-L194'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3852,7 +4655,7 @@ app.auth.genConnUri()</pre>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L172-L174'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L200-L202'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -3920,7 +4723,7 @@ app.auth.genConnUri()</pre>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L187-L196'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L215-L225'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4006,7 +4809,7 @@ app.auth.genContainerAuthUri(
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L203-L205'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L232-L234'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4070,7 +4873,7 @@ connected or received a response from the authenticator in the IPC protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L212-L214'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L241-L243'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4134,7 +4937,7 @@ permissions for each of them.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L221-L242'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L250-L271'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4198,7 +5001,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L250-L266'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L279-L295'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4284,7 +5087,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L273-L276'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L302-L305'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4352,7 +5155,7 @@ When run in tests, this falls back to the randomly generated version</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>loginFromURI(responseUri)</span>
+            <span class='code strong strong truncate'>loginFromURI(uri)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -4362,7 +5165,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L284-L318'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L313-L344'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4372,7 +5175,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <p>Create a new authenticated or unregistered session using the provided IPC response.</p>
 
 
-  <div class='pre p1 fill-light mt0'>loginFromURI(responseUri: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
+  <div class='pre p1 fill-light mt0'>loginFromURI(uri: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
   
   
 
@@ -4389,7 +5192,7 @@ When run in tests, this falls back to the randomly generated version</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>responseUri</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+            <span class='code bold'>uri</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
 	    the IPC response string given
 
           </div>
@@ -4440,7 +5243,7 @@ authenticated session.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/auth.js#L327-L338'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/auth.js#L353-L364'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4524,7 +5327,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/cipher_opt.js#L17-L51'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/cipher_opt.js#L17-L51'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -4588,7 +5391,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/cipher_opt.js#L27-L30'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/cipher_opt.js#L27-L30'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -4651,7 +5454,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/cipher_opt.js#L36-L39'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/cipher_opt.js#L36-L39'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -4714,7 +5517,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/cipher_opt.js#L46-L49'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/cipher_opt.js#L46-L49'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -4796,7 +5599,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/immutable.js#L119-L147'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/immutable.js#L119-L147'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -4861,7 +5664,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/immutable.js#L133-L136'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/immutable.js#L133-L136'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -4924,7 +5727,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/immutable.js#L143-L146'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/immutable.js#L143-L146'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5007,7 +5810,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L671-L787'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L539-L649'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5088,7 +5891,7 @@ app.mutableData.newRandomPublic(<span class="hljs-number">15001</span>)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L687-L690'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L555-L558'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5166,7 +5969,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L699-L702'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L567-L570'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5244,7 +6047,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L713-L716'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L581-L584'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5346,7 +6149,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L725-L728'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L593-L599'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5432,7 +6235,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L734-L737'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L605-L608'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5481,69 +6284,6 @@ access.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='mutabledatainterfacenewpermissionset'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>newPermissionSet()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L743-L746'>
-      <span>src/api/mutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Create a new PermissionsSet object.</p>
-
-
-  <div class='pre p1 fill-light mt0'>newPermissionSet(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#permissionsset">PermissionsSet</a>></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#permissionsset">PermissionsSet</a>></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='mutabledatainterfacenewmutation'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -5558,7 +6298,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L752-L755'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L614-L617'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5621,7 +6361,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L761-L764'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L623-L626'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5684,7 +6424,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L770-L773'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L632-L635'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5781,7 +6521,7 @@ access.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/immutable.js#L8-L51'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/immutable.js#L8-L51'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5839,7 +6579,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/immutable.js#L16-L30'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/immutable.js#L16-L30'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5941,7 +6681,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/immutable.js#L36-L38'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/immutable.js#L36-L38'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6010,7 +6750,7 @@ access.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/immutable.js#L70-L112'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/immutable.js#L70-L112'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6085,7 +6825,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/immutable.js#L78-L80'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/immutable.js#L78-L80'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6162,7 +6902,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/immutable.js#L88-L92'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/immutable.js#L88-L92'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6247,7 +6987,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/immutable.js#L97-L99'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/immutable.js#L97-L99'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6323,7 +7063,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L371-L652'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L241-L520'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6381,7 +7121,7 @@ app.immutableData.create().then(<span class="hljs-function">(<span class="hljs-p
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L406-L435'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L266-L292'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6494,7 +7234,7 @@ create the data with
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L452-L462'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L309-L320'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6587,7 +7327,7 @@ decision to either allow or deny such a request based on it.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L472-L474'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L330-L332'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6666,7 +7406,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L484-L486'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L342-L344'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6745,7 +7485,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L495-L497'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L353-L355'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6823,7 +7563,7 @@ contained in a Private MutableData.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L505-L507'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L363-L368'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6887,7 +7627,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L514-L516'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L375-L377'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6950,7 +7690,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L523-L525'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L384-L386'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7026,7 +7766,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L533-L538'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L396-L401'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7036,7 +7776,7 @@ up on the network.</p>
   <p>Commit this MutableData to the network.</p>
 
 
-  <div class='pre p1 fill-light mt0'>put(permissions: (Permission | null), entries: (<a href="#entries">Entries</a> | null)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>put(permissions: (Permission | CONSTANTS.MD_PERMISSION_EMPTY), entries: (<a href="#entries">Entries</a> | CONSTANTS.MD_ENTRIES_EMPTY)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -7053,7 +7793,7 @@ up on the network.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>permissions</span> <code class='quiet'>((Permission | null))</code>
+            <span class='code bold'>permissions</span> <code class='quiet'>((Permission | CONSTANTS.MD_PERMISSION_EMPTY))</code>
 	    the permissions to create the mutable data with
 
           </div>
@@ -7062,7 +7802,7 @@ up on the network.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>entries</span> <code class='quiet'>((<a href="#entries">Entries</a> | null))</code>
+            <span class='code bold'>entries</span> <code class='quiet'>((<a href="#entries">Entries</a> | CONSTANTS.MD_ENTRIES_EMPTY))</code>
 	    data entries to create the mutable data with
 
           </div>
@@ -7112,7 +7852,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L545-L548'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L408-L411'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7175,17 +7915,17 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L554-L557'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L417-L419'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Get a Handle to the keys associated with this MutableData</p>
+  <p>Get a list with the keys contained in this MutableData</p>
 
 
-  <div class='pre p1 fill-light mt0'>getKeys(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#keys">Keys</a>)></div>
+  <div class='pre p1 fill-light mt0'>getKeys(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)></div>
   
   
 
@@ -7203,8 +7943,8 @@ up on the network.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#keys">Keys</a>)></code>:
-        the keys representation object
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)></code>:
+        the keys list
 
       
     
@@ -7238,17 +7978,17 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L563-L566'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L425-L427'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Get a Handle to the values associated with this MutableData</p>
+  <p>Get the list of values contained in this MutableData</p>
 
 
-  <div class='pre p1 fill-light mt0'>getValues(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#values">Values</a>)></div>
+  <div class='pre p1 fill-light mt0'>getValues(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)></div>
   
   
 
@@ -7266,8 +8006,8 @@ up on the network.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#values">Values</a>)></code>:
-        the values representation object
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)></code>:
+        the list of values
 
       
     
@@ -7301,7 +8041,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L572-L575'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L433-L436'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7364,7 +8104,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L585-L589'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L444-L449'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7372,12 +8112,10 @@ up on the network.</p>
   
 
   <p>Get a Handle to the permissions associated with this MutableData for
-a specifc key
-If the signKey provided is <code>null</code> the permission set will be then
-assummed as <code>USER_ANYONE</code>.</p>
+a specifc key</p>
 
 
-  <div class='pre p1 fill-light mt0'>getUserPermissions(signKey: (<a href="#signkey">SignKey</a> | null)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#permissions">Permissions</a>)></div>
+  <div class='pre p1 fill-light mt0'>getUserPermissions(signKey: (<a href="#pubsignkey">PubSignKey</a> | CONSTANTS.USER_ANYONE)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="#permissions">Permissions</a>)></div>
   
   
 
@@ -7394,7 +8132,8 @@ assummed as <code>USER_ANYONE</code>.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#signkey">SignKey</a> | null))</code>
+            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#pubsignkey">PubSignKey</a> | CONSTANTS.USER_ANYONE)
+            = <code>CONSTANTS.USER_ANYONE</code>)</code>
 	    the key to look up
 
           </div>
@@ -7444,7 +8183,7 @@ assummed as <code>USER_ANYONE</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L601-L606'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L459-L466'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7452,12 +8191,10 @@ assummed as <code>USER_ANYONE</code>.</p>
   
 
   <p>Delete the permissions of a specifc key. Directly commits to the network.
-Requires 'ManagePermissions'-Permission for the app.
-If the signKey provided is <code>null</code> the permission set will be then
-assummed for <code>USER_ANYONE</code>.</p>
+Requires 'ManagePermissions'-Permission for the app.</p>
 
 
-  <div class='pre p1 fill-light mt0'>delUserPermissions(signKey: (<a href="#signkey">SignKey</a> | null), version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>delUserPermissions(signKey: (<a href="#pubsignkey">PubSignKey</a> | CONSTANTS.USER_ANYONE), version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -7474,7 +8211,8 @@ assummed for <code>USER_ANYONE</code>.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#signkey">SignKey</a> | null))</code>
+            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#pubsignkey">PubSignKey</a> | CONSTANTS.USER_ANYONE)
+            = <code>CONSTANTS.USER_ANYONE</code>)</code>
 	    the key to lookup for
 
           </div>
@@ -7524,7 +8262,7 @@ actually asking for the right one
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setUserPermissions(signKey, pmset, version)</span>
+            <span class='code strong strong truncate'>setUserPermissions(signKey, permissionSet, version)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -7534,7 +8272,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L619-L625'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L477-L485'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7542,12 +8280,10 @@ actually asking for the right one
   
 
   <p>Set the permissions of a specifc key. Directly commits to the network.
-Requires 'ManagePermissions'-Permission for the app.
-If the signKey provided is <code>null</code> the permission set will be then
-set for <code>USER_ANYONE</code>.</p>
+Requires 'ManagePermissions'-Permission for the app.</p>
 
 
-  <div class='pre p1 fill-light mt0'>setUserPermissions(signKey: (<a href="#signkey">SignKey</a> | null), pmset: PermissionSet, version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>setUserPermissions(signKey: (<a href="#pubsignkey">PubSignKey</a> | CONSTANTS.USER_ANYONE), permissionSet: PermissionSet, version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -7564,7 +8300,8 @@ set for <code>USER_ANYONE</code>.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#signkey">SignKey</a> | null))</code>
+            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#pubsignkey">PubSignKey</a> | CONSTANTS.USER_ANYONE)
+            = <code>CONSTANTS.USER_ANYONE</code>)</code>
 	    the key to lookup for
 
           </div>
@@ -7573,7 +8310,7 @@ set for <code>USER_ANYONE</code>.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>pmset</span> <code class='quiet'>(PermissionSet)</code>
+            <span class='code bold'>permissionSet</span> <code class='quiet'>(PermissionSet)</code>
 	    the permission set to set to
 
           </div>
@@ -7633,7 +8370,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L632-L634'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L492-L494'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7710,7 +8447,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L640-L642'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L500-L502'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7759,6 +8496,69 @@ actually asking for the right one
       </div>
     </div>
   
+    <div class='border-bottom' id='mutabledatagetserialisedsize'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getSerialisedSize()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L508-L510'>
+      <span>src/api/mutable.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Get serialised size of current MutableData</p>
+
+
+  <div class='pre p1 fill-light mt0'>getSerialisedSize(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)></code>:
+        the serialilsed size of the MutableData
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='mutabledataemulateas'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -7773,7 +8573,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L649-L651'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L517-L519'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7856,7 +8656,7 @@ actually asking for the right one
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L223-L285'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L161-L223'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7914,7 +8714,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L229-L231'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L167-L169'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7977,7 +8777,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L249-L251'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L187-L189'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8054,7 +8854,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L258-L260'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L196-L198'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8131,7 +8931,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L272-L274'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L210-L212'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8219,7 +9019,7 @@ permissions to edit that mutable data.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L280-L283'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L218-L221'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8283,420 +9083,12 @@ permissions to edit that mutable data.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='keys'>
-      Keys
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L290-L318'>
-      <span>src/api/mutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Represent the keys of a MutableData network object</p>
-
-
-  <div class='pre p1 fill-light mt0'>new Keys()</div>
-  
-  
-    <p>
-      Extends
-      
-        h.NetworkObject
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='keyslen'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>len()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L296-L298'>
-      <span>src/api/mutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Get the total number of keys in the MutableData</p>
-
-
-  <div class='pre p1 fill-light mt0'>len(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></code>:
-        number of keys
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='keysforeach'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>forEach(fn)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L305-L307'>
-      <span>src/api/mutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Iterate over the keys, execute the function for each entry.</p>
-
-
-  <div class='pre p1 fill-light mt0'>forEach(fn: function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>fn</span> <code class='quiet'>(function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>))</code>
-	    the function to call with the key in the buffer
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        resolves once the iteration is done
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='values'>
-      Values
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L323-L351'>
-      <span>src/api/mutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Represent the values of a MutableData network object</p>
-
-
-  <div class='pre p1 fill-light mt0'>new Values()</div>
-  
-  
-    <p>
-      Extends
-      
-        h.NetworkObject
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='valueslen'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>len()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L329-L331'>
-      <span>src/api/mutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Get the total number of values in the MutableData</p>
-
-
-  <div class='pre p1 fill-light mt0'>len(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>></code>:
-        number of values
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='valuesforeach'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>forEach(fn)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L338-L340'>
-      <span>src/api/mutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Iterate over the values, execute the function for each entry.</p>
-
-
-  <div class='pre p1 fill-light mt0'>forEach(fn: function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>, <a href="#valueversion">ValueVersion</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>fn</span> <code class='quiet'>(function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>, <a href="#valueversion">ValueVersion</a>))</code>
-	    the function to call
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        resolves once the iteration is done
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='entrymutationtransaction'>
       EntryMutationTransaction
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L153-L217'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L91-L155'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8771,7 +9163,7 @@ app.mutableData.newPublic(somename, tagtype)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L173-L180'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L111-L118'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8857,7 +9249,7 @@ app.mutableData.newPublic(somename, tagtype)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L190-L197'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L128-L135'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8944,7 +9336,7 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L208-L216'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L146-L154'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9041,68 +9433,12 @@ actually asking for the right version
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='mdataaction'>
-      MDataAction
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/native/_mutable.js#L27-L32'>
-      <span>src/native/_mutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>One of: <code>Insert</code>, <code>Update</code>, <code>Delete</code>, <code>ManagePermissions</code></p>
-
-
-  <div class='pre p1 fill-light mt0'>MDataAction</div>
-  
-    <p>
-      Type:
-      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='permissions'>
       Permissions
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L70-L134'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L11-L72'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9160,7 +9496,7 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L76-L78'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L17-L19'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9223,19 +9559,17 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L97-L101'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L36-L40'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Lookup the permissions of a specifc key
-If the signKey provided is <code>null</code> the permission set will be then
-assumed to be <code>USER_ANYONE</code>.</p>
+  <p>Lookup the permissions of a specifc key</p>
 
 
-  <div class='pre p1 fill-light mt0'>getPermissionSet(signKey: (<a href="#signkey">SignKey</a> | null)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;PermissionSet></div>
+  <div class='pre p1 fill-light mt0'>getPermissionSet(signKey: (<a href="#pubsignkey">PubSignKey</a> | CONSTANTS.USER_ANYONE)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
   
   
 
@@ -9252,7 +9586,8 @@ assumed to be <code>USER_ANYONE</code>.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#signkey">SignKey</a> | null))</code>
+            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#pubsignkey">PubSignKey</a> | CONSTANTS.USER_ANYONE)
+            = <code>CONSTANTS.USER_ANYONE</code>)</code>
 	    the key to lookup for
 
           </div>
@@ -9267,7 +9602,7 @@ assumed to be <code>USER_ANYONE</code>.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;PermissionSet></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></code>:
         the permission set for that key
 
       
@@ -9292,7 +9627,7 @@ assumed to be <code>USER_ANYONE</code>.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>insertPermissionSet(signKey, permissionSet, pmset)</span>
+            <span class='code strong strong truncate'>insertPermissionSet(signKey, permissionSet)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -9302,7 +9637,7 @@ assumed to be <code>USER_ANYONE</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L113-L118'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L50-L57'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9311,12 +9646,10 @@ assumed to be <code>USER_ANYONE</code>.</p>
 
   <p>Insert a new permission set mapped to a specifc key. Directly commits
 to the network.
-Requires 'ManagePermissions'-Permission for the app.
-If the signKey provided is <code>null</code> the permission set will be then
-set for <code>USER_ANYONE</code>.</p>
+Requires 'ManagePermissions'-Permission for the app.</p>
 
 
-  <div class='pre p1 fill-light mt0'>insertPermissionSet(signKey: (<a href="#signkey">SignKey</a> | null), permissionSet: any, pmset: PermissionSet): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>insertPermissionSet(signKey: (<a href="#pubsignkey">PubSignKey</a> | CONSTANTS.USER_ANYONE), permissionSet: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -9333,7 +9666,8 @@ set for <code>USER_ANYONE</code>.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#signkey">SignKey</a> | null))</code>
+            <span class='code bold'>signKey</span> <code class='quiet'>((<a href="#pubsignkey">PubSignKey</a> | CONSTANTS.USER_ANYONE)
+            = <code>CONSTANTS.USER_ANYONE</code>)</code>
 	    the key to map to
 
           </div>
@@ -9342,15 +9676,7 @@ set for <code>USER_ANYONE</code>.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>permissionSet</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>pmset</span> <code class='quiet'>(PermissionSet)</code>
+            <span class='code bold'>permissionSet</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
 	    the permission set to insert
 
           </div>
@@ -9386,11 +9712,11 @@ set for <code>USER_ANYONE</code>.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='permissionsforeach'>
+    <div class='border-bottom' id='permissionslistpermissionsets'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>forEach(fn)</span>
+            <span class='code strong strong truncate'>listPermissionSets()</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -9400,42 +9726,27 @@ set for <code>USER_ANYONE</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L126-L132'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L63-L70'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Iterate over the entries, execute the function provided for each of entry,
-and return a promise that resolves once iteration is finished.</p>
+  <p>Return the list of all associated permission sets.</p>
 
 
-  <div class='pre p1 fill-light mt0'>forEach(fn: function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>, <a href="#valueversion">ValueVersion</a>)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
-  
-  
-
-  
-  
-  
-  
+  <div class='pre p1 fill-light mt0'>listPermissionSets(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>></div>
   
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>fn</span> <code class='quiet'>(function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>, <a href="#valueversion">ValueVersion</a>))</code>
-	    the function to call
+  
+  
+  
+  
+  
 
-          </div>
-          
-        </div>
-      
-    </div>
   
 
   
@@ -9443,304 +9754,8 @@ and return a promise that resolves once iteration is finished.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        resolves once the iteration is done
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='permissionsset'>
-      PermissionsSet
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L24-L65'>
-      <span>src/api/mutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>A Set of Permissions per Sign key. Each action might either be
-allowed or denied</p>
-
-
-  <div class='pre p1 fill-light mt0'>new PermissionsSet()</div>
-  
-  
-    <p>
-      Extends
-      
-        h.NetworkObject
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='permissionssetsetallow'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setAllow(action)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L31-L34'>
-      <span>src/api/mutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Set the action as allowed</p>
-
-
-  <div class='pre p1 fill-light mt0'>setAllow(action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>action</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    the action to be set as allowed
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='permissionssetsetdeny'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setDeny(action)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L41-L44'>
-      <span>src/api/mutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Set the action as denied</p>
-
-
-  <div class='pre p1 fill-light mt0'>setDeny(action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>action</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    the action to be set as denied
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='permissionssetclear'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>clear(action)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L51-L54'>
-      <span>src/api/mutable.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Remove action from the set</p>
-
-
-  <div class='pre p1 fill-light mt0'>clear(action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>action</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    the action to clear permissions on
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>></code>:
+        the list of permission sets
 
       
     
@@ -9795,7 +9810,7 @@ allowed or denied</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L172-L288'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L170-L291'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9859,7 +9874,7 @@ allowed or denied</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L188-L194'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L186-L192'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9936,7 +9951,7 @@ allowed or denied</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L201-L204'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L199-L202'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10013,7 +10028,7 @@ allowed or denied</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L213-L222'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L211-L220'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10100,7 +10115,7 @@ to the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L232-L237'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L230-L235'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10196,7 +10211,7 @@ are overwriting the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L245-L247'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L243-L245'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10280,7 +10295,7 @@ are overwriting the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L261-L287'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L264-L290'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10288,13 +10303,13 @@ are overwriting the right one
   
 
   <p>Open a file for reading or writing.</p>
-<p>Open modes (these constants are declared in ../../consts.js):
-OPEN_MODE_OVERWRITE: Replaces the entire content of the file when writing data.
-OPEN_MODE_APPEND: Appends to existing data in the file.
-OPEN_MODE_READ: Open file to read.</p>
+<p>Open modes (these constants are exported by the safe-app-nodejs package):</p>
+<p>CONSTANTS.NFS_FILE_MODE_OVERWRITE: Replaces the entire content of the file when writing data.</p>
+<p>CONSTANTS.NFS_FILE_MODE_APPEND: Appends to existing data in the file.</p>
+<p>CONSTANTS.NFS_FILE_MODE_READ: Open file to read.</p>
 
 
-  <div class='pre p1 fill-light mt0'>open(file: <a href="#file">File</a>, openMode: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#file">File</a>></div>
+  <div class='pre p1 fill-light mt0'>open(file: <a href="#file">File</a>, openMode: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a> | CONSTANTS.NFS_FILE_MODE_OVERWRITE | CONSTANTS.NFS_FILE_MODE_APPEND | CONSTANTS.NFS_FILE_MODE_READ)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#file">File</a>></div>
   
   
 
@@ -10319,8 +10334,8 @@ OPEN_MODE_READ: Open file to read.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>openMode</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>
-            = <code>OPEN_MODE_OVERWRITE</code>)</code>
+            <span class='code bold'>openMode</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a> | CONSTANTS.NFS_FILE_MODE_OVERWRITE | CONSTANTS.NFS_FILE_MODE_APPEND | CONSTANTS.NFS_FILE_MODE_READ)
+            = <code>CONSTANTS.NFS_FILE_MODE_OVERWRITE</code>)</code>
 	    
           </div>
           
@@ -10375,7 +10390,7 @@ OPEN_MODE_READ: Open file to read.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L16-L167'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L14-L165'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10457,7 +10472,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L69-L71'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L67-L69'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10520,7 +10535,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L77-L79'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L75-L77'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10583,7 +10598,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L85-L87'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L83-L85'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10646,7 +10661,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L93-L102'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L91-L100'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10709,7 +10724,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L113-L118'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L111-L116'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10717,12 +10732,12 @@ of the metadata provided.</p>
   
 
   <p>Read the file.
-FILE_READ_FROM_BEGIN and FILE_READ_TO_END may be used
+CONSTANTS.NFS_FILE_START and CONSTANTS.NFS_FILE_END may be used
 to read the entire content of the file. These constants are
-declared in ../../consts.js.</p>
+exposed by the safe-app-nodejs package.</p>
 
 
-  <div class='pre p1 fill-light mt0'>read(position: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, len: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;[Data, Size]></div>
+  <div class='pre p1 fill-light mt0'>read(position: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a> | CONSTANTS.NFS_FILE_START), len: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a> | CONSTANTS.NFS_FILE_END)): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;[Data, Size]></div>
   
   
 
@@ -10739,7 +10754,7 @@ declared in ../../consts.js.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>position</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+            <span class='code bold'>position</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a> | CONSTANTS.NFS_FILE_START))</code>
 	    
           </div>
           
@@ -10747,7 +10762,7 @@ declared in ../../consts.js.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>len</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+            <span class='code bold'>len</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a> | CONSTANTS.NFS_FILE_END))</code>
 	    
           </div>
           
@@ -10796,7 +10811,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L125-L130'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L123-L128'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10880,7 +10895,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L136-L148'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L134-L146'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10943,7 +10958,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/nfs.js#L154-L156'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/nfs.js#L152-L154'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -11022,149 +11037,22 @@ declared in ../../consts.js.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='signkey'>
-      SignKey
+    <h3 class='fl m0' id='enckeypair'>
+      EncKeyPair
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L29-L48'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L135-L170'>
       <span>src/api/crypto.js</span>
       </a>
     
   </div>
   
 
-  <p>Holds signature key</p>
+  <p>Holds an asymmetric encryption keypair</p>
 
 
-  <div class='pre p1 fill-light mt0'>new SignKey()</div>
-  
-  
-    <p>
-      Extends
-      
-        h.NetworkObject
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='signkeygetraw'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getRaw()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L35-L37'>
-      <span>src/api/crypto.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>generate raw string copy of signature key</p>
-
-
-  <div class='pre p1 fill-light mt0'>getRaw(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='keypair'>
-      KeyPair
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L129-L164'>
-      <span>src/api/crypto.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Holds an asymmetric keypair</p>
-
-
-  <div class='pre p1 fill-light mt0'>new KeyPair(app: any, pub: any, secret: any)</div>
+  <div class='pre p1 fill-light mt0'>new EncKeyPair(app: any, pub: any, secret: any)</div>
   
   
 
@@ -11220,7 +11108,7 @@ declared in ../../consts.js.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='keypairpubenckey'>
+    <div class='border-bottom' id='enckeypairpubenckey'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -11234,7 +11122,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L142-L144'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L148-L150'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11283,7 +11171,7 @@ declared in ../../consts.js.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='keypairsecenckey'>
+    <div class='border-bottom' id='enckeypairsecenckey'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -11297,7 +11185,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L151-L153'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L157-L159'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11346,7 +11234,7 @@ declared in ../../consts.js.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='keypairdecryptsealed'>
+    <div class='border-bottom' id='enckeypairdecryptsealed'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -11360,14 +11248,15 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L159-L162'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L166-L169'>
       <span>src/api/crypto.js</span>
       </a>
     
   </div>
   
 
-  <p>Decrypt the given ciphertext with a seal (buffer or string) using the private and public key</p>
+  <p>Decrypt the given cipher text with a seal (buffer or string) using
+this encryption key pair</p>
 
 
   <div class='pre p1 fill-light mt0'>decryptSealed(cipher: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
@@ -11402,7 +11291,7 @@ declared in ../../consts.js.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></code>:
-        Plaintext
+        plain text
 
       
     
@@ -11442,7 +11331,7 @@ declared in ../../consts.js.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L95-L123'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L86-L129'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11500,14 +11389,14 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L101-L103'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L92-L94'>
       <span>src/api/crypto.js</span>
       </a>
     
   </div>
   
 
-  <p>generate raw string copy of encryption key</p>
+  <p>generate raw string copy of secret encryption key</p>
 
 
   <div class='pre p1 fill-light mt0'>getRaw(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
@@ -11553,7 +11442,7 @@ declared in ../../consts.js.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>decrypt(cipher, theirPubKey)</span>
+            <span class='code strong strong truncate'>decrypt(cipher, publicEncKey)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -11563,17 +11452,18 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L120-L122'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L114-L116'>
       <span>src/api/crypto.js</span>
       </a>
     
   </div>
   
 
-  <p>Decrypt the given ciphertext (buffer or string) using the private and public key</p>
+  <p>Decrypt the given cipher text (buffer or string) using this secret
+encryption key and the given public key</p>
 
 
-  <div class='pre p1 fill-light mt0'>decrypt(cipher: any, theirPubKey: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
+  <div class='pre p1 fill-light mt0'>decrypt(cipher: <a href="https://nodejs.org/api/buffer.html">Buffer</a>, publicEncKey: <a href="#pubenckey">PubEncKey</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
   
   
 
@@ -11590,16 +11480,17 @@ declared in ../../consts.js.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>cipher</span> <code class='quiet'>(any)</code>
-	    
+            <span class='code bold'>cipher</span> <code class='quiet'>(<a href="https://nodejs.org/api/buffer.html">Buffer</a>)</code>
+	    to decrypt
+
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>theirPubKey</span> <code class='quiet'>(any)</code>
-	    {PubEncKey} the others public key
+            <span class='code bold'>publicEncKey</span> <code class='quiet'>(<a href="#pubenckey">PubEncKey</a>)</code>
+	    public encryption key
 
           </div>
           
@@ -11614,7 +11505,94 @@ declared in ../../consts.js.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></code>:
-        Plaintext
+        plain text
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='secenckeyencrypt'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>encrypt(data, recipientPubKey)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L126-L128'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Encrypt the input (buffer or string) using this secret encryption key
+and the recipient's public key</p>
+
+
+  <div class='pre p1 fill-light mt0'>encrypt(data: <a href="https://nodejs.org/api/buffer.html">Buffer</a>, recipientPubKey: <a href="#pubenckey">PubEncKey</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://nodejs.org/api/buffer.html">Buffer</a>)</code>
+	    to be encrypted
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>recipientPubKey</span> <code class='quiet'>(<a href="#pubenckey">PubEncKey</a>)</code>
+	    recipient's public encryption key
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></code>:
+        cipher text
 
       
     
@@ -11654,7 +11632,7 @@ declared in ../../consts.js.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L53-L89'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L29-L80'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11712,14 +11690,14 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L59-L61'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L35-L37'>
       <span>src/api/crypto.js</span>
       </a>
     
   </div>
   
 
-  <p>generate raw string copy of encryption key</p>
+  <p>generate raw string copy of public encryption key</p>
 
 
   <div class='pre p1 fill-light mt0'>getRaw(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
@@ -11775,7 +11753,7 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L77-L79'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L53-L55'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11837,11 +11815,11 @@ declared in ../../consts.js.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='pubenckeyencrypt'>
+    <div class='border-bottom' id='pubenckeydecrypt'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>encrypt(str, secretKey)</span>
+            <span class='code strong strong truncate'>decrypt(cipher, secretEncKey)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -11851,17 +11829,18 @@ declared in ../../consts.js.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/crypto.js#L86-L88'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L65-L67'>
       <span>src/api/crypto.js</span>
       </a>
     
   </div>
   
 
-  <p>Encrypt the input (buffer or string) using the private and public key and the given privateKey</p>
+  <p>Decrypt the given cipher text (buffer or string) using this public
+encryption key and the given secret key</p>
 
 
-  <div class='pre p1 fill-light mt0'>encrypt(str: any, secretKey: any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
+  <div class='pre p1 fill-light mt0'>decrypt(cipher: <a href="https://nodejs.org/api/buffer.html">Buffer</a>, secretEncKey: <a href="#secenckey">SecEncKey</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
   
   
 
@@ -11878,16 +11857,18 @@ declared in ../../consts.js.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>str</span> <code class='quiet'>(any)</code>
-	    
+            <span class='code bold'>cipher</span> <code class='quiet'>(<a href="https://nodejs.org/api/buffer.html">Buffer</a>)</code>
+	    to decrypt
+
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>secretKey</span> <code class='quiet'>(any)</code>
-	    
+            <span class='code bold'>secretEncKey</span> <code class='quiet'>(<a href="#secenckey">SecEncKey</a>)</code>
+	    secret encryption key
+
           </div>
           
         </div>
@@ -11901,7 +11882,714 @@ declared in ../../consts.js.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></code>:
-        Ciphertext
+        plain text
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='pubenckeyencrypt'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>encrypt(data, secretEncKey)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L77-L79'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Encrypt the input (buffer or string) using this public encryption key
+and the given secret key.</p>
+
+
+  <div class='pre p1 fill-light mt0'>encrypt(data: <a href="https://nodejs.org/api/buffer.html">Buffer</a>, secretEncKey: <a href="#secenckey">SecEncKey</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://nodejs.org/api/buffer.html">Buffer</a>)</code>
+	    to be encrypted
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>secretEncKey</span> <code class='quiet'>(<a href="#secenckey">SecEncKey</a>)</code>
+	    secret encrpytion key
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></code>:
+        cipher text
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='signkeypair'>
+      SignKeyPair
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L241-L266'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Holds a sign key pair</p>
+
+
+  <div class='pre p1 fill-light mt0'>new SignKeyPair(app: any, pub: any, secret: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>app</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pub</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>secret</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='signkeypairpubsignkey'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>pubSignKey</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L254-L256'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>get the public sign key instance of this key pair</p>
+
+
+  <div class='pre p1 fill-light mt0'>pubSignKey</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#pubsignkey">PubSignKey</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='signkeypairsecsignkey'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>secSignKey</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L263-L265'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>get the secrect sign key instance of this key pair</p>
+
+
+  <div class='pre p1 fill-light mt0'>secSignKey</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#secsignkey">SecSignKey</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='secsignkey'>
+      SecSignKey
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L208-L236'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Holds the secret part of a sign key</p>
+
+
+  <div class='pre p1 fill-light mt0'>new SecSignKey()</div>
+  
+  
+    <p>
+      Extends
+      
+        h.NetworkObject
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='secsignkeygetraw'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getRaw()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L214-L216'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>generate raw string copy of secret sign key</p>
+
+
+  <div class='pre p1 fill-light mt0'>getRaw(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='secsignkeysign'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>sign(data)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L233-L235'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Sign the given data (buffer or string) using the secret sign key</p>
+
+
+  <div class='pre p1 fill-light mt0'>sign(data: <a href="https://nodejs.org/api/buffer.html">Buffer</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://nodejs.org/api/buffer.html">Buffer</a>)</code>
+	    to sign
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></code>:
+        signed data
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='pubsignkey'>
+      PubSignKey
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L175-L203'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Holds the public part of a sign key</p>
+
+
+  <div class='pre p1 fill-light mt0'>new PubSignKey()</div>
+  
+  
+    <p>
+      Extends
+      
+        h.NetworkObject
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='pubsignkeygetraw'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getRaw()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L181-L183'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>generate raw string copy of public sign key</p>
+
+
+  <div class='pre p1 fill-light mt0'>getRaw(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='pubsignkeyverify'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>verify(data)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/crypto.js#L200-L202'>
+      <span>src/api/crypto.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Verify the given signed data (buffer or string) using the public sign key</p>
+
+
+  <div class='pre p1 fill-light mt0'>verify(data: <a href="https://nodejs.org/api/buffer.html">Buffer</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://nodejs.org/api/buffer.html">Buffer</a>)</code>
+	    to verify signature
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></code>:
+        
 
       
     
@@ -11941,7 +12629,7 @@ declared in ../../consts.js.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/cipher_opt.js#L8-L12'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/cipher_opt.js#L8-L12'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -12000,7 +12688,7 @@ either PlainText, Symmetric or Asymmetric</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L371-L652'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L241-L520'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -12040,7 +12728,7 @@ either PlainText, Symmetric or Asymmetric</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>tag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+            <span class='code bold'>type_tag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
 	    the type tag
 
           </div>
@@ -12078,7 +12766,7 @@ either PlainText, Symmetric or Asymmetric</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/mutable.js#L371-L652'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/mutable.js#L241-L520'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -12157,7 +12845,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/joshuef/safe_app_nodejs/blob/7ceac83889303432cc05a6a7fb68d296ca869d34/src/api/emulations/index.js#L8-L10'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/137723eff355bd64a655690b7fe45cbe0d6a5b1c/src/api/emulations/index.js#L8-L10'>
       <span>src/api/emulations/index.js</span>
       </a>
     
