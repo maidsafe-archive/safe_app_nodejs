@@ -20,6 +20,6 @@ deploy:
   skip_cleanup: true
   email: krishna.kumar@maidsafe.net 
   api_key: $NPM_API_KEY
-  tag: next
+  tag: latest
   on:
     tags: true
