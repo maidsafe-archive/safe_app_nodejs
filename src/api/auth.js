@@ -189,7 +189,7 @@ class AuthInterface {
   */
   /* eslint-disable class-methods-use-this */
   genConnUri() {
-    return lib.encode_unregistered_req()
+    return lib.encode_unregistered_req(this.app.appInfo.id)
       .then(addSafeAuthProtocol);
   }
 

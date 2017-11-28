@@ -190,7 +190,7 @@ module.exports = {
     encode_auth_req: [t.Void, [ ref.refType(AuthReq), 'pointer', 'pointer'] ],
     encode_containers_req: [t.Void, [ref.refType(ContainerReq), 'pointer', 'pointer'] ],
     encode_share_mdata_req: [t.Void, [ref.refType(ShareMDataReq), 'pointer', 'pointer'] ],
-    encode_unregistered_req: [t.Void, ['pointer', 'pointer'] ],
+    encode_unregistered_req: [t.Void, [t.u8Pointer, t.usize, 'pointer', 'pointer'] ],
     decode_ipc_msg: [t.Void, [
                       'string', //  (msg: *const c_char,
                       t.VoidPtr, // user_data: *mut c_void,
@@ -234,7 +234,10 @@ module.exports = {
     encode_containers_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_auth_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_share_mdata_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
-    encode_unregistered_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
+    encode_unregistered_req: helpers.Promisified((appId) => {
+      let str = new Buffer(appId);
+      return [str, str.length];
+    }, ['uint32', 'char *'], remapEncodeValues),
     decode_ipc_msg: (lib, fn) => {
       return ((str) => {
         return new Promise((resolve, reject) => {
