@@ -1,5 +1,9 @@
 # safe_app nodejs Change Log
 
+## 0.5.1
+- Upgrade safe_app version to `57f3afb`
+- Adapt to change in safe_app which adds app's ID in unreg auth requests
+
 ## 0.5.0
 
 - Add function to retrieve account information
