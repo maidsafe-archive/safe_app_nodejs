@@ -130,89 +130,104 @@ class SAFEApp extends EventEmitter {
   * @arg {String} url the url you want to fetch
   * @returns {Promise<File>} the file object found for that URL
   */
-  webFetch(url) {
+  async webFetch(url) {
     if (!url) return Promise.reject(new Error('No URL provided.'));
     const parsedUrl = parseUrl(url);
     if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
     const hostname = parsedUrl.hostname;
     let path = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
-
     const tokens = path.split('/');
-    if (!tokens[tokens.length - 1] && tokens.length > 1) { tokens.pop(); }
 
-    if (!tokens[tokens.length - 1].split('.')[1]) {
-      tokens.push(consts.INDEX_HTML);
-      path = tokens.join('/');
+    if (!tokens[tokens.length - 1] && tokens.length > 1) {
+       tokens.pop();
     }
+
+    path = tokens.join('/') || `/${consts.INDEX_HTML}`;
 
     // lets' unpack
     const hostParts = hostname.split('.');
     const lookupName = hostParts.pop(); // last one is 'domain'
-    const serviceName = hostParts.join('.'); // all others are 'service'
+    const serviceName = hostParts.join('.') || 'www'; // all others are 'service'
 
-    return this.crypto.sha3Hash(lookupName)
-      .then((address) => this.mutableData.newPublic(address, consts.TAG_TYPE_DNS)
-        .then((mdata) => mdata.get(serviceName)
-            .then((serviceBuffer) => {
-              const service = serviceBuffer.buf.toString();
+    return new Promise(async (resolve, reject) => {
+      const getServiceInfo = async (lookupName, serviceName) => {
+        try {
+          const address = await this.crypto.sha3Hash(lookupName);
+          const servicesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
+          return await servicesContainer.get(serviceName);
+        } catch(err) {
+          if (err.code === -103) {
+            let error = new Error();
+            error.code = err.code;
+            error.message = 'Requested Service or Public Name is invalid.';
+            throw error;
+          }
+          throw err;
+        }
+      };
 
-              if (service.length < 1) {
-                // this means the service was soft-deleted
-                const error = new Error();
-                error.code = -106;
-                throw error;
-              }
-              return serviceBuffer;
-            })
-            .catch((err) => {
-              // Error code -106 coresponds to 'Requested entry not found'
-              if (err.code === -106) {
-                if (!serviceName || !serviceName.length) {
-                  return mdata.get('www');
-                }
-                return Promise.reject(new Error('Service not found'));
-              }
-              return Promise.reject(err);
-            })
-          .then((value) => this.mutableData.fromSerial(value.buf)
-              .catch(() => this.mutableData.newPublic(value.buf, consts.TAG_TYPE_WWW)))
-          .then((service) => service.emulateAs('NFS'))
-          .then((emulation) => emulation.fetch(path)
-            .catch((err) => {
-              // Error codes -305 and -301 correspond to 'NfsError::FileNotFound'
-              if (err.code === -305 || err.code === -301) {
-                let newPath;
-                if (path[path.length - 1] === '/') {
-                  // try with appending the index.html at the end then
-                  newPath = `${path}${consts.INDEX_HTML}`;
-                  return emulation.fetch(newPath).catch((e) => {
-                    // and the version without the leading slash
-                    if (e.code === -305 || e.code === -301) {
-                      return emulation.fetch(newPath.slice(1, newPath.length));
-                    }
-                    return Promise.reject(e);
-                  });
-                } else if (path[0] === '/') {
-                  // directly try the non-slash version
-                  return emulation.fetch(path.slice(1, path.length))
-                  .catch((e) => {
-                    // This catch block handles the cases where a user intends
-                    // to fetch a path without index.html
-                    const pathArray = path.split('/');
-                    if (pathArray[pathArray.length - 1] === consts.INDEX_HTML) {
-                      pathArray.pop();
-                      return emulation.fetch(pathArray.join('/'));
-                    }
-                    return Promise.reject(e);
-                  });
-                }
-              }
-              return Promise.reject(err);
-            })
-            .then((file) => emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ))
-            .then((openFile) => openFile.read(
-                consts.pubConsts.NFS_FILE_START, consts.pubConsts.NFS_FILE_END))
-          )));
+      const getFile = async (emulation, path, shouldThrow) => {
+        try {
+          console.log('Fetching', path);
+          let file = await emulation.fetch(path);
+          return;
+        } catch(e) {
+          console.log(e.code, -301)
+          if(e.code !== -301) {
+            throw e;
+          }
+          if (shouldThrow) {
+            throw e;
+          }
+        }
+      };
+
+      const handleNfsFetchException = (error) => {
+        if (error.code !== -301) {
+          throw error;
+        }
+      };
+
+      try {
+        const serviceInfo = await getServiceInfo(lookupName, serviceName);
+        let serviceMd;
+        try {
+          serviceMd = await this.mutableData.fromSerial(serviceInfo.buf);
+        } catch(e) {
+          serviceMd = await this.mutableData.newPublic(serviceInfo.buf, consts.TAG_TYPE_WWW);
+        }
+        const emulation = await serviceMd.emulateAs('NFS');
+        let file;
+        try {
+          file = await emulation.fetch(path);
+        } catch (e) {
+          handleNfsFetchException(e)
+        }
+        if (!file && path.startsWith('/')) {
+          try {
+            file = await emulation.fetch(path.replace('/', ''));
+          } catch(e) {
+            handleNfsFetchException(e);
+          }
+        }
+        if (!file && path.split('/').length > 1) {
+          try {
+            file = await emulation.fetch(`${path}/${consts.INDEX_HTML}`);
+          } catch(e) {
+            handleNfsFetchException(e);
+          }
+        }
+        if (!file) {
+          file = await emulation.fetch(`${path}/${consts.INDEX_HTML}`.replace('/', ''));
+        }
+        const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
+        const data = await openedFile.read(
+              consts.pubConsts.NFS_FILE_START, consts.pubConsts.NFS_FILE_END);
+        resolve(data);
+      } catch(e) {
+        reject(e);
+      }
+    });
   }
 
 
