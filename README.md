@@ -2,7 +2,7 @@
 
 A safe_app library for [Node.js](https://nodejs.org/).
 
-**Maintainer:** Krishna Kumar (krishna.kumar@maidsafe.net)
+**Maintainer:** Gabriel Viganotti (gabriel.viganotti@maidsafe.net)
 
 |Linux/OS X|Windows|Coverage Status|
 |:---:|:---:|:---:|
