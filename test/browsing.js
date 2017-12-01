@@ -14,13 +14,13 @@ const createRandomDomain = (content, path, service, authedApp) => {
         const nfs = serviceMdata.emulateAs('NFS');
         // let's write the file
         return nfs.create(content)
-          .then((file) => nfs.insert(path || '', file))
+          .then((file) => nfs.insert(path || '/index.html', file))
           .then(() => app.crypto.sha3Hash(domain)
             .then((dnsName) => app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS)
               .then((dnsData) => serviceMdata.getNameAndTag()
                   .then((res) => {
                     const payload = {};
-                    payload[service || ''] = res.name;
+                    payload[service || 'www'] = res.name;
                     return dnsData.quickSetup(payload);
                   }))));
       }))
@@ -252,8 +252,7 @@ describe('Browsing', () => {
 
     it('should not find dns', () =>
       client.webFetch('safe://domain_doesnt_exist')
-        .should.be.rejectedWith('Core error: Routing client error -> Requested data not found')
-        .then((err) => should(err.code).be.equal(-103))
+        .should.be.rejectedWith('Requested public name is not found')
     );
 
     it('should be case sensitive', () =>
@@ -264,7 +263,7 @@ describe('Browsing', () => {
 
     it('should not find service', () =>
       client.webFetch(`safe://faulty_service.${domain}`)
-        .should.be.rejectedWith('Service not found')
+        .should.be.rejectedWith('Requested service is not found')
     );
 
     it('should not find file', () =>
@@ -281,7 +280,7 @@ describe('Browsing', () => {
 
     it('wrong path', () => createRandomDomain(content, '/my.file', '')
       .then((newdomain) => createAnonTestApp()
-        .then((app) => app.webFetch(`safe://${newdomain}/my.file/`)
+        .then((app) => app.webFetch(`safe://${newdomain}/my.file/some`)
           .should.be.rejectedWith('NFS error: File not found')
         ))
     ).timeout(20000);
