@@ -146,7 +146,7 @@ class SAFEApp extends EventEmitter {
 
     const PUBLIC_NAME_NOT_FOUND = -103;
     const SERVICE_NOT_FOUND = -106;
-    // const NFS_NOT_FOUND = -301;
+
     // lets' unpack
     const hostParts = hostname.split('.');
     const lookupName = hostParts.pop(); // last one is 'domain'
@@ -168,22 +168,6 @@ class SAFEApp extends EventEmitter {
           throw err;
         }
       };
-
-      // const getFile = async (emulation, path, shouldThrow) => {
-      //   try {
-      //     console.log('Fetching', path);
-      //     let file = await emulation.fetch(path);
-      //     return;
-      //   } catch (e) {
-      //     console.log(e.code, -301)
-      //     if (e.code !== -301) {
-      //       throw e;
-      //     }
-      //     if (shouldThrow) {
-      //       throw e;
-      //     }
-      //   }
-      // };
 
       const handleNfsFetchException = (error) => {
         if (error.code !== -301) {
