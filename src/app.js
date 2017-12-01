@@ -139,48 +139,51 @@ class SAFEApp extends EventEmitter {
     const tokens = path.split('/');
 
     if (!tokens[tokens.length - 1] && tokens.length > 1) {
-       tokens.pop();
+      tokens.pop();
     }
 
     path = tokens.join('/') || `/${consts.INDEX_HTML}`;
 
+    const PUBLIC_NAME_NOT_FOUND = -103;
+    const SERVICE_NOT_FOUND = -106;
+    // const NFS_NOT_FOUND = -301;
     // lets' unpack
     const hostParts = hostname.split('.');
     const lookupName = hostParts.pop(); // last one is 'domain'
     const serviceName = hostParts.join('.') || 'www'; // all others are 'service'
 
     return new Promise(async (resolve, reject) => {
-      const getServiceInfo = async (lookupName, serviceName) => {
+      const getServiceInfo = async (pubName, servName) => {
         try {
-          const address = await this.crypto.sha3Hash(lookupName);
+          const address = await this.crypto.sha3Hash(pubName);
           const servicesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
-          return await servicesContainer.get(serviceName);
-        } catch(err) {
-          if (err.code === -103) {
-            let error = new Error();
+          return await servicesContainer.get(servName);
+        } catch (err) {
+          if (err.code === PUBLIC_NAME_NOT_FOUND || err.code === SERVICE_NOT_FOUND) {
+            const error = new Error();
             error.code = err.code;
-            error.message = 'Requested Service or Public Name is invalid.';
+            error.message = `Requested ${err.code === PUBLIC_NAME_NOT_FOUND ? 'public name' : 'service'} is not found`;
             throw error;
           }
           throw err;
         }
       };
 
-      const getFile = async (emulation, path, shouldThrow) => {
-        try {
-          console.log('Fetching', path);
-          let file = await emulation.fetch(path);
-          return;
-        } catch(e) {
-          console.log(e.code, -301)
-          if(e.code !== -301) {
-            throw e;
-          }
-          if (shouldThrow) {
-            throw e;
-          }
-        }
-      };
+      // const getFile = async (emulation, path, shouldThrow) => {
+      //   try {
+      //     console.log('Fetching', path);
+      //     let file = await emulation.fetch(path);
+      //     return;
+      //   } catch (e) {
+      //     console.log(e.code, -301)
+      //     if (e.code !== -301) {
+      //       throw e;
+      //     }
+      //     if (shouldThrow) {
+      //       throw e;
+      //     }
+      //   }
+      // };
 
       const handleNfsFetchException = (error) => {
         if (error.code !== -301) {
@@ -190,10 +193,16 @@ class SAFEApp extends EventEmitter {
 
       try {
         const serviceInfo = await getServiceInfo(lookupName, serviceName);
+        if (serviceInfo.buf.length === 0) {
+          const error = new Error();
+          error.code = SERVICE_NOT_FOUND;
+          error.message = 'Service not found';
+          return reject(error);
+        }
         let serviceMd;
         try {
           serviceMd = await this.mutableData.fromSerial(serviceInfo.buf);
-        } catch(e) {
+        } catch (e) {
           serviceMd = await this.mutableData.newPublic(serviceInfo.buf, consts.TAG_TYPE_WWW);
         }
         const emulation = await serviceMd.emulateAs('NFS');
@@ -201,19 +210,19 @@ class SAFEApp extends EventEmitter {
         try {
           file = await emulation.fetch(path);
         } catch (e) {
-          handleNfsFetchException(e)
+          handleNfsFetchException(e);
         }
         if (!file && path.startsWith('/')) {
           try {
             file = await emulation.fetch(path.replace('/', ''));
-          } catch(e) {
+          } catch (e) {
             handleNfsFetchException(e);
           }
         }
         if (!file && path.split('/').length > 1) {
           try {
             file = await emulation.fetch(`${path}/${consts.INDEX_HTML}`);
-          } catch(e) {
+          } catch (e) {
             handleNfsFetchException(e);
           }
         }
@@ -222,9 +231,9 @@ class SAFEApp extends EventEmitter {
         }
         const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
         const data = await openedFile.read(
-              consts.pubConsts.NFS_FILE_START, consts.pubConsts.NFS_FILE_END);
+          consts.pubConsts.NFS_FILE_START, consts.pubConsts.NFS_FILE_END);
         resolve(data);
-      } catch(e) {
+      } catch (e) {
         reject(e);
       }
     });
