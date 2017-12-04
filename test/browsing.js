@@ -82,7 +82,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, '', '')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
       ));
   }).timeout(20000);
 
@@ -91,7 +91,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, 'emptyfile.txt', '')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}/emptyfile.txt`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
       ));
   }).timeout(20000);
 
@@ -100,7 +100,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/any/path/html', 'whatever')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://whatever.${domain}/any/path/html`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
       ));
   }).timeout(20000);
 
@@ -109,7 +109,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/yumyum.html', 'whatever.valid_service')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://whatever.valid_service.${domain}/yumyum.html`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
       ));
   }).timeout(20000);
 
@@ -118,7 +118,7 @@ describe('Browsing', () => {
     return createRandomPrivateServiceDomain(content, '/yumyum.html', 'www')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://www.${domain}/yumyum.html`)
-          .then((co) => should(co.toString()).equal(content))));
+          .then((data) => should(data.body.toString()).equal(content))));
   }).timeout(20000);
 
   it('find missing slash fallback', () => {
@@ -126,7 +126,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, 'test.html', 'whatever.valid_service')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://whatever.valid_service.${domain}/test.html`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
       ));
   }).timeout(20000);
 
@@ -135,7 +135,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/index.html', '')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
       ));
   }).timeout(20000);
 
@@ -144,7 +144,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, '', 'www')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
       ));
   }).timeout(20000);
 
@@ -153,7 +153,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/index.html', 'www')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
       ));
   }).timeout(20000);
 
@@ -162,7 +162,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/subdir/index.html', 'www')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}/subdir/`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
       ));
   }).timeout(20000);
 
@@ -171,7 +171,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, 'index.html', '')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
         ));
   }).timeout(20000);
 
@@ -180,7 +180,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/my.folder/index.html', '')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}/my.folder/index.html`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
         ));
   }).timeout(20000);
 
@@ -189,7 +189,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/my.folder/index.html', '')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}/my.folder/`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
         ));
   }).timeout(20000);
 
@@ -198,7 +198,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/path/my.file', '')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}/path/my.file`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
         ));
   }).timeout(20000);
 
@@ -207,7 +207,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/index.html', 'www')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}/`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
       ));
   }).timeout(20000);
 
@@ -216,7 +216,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, '/spa ce.ht"ml', '')
       .then((domain) => createAnonTestApp()
         .then((app) => app.webFetch(`safe://${domain}/spa ce.ht"ml`)
-          .then((co) => should(co.toString()).equal(content))
+          .then((data) => should(data.body.toString()).equal(content))
       ));
   }).timeout(20000);
 
