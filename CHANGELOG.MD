@@ -1,5 +1,9 @@
 # safe_app nodejs Change Log
 
+## 0.5.3
+- Fix webFetch to load URLs from root and sub directory
+
+
 ## 0.5.2
 - Fix webFetch to load URLs from root and sub directory
 
