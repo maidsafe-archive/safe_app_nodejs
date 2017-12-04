@@ -1,4 +1,6 @@
 const { EventEmitter } = require('events');
+const nodePath = require('path');
+const mime = require('mime');
 const { autoref } = require('./helpers');
 const api = require('./api');
 const lib = require('./native/lib');
@@ -128,7 +130,7 @@ class SAFEApp extends EventEmitter {
   * convention and find the requested object.
   *
   * @arg {String} url the url you want to fetch
-  * @returns {Promise<File>} the file object found for that URL
+  * @returns {Promise<Object>} the object with body of content and headers
   */
   async webFetch(url) {
     if (!url) return Promise.reject(new Error('No URL provided.'));
@@ -191,32 +193,43 @@ class SAFEApp extends EventEmitter {
         }
         const emulation = await serviceMd.emulateAs('NFS');
         let file;
+        let filePath;
         try {
-          file = await emulation.fetch(path);
+          filePath = path;
+          file = await emulation.fetch(filePath);
         } catch (e) {
           handleNfsFetchException(e);
         }
         if (!file && path.startsWith('/')) {
           try {
-            file = await emulation.fetch(path.replace('/', ''));
+            filePath = path.replace('/', '');
+            file = await emulation.fetch(filePath);
           } catch (e) {
             handleNfsFetchException(e);
           }
         }
         if (!file && path.split('/').length > 1) {
           try {
-            file = await emulation.fetch(`${path}/${consts.INDEX_HTML}`);
+            filePath = `${path}/${consts.INDEX_HTML}`;
+            file = await emulation.fetch(filePath);
           } catch (e) {
             handleNfsFetchException(e);
           }
         }
         if (!file) {
-          file = await emulation.fetch(`${path}/${consts.INDEX_HTML}`.replace('/', ''));
+          filePath = `${path}/${consts.INDEX_HTML}`.replace('/', '');
+          file = await emulation.fetch(filePath);
         }
         const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
         const data = await openedFile.read(
           consts.pubConsts.NFS_FILE_START, consts.pubConsts.NFS_FILE_END);
-        resolve(data);
+        const mimeType = mime.getType(nodePath.extname(filePath)) || 'application/octet-stream';
+        resolve({
+          headers: {
+            'Content-Type': mimeType
+          },
+          body: data
+        });
       } catch (e) {
         reject(e);
       }
