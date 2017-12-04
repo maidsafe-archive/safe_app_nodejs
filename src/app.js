@@ -130,7 +130,7 @@ class SAFEApp extends EventEmitter {
   * convention and find the requested object.
   *
   * @arg {String} url the url you want to fetch
-  * @returns {Promise<File>} the file object found for that URL
+  * @returns {Promise<Object>} the object with body of content and headers
   */
   async webFetch(url) {
     if (!url) return Promise.reject(new Error('No URL provided.'));
