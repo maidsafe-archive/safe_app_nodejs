@@ -2,7 +2,7 @@
 
 A safe_app library for [Node.js](https://nodejs.org/).
 
-**Maintainer:** Krishna Kumar (krishna.kumar@maidsafe.net)
+**Maintainer:** Gabriel Viganotti (gabriel.viganotti@maidsafe.net)
 
 |Linux/OS X|Windows|Coverage Status|
 |:---:|:---:|:---:|
@@ -16,7 +16,7 @@ The documentation for the safe_app Node.js API is available at <http://docs.maid
 
 1. Prerequisites
 
-    * Node.js 6.5.0 (we recommend installing it via [nvm](https://github.com/creationix/nvm))
+    * Node.js 7.10.0 (we recommend installing it via [nvm](https://github.com/creationix/nvm))
     * [Git](https://git-scm.com/)
     * [Yarn](https://yarnpkg.com) (as a replacement for `npm`).
 
