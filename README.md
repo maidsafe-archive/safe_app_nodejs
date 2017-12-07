@@ -41,6 +41,15 @@ To run the tests locally, make sure you installed the `safe_client` libraries wi
 
 Note: If you are compiling your own [safe_app](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library for testing purposes, and if you want to be able to run the tests, make sure to include `testing` in your build features when compiling `safe_app` in `safe_client_libs`, i.e. `cargo build --release --features "use-mock-routing testing"`.
 
+### Docker
+
+Notice the Dockerfile in this repo. It will build a 32-bit version of Ubuntu 16.04 and run `safe_app_nodejs` tests
+- Start your Docker terminal and navigate to this project directory.
+- Run `docker build -t 32_bit_linux .`
+
+The previous command will run `safe_app_nodejs` tests but if you want to run a container interactively, use:
+- `docker run -it --name safe_app32 32_bit_linux /bin/bash`
+
 ## Further Help
 
 You can discuss development-related questions on the [SAFE Dev Forum](https://forum.safedev.org/).
