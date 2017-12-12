@@ -68,6 +68,13 @@ describe('External API', () => {
         .then((app) => should(app.auth.registered).be.true());
     });
 
+    // this is the case in Fedora where '/' characters are added after the ':' by the OS
+    it('URI == safe-<app id>:///<auth info>', () => {
+      const uri = h.authUris.registeredUri.replace(/^safe-([^:]*):?/g, 'safe-$1:///');
+      return fromAuthURI(appInfo, uri, null, { log: false })
+        .then((app) => should(app.auth.registered).be.true());
+    });
+
     it('fail with safe-<app info>://<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, '$&//$\'');
       return should(fromAuthURI(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
