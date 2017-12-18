@@ -139,15 +139,15 @@ class SAFEApp extends EventEmitter {
     const hostname = parsedUrl.hostname;
     let path = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
     const tokens = path.split('/');
-
     if (!tokens[tokens.length - 1] && tokens.length > 1) {
       tokens.pop();
+      tokens.push(consts.INDEX_HTML);
     }
 
     path = tokens.join('/') || `/${consts.INDEX_HTML}`;
-
-    const PUBLIC_NAME_NOT_FOUND = -103;
-    const SERVICE_NOT_FOUND = -106;
+    const ERR_NO_SUCH_DATA = -103;
+    const ERR_NO_SUCH_ENTRY = -106;
+    const ERR_FILE_NOT_FOUND = -301;
 
     // lets' unpack
     const hostParts = hostname.split('.');
@@ -161,10 +161,10 @@ class SAFEApp extends EventEmitter {
           const servicesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
           return await servicesContainer.get(servName);
         } catch (err) {
-          if (err.code === PUBLIC_NAME_NOT_FOUND || err.code === SERVICE_NOT_FOUND) {
+          if (err.code === ERR_NO_SUCH_DATA || err.code === ERR_NO_SUCH_ENTRY) {
             const error = new Error();
             error.code = err.code;
-            error.message = `Requested ${err.code === PUBLIC_NAME_NOT_FOUND ? 'public name' : 'service'} is not found`;
+            error.message = `Requested ${err.code === ERR_NO_SUCH_DATA ? 'public name' : 'service'} is not found`;
             throw error;
           }
           throw err;
@@ -172,7 +172,7 @@ class SAFEApp extends EventEmitter {
       };
 
       const handleNfsFetchException = (error) => {
-        if (error.code !== -301) {
+        if (error.code !== ERR_FILE_NOT_FOUND) {
           throw error;
         }
       };
@@ -181,7 +181,7 @@ class SAFEApp extends EventEmitter {
         const serviceInfo = await getServiceInfo(lookupName, serviceName);
         if (serviceInfo.buf.length === 0) {
           const error = new Error();
-          error.code = SERVICE_NOT_FOUND;
+          error.code = ERR_NO_SUCH_ENTRY;
           error.message = 'Service not found';
           return reject(error);
         }

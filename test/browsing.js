@@ -184,6 +184,15 @@ describe('Browsing', () => {
         ));
   }).timeout(20000);
 
+  it('/index.html', () => {
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    return createRandomDomain(content, '/index.html', '')
+      .then((domain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://${domain}/index.html`)
+          .then((data) => should(data.body.toString()).equal(content))
+        ));
+  }).timeout(20000);
+
   it('/my.folder/', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/my.folder/index.html', '')
@@ -280,7 +289,14 @@ describe('Browsing', () => {
 
     it('wrong path', () => createRandomDomain(content, '/my.file', '')
       .then((newdomain) => createAnonTestApp()
-        .then((app) => app.webFetch(`safe://${newdomain}/my.file/some`)
+        .then((app) => app.webFetch(`safe://${newdomain}/my.file/`)
+          .should.be.rejectedWith('NFS error: File not found')
+        ))
+    ).timeout(20000);
+
+    it('wrong deeper path', () => createRandomDomain(content, '/my.file/my.other.file', '')
+      .then((newdomain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://${newdomain}/my.file/my.other.file/`)
           .should.be.rejectedWith('NFS error: File not found')
         ))
     ).timeout(20000);

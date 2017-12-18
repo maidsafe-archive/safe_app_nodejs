@@ -56,9 +56,13 @@ const addSafeAuthProtocol = (response) => {
 
 /**
 * @private
-* Remove 'safe' protocol from URI in order to be able to decode it
+* Remove 'safe' protocol from URI in order to be able to decode it.
+* Also, remove any '/' characters that could have been added after the ':' by
+* some OS like Fedora, making the URI invalid for decoding.
+* This characters are not added by the authenticator, we therefore
+* don't have much choice than just make sure we remove them from here.
 */
-const removeSafeProcol = (uri) => uri.replace(/^safe-[^:]*:?/g, '');
+const removeSafeProcol = (uri) => uri.replace(/^safe-[^:]*:?[/]*/g, '');
 
 /**
 * The AuthInterface contains all authentication related
