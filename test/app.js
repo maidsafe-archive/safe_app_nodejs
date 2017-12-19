@@ -2,6 +2,7 @@ const should = require('should');
 const h = require('./helpers');
 const App = require('../src/app');
 const appHelpers = require('../src/helpers');
+const errConst = require('../src/error_const');
 
 const createTestApp = h.createTestApp;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
@@ -9,21 +10,6 @@ const createTestAppWithNetworkCB = h.createTestAppWithNetworkCB;
 const createTestAppWithOptions = h.createTestAppWithOptions;
 
 describe('Smoke test', () => {
-  it('unauthorised connection', () => {
-    const app = createTestApp();
-    return app.auth.genConnUri()
-      .then((resp) => {
-        should(resp.uri).is.not.undefined();
-        should(resp.uri).startWith('safe-auth:');
-      });
-  });
-
-  it('should build some authentication uri', () => {
-    const app = createTestApp();
-    return app.auth.genAuthUri({ _public: ['Read'] })
-        .then((resp) => should(resp.uri).startWith('safe-auth:'));
-  });
-
   it('can take a network state callback', () => {
     const networkCb = (state) => `NETWORK STATE: ${state}`;
     const app = createTestAppWithNetworkCB(
@@ -107,8 +93,7 @@ describe('Smoke test', () => {
         scope: null
       }
     }));
-
-    should.throws(test);
+    should(test).throw(errConst.MALFORMED_APP_INFO.msg);
   });
 
   it('should throw informative error, if App properties, excepting scope, are empty', () => {
@@ -145,7 +130,16 @@ describe('Smoke test', () => {
     const app = h.createTestApp();
     await app.auth.loginFromURI(h.authUris.unregisteredUri);
     should(app.getAccountInfo()).be.rejected();
+  });
+
+  it('returns safe_client_libs log path', async () => {
+    const app = createAuthenticatedTestApp();
+    should(app.logPath()).be.fulfilled();
   }).timeout(10000);
+
+  it('logs in to netowrk from existing authUri', async () => {
+    should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri)).be.fulfilled();
+  });
 
   it('returns boolean for network state', () => {
     const app = createAuthenticatedTestApp();

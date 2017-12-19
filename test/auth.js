@@ -3,16 +3,60 @@ const h = require('./helpers');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
+/* eslint-disable no-shadow */
+describe('auth interface', () => {
+  const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
+  const app = createAuthenticatedTestApp('_test_scope', containersPermissions);
+  it('should build some authentication uri', () => {
+    const app = h.createTestApp();
+    return app.auth.genAuthUri({ _public: ['Read'] })
+        .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  });
+
+  it('is authenticated for testing', () => {
+    should(app.auth.registered).be.true();
+  });
+
+  it('should build some containers uri', () => {
+    const app = h.createTestApp();
+    return app.auth.genContainerAuthUri({ private: ['Insert'] })
+        .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  });
+
+  it('should build some shared MD uri', () => {
+    const app = h.createTestApp();
+    const sharedMdXorName = h.createRandomXorName();
+    const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
+    return app.auth.genShareMDataUri(perms)
+        .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  });
+
+  it('creates unregistered connection', () => {
+    const app = h.createTestApp();
+    return app.auth.genConnUri()
+      .then((resp) => {
+        should(resp.uri).is.not.undefined();
+        should(resp.uri).startWith('safe-auth:');
+      });
+  });
+
+  it('logs in to network with URI response from authenticator', () => {
+    const app = h.createTestApp();
+    should(app.auth.loginFromURI(h.authUris.registeredUri)).be.fulfilled();
+  });
+
+  it('creates an authenticated session just for testing', () => {
+    const app = h.createTestApp();
+    should(app.auth.loginForTest()).be.fulfilled();
+  });
+});
+
 describe('Access Container', () => {
   const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
   const app = createAuthenticatedTestApp('_test_scope', containersPermissions);
 
   it('should have a connection object after completing app authentication', () => {
     should.exist(app.connection);
-  });
-
-  it('is authenticated for testing', () => {
-    should(app.auth.registered).be.true();
   });
 
   /* eslint-disable dot-notation */
@@ -101,4 +145,4 @@ describe('Access Container', () => {
             should(value.buf.toString()).equal('value1');
           })
   ));
-});
+}).timeout(15000);

@@ -9,6 +9,12 @@ const authUris = {
   sharedMdataUri: 'safe-bmv0lm1hawrzywzllmv4yw1wbgvzlndlymhvc3rpbmdtyw5hz2vy:AQAAAKY8y-wAAAAAAAAAACAAAAAAAAAAA29bsGLigcpbfsj8A_P9zMQsHM2dYVC11aE2juQJYZwgAAAAAAAAAOPTk8r3ThVoccb1ZU15U-rz2JPoAltta1PedqiHe4S2IAAAAAAAAACso4SQFLF6Xirfi7boTHlotq8sfq1uCY3Wld4E8kWTMkAAAAAAAAAAkr308V8c7tHVpt5t65gaZRAovEdE4cibhK90DoNlgOGso4SQFLF6Xirfi7boTHlotq8sfq1uCY3Wld4E8kWTMiAAAAAAAAAARK483_DDk3kOCtEwtJ1Cloo4eQ3CT2sB5issPvQPDzMgAAAAAAAAAMh20SEvg5xcgQx_ggGvx7dv3AqYMVXAQ6OcElSH45hOAAAAAAAAAAAAAAAAAAAAAFNdSUU4ZlhwB9iCNiv_XfeeVR-q2uIn9OAvkV-o_9hWmDoAAAAAAAAYAAAAAAAAAJGRW8SSrLGexAiA6ETQkJpOhV3TLq_UYwIAAAAAAAAADAAAAAAAAABfcHVibGljTmFtZXNe_yEfW_EmRDrQorUu0zfxFyqQhbgNK874tdvOotyxL5g6AAAAAAAAASAAAAAAAAAAJrC0-PrKT3YR6AVuOENalm6JlhGarqATQZxULxvsVgYYAAAAAAAAAC8-2s-W-7f2D4y78bQuDLYr60lZnVyFlAAEAAAAAAAAAAAAAAABAAAAAgAAAAMAAAAHAAAAAAAAAF9wdWJsaWNU6gkC4SN-XmdPG8xGQNGvA6ALK7yFB2X586lwcVDKqJg6AAAAAAAAAAAEAAAAAAAAAAAAAAABAAAAAgAAAAMAAAA'
 };
 
+const appInfo = {
+  id: 'net.maidsafe.test.javascript.id',
+  name: 'JS Test',
+  vendor: 'MaidSafe Ltd.'
+};
+
 const createTestApp = (scope) =>
   h.autoref(new App({
     id: 'net.maidsafe.test.javascript.id',
@@ -16,6 +22,17 @@ const createTestApp = (scope) =>
     vendor: 'MaidSafe.net Ltd',
     scope
   }, null, { log: false }));
+
+const createAltAuthTestApp = (scope, access) => {
+  const app = h.autoref(new App({
+    id: 'alt-net.maidsafe.test.javascript.id',
+    name: 'alt-NodeJS Test',
+    vendor: 'alt-MaidSafe.net Ltd',
+    scope
+  }, null, { log: false }));
+  app.auth.loginForTest(access || {}); // Promise, but immediate
+  return app;
+};
 
 const createTestAppWithNetworkCB = (scope, networkCB) =>
   h.autoref(new App({
@@ -49,6 +66,8 @@ const createRandomSecKey = () => crypto.randomBytes(32);
 const createRandomNonce = () => crypto.randomBytes(32);
 
 module.exports = {
+  App,
+  appInfo,
   authUris,
   createTestApp,
   createAnonTestApp,
@@ -57,5 +76,6 @@ module.exports = {
   createRandomSecKey,
   createRandomNonce,
   createTestAppWithNetworkCB,
-  createTestAppWithOptions
+  createTestAppWithOptions,
+  createAltAuthTestApp
 };

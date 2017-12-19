@@ -30,7 +30,7 @@ class Reader extends helpers.NetworkObject {
   }
 
   /**
-  * The size of the mutable data on the network
+  * The size of the immutable data on the network
   * @returns {Promise<Number>} length in bytes
   */
   size() {
@@ -89,13 +89,6 @@ class Writer extends helpers.NetworkObject {
     return lib.idata_close_self_encryptor(this.app.connection,
                                           this.ref,
                                           cipherOpt.ref);
-  }
-
-  /**
-  * Proxy to `close`.
-  */
-  save() {
-    return this.close();
   }
 
   /**
