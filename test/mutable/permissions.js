@@ -39,6 +39,14 @@ describe('Permissions', () => {
           )))
   );
 
+  it('get empty list of permissions sets', () => app.mutableData.newRandomPublic(TYPE_TAG)
+      .then((m) => m.put(CONSTANTS.MD_PERMISSION_EMPTY, CONSTANTS.MD_ENTRIES_EMPTY)
+        .then(() => m.getPermissions())
+      )
+      .then((perms) => perms.listPermissionSets())
+      .then((permsSets) => should(permsSets.length).equal(0))
+  );
+
   it('insert permissions set for `Anyone`', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => m.getPermissions())
