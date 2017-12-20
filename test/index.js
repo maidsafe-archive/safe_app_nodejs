@@ -54,7 +54,7 @@ describe('Smoke testing', () => {
 
   it('system uri openUri function returns a promise', () => {
     const app = h.createTestApp();
-    app.auth.openUri('').should.be.Promise();
+    should(app.auth.openUri('')).be.Promise();
   });
 
   it('throws error if lib fails to load', () => {
