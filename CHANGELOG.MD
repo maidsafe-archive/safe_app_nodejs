@@ -1,8 +1,19 @@
 # safe_app nodejs Change Log
 
+## [0.6.0] - 20-12-2017
+### Added
+- Increase test coverage to 90%+ plus minor reorganisation of tests
+
+### Fixed
+- Remove '/' characters added by some OS to auth URI before decoding it
+- Fix issue in webFetch with URL's ending with '/' to correctly treat it as ending with a folder path
+
+### SAFE libraries Dependencies
+- safe_app: v0.5.0
+- system_uri: v0.3.0
+
 ## 0.5.3
 - Fix webFetch to load URLs from root and sub directory
-
 
 ## 0.5.2
 - Fix webFetch to load URLs from root and sub directory
