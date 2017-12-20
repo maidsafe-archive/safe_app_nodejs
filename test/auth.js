@@ -48,7 +48,7 @@ describe('auth interface', () => {
   it('creates an authenticated session just for testing', () => {
     const app = h.createTestApp();
     should(app.auth.loginForTest()).be.fulfilled();
-  });
+  }).timeout(20000);
 });
 
 describe('Access Container', () => {
