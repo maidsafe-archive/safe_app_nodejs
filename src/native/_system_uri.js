@@ -30,10 +30,11 @@ const init = (options) => {
 };
 
 const _handleError = (resolve,  reject) => {
-  return FFI.Callback("void", [t.VoidPtr, t.FfiResult],
-    (userData, result) => {
+  return FFI.Callback("void", [t.VoidPtr, t.FfiResultPtr],
+    (userData, resultPtr) => {
+      const result = h.makeFfiResult(resultPtr);
       if (result.error_code !== 0) {
-        return reject(makeFfiError(err.error_code, err.error_description));
+        return reject(makeFfiError(result.error_code, result.error_description));
       }
       return resolve();
     }
