@@ -1,5 +1,10 @@
 # safe_app nodejs Change Log
 
+## [Unreleased]
+## Changed
+- Recommend Node ^8.0.0 for building from source
+- Upgrade CI scripts to test Node 8.0.0
+
 ## [0.6.0] - 20-12-2017
 ### Added
 - Increase test coverage to 90%+ plus minor reorganisation of tests

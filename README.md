@@ -16,7 +16,7 @@ The documentation for the safe_app Node.js API is available at <http://docs.maid
 
 1. Prerequisites
 
-    * Node.js 7.10.0 (we recommend installing it via [nvm](https://github.com/creationix/nvm))
+    * Node.js ^8.0.0 (we recommend installing it via [nvm](https://github.com/creationix/nvm))
     * [Git](https://git-scm.com/)
     * [Yarn](https://yarnpkg.com) (as a replacement for `npm`).
 
