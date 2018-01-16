@@ -17,9 +17,6 @@ let lib = null;
 
 ffi.init = (options) => {
   try {
-    if (os.platform() === 'win32') {
-      FFI.DynamicLibrary(path.resolve(options.libPath || __dirname, 'libwinpthread-1'), mode);
-    }
     lib = FFI.DynamicLibrary(path.join(options.libPath || dir, LIB_FILENAME), mode);
 
     api.forEach((mod) => {
