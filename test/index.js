@@ -75,6 +75,16 @@ describe('External API', () => {
       const app = await initializeApp(appInfo);
       should(app).have.properties(['auth', 'appInfo', 'crypto', 'cipherOpt', 'mutableData', 'immutableData', 'networkState']);
     });
+
+    it('customExecPath with an array of args', async () => {
+      const wrongAppInfo = Object.assign({}, appInfo, { customExecPath: ['arg0', 'arg1', 'arg2'] });
+      return should(initializeApp(wrongAppInfo)).be.fulfilled();
+    });
+
+    it('invalid customExecPath param format', async () => {
+      const wrongAppInfo = Object.assign({}, appInfo, { customExecPath: 'non-array-exec-path' });
+      return should(initializeApp(wrongAppInfo)).be.rejectedWith('Exec command must be an array of string arguments');
+    });
   });
 
   describe('fromAuthURI', () => {
