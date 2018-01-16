@@ -5,9 +5,9 @@ const ref = require('ref');
 const Struct = require('ref-struct');
 const base = require('./_base.js');
 const makeFfiError = require('./_error.js');
-const { helpersToExport, types: MDtypes } = require('./_mutable.js');
+const { helpersForNative, types: MDtypes } = require('./_mutable.js');
 
-const readMDataInfoPtr = helpersToExport.readMDataInfoPtr;
+const readMDataInfoPtr = helpersForNative.readMDataInfoPtr;
 const MDataInfo = MDtypes.MDataInfo;
 const MDataInfoPtr = MDtypes.MDataInfoPtr;
 const t = base.types;
@@ -132,12 +132,64 @@ const AuthGranted = Struct({
   bootstrap_config_cap: t.usize
 });
 
-const makeAppInfo = (appInfo) => {
+const toBuffer = (ptr, len) => {
+  return new Buffer(ref.reinterpret(ptr, len, 0))
+}
+
+const readAuthGrantedPtr = (authGrantedPtr) => {
+  const authGranted = authGrantedPtr.deref();
+  console.log("DEREF:", authGranted.access_container_entry.ptr.deref());
+  let ptr = authGranted.access_container_entry.ptr;
+  const len = authGranted.access_container_entry.len;
+  const arrPtr = ref.reinterpret(ptr, ContainerInfo.size * len);
+  const arr = ContainerInfoArray(arrPtr);
+  let containersList = [];
+  for (let i = 0; i < len ; i++) {
+    const currValue = arr[i];
+    console.log("CONTAINER:", currValue.name, currValue.permissions)
+    containersList.push({
+      name: currValue.name,
+      mdata_info: currValue.mdata_info,
+      permissions: {
+        Read: currValue.permissions.Read,
+        Insert: currValue.permissions.Insert,
+        Update: currValue.permissions.Update,
+        Delete: currValue.permissions.Delete,
+        ManagePermissions: currValue.permissions.ManagePermissions
+      }
+    });
+  }
+  const authGrantedObj = {
+    app_keys: authGranted.app_keys,
+    access_container: authGranted.access_container,
+    access_container_entry: containersList,
+    bootstrap_config: toBuffer(authGranted.bootstrap_config_ptr, authGranted.bootstrap_config_len)
+  }
+  return authGrantedObj;
+}
+
+const extractContainersPerms = (authGrantedPtr) => {
+  const authGrantedObj = readAuthGrantedPtr(authGrantedPtr);
+  let contsPerms = {};
+  const containers = authGrantedObj.access_container_entry;
+  containers.forEach((cont) => {
+    contsPerms[cont.name] = {
+      Read: cont.permissions.Read,
+      Insert: cont.permissions.Insert,
+      Update: cont.permissions.Update,
+      Delete: cont.permissions.Delete,
+      ManagePermissions: cont.permissions.ManagePermissions
+    }
+  });
+  return contsPerms;
+}
+
+function makeAppInfo(appInfoObj) {
   return new AppExchangeInfo({
-    id: appInfo.id,
-    scope: appInfo.scope || ref.NULL,
-    name: appInfo.name,
-    vendor: appInfo.vendor
+    id: appInfoObj.id,
+    scope: appInfoObj.scope || ref.NULL,
+    name: appInfoObj.name,
+    vendor: appInfoObj.vendor
   });
 }
 
@@ -176,7 +228,7 @@ const remapEncodeValues = (resp) => {
 }
 
 module.exports = {
-  types : {
+  types: {
     // request
     AuthReq,
     ContainerReq,
@@ -209,6 +261,7 @@ module.exports = {
     makeAppInfo,
     makePermissions,
     makeShareMDataPermissions,
+    extractContainersPerms
   },
   api: {
     access_container_fetch: helpers.Promisified(null, [ref.refType(ContainerPermissions), t.usize], (args) => {
@@ -216,10 +269,10 @@ module.exports = {
       const len = args[1];
       if(len === 0) return {};
       const arrPtr = ref.reinterpret(ptr, ContainerPermissions.size * len);
-      let arr = ContainerPermissionsArray(arrPtr)
+      const arr = ContainerPermissionsArray(arrPtr);
       const contsPerms = {};
       for (let i = 0; i < len ; i++) {
-        let cont = arr[i];
+        const cont = arr[i];
         contsPerms[cont.cont_name] = {
           Read: cont.access.Read,
           Insert: cont.access.Insert,
@@ -244,11 +297,11 @@ module.exports = {
         return new Promise((resolve, reject) => {
           fn.async(str,
                    ref.NULL,
-                   ffi.Callback('void', [t.VoidPtr, 'uint32', ref.refType(AuthGranted)], (user_data, req_id, authGranted) => {
-                      resolve(["granted", authGranted])
+                   ffi.Callback('void', [t.VoidPtr, 'uint32', ref.refType(AuthGranted)], (user_data, req_id, authGrantedPtr) => {
+                      resolve(["granted", authGrantedPtr])
                    }),
-                   ffi.Callback('void', [t.VoidPtr, 'uint32', t.u8Pointer, t.usize], (user_data, req_id, connUri, connUriLen) => {
-                      resolve(["unregistered", new Buffer(ref.reinterpret(connUri, connUriLen, 0))])
+                   ffi.Callback('void', [t.VoidPtr, 'uint32', t.u8Pointer, t.usize], function(user_data, req_id, connUriPtr, connUriLen) {
+                      resolve(["unregistered", toBuffer(connUriPtr, connUriLen)])
                    }),
                    ffi.Callback('void', [t.VoidPtr, 'uint32'], (user_data, req_id) => {
                       resolve(["containers", req_id])

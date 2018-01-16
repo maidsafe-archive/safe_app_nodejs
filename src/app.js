@@ -409,6 +409,20 @@ class SAFEApp extends EventEmitter {
     return lib.app_output_log_path(filename);
   }
 
+  /**
+  * @typedef {Object} AccountInfo
+  * Holds the information about the account.
+  * @param {Number} mutations_done - number of mutations performed
+  * with this account
+  * @param {Number} mutations_available - number of remaining mutations
+  * allowed for this account
+  */
+
+  /**
+  * Returns account information, e.g. number of mutations done and available.
+  *
+  * @returns {Promise<AccountInfo>}
+  */
   getAccountInfo() {
     return lib.app_account_info(this.connection);
   }
@@ -425,6 +439,15 @@ class SAFEApp extends EventEmitter {
   static fromAuthUri(appInfo, authUri, networkStateCallBack, options) {
     const app = autoref(new SAFEApp(appInfo, networkStateCallBack, options));
     return app.auth.loginFromURI(authUri);
+  }
+
+  /**
+  * Returns the name of the app's own container.
+  *
+  * @returns {Promise<String>}
+  */
+  getContainerName() {
+    return lib.app_container_name(this.appInfo.id);
   }
 
   /**

@@ -31,6 +31,7 @@ const makeError = require('../native/_error.js');
 const makeAppInfo = nativeH.makeAppInfo;
 const makePermissions = nativeH.makePermissions;
 const makeShareMDataPermissions = nativeH.makeShareMDataPermissions;
+const extractContainersPerms = nativeH.extractContainersPerms;
 
 /**
 * @private
@@ -244,10 +245,29 @@ class AuthInterface {
   /**
   * Get the names of all containers found and the app's granted
   * permissions for each of them.
+  *
   * @return {Promise<[ContainersPerms]>}
   */
   getContainersPermissions() {
     return lib.access_container_fetch(this.app.connection);
+  }
+
+  /**
+  * Read granted containers permissions without connecting to network.
+  * @arg {String} uri the IPC response string given
+  *
+  * @return {Promise<[ContainersPerms]>}
+  */
+  readGrantedPermissions(uri) {
+    const sanitisedUri = removeSafeProcol(uri);
+
+    return lib.decode_ipc_msg(sanitisedUri)
+      .then((resp) => {
+        if (resp[0] === 'granted') {
+          return extractContainersPerms(resp[1]);
+        }
+        throw Error('URI doesn\'t contain granted access information');
+      }).catch((err) => Promise.reject(err));
   }
 
   /**

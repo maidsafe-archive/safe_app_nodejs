@@ -108,6 +108,12 @@ describe('Smoke test', () => {
     return should(accInfo).have.properties(['mutations_done', 'mutations_available']);
   }).timeout(10000);
 
+  it('should return own container name', async () => {
+    const app = createAuthenticatedTestApp();
+    const contName = await app.getContainerName();
+    should(contName).be.equal(`apps/${app.appInfo.id}`);
+  }).timeout(10000);
+
   it('should increment/decrement mutation values', async () => {
     const app = await createAuthenticatedTestApp();
     const accInfoBefore = await app.getAccountInfo();

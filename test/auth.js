@@ -3,6 +3,7 @@ const h = require('./helpers');
 const errConst = require('../src/error_const');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
+const createTestApp = h.createTestApp;
 
 /* eslint-disable no-shadow */
 describe('auth interface', () => {
@@ -133,6 +134,39 @@ describe('auth interface', () => {
     const app = h.createTestApp();
     return should(app.auth.loginForTest()).be.fulfilled();
   }).timeout(20000);
+});
+
+describe('Get granted containers permissions from auth URI', () => {
+  it('invalid uri', async () => {
+    const appNoConnect = createTestApp();
+    should(appNoConnect.auth.readGrantedPermissions('safe-invalid-uri')).be.rejectedWith('Serialisation error');
+  });
+
+  it('uri with no auth granted information', async () => {
+    const appNoConnect = createTestApp();
+    return should(appNoConnect.auth.readGrantedPermissions(h.authUris.unregisteredUri)).be.rejectedWith('URI doesn\'t contain granted access information');
+  });
+
+  it('valid uri with auth granted info', async () => {
+    const appNoConnect = createTestApp();
+    const permissions = await appNoConnect.auth.readGrantedPermissions(h.authUris.registeredUri);
+    should(permissions).be.eql({
+      _public: {
+        Read: true,
+        Insert: true,
+        Delete: false,
+        Update: false,
+        ManagePermissions: false
+      }
+    });
+  });
+
+  it.only('reads granted permissions without network connection', async () => {
+    const appNoConnect = h.createTestApp();
+    const authUri = 'safe-bmv0lm1hawrzywzllnrlc3qud2viyxbwlmlk:AQAAACEIbEIAAAAAAAAAACAAAAAAAAAAvn4ylaPAeJgyjSA4JA5jbculWVtpM9dQFFoYDW9QNrIgAAAAAAAAAE2Gn-Mt165Cpn07iz9BqJXN1KNwlfrLkszB9jJHPCUlIAAAAAAAAACOEf7-ZXWkoQWO-Uj1jbDBgUVt5zq3CY6vA_GCiUfXX0AAAAAAAAAAzZBcpiOSrD-gcowqgIQjFBXqsEvfUgdLwBsM8G1Sx_WOEf7-ZXWkoQWO-Uj1jbDBgUVt5zq3CY6vA_GCiUfXXyAAAAAAAAAAUgG7PJvkjXB8FU-gUk2MmuQP4ssUBnuWQsVp5YJIJU4gAAAAAAAAAO0_qoFKQHmbX9zl1AaLhTAGbSRUlMmsIvOTdKr4LrLjAAAAAAAAAAAAAAAAAAAAAMSQQOawAhm02qhffam1wcrV5Y2leH9M4ldTcCDF0BsbmDoAAAAAAAAYAAAAAAAAAD7kwIUEkMXRwrypwPryM0V1fEofDP3NcQEAAAAAAAAADAAAAAAAAABfcHVibGljTmFtZXPWrKIC-xMCJL5Ucacw9oyvVD1KTcLo6I7z4ZicJr1ne5g6AAAAAAAAASAAAAAAAAAAhvmbGRhaIC4tbG0Blp5CzRofE_i_auqODmkIhj_ZnsIYAAAAAAAAANRWxwuFvu5CqpBXAH8hrJsqrY_NoPwpWgACAAAAAAAAAAAAAAABAAAA';
+    const permissions = await appNoConnect.auth.readGrantedPermissions(authUri);
+    console.log("GOT:", permissions); // eslint-disable-line
+  });
 });
 
 describe('Access Container', () => {

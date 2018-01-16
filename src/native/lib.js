@@ -41,9 +41,9 @@ ffi.init = (options) => {
         }
       //   Object.assign(mappings, mod.api);
       }
-      if (mod.helpersToExport) {
-        for (const key in mod.helpersToExport) {
-          let fn = mod.helpersToExport[key];
+      if (mod.helpersForNative) {
+        for (const key in mod.helpersForNative) {
+          let fn = mod.helpersForNative[key];
           fn.fn_name = "[mapped]" + key;
           ffi[key] = fn;
         }

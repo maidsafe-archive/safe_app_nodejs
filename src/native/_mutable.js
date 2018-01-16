@@ -256,7 +256,7 @@ module.exports = {
     MDataEntryActionsHandle,
     UserMetadata
   },
-  helpersToExport: {
+  helpersForNative: {
     makeMDataInfoObj,
     toMDataInfo,
     readMDataInfoPtr,
