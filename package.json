@@ -77,14 +77,6 @@
         "safe_app": {
           "filename": "safe_app-nightly"
         }
-      },
-      "win32": {
-        "libwinpthread-1": {
-          "mirror": "https://s3.eu-west-2.amazonaws.com/libwinpthread",
-          "version": "v0.1.0",
-          "targetDir": "src/native",
-          "filePattern": "^libwinpthread-1.dll$"
-        }
       }
     }
   }
