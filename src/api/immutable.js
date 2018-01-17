@@ -54,17 +54,16 @@ class Reader extends helpers.NetworkObject {
 * Holds a immutable Data Writer
 *
 * @example // write new data to the network
-* app.immutableData.create().then((writer)=> {
-*  return writer.write("some string\n")
-*   .then(() => writer.write("second string"))
-*   .then(() => writer.close())
-*   .then((address) => app.immutableData.fetch(address)
-*     .then((reader) => reader.read()
-*       .then( (payload) => {
-*         should(payload).equals("some string\nsecond string");
-*       })
-*     ))
-* })
+* app.immutableData.create()
+*  .then((writer) => writer.write("some string\n")
+*    .then(() => writer.write("second string"))
+*    .then(() => app.cipherOpt.newPlainText())
+*    .then((cipher) => writer.close(cipher))
+*  ).then((address) => app.immutableData.fetch(address))
+*  .then((reader) => reader.read())
+*  .then((payload) => {
+*    console.log("Data read from ImmutableData: ", payload.toString());
+*  })
 *
 */
 class Writer extends helpers.NetworkObject {
