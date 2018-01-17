@@ -3,7 +3,7 @@ const helpers = require('../helpers');
 const lib = require('../native/lib');
 
 /**
-* Hold the connection to read an existing ImmutableData
+* Holds the connection to read an existing ImmutableData
 */
 class Reader extends helpers.NetworkObject {
 
@@ -51,7 +51,7 @@ class Reader extends helpers.NetworkObject {
 }
 
 /**
-* Holds a immutable Data Writer
+* Holds an Immutable Data Writer
 *
 * @example // write new data to the network
 * app.immutableData.create()
@@ -81,7 +81,7 @@ class Writer extends helpers.NetworkObject {
   /**
   * Close and write the immutable Data to the network.
   *
-  * @param {CipherOpt} the Cipher Opt to encrypt data with
+  * @param {CipherOpt} cipherOpt the Cipher Opt to encrypt data with
   * @returns {Promise<String>} the address to the data once written to the network
   */
   close(cipherOpt) {
