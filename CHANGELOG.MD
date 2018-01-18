@@ -4,6 +4,13 @@
 ## Changed
 - Recommend Node ^8.0.0 for building from source
 - Upgrade CI scripts to test Node 8.0.0
+- Pass the system URI's execution path as an array of arguments to support white spaces in it
+- Adapt to changes in `system_uri` library API which now returns results as a pointer to FfiResult struct
+- Upgrade system_uri library to v0.4.0
+
+### SAFE libraries Dependencies
+- safe_app: v0.5.0
+- system_uri: v0.4.0
 
 ## [0.6.0] - 20-12-2017
 ### Added
