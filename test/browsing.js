@@ -113,6 +113,16 @@ describe('Browsing', () => {
       ));
   }).timeout(20000);
 
+
+  it('fetch partial content', () => {
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    return createRandomDomain(content, '/yumyum.html', 'whatever.valid_service')
+      .then((domain) => createAnonTestApp()
+        .then((app) => app.webFetch(`safe://whatever.valid_service.${domain}/yumyum.html`, { range: { start: 0, end: 14 } })
+          .then((data) => should(data.body.toString()).equal(content.substring(0, 14)))
+      ));
+  }).timeout(20000);
+
   it('find private service', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomPrivateServiceDomain(content, '/yumyum.html', 'www')

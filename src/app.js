@@ -130,11 +130,26 @@ class SAFEApp extends EventEmitter {
   * Helper to lookup a given `safe://`-url in accordance with the
   * convention and find the requested object.
   *
+
   * @param {String} url the url you want to fetch
+  * @param {Object} options options Object
+  *                       range: { object } override header range with bytes from request.
   * @returns {Promise<Object>} the object with body of content and headers
   */
-  async webFetch(url) {
+  async webFetch(url, options) {
     if (!url) return Promise.reject(new Error('No URL provided.'));
+
+    let range;
+    let start;
+    let end;
+    let contentLength;
+
+    if (options && options.range && typeof options.range.start !== 'undefined') {
+      range = options.range;
+      start = range.start;
+      end = range.end;
+    }
+
     const parsedUrl = parseUrl(url);
     if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
     const hostname = parsedUrl.hostname;
@@ -222,15 +237,35 @@ class SAFEApp extends EventEmitter {
           file = await emulation.fetch(filePath);
         }
         const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
-        const data = await openedFile.read(
-          consts.pubConsts.NFS_FILE_START, consts.pubConsts.NFS_FILE_END);
+        const fileSize = await openedFile.size() || '*';
+        let data;
+
+        // TODO: how do we handle multipart Reqs
+        if (options && options.range) {
+          if (!end) {
+            end = fileSize;
+          }
+          contentLength = end - start;
+          data = await openedFile.read(start, contentLength);
+        } else {
+          data = await openedFile.read(
+            consts.pubConsts.NFS_FILE_START, consts.pubConsts.NFS_FILE_END);
+        }
         const mimeType = mime.getType(nodePath.extname(filePath)) || 'application/octet-stream';
-        resolve({
+
+        const response = {
           headers: {
             'Content-Type': mimeType
           },
           body: data
-        });
+        };
+
+        if (range) {
+          response.headers['Content-Range'] = `bytes ${start}-${end}/${fileSize}`;
+          response.headers['Content-Length'] = contentLength;
+        }
+
+        resolve(response);
       } catch (e) {
         reject(e);
       }
