@@ -446,7 +446,7 @@ class SAFEApp extends EventEmitter {
   *
   * @returns {Promise<String>}
   */
-  getContainerName() {
+  getOwnContainerName() {
     return lib.app_container_name(this.appInfo.id);
   }
 

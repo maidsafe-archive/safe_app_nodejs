@@ -276,12 +276,8 @@ class AuthInterface {
   * @return {Promise<MutableData>}
   */
   getOwnContainer() {
-    const appInfo = this.app.appInfo;
-    let containerName = `apps/${appInfo.id}`;
-    if (appInfo.scope) {
-      containerName += `/${appInfo.scope}`;
-    }
-    let prms = this.getContainer(containerName);
+    let prms = this.app.getOwnContainerName()
+      .then((containerName) => this.getContainer(containerName));
 
     if (inTesting) {
       prms = prms.catch((err) => {
