@@ -90,13 +90,18 @@ describe('Access Container', () => {
         should(hasAccess).be.true();
       })));
 
-  it('has read access to `_public` for `Read` and Insert`', () => app.auth.refreshContainersPermissions().then(() =>
+  it('has access to `_public` for `Read` and Insert`', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.canAccessContainer('_public', ['Read', 'Insert']).then((hasAccess) => {
         should(hasAccess).be.false();
       })));
 
-  it('has read access to `_publicNames` for `Read` and ManagePermissions`', () => app.auth.refreshContainersPermissions().then(() =>
+  it('has access to `_publicNames` for `Read` and ManagePermissions`', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.canAccessContainer('_publicNames', ['Read', 'ManagePermissions']).then((hasAccess) => {
+        should(hasAccess).be.true();
+      })));
+
+  it('access permission provided as a string', () => app.auth.refreshContainersPermissions().then(() =>
+      app.auth.canAccessContainer('_public', 'Read').then((hasAccess) => {
         should(hasAccess).be.true();
       })));
 

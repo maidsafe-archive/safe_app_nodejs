@@ -1,5 +1,17 @@
 # safe_app nodejs Change Log
 
+## [Unreleased]
+### Fixed
+- Minor corrections to documentation snippet code and README
+- Upgrade istanbul library to support async/await and remove errors when getting testing coverage
+
+### Added
+- New tests were added as well as some enhancements to increase test coverage
+
+### SAFE libraries Dependencies
+- safe_app: v0.5.0
+- system_uri: v0.4.0
+
 ## [0.6.1] - 18-1-2018
 ## Changed
 - Recommend Node ^8.0.0 for building from source

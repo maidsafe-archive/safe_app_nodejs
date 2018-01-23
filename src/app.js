@@ -104,7 +104,8 @@ class SAFEApp extends EventEmitter {
     return this._mutableData;
   }
 
-  /*
+  /**
+  * @private
   * Validates appInfo and properly handles error
   */
   validateAppInfo() {
@@ -129,7 +130,7 @@ class SAFEApp extends EventEmitter {
   * Helper to lookup a given `safe://`-url in accordance with the
   * convention and find the requested object.
   *
-  * @arg {String} url the url you want to fetch
+  * @param {String} url the url you want to fetch
   * @returns {Promise<Object>} the object with body of content and headers
   */
   async webFetch(url) {
@@ -244,13 +245,13 @@ class SAFEApp extends EventEmitter {
   * used at startup/beginning as it will devaluate all handlers that might
   * still be around after switching.
   *
-  * @param {Pointer} con - the pointer to the native object
+  * @param {Pointer} conn the pointer to the native object
   */
-  set connection(con) {
+  set connection(conn) {
     if (this._connection) {
       lib.app_free(this._connection);
     }
-    this._connection = con;
+    this._connection = conn;
   }
 
   /**

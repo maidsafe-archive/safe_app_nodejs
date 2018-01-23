@@ -39,22 +39,22 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
  *
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  * @example // Usage Example
- * const safe = require('safe');
+ * const safe = require('@maidsafe/safe-node-app');
  *
  * // starting initialisation
  * let prms = safe.initializeApp({
  *                      id: "net.maidsafe.example",
- *                      name: 'Example App',
- *                      vendor: 'MaidSafe Ltd.'
+ *                      name: 'Example SAFE App',
+ *                      vendor: 'MaidSafe.net Ltd'
  *                     });
- * // we want read-append access to `_pictures` and
- * // read access to `_videos`:
+ * // we want read & insert access permissions for `_pictures` and
+ * // read access to `_videos` container:
  * const containers = { '_videos': ['Read'], '_pictures' : ['Read', 'Insert']}
- * prms.then(app => app.auth.genAuthUri(containers
- *           ).then(uri => app.auth.openUri(uri)
+ * prms.then(app => app.auth.genAuthUri(containers)
+ *                    .then(uri => app.auth.openUri(uri))
  *        // now we either quit the programm
- *        // or wait for a result url
- *        ))
+ *        // or wait for an authorisation URI
+ *        )
  */
 const initializeApp = (appInfo, networkStateCallBack, options) => {
   try {

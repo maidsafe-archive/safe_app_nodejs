@@ -114,8 +114,10 @@ describe('NFS emulation', () => {
     await file.close();
     await nfs.insert('hello.txt', file);
     file = await nfs.fetch('hello.txt');
-    await nfs.open(file, CONSTANTS.NFS_FILE_MODE_READ);
-    const size = await file.size();
+    let size = await file.size();
+    should(size).be.equal(18);
+    file = await nfs.open(file, CONSTANTS.NFS_FILE_MODE_READ);
+    size = await file.size();
     should(size).be.equal(18);
   });
 
