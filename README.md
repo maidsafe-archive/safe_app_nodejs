@@ -16,7 +16,7 @@ The documentation for the safe_app Node.js API is available at <http://docs.maid
 
 1. Prerequisites
 
-    * Node.js ^8.0.0 (we recommend installing it via [nvm](https://github.com/creationix/nvm))
+    * [Node.js](https://nodejs.org) ^8.0.0 (we recommend installing it via [nvm](https://github.com/creationix/nvm))
     * [Git](https://git-scm.com/)
     * [Yarn](https://yarnpkg.com) (as a replacement for `npm`).
 
@@ -33,13 +33,13 @@ The documentation for the safe_app Node.js API is available at <http://docs.maid
     yarn
     ```
 
-    If you are working on a development environment, you can run `NODE_ENV=dev yarn` instead in order to get the `safe_client` libraries which use the `MockVault` file rather than connecting to the SAFE Network.
+    If you are working on a development environment, you can run `NODE_ENV=dev yarn` instead in order to get the [`safe_app`](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library which uses the `MockVault` file rather than connecting to the actual SAFE Network.
 
 ### Testing
 
-To run the tests locally, make sure you installed the `safe_client` libraries with `NODE_ENV=dev yarn`, then you can run them by executing `yarn test`.
+To run the tests locally, make sure you installed the [`safe_app`](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library with `NODE_ENV=dev yarn`, then you can run them by executing `yarn test`.
 
-Note: If you are compiling your own [safe_app](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library for testing purposes, and if you want to be able to run the tests, make sure to include `testing` in your build features when compiling `safe_app` in `safe_client_libs`, i.e. `cargo build --release --features "use-mock-routing testing"`.
+Note: If you are compiling your own [`safe_app`](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library for testing purposes, and if you want to be able to run the tests, make sure to include `testing` in your build features when compiling `safe_app` in `safe_client_libs`, i.e. `cargo build --release --features "use-mock-routing testing"`.
 
 ## Further Help
 
