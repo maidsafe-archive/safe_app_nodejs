@@ -30,6 +30,17 @@ describe('Immutable Data', () => {
       should(idData.toString()).equal(testString);
     });
 
+    it('reads content providing options', async () => {
+      const testString = `test-${Math.random()}`;
+      const idWriter = await app.immutableData.create();
+      await idWriter.write(testString);
+      const cipherOpt = await app.cipherOpt.newPlainText();
+      const idAddress = await idWriter.close(cipherOpt);
+      const idReader = await app.immutableData.fetch(idAddress);
+      const idData = await idReader.read({ offset: 0, size: testString.length });
+      should(idData.toString()).equal(testString);
+    });
+
     it('reads size of data', async () => {
       const testString = 'test-string';
       const idWriter = await app.immutableData.create();
