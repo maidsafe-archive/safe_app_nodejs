@@ -5,6 +5,9 @@
 - Minor corrections to documentation snippet code and README
 - Upgrade istanbul library to support async/await and remove errors when getting testing coverage
 
+### Added
+- New tests were added as well as some enhancements to increase test coverage
+
 ### SAFE libraries Dependencies
 - safe_app: v0.5.0
 - system_uri: v0.4.0

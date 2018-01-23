@@ -37,8 +37,8 @@ describe('Immutable Data', () => {
       const cipherOpt = await app.cipherOpt.newPlainText();
       const idAddress = await idWriter.close(cipherOpt);
       const idReader = await app.immutableData.fetch(idAddress);
-      const idData = await idReader.read({ offset: 0, size: testString.length });
-      should(idData.toString()).equal(testString);
+      const idData = await idReader.read({ offset: 0, end: testString.length - 1 });
+      should(idData.toString()).equal(testString.slice(0, -1));
     });
 
     it('reads size of data', async () => {
