@@ -113,16 +113,6 @@ describe('Browsing', () => {
       ));
   }).timeout(20000);
 
-
-  it('fetch partial content', () => {
-    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
-    return createRandomDomain(content, '/yumyum.html', 'whatever.valid_service')
-      .then((domain) => createAnonTestApp()
-        .then((app) => app.webFetch(`safe://whatever.valid_service.${domain}/yumyum.html`, { range: { start: 0, end: 14 } })
-          .then((data) => should(data.body.toString()).equal(content.substring(0, 14)))
-      ));
-  }).timeout(20000);
-
   it('find private service', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomPrivateServiceDomain(content, '/yumyum.html', 'www')
@@ -239,6 +229,80 @@ describe('Browsing', () => {
       ));
   }).timeout(20000);
 
+  describe('WebFetch partial content', () => {
+    it('fetch partial content', () => {
+      const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      const bytesToRetrieve = 6;
+      const offset = 3;
+      return createRandomDomain(content, '/streaming.mp4')
+        .then((domain) => createAnonTestApp()
+          .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`,
+                    { range: { start: offset, end: offset + bytesToRetrieve } })
+            .then((data) => {
+              should(data.body.toString()).equal(
+                          content.substring(offset, offset + bytesToRetrieve));
+              should(data.headers['Content-Range']).equal(`bytes ${offset}-${offset + (bytesToRetrieve - 1)}/${content.length}`);
+              should(data.headers['Content-Length']).equal(bytesToRetrieve);
+            })
+        ));
+    }).timeout(20000);
+
+    it('fetch full length with range', () => {
+      const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      return createRandomDomain(content, '/streaming.mp4')
+        .then((domain) => createAnonTestApp()
+          .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: content.length } })
+            .then((data) => {
+              should(data.body.toString()).equal(content);
+              should(data.headers['Content-Range']).equal(`bytes 0-${content.length - 1}/${content.length}`);
+              should(data.headers['Content-Length']).equal(content.length);
+            })
+        ));
+    }).timeout(20000);
+
+    it('without range end param', () => {
+      const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      const offset = 4;
+      return createRandomDomain(content, '/streaming.mp4')
+        .then((domain) => createAnonTestApp()
+          .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: offset } })
+            .then((data) => {
+              should(data.body.toString()).equal(content.substring(offset));
+              should(data.headers['Content-Range']).equal(`bytes ${offset}-${content.length - 1}/${content.length}`);
+              should(data.headers['Content-Length']).equal(content.length - offset);
+            })
+        ));
+    }).timeout(20000);
+
+    it('range end beyond data length', () => {
+      const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      return createRandomDomain(content, '/streaming.mp4')
+        .then((domain) => createAnonTestApp()
+          .then((app) => should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: content.length + 1 } }))
+            .be.rejectedWith('NFS error: Invalid byte range specified')
+        ));
+    }).timeout(20000);
+
+    // safe_app lib is not making validating for invalid start offset
+    it.skip('range start beyond data length', () => {
+      const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      return createRandomDomain(content, '/streaming.mp4')
+        .then((domain) => createAnonTestApp()
+          .then((app) => should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 1000 } }))
+            .be.rejectedWith('NFS error: Invalid byte range specified')
+        ));
+    }); // .timeout(20000);
+
+    // safe_app lib is not making validating for invalid start offset
+    it.skip('negative range start param', () => {
+      const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      return createRandomDomain(content, '/streaming.mp4')
+        .then((domain) => createAnonTestApp()
+          .then((app) => should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: -1 } }))
+            .be.rejectedWith('Invalid range start value')
+        ));
+    }); // .timeout(20000);
+  });
 
   describe('errors', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;

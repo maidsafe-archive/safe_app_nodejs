@@ -127,28 +127,29 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
+  * @typedef {Object} WebFetchOptions
+  * holds additional options for the `webFetch` function.
+  * @param {Object} range range of bytes to be retrieved.
+  * The `start` attribute is expected to be the start offset, while the
+  * `end` attribute of the `range` object the end position (non inclusive)
+  * to be retrieved, e.g. with `range: { start: 1, end: 3 }` only the 2nd
+  * and 3rd bytes of data will be retrieved.
+  * If `end` is not specified, the bytes retrived will be from the `start` offset
+  * untill the end of the file.
+  * The ranges values are also used to populate the `Content-Range` and
+  * `Content-Length` headers in the response.
+  */
+
+  /**
   * Helper to lookup a given `safe://`-url in accordance with the
   * convention and find the requested object.
   *
-
   * @param {String} url the url you want to fetch
-  * @param {Object} options options Object
-  *                       range: { object } override header range with bytes from request.
+  * @param {WebFetchOptions} [options=null] additional options
   * @returns {Promise<Object>} the object with body of content and headers
   */
   async webFetch(url, options) {
     if (!url) return Promise.reject(new Error('No URL provided.'));
-
-    let range;
-    let start;
-    let end;
-    let contentLength;
-
-    if (options && options.range && typeof options.range.start !== 'undefined') {
-      range = options.range;
-      start = range.start;
-      end = range.end;
-    }
 
     const parsedUrl = parseUrl(url);
     if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
@@ -237,20 +238,25 @@ class SAFEApp extends EventEmitter {
           file = await emulation.fetch(filePath);
         }
         const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
-        const fileSize = await openedFile.size() || '*';
-        let data;
+        let range;
+        let start = consts.pubConsts.NFS_FILE_START;
+        let end;
+        let fileSize;
+        let contentLength = consts.pubConsts.NFS_FILE_END;
 
         // TODO: how do we handle multipart Reqs
-        if (options && options.range) {
+        if (options && options.range && typeof options.range.start !== 'undefined') {
+          range = options.range;
+          start = range.start;
+          end = range.end;
+          fileSize = await openedFile.size();
           if (!end) {
             end = fileSize;
           }
           contentLength = end - start;
-          data = await openedFile.read(start, contentLength);
-        } else {
-          data = await openedFile.read(
-            consts.pubConsts.NFS_FILE_START, consts.pubConsts.NFS_FILE_END);
         }
+
+        const data = await openedFile.read(start, contentLength);
         const mimeType = mime.getType(nodePath.extname(filePath)) || 'application/octet-stream';
 
         const response = {
@@ -261,7 +267,7 @@ class SAFEApp extends EventEmitter {
         };
 
         if (range) {
-          response.headers['Content-Range'] = `bytes ${start}-${end}/${fileSize}`;
+          response.headers['Content-Range'] = `bytes ${start}-${end - 1}/${fileSize}`;
           response.headers['Content-Length'] = contentLength;
         }
 
