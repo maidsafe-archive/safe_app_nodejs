@@ -232,16 +232,40 @@ describe('Browsing', () => {
   describe('WebFetch partial content', () => {
     it('fetch partial content', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      const numberOfBytes = content.length - 1;
       const bytesToRetrieve = 6;
-      const offset = 3;
+      const startByte = 3;
+
       return createRandomDomain(content, '/streaming.mp4')
         .then((domain) => createAnonTestApp()
           .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`,
-                    { range: { start: offset, end: offset + bytesToRetrieve } })
+                    { range: { start: startByte, end: startByte + bytesToRetrieve } })
             .then((data) => {
+              should(data.body.toString()).equal('lo wor');
               should(data.body.toString()).equal(
-                          content.substring(offset, offset + bytesToRetrieve));
-              should(data.headers['Content-Range']).equal(`bytes ${offset}-${offset + (bytesToRetrieve - 1)}/${content.length}`);
+                          content.substring(startByte, startByte + bytesToRetrieve));
+              should(data.headers['Content-Range']).equal(`bytes ${startByte}-${startByte + (bytesToRetrieve)}/${numberOfBytes}`);
+              should(data.headers['Content-Length']).equal(bytesToRetrieve);
+            })
+        ));
+    }).timeout(20000);
+
+    it('fetches partial content starting at 0', () => {
+      const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      const numberOfBytes = content.length - 1;
+
+      const bytesToRetrieve = 7;
+      const startByte = 0;
+
+      return createRandomDomain(content, '/streaming.mp4')
+        .then((domain) => createAnonTestApp()
+          .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`,
+                    { range: { start: startByte, end: startByte + bytesToRetrieve } })
+            .then((data) => {
+              should(data.body.toString()).equal('hello w');
+              should(data.body.toString()).equal(
+                          content.substring(startByte, startByte + bytesToRetrieve));
+              should(data.headers['Content-Range']).equal(`bytes ${startByte}-${startByte + (bytesToRetrieve)}/${numberOfBytes}`);
               should(data.headers['Content-Length']).equal(bytesToRetrieve);
             })
         ));
@@ -249,12 +273,13 @@ describe('Browsing', () => {
 
     it('fetch full length with range', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      const numberOfBytes = content.length - 1;
       return createRandomDomain(content, '/streaming.mp4')
         .then((domain) => createAnonTestApp()
-          .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: content.length } })
+          .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: numberOfBytes } })
             .then((data) => {
               should(data.body.toString()).equal(content);
-              should(data.headers['Content-Range']).equal(`bytes 0-${content.length - 1}/${content.length}`);
+              should(data.headers['Content-Range']).equal(`bytes 0-${numberOfBytes}/${numberOfBytes}`);
               should(data.headers['Content-Length']).equal(content.length);
             })
         ));
@@ -262,14 +287,16 @@ describe('Browsing', () => {
 
     it('without range end param', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
-      const offset = 4;
+      const startByte = 4;
+      const numberOfBytes = content.length - 1;
+
       return createRandomDomain(content, '/streaming.mp4')
         .then((domain) => createAnonTestApp()
-          .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: offset } })
+          .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: startByte } })
             .then((data) => {
-              should(data.body.toString()).equal(content.substring(offset));
-              should(data.headers['Content-Range']).equal(`bytes ${offset}-${content.length - 1}/${content.length}`);
-              should(data.headers['Content-Length']).equal(content.length - offset);
+              should(data.body.toString()).equal(content.substring(startByte));
+              should(data.headers['Content-Range']).equal(`bytes ${startByte}-${numberOfBytes}/${numberOfBytes}`);
+              should(data.headers['Content-Length']).equal(content.length - startByte);
             })
         ));
     }).timeout(20000);
@@ -283,7 +310,7 @@ describe('Browsing', () => {
         ));
     }).timeout(20000);
 
-    // safe_app lib is not making validating for invalid start offset
+    // safe_app lib is not validating for invalid start offset
     it.skip('range start beyond data length', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       return createRandomDomain(content, '/streaming.mp4')

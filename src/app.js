@@ -242,21 +242,24 @@ class SAFEApp extends EventEmitter {
         let start = consts.pubConsts.NFS_FILE_START;
         let end;
         let fileSize;
-        let contentLength = consts.pubConsts.NFS_FILE_END;
+        let fileFinalByteIndex;
+        let lengthToRead = consts.pubConsts.NFS_FILE_END;
+        let endByte;
 
         // TODO: how do we handle multipart Reqs
         if (options && options.range && typeof options.range.start !== 'undefined') {
           range = options.range;
           start = range.start;
-          end = range.end;
           fileSize = await openedFile.size();
-          if (!end) {
-            end = fileSize;
-          }
-          contentLength = end - start;
-        }
+          end = range.end || fileSize;
+          fileFinalByteIndex = fileSize - 1;
+          lengthToRead = end - start;
 
-        const data = await openedFile.read(start, contentLength);
+          if (end === fileFinalByteIndex) {
+            lengthToRead += 1;
+          }
+        }
+        const data = await openedFile.read(start, lengthToRead);
         const mimeType = mime.getType(nodePath.extname(filePath)) || 'application/octet-stream';
 
         const response = {
@@ -267,8 +270,9 @@ class SAFEApp extends EventEmitter {
         };
 
         if (range) {
-          response.headers['Content-Range'] = `bytes ${start}-${end - 1}/${fileSize}`;
-          response.headers['Content-Length'] = contentLength;
+          endByte = (end === fileSize) ? fileSize - 1 : end;
+          response.headers['Content-Range'] = `bytes ${start}-${endByte}/${fileFinalByteIndex}`;
+          response.headers['Content-Length'] = lengthToRead;
         }
 
         resolve(response);
