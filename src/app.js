@@ -132,8 +132,8 @@ class SAFEApp extends EventEmitter {
   * @param {Object} range range of bytes to be retrieved.
   * The `start` attribute is expected to be the start offset, while the
   * `end` attribute of the `range` object the end position (both inclusive)
-  * to be retrieved, e.g. with `range: { start: 2, end: 3 }` the 2nd
-  * and 3rd bytes of data will be retrieved.
+  * to be retrieved, e.g. with `range: { start: 2, end: 3 }` the 3rd
+  * and 4th bytes of data will be retrieved.
   * If `end` is not specified, the bytes retrived will be from the `start` offset
   * untill the end of the file.
   * The ranges values are also used to populate the `Content-Range` and
