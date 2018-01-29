@@ -1,6 +1,6 @@
 # safe_app nodejs Change Log
 
-## [Unreleased]
+## [0.7.0] - 29-1-2018
 ### Fixed
 - Minor corrections to documentation snippet code and README
 - Upgrade istanbul library to support async/await and remove errors when getting testing coverage
