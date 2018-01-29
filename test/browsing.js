@@ -232,41 +232,40 @@ describe('Browsing', () => {
   describe('WebFetch partial content', () => {
     it('fetch partial content', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
-      const numberOfBytes = content.length - 1;
-      const bytesToRetrieve = 6;
       const startByte = 3;
+      const endByte = 9;
+      const exptedReturn = 'lo worl';
 
       return createRandomDomain(content, '/streaming.mp4')
         .then((domain) => createAnonTestApp()
           .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`,
-                    { range: { start: startByte, end: startByte + bytesToRetrieve } })
+                    { range: { start: startByte, end: endByte } })
             .then((data) => {
-              should(data.body.toString()).equal('lo wor');
+              should(data.body.toString()).equal(exptedReturn);
               should(data.body.toString()).equal(
-                          content.substring(startByte, startByte + bytesToRetrieve));
-              should(data.headers['Content-Range']).equal(`bytes ${startByte}-${startByte + (bytesToRetrieve)}/${numberOfBytes}`);
-              should(data.headers['Content-Length']).equal(bytesToRetrieve);
+                          content.substring(startByte, endByte + 1));
+              should(data.headers['Content-Range']).equal(`bytes ${startByte}-${endByte}/${content.length}`);
+              should(data.headers['Content-Length']).equal(exptedReturn.length);
             })
         ));
     }).timeout(20000);
 
     it('fetches partial content starting at 0', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
-      const numberOfBytes = content.length - 1;
-
-      const bytesToRetrieve = 7;
+      const exptedReturn = 'hello wo';
+      const endByte = 7;
       const startByte = 0;
 
       return createRandomDomain(content, '/streaming.mp4')
         .then((domain) => createAnonTestApp()
           .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`,
-                    { range: { start: startByte, end: startByte + bytesToRetrieve } })
+                    { range: { start: startByte, end: endByte } })
             .then((data) => {
-              should(data.body.toString()).equal('hello w');
+              should(data.body.toString()).equal(exptedReturn);
               should(data.body.toString()).equal(
-                          content.substring(startByte, startByte + bytesToRetrieve));
-              should(data.headers['Content-Range']).equal(`bytes ${startByte}-${startByte + (bytesToRetrieve)}/${numberOfBytes}`);
-              should(data.headers['Content-Length']).equal(bytesToRetrieve);
+                          content.substring(startByte, endByte + 1));
+              should(data.headers['Content-Range']).equal(`bytes ${startByte}-${endByte}/${content.length}`);
+              should(data.headers['Content-Length']).equal(exptedReturn.length);
             })
         ));
     }).timeout(20000);
@@ -279,7 +278,7 @@ describe('Browsing', () => {
           .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: numberOfBytes } })
             .then((data) => {
               should(data.body.toString()).equal(content);
-              should(data.headers['Content-Range']).equal(`bytes 0-${numberOfBytes}/${numberOfBytes}`);
+              should(data.headers['Content-Range']).equal(`bytes 0-${numberOfBytes}/${content.length}`);
               should(data.headers['Content-Length']).equal(content.length);
             })
         ));
@@ -295,7 +294,7 @@ describe('Browsing', () => {
           .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: startByte } })
             .then((data) => {
               should(data.body.toString()).equal(content.substring(startByte));
-              should(data.headers['Content-Range']).equal(`bytes ${startByte}-${numberOfBytes}/${numberOfBytes}`);
+              should(data.headers['Content-Range']).equal(`bytes ${startByte}-${numberOfBytes}/${content.length}`);
               should(data.headers['Content-Length']).equal(content.length - startByte);
             })
         ));
@@ -305,7 +304,7 @@ describe('Browsing', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       return createRandomDomain(content, '/streaming.mp4')
         .then((domain) => createAnonTestApp()
-          .then((app) => should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: content.length + 1 } }))
+          .then((app) => should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: content.length } }))
             .be.rejectedWith('NFS error: Invalid byte range specified')
         ));
     }).timeout(20000);

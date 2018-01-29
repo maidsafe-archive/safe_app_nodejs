@@ -131,8 +131,8 @@ class SAFEApp extends EventEmitter {
   * holds additional options for the `webFetch` function.
   * @param {Object} range range of bytes to be retrieved.
   * The `start` attribute is expected to be the start offset, while the
-  * `end` attribute of the `range` object the end position (non inclusive)
-  * to be retrieved, e.g. with `range: { start: 1, end: 3 }` only the 2nd
+  * `end` attribute of the `range` object the end position (both inclusive)
+  * to be retrieved, e.g. with `range: { start: 2, end: 3 }` the 2nd
   * and 3rd bytes of data will be retrieved.
   * If `end` is not specified, the bytes retrived will be from the `start` offset
   * untill the end of the file.
@@ -242,7 +242,6 @@ class SAFEApp extends EventEmitter {
         let start = consts.pubConsts.NFS_FILE_START;
         let end;
         let fileSize;
-        let fileFinalByteIndex;
         let lengthToRead = consts.pubConsts.NFS_FILE_END;
         let endByte;
 
@@ -251,13 +250,9 @@ class SAFEApp extends EventEmitter {
           range = options.range;
           start = range.start;
           fileSize = await openedFile.size();
-          end = range.end || fileSize;
-          fileFinalByteIndex = fileSize - 1;
-          lengthToRead = end - start;
+          end = range.end || fileSize - 1;
 
-          if (end === fileFinalByteIndex) {
-            lengthToRead += 1;
-          }
+          lengthToRead = (end - start) + 1; // account for 0 index
         }
         const data = await openedFile.read(start, lengthToRead);
         const mimeType = mime.getType(nodePath.extname(filePath)) || 'application/octet-stream';
@@ -271,7 +266,7 @@ class SAFEApp extends EventEmitter {
 
         if (range) {
           endByte = (end === fileSize) ? fileSize - 1 : end;
-          response.headers['Content-Range'] = `bytes ${start}-${endByte}/${fileFinalByteIndex}`;
+          response.headers['Content-Range'] = `bytes ${start}-${endByte}/${fileSize}`;
           response.headers['Content-Length'] = lengthToRead;
         }
 
