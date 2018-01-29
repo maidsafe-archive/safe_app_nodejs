@@ -127,14 +127,30 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
+  * @typedef {Object} WebFetchOptions
+  * holds additional options for the `webFetch` function.
+  * @param {Object} range range of bytes to be retrieved.
+  * The `start` attribute is expected to be the start offset, while the
+  * `end` attribute of the `range` object the end position (both inclusive)
+  * to be retrieved, e.g. with `range: { start: 2, end: 3 }` the 3rd
+  * and 4th bytes of data will be retrieved.
+  * If `end` is not specified, the bytes retrived will be from the `start` offset
+  * untill the end of the file.
+  * The ranges values are also used to populate the `Content-Range` and
+  * `Content-Length` headers in the response.
+  */
+
+  /**
   * Helper to lookup a given `safe://`-url in accordance with the
   * convention and find the requested object.
   *
   * @param {String} url the url you want to fetch
+  * @param {WebFetchOptions} [options=null] additional options
   * @returns {Promise<Object>} the object with body of content and headers
   */
-  async webFetch(url) {
+  async webFetch(url, options) {
     if (!url) return Promise.reject(new Error('No URL provided.'));
+
     const parsedUrl = parseUrl(url);
     if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
     const hostname = parsedUrl.hostname;
@@ -222,15 +238,39 @@ class SAFEApp extends EventEmitter {
           file = await emulation.fetch(filePath);
         }
         const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
-        const data = await openedFile.read(
-          consts.pubConsts.NFS_FILE_START, consts.pubConsts.NFS_FILE_END);
+        let range;
+        let start = consts.pubConsts.NFS_FILE_START;
+        let end;
+        let fileSize;
+        let lengthToRead = consts.pubConsts.NFS_FILE_END;
+        let endByte;
+
+        // TODO: how do we handle multipart Reqs
+        if (options && options.range && typeof options.range.start !== 'undefined') {
+          range = options.range;
+          start = range.start;
+          fileSize = await openedFile.size();
+          end = range.end || fileSize - 1;
+
+          lengthToRead = (end - start) + 1; // account for 0 index
+        }
+        const data = await openedFile.read(start, lengthToRead);
         const mimeType = mime.getType(nodePath.extname(filePath)) || 'application/octet-stream';
-        resolve({
+
+        const response = {
           headers: {
             'Content-Type': mimeType
           },
           body: data
-        });
+        };
+
+        if (range) {
+          endByte = (end === fileSize) ? fileSize - 1 : end;
+          response.headers['Content-Range'] = `bytes ${start}-${endByte}/${fileSize}`;
+          response.headers['Content-Length'] = lengthToRead;
+        }
+
+        resolve(response);
       } catch (e) {
         reject(e);
       }

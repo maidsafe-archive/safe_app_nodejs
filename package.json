@@ -13,8 +13,8 @@
     "test-coverage": "istanbul cover _mocha --report lcovonly -- -R spec --recursive test",
     "publish-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "pre-pack": "yarn run lint",
-    "prepush": "yarn run test && yarn run lint",
-    "prepublish": "yarn run test && yarn run lint"
+    "prepush": "yarn run lint && yarn run test",
+    "prepublish": "yarn run lint && yarn run test"
   },
   "repository": {
     "type": "git",

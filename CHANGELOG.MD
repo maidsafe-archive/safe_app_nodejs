@@ -6,6 +6,7 @@
 - Upgrade istanbul library to support async/await and remove errors when getting testing coverage
 
 ### Added
+- Support for webFetch-ing partial content by providing the range of bytes to retrieve
 - New tests were added as well as some enhancements to increase test coverage
 
 ### SAFE libraries Dependencies

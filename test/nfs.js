@@ -98,7 +98,7 @@ describe('NFS emulation', () => {
         .then((file) => m.get('test.txt').then((value) => nfs.update('test.txt', file, value.version + 1)))
         .then(() => nfs.fetch('test.txt'))
         .then((file) => nfs.open(file, 4))
-        .then((f) => f.read(0, 0))
+        .then((f) => f.read(CONSTANTS.NFS_FILE_START, CONSTANTS.NFS_FILE_END))
         .then((co) => {
           should(co.toString()).be.equal('Hello world');
         })
