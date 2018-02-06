@@ -2,14 +2,16 @@ const should = require('should');
 const h = require('../helpers');
 const { pubConsts: CONSTANTS } = require('../../src/consts');
 
-const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
-
 describe('Mutable Data', () => {
-  const app = createAuthenticatedTestApp();
+  let app;
   const TYPE_TAG = 15639;
   const TAG_TYPE_INVALID = '_invalid_tag';
   const TEST_NAME_INVALID = 'name-shorter-than-32-bytes-long';
   const TEST_ENTRIES = { key1: 'value1', key2: 'value2' };
+
+  before(async () => {
+    app = await h.createAuthenticatedTestApp();
+  });
 
   describe('Create with invalid values', () => {
     it('create random public with invalid tag vaue', () =>

@@ -2,8 +2,12 @@ const should = require('should');
 const h = require('./helpers');
 
 describe('Immutable Data', () => {
-  const app = h.createAuthenticatedTestApp();
+  let app;
   const TYPE_TAG = 15639;
+
+  before(async () => {
+    app = await h.createAuthenticatedTestApp();
+  });
 
   it('returns Reader for corresponding operations', async () => {
     const testString = `test-${Math.random()}`;

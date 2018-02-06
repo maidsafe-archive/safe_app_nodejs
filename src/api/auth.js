@@ -354,17 +354,32 @@ class AuthInterface {
   * a local unregistered App if permissions is `null`.
   * @returns {Promise<SAFEApp>} the locally registered/unregistered App instance
   */
-  loginForTest(access) {
+  loginForTest(access, opts) {
     if (!inTesting) throw Error('Not supported outside of Dev and Testing Environment!');
     if (access) {
-      const permissions = makePermissions(access || {});
-      this.app.connection = lib.test_create_app_with_access(permissions);
-      this._registered = true;
-    } else {
-      this.app.connection = lib.test_create_app();
-      this._registered = false;
+      const appInfo = makeAppInfo(this.app.appInfo);
+      const perms = makePermissions(access || {});
+      const authReq = new types.AuthReq({
+        app: appInfo,
+        app_container: !!(opts && opts.own_container),
+        containers: perms,
+        containers_len: perms.length,
+        containers_cap: perms.length
+      });
+      return lib.test_create_app_with_access(authReq.ref())
+        .then((appPtr) => {
+          this.app.connection = appPtr;
+          this._registered = true;
+          return this.app;
+        });
     }
-    return Promise.resolve(this.app);
+
+    return lib.test_create_app(this.app.appInfo.id)
+      .then((appPtr) => {
+        this.app.connection = appPtr;
+        this._registered = false;
+        return this.app;
+      });
   }
 }
 

@@ -2,12 +2,14 @@ const should = require('should');
 const h = require('../helpers');
 const { pubConsts: CONSTANTS } = require('../../src/consts');
 
-const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
-
 describe('Permissions', () => {
-  const app = createAuthenticatedTestApp();
+  let app;
   const TYPE_TAG = 15639;
   const TEST_ENTRIES = { key1: 'value1', key2: 'value2' };
+
+  before(async () => {
+    app = await h.createAuthenticatedTestApp();
+  });
 
   it('get list of permissions', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)

@@ -5,8 +5,13 @@ const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
 /* eslint-disable no-shadow */
 describe('auth interface', () => {
-  const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
-  const app = createAuthenticatedTestApp('_test_scope', containersPermissions);
+  let app;
+
+  before(async () => {
+    const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
+    app = await createAuthenticatedTestApp('_test_scope', containersPermissions);
+  });
+
   it('should build some authentication uri', () => {
     const app = h.createTestApp();
     return app.auth.genAuthUri({ _public: ['Read'] })
@@ -52,8 +57,12 @@ describe('auth interface', () => {
 });
 
 describe('Access Container', () => {
-  const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
-  const app = createAuthenticatedTestApp('_test_scope', containersPermissions);
+  let app;
+
+  before(async () => {
+    const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
+    app = await createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true });
+  });
 
   it('should have a connection object after completing app authentication', () => {
     should.exist(app.connection);

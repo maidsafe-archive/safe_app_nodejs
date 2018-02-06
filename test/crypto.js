@@ -16,7 +16,11 @@ describe('Crypto Smoke Test', () => {
 
 
 describe('App Crypto Tests', () => {
-  const app = h.createAuthenticatedTestApp();
+  let app;
+
+  before(async () => {
+    app = await h.createAuthenticatedTestApp();
+  });
 
   it('can hash nicely', () => app.crypto.sha3Hash('testing input').then((resp) =>
     should(resp.toString())
@@ -46,8 +50,12 @@ describe('App Crypto Tests', () => {
 
 describe('Encryption keys', () => {
   describe('custom encryption key pair', () => {
-    const app = h.createAuthenticatedTestApp();
     let encKeyPair;
+    let app;
+
+    before(async () => {
+      app = await h.createAuthenticatedTestApp();
+    });
 
     beforeEach(() => app.crypto.generateEncKeyPair()
           .then((kp) => {
@@ -101,42 +109,46 @@ describe('Encryption keys', () => {
   });
 
   describe('two app encryption', () => {
-    const me = h.createAuthenticatedTestApp();
-    const other = h.createAuthenticatedTestApp();
-
+    let me;
+    let other;
     let myKeys;
     let myHandleOnTheirPubKey;
     let theirKeys;
     let theirHandleOnMyPubKey;
 
-    before(() => Promise.all([
-      me.crypto.generateEncKeyPair()
-            .then((kp) => {
-              myKeys = kp;
-              should(myKeys).not.be.undefined();
-            }),
-
-      other.crypto.generateEncKeyPair()
-            .then((kp) => {
-              theirKeys = kp;
-              should(theirKeys).not.be.undefined();
-            })])
-      .then(() => Promise.all([
-        myKeys.pubEncKey.getRaw()
-            .then((r) => other.crypto.pubEncKeyFromRaw(r)
-              .then((w) => {
-                theirHandleOnMyPubKey = w;
-                should(theirHandleOnMyPubKey).not.be.undefined();
-              })),
-
-        theirKeys.pubEncKey.getRaw()
-            .then((r) => me.crypto.pubEncKeyFromRaw(r)
-              .then((w) => {
-                myHandleOnTheirPubKey = w;
-                should(myHandleOnTheirPubKey).not.be.undefined();
-              }))
-      ]))
-    );
+    before(function () {
+      this.timeout(10000);
+      return h.createAuthenticatedTestApp()
+        .then((app) => {
+          me = app;
+          return h.createAuthenticatedTestApp();
+        })
+        .then((app) => {
+          other = app;
+          return me.crypto.generateEncKeyPair();
+        })
+        .then((kp) => {
+          myKeys = kp;
+          should(myKeys).not.be.undefined();
+          return other.crypto.generateEncKeyPair();
+        })
+        .then((kp) => {
+          theirKeys = kp;
+          should(theirKeys).not.be.undefined();
+          return myKeys.pubEncKey.getRaw();
+        })
+        .then((r) => other.crypto.pubEncKeyFromRaw(r))
+        .then((w) => {
+          theirHandleOnMyPubKey = w;
+          should(theirHandleOnMyPubKey).not.be.undefined();
+          return theirKeys.pubEncKey.getRaw();
+        })
+        .then((r) => me.crypto.pubEncKeyFromRaw(r))
+        .then((w) => {
+          myHandleOnTheirPubKey = w;
+          should(myHandleOnTheirPubKey).not.be.undefined();
+        });
+    });
 
     it('encrypts and decrypts', () => {
       const plaintext = `all the ${Math.random()} places where I've been`;
@@ -166,8 +178,12 @@ describe('Encryption keys', () => {
 
 describe('Sign keys', () => {
   describe('custom sign key pair', () => {
-    const app = h.createAuthenticatedTestApp();
+    let app;
     let signKeyPair;
+
+    before(async () => {
+      app = await h.createAuthenticatedTestApp();
+    });
 
     beforeEach(() => app.crypto.generateSignKeyPair()
           .then((kp) => {
@@ -221,24 +237,34 @@ describe('Sign keys', () => {
   });
 
   describe('signing messages between two app encryption', () => {
-    const me = h.createAuthenticatedTestApp();
-    const other = h.createAuthenticatedTestApp();
-
+    let me;
+    let other;
     let myKeys;
     let theirHandleOnMyPubKey;
 
-    before(() => me.crypto.generateSignKeyPair().then((kp) => {
-      myKeys = kp;
-      should(myKeys).not.be.undefined();
-    })
-    .then(() => myKeys.pubSignKey.getRaw()
-      .then((r) => other.crypto.pubSignKeyFromRaw(r)
-        .then((w) => {
-          theirHandleOnMyPubKey = w;
-          should(theirHandleOnMyPubKey).not.be.undefined();
-        }))
-      )
-    );
+    before(function () {
+      this.timeout(10000);
+      return h.createAuthenticatedTestApp()
+        .then((app) => {
+          me = app;
+          return h.createAuthenticatedTestApp();
+        })
+        .then((app) => {
+          other = app;
+          return me.crypto.generateSignKeyPair();
+        })
+        .then((kp) => {
+          myKeys = kp;
+          should(myKeys).not.be.undefined();
+        })
+        .then(() => myKeys.pubSignKey.getRaw())
+        .then((r) => other.crypto.pubSignKeyFromRaw(r)
+          .then((w) => {
+            theirHandleOnMyPubKey = w;
+            should(theirHandleOnMyPubKey).not.be.undefined();
+          })
+        );
+    });
 
     it('sign and verify', () => {
       const plaintext = `random ${Math.random()} plain text`;

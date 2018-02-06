@@ -1,12 +1,15 @@
 const should = require('should');
 const h = require('../helpers');
 
-const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
-
 describe('Mutable Data Entries', () => {
-  const app = createAuthenticatedTestApp();
+  let app;
   const TYPE_TAG = 15639;
   const TEST_ENTRIES = { key1: 'value1', key2: 'value2' };
+
+  before(async () => {
+    app = await h.createAuthenticatedTestApp();
+  });
+
 
   it('get entries and check length', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
