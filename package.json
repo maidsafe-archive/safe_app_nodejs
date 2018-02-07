@@ -6,7 +6,9 @@
   "scripts": {
     "lint": "eslint src test",
     "fix-lint": "eslint --fix src test",
-    "postinstall": "download_deps --package package.json",
+    "postinstall": "yarn run install-prod && yarn run install-mock",
+    "install-prod": "cross-env NODE_ENV=prod download_deps --package package.json",
+    "install-mock": "cross-env NODE_ENV=dev download_deps --package package.json",
     "docs": "documentation build --config etc/documentation.yml --github true --output docs --format html src/**",
     "serve-docs": "documentation serve --config etc/documentation.yml --github true --output docs --format html src/**",
     "test": "mocha --recursive",
@@ -56,13 +58,13 @@
     "system_uri": {
       "mirror": "https://s3.eu-west-2.amazonaws.com/system-uri",
       "version": "v0.4.0",
-      "targetDir": "src/native",
+      "targetDir": "src/native/prod",
       "filePattern": "^.*\\.(dll|so|dylib)$"
     },
     "safe_app": {
       "mirror": "https://s3.eu-west-2.amazonaws.com/safe-client-libs",
       "version": "v0.5.0",
-      "targetDir": "src/native",
+      "targetDir": "src/native/prod",
       "filename": "safe_app",
       "filePattern": "^.*\\.(dll|so|dylib)$",
       "force": true
@@ -70,11 +72,16 @@
     "ENV": {
       "dev": {
         "safe_app": {
+          "targetDir": "src/native/mock",
           "filename": "safe_app-mock"
+        },
+        "system_uri": {
+          "targetDir": "src/native/mock"
         }
       },
       "nightly": {
         "safe_app": {
+          "targetDir": "src/native/nightly",
           "filename": "safe_app-nightly"
         }
       }
