@@ -23,15 +23,14 @@ const createTestApp = (scope) =>
     scope
   }, null, { log: false }));
 
-const createAltAuthTestApp = (scope, access) => {
+const createAltAuthTestApp = async (scope, access) => {
   const app = h.autoref(new App({
     id: 'alt-net.maidsafe.test.javascript.id',
     name: 'alt-NodeJS Test',
     vendor: 'alt-MaidSafe.net Ltd',
     scope
   }, null, { log: false }));
-  app.auth.loginForTest(access || {}); // Promise, but immediate
-  return app;
+  return app.auth.loginForTest(access || {});
 };
 
 const createTestAppWithNetworkCB = (scope, networkCB) =>
@@ -55,10 +54,9 @@ const createAnonTestApp = (scope) => {
   return app.auth.loginForTest();
 };
 
-const createAuthenticatedTestApp = (scope, access) => {
+const createAuthenticatedTestApp = (scope, access, opts) => {
   const app = createTestApp(scope);
-  app.auth.loginForTest(access || {}); // Promise, but immediate
-  return app;
+  return app.auth.loginForTest(access || {}, opts);
 };
 
 const createRandomXorName = () => crypto.randomBytes(32);

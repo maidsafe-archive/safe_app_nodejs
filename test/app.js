@@ -51,20 +51,20 @@ describe('Smoke test', () => {
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
-  it('creates registered for testing', () => {
-    const app = createAuthenticatedTestApp();
+  it('creates registered for testing', async () => {
+    const app = await createAuthenticatedTestApp();
     should(app.auth.registered).be.true();
   }).timeout(20000);
 
-  it('clears object cache invalidating objects', () => {
-    const app = createAuthenticatedTestApp();
-    return app.mutableData.newMutation()
+  it('clears object cache invalidating objects', () => createAuthenticatedTestApp()
+    .then((app) => app.mutableData.newMutation()
       .then((mut) => should(mut.insert('key1', 'value1')).be.fulfilled()
         .then(() => should(app.clearObjectCache()).be.fulfilled())
         .then(() => should(mut.insert('key2', 'value2')).be.rejectedWith('Invalid MutableData entry actions handle'))
       )
-      .then(() => should(app.mutableData.newMutation()).be.fulfilled());
-  }).timeout(20000);
+      .then(() => should(app.mutableData.newMutation()).be.fulfilled())
+    )
+  ).timeout(20000);
 
   it('validate is mock build', () => {
     const app = createTestApp();
@@ -108,13 +108,13 @@ describe('Smoke test', () => {
   });
 
   it('should return account information', async () => {
-    const app = createAuthenticatedTestApp();
+    const app = await createAuthenticatedTestApp();
     const accInfo = await app.getAccountInfo();
     should(accInfo).have.properties(['mutations_done', 'mutations_available']);
   }).timeout(10000);
 
   it('should increment/decrement mutation values', async () => {
-    const app = createAuthenticatedTestApp();
+    const app = await createAuthenticatedTestApp();
     const accInfoBefore = await app.getAccountInfo();
     const idWriter = await app.immutableData.create();
     const testString = `test-${Math.random()}`;
@@ -133,7 +133,7 @@ describe('Smoke test', () => {
   });
 
   it('returns safe_client_libs log path', async () => {
-    const app = createAuthenticatedTestApp();
+    const app = await createAuthenticatedTestApp();
     should(app.logPath()).be.fulfilled();
   }).timeout(10000);
 
@@ -141,8 +141,8 @@ describe('Smoke test', () => {
     should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri)).be.fulfilled();
   });
 
-  it('returns boolean for network state', () => {
-    const app = createAuthenticatedTestApp();
+  it('returns boolean for network state', async () => {
+    const app = await createAuthenticatedTestApp();
     should(app.isNetStateInit()).be.true();
     should(app.isNetStateConnected()).be.false();
     should(app.isNetStateDisconnected()).be.false();

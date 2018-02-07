@@ -2,11 +2,13 @@ const should = require('should');
 const h = require('./helpers');
 const { pubConsts: CONSTANTS } = require('../src/consts');
 
-const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
-
 describe('NFS emulation', () => {
-  const app = createAuthenticatedTestApp();
+  let app;
   const TYPE_TAG = 15639;
+
+  before(async () => {
+    app = await h.createAuthenticatedTestApp();
+  });
 
   it('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TYPE_TAG)
     .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))

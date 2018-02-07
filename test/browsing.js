@@ -5,9 +5,9 @@ const consts = require('../src/consts');
 const createAnonTestApp = h.createAnonTestApp;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
-const createRandomDomain = (content, path, service, authedApp) => {
+const createRandomDomain = async (content, path, service, authedApp) => {
   const domain = `test_${Math.round(Math.random() * 100000)}`;
-  const app = authedApp || createAuthenticatedTestApp();
+  const app = authedApp || await createAuthenticatedTestApp();
   return app.mutableData.newRandomPublic(consts.TAG_TYPE_WWW)
     .then((serviceMdata) => serviceMdata.quickSetup()
       .then(() => {
@@ -28,9 +28,9 @@ const createRandomDomain = (content, path, service, authedApp) => {
 };
 
 
-const createRandomPrivateServiceDomain = (content, path, service) => {
+const createRandomPrivateServiceDomain = async (content, path, service) => {
   const domain = `test_${Math.round(Math.random() * 100000)}`;
-  const app = createAuthenticatedTestApp();
+  const app = await createAuthenticatedTestApp();
   return app.mutableData.newRandomPrivate(consts.TAG_TYPE_WWW)
     .then((serviceMdata) => serviceMdata.quickSetup()
       .then(() => {
@@ -346,8 +346,8 @@ describe('Browsing', () => {
         });
     });
 
-    it('should throw error when a previously existing service is removed', () => {
-      const app = createAuthenticatedTestApp();
+    it('should throw error when a previously existing service is removed', async () => {
+      const app = await createAuthenticatedTestApp();
       const deletedService = 'nonexistant';
       let testDomain;
       return createRandomDomain(content, '', deletedService, app)
