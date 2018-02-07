@@ -2,7 +2,11 @@ const should = require('should');
 const h = require('./helpers');
 
 describe('CipherOpt', () => {
-  const app = h.createAuthenticatedTestApp();
+  let app;
+
+  before(async () => {
+    app = await h.createAuthenticatedTestApp();
+  });
 
   it('provides a plain text cipher opt to write immutable structure', async () => {
     const testString = 'information to be encrypted';
@@ -27,7 +31,7 @@ describe('CipherOpt', () => {
   });
 
   it('asymmetrically encrypts data to be written to immutable structure', async () => {
-    const differentApp = h.createAltAuthTestApp();
+    const differentApp = await h.createAltAuthTestApp();
     const pubEncKey = await differentApp.crypto.getAppPubEncKey();
     const rawKey = await pubEncKey.getRaw();
 
@@ -42,4 +46,4 @@ describe('CipherOpt', () => {
     const idData = await idReader.read();
     should(idData.toString()).equal(testString);
   }).timeout(10000);
-}).timeout(15000);
+});
