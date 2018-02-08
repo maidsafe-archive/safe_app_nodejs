@@ -13,11 +13,7 @@ const NET_STATE_CONNECTED = 0;
 // Determine if process is forced to mock
 const allPassedArgs = process.argv;
 
-let hasMockFlag = false;
-
-if (allPassedArgs.includes('--mock')) {
-  hasMockFlag = true;
-}
+const hasMockFlag = allPassedArgs.includes('--mock');
 
 const env = hasMockFlag ? 'development' : process.env.NODE_ENV || 'production';
 const isRunningDevelopment = /^dev/.test(env);
@@ -125,5 +121,6 @@ module.exports = {
 
   INDEX_HTML,
   inTesting,
-  pubConsts
+  pubConsts,
+  hasMockFlag
 };
