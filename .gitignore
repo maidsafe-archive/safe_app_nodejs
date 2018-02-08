@@ -39,9 +39,8 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-src/native/*safe_app*
-src/native/libsystem_uri*
-src/native/system_uri*
+src/native/prod/
+src/native/mock/
 .idea
 out
 src/native/*.dll

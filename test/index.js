@@ -57,6 +57,21 @@ describe('Smoke testing', () => {
     should(app.auth.openUri('')).be.Promise();
   });
 
+  it('system uri lib contains "mock" dir (as we\'re testing)', () => {
+    const sysUriPath = LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME;
+    should(sysUriPath.includes('mock')).be.True();
+  });
+
+  it('safe app lib contains "mock" dir (as we\'re testing)', () => {
+    const libPath = LIB_CONSTANTS.LIB_FILENAME;
+    should(libPath.includes('mock')).be.True();
+  });
+
+  it('hasMockFlag is set FALSE for testing', () => {
+    const hasMock = LIB_CONSTANTS.hasMockFlag;
+    should(hasMock).be.False();
+  });
+
   it('throws error if lib fails to load', () => {
     fs.renameSync(path.join(__dirname, `../src/native/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`), path.join(__dirname, '../src/native/hideLib.so'));
     try {

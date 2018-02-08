@@ -1,4 +1,5 @@
 const os = require('os');
+const path = require('path');
 
 const inTesting = (process.env.NODE_ENV || '').match(/dev|development|testing|test/) || typeof global.it === 'function';
 
@@ -8,6 +9,20 @@ const TAG_TYPE_WWW = 15002;
 const NET_STATE_INIT = -100;
 const NET_STATE_DISCONNECTED = -1;
 const NET_STATE_CONNECTED = 0;
+
+// Determine if process is forced to mock
+const allPassedArgs = process.argv;
+
+const hasMockFlag = allPassedArgs.includes('--mock');
+
+const env = hasMockFlag ? 'development' : process.env.NODE_ENV || 'production';
+const isRunningDevelopment = /^dev/.test(env);
+
+let libLocationModifier = 'prod';
+
+if (isRunningDevelopment || inTesting) {
+  libLocationModifier = 'mock';
+}
 
 /**
 * @typedef {Object} CONSTANTS
@@ -80,15 +95,15 @@ const pubConsts = {
 };
 
 const LIB_FILENAME = {
-  win32: 'safe_app.dll',
-  darwin: 'libsafe_app.dylib',
-  linux: 'libsafe_app.so'
+  win32: path.join('./', libLocationModifier, 'safe_app.dll'),
+  darwin: path.join('./', libLocationModifier, 'libsafe_app.dylib'),
+  linux: path.join('./', libLocationModifier, 'libsafe_app.so')
 }[os.platform()];
 
 const SYSTEM_URI_LIB_FILENAME = {
-  win32: './system_uri.dll',
-  darwin: './libsystem_uri.dylib',
-  linux: './libsystem_uri.so'
+  win32: path.join('./', libLocationModifier, 'system_uri.dll'),
+  darwin: path.join('./', libLocationModifier, 'libsystem_uri.dylib'),
+  linux: path.join('./', libLocationModifier, 'libsystem_uri.so')
 }[os.platform()];
 
 const INDEX_HTML = 'index.html';
@@ -106,5 +121,6 @@ module.exports = {
 
   INDEX_HTML,
   inTesting,
-  pubConsts
+  pubConsts,
+  hasMockFlag
 };
