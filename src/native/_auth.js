@@ -5,6 +5,7 @@ const ref = require('ref');
 const Struct = require('ref-struct');
 const base = require('./_base.js');
 const makeFfiError = require('./_error.js');
+const errConst = require('../error_const');
 const { helpersToExport, types: MDtypes } = require('./_mutable.js');
 
 const readMDataInfoPtr = helpersToExport.readMDataInfoPtr;
@@ -214,7 +215,13 @@ module.exports = {
     access_container_fetch: helpers.Promisified(null, [ref.refType(ContainerPermissions), t.usize], (args) => {
       const ptr = args[0];
       const len = args[1];
-      let arrPtr = ref.reinterpret(ptr, ContainerPermissions.size * len);
+      let arrPtr;
+      try {
+        arrPtr = ref.reinterpret(ptr, ContainerPermissions.size * len);
+      } catch (err) {
+        const noContainersErr = errConst.NO_CONTAINERS;
+        return makeFfiError(noContainersErr.code, noContainersErr.msg); 
+      }
       let arr = ContainerPermissionsArray(arrPtr)
       const contsPerms = {};
       for (let i = 0; i < len ; i++) {

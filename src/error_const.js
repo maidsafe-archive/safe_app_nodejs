@@ -15,5 +15,15 @@ module.exports = {
       vendor: 'MaidSafe Ltd.',
       scope: null
     }`
+  },
+
+  NO_CONTAINERS: {
+    code: 3,
+    msg: `
+    App was not authorised with containers.
+    If this is unexpected, make sure to request containers permissions:
+    {
+      _public: ['Read', 'Insert']
+    }`
   }
 };

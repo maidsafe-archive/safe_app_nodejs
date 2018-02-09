@@ -1,5 +1,6 @@
 const should = require('should');
 const h = require('./helpers');
+const errConst = require('../src/error_const');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
@@ -88,6 +89,12 @@ describe('Access Container', () => {
         ManagePermissions: true
       });
     })));
+
+  it('throws error if no containers found', async () => {
+    const appWithNoContainers = await createAuthenticatedTestApp();
+    const noContainersErr = await appWithNoContainers.auth.getContainersPermissions();
+    should(noContainersErr.message).be.equal(errConst.NO_CONTAINERS.msg);
+  }).timeout(6000);
 
   it('get own container', () => app.auth.refreshContainersPermissions().then(() =>
     app.auth.getOwnContainer().then((mdata) => {
