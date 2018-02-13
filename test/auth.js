@@ -19,6 +19,12 @@ describe('auth interface', () => {
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
+  it('should throw error if non-standard container is requested', () => {
+    const containersPermissions = { _app: ['Read', 'Insert', 'ManagePermissions'] };
+    const result = createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true });
+    should(result).be.rejected();
+  });
+
   it('is authenticated for testing', () => {
     should(app.auth.registered).be.true();
   });
