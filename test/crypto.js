@@ -196,7 +196,7 @@ describe('Encryption keys', () => {
       return myHandleOnTheirPubKey.encryptSealed(plaintext)
         .then((cipher) => {
           should(cipher.toString()).not.equal(plaintext);
-          const test = theirKeys.decryptSealed()
+          const test = theirKeys.decryptSealed();
           should(test).be.rejectedWith('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object');
         });
     });

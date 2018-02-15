@@ -45,7 +45,7 @@ class CipherOptInterface {
   * @returns {CipherOpt}
   */
   newAsymmetric(key) {
-    if (!key) throw new Error(errConst.MISSING_KEY.msg);
+    if (!key) throw new Error(errConst.MISSING_PUB_ENC_KEY.msg);
     return lib.cipher_opt_new_asymmetric(this.app.connection, key.ref)
         .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }

@@ -6,7 +6,6 @@ const api = require('./api');
 const lib = require('./native/lib');
 const { parse: parseUrl } = require('url');
 const consts = require('./consts');
-const makeFfiError = require('./native/_error.js');
 const errConst = require('./error_const');
 
 /**

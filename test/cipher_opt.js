@@ -50,6 +50,6 @@ describe('CipherOpt', () => {
 
   it('throws error if key is not provided to newAsymmetric', () => {
     const test = () => app.cipherOpt.newAsymmetric();
-    should(test).throw(errConst.MISSING_KEY.msg);
+    should(test).throw(errConst.MISSING_PUB_ENC_KEY.msg);
   });
 });

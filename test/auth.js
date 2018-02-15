@@ -44,12 +44,12 @@ describe('auth interface', () => {
 
     Err(
         Unexpected(
-	        "\'_app\' not found in the access container"
-		    )
-		    )
+                "'_app' not found in the access container"
+                    )
+                    )
 
-		    ', C:\\Users\\viv\\.cargo\\registry\\src\\github.com-1ecc6299db9ec823\\unwrap-1.1.0\\src\\lib.rs:67:24
-		    note: Run with \`RUST_BACKTRACE=1\` for a backtrace.
+                    ', C:\\Users\\viv\\.cargo\\registry\\src\\github.com-1ecc6299db9ec823\\unwrap-1.1.0\\src\\lib.rs:67:24
+                    note: Run with \`RUST_BACKTRACE=1\` for a backtrace.
     `);
   });
 
@@ -86,7 +86,7 @@ describe('auth interface', () => {
   it('should throw error for non-existent permissions array for share MD request', () => {
     const app = h.createTestApp();
     const test = () => app.auth.genShareMDataUri();
-    should(test).throw('No permissions array provided');
+    should(test).throw(errConst.MISSING_PERMS_ARRAY.msg);
   });
 
   it('should throw error for misspelled or non-existent share MD request permission', async () => {
@@ -102,7 +102,7 @@ describe('auth interface', () => {
     const sharedMdXorName = h.createRandomXorName();
     const perms = { type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] };
     const test = () => app.auth.genShareMDataUri(perms);
-    should(test).throw('Permissions provided are not in array format');
+    should(test).throw(errConst.INVALID_PERMS_ARRAY.msg);
   });
 
   it('should throw error for invalid share MD request permission', async () => {
@@ -184,7 +184,9 @@ describe('Access Container', () => {
   it('returns empty array if no containers found for app', async () => {
     const appWithNoContainers = await createAuthenticatedTestApp();
     const noContainers = await appWithNoContainers.auth.getContainersPermissions();
-    should(Array.isArray(noContainers) && noContainers.length === 0).be.true;
+    const isArray = Array.isArray(noContainers);
+    const emptyArray = noContainers.length === 0;
+    should(isArray && emptyArray).be.true();
   });
 
   it('get own container', () => app.auth.refreshContainersPermissions().then(() =>
@@ -230,8 +232,8 @@ describe('Access Container', () => {
       })));
 
   it('throws error is no container name provided', () => app.auth.refreshContainersPermissions().then(() => {
-   const test = () => app.auth.getContainer();
-   should(test).throw(errConst.MISSING_CONTAINER_STRING.msg);
+    const test = () => app.auth.getContainer();
+    should(test).throw(errConst.MISSING_CONTAINER_STRING.msg);
   }));
 
   it('read info of own container', () => app.auth.refreshContainersPermissions().then(() =>
