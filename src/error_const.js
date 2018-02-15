@@ -73,12 +73,21 @@ module.exports = {
     Set NODE_ENV=dev`
   },
 
-  MISSING_KEY: {
+  MISSING_PUB_ENC_KEY: {
     code: 12,
     msg: `
-    No key provided. Please provide public key.
+    Please provide public encryption key.
     For example:
-    app.crypto.getAppPubEncKey()`
-  }
+    - app.crypto.getAppPubEncKey()
+    - const encKeyPair = app.crypto.generateEncKeyPair();
+      encKeyPair.pubEncKey;`
+  },
 
+  MISSING_SEC_ENC_KEY: {
+    code: 13,
+    msg: `
+    Please provide secret encryption key:
+    const encKeyPair = app.crypto.generateEncKeyPair();
+    encKeyPair.secEncKey;`
+  }
 };

@@ -22,6 +22,7 @@
 
 const lib = require('../native/lib');
 const h = require('../helpers');
+const errConst = require('../error_const');
 
 /**
 * Holds the public part of an encryption key
@@ -55,18 +56,6 @@ class PubEncKey extends h.NetworkObject {
   }
 
   /**
-  * Decrypt the given cipher text (buffer or string) using this public
-  * encryption key and the given secret key
-  *
-  * @arg {Buffer} cipher to decrypt
-  * @arg {SecEncKey} secretEncKey secret encryption key
-  * @returns {Promise<Buffer>} plain text
-  */
-  decrypt(cipher, secretEncKey) {
-    return lib.decrypt(this.app.connection, cipher, this.ref, secretEncKey.ref);
-  }
-
-  /**
   * Encrypt the input (buffer or string) using this public encryption key
   * and the given secret key.
   *
@@ -75,6 +64,7 @@ class PubEncKey extends h.NetworkObject {
   * @returns {Promise<Buffer>} cipher text
   */
   encrypt(data, secretEncKey) {
+    if (!secretEncKey) throw new Error(errConst.MISSING_SEC_ENC_KEY.msg);
     return lib.encrypt(this.app.connection, data, this.ref, secretEncKey.ref);
   }
 }
@@ -112,19 +102,8 @@ class SecEncKey extends h.NetworkObject {
   * @returns {Promise<Buffer>} plain text
   */
   decrypt(cipher, publicEncKey) {
+    if (!publicEncKey) throw new Error(errConst.MISSING_PUB_ENC_KEY.msg);
     return lib.decrypt(this.app.connection, cipher, publicEncKey.ref, this.ref);
-  }
-
-  /**
-  * Encrypt the input (buffer or string) using this secret encryption key
-  * and the recipient's public key
-  *
-  * @param {Buffer} data to be encrypted
-  * @param {PubEncKey} recipientPubKey recipient's public encryption key
-  * @returns {Promise<Buffer>} cipher text
-  */
-  encrypt(data, recipientPubKey) {
-    return lib.encrypt(this.app.connection, data, recipientPubKey.ref, this.ref);
   }
 }
 

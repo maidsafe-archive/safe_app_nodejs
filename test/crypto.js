@@ -1,6 +1,7 @@
 const should = require('should');
 const h = require('./helpers');
 const l = require('../src/native/lib');
+const errConst = require('../src/error_const');
 
 describe('Crypto Smoke Test', () => {
   it('properly sha3 hashes strings', () => l.sha3_hash('test').then((resp) => {
@@ -162,6 +163,22 @@ describe('Encryption keys', () => {
         });
     });
 
+    it('throws error on decrypt if public enc key not provided', () => {
+      const plaintext = `all the ${Math.random()} places where I've been`;
+      return myHandleOnTheirPubKey.encrypt(plaintext, myKeys.secEncKey)
+        .then((cipher) => {
+          should(cipher.toString()).not.equal(plaintext);
+          const test = () => theirKeys.secEncKey.decrypt(cipher);
+          should(test).throw(errConst.MISSING_PUB_ENC_KEY.msg);
+        });
+    });
+
+    it('throws error if secret enc key not provided for encryption', () => {
+      const plaintext = `all the ${Math.random()} places where I've been`;
+      const test = () => myHandleOnTheirPubKey.encrypt(plaintext);
+      should(test).throw(errConst.MISSING_SEC_ENC_KEY.msg);
+    });
+
     it('encrypts and decrypts with seal', () => {
       const plaintext = `all the ${Math.random()} places where I've been`;
       return myHandleOnTheirPubKey.encryptSealed(plaintext)
@@ -171,6 +188,16 @@ describe('Encryption keys', () => {
             .then((raw) => {
               should(plaintext).equal(raw.toString());
             });
+        });
+    });
+
+    it('throws error if decryptSealed not provided with cipher', () => {
+      const plaintext = `all the ${Math.random()} places where I've been`;
+      return myHandleOnTheirPubKey.encryptSealed(plaintext)
+        .then((cipher) => {
+          should(cipher.toString()).not.equal(plaintext);
+          const test = theirKeys.decryptSealed()
+          should(test).be.rejectedWith('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object');
         });
     });
   });
@@ -236,7 +263,7 @@ describe('Sign keys', () => {
     });
   });
 
-  describe('signing messages between two app encryption', () => {
+  describe('signing messages between two apps', () => {
     let me;
     let other;
     let myKeys;
