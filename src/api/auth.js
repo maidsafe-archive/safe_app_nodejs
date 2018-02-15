@@ -24,6 +24,7 @@ const lib = require('../native/lib');
 const nativeH = require('../native/helpers');
 const types = require('../native/types');
 const { inTesting } = require('../consts');
+const { validateShareMDataPermissions } = require('../helpers');
 
 const makeAppInfo = nativeH.makeAppInfo;
 const makePermissions = nativeH.makePermissions;
@@ -174,6 +175,9 @@ class AuthInterface {
   * ])
   */
   genShareMDataUri(permissions) {
+    if (!permissions) throw new Error('No permissions array provided');
+    if (!Array.isArray(permissions)) throw new Error('Permissions provided are not in array format');
+    validateShareMDataPermissions(permissions);
     const mdatasPerms = makeShareMDataPermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
     return lib.encode_share_mdata_req(new types.ShareMDataReq({
@@ -315,6 +319,7 @@ class AuthInterface {
   *          authenticated session.
   */
   loginFromURI(uri) {
+    if (!uri) return new Error('No auth URI provided');
     const sanitisedUri = removeSafeProcol(uri);
     return lib.decode_ipc_msg(sanitisedUri).then((resp) => {
       const ipcMsgType = resp[0];

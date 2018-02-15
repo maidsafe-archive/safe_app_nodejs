@@ -39,7 +39,7 @@ describe('Smoke test', () => {
 
   it('should build some containers uri', () => {
     const app = createTestApp();
-    return app.auth.genContainerAuthUri({ private: ['Insert'] })
+    return app.auth.genContainerAuthUri({ _public: ['Insert'] })
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
@@ -130,6 +130,11 @@ describe('Smoke test', () => {
     const app = h.createTestApp();
     await app.auth.loginFromURI(h.authUris.unregisteredUri);
     should(app.getAccountInfo()).be.rejected();
+  });
+
+  it('should throw error if no auth URI is present during login', async () => {
+    const app = h.createTestApp();
+    should.throws(app.auth.loginFromURI());
   });
 
   it('returns safe_client_libs log path', async () => {

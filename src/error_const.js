@@ -25,5 +25,10 @@ module.exports = {
     {
       _public: ['Read', 'Insert']
     }`
+  },
+
+  INVALID_SHARE_MD_PERMISSION: {
+    code: 4,
+    msg: (perm) => `Invalid share MData permission: ${perm}`
   }
 };

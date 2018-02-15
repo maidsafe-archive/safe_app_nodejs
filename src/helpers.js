@@ -1,4 +1,6 @@
 const weak = require('weak');
+const makeFfiError = require('./native/_error.js');
+const errConst = require('./error_const');
 
 /**
 * General purpose interface to link a native handle
@@ -64,7 +66,30 @@ const autoref = (obj) => {
 };
 
 
+function validateShareMDataPermissions(permissions) {
+  const permissionMustHaveProperties = ['type_tag', 'name', 'perms'];
+  let badPerm = {};
+  const hasCorrectProperties = permissions.every(
+    (perm) => permissionMustHaveProperties.every((prop) => {
+      const bool = Object.prototype.hasOwnProperty.call(perm, prop) && perm[prop];
+      if (!bool) {
+        badPerm = perm;
+        return false;
+      }
+      return true;
+    }));
+
+  if (!hasCorrectProperties) {
+    throw makeFfiError(
+      errConst.INVALID_SHARE_MD_PERMISSION.code,
+      errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(badPerm))
+    );
+  }
+}
+
+
 module.exports = {
   NetworkObject,
-  autoref
+  autoref,
+  validateShareMDataPermissions
 };

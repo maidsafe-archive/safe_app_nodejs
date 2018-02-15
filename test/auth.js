@@ -31,7 +31,7 @@ describe('auth interface', () => {
 
   it('should build some containers uri', () => {
     const app = h.createTestApp();
-    return app.auth.genContainerAuthUri({ private: ['Insert'] })
+    return app.auth.genContainerAuthUri({ _public: ['Insert'] })
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
@@ -41,6 +41,51 @@ describe('auth interface', () => {
     const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
     return app.auth.genShareMDataUri(perms)
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  });
+
+  it('should throw error for non-existent permissions array for share MD request', () => {
+    const app = h.createTestApp();
+    const test = () => app.auth.genShareMDataUri();
+    should(test).throw('No permissions array provided');
+  });
+
+  it('should throw error for misspelled or non-existent share MD request permission', async () => {
+    const app = h.createTestApp();
+    const sharedMdXorName = h.createRandomXorName();
+    const perms = [{ name: sharedMdXorName, perms: ['Insert'] }];
+    const test = () => app.auth.genShareMDataUri(perms);
+    should(test).throw(errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(perms[0])));
+  });
+
+  it('should throw error for malformed share MD request permission', async () => {
+    const app = h.createTestApp();
+    const sharedMdXorName = h.createRandomXorName();
+    const perms = { type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] };
+    const test = () => app.auth.genShareMDataUri(perms);
+    should(test).throw('Permissions provided are not in array format');
+  });
+
+  it('should throw error for invalid share MD request permission', async () => {
+    const app = h.createTestApp();
+    const sharedMdXorName = h.createRandomXorName();
+    const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Wrong'] }];
+    const test = () => app.auth.genShareMDataUri(perms);
+    should(test).throw(`'${perms[0].perms[0]}' is not a valid permission`);
+  });
+
+  it('should throw error for share MD request if type_tag is non-integer', async () => {
+    const app = h.createTestApp();
+    const sharedMdXorName = h.createRandomXorName();
+    const perms = [{ type_tag: 'non-integer', name: sharedMdXorName, perms: ['Insert'] }];
+    const test = () => app.auth.genShareMDataUri(perms);
+    should(test).throw('writeUInt64: no digits we found in input String');
+  });
+
+  it('should throw error for share MD request if name is not 32 byte buffer', async () => {
+    const app = h.createTestApp();
+    const perms = [{ type_tag: 15001, name: 'not 32 byte buffer', perms: ['Insert'] }];
+    const test = () => app.auth.genShareMDataUri(perms);
+    should(test).throw('XOR Names _must be_ 32 bytes long.');
   });
 
   it('creates unregistered connection', () => {
