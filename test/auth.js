@@ -19,10 +19,38 @@ describe('auth interface', () => {
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
+  it('throws error if missing permissions object', async () => {
+    const app = h.createTestApp();
+    const test = () => app.auth.genAuthUri();
+    should(test).throw(errConst.MISSING_CONTAINERS_OBJECT.msg);
+  });
+
+  it('throws error if permissions object contains invalid permission', async () => {
+    const app = h.createTestApp();
+    const test = () => app.auth.genAuthUri({ _public: ['Invalid'] });
+    should(test).throw("'Invalid' is not a valid permission");
+  });
+
   it('should throw error if non-standard container is requested', () => {
     const containersPermissions = { _app: ['Read', 'Insert', 'ManagePermissions'] };
     const result = createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true });
-    should(result).be.rejected();
+    should(result).be.rejectedWith(`
+    thread '<unnamed>' panicked at '
+
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !   unwrap! called on Result::Err                                              !
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    src\\test_utils.rs:89,23 in safe_app::test_utils
+
+    Err(
+        Unexpected(
+	        "\'_app\' not found in the access container"
+		    )
+		    )
+
+		    ', C:\\Users\\viv\\.cargo\\registry\\src\\github.com-1ecc6299db9ec823\\unwrap-1.1.0\\src\\lib.rs:67:24
+		    note: Run with \`RUST_BACKTRACE=1\` for a backtrace.
+    `);
   });
 
   it('is authenticated for testing', () => {
@@ -33,6 +61,18 @@ describe('auth interface', () => {
     const app = h.createTestApp();
     return app.auth.genContainerAuthUri({ _public: ['Insert'] })
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  });
+
+  it('throws error if missing containers object', () => {
+    const app = h.createTestApp();
+    const test = () => app.auth.genContainerAuthUri();
+    should(test).throw(errConst.MISSING_CONTAINERS_OBJECT.msg);
+  });
+
+  it('throws error if invalid container permission requested', () => {
+    const app = h.createTestApp();
+    const test = () => app.auth.genContainerAuthUri({ _public: ['Invalid'] });
+    should(test).throw("'Invalid' is not a valid permission");
   });
 
   it('should build some shared MD uri', () => {
@@ -141,16 +181,23 @@ describe('Access Container', () => {
       });
     })));
 
-  it('throws error if no containers found', async () => {
+  it('returns empty array if no containers found for app', async () => {
     const appWithNoContainers = await createAuthenticatedTestApp();
-    const noContainersErr = await appWithNoContainers.auth.getContainersPermissions();
-    should(noContainersErr.message).be.equal(errConst.NO_CONTAINERS.msg);
-  }).timeout(6000);
+    const noContainers = await appWithNoContainers.auth.getContainersPermissions();
+    should(Array.isArray(noContainers) && noContainers.length === 0).be.true;
+  });
 
   it('get own container', () => app.auth.refreshContainersPermissions().then(() =>
     app.auth.getOwnContainer().then((mdata) => {
       should(mdata).is.not.undefined();
     })));
+
+  it('throws error if root container requested but was not created', async () => {
+    const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
+    const app = await createAuthenticatedTestApp('_test_scope_2', containersPermissions, { own_container: false });
+    const test = app.auth.getOwnContainer();
+    should(test).be.rejectedWith('-1002: Container not found');
+  });
 
   it('has read access to `_public`', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.canAccessContainer('_public').then((hasAccess) => {
@@ -181,6 +228,11 @@ describe('Access Container', () => {
         should(resp.name).is.not.undefined();
         should(resp.type_tag).equal(15000);
       })));
+
+  it('throws error is no container name provided', () => app.auth.refreshContainersPermissions().then(() => {
+   const test = () => app.auth.getContainer();
+   should(test).throw(errConst.MISSING_CONTAINER_STRING.msg);
+  }));
 
   it('read info of own container', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.getOwnContainer().then((ctnr) => ctnr.getNameAndTag()).then((resp) => {

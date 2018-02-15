@@ -59,6 +59,18 @@ module.exports = {
       _public: ['Insert'],
       _publicNames: ['ManagePermissions']
     }`
+  },
+
+  MISSING_CONTAINER_STRING: {
+    code: 10,
+    msg: 'Please provide container string argument'
+  },
+
+  NON_DEV: {
+    code: 11,
+    msg: `
+    Not supported outside of Dev and Testing Environment.
+    Set NODE_ENV=dev`
   }
 
 };

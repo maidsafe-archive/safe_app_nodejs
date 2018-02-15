@@ -50,26 +50,6 @@ describe('Smoke test', () => {
     );
   });
 
-  it('should build some containers uri', () => {
-    const app = createTestApp();
-    return app.auth.genContainerAuthUri({ _public: ['Insert'] })
-        .then((resp) => should(resp.uri).startWith('safe-auth:'));
-  });
-
-  it('throws error if missing containers object', () => {
-    const app = createTestApp();
-    const test = () => app.auth.genContainerAuthUri();
-    should(test).throw(errConst.MISSING_CONTAINERS_OBJECT.msg);
-  });
-
-  it('should build some shared MD uri', () => {
-    const app = createTestApp();
-    const sharedMdXorName = h.createRandomXorName();
-    const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
-    return app.auth.genShareMDataUri(perms)
-        .then((resp) => should(resp.uri).startWith('safe-auth:'));
-  });
-
   it('creates registered for testing', async () => {
     const app = await createAuthenticatedTestApp();
     should(app.auth.registered).be.true();

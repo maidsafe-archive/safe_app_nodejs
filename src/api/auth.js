@@ -143,6 +143,7 @@ class AuthInterface {
   * }, {own_container: true}) // and we want our own container, too
   */
   genAuthUri(permissions, opts) {
+    if (!permissions) throw new Error(errConst.MISSING_CONTAINERS_OBJECT.msg);
     const perm = makePermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
     return lib.encode_auth_req(new types.AuthReq({
@@ -310,6 +311,7 @@ class AuthInterface {
   * @returns {Promise<MutableData>} the MutableData behind it
   */
   getContainer(name) {
+    if (!name) throw new Error(errConst.MISSING_CONTAINER_STRING.msg);
     return lib.access_container_get_container_mdata_info(this.app.connection, name)
       .then((data) => this.app.mutableData.wrapMdata(data));
   }
@@ -362,7 +364,7 @@ class AuthInterface {
   * @returns {Promise<SAFEApp>} the locally registered/unregistered App instance
   */
   loginForTest(access, opts) {
-    if (!inTesting) throw Error('Not supported outside of Dev and Testing Environment!');
+    if (!inTesting) throw Error(errConst.NON_DEV.msg);
     if (access) {
       const appInfo = makeAppInfo(this.app.appInfo);
       const perms = makePermissions(access || {});
