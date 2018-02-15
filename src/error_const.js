@@ -71,6 +71,14 @@ module.exports = {
     msg: `
     Not supported outside of Dev and Testing Environment.
     Set NODE_ENV=dev`
+  },
+
+  MISSING_KEY: {
+    code: 12,
+    msg: `
+    No key provided. Please provide public key.
+    For example:
+    app.crypto.getAppPubEncKey()`
   }
 
 };
