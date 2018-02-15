@@ -1,4 +1,7 @@
 module.exports = {
+  ERR_NO_SUCH_DATA: -103,
+  ERR_NO_SUCH_ENTRY: -106,
+  ERR_FILE_NOT_FOUND: -301,
   FAILED_TO_LOAD_LIB: {
     code: 1,
     msg: (e) => `Failed to load native libraries: ${e}`
@@ -8,7 +11,7 @@ module.exports = {
     code: 2,
     msg: `
     Malformed appInfo.
-    Make sure you conform to proper format and that id, name, and vendor are defined:
+    Please conform to proper format and be sure id, name, and vendor properties are defined:
     {
       id: 'net.maidsafe.example.id',
       name: 'Name of App',
@@ -17,18 +20,45 @@ module.exports = {
     }`
   },
 
-  NO_CONTAINERS: {
+  MISSING_PERMS_ARRAY: {
     code: 3,
-    msg: `
-    App was not authorised with containers.
-    If this is unexpected, make sure to request containers permissions:
-    {
-      _public: ['Read', 'Insert']
-    }`
+    msg: 'Argument should be an array object'
   },
 
   INVALID_SHARE_MD_PERMISSION: {
     code: 4,
     msg: (perm) => `Invalid share MData permission: ${perm}`
+  },
+
+  INVALID_PERMS_ARRAY: {
+    code: 5,
+    msg: 'Permissions provided are not in array format'
+  },
+
+  MISSING_URL: {
+    code: 6,
+    msg: 'Please provide URL'
+  },
+
+  INVALID_URL: {
+    code: 7,
+    msg: 'Please provide URL in string format'
+  },
+
+  MISSING_AUTH_URI: {
+    code: 8,
+    msg: 'Please provide auth URI'
+  },
+
+  MISSING_CONTAINERS_OBJECT: {
+    code: 9,
+    msg: `
+    Please provide container object.
+    For example:
+    {
+      _public: ['Insert'],
+      _publicNames: ['ManagePermissions']
+    }`
   }
+
 };

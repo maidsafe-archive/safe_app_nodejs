@@ -25,6 +25,7 @@ const nativeH = require('../native/helpers');
 const types = require('../native/types');
 const { inTesting } = require('../consts');
 const { validateShareMDataPermissions } = require('../helpers');
+const errConst = require('../error_const');
 
 const makeAppInfo = nativeH.makeAppInfo;
 const makePermissions = nativeH.makePermissions;
@@ -175,8 +176,8 @@ class AuthInterface {
   * ])
   */
   genShareMDataUri(permissions) {
-    if (!permissions) throw new Error('No permissions array provided');
-    if (!Array.isArray(permissions)) throw new Error('Permissions provided are not in array format');
+    if (!permissions) throw new Error(errConst.MISSING_PERMS_ARRAY.msg);
+    if (!Array.isArray(permissions)) throw new Error(errConst.INVALID_PERMS_ARRAY.msg);
     validateShareMDataPermissions(permissions);
     const mdatasPerms = makeShareMDataPermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
@@ -221,6 +222,7 @@ class AuthInterface {
   * @arg {Object} containers mapping container name to list of permissions
   */
   genContainerAuthUri(containers) {
+    if (!containers) throw new Error(errConst.MISSING_CONTAINERS_OBJECT.msg);
     const ctnrs = makePermissions(containers);
     const appInfo = makeAppInfo(this.app.appInfo);
     return lib.encode_containers_req(new types.ContainerReq({
@@ -319,7 +321,7 @@ class AuthInterface {
   *          authenticated session.
   */
   loginFromURI(uri) {
-    if (!uri) return new Error('No auth URI provided');
+    if (!uri) throw new Error(errConst.MISSING_AUTH_URI.msg);
     const sanitisedUri = removeSafeProcol(uri);
     return lib.decode_ipc_msg(sanitisedUri).then((resp) => {
       const ipcMsgType = resp[0];

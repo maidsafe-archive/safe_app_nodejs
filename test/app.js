@@ -37,10 +37,29 @@ describe('Smoke test', () => {
     should(optionsObjectsEqual).be.true();
   });
 
+  it('logs error if options object contains invalid configPath value', () => {
+    const optionsObject = {
+      log: true,
+      registerScheme: false,
+      joinSchemes: ['proto'],
+      configPath: { path: '/home' }
+    };
+    createTestAppWithOptions(
+      null,
+      optionsObject
+    );
+  });
+
   it('should build some containers uri', () => {
     const app = createTestApp();
     return app.auth.genContainerAuthUri({ _public: ['Insert'] })
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  });
+
+  it('throws error if missing containers object', () => {
+    const app = createTestApp();
+    const test = () => app.auth.genContainerAuthUri();
+    should(test).throw(errConst.MISSING_CONTAINERS_OBJECT.msg);
   });
 
   it('should build some shared MD uri', () => {
@@ -144,6 +163,16 @@ describe('Smoke test', () => {
 
   it('logs in to netowrk from existing authUri', async () => {
     should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri)).be.fulfilled();
+  });
+
+  it('throws error if fromAuthUri missing authUri argument', async () => {
+    const test = () => h.App.fromAuthUri(h.appInfo);
+    should(test).throw(errConst.MISSING_AUTH_URI.msg);
+  });
+
+  it('throws error if fromAuthUri missing appInfo argument', async () => {
+    const test = () => h.App.fromAuthUri(h.authUris.registeredUri);
+    should(test).throw(errConst.MALFORMED_APP_INFO.msg);
   });
 
   it('returns boolean for network state', async () => {

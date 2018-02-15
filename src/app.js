@@ -60,7 +60,7 @@ class SAFEApp extends EventEmitter {
     // in this additional search path.
     if (this.options.configPath) {
       lib.app_set_additional_search_path(this.options.configPath)
-        .catch((err) => { console.error('Faled to set additional config search path', err); });
+        .catch((err) => console.error('Failed to set additional config search path', err));
     }
   }
 
@@ -122,7 +122,7 @@ class SAFEApp extends EventEmitter {
     });
 
     if (!hasCorrectProperties) {
-      throw makeFfiError(errConst.MALFORMED_APP_INFO.code, errConst.MALFORMED_APP_INFO.msg);
+      throw new Error(errConst.MALFORMED_APP_INFO.msg);
     }
   }
 
@@ -149,10 +149,10 @@ class SAFEApp extends EventEmitter {
   * @returns {Promise<Object>} the object with body of content and headers
   */
   async webFetch(url, options) {
-    if (!url) return Promise.reject(new Error('No URL provided.'));
+    if (!url) return Promise.reject(new Error(errConst.MISSING_URL.msg));
 
     const parsedUrl = parseUrl(url);
-    if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
+    if (!parsedUrl) return Promise.reject(new Error(errConst.INVALID_URL.msg));
     const hostname = parsedUrl.hostname;
     let path = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
     const tokens = path.split('/');
@@ -162,9 +162,6 @@ class SAFEApp extends EventEmitter {
     }
 
     path = tokens.join('/') || `/${consts.INDEX_HTML}`;
-    const ERR_NO_SUCH_DATA = -103;
-    const ERR_NO_SUCH_ENTRY = -106;
-    const ERR_FILE_NOT_FOUND = -301;
 
     // lets' unpack
     const hostParts = hostname.split('.');
@@ -178,10 +175,10 @@ class SAFEApp extends EventEmitter {
           const servicesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
           return await servicesContainer.get(servName);
         } catch (err) {
-          if (err.code === ERR_NO_SUCH_DATA || err.code === ERR_NO_SUCH_ENTRY) {
+          if (err.code === errConst.ERR_NO_SUCH_DATA || err.code === errConst.ERR_NO_SUCH_ENTRY) {
             const error = new Error();
             error.code = err.code;
-            error.message = `Requested ${err.code === ERR_NO_SUCH_DATA ? 'public name' : 'service'} is not found`;
+            error.message = `Requested ${err.code === errConst.ERR_NO_SUCH_DATA ? 'public name' : 'service'} is not found`;
             throw error;
           }
           throw err;
@@ -189,7 +186,7 @@ class SAFEApp extends EventEmitter {
       };
 
       const handleNfsFetchException = (error) => {
-        if (error.code !== ERR_FILE_NOT_FOUND) {
+        if (error.code !== errConst.ERR_FILE_NOT_FOUND) {
           throw error;
         }
       };
@@ -198,7 +195,7 @@ class SAFEApp extends EventEmitter {
         const serviceInfo = await getServiceInfo(lookupName, serviceName);
         if (serviceInfo.buf.length === 0) {
           const error = new Error();
-          error.code = ERR_NO_SUCH_ENTRY;
+          error.code = errConst.ERR_NO_SUCH_ENTRY;
           error.message = 'Service not found';
           return reject(error);
         }
