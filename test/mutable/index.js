@@ -33,9 +33,10 @@ describe('Mutable Data', () => {
                                           h.createRandomNonce())).be.rejected()
     );
 
-    it('create custom public with invalid name', () =>
-      should(app.mutableData.newPublic(TEST_NAME_INVALID, TYPE_TAG)).be.rejected()
-    );
+    it('create custom public with invalid name', () => {
+      const test = () => app.mutableData.newPublic(TEST_NAME_INVALID, TYPE_TAG);
+      should(test).throw(`buffer length must be at least 32, got ${TEST_NAME_INVALID.length}`);
+    });
 
     it('create custom private with invalid name', () =>
       should(app.mutableData.newPrivate(TEST_NAME_INVALID, TYPE_TAG,
@@ -72,6 +73,32 @@ describe('Mutable Data', () => {
               should(r.type_tag).equal(TYPE_TAG);
             })
     );
+
+    it('throws error if custom public is created with name not equal to 32 bytes', async () => {
+      const name = 'non XOR name';
+      const test = () => app.mutableData.newPublic(name, TYPE_TAG);
+      should(test).throw(`buffer length must be at least 32, got ${name.length}`);
+    });
+
+    it('throws error if custom private is created with name not equal to 32 bytes', async () => {
+      const name = 'non XOR name';
+      should(
+             app.mutableData.newPrivate(name,
+                                        TYPE_TAG,
+                                        h.createRandomSecKey(),
+                                        h.createRandomNonce()))
+            .be.rejectedWith(`buffer length must be at least 32, got ${name.length}`);
+    });
+
+    it('throws error if custom private is created with nonce not equal to 24 bytes', async () => {
+      const nonce = 'not a nonce';
+      should(
+             app.mutableData.newPrivate(h.createRandomXorName(),
+                                        TYPE_TAG,
+                                        h.createRandomSecKey(),
+                                        nonce))
+            .be.rejectedWith(`buffer length must be at least 24, got ${nonce.length}`);
+    });
 
     it('create custom private and read its name', () =>
         app.mutableData.newPrivate(h.createRandomXorName(), TYPE_TAG,

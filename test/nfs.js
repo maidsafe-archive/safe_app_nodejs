@@ -21,6 +21,17 @@ describe('NFS emulation', () => {
       )
   );
 
+  it('can write a buffer to a file', () => app.mutableData.newRandomPublic(TYPE_TAG)
+    .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+    .then((nfs) => nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)
+        .then((file) => file.write(Buffer.from('hello, SAFE world!'))
+          .then(() => file.close())
+          .then(() => nfs.insert('hello.txt', file))
+        )
+        .then(() => should(nfs.fetch('hello.txt')).be.fulfilled())
+      )
+  );
+
   it('reads a file and returns file contents', () => app.mutableData.newRandomPublic(TYPE_TAG)
     .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
     .then((nfs) => nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)

@@ -131,7 +131,7 @@ describe('Smoke test', () => {
     should(app.getAccountInfo()).be.rejected();
   });
 
-  it('should throw error if no auth URI is present during login', async () => {
+  it('should throw error if no auth URI is present during login', () => {
     const app = h.createTestApp();
     const test = () => app.auth.loginFromURI();
     should(test).throw(errConst.MISSING_AUTH_URI.msg);

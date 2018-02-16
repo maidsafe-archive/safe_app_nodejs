@@ -35,22 +35,11 @@ describe('auth interface', () => {
     const containersPermissions = { _app: ['Read', 'Insert', 'ManagePermissions'] };
     const result = createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true });
     should(result).be.rejectedWith(`
-    thread '<unnamed>' panicked at '
-
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !   unwrap! called on Result::Err                                              !
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    src\\test_utils.rs:89,23 in safe_app::test_utils
-
     Err(
         Unexpected(
                 "'_app' not found in the access container"
-                    )
-                    )
-
-                    ', C:\\Users\\viv\\.cargo\\registry\\src\\github.com-1ecc6299db9ec823\\unwrap-1.1.0\\src\\lib.rs:67:24
-                    note: Run with \`RUST_BACKTRACE=1\` for a backtrace.
-    `);
+                    )`
+    );
   });
 
   it('is authenticated for testing', () => {
@@ -123,9 +112,10 @@ describe('auth interface', () => {
 
   it('should throw error for share MD request if name is not 32 byte buffer', async () => {
     const app = h.createTestApp();
-    const perms = [{ type_tag: 15001, name: 'not 32 byte buffer', perms: ['Insert'] }];
+    const mdName = 'not 32 byte buffer';
+    const perms = [{ type_tag: 15001, name: mdName, perms: ['Insert'] }];
     const test = () => app.auth.genShareMDataUri(perms);
-    should(test).throw('XOR Names _must be_ 32 bytes long.');
+    should(test).throw(`buffer length must be at least 32, got ${mdName.length}`);
   });
 
   it('creates unregistered connection', () => {

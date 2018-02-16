@@ -143,7 +143,6 @@ const makeAppInfo = (appInfo) => {
 
 const translateXorName = (str) => {
   const b = new Buffer(str);
-  if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
   return t.XOR_NAME(b);
 }
 

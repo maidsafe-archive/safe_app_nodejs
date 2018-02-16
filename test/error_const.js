@@ -17,17 +17,17 @@ describe('Error Constants', () => {
 
   it('ERR_NO_SUCH_DATA', () => {
     should.exist(error.ERR_NO_SUCH_DATA);
-    should(error.ERR_NO_SUCH_DATA).be.equal(-103);
+    should(error.ERR_NO_SUCH_DATA.code).be.equal(-103);
   });
 
   it('ERR_NO_SUCH_ENTRY', () => {
     should.exist(error.ERR_NO_SUCH_ENTRY);
-    should(error.ERR_NO_SUCH_ENTRY).be.equal(-106);
+    should(error.ERR_NO_SUCH_ENTRY.code).be.equal(-106);
   });
 
   it('ERR_FILE_NOT_FOUND', () => {
     should.exist(error.ERR_FILE_NOT_FOUND);
-    should(error.ERR_FILE_NOT_FOUND).be.equal(-301);
+    should(error.ERR_FILE_NOT_FOUND.code).be.equal(-301);
   });
 
   it('MISSING_PERMS_ARRAY', () => {

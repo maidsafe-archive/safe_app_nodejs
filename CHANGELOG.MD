@@ -1,5 +1,15 @@
 # safe_app nodejs Change Log
 
+## [Unreleased]
+### Added
+- tests for API modules
+- informative error handling where not handled by native library
+
+### Fixed
+- remove encrypt function from SecEncKey
+- remove decrypt function from PubEncKey
+- remove unnecessary validation of XOR names and nonces
+
 ## [0.7.0] - 29-1-2018
 ### Fixed
 - Minor corrections to documentation snippet code and README

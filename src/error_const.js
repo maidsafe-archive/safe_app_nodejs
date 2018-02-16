@@ -1,7 +1,19 @@
 module.exports = {
-  ERR_NO_SUCH_DATA: -103,
-  ERR_NO_SUCH_ENTRY: -106,
-  ERR_FILE_NOT_FOUND: -301,
+  ERR_NO_SUCH_DATA: {
+    code: -103,
+    msg: 'No such data.'
+  },
+
+  ERR_NO_SUCH_ENTRY: {
+    code: -106,
+    msg: 'Entry does not exist.'
+  },
+
+  ERR_FILE_NOT_FOUND: {
+    code: -301,
+    msg: 'File not found.'
+  },
+
   FAILED_TO_LOAD_LIB: {
     code: 1,
     msg: (e) => `Failed to load native libraries: ${e}`
@@ -11,7 +23,7 @@ module.exports = {
     code: 2,
     msg: `
     Malformed appInfo.
-    Please conform to proper format and be sure id, name, and vendor properties are defined:
+    Please conform to proper format and be sure "id", "name", and "vendor" properties are defined:
     {
       id: 'net.maidsafe.example.id',
       name: 'Name of App',
@@ -89,5 +101,15 @@ module.exports = {
     Please provide secret encryption key:
     const encKeyPair = app.crypto.generateEncKeyPair();
     encKeyPair.secEncKey;`
+  },
+
+  LOGGER_INIT_ERROR: {
+    code: 14,
+    msg: (e) => `Logger initialisation failed. Reason: ${e}`
+  },
+
+  CONFIG_PATH_ERROR: {
+    code: 15,
+    msg: (e) => `Failed to set additional config search path. Reason: ${e}`
   }
 };

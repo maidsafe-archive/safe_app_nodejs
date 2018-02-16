@@ -35,6 +35,8 @@ class SAFEApp extends EventEmitter {
     lib.init(this.options);
     this._appInfo = appInfo;
     this.validateAppInfo();
+    this.initLogging(appInfo);
+    this.setSearchPath();
     this.networkState = consts.NET_STATE_INIT;
     if (networkStateCallBack) {
       this._networkStateCallBack = networkStateCallBack;
@@ -43,24 +45,6 @@ class SAFEApp extends EventEmitter {
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
     });
-
-    // Init logging on the underlying library only if it wasn't done already
-    if (this.options.log && !SAFEApp.logFilePath) {
-      let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
-      filename = `${filename}.log`;
-      lib.app_init_logging(filename)
-        .then(() => lib.app_output_log_path(filename))
-        .then((logPath) => { SAFEApp.logFilePath = logPath; })
-        .catch((err) => { console.error('Logger initilalisation failed', err); });
-    }
-
-    // Set additional search path for the config files if it was requested in
-    // the options. E.g. log.toml and crust.config files will be search
-    // in this additional search path.
-    if (this.options.configPath) {
-      lib.app_set_additional_search_path(this.options.configPath)
-        .catch((err) => console.error('Failed to set additional config search path', err));
-    }
   }
 
   /**
@@ -101,6 +85,38 @@ class SAFEApp extends EventEmitter {
   */
   get mutableData() {
     return this._mutableData;
+  }
+
+  /**
+  * @private
+  * Init logging on the underlying library only if it wasn't done already
+  */
+  initLogging(appInfo) {
+    if (this.options.log && !SAFEApp.logFilePath) {
+      let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
+      filename = `${filename}.log`;
+      lib.app_init_logging(filename)
+        .then(() => lib.app_output_log_path(filename))
+        .then((logPath) => { SAFEApp.logFilePath = logPath; })
+        .catch((err) => {
+          console.error(errConst.LOGGER_INIT_ERR.msg(err));
+        });
+    }
+  }
+
+  /**
+  * @private
+  * Set additional search path for the config files if it was requested in
+  * the options. E.g. log.toml and crust.config files will be search
+  * in this additional search path.
+  */
+  setSearchPath() {
+    if (this.options.configPath) {
+      lib.app_set_additional_search_path(this.options.configPath)
+        .catch((err) => {
+          console.error(errConst.CONFIG_PATH_ERROR.msg(err));
+        });
+    }
   }
 
   /**
@@ -174,10 +190,11 @@ class SAFEApp extends EventEmitter {
           const servicesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
           return await servicesContainer.get(servName);
         } catch (err) {
-          if (err.code === errConst.ERR_NO_SUCH_DATA || err.code === errConst.ERR_NO_SUCH_ENTRY) {
+          if (err.code === errConst.ERR_NO_SUCH_DATA.code ||
+              err.code === errConst.ERR_NO_SUCH_ENTRY.code) {
             const error = new Error();
             error.code = err.code;
-            error.message = `Requested ${err.code === errConst.ERR_NO_SUCH_DATA ? 'public name' : 'service'} is not found`;
+            error.message = `Requested ${err.code === errConst.ERR_NO_SUCH_DATA.code ? 'public name' : 'service'} is not found`;
             throw error;
           }
           throw err;
@@ -185,7 +202,7 @@ class SAFEApp extends EventEmitter {
       };
 
       const handleNfsFetchException = (error) => {
-        if (error.code !== errConst.ERR_FILE_NOT_FOUND) {
+        if (error.code !== errConst.ERR_FILE_NOT_FOUND.code) {
           throw error;
         }
       };
@@ -194,7 +211,7 @@ class SAFEApp extends EventEmitter {
         const serviceInfo = await getServiceInfo(lookupName, serviceName);
         if (serviceInfo.buf.length === 0) {
           const error = new Error();
-          error.code = errConst.ERR_NO_SUCH_ENTRY;
+          error.code = errConst.ERR_NO_SUCH_ENTRY.code;
           error.message = 'Service not found';
           return reject(error);
         }

@@ -127,21 +127,18 @@ const translatePrivMDInput = (xorname, tag, secKey, nonce) => {
   let name = xorname;
   if (!Buffer.isBuffer(xorname)) {
     const b = new Buffer(xorname);
-    if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
     name = t.XOR_NAME(b).ref().readPointer(0);
   }
 
   let sk = secKey;
   if (!Buffer.isBuffer(secKey)) {
     const b = new Buffer(secKey);
-    if (b.length != 32) throw Error("Secret Key _must be_ 32 bytes long.")
     sk = t.SYM_SECRET_KEY(b).ref().readPointer(0);
   }
 
   let n = nonce;
   if (!Buffer.isBuffer(nonce)) {
     const b = new Buffer(nonce);
-    if (b.length != 24) throw Error("Nonce _must be_ 24 bytes long.")
     n = t.SYM_NONCE(b).ref().readPointer(0);
   }
 

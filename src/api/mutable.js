@@ -591,9 +591,6 @@ class MutableDataInterface {
   * @returns {Promise<MutableData>}
   */
   newPublic(name, typeTag) {
-    if (name.length !== 32) {
-      return Promise.reject(Error('XOR Names _must be_ 32 bytes long'));
-    }
     const mDataInfo = lib.makeMDataInfoObj({ name, type_tag: typeTag });
     return Promise.resolve(this.wrapMdata(mDataInfo));
   }
