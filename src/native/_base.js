@@ -20,11 +20,13 @@ const CString = ref.types.CString;
 
 const u8Array = ArrayType(u8);
 const XOR_NAME = ArrayType(u8, 32);
-const KEYBYTES = ArrayType(u8, 32);
+const SYM_KEYBYTES = ArrayType(u8, 32);
+const SYM_NONCEBYTES = ArrayType(u8, 24);
+const SIGN_PUBLICKEYBYTES = ArrayType(u8, 32);
 const SIGN_SECRETKEYBYTES = ArrayType(u8, 64);
-const NONCEBYTES = ArrayType(u8, 24);
-const SYM_SECRET_KEY = ArrayType(u8, 64);
-const SYM_NONCE = ArrayType(u8, 24);
+const ASYM_PUBLICKEYBYTES = ArrayType(u8, 32);
+const ASYM_SECRETKEYBYTES = ArrayType(u8, 32);
+const ASYM_NONCEBYTES = ArrayType(u8, 24);
 
 const ObjectHandle = u64;
 const App = Struct({});
@@ -117,11 +119,13 @@ module.exports = {
     PermissionSetPtr,
     ObjectHandle,
     XOR_NAME,
-    KEYBYTES,
+    SYM_KEYBYTES,
+    SYM_NONCEBYTES,
+    SIGN_PUBLICKEYBYTES,
     SIGN_SECRETKEYBYTES,
-    NONCEBYTES,
-    SYM_SECRET_KEY,
-    SYM_NONCE,
+    ASYM_PUBLICKEYBYTES,
+    ASYM_SECRETKEYBYTES,
+    ASYM_NONCEBYTES,
     VoidPtr,
     i32,
     u32,

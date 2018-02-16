@@ -20,12 +20,12 @@ const strToBuffer = (str) => {
   return [res, res.length]
 }
 
-const toBuffer = (app, key) => {
+const toKeyBytesBuffer = (type) => (app, key) => {
   let keyArr = key;
   if (!Buffer.isBuffer(key)) {
     const b = new Buffer(key);
-    if (b.length != 32) throw Error("Sign/Enc Keys _must be_ 32 bytes long.")
-    keyArr = t.KEYBYTES(b).ref().readPointer(0);
+    if (b.length != type.size) throw Error(`Sign/Enc Keys _must be_ ${type.size} bytes long.`)
+    keyArr = type(b).ref().readPointer(0);
   }
   return [app, keyArr];
 }
@@ -35,9 +35,9 @@ const appStrToBuffer = (appPtr, str, ...varArgs) => {
   return [appPtr, ...buf, ...varArgs];
 }
 
-// Helper to create a copy of the received KEYBYTES array as it might
+// Helper to create a copy of the received key bytes array as it might
 // be overwritten after the callback finishes.
-const copyKeyBytesArray = (res) => t.KEYBYTES(ref.reinterpret(res[0], 32));
+const copyKeyBytesArray = (type) => (res) => type(ref.reinterpret(res[0], type.size));
 
 module.exports = {
   types: {
@@ -52,20 +52,20 @@ module.exports = {
     app_pub_enc_key: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
 
     sign_generate_key_pair: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
-    sign_pub_key_new: [t.Void, [t.AppPtr, ref.refType(t.KEYBYTES), 'pointer', 'pointer']],
+    sign_pub_key_new: [t.Void, [t.AppPtr, ref.refType(t.SIGN_PUBLICKEYBYTES), 'pointer', 'pointer']],
     sign_pub_key_get: [t.Void, [t.AppPtr, SignPubKeyHandle, 'pointer', 'pointer']],
     sign_pub_key_free: [t.Void, [t.AppPtr, SignPubKeyHandle, 'pointer', 'pointer']],
 
-    sign_sec_key_new: [t.Void, [t.AppPtr, ref.refType(t.KEYBYTES), 'pointer', 'pointer']],
+    sign_sec_key_new: [t.Void, [t.AppPtr, ref.refType(t.SIGN_SECRETKEYBYTES), 'pointer', 'pointer']],
     sign_sec_key_get: [t.Void, [t.AppPtr, SignSecKeyHandle, 'pointer', 'pointer']],
     sign_sec_key_free: [t.Void, [t.AppPtr, SignSecKeyHandle, 'pointer', 'pointer']],
 
     enc_generate_key_pair: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
-    enc_pub_key_new: [t.Void, [t.AppPtr, ref.refType(t.KEYBYTES), 'pointer', 'pointer']],
+    enc_pub_key_new: [t.Void, [t.AppPtr, ref.refType(t.ASYM_PUBLICKEYBYTES), 'pointer', 'pointer']],
     enc_pub_key_get: [t.Void, [t.AppPtr, EncryptPubKeyHandle, 'pointer', 'pointer']],
     enc_pub_key_free: [t.Void, [t.AppPtr, EncryptPubKeyHandle, 'pointer', 'pointer']],
 
-    enc_secret_key_new: [t.Void, [t.AppPtr, ref.refType(t.KEYBYTES), 'pointer', 'pointer']],
+    enc_secret_key_new: [t.Void, [t.AppPtr, ref.refType(t.ASYM_SECRETKEYBYTES), 'pointer', 'pointer']],
     enc_secret_key_get: [t.Void, [t.AppPtr, EncryptSecKeyHandle, 'pointer', 'pointer']],
     enc_secret_key_free: [t.Void, [t.AppPtr, EncryptSecKeyHandle, 'pointer', 'pointer']],
 
@@ -86,21 +86,21 @@ module.exports = {
     app_pub_enc_key: h.Promisified(null, EncryptKeyHandle),
 
     sign_generate_key_pair: h.Promisified(null, [SignPubKeyHandle, SignSecKeyHandle]),
-    sign_pub_key_new: h.Promisified(toBuffer, SignPubKeyHandle),
-    sign_pub_key_get: h.Promisified(null, ['pointer'], copyKeyBytesArray),
+    sign_pub_key_new: h.Promisified(toKeyBytesBuffer(t.SIGN_PUBLICKEYBYTES), SignPubKeyHandle),
+    sign_pub_key_get: h.Promisified(null, ['pointer'], copyKeyBytesArray(t.SIGN_PUBLICKEYBYTES)),
     sign_pub_key_free: h.Promisified(null, []),
 
-    sign_sec_key_new: h.Promisified(toBuffer, SignSecKeyHandle),
-    sign_sec_key_get: h.Promisified(null, ['pointer'], copyKeyBytesArray),
+    sign_sec_key_new: h.Promisified(toKeyBytesBuffer(t.SIGN_SECRETKEYBYTES), SignSecKeyHandle),
+    sign_sec_key_get: h.Promisified(null, ['pointer'], copyKeyBytesArray(t.SIGN_SECRETKEYBYTES)),
     sign_sec_key_free: h.Promisified(null, []),
 
     enc_generate_key_pair: h.Promisified(null, [EncryptPubKeyHandle, EncryptSecKeyHandle]),
-    enc_pub_key_new: h.Promisified(toBuffer, EncryptPubKeyHandle),
-    enc_pub_key_get: h.Promisified(null, ['pointer'], copyKeyBytesArray),
+    enc_pub_key_new: h.Promisified(toKeyBytesBuffer(t.ASYM_PUBLICKEYBYTES), EncryptPubKeyHandle),
+    enc_pub_key_get: h.Promisified(null, ['pointer'], copyKeyBytesArray(t.ASYM_PUBLICKEYBYTES)),
     enc_pub_key_free: h.Promisified(null, []),
 
-    enc_secret_key_new: h.Promisified(toBuffer, EncryptPubKeyHandle),
-    enc_secret_key_get: h.Promisified(null, ['pointer'], copyKeyBytesArray),
+    enc_secret_key_new: h.Promisified(toKeyBytesBuffer(t.ASYM_SECRETKEYBYTES), EncryptPubKeyHandle),
+    enc_secret_key_get: h.Promisified(null, ['pointer'], copyKeyBytesArray(t.ASYM_SECRETKEYBYTES)),
     enc_secret_key_free: h.Promisified(null, []),
 
     encrypt: h.Promisified(appStrToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
@@ -113,6 +113,6 @@ module.exports = {
     verify: h.Promisified(appStrToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
 
     sha3_hash: h.Promisified(strToBuffer, [t.u8Pointer, t.usize], h.asBuffer),
-    generate_nonce: h.Promisified(null, t.NONCEBYTES)
+    generate_nonce: h.Promisified(null, t.ASYM_NONCEBYTES)
   }
 };
