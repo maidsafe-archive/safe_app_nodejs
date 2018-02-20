@@ -23,6 +23,7 @@
 const lib = require('../native/lib');
 const h = require('../helpers');
 const errConst = require('../error_const');
+const makeError = require('../native/_error.js');
 
 /**
 * Holds the public part of an encryption key
@@ -56,6 +57,18 @@ class PubEncKey extends h.NetworkObject {
   }
 
   /**
+  * Decrypt the given cipher text (buffer or string) using this public
+  * encryption key and the given secret key
+  *
+  * @arg {Buffer} cipher to decrypt
+  * @arg {SecEncKey} secretEncKey secret encryption key
+  * @returns {Promise<Buffer>} plain text
+  */
+  decrypt(cipher, secretEncKey) {
+    return lib.decrypt(this.app.connection, cipher, this.ref, secretEncKey.ref);
+  }
+
+  /**
   * Encrypt the input (buffer or string) using this public encryption key
   * and the given secret key.
   *
@@ -64,7 +77,9 @@ class PubEncKey extends h.NetworkObject {
   * @returns {Promise<Buffer>} cipher text
   */
   encrypt(data, secretEncKey) {
-    if (!secretEncKey) throw new Error(errConst.MISSING_SEC_ENC_KEY.msg);
+    if (!secretEncKey) {
+      throw makeError(errConst.MISSING_SEC_ENC_KEY.code, errConst.MISSING_SEC_ENC_KEY.msg);
+    }
     return lib.encrypt(this.app.connection, data, this.ref, secretEncKey.ref);
   }
 }
@@ -97,13 +112,35 @@ class SecEncKey extends h.NetworkObject {
   * Decrypt the given cipher text (buffer or string) using this secret
   * encryption key and the given public key
   *
+  * An example use case for this method is if you have received messages from multiple
+  * senders, you may fetch your secret key once, then iterate over the messages along
+  * with passing associated public encryption key to decrypt each message.
+  *
   * @arg {Buffer} cipher to decrypt
   * @arg {PubEncKey} publicEncKey public encryption key
   * @returns {Promise<Buffer>} plain text
   */
   decrypt(cipher, publicEncKey) {
-    if (!publicEncKey) throw new Error(errConst.MISSING_PUB_ENC_KEY.msg);
+    if (!publicEncKey) {
+      throw makeError(errConst.MISSING_PUB_ENC_KEY.code, errConst.MISSING_PUB_ENC_KEY.msg);
+    }
     return lib.decrypt(this.app.connection, cipher, publicEncKey.ref, this.ref);
+  }
+
+  /**
+  * Encrypt the input (buffer or string) using this secret encryption key
+  * and the recipient's public key
+  *
+  * An example use case for this method is if you have multiple intended recipients.
+  * You can fetch your secret key once, then use this method to iterate over
+  * recipient public encryption keys, encrypting data for each key.
+  *
+  * @param {Buffer} data to be encrypted
+  * @param {PubEncKey} recipientPubKey recipient's public encryption key
+  * @returns {Promise<Buffer>} cipher text
+  */
+  encrypt(data, recipientPubKey) {
+    return lib.encrypt(this.app.connection, data, recipientPubKey.ref, this.ref);
   }
 }
 

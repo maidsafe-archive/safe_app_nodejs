@@ -74,4 +74,28 @@ describe('Error Constants', () => {
   it('MISSING_SEC_ENC_KEY', () => {
     should.exist(error.MISSING_SEC_ENC_KEY);
   });
+
+  it('LOGGER_INIT_ERROR', () => {
+    should.exist(error.LOGGER_INIT_ERROR);
+  });
+
+  it('CONFIG_PATH_ERROR', () => {
+    should.exist(error.CONFIG_PATH_ERROR);
+  });
+
+  it('XOR_NAME', () => {
+    should.exist(error.XOR_NAME);
+  });
+
+  it('NONCE', () => {
+    should.exist(error.NONCE);
+  });
+
+  it('TYPE_TAG_NAN', () => {
+    should.exist(error.TYPE_TAG_NAN);
+  });
+
+  it('SETUP_INCOMPLETE', () => {
+    should.exist(error.SETUP_INCOMPLETE);
+  });
 });

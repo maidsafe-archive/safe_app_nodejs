@@ -26,6 +26,7 @@ const types = require('../native/types');
 const { inTesting } = require('../consts');
 const { validateShareMDataPermissions } = require('../helpers');
 const errConst = require('../error_const');
+const makeError = require('../native/_error.js');
 
 const makeAppInfo = nativeH.makeAppInfo;
 const makePermissions = nativeH.makePermissions;
@@ -143,7 +144,10 @@ class AuthInterface {
   * }, {own_container: true}) // and we want our own container, too
   */
   genAuthUri(permissions, opts) {
-    if (!permissions) throw new Error(errConst.MISSING_CONTAINERS_OBJECT.msg);
+    if (!permissions) {
+      throw makeError(errConst.MISSING_CONTAINERS_OBJECT.code,
+                      errConst.MISSING_CONTAINERS_OBJECT.msg);
+    }
     const perm = makePermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
     return lib.encode_auth_req(new types.AuthReq({
@@ -177,8 +181,12 @@ class AuthInterface {
   * ])
   */
   genShareMDataUri(permissions) {
-    if (!permissions) throw new Error(errConst.MISSING_PERMS_ARRAY.msg);
-    if (!Array.isArray(permissions)) throw new Error(errConst.INVALID_PERMS_ARRAY.msg);
+    if (!permissions) {
+      throw makeError(errConst.MISSING_PERMS_ARRAY.code, errConst.MISSING_PERMS_ARRAY.msg);
+    }
+    if (!Array.isArray(permissions)) {
+      throw makeError(errConst.INVALID_PERMS_ARRAY.code, errConst.INVALID_PERMS_ARRAY.msg);
+    }
     validateShareMDataPermissions(permissions);
     const mdatasPerms = makeShareMDataPermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
@@ -223,7 +231,10 @@ class AuthInterface {
   * @arg {Object} containers mapping container name to list of permissions
   */
   genContainerAuthUri(containers) {
-    if (!containers) throw new Error(errConst.MISSING_CONTAINERS_OBJECT.msg);
+    if (!containers) {
+      throw makeError(errConst.MISSING_CONTAINERS_OBJECT.code,
+                      errConst.MISSING_CONTAINERS_OBJECT.msg);
+    }
     const ctnrs = makePermissions(containers);
     const appInfo = makeAppInfo(this.app.appInfo);
     return lib.encode_containers_req(new types.ContainerReq({
@@ -311,7 +322,10 @@ class AuthInterface {
   * @returns {Promise<MutableData>} the MutableData behind it
   */
   getContainer(name) {
-    if (!name) throw new Error(errConst.MISSING_CONTAINER_STRING.msg);
+    if (!name) {
+      throw makeError(errConst.MISSING_CONTAINER_STRING.code,
+                      errConst.MISSING_CONTAINER_STRING.msg);
+    }
     return lib.access_container_get_container_mdata_info(this.app.connection, name)
       .then((data) => this.app.mutableData.wrapMdata(data));
   }
@@ -323,7 +337,7 @@ class AuthInterface {
   *          authenticated session.
   */
   loginFromURI(uri) {
-    if (!uri) throw new Error(errConst.MISSING_AUTH_URI.msg);
+    if (!uri) throw makeError(errConst.MISSING_AUTH_URI.code, errConst.MISSING_AUTH_URI.msg);
     const sanitisedUri = removeSafeProcol(uri);
     return lib.decode_ipc_msg(sanitisedUri).then((resp) => {
       const ipcMsgType = resp[0];
@@ -364,7 +378,7 @@ class AuthInterface {
   * @returns {Promise<SAFEApp>} the locally registered/unregistered App instance
   */
   loginForTest(access, opts) {
-    if (!inTesting) throw Error(errConst.NON_DEV.msg);
+    if (!inTesting) throw makeError(errConst.NON_DEV.code, errConst.NON_DEV.msg);
     if (access) {
       const appInfo = makeAppInfo(this.app.appInfo);
       const perms = makePermissions(access || {});

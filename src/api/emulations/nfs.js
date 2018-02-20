@@ -2,6 +2,8 @@ const lib = require('../../native/lib');
 const t = require('../../native/types');
 const nativeH = require('../../native/helpers');
 const { pubConsts: CONSTANTS } = require('../../consts');
+const errConst = require('../../error_const');
+const makeError = require('../../native/_error.js');
 
 const isString = (arg) => typeof arg === 'string' || (arg.toString ? arg.toString() === '[object String]' : false);
 
@@ -110,7 +112,8 @@ class File {
   */
   read(position, len) {
     if (!this._fileCtx) {
-      return Promise.reject(new Error('File is not open'));
+      return Promise
+        .reject(makeError(errConst.ERR_FILE_NOT_FOUND.code, errConst.ERR_FILE_NOT_FOUND.msg));
     }
     return lib.file_read(this._connection, this._fileCtx, position, len);
   }
@@ -122,7 +125,8 @@ class File {
   */
   write(fileContent) {
     if (!this._fileCtx) {
-      return Promise.reject(new Error('File is not open'));
+      return Promise
+        .reject(makeError(errConst.ERR_FILE_NOT_FOUND.code, errConst.ERR_FILE_NOT_FOUND.msg));
     }
     return lib.file_write(this._connection, this._fileCtx, fileContent);
   }
@@ -133,7 +137,8 @@ class File {
   */
   close() {
     if (!this._fileCtx) {
-      return Promise.reject(new Error('File is not open'));
+      return Promise
+        .reject(makeError(errConst.ERR_FILE_NOT_FOUND.code, errConst.ERR_FILE_NOT_FOUND.msg));
     }
 
     const version = this._ref.version;

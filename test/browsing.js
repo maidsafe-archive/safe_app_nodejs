@@ -356,7 +356,7 @@ describe('Browsing', () => {
             return deleteService(app, testDomain, deletedService);
           })
           .then(() => app.webFetch(`safe://${deletedService}.${testDomain}`)
-          .should.be.rejectedWith('Service not found'));
+          .should.be.rejectedWith('Service not found. Entry does not exist.'));
     }).timeout(20000);
 
     it('should not find dns', () =>

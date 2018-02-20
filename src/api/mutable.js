@@ -5,6 +5,7 @@ const emulations = require('./emulations');
 const { PubSignKey } = require('./crypto');
 const { pubConsts: CONSTANTS } = require('../consts');
 const errConst = require('../error_const');
+const makeError = require('../native/_error.js');
 
 /**
 * Holds the permissions of a MutableData object
@@ -554,7 +555,9 @@ class MutableDataInterface {
   * @returns {Promise<MutableData>}
   */
   newRandomPrivate(typeTag) {
-    if (!typeTag || !Number.isInteger(typeTag)) throw new Error(errConst.TYPE_TAG_NAN.msg);
+    if (!typeTag || !Number.isInteger(typeTag)) {
+      throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
+    }
     return lib.mdata_info_random_private(typeTag)
           .then((mDataInfo) => this.wrapMdata(mDataInfo));
   }
@@ -567,7 +570,9 @@ class MutableDataInterface {
   * @returns {Promise<MutableData>}
   */
   newRandomPublic(typeTag) {
-    if (!typeTag || !Number.isInteger(typeTag)) throw new Error(errConst.TYPE_TAG_NAN.msg);
+    if (!typeTag || !Number.isInteger(typeTag)) {
+      throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
+    }
     return lib.mdata_info_random_public(typeTag)
           .then((mDataInfo) => this.wrapMdata(mDataInfo));
   }

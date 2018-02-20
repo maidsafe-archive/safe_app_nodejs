@@ -7,6 +7,7 @@ const lib = require('./native/lib');
 const { parse: parseUrl } = require('url');
 const consts = require('./consts');
 const errConst = require('./error_const');
+const makeError = require('./native/_error.js');
 
 /**
  * Holds one sessions with the network and is the primary interface to interact
@@ -137,7 +138,7 @@ class SAFEApp extends EventEmitter {
     });
 
     if (!hasCorrectProperties) {
-      throw new Error(errConst.MALFORMED_APP_INFO.msg);
+      throw makeError(errConst.MALFORMED_APP_INFO.code, errConst.MALFORMED_APP_INFO.msg);
     }
   }
 
@@ -164,10 +165,12 @@ class SAFEApp extends EventEmitter {
   * @returns {Promise<Object>} the object with body of content and headers
   */
   async webFetch(url, options) {
-    if (!url) return Promise.reject(new Error(errConst.MISSING_URL.msg));
+    if (!url) return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
 
     const parsedUrl = parseUrl(url);
-    if (!parsedUrl) return Promise.reject(new Error(errConst.INVALID_URL.msg));
+    if (!parsedUrl) {
+      return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
+    }
     const hostname = parsedUrl.hostname;
     let path = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
     const tokens = path.split('/');
@@ -192,10 +195,10 @@ class SAFEApp extends EventEmitter {
         } catch (err) {
           if (err.code === errConst.ERR_NO_SUCH_DATA.code ||
               err.code === errConst.ERR_NO_SUCH_ENTRY.code) {
-            const error = new Error();
+            const error = {};
             error.code = err.code;
             error.message = `Requested ${err.code === errConst.ERR_NO_SUCH_DATA.code ? 'public name' : 'service'} is not found`;
-            throw error;
+            throw makeError(error.code, error.message);
           }
           throw err;
         }
@@ -210,10 +213,10 @@ class SAFEApp extends EventEmitter {
       try {
         const serviceInfo = await getServiceInfo(lookupName, serviceName);
         if (serviceInfo.buf.length === 0) {
-          const error = new Error();
+          const error = {};
           error.code = errConst.ERR_NO_SUCH_ENTRY.code;
-          error.message = 'Service not found';
-          return reject(error);
+          error.message = `Service not found. ${errConst.ERR_NO_SUCH_ENTRY.msg}`;
+          return reject(makeError(error.code, error.message));
         }
         let serviceMd;
         try {
@@ -312,7 +315,9 @@ class SAFEApp extends EventEmitter {
   * @returns {Pointer}
   */
   get connection() {
-    if (!this._connection) throw Error('Setup Incomplete. Connection not available yet.');
+    if (!this._connection) {
+      throw makeError(errConst.SETUP_INCOMPLETE.code, errConst.SETUP_INCOMPLETE.msg);
+    }
     return this._connection;
   }
 
