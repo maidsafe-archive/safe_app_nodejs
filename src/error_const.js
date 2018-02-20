@@ -1,14 +1,36 @@
 module.exports = {
+
+  /**
+   * @name ERR_NO_SUCH_DATA
+   * @type {object}
+   * @description Thrown natively when data not found on network.
+   * @property {number} code
+   * @property {string} msg
+   */
   ERR_NO_SUCH_DATA: {
     code: -103,
     msg: 'No such data.'
   },
 
+  /**
+   * @name ERR_NO_SUCH_ENTRY
+   * @type {object}
+   * @description Thrown natively when entry on found in MutableData.
+   * @property {number} code
+   * @property {string} msg
+   */
   ERR_NO_SUCH_ENTRY: {
     code: -106,
     msg: 'Entry does not exist.'
   },
 
+  /**
+   * @name ERR_FILE_NOT_FOUND
+   * @type {object}
+   * @description Thrown natively when NFS-style file not found.
+   * @property {number} code
+   * @property {string} msg
+   */
   ERR_FILE_NOT_FOUND: {
     code: -301,
     msg: 'File not found.'
@@ -98,7 +120,7 @@ module.exports = {
   MISSING_SEC_ENC_KEY: {
     code: 13,
     msg: `
-    Please provide secret encryption key:
+    Please provide 32 byte secret encryption key:
     const encKeyPair = app.crypto.generateEncKeyPair();
     encKeyPair.secEncKey;`
   },
@@ -111,5 +133,21 @@ module.exports = {
   CONFIG_PATH_ERROR: {
     code: 15,
     msg: (e) => `Failed to set additional config search path. Reason: ${e}`
+  },
+
+  XOR_NAME: {
+    code: 16,
+    msg: 'Name _must be_ provided and 32 bytes long.'
+  },
+
+  NONCE: {
+    code: 17,
+    msg: 'Nonce _must be_ provided and 24 bytes long.'
+  },
+
+  TYPE_TAG_NAN: {
+    code: 18,
+    msg: 'Type tag provided must be an integer'
   }
+
 };

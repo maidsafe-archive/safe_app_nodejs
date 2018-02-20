@@ -5,6 +5,7 @@ const Enum = require('enum');
 const ArrayType = require('ref-array');
 const { SignPubKeyHandle } = require('./_crypto').types;
 const { types: t, helpers: h } = require('./_base');
+const errConst = require('../error_const');
 
 const PromisifiedForEachCb = h.PromisifiedForEachCb;
 const Promisified = h.Promisified;
@@ -124,21 +125,25 @@ const keyValueCallBackLastEntry = (types, ...varArgs) => {
 }
 
 const translatePrivMDInput = (xorname, tag, secKey, nonce) => {
+  if(!Number.isInteger(tag)) throw Error(errConst.TYPE_TAG_NAN.msg);
   let name = xorname;
   if (!Buffer.isBuffer(xorname)) {
     const b = new Buffer(xorname);
+    if (b.length != 32) throw Error(errConst.XOR_NAME.msg)
     name = t.XOR_NAME(b).ref().readPointer(0);
   }
 
   let sk = secKey;
   if (!Buffer.isBuffer(secKey)) {
     const b = new Buffer(secKey);
+    if (b.length != 32) throw Error(errConst.MISSING_SEC_ENC_KEY.msg)
     sk = t.SYM_SECRET_KEY(b).ref().readPointer(0);
   }
 
   let n = nonce;
   if (!Buffer.isBuffer(nonce)) {
     const b = new Buffer(nonce);
+    if (b.length != 24) throw Error(errConst.NONCE.msg)
     n = t.SYM_NONCE(b).ref().readPointer(0);
   }
 
@@ -198,9 +203,14 @@ const lastToPermissionSet = (...varArgs) => {
 }
 
 const makeMDataInfoObj = (mDataInfo) => {
-  const name = t.XOR_NAME(new Buffer(mDataInfo.name));
+  let name;
+  try {
+    name = t.XOR_NAME(new Buffer(mDataInfo.name));
+  } catch (err) {
+    throw new Error(errConst.XOR_NAME.msg);
+  }
   const type_tag = mDataInfo.type_tag;
-
+  if(!Number.isInteger(type_tag)) throw new Error(errConst.TYPE_TAG_NAN.msg); 
   const has_enc_info = mDataInfo.has_enc_info;
   const enc_key = t.SYM_SECRET_KEY(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_key) : null);
   const enc_nonce = t.SYM_NONCE(mDataInfo.enc_nonce ? new Buffer(mDataInfo.enc_nonce) : null);

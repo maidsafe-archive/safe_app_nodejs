@@ -213,7 +213,7 @@ module.exports = {
     access_container_fetch: helpers.Promisified(null, [ref.refType(ContainerPermissions), t.usize], (args) => {
       const ptr = args[0];
       const len = args[1];
-      if(len === 0) return [];
+      if(len === 0) return {};
       const arrPtr = ref.reinterpret(ptr, ContainerPermissions.size * len);
       let arr = ContainerPermissionsArray(arrPtr)
       const contsPerms = {};

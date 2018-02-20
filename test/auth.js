@@ -171,12 +171,12 @@ describe('Access Container', () => {
       });
     })));
 
-  it('returns empty array if no containers found for app', async () => {
+  it('returns empty object if no containers found for app', async () => {
     const appWithNoContainers = await createAuthenticatedTestApp();
     const noContainers = await appWithNoContainers.auth.getContainersPermissions();
-    const isArray = Array.isArray(noContainers);
-    const emptyArray = noContainers.length === 0;
-    should(isArray && emptyArray).be.true();
+    const isObject = noContainers.constructor === Object;
+    const emptyObject = Object.keys(noContainers).length === 0;
+    should(isObject && emptyObject).be.true();
   });
 
   it('get own container', () => app.auth.refreshContainersPermissions().then(() =>

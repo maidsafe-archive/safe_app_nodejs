@@ -1,5 +1,5 @@
 const weak = require('weak');
-const makeFfiError = require('./native/_error.js');
+const makeError = require('./native/_error.js');
 const errConst = require('./error_const');
 
 /**
@@ -80,7 +80,7 @@ function validateShareMDataPermissions(permissions) {
     }));
 
   if (!hasCorrectProperties) {
-    throw makeFfiError(
+    throw makeError(
       errConst.INVALID_SHARE_MD_PERMISSION.code,
       errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(badPerm))
     );

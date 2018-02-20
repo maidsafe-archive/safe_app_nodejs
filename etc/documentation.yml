@@ -42,3 +42,8 @@ toc:
   - CipherOpt
   - NameAndTag
   - ValueVersion
+  
+  - name: Errors
+  - ERR_NO_SUCH_DATA
+  - ERR_NO_SUCH_ENTRY
+  - ERR_FILE_NOT_FOUND

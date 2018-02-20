@@ -1,6 +1,7 @@
 const should = require('should');
 const h = require('../helpers');
 const { pubConsts: CONSTANTS } = require('../../src/consts');
+const errConst = require('../../src/error_const');
 
 describe('Mutable Data', () => {
   let app;
@@ -14,35 +15,39 @@ describe('Mutable Data', () => {
   });
 
   describe('Create with invalid values', () => {
-    it('create random public with invalid tag vaue', () =>
-      should(app.mutableData.newRandomPublic(TAG_TYPE_INVALID)).be.rejected()
-    );
+    it('create random public with invalid tag vaue', () => {
+      const test = () => app.mutableData.newRandomPublic(TAG_TYPE_INVALID);
+      should(test).throw(errConst.TYPE_TAG_NAN.msg);
+    });
 
-    it('create random private with invalid tag value', () =>
-      should(app.mutableData.newRandomPrivate(TAG_TYPE_INVALID)).be.rejected()
-    );
+    it('create random private with invalid tag value', () => {
+      const test = () => app.mutableData.newRandomPrivate(TAG_TYPE_INVALID);
+      should(test).throw(errConst.TYPE_TAG_NAN.msg);
+    });
 
-    it('create custom public with invalid tag value', () =>
-      app.mutableData.newPublic(h.createRandomXorName(), TAG_TYPE_INVALID)
-          .then((m) => should(m.quickSetup()).be.rejected())
-    );
+    it('create custom public with invalid tag value', () => {
+      const test = () => app.mutableData.newPublic(h.createRandomXorName(), TAG_TYPE_INVALID);
+      should(test).throw(errConst.TYPE_TAG_NAN.msg);
+    });
 
-    it('create custom private with invalid tag value', () =>
-      should(app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE_INVALID,
+    it('create custom private with invalid tag value', () => {
+      const test = () => app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE_INVALID,
                                           h.createRandomSecKey(),
-                                          h.createRandomNonce())).be.rejected()
-    );
+                                          h.createRandomNonce());
+      should(test()).be.rejectedWith(errConst.TYPE_TAG_NAN.msg);
+    });
 
     it('create custom public with invalid name', () => {
       const test = () => app.mutableData.newPublic(TEST_NAME_INVALID, TYPE_TAG);
-      should(test).throw(`buffer length must be at least 32, got ${TEST_NAME_INVALID.length}`);
+      should(test).throw(errConst.XOR_NAME.msg);
     });
 
-    it('create custom private with invalid name', () =>
-      should(app.mutableData.newPrivate(TEST_NAME_INVALID, TYPE_TAG,
+    it('create custom private with invalid name', () => {
+      const test = () => app.mutableData.newPrivate(TEST_NAME_INVALID, TYPE_TAG,
                                           h.createRandomSecKey(),
-                                          h.createRandomNonce())).be.rejected()
-    );
+                                          h.createRandomNonce());
+      should(test()).be.rejectedWith(errConst.XOR_NAME.msg);
+    });
   });
 
   describe('MutableData info', () => {
@@ -77,7 +82,7 @@ describe('Mutable Data', () => {
     it('throws error if custom public is created with name not equal to 32 bytes', async () => {
       const name = 'non XOR name';
       const test = () => app.mutableData.newPublic(name, TYPE_TAG);
-      should(test).throw(`buffer length must be at least 32, got ${name.length}`);
+      should(test).throw(errConst.XOR_NAME.msg);
     });
 
     it('throws error if custom private is created with name not equal to 32 bytes', async () => {
@@ -87,7 +92,7 @@ describe('Mutable Data', () => {
                                         TYPE_TAG,
                                         h.createRandomSecKey(),
                                         h.createRandomNonce()))
-            .be.rejectedWith(`buffer length must be at least 32, got ${name.length}`);
+            .be.rejectedWith(errConst.XOR_NAME.msg);
     });
 
     it('throws error if custom private is created with nonce not equal to 24 bytes', async () => {
@@ -97,7 +102,7 @@ describe('Mutable Data', () => {
                                         TYPE_TAG,
                                         h.createRandomSecKey(),
                                         nonce))
-            .be.rejectedWith(`buffer length must be at least 24, got ${nonce.length}`);
+            .be.rejectedWith(errConst.NONCE.msg);
     });
 
     it('create custom private and read its name', () =>
