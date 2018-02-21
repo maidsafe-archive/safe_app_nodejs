@@ -244,6 +244,34 @@ describe('Sign keys', () => {
         })
     ]).then((r) => should(r[0]).not.equal(r[1])));
 
+    it('generate secret sign key from raw', () => {
+      const secKeyRaw = h.createRandomSignSecKey();
+      return app.crypto.secSignKeyFromRaw(secKeyRaw)
+        .then((signSecKey) => signSecKey.getRaw())
+        .then((r) => should([...r.buffer]).eql([...secKeyRaw]));
+    });
+
+    it('generate public sign key from raw', () => {
+      const pubKeyRaw = h.createRandomSignPubKey();
+      return app.crypto.pubSignKeyFromRaw(pubKeyRaw)
+        .then((signPubKey) => signPubKey.getRaw())
+        .then((r) => should([...r.buffer]).eql([...pubKeyRaw]));
+    });
+
+    it('generate secret enc key from raw', () => {
+      const raw = h.createRandomSecKey();
+      return app.crypto.secEncKeyFromRaw(raw)
+        .then((encSecKey) => encSecKey.getRaw())
+        .then((r) => should([...r.buffer]).eql([...raw]));
+    });
+
+    it('generate public enc key from raw', () => {
+      const raw = h.createRandomSecKey();
+      return app.crypto.pubEncKeyFromRaw(raw)
+        .then((encPubKey) => encPubKey.getRaw())
+        .then((r) => should([...r.buffer]).eql([...raw]));
+    });
+
     it('generate key pair from raw keys', () => {
       let rawPubKey;
       let rawPubKeyFromRaw;

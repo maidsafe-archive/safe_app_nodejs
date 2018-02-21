@@ -210,8 +210,8 @@ module.exports = {
    */
   MISSING_SEC_ENC_KEY: {
     code: 13,
-    msg: `
-    Please provide 32 byte secret encryption key:
+    msg: (size) => `
+    Please provide ${size} byte secret encryption key:
     const encKeyPair = app.crypto.generateEncKeyPair();
     encKeyPair.secEncKey;`
   },
@@ -250,7 +250,7 @@ module.exports = {
    */
   XOR_NAME: {
     code: 16,
-    msg: 'Name _must be_ provided and 32 bytes long.'
+    msg: (size) => `Name _must be_ provided and ${size} bytes long.`
   },
 
   /**
@@ -263,7 +263,7 @@ module.exports = {
    */
   NONCE: {
     code: 17,
-    msg: 'Nonce _must be_ provided and 24 bytes long.'
+    msg: (size) => `Nonce _must be_ provided and ${size} bytes long.`
   },
 
   /**
@@ -288,5 +288,10 @@ module.exports = {
   SETUP_INCOMPLETE: {
     code: 19,
     msg: 'Setup Incomplete. Connection not available yet.'
+  },
+
+  INVALID_PERM: {
+    code: 20,
+    msg: (perm) => `${perm} is not a valid permission`
   }
 };

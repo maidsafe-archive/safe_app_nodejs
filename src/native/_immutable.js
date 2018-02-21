@@ -6,6 +6,8 @@ const { types } = require('./_cipher_opt');
 const CipherOptHandle = types.CipherOptHandle;
 const t = base.types;
 const h = base.helpers;
+const errConst = require('../error_const');
+const makeError = require('./_error.js');
 
 const SEWriteHandle = t.ObjectHandle;
 const SEReadHandle = t.ObjectHandle;
@@ -23,7 +25,7 @@ const translateXorName = (appPtr, str) => {
     name = t.XOR_NAME(str).ref().readPointer(0)
   } else {
     const b = new Buffer(str);
-    if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
+    if (b.length != t.XOR_NAME.size) throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size))
     name = t.XOR_NAME(b).ref().readPointer(0);
   }
   return [appPtr, name]

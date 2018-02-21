@@ -6,6 +6,7 @@ const ArrayType = require('ref-array');
 const { SignPubKeyHandle } = require('./_crypto').types;
 const { types: t, helpers: h } = require('./_base');
 const errConst = require('../error_const');
+const makeError = require('./_error.js');
 
 const PromisifiedForEachCb = h.PromisifiedForEachCb;
 const Promisified = h.Promisified;
@@ -52,34 +53,34 @@ const MDataInfo = Struct({
   /// is set.
   has_enc_info: t.bool,
   /// Encryption key. Meaningful only if `has_enc_info` is `true`.
-  enc_key: t.SYM_SECRET_KEY,
+  enc_key: t.SYM_KEYBYTES,
   /// Encryption nonce. Meaningful only if `has_enc_info` is `true`.
-  enc_nonce: t.SYM_NONCE,
+  enc_nonce: t.SYM_NONCEBYTES,
 
   /// Flag indicating whether the new encryption info is set.
   has_new_enc_info: t.bool,
   /// New encryption key (used for two-phase reencryption). Meaningful only if
   /// `has_new_enc_info` is `true`.
-  new_enc_key: t.SYM_SECRET_KEY,
+  new_enc_key: t.SYM_KEYBYTES,
   /// New encryption nonce (used for two-phase reencryption). Meaningful only if
   /// `has_new_enc_info` is `true`.
-  new_enc_nonce: t.SYM_NONCE,
+  new_enc_nonce: t.SYM_NONCEBYTES,
 });
 
 const MDataInfoPtr = ref.refType(MDataInfo);
 
 const makeMDataInfo = (mDataInfoObj) => {
   // let's make sure we send empty arrays if there is no enc key
-  let enc_key = t.SYM_SECRET_KEY(Buffer.alloc(64));
-  let enc_nonce = t.SYM_NONCE(Buffer.alloc(24));
+  let enc_key = t.SYM_KEYBYTES(Buffer.alloc(t.SYM_KEYBYTES.size));
+  let enc_nonce = t.SYM_NONCEBYTES(Buffer.alloc(t.SYM_NONCEBYTES.size));
   if (mDataInfoObj.has_enc_info) {
     enc_key = mDataInfoObj.enc_key;
     enc_nonce = mDataInfoObj.enc_nonce;
   }
 
   // let's make sure we send empty arrays if there is no new enc info
-  let new_enc_key = t.SYM_SECRET_KEY(Buffer.alloc(64));
-  let new_enc_nonce = t.SYM_NONCE(Buffer.alloc(24));
+  let new_enc_key = t.SYM_KEYBYTES(Buffer.alloc(t.SYM_KEYBYTES.size));
+  let new_enc_nonce = t.SYM_NONCEBYTES(Buffer.alloc(t.SYM_NONCEBYTES.size));
   if (mDataInfoObj.has_new_enc_info) {
     new_enc_key = mDataInfoObj.new_enc_key;
     new_enc_nonce = mDataInfoObj.new_enc_nonce;
@@ -125,26 +126,26 @@ const keyValueCallBackLastEntry = (types, ...varArgs) => {
 }
 
 const translatePrivMDInput = (xorname, tag, secKey, nonce) => {
-  if(!Number.isInteger(tag)) throw Error(errConst.TYPE_TAG_NAN.msg);
+  if(!Number.isInteger(tag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
   let name = xorname;
   if (!Buffer.isBuffer(xorname)) {
     const b = new Buffer(xorname);
-    if (b.length != 32) throw Error(errConst.XOR_NAME.msg)
+    if (b.length != t.XOR_NAME.size) throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size))
     name = t.XOR_NAME(b).ref().readPointer(0);
   }
 
   let sk = secKey;
   if (!Buffer.isBuffer(secKey)) {
     const b = new Buffer(secKey);
-    if (b.length != 32) throw Error(errConst.MISSING_SEC_ENC_KEY.msg)
-    sk = t.SYM_SECRET_KEY(b).ref().readPointer(0);
+    if (b.length != t.SYM_KEYBYTES.size) throw makeError(errConst.MISSING_SEC_ENC_KEY.code, errConst.MISSING_SEC_ENC_KEY.msg(t.SYM_KEYBYTES.size))
+    sk = t.SYM_KEYBYTES(b).ref().readPointer(0);
   }
 
   let n = nonce;
   if (!Buffer.isBuffer(nonce)) {
     const b = new Buffer(nonce);
-    if (b.length != 24) throw Error(errConst.NONCE.msg)
-    n = t.SYM_NONCE(b).ref().readPointer(0);
+    if (b.length != t.SYM_NONCEBYTES.size) throw makeError(errConst.NONCE.code, errConst.NONCE.msg(t.SYM_NONCEBYTES.size))
+    n = t.SYM_NONCEBYTES(b).ref().readPointer(0);
   }
 
   return [name, tag, sk, n]
@@ -207,17 +208,17 @@ const makeMDataInfoObj = (mDataInfo) => {
   try {
     name = t.XOR_NAME(new Buffer(mDataInfo.name));
   } catch (err) {
-    throw new Error(errConst.XOR_NAME.msg);
+    throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg);
   }
   const type_tag = mDataInfo.type_tag;
-  if(!Number.isInteger(type_tag)) throw new Error(errConst.TYPE_TAG_NAN.msg); 
+  if(!Number.isInteger(type_tag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg); 
   const has_enc_info = mDataInfo.has_enc_info;
-  const enc_key = t.SYM_SECRET_KEY(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_key) : null);
-  const enc_nonce = t.SYM_NONCE(mDataInfo.enc_nonce ? new Buffer(mDataInfo.enc_nonce) : null);
+  const enc_key = t.SYM_KEYBYTES(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_key) : null);
+  const enc_nonce = t.SYM_NONCEBYTES(mDataInfo.enc_nonce ? new Buffer(mDataInfo.enc_nonce) : null);
 
   const has_new_enc_info = mDataInfo.has_new_enc_info;
-  const new_enc_key = t.SYM_SECRET_KEY(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_key) : null);
-  const new_enc_nonce = t.SYM_NONCE(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_nonce) : null);
+  const new_enc_key = t.SYM_KEYBYTES(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_key) : null);
+  const new_enc_nonce = t.SYM_NONCEBYTES(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_nonce) : null);
 
   let retMDataInfo = {
     name,
@@ -261,7 +262,7 @@ module.exports = {
     readMDataInfoPtr,
   },
   functions: {
-    mdata_info_new_private: [t.Void, [ref.refType(t.XOR_NAME), t.u64, ref.refType(t.SYM_SECRET_KEY), ref.refType(t.SYM_NONCE), "pointer", "pointer"]],
+    mdata_info_new_private: [t.Void, [ref.refType(t.XOR_NAME), t.u64, ref.refType(t.SYM_KEYBYTES), ref.refType(t.SYM_NONCEBYTES), "pointer", "pointer"]],
     mdata_info_random_public: [t.Void, [t.u64, "pointer", "pointer"]],
     mdata_info_random_private: [t.Void, [t.u64, "pointer", "pointer"]],
     mdata_info_encrypt_entry_key: [t.Void, [MDataInfoPtr, t.u8Pointer, t.usize, "pointer", "pointer"]],

@@ -65,23 +65,23 @@ const ShareMDataReq = Struct({
 const AppKeys = Struct({
   /// Owner signing public key
   // pub owner_key: [u8; sign::PUBLICKEYBYTES],
-  owner_key: t.KEYBYTES,
+  owner_key: t.SIGN_PUBLICKEYBYTES,
   /// Data symmetric encryption key
   // pub enc_key: [u8; secretbox::KEYBYTES],
-  enc_key: t.KEYBYTES,
+  enc_key: t.SYM_KEYBYTES,
   /// Asymmetric sign public key.
   /// This is the identity of the App in the Network.
   // pub sign_pk: [u8; sign::PUBLICKEYBYTES],
-  sign_pk: t.KEYBYTES,
+  sign_pk: t.SIGN_PUBLICKEYBYTES,
   /// Asymmetric sign private key.
   // pub sign_sk: [u8; sign::SECRETKEYBYTES],
   sign_sk: t.SIGN_SECRETKEYBYTES,
   /// Asymmetric enc public key.
   // pub enc_pk: [u8; box_::PUBLICKEYBYTES],
-  enc_pk: t.KEYBYTES,
+  enc_pk: t.ASYM_PUBLICKEYBYTES,
   /// Asymmetric enc private key.
   // pub enc_sk: [u8; box_::SECRETKEYBYTES],
-  enc_sk: t.KEYBYTES
+  enc_sk: t.ASYM_SECRETKEYBYTES
 })
 
 const AccessContInfo = Struct({
@@ -93,7 +93,7 @@ const AccessContInfo = Struct({
   tag: t.u64,
   /// Nonce
   // pub nonce: [u8; secretbox::NONCEBYTES],
-  nonce: t.NONCEBYTES
+  nonce: t.SYM_NONCEBYTES
 });
 
 const ContainerInfo = Struct({
@@ -109,11 +109,11 @@ const ContainerInfoArray = new ArrayType(ContainerInfo);
 
 const AccessContainerEntry = Struct({
   /// Pointer to the array of `ContainerInfo`.
-  ptr: ContainerInfoArray,
+  containers: ref.refType(ContainerInfo),
   /// Size of the array.
-  len: t.usize,
+  containers_len: t.usize,
   /// Internal field used by rust memory allocator.
-  cap: t.usize
+  containers_cap: t.usize
 });
 
 const AuthGranted = Struct({
