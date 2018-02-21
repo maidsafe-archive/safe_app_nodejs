@@ -1,5 +1,18 @@
 # safe_app nodejs Change Log
 
+## [Unreleased]
+### Fixed
+- The size of the secret encryption keys in the corresponding FFI array was corrected
+
+### Added
+- Adapt code to upgrade safe_app lib to v0.6.0
+- Download safe_app lib for both live & mock routing when installing in development mode
+- Additional tests for verifying the size of keys generated from raw bytes
+
+### SAFE libraries Dependencies
+- safe_app: v0.6.0
+- system_uri: v0.4.0
+
 ## [0.7.0] - 29-1-2018
 ### Fixed
 - Minor corrections to documentation snippet code and README

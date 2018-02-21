@@ -61,6 +61,8 @@ const createAuthenticatedTestApp = (scope, access, opts) => {
 
 const createRandomXorName = () => crypto.randomBytes(32);
 const createRandomSecKey = () => crypto.randomBytes(32);
+const createRandomSignPubKey = () => crypto.randomBytes(32);
+const createRandomSignSecKey = () => crypto.randomBytes(64);
 const createRandomNonce = () => crypto.randomBytes(32);
 
 module.exports = {
@@ -72,6 +74,8 @@ module.exports = {
   createAuthenticatedTestApp,
   createRandomXorName,
   createRandomSecKey,
+  createRandomSignPubKey,
+  createRandomSignSecKey,
   createRandomNonce,
   createTestAppWithNetworkCB,
   createTestAppWithOptions,
