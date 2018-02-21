@@ -39,7 +39,7 @@ describe('Mutable Data', () => {
 
     it('create custom public with invalid name', () => {
       const test = () => app.mutableData.newPublic(TEST_NAME_INVALID, TYPE_TAG);
-      should(test).throw(errConst.XOR_NAME.msg);
+      should(test).throw(errConst.XOR_NAME.msg(32));
     });
 
     it('create custom private with invalid name', () => {
@@ -82,7 +82,7 @@ describe('Mutable Data', () => {
     it('throws error if custom public is created with name not equal to 32 bytes', async () => {
       const name = 'non XOR name';
       const test = () => app.mutableData.newPublic(name, TYPE_TAG);
-      should(test).throw(errConst.XOR_NAME.msg);
+      should(test).throw(errConst.XOR_NAME.msg(32));
     });
 
     it('throws error if custom private is created with name not equal to 32 bytes', async () => {
@@ -260,7 +260,7 @@ describe('Mutable Data', () => {
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => {
           const invalidPerm = 'Invalid-Perm';
-          return should(md.setUserPermissions(CONSTANTS.USER_ANYONE, [invalidPerm], 1)).be.rejectedWith(`'${invalidPerm}' is not a valid permission`);
+          return should(md.setUserPermissions(CONSTANTS.USER_ANYONE, [invalidPerm], 1)).be.rejectedWith(`${invalidPerm} is not a valid permission`);
         })
     );
   });

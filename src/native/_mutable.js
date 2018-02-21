@@ -208,7 +208,7 @@ const makeMDataInfoObj = (mDataInfo) => {
   try {
     name = t.XOR_NAME(new Buffer(mDataInfo.name));
   } catch (err) {
-    throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg);
+    throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size));
   }
   const type_tag = mDataInfo.type_tag;
   if(!Number.isInteger(type_tag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg); 

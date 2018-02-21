@@ -141,21 +141,15 @@ module.exports = {
   },
 
   /**
-   * @name MISSING_CONTAINERS_OBJECT
+   * @name INVALID_PERM
    * @type {object}
-   * @description Thrown when container request is missing exptected object.
+   * @description Thrown when invalid permission is requested on container.
    * @property {number} code 9
-   * @property {string} msg
+   * @property {function} msg
    */
-  MISSING_CONTAINERS_OBJECT: {
+  INVALID_PERM: {
     code: 9,
-    msg: `
-    Please provide container object.
-    For example:
-    {
-      _public: ['Insert'],
-      _publicNames: ['ManagePermissions']
-    }`
+    msg: (perm) => `${perm} is not a valid permission`
   },
 
   /**
@@ -206,7 +200,7 @@ module.exports = {
    * @type {object}
    * @description Thrown when secret encryption key is not provided as necessary function argument.
    * @property {number} code 13
-   * @property {string} msg
+   * @property {function} msg
    */
   MISSING_SEC_ENC_KEY: {
     code: 13,
@@ -246,7 +240,7 @@ module.exports = {
    * @description Custom name used to create public or private
    * MutableData must be 32 bytes in length.
    * @property {number} code 16
-   * @property {string} msg
+   * @property {function} msg
    */
   XOR_NAME: {
     code: 16,
@@ -259,7 +253,7 @@ module.exports = {
    * @description Any string or buffer provided to private MutableData
    * that is not 24 bytes in length will throw error.
    * @property {number} code 17
-   * @property {string} msg
+   * @property {function} msg
    */
   NONCE: {
     code: 17,
@@ -288,10 +282,5 @@ module.exports = {
   SETUP_INCOMPLETE: {
     code: 19,
     msg: 'Setup Incomplete. Connection not available yet.'
-  },
-
-  INVALID_PERM: {
-    code: 20,
-    msg: (perm) => `${perm} is not a valid permission`
   }
 };

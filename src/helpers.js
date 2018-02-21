@@ -67,6 +67,9 @@ const autoref = (obj) => {
 
 
 function validateShareMDataPermissions(permissions) {
+  if (!permissions) {
+    throw makeError(errConst.MISSING_PERMS_ARRAY.code, errConst.MISSING_PERMS_ARRAY.msg);
+  }
   const permissionMustHaveProperties = ['type_tag', 'name', 'perms'];
   let badPerm = {};
   const hasCorrectProperties = permissions.every(

@@ -176,7 +176,7 @@ describe('Encryption keys', () => {
     it('throws error if secret enc key not provided for encryption', () => {
       const plaintext = `all the ${Math.random()} places where I've been`;
       const test = () => myHandleOnTheirPubKey.encrypt(plaintext);
-      should(test).throw(errConst.MISSING_SEC_ENC_KEY.msg);
+      should(test).throw(errConst.MISSING_SEC_ENC_KEY.msg(32));
     });
 
     it('encrypts and decrypts with seal', () => {

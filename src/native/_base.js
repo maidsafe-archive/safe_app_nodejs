@@ -42,7 +42,7 @@ const validPerms = new Enum({
 });
 
 const validatePermission = (perm) => {
-  if (!validPerms.get(perm)) throw makeFFiError(errConst.INVALID_PERM.code, errConst.INVALID_PERM.msg(perm));
+  if (!validPerms.get(perm)) throw makeFfiError(errConst.INVALID_PERM.code, errConst.INVALID_PERM.msg(perm));
 }
 
 const FfiResult = Struct({

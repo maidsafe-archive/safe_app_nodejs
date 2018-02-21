@@ -147,6 +147,7 @@ const translateXorName = (str) => {
 }
 
 const makePermissions = (perms) => {
+  if (!perms) return new ContainerPermissionsArray([]);
   return new ContainerPermissionsArray(Object.getOwnPropertyNames(perms).map((key) => {
     const permArray = helpers.makePermissionSet(perms[key]);
     return ContainerPermissions({

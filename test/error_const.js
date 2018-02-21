@@ -55,10 +55,6 @@ describe('Error Constants', () => {
     should.exist(error.MISSING_AUTH_URI);
   });
 
-  it('MISSING_CONTAINERS_OBJECT', () => {
-    should.exist(error.MISSING_CONTAINERS_OBJECT);
-  });
-
   it('MISSING_CONTAINER_STRING', () => {
     should.exist(error.MISSING_CONTAINER_STRING);
   });
@@ -97,5 +93,9 @@ describe('Error Constants', () => {
 
   it('SETUP_INCOMPLETE', () => {
     should.exist(error.SETUP_INCOMPLETE);
+  });
+
+  it('INVALID_PERM', () => {
+    should.exist(error.INVALID_PERM);
   });
 });

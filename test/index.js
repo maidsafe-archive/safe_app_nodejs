@@ -42,6 +42,7 @@ describe('Smoke testing', () => {
 
   it('requires additional functions for testing, if in non-production', () => {
     const testingApi = api[api.length - 1];
+    should(LIB_CONSTANTS.inTesting).be.true();
     should.exist(testingApi.functions.test_create_app);
     should.exist(testingApi.functions.test_create_app_with_access);
   });

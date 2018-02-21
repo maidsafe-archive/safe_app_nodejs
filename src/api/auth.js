@@ -144,10 +144,6 @@ class AuthInterface {
   * }, {own_container: true}) // and we want our own container, too
   */
   genAuthUri(permissions, opts) {
-    if (!permissions) {
-      throw makeError(errConst.MISSING_CONTAINERS_OBJECT.code,
-                      errConst.MISSING_CONTAINERS_OBJECT.msg);
-    }
     const perm = makePermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
     return lib.encode_auth_req(new types.AuthReq({
@@ -231,10 +227,6 @@ class AuthInterface {
   * @arg {Object} containers mapping container name to list of permissions
   */
   genContainerAuthUri(containers) {
-    if (!containers) {
-      throw makeError(errConst.MISSING_CONTAINERS_OBJECT.code,
-                      errConst.MISSING_CONTAINERS_OBJECT.msg);
-    }
     const ctnrs = makePermissions(containers);
     const appInfo = makeAppInfo(this.app.appInfo);
     return lib.encode_containers_req(new types.ContainerReq({

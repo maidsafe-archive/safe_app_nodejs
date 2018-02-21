@@ -78,7 +78,7 @@ class PubEncKey extends h.NetworkObject {
   */
   encrypt(data, secretEncKey) {
     if (!secretEncKey) {
-      throw makeError(errConst.MISSING_SEC_ENC_KEY.code, errConst.MISSING_SEC_ENC_KEY.msg);
+      throw makeError(errConst.MISSING_SEC_ENC_KEY.code, errConst.MISSING_SEC_ENC_KEY.msg(32));
     }
     return lib.encrypt(this.app.connection, data, this.ref, secretEncKey.ref);
   }

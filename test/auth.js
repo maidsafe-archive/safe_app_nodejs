@@ -19,16 +19,16 @@ describe('auth interface', () => {
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
-  it('throws error if missing permissions object', async () => {
+  it('should build some authentication uri if missing permissions object', () => {
     const app = h.createTestApp();
-    const test = () => app.auth.genAuthUri();
-    should(test).throw(errConst.MISSING_CONTAINERS_OBJECT.msg);
+    app.auth.genAuthUri()
+      .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
   it('throws error if permissions object contains invalid permission', async () => {
     const app = h.createTestApp();
     const test = () => app.auth.genAuthUri({ _public: ['Invalid'] });
-    should(test).throw("'Invalid' is not a valid permission");
+    should(test).throw('Invalid is not a valid permission');
   });
 
   it('should throw error if non-standard container is requested', () => {
@@ -52,16 +52,16 @@ describe('auth interface', () => {
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
-  it('throws error if missing containers object', () => {
+  it('should build some containers uri if missing containers object', () => {
     const app = h.createTestApp();
-    const test = () => app.auth.genContainerAuthUri();
-    should(test).throw(errConst.MISSING_CONTAINERS_OBJECT.msg);
+    app.auth.genContainerAuthUri()
+      .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
   it('throws error if invalid container permission requested', () => {
     const app = h.createTestApp();
     const test = () => app.auth.genContainerAuthUri({ _public: ['Invalid'] });
-    should(test).throw("'Invalid' is not a valid permission");
+    should(test).throw('Invalid is not a valid permission');
   });
 
   it('should build some shared MD uri', () => {
@@ -99,7 +99,7 @@ describe('auth interface', () => {
     const sharedMdXorName = h.createRandomXorName();
     const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Wrong'] }];
     const test = () => app.auth.genShareMDataUri(perms);
-    should(test).throw(`'${perms[0].perms[0]}' is not a valid permission`);
+    should(test).throw(`${perms[0].perms[0]} is not a valid permission`);
   });
 
   it('should throw error for share MD request if type_tag is non-integer', async () => {
