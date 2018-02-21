@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint src test",
     "fix-lint": "eslint --fix src test",
-    "postinstall": "cross-env-shell yarn run install-prod && if [ $NODE_ENV != prod ]; then yarn run install-mock; fi",
+    "postinstall": "yarn run install-prod && node install-dev-libs.js",
     "install-prod": "cross-env NODE_ENV=prod download_deps --package package.json",
     "install-mock": "cross-env NODE_ENV=dev download_deps --package package.json",
     "docs": "documentation build --config etc/documentation.yml --github true --output docs --format html src/**",
