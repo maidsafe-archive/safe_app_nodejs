@@ -138,18 +138,16 @@ const toBuffer = (ptr, len) => {
 
 const readAuthGrantedPtr = (authGrantedPtr) => {
   const authGranted = authGrantedPtr.deref();
-  console.log("DEREF:", authGranted.access_container_entry.ptr.deref());
-  let ptr = authGranted.access_container_entry.ptr;
-  const len = authGranted.access_container_entry.len;
+  let ptr = authGranted.access_container_entry.containers;
+  const len = authGranted.access_container_entry.containers_len;
   const arrPtr = ref.reinterpret(ptr, ContainerInfo.size * len);
   const arr = ContainerInfoArray(arrPtr);
   let containersList = [];
   for (let i = 0; i < len ; i++) {
     const currValue = arr[i];
-    console.log("CONTAINER:", currValue.name, currValue.permissions)
     containersList.push({
       name: currValue.name,
-      mdata_info: currValue.mdata_info,
+      mdata_info: helpersForNative.makeMDataInfoObj(currValue.mdata_info),
       permissions: {
         Read: currValue.permissions.Read,
         Insert: currValue.permissions.Insert,
@@ -160,8 +158,8 @@ const readAuthGrantedPtr = (authGrantedPtr) => {
     });
   }
   const authGrantedObj = {
-    app_keys: authGranted.app_keys,
-    access_container: authGranted.access_container,
+    app_keys: authGranted.app_keys, // FIXME: makeAppKeysObj read and create obj
+    access_container: authGranted.access_container, // FIXME: makeAccessContObj read and create obj
     access_container_entry: containersList,
     bootstrap_config: toBuffer(authGranted.bootstrap_config_ptr, authGranted.bootstrap_config_len)
   }
@@ -169,17 +167,17 @@ const readAuthGrantedPtr = (authGrantedPtr) => {
 }
 
 const extractContainersPerms = (authGrantedPtr) => {
+  // TODO: expect the object directly and not from the pointer
   const authGrantedObj = readAuthGrantedPtr(authGrantedPtr);
   let contsPerms = {};
-  const containers = authGrantedObj.access_container_entry;
-  containers.forEach((cont) => {
+  authGrantedObj.access_container_entry.forEach((cont) => {
     contsPerms[cont.name] = {
       Read: cont.permissions.Read,
       Insert: cont.permissions.Insert,
       Update: cont.permissions.Update,
       Delete: cont.permissions.Delete,
       ManagePermissions: cont.permissions.ManagePermissions
-    }
+    };
   });
   return contsPerms;
 }
@@ -235,8 +233,6 @@ module.exports = {
     ShareMDataReq,
     // response
     AuthGranted,
-    AccessContInfo,
-    AppKeys,
   },
   functions: {
     encode_auth_req: [t.Void, [ ref.refType(AuthReq), 'pointer', 'pointer'] ],
@@ -298,6 +294,7 @@ module.exports = {
           fn.async(str,
                    ref.NULL,
                    ffi.Callback('void', [t.VoidPtr, 'uint32', ref.refType(AuthGranted)], (user_data, req_id, authGrantedPtr) => {
+                      // TODO: return an object since the info referenced can be freed
                       resolve(["granted", authGrantedPtr])
                    }),
                    ffi.Callback('void', [t.VoidPtr, 'uint32', t.u8Pointer, t.usize], function(user_data, req_id, connUriPtr, connUriLen) {

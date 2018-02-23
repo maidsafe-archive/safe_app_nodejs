@@ -147,25 +147,26 @@ describe('Get granted containers permissions from auth URI', () => {
     return should(appNoConnect.auth.readGrantedPermissions(h.authUris.unregisteredUri)).be.rejectedWith('URI doesn\'t contain granted access information');
   });
 
+  /* eslint-disable no-underscore-dangle */
   it('valid uri with auth granted info', async () => {
     const appNoConnect = createTestApp();
-    const permissions = await appNoConnect.auth.readGrantedPermissions(h.authUris.registeredUri);
-    should(permissions).be.eql({
-      _public: {
-        Read: true,
-        Insert: true,
-        Delete: false,
-        Update: false,
-        ManagePermissions: false
-      }
+    const contsPerms = await appNoConnect.auth.readGrantedPermissions(h.authUris.registeredUri);
+    should(Object.keys(contsPerms).length).be.equal(2);
+    should(contsPerms._publicNames).be.eql({
+      Read: true,
+      Insert: true,
+      Delete: false,
+      Update: false,
+      ManagePermissions: false
     });
-  });
-
-  it.only('reads granted permissions without network connection', async () => {
-    const appNoConnect = h.createTestApp();
-    const authUri = 'safe-bmv0lm1hawrzywzllnrlc3qud2viyxbwlmlk:AQAAACEIbEIAAAAAAAAAACAAAAAAAAAAvn4ylaPAeJgyjSA4JA5jbculWVtpM9dQFFoYDW9QNrIgAAAAAAAAAE2Gn-Mt165Cpn07iz9BqJXN1KNwlfrLkszB9jJHPCUlIAAAAAAAAACOEf7-ZXWkoQWO-Uj1jbDBgUVt5zq3CY6vA_GCiUfXX0AAAAAAAAAAzZBcpiOSrD-gcowqgIQjFBXqsEvfUgdLwBsM8G1Sx_WOEf7-ZXWkoQWO-Uj1jbDBgUVt5zq3CY6vA_GCiUfXXyAAAAAAAAAAUgG7PJvkjXB8FU-gUk2MmuQP4ssUBnuWQsVp5YJIJU4gAAAAAAAAAO0_qoFKQHmbX9zl1AaLhTAGbSRUlMmsIvOTdKr4LrLjAAAAAAAAAAAAAAAAAAAAAMSQQOawAhm02qhffam1wcrV5Y2leH9M4ldTcCDF0BsbmDoAAAAAAAAYAAAAAAAAAD7kwIUEkMXRwrypwPryM0V1fEofDP3NcQEAAAAAAAAADAAAAAAAAABfcHVibGljTmFtZXPWrKIC-xMCJL5Ucacw9oyvVD1KTcLo6I7z4ZicJr1ne5g6AAAAAAAAASAAAAAAAAAAhvmbGRhaIC4tbG0Blp5CzRofE_i_auqODmkIhj_ZnsIYAAAAAAAAANRWxwuFvu5CqpBXAH8hrJsqrY_NoPwpWgACAAAAAAAAAAAAAAABAAAA';
-    const permissions = await appNoConnect.auth.readGrantedPermissions(authUri);
-    console.log("GOT:", permissions); // eslint-disable-line
+    const ownContainerName = 'apps/net.maidsafe.examples.mailtutorial';
+    should(contsPerms[ownContainerName]).be.eql({
+      Read: true,
+      Insert: true,
+      Delete: true,
+      Update: true,
+      ManagePermissions: true
+    });
   });
 });
 
@@ -181,19 +182,19 @@ describe('Access Container', () => {
     should.exist(app.connection);
   });
 
-  /* eslint-disable dot-notation */
+  /* eslint-disable no-underscore-dangle */
   it('get container names', () => app.auth.refreshContainersPermissions().then(() =>
     app.auth.getContainersPermissions().then((contsPerms) => {
       // we always get a our own sandboxed container in tests
       should(Object.keys(contsPerms).length).be.equal(3);
-      should(contsPerms['_public']).be.eql({
+      should(contsPerms._public).be.eql({
         Read: true,
         Insert: false,
         Delete: false,
         Update: false,
         ManagePermissions: false
       });
-      return should(contsPerms['_publicNames']).be.eql({
+      should(contsPerms._publicNames).be.eql({
         Read: true,
         Insert: true,
         Delete: false,

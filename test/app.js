@@ -109,7 +109,7 @@ describe('Smoke test', () => {
   }).timeout(10000);
 
   it('should return own container name', async () => {
-    const app = createAuthenticatedTestApp();
+    const app = await createAuthenticatedTestApp();
     const contName = await app.getOwnContainerName();
     should(contName).be.equal(`apps/${app.appInfo.id}`);
   }).timeout(10000);
