@@ -136,10 +136,80 @@ const toBuffer = (ptr, len) => {
   return new Buffer(ref.reinterpret(ptr, len, 0))
 }
 
-const readAuthGrantedPtr = (authGrantedPtr) => {
-  const authGranted = authGrantedPtr.deref();
-  let ptr = authGranted.access_container_entry.containers;
-  const len = authGranted.access_container_entry.containers_len;
+const makeAppKeys = (appKeys) => {
+  return new AppKeys({
+    owner_key: t.SIGN_PUBLICKEYBYTES(new Buffer(appKeys.owner_key)),
+    enc_key: t.SYM_KEYBYTES(new Buffer(appKeys.enc_key)),
+    sign_pk: t.SIGN_PUBLICKEYBYTES(new Buffer(appKeys.sign_pk)),
+    sign_sk: t.SIGN_SECRETKEYBYTES(new Buffer(appKeys.sign_sk)),
+    enc_pk: t.ASYM_PUBLICKEYBYTES(new Buffer(appKeys.enc_pk)),
+    enc_sk: t.ASYM_SECRETKEYBYTES(new Buffer(appKeys.enc_sk)),
+  });
+}
+
+const makeAccessContInfo = (accessContainer) => {
+  return new AccessContInfo({
+    id: t.XOR_NAME(new Buffer(accessContainer.id)),
+    tag: accessContainer.tag,
+    nonce: t.SYM_NONCEBYTES(new Buffer(accessContainer.nonce)),
+  });
+}
+
+const makeAccessContainerEntry = (accessContainerEntry) => {
+  const contInfoArray = new ContainerInfoArray(accessContainerEntry.length);
+  accessContainerEntry.forEach((entry, index) => {
+    const permissions = new t.PermissionSet({
+      Read: entry.permissions.Read,
+      Insert: entry.permissions.Insert,
+      Update: entry.permissions.Update,
+      Delete: entry.permissions.Delete,
+      ManagePermissions: entry.permissions.ManagePermissions
+    });
+    contInfoArray[index] = new ContainerInfo({
+      name: entry.name,
+      mdata_info: helpersForNative.makeMDataInfo(entry.mdata_info),
+      permissions
+    });
+  });
+
+  return new AccessContainerEntry({
+    containers: contInfoArray.buffer,
+    containers_len: contInfoArray.length
+  });
+}
+
+const makeAuthGranted = (authGrantedObj) => {
+  return new AuthGranted({
+    app_keys: makeAppKeys(authGrantedObj.app_keys),
+    access_container: makeAccessContInfo(authGrantedObj.access_container),
+    access_container_entry: makeAccessContainerEntry(authGrantedObj.access_container_entry),
+    bootstrap_config_ptr: new Buffer(authGrantedObj.bootstrap_config),
+    bootstrap_config_len: authGrantedObj.bootstrap_config.length,
+  });
+}
+
+const readAppKeys = (appKeys) => {
+  return {
+    owner_key: new Buffer(appKeys.owner_key),
+    enc_key: new Buffer(appKeys.enc_key),
+    sign_pk: new Buffer(appKeys.sign_pk),
+    sign_sk: new Buffer(appKeys.sign_sk),
+    enc_pk: new Buffer(appKeys.enc_pk),
+    enc_sk: new Buffer(appKeys.enc_sk),
+  };
+}
+
+const readAccessContainer = (accessContainer) => {
+  return {
+    id: new Buffer(accessContainer.id),
+    tag: accessContainer.tag,
+    nonce: new Buffer(accessContainer.nonce),
+  };
+}
+
+const readAccessContainerEntry = (accessContainerEntry) => {
+  let ptr = accessContainerEntry.containers;
+  const len = accessContainerEntry.containers_len;
   const arrPtr = ref.reinterpret(ptr, ContainerInfo.size * len);
   const arr = ContainerInfoArray(arrPtr);
   let containersList = [];
@@ -148,38 +218,21 @@ const readAuthGrantedPtr = (authGrantedPtr) => {
     containersList.push({
       name: currValue.name,
       mdata_info: helpersForNative.makeMDataInfoObj(currValue.mdata_info),
-      permissions: {
-        Read: currValue.permissions.Read,
-        Insert: currValue.permissions.Insert,
-        Update: currValue.permissions.Update,
-        Delete: currValue.permissions.Delete,
-        ManagePermissions: currValue.permissions.ManagePermissions
-      }
+      permissions: helpersForNative.readPermsSet(currValue.permissions),
     });
   }
+  return containersList;
+}
+
+const readAuthGrantedPtr = (authGrantedPtr) => {
+  const authGranted = authGrantedPtr.deref();
   const authGrantedObj = {
-    app_keys: authGranted.app_keys, // FIXME: makeAppKeysObj read and create obj
-    access_container: authGranted.access_container, // FIXME: makeAccessContObj read and create obj
-    access_container_entry: containersList,
+    app_keys: readAppKeys(authGranted.app_keys),
+    access_container: readAccessContainer(authGranted.access_container),
+    access_container_entry: readAccessContainerEntry(authGranted.access_container_entry),
     bootstrap_config: toBuffer(authGranted.bootstrap_config_ptr, authGranted.bootstrap_config_len)
   }
   return authGrantedObj;
-}
-
-const extractContainersPerms = (authGrantedPtr) => {
-  // TODO: expect the object directly and not from the pointer
-  const authGrantedObj = readAuthGrantedPtr(authGrantedPtr);
-  let contsPerms = {};
-  authGrantedObj.access_container_entry.forEach((cont) => {
-    contsPerms[cont.name] = {
-      Read: cont.permissions.Read,
-      Insert: cont.permissions.Insert,
-      Update: cont.permissions.Update,
-      Delete: cont.permissions.Delete,
-      ManagePermissions: cont.permissions.ManagePermissions
-    };
-  });
-  return contsPerms;
 }
 
 function makeAppInfo(appInfoObj) {
@@ -234,6 +287,9 @@ module.exports = {
     // response
     AuthGranted,
   },
+  helpersForNative: {
+    makeAuthGranted,
+  },
   functions: {
     encode_auth_req: [t.Void, [ ref.refType(AuthReq), 'pointer', 'pointer'] ],
     encode_containers_req: [t.Void, [ref.refType(ContainerReq), 'pointer', 'pointer'] ],
@@ -257,7 +313,6 @@ module.exports = {
     makeAppInfo,
     makePermissions,
     makeShareMDataPermissions,
-    extractContainersPerms
   },
   api: {
     access_container_fetch: helpers.Promisified(null, [ref.refType(ContainerPermissions), t.usize], (args) => {
@@ -269,13 +324,7 @@ module.exports = {
       const contsPerms = {};
       for (let i = 0; i < len ; i++) {
         const cont = arr[i];
-        contsPerms[cont.cont_name] = {
-          Read: cont.access.Read,
-          Insert: cont.access.Insert,
-          Update: cont.access.Update,
-          Delete: cont.access.Delete,
-          ManagePermissions: cont.access.ManagePermissions
-        }
+        contsPerms[cont.cont_name] = helpersForNative.readPermsSet(cont.access);
       }
       return contsPerms;
     }),
@@ -294,8 +343,8 @@ module.exports = {
           fn.async(str,
                    ref.NULL,
                    ffi.Callback('void', [t.VoidPtr, 'uint32', ref.refType(AuthGranted)], (user_data, req_id, authGrantedPtr) => {
-                      // TODO: return an object since the info referenced can be freed
-                      resolve(["granted", authGrantedPtr])
+                      const authGrantedObj = readAuthGrantedPtr(authGrantedPtr);
+                      resolve(["granted", authGrantedObj])
                    }),
                    ffi.Callback('void', [t.VoidPtr, 'uint32', t.u8Pointer, t.usize], function(user_data, req_id, connUriPtr, connUriLen) {
                       resolve(["unregistered", toBuffer(connUriPtr, connUriLen)])
