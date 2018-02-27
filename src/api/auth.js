@@ -177,12 +177,6 @@ class AuthInterface {
   * ])
   */
   genShareMDataUri(permissions) {
-    if (!permissions) {
-      throw makeError(errConst.MISSING_PERMS_ARRAY.code, errConst.MISSING_PERMS_ARRAY.msg);
-    }
-    if (!Array.isArray(permissions)) {
-      throw makeError(errConst.INVALID_PERMS_ARRAY.code, errConst.INVALID_PERMS_ARRAY.msg);
-    }
     validateShareMDataPermissions(permissions);
     const mdatasPerms = makeShareMDataPermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);

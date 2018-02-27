@@ -46,7 +46,7 @@ describe('Mutable Data', () => {
       const test = () => app.mutableData.newPrivate(TEST_NAME_INVALID, TYPE_TAG,
                                           h.createRandomSecKey(),
                                           h.createRandomNonce());
-      should(test()).be.rejectedWith(errConst.XOR_NAME.msg);
+      should(test()).be.rejectedWith(errConst.XOR_NAME.msg(32));
     });
   });
 
@@ -78,22 +78,6 @@ describe('Mutable Data', () => {
               should(r.type_tag).equal(TYPE_TAG);
             })
     );
-
-    it('throws error if custom public is created with name not equal to 32 bytes', async () => {
-      const name = 'non XOR name';
-      const test = () => app.mutableData.newPublic(name, TYPE_TAG);
-      should(test).throw(errConst.XOR_NAME.msg(32));
-    });
-
-    it('throws error if custom private is created with name not equal to 32 bytes', async () => {
-      const name = 'non XOR name';
-      should(
-             app.mutableData.newPrivate(name,
-                                        TYPE_TAG,
-                                        h.createRandomSecKey(),
-                                        h.createRandomNonce()))
-            .be.rejectedWith(errConst.XOR_NAME.msg);
-    });
 
     it('throws error if custom private is created with nonce not equal to 24 bytes', async () => {
       const nonce = 'not a nonce';

@@ -107,7 +107,9 @@ describe('auth interface', () => {
     const sharedMdXorName = h.createRandomXorName();
     const perms = [{ type_tag: 'non-integer', name: sharedMdXorName, perms: ['Insert'] }];
     const test = () => app.auth.genShareMDataUri(perms);
-    should(test).throw('writeUInt64: no digits we found in input String');
+    should(test).throw(
+      errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(perms[0]))
+    );
   });
 
   it('should throw error for share MD request if name is not 32 byte buffer', async () => {
@@ -115,7 +117,9 @@ describe('auth interface', () => {
     const mdName = 'not 32 byte buffer';
     const perms = [{ type_tag: 15001, name: mdName, perms: ['Insert'] }];
     const test = () => app.auth.genShareMDataUri(perms);
-    should(test).throw(`buffer length must be at least 32, got ${mdName.length}`);
+    should(test).throw(
+      errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(perms[0]))
+    );
   });
 
   it('creates unregistered connection', () => {

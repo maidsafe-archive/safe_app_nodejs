@@ -1,6 +1,9 @@
 const weak = require('weak');
 const makeError = require('./native/_error.js');
 const errConst = require('./error_const');
+const base = require('./native/_base');
+
+const t = base.types;
 
 /**
 * General purpose interface to link a native handle
@@ -70,6 +73,9 @@ function validateShareMDataPermissions(permissions) {
   if (!permissions) {
     throw makeError(errConst.MISSING_PERMS_ARRAY.code, errConst.MISSING_PERMS_ARRAY.msg);
   }
+  if (!Array.isArray(permissions)) {
+    throw makeError(errConst.INVALID_PERMS_ARRAY.code, errConst.INVALID_PERMS_ARRAY.msg);
+  }
   const permissionMustHaveProperties = ['type_tag', 'name', 'perms'];
   let badPerm = {};
   const hasCorrectProperties = permissions.every(
@@ -78,6 +84,16 @@ function validateShareMDataPermissions(permissions) {
       if (!bool) {
         badPerm = perm;
         return false;
+      } else if (bool && prop === 'name') {
+        if (new Buffer(perm[prop]).length !== t.XOR_NAME(32).length) {
+          badPerm = perm;
+          return false;
+        }
+      } else if (bool && prop === 'type_tag') {
+        if (!Number.isInteger(perm[prop])) {
+          badPerm = perm;
+          return false;
+        }
       }
       return true;
     }));
