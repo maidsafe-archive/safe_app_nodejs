@@ -37,39 +37,39 @@ describe('Smoke testing', () => {
       MD_ENTRIES_EMPTY: 0,
       MD_PERMISSION_EMPTY: 0
     };
-    should(CONSTANTS).be.eql(expectedConsts);
+    return should(CONSTANTS).be.eql(expectedConsts);
   });
 
   it('requires additional functions for testing, if in non-production', () => {
     const testingApi = api[api.length - 1];
     should(LIB_CONSTANTS.inTesting).be.true();
     should.exist(testingApi.functions.test_create_app);
-    should.exist(testingApi.functions.test_create_app_with_access);
+    return should.exist(testingApi.functions.test_create_app_with_access);
   });
 
   it('requires console and console.warn', () => {
     should.exist(console);
-    should.exist(console.warn);
+    return should.exist(console.warn);
   });
 
   it('system uri openUri function returns a promise', () => {
     const app = h.createTestApp();
-    should(app.auth.openUri('')).be.Promise();
+    return should(app.auth.openUri('')).be.a.Promise();
   });
 
   it('system uri lib contains "mock" dir (as we\'re testing)', () => {
     const sysUriPath = LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME;
-    should(sysUriPath.includes('mock')).be.True();
+    return should(sysUriPath.includes('mock')).be.true();
   });
 
   it('safe app lib contains "mock" dir (as we\'re testing)', () => {
     const libPath = LIB_CONSTANTS.LIB_FILENAME;
-    should(libPath.includes('mock')).be.True();
+    return should(libPath.includes('mock')).be.true();
   });
 
   it('hasMockFlag is set FALSE for testing', () => {
     const hasMock = LIB_CONSTANTS.hasMockFlag;
-    should(hasMock).be.False();
+    return should(hasMock).be.false();
   });
 
   it('throws error if lib fails to load', () => {
@@ -80,7 +80,7 @@ describe('Smoke testing', () => {
       const errArray = err.message.split('libraries: ');
       should(errConst.FAILED_TO_LOAD_LIB.msg(errArray[1])).be.equal(err.message);
     }
-    fs.renameSync(path.join(__dirname, '../src/native/hideLib.so'), path.join(__dirname, `../src/native/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`));
+    return fs.renameSync(path.join(__dirname, '../src/native/hideLib.so'), path.join(__dirname, `../src/native/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`));
   }).timeout(10000);
 });
 
@@ -88,7 +88,7 @@ describe('External API', () => {
   describe('initializeApp', () => {
     it('creates and returns new App instance to interface with network', async () => {
       const app = await initializeApp(appInfo);
-      should(app).have.properties(['auth', 'appInfo', 'crypto', 'cipherOpt', 'mutableData', 'immutableData', 'networkState']);
+      return should(app).have.properties(['auth', 'appInfo', 'crypto', 'cipherOpt', 'mutableData', 'immutableData', 'networkState']);
     });
 
     it('customExecPath with an array of args', async () => {

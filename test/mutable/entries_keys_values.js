@@ -14,9 +14,7 @@ describe('Mutable Data Entries', () => {
   it('get entries and check length', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
       .then((entries) => entries.len())
-      .then((len) => {
-        should(len).equal(Object.keys(TEST_ENTRIES).length);
-      })
+      .then((len) => should(len).equal(Object.keys(TEST_ENTRIES).length))
   );
 
   it('get entries and get a value', () => app.mutableData.newRandomPublic(TYPE_TAG)
@@ -25,7 +23,7 @@ describe('Mutable Data Entries', () => {
       .then((value) => {
         should(value).not.be.undefined();
         should(value.buf.toString()).equal('value1');
-        should(value.version).equal(0);
+        return should(value.version).equal(0);
       })
   );
 
@@ -36,7 +34,7 @@ describe('Mutable Data Entries', () => {
         .then((value) => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('newValue');
-          should(value.version).equal(0);
+          return should(value.version).equal(0);
         }))
   ));
 
@@ -47,7 +45,7 @@ describe('Mutable Data Entries', () => {
         .then((value) => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('newValue');
-          should(value.version).equal(0);
+          return should(value.version).equal(0);
         }))
   ));
 
