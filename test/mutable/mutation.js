@@ -21,7 +21,7 @@ describe('Applying EntryMutationTransaction', () => {
               .then((value) => {
                 should(value).not.be.undefined();
                 should(value.buf.toString()).equal('newValue');
-                should(value.version).equal(0);
+                return should(value.version).equal(0);
               })
           ))))
   );
@@ -36,7 +36,7 @@ describe('Applying EntryMutationTransaction', () => {
               .then((value) => {
                 should(value).not.be.undefined();
                 should(value.buf.toString()).equal('newValue');
-                should(value.version).equal(0);
+                return should(value.version).equal(0);
               })
           ))))
   );
@@ -51,7 +51,7 @@ describe('Applying EntryMutationTransaction', () => {
               .then((value) => {
                 should(value).not.be.undefined();
                 should(value.buf.toString()).equal('updatedValue');
-                should(value.version).equal(1);
+                return should(value.version).equal(1);
               })
           ))))
   );
@@ -66,7 +66,7 @@ describe('Applying EntryMutationTransaction', () => {
               .then((value) => {
                 should(value).not.be.undefined();
                 should(value.buf.toString()).equal('updatedValue');
-                should(value.version).equal(1);
+                return should(value.version).equal(1);
               })
           ))))
   );
@@ -82,7 +82,7 @@ describe('Applying EntryMutationTransaction', () => {
             .then((value) => {
               should(value).not.be.undefined();
               should(Buffer.from(value.buf)).deepEqual(newVal);
-              should(value.version).equal(1);
+              return should(value.version).equal(1);
             });
         })))
   );
@@ -97,7 +97,7 @@ describe('Applying EntryMutationTransaction', () => {
               .then((value) => {
                 should(value).not.be.undefined();
                 should(value.buf.toString()).equal('');
-                should(value.version).equal(1);
+                return should(value.version).equal(1);
               })
           ))))
   );
@@ -112,7 +112,7 @@ describe('Applying EntryMutationTransaction', () => {
               .then((value) => {
                 should(value).not.be.undefined();
                 should(value.buf.toString()).equal('value2');
-                should(value.version).equal(0);
+                return should(value.version).equal(0);
               })
           ))))
   );
@@ -127,7 +127,7 @@ describe('Applying EntryMutationTransaction', () => {
               .then((value) => {
                 should(value).not.be.undefined();
                 should(value.buf.toString()).equal('');
-                should(value.version).equal(1);
+                return should(value.version).equal(1);
               })
           ))))
   );
@@ -146,7 +146,7 @@ describe('Applying EntryMutationTransaction', () => {
       .then((value) => {
         should(value).not.be.undefined();
         should(value.buf.toString()).equal('');
-        should(value.version).equal(1);
+        return should(value.version).equal(1);
       });
   });
 
@@ -164,7 +164,7 @@ describe('Applying EntryMutationTransaction', () => {
       .then((value) => {
         should(value).not.be.undefined();
         should(value.buf.toString()).equal('value1');
-        should(value.version).equal(0);
+        return should(value.version).equal(0);
       });
   });
 
@@ -181,7 +181,7 @@ describe('Applying EntryMutationTransaction', () => {
         .then((value) => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('');
-          should(value.version).equal(1);
+          return should(value.version).equal(1);
         })
       );
   });
@@ -201,7 +201,7 @@ describe('Applying EntryMutationTransaction', () => {
         .then((value) => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('');
-          should(value.version).equal(1);
+          return should(value.version).equal(1);
         })
       );
   });
@@ -215,7 +215,7 @@ describe('Applying EntryMutationTransaction', () => {
             .then((value) => {
               should(value).not.be.undefined();
               should(value.buf.toString()).equal('newValue');
-              should(value.version).equal(0);
+              return should(value.version).equal(0);
             })
           )))
   );
@@ -230,7 +230,7 @@ describe('Applying EntryMutationTransaction', () => {
           .then((value) => {
             should(value).not.be.undefined();
             should(value.buf.toString()).equal('newValue');
-            should(value.version).equal(0);
+            return should(value.version).equal(0);
           })
         ))
   );
@@ -247,7 +247,7 @@ describe('Applying EntryMutationTransaction', () => {
           .then((value) => m.decrypt(value.buf))
           .then((d) => {
             should(d).not.be.undefined();
-            should(d.toString()).equal('newValue');
+            return should(d.toString()).equal('newValue');
           })
         ))
   );
@@ -261,7 +261,7 @@ describe('Applying EntryMutationTransaction', () => {
             .then((value) => {
               should(value).not.be.undefined();
               should(value.buf.toString()).equal('updatedValue');
-              should(value.version).equal(1);
+              return should(value.version).equal(1);
             })
           )))
   );
@@ -276,7 +276,7 @@ describe('Applying EntryMutationTransaction', () => {
           .then((value) => {
             should(value).not.be.undefined();
             should(value.buf.toString()).equal('updatedValue');
-            should(value.version).equal(1);
+            return should(value.version).equal(1);
           })
         ))
   );
@@ -290,7 +290,7 @@ describe('Applying EntryMutationTransaction', () => {
             .then((value) => {
               should(value).not.be.undefined();
               should(value.buf.toString()).equal('');
-              should(value.version).equal(1);
+              return should(value.version).equal(1);
             })
           )))
   );
@@ -308,7 +308,7 @@ describe('Applying EntryMutationTransaction', () => {
               .then((value) => {
                 should(value).not.be.undefined();
                 should(value.buf.toString()).equal('newValue');
-                should(value.version).equal(2);
+                return should(value.version).equal(2);
               })
           ))))
   );
@@ -330,7 +330,7 @@ describe('Applying EntryMutationTransaction', () => {
               .then((value) => {
                 should(value).not.be.undefined();
                 should(value.buf.toString()).equal('updatedValue');
-                should(value.version).equal(1);
+                return should(value.version).equal(1);
               })
           ))))
   );

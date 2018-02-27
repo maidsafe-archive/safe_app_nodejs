@@ -15,7 +15,7 @@ describe('Immutable Data', () => {
     await idWriter.write(testString);
     const cipherOpt = await app.cipherOpt.newPlainText();
     const idAddress = await idWriter.close(cipherOpt);
-    should(app.immutableData.fetch(idAddress)).be.fulfilled();
+    return should(app.immutableData.fetch(idAddress)).be.fulfilled();
   });
 
   it('returns Writer for corresponding operations', async () => {
@@ -31,7 +31,7 @@ describe('Immutable Data', () => {
       const idAddress = await idWriter.close(cipherOpt);
       const idReader = await app.immutableData.fetch(idAddress);
       const idData = await idReader.read();
-      should(idData.toString()).equal(testString);
+      return should(idData.toString()).equal(testString);
     });
 
     it('reads content providing options', async () => {
@@ -42,7 +42,7 @@ describe('Immutable Data', () => {
       const idAddress = await idWriter.close(cipherOpt);
       const idReader = await app.immutableData.fetch(idAddress);
       const idData = await idReader.read({ offset: 0, end: testString.length - 1 });
-      should(idData.toString()).equal(testString.slice(0, -1));
+      return should(idData.toString()).equal(testString.slice(0, -1));
     });
 
     it('throws error if end option is greater than end of file byte length', async () => {
@@ -52,8 +52,8 @@ describe('Immutable Data', () => {
       const cipherOpt = await app.cipherOpt.newPlainText();
       const idAddress = await idWriter.close(cipherOpt);
       const idReader = await app.immutableData.fetch(idAddress);
-      should(idReader.read({ offset: 0, end: testString.length + 1 }))
-        .be.rejectedWith('-1012: Invalid offsets (from-position and length combination) provided for reading form SelfEncryptor. Would have probably caused an overflow.');
+      return should(idReader.read({ offset: 0, end: testString.length + 1 }))
+        .be.rejectedWith('Invalid offsets (from-position and length combination) provided for reading form SelfEncryptor. Would have probably caused an overflow.');
     });
 
     it('reads size of data', async () => {
@@ -63,7 +63,7 @@ describe('Immutable Data', () => {
       const cipherOpt = await app.cipherOpt.newPlainText();
       const idAddress = await idWriter.close(cipherOpt);
       const idReader = await app.immutableData.fetch(idAddress);
-      should(await idReader.size()).equal(11);
+      return should(await idReader.size()).equal(11);
     });
   });
 
@@ -71,13 +71,13 @@ describe('Immutable Data', () => {
     it('writes data from string', async () => {
       const testString = `test-${Math.random()}`;
       const idWriter = await app.immutableData.create();
-      await idWriter.write(testString).should.be.fulfilled();
+      return should(idWriter.write(testString)).be.fulfilled();
     });
 
     it('writes data from buffer', async () => {
       const testString = `test-${Math.random()}`;
       const idWriter = await app.immutableData.create();
-      await idWriter.write(Buffer.from(testString)).should.be.fulfilled();
+      return should(idWriter.write(Buffer.from(testString))).be.fulfilled();
     });
 
     it('closes itself, writes Immutable Data to network, and returns network address', async () => {
@@ -86,7 +86,7 @@ describe('Immutable Data', () => {
       await idWriter.write(testString);
       const cipherOpt = await app.cipherOpt.newPlainText();
       const idAddress = await idWriter.close(cipherOpt);
-      should(idAddress.length).be.equal(32);
+      return should(idAddress.length).be.equal(32);
     });
   });
 
@@ -99,7 +99,7 @@ describe('Immutable Data', () => {
     const addressAsString = JSON.stringify(idAddress);
     const idReader = await app.immutableData.fetch(JSON.parse(addressAsString));
     const idData = await idReader.read();
-    should(idData.toString()).equal(testString);
+    return should(idData.toString()).equal(testString);
   });
 
   it('throws error if immutable address is not 32 bytes', async () => {
@@ -109,7 +109,7 @@ describe('Immutable Data', () => {
     const cipherOpt = await app.cipherOpt.newPlainText();
     const idAddress = await idWriter.close(cipherOpt);
     const addressAsString = idAddress.toString();
-    should(app.immutableData.fetch(addressAsString)).be.rejectedWith(Error, { message: 'XOR Names _must be_ 32 bytes long.' });
+    return should(app.immutableData.fetch(addressAsString)).be.rejectedWith(Error, { message: 'Name _must be_ provided and 32 bytes long.' });
   });
 
   it('store address in a MD', () => {
@@ -127,9 +127,7 @@ describe('Immutable Data', () => {
       .then((md) => md.get('key1'))
       .then((value) => app.immutableData.fetch(value.buf))
       .then((r) => r.read())
-      .then((res) => {
-        should(res.toString()).equal(testString);
-      });
+      .then((res) => should(res.toString()).equal(testString));
   });
 
   it('store address in a serialised/deserialised  MD', () => {
@@ -156,9 +154,7 @@ describe('Immutable Data', () => {
       .then((entries) => entries.forEach((key, value) => {
         app.immutableData.fetch(value.buf)
         .then((r) => r.read())
-        .then((res) => {
-          should(res.toString()).equal(testString);
-        });
+        .then((res) => should(res.toString()).equal(testString));
       }));
   });
 });

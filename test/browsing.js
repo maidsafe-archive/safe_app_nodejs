@@ -72,10 +72,7 @@ describe('Browsing', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '', '')
       .then(() => createAnonTestApp()
-        .then((app) => {
-          should(app.webFetch()).be.rejectedWith(errConst.MISSING_URL.msg);
-        }
-      ));
+        .then((app) => should(app.webFetch()).be.rejectedWith(errConst.MISSING_URL.msg)));
   }).timeout(20000);
 
   it('fetch content', () => {
@@ -246,7 +243,7 @@ describe('Browsing', () => {
               should(data.body.toString()).equal(
                           content.substring(startByte, endByte + 1));
               should(data.headers['Content-Range']).equal(`bytes ${startByte}-${endByte}/${content.length}`);
-              should(data.headers['Content-Length']).equal(exptedReturn.length);
+              return should(data.headers['Content-Length']).equal(exptedReturn.length);
             })
         ));
     }).timeout(20000);
@@ -266,7 +263,7 @@ describe('Browsing', () => {
               should(data.body.toString()).equal(
                           content.substring(startByte, endByte + 1));
               should(data.headers['Content-Range']).equal(`bytes ${startByte}-${endByte}/${content.length}`);
-              should(data.headers['Content-Length']).equal(exptedReturn.length);
+              return should(data.headers['Content-Length']).equal(exptedReturn.length);
             })
         ));
     }).timeout(20000);
@@ -280,7 +277,7 @@ describe('Browsing', () => {
             .then((data) => {
               should(data.body.toString()).equal(content);
               should(data.headers['Content-Range']).equal(`bytes 0-${numberOfBytes}/${content.length}`);
-              should(data.headers['Content-Length']).equal(content.length);
+              return should(data.headers['Content-Length']).equal(content.length);
             })
         ));
     }).timeout(20000);
@@ -296,7 +293,7 @@ describe('Browsing', () => {
             .then((data) => {
               should(data.body.toString()).equal(content.substring(startByte));
               should(data.headers['Content-Range']).equal(`bytes ${startByte}-${numberOfBytes}/${content.length}`);
-              should(data.headers['Content-Length']).equal(content.length - startByte);
+              return should(data.headers['Content-Length']).equal(content.length - startByte);
             })
         ));
     }).timeout(20000);
@@ -356,49 +353,42 @@ describe('Browsing', () => {
             testDomain = returnedDomain;
             return deleteService(app, testDomain, deletedService);
           })
-          .then(() => app.webFetch(`safe://${deletedService}.${testDomain}`)
-          .should.be.rejectedWith('Service not found. Entry does not exist.'));
+          .then(() => should(app.webFetch(`safe://${deletedService}.${testDomain}`))
+            .be.rejectedWith('Service not found. Entry does not exist.'));
     }).timeout(20000);
 
-    it('should not find dns', () =>
-      client.webFetch('safe://domain_doesnt_exist')
-        .should.be.rejectedWith('Requested public name is not found')
-    );
+    it('should not find dns', () => should(client.webFetch('safe://domain_doesnt_exist'))
+      .be.rejectedWith('Requested public name is not found'));
 
-    it('should be case sensitive', () =>
-      client.webFetch(`safe://${domain}/SUBDIR/index.html`)
-        .should.be.rejectedWith('NFS error: File not found')
+    it('should be case sensitive', () => should(client.webFetch(`safe://${domain}/SUBDIR/index.html`))
+      .be.rejectedWith('NFS error: File not found')
         .then((err) => should(err.code).be.equal(-301))
     );
 
-    it('should not find service', () =>
-      client.webFetch(`safe://faulty_service.${domain}`)
-        .should.be.rejectedWith('Requested service is not found')
-    );
+    it('should not find service', () => should(client.webFetch(`safe://faulty_service.${domain}`))
+      .be.rejectedWith('Requested service is not found'));
 
-    it('should not find file', () =>
-      client.webFetch(`safe://www.${domain}/404.html`)
-        .should.be.rejectedWith('NFS error: File not found')
+    it('should not find file', () => should(client.webFetch(`safe://www.${domain}/404.html`))
+      .be.rejectedWith('NFS error: File not found')
         .then((err) => should(err.code).be.equal(-301))
     );
 
-    it('should not find file in subdirectory', () =>
-      client.webFetch(`safe://www.${domain}/subdir/404.html`)
-        .should.be.rejectedWith('NFS error: File not found')
+    it('should not find file in subdirectory', () => should(client.webFetch(`safe://www.${domain}/subdir/404.html`))
+      .be.rejectedWith('NFS error: File not found')
         .then((err) => should(err.code).be.equal(-301))
     );
 
     it('wrong path', () => createRandomDomain(content, '/my.file', '')
       .then((newdomain) => createAnonTestApp()
-        .then((app) => app.webFetch(`safe://${newdomain}/my.file/`)
-          .should.be.rejectedWith('NFS error: File not found')
+        .then((app) => should(app.webFetch(`safe://${newdomain}/my.file/`))
+          .be.rejectedWith('NFS error: File not found')
         ))
     ).timeout(20000);
 
     it('wrong deeper path', () => createRandomDomain(content, '/my.file/my.other.file', '')
       .then((newdomain) => createAnonTestApp()
-        .then((app) => app.webFetch(`safe://${newdomain}/my.file/my.other.file/`)
-          .should.be.rejectedWith('NFS error: File not found')
+        .then((app) => should(app.webFetch(`safe://${newdomain}/my.file/my.other.file/`))
+          .be.rejectedWith('NFS error: File not found')
         ))
     ).timeout(20000);
   });

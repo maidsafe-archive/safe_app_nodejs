@@ -15,9 +15,8 @@ describe('Permissions', () => {
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => m.getPermissions()
           .then((perm) => perm.len())
-          .then((length) => {
-            should(length).equal(1);
-          })
+          .then((length) => should(length).equal(1)
+          )
         ))
   );
 
@@ -87,7 +86,7 @@ describe('Permissions', () => {
   it('get user\'s permissions', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => app.crypto.getAppPubSignKey()
-          .then((pk) => m.getUserPermissions(pk).should.be.fulfilled())
+          .then((pk) => should(m.getUserPermissions(pk)).be.fulfilled())
         ))
   );
 
@@ -104,15 +103,13 @@ describe('Permissions', () => {
 
   it('set new permissions for `Anyone`', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
-        .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE,
-                                           ['Insert'], 1).should.be.fulfilled())
+        .then(() => should(m.setUserPermissions(CONSTANTS.USER_ANYONE, ['Insert'], 1)).be.fulfilled())
         )
   );
 
   it('deny all permissions to `Anyone`', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
-          .then(() => m.setUserPermissions(CONSTANTS.USER_ANYONE,
-                                           null, 1).should.be.fulfilled())
+          .then(() => should(m.setUserPermissions(CONSTANTS.USER_ANYONE, null, 1)).be.fulfilled())
         )
   );
 
