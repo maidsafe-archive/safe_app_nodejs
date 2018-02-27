@@ -5,14 +5,12 @@ const should = require('should');
 describe('Error Constants', () => {
   it('FAILED_TO_LOAD_LIB', () => {
     should.exist(error.FAILED_TO_LOAD_LIB);
-    should(error.FAILED_TO_LOAD_LIB.code).be.equal(1);
     should(error.FAILED_TO_LOAD_LIB.msg('theReason')).endWith('theReason');
   });
 
 
   it('MALFORMED_APP_INFO', () => {
     should.exist(error.MALFORMED_APP_INFO);
-    should(error.MALFORMED_APP_INFO.code).be.equal(2);
   });
 
   it('ERR_NO_SUCH_DATA', () => {
@@ -68,14 +66,17 @@ describe('Error Constants', () => {
   });
 
   it('MISSING_SEC_ENC_KEY', () => {
+    should(new RegExp('theReason').test(error.MISSING_SEC_ENC_KEY.msg('theReason'))).be.true();
     should.exist(error.MISSING_SEC_ENC_KEY);
   });
 
   it('LOGGER_INIT_ERROR', () => {
+    should(error.LOGGER_INIT_ERROR.msg('theReason')).endWith('theReason');
     should.exist(error.LOGGER_INIT_ERROR);
   });
 
   it('CONFIG_PATH_ERROR', () => {
+    should(error.CONFIG_PATH_ERROR.msg('theReason')).endWith('theReason');
     should.exist(error.CONFIG_PATH_ERROR);
   });
 
@@ -96,6 +97,7 @@ describe('Error Constants', () => {
   });
 
   it('INVALID_PERM', () => {
+    should(error.INVALID_PERM.msg('theReason')).startWith('theReason');
     should.exist(error.INVALID_PERM);
   });
 });
