@@ -15,7 +15,7 @@ describe('Immutable Data', () => {
     await idWriter.write(testString);
     const cipherOpt = await app.cipherOpt.newPlainText();
     const idAddress = await idWriter.close(cipherOpt);
-    await app.immutableData.fetch(idAddress).should.be.fulfilled();
+    should(app.immutableData.fetch(idAddress)).be.fulfilled();
   });
 
   it('returns Writer for corresponding operations', async () => {
@@ -45,6 +45,17 @@ describe('Immutable Data', () => {
       should(idData.toString()).equal(testString.slice(0, -1));
     });
 
+    it('throws error if end option is greater than end of file byte length', async () => {
+      const testString = `test-${Math.random()}`;
+      const idWriter = await app.immutableData.create();
+      await idWriter.write(testString);
+      const cipherOpt = await app.cipherOpt.newPlainText();
+      const idAddress = await idWriter.close(cipherOpt);
+      const idReader = await app.immutableData.fetch(idAddress);
+      should(idReader.read({ offset: 0, end: testString.length + 1 }))
+        .be.rejectedWith('-1012: Invalid offsets (from-position and length combination) provided for reading form SelfEncryptor. Would have probably caused an overflow.');
+    });
+
     it('reads size of data', async () => {
       const testString = 'test-string';
       const idWriter = await app.immutableData.create();
@@ -53,17 +64,6 @@ describe('Immutable Data', () => {
       const idAddress = await idWriter.close(cipherOpt);
       const idReader = await app.immutableData.fetch(idAddress);
       should(await idReader.size()).equal(11);
-    });
-
-    it.skip('frees Reader object from memory', async () => {
-      const testString = `test-${Math.random()}`;
-      const idWriter = await app.immutableData.create();
-      await idWriter.write(testString);
-      const cipherOpt = await app.cipherOpt.newPlainText();
-      const idAddress = await idWriter.close(cipherOpt);
-      const idReader = await app.immutableData.fetch(idAddress);
-      idReader.free();
-      should(idReader.read()).be.rejected();
     });
   });
 

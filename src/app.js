@@ -6,8 +6,8 @@ const api = require('./api');
 const lib = require('./native/lib');
 const { parse: parseUrl } = require('url');
 const consts = require('./consts');
-const makeFfiError = require('./native/_error.js');
 const errConst = require('./error_const');
+const makeError = require('./native/_error.js');
 
 /**
  * Holds one sessions with the network and is the primary interface to interact
@@ -36,6 +36,8 @@ class SAFEApp extends EventEmitter {
     lib.init(this.options);
     this._appInfo = appInfo;
     this.validateAppInfo();
+    this.initLogging(appInfo);
+    this.setSearchPath();
     this.networkState = consts.NET_STATE_INIT;
     if (networkStateCallBack) {
       this._networkStateCallBack = networkStateCallBack;
@@ -44,24 +46,6 @@ class SAFEApp extends EventEmitter {
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
     });
-
-    // Init logging on the underlying library only if it wasn't done already
-    if (this.options.log && !SAFEApp.logFilePath) {
-      let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
-      filename = `${filename}.log`;
-      lib.app_init_logging(filename)
-        .then(() => lib.app_output_log_path(filename))
-        .then((logPath) => { SAFEApp.logFilePath = logPath; })
-        .catch((err) => { console.error('Logger initilalisation failed', err); });
-    }
-
-    // Set additional search path for the config files if it was requested in
-    // the options. E.g. log.toml and crust.config files will be search
-    // in this additional search path.
-    if (this.options.configPath) {
-      lib.app_set_additional_search_path(this.options.configPath)
-        .catch((err) => { console.error('Faled to set additional config search path', err); });
-    }
   }
 
   /**
@@ -106,6 +90,38 @@ class SAFEApp extends EventEmitter {
 
   /**
   * @private
+  * Init logging on the underlying library only if it wasn't done already
+  */
+  initLogging(appInfo) {
+    if (this.options.log && !SAFEApp.logFilePath) {
+      let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
+      filename = `${filename}.log`;
+      lib.app_init_logging(filename)
+        .then(() => lib.app_output_log_path(filename))
+        .then((logPath) => { SAFEApp.logFilePath = logPath; })
+        .catch((err) => {
+          console.error(errConst.LOGGER_INIT_ERR.msg(err));
+        });
+    }
+  }
+
+  /**
+  * @private
+  * Set additional search path for the config files if it was requested in
+  * the options. E.g. log.toml and crust.config files will be search
+  * in this additional search path.
+  */
+  setSearchPath() {
+    if (this.options.configPath) {
+      lib.app_set_additional_search_path(this.options.configPath)
+        .catch((err) => {
+          console.error(errConst.CONFIG_PATH_ERROR.msg(err));
+        });
+    }
+  }
+
+  /**
+  * @private
   * Validates appInfo and properly handles error
   */
   validateAppInfo() {
@@ -122,7 +138,7 @@ class SAFEApp extends EventEmitter {
     });
 
     if (!hasCorrectProperties) {
-      throw makeFfiError(errConst.MALFORMED_APP_INFO.code, errConst.MALFORMED_APP_INFO.msg);
+      throw makeError(errConst.MALFORMED_APP_INFO.code, errConst.MALFORMED_APP_INFO.msg);
     }
   }
 
@@ -149,10 +165,12 @@ class SAFEApp extends EventEmitter {
   * @returns {Promise<Object>} the object with body of content and headers
   */
   async webFetch(url, options) {
-    if (!url) return Promise.reject(new Error('No URL provided.'));
+    if (!url) return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
 
     const parsedUrl = parseUrl(url);
-    if (!parsedUrl) return Promise.reject(new Error('Not a proper URL!'));
+    if (!parsedUrl) {
+      return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
+    }
     const hostname = parsedUrl.hostname;
     let path = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
     const tokens = path.split('/');
@@ -162,9 +180,6 @@ class SAFEApp extends EventEmitter {
     }
 
     path = tokens.join('/') || `/${consts.INDEX_HTML}`;
-    const ERR_NO_SUCH_DATA = -103;
-    const ERR_NO_SUCH_ENTRY = -106;
-    const ERR_FILE_NOT_FOUND = -301;
 
     // lets' unpack
     const hostParts = hostname.split('.');
@@ -178,18 +193,19 @@ class SAFEApp extends EventEmitter {
           const servicesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
           return await servicesContainer.get(servName);
         } catch (err) {
-          if (err.code === ERR_NO_SUCH_DATA || err.code === ERR_NO_SUCH_ENTRY) {
-            const error = new Error();
+          if (err.code === errConst.ERR_NO_SUCH_DATA.code ||
+              err.code === errConst.ERR_NO_SUCH_ENTRY.code) {
+            const error = {};
             error.code = err.code;
-            error.message = `Requested ${err.code === ERR_NO_SUCH_DATA ? 'public name' : 'service'} is not found`;
-            throw error;
+            error.message = `Requested ${err.code === errConst.ERR_NO_SUCH_DATA.code ? 'public name' : 'service'} is not found`;
+            throw makeError(error.code, error.message);
           }
           throw err;
         }
       };
 
       const handleNfsFetchException = (error) => {
-        if (error.code !== ERR_FILE_NOT_FOUND) {
+        if (error.code !== errConst.ERR_FILE_NOT_FOUND.code) {
           throw error;
         }
       };
@@ -197,10 +213,10 @@ class SAFEApp extends EventEmitter {
       try {
         const serviceInfo = await getServiceInfo(lookupName, serviceName);
         if (serviceInfo.buf.length === 0) {
-          const error = new Error();
-          error.code = ERR_NO_SUCH_ENTRY;
-          error.message = 'Service not found';
-          return reject(error);
+          const error = {};
+          error.code = errConst.ERR_NO_SUCH_ENTRY.code;
+          error.message = `Service not found. ${errConst.ERR_NO_SUCH_ENTRY.msg}`;
+          return reject(makeError(error.code, error.message));
         }
         let serviceMd;
         try {
@@ -299,7 +315,9 @@ class SAFEApp extends EventEmitter {
   * @returns {Pointer}
   */
   get connection() {
-    if (!this._connection) throw Error('Setup Incomplete. Connection not available yet.');
+    if (!this._connection) {
+      throw makeError(errConst.SETUP_INCOMPLETE.code, errConst.SETUP_INCOMPLETE.msg);
+    }
     return this._connection;
   }
 

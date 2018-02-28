@@ -1,6 +1,7 @@
 const should = require('should');
 const h = require('./helpers');
 const consts = require('../src/consts');
+const errConst = require('../src/error_const');
 
 const createAnonTestApp = h.createAnonTestApp;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
@@ -72,7 +73,7 @@ describe('Browsing', () => {
     return createRandomDomain(content, '', '')
       .then(() => createAnonTestApp()
         .then((app) => {
-          should(app.webFetch()).be.rejected();
+          should(app.webFetch()).be.rejectedWith(errConst.MISSING_URL.msg);
         }
       ));
   }).timeout(20000);
@@ -356,7 +357,7 @@ describe('Browsing', () => {
             return deleteService(app, testDomain, deletedService);
           })
           .then(() => app.webFetch(`safe://${deletedService}.${testDomain}`)
-          .should.be.rejectedWith('Service not found'));
+          .should.be.rejectedWith('Service not found. Entry does not exist.'));
     }).timeout(20000);
 
     it('should not find dns', () =>

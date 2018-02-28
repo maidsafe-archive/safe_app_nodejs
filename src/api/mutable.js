@@ -4,6 +4,8 @@ const t = require('../native/types');
 const emulations = require('./emulations');
 const { PubSignKey } = require('./crypto');
 const { pubConsts: CONSTANTS } = require('../consts');
+const errConst = require('../error_const');
+const makeError = require('../native/_error.js');
 
 /**
 * Holds the permissions of a MutableData object
@@ -553,6 +555,9 @@ class MutableDataInterface {
   * @returns {Promise<MutableData>}
   */
   newRandomPrivate(typeTag) {
+    if (!typeTag || !Number.isInteger(typeTag)) {
+      throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
+    }
     return lib.mdata_info_random_private(typeTag)
           .then((mDataInfo) => this.wrapMdata(mDataInfo));
   }
@@ -565,6 +570,9 @@ class MutableDataInterface {
   * @returns {Promise<MutableData>}
   */
   newRandomPublic(typeTag) {
+    if (!typeTag || !Number.isInteger(typeTag)) {
+      throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
+    }
     return lib.mdata_info_random_public(typeTag)
           .then((mDataInfo) => this.wrapMdata(mDataInfo));
   }
@@ -591,9 +599,6 @@ class MutableDataInterface {
   * @returns {Promise<MutableData>}
   */
   newPublic(name, typeTag) {
-    if (name.length !== 32) {
-      return Promise.reject(Error('XOR Names _must be_ 32 bytes long'));
-    }
     const mDataInfo = lib.makeMDataInfoObj({ name, type_tag: typeTag });
     return Promise.resolve(this.wrapMdata(mDataInfo));
   }

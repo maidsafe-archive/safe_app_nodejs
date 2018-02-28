@@ -1,4 +1,5 @@
 const makeFfiError = require('./_error.js');
+const errConst = require('../error_const');
 const ffi = require('ffi');
 const ref = require('ref');
 const Enum = require('enum');
@@ -41,7 +42,7 @@ const validPerms = new Enum({
 });
 
 const validatePermission = (perm) => {
-  if (!validPerms.get(perm)) throw Error(`'${perm}' is not a valid permission`);
+  if (!validPerms.get(perm)) throw makeFfiError(errConst.INVALID_PERM.code, errConst.INVALID_PERM.msg(perm));
 }
 
 const FfiResult = Struct({

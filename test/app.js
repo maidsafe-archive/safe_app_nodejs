@@ -37,18 +37,17 @@ describe('Smoke test', () => {
     should(optionsObjectsEqual).be.true();
   });
 
-  it('should build some containers uri', () => {
-    const app = createTestApp();
-    return app.auth.genContainerAuthUri({ private: ['Insert'] })
-        .then((resp) => should(resp.uri).startWith('safe-auth:'));
-  });
-
-  it('should build some shared MD uri', () => {
-    const app = createTestApp();
-    const sharedMdXorName = h.createRandomXorName();
-    const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
-    return app.auth.genShareMDataUri(perms)
-        .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  it('logs error if options object contains invalid configPath value', () => {
+    const optionsObject = {
+      log: true,
+      registerScheme: false,
+      joinSchemes: ['proto'],
+      configPath: { path: '/home' }
+    };
+    createTestAppWithOptions(
+      null,
+      optionsObject
+    );
   });
 
   it('creates registered for testing', async () => {
@@ -132,6 +131,12 @@ describe('Smoke test', () => {
     should(app.getAccountInfo()).be.rejected();
   });
 
+  it('should throw error if no auth URI is present during login', () => {
+    const app = h.createTestApp();
+    const test = () => app.auth.loginFromURI();
+    should(test).throw(errConst.MISSING_AUTH_URI.msg);
+  });
+
   it('returns safe_client_libs log path', async () => {
     const app = await createAuthenticatedTestApp();
     should(app.logPath()).be.fulfilled();
@@ -139,6 +144,16 @@ describe('Smoke test', () => {
 
   it('logs in to netowrk from existing authUri', async () => {
     should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri)).be.fulfilled();
+  });
+
+  it('throws error if fromAuthUri missing authUri argument', async () => {
+    const test = () => h.App.fromAuthUri(h.appInfo);
+    should(test).throw(errConst.MISSING_AUTH_URI.msg);
+  });
+
+  it('throws error if fromAuthUri missing appInfo argument', async () => {
+    const test = () => h.App.fromAuthUri(h.authUris.registeredUri);
+    should(test).throw(errConst.MALFORMED_APP_INFO.msg);
   });
 
   it('returns boolean for network state', async () => {

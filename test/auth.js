@@ -1,5 +1,6 @@
 const should = require('should');
 const h = require('./helpers');
+const errConst = require('../src/error_const');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
@@ -18,14 +19,49 @@ describe('auth interface', () => {
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
+  it('should build some authentication uri if missing permissions object', () => {
+    const app = h.createTestApp();
+    app.auth.genAuthUri()
+      .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  });
+
+  it('throws error if permissions object contains invalid permission', async () => {
+    const app = h.createTestApp();
+    const test = () => app.auth.genAuthUri({ _public: ['Invalid'] });
+    should(test).throw('Invalid is not a valid permission');
+  });
+
+  it('should throw error if non-standard container is requested', () => {
+    const containersPermissions = { _app: ['Read', 'Insert', 'ManagePermissions'] };
+    const result = createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true });
+    should(result).be.rejectedWith(`
+    Err(
+        Unexpected(
+                "'_app' not found in the access container"
+                    )`
+    );
+  });
+
   it('is authenticated for testing', () => {
     should(app.auth.registered).be.true();
   });
 
   it('should build some containers uri', () => {
     const app = h.createTestApp();
-    return app.auth.genContainerAuthUri({ private: ['Insert'] })
+    return app.auth.genContainerAuthUri({ _public: ['Insert'] })
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  });
+
+  it('should build some containers uri if missing containers object', () => {
+    const app = h.createTestApp();
+    app.auth.genContainerAuthUri()
+      .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  });
+
+  it('throws error if invalid container permission requested', () => {
+    const app = h.createTestApp();
+    const test = () => app.auth.genContainerAuthUri({ _public: ['Invalid'] });
+    should(test).throw('Invalid is not a valid permission');
   });
 
   it('should build some shared MD uri', () => {
@@ -34,6 +70,56 @@ describe('auth interface', () => {
     const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
     return app.auth.genShareMDataUri(perms)
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
+  });
+
+  it('should throw error for non-existent permissions array for share MD request', () => {
+    const app = h.createTestApp();
+    const test = () => app.auth.genShareMDataUri();
+    should(test).throw(errConst.MISSING_PERMS_ARRAY.msg);
+  });
+
+  it('should throw error for misspelled or non-existent share MD request permission', async () => {
+    const app = h.createTestApp();
+    const sharedMdXorName = h.createRandomXorName();
+    const perms = [{ name: sharedMdXorName, perms: ['Insert'] }];
+    const test = () => app.auth.genShareMDataUri(perms);
+    should(test).throw(errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(perms[0])));
+  });
+
+  it('should throw error for malformed share MD request permission', async () => {
+    const app = h.createTestApp();
+    const sharedMdXorName = h.createRandomXorName();
+    const perms = { type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] };
+    const test = () => app.auth.genShareMDataUri(perms);
+    should(test).throw(errConst.INVALID_PERMS_ARRAY.msg);
+  });
+
+  it('should throw error for invalid share MD request permission', async () => {
+    const app = h.createTestApp();
+    const sharedMdXorName = h.createRandomXorName();
+    const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Wrong'] }];
+    const test = () => app.auth.genShareMDataUri(perms);
+    should(test).throw(`${perms[0].perms[0]} is not a valid permission`);
+  });
+
+  it('should throw error for share MD request if type_tag is non-integer', async () => {
+    const app = h.createTestApp();
+    const sharedMdXorName = h.createRandomXorName();
+    const perms = [{ type_tag: 'non-integer', name: sharedMdXorName, perms: ['Insert'] }];
+    const test = () => app.auth.genShareMDataUri(perms);
+    should(test).throw(
+      errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(perms[0]))
+    );
+  });
+
+  it('should throw error for share MD request if name is not 32 byte buffer', async () => {
+    const app = h.createTestApp();
+    const mdName = 'not 32 byte buffer';
+    const perms = [{ type_tag: 15001, name: mdName, perms: ['Insert'] }];
+    const test = () => app.auth.genShareMDataUri(perms);
+    should(test).throw(
+      errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(perms[0]))
+    );
   });
 
   it('creates unregistered connection', () => {
@@ -89,10 +175,25 @@ describe('Access Container', () => {
       });
     })));
 
+  it('returns empty object if no containers found for app', async () => {
+    const appWithNoContainers = await createAuthenticatedTestApp();
+    const noContainers = await appWithNoContainers.auth.getContainersPermissions();
+    const isObject = noContainers.constructor === Object;
+    const emptyObject = Object.keys(noContainers).length === 0;
+    should(isObject && emptyObject).be.true();
+  });
+
   it('get own container', () => app.auth.refreshContainersPermissions().then(() =>
     app.auth.getOwnContainer().then((mdata) => {
       should(mdata).is.not.undefined();
     })));
+
+  it('throws error if root container requested but was not created', async () => {
+    const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
+    const app = await createAuthenticatedTestApp('_test_scope_2', containersPermissions, { own_container: false });
+    const test = app.auth.getOwnContainer();
+    should(test).be.rejectedWith('-1002: Container not found');
+  });
 
   it('has read access to `_public`', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.canAccessContainer('_public').then((hasAccess) => {
@@ -123,6 +224,11 @@ describe('Access Container', () => {
         should(resp.name).is.not.undefined();
         should(resp.type_tag).equal(15000);
       })));
+
+  it('throws error is no container name provided', () => app.auth.refreshContainersPermissions().then(() => {
+    const test = () => app.auth.getContainer();
+    should(test).throw(errConst.MISSING_CONTAINER_STRING.msg);
+  }));
 
   it('read info of own container', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.getOwnContainer().then((ctnr) => ctnr.getNameAndTag()).then((resp) => {

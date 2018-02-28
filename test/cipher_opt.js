@@ -1,5 +1,6 @@
 const should = require('should');
 const h = require('./helpers');
+const errConst = require('../src/error_const');
 
 describe('CipherOpt', () => {
   let app;
@@ -46,4 +47,9 @@ describe('CipherOpt', () => {
     const idData = await idReader.read();
     should(idData.toString()).equal(testString);
   }).timeout(10000);
+
+  it('throws error if key is not provided to newAsymmetric', () => {
+    const test = () => app.cipherOpt.newAsymmetric();
+    should(test).throw(errConst.MISSING_PUB_ENC_KEY.msg);
+  });
 });

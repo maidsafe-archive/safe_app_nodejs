@@ -71,11 +71,11 @@ class Writer extends helpers.NetworkObject {
   /**
   * Append the given data to immutable Data.
   *
-  * @param {String} string the data to write
+  * @param {String|Buffer} data The string or buffer to write
   * @returns {Promise<()>}
   */
-  write(string) {
-    return lib.idata_write_to_self_encryptor(this.app.connection, this.ref, string);
+  write(data) {
+    return lib.idata_write_to_self_encryptor(this.app.connection, this.ref, data);
   }
 
   /**

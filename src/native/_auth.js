@@ -143,11 +143,11 @@ const makeAppInfo = (appInfo) => {
 
 const translateXorName = (str) => {
   const b = new Buffer(str);
-  if (b.length != 32) throw Error("XOR Names _must be_ 32 bytes long.")
   return t.XOR_NAME(b);
 }
 
 const makePermissions = (perms) => {
+  if (!perms) return new ContainerPermissionsArray([]);
   return new ContainerPermissionsArray(Object.getOwnPropertyNames(perms).map((key) => {
     const permArray = helpers.makePermissionSet(perms[key]);
     return ContainerPermissions({
@@ -214,7 +214,8 @@ module.exports = {
     access_container_fetch: helpers.Promisified(null, [ref.refType(ContainerPermissions), t.usize], (args) => {
       const ptr = args[0];
       const len = args[1];
-      let arrPtr = ref.reinterpret(ptr, ContainerPermissions.size * len);
+      if(len === 0) return {};
+      const arrPtr = ref.reinterpret(ptr, ContainerPermissions.size * len);
       let arr = ContainerPermissionsArray(arrPtr)
       const contsPerms = {};
       for (let i = 0; i < len ; i++) {

@@ -24,6 +24,9 @@ const lib = require('../native/lib');
 const nativeH = require('../native/helpers');
 const types = require('../native/types');
 const { inTesting } = require('../consts');
+const { validateShareMDataPermissions } = require('../helpers');
+const errConst = require('../error_const');
+const makeError = require('../native/_error.js');
 
 const makeAppInfo = nativeH.makeAppInfo;
 const makePermissions = nativeH.makePermissions;
@@ -174,6 +177,7 @@ class AuthInterface {
   * ])
   */
   genShareMDataUri(permissions) {
+    validateShareMDataPermissions(permissions);
     const mdatasPerms = makeShareMDataPermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
     return lib.encode_share_mdata_req(new types.ShareMDataReq({
@@ -304,6 +308,10 @@ class AuthInterface {
   * @returns {Promise<MutableData>} the MutableData behind it
   */
   getContainer(name) {
+    if (!name) {
+      throw makeError(errConst.MISSING_CONTAINER_STRING.code,
+                      errConst.MISSING_CONTAINER_STRING.msg);
+    }
     return lib.access_container_get_container_mdata_info(this.app.connection, name)
       .then((data) => this.app.mutableData.wrapMdata(data));
   }
@@ -315,6 +323,7 @@ class AuthInterface {
   *          authenticated session.
   */
   loginFromURI(uri) {
+    if (!uri) throw makeError(errConst.MISSING_AUTH_URI.code, errConst.MISSING_AUTH_URI.msg);
     const sanitisedUri = removeSafeProcol(uri);
     return lib.decode_ipc_msg(sanitisedUri).then((resp) => {
       const ipcMsgType = resp[0];
@@ -355,7 +364,7 @@ class AuthInterface {
   * @returns {Promise<SAFEApp>} the locally registered/unregistered App instance
   */
   loginForTest(access, opts) {
-    if (!inTesting) throw Error('Not supported outside of Dev and Testing Environment!');
+    if (!inTesting) throw makeError(errConst.NON_DEV.code, errConst.NON_DEV.msg);
     if (access) {
       const appInfo = makeAppInfo(this.app.appInfo);
       const perms = makePermissions(access || {});

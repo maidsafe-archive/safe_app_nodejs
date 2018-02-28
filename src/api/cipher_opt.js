@@ -1,5 +1,7 @@
 const h = require('../helpers');
 const lib = require('../native/lib');
+const errConst = require('../error_const');
+const makeError = require('../native/_error.js');
 
 /**
 * Holds the reference to a Cipher Options,
@@ -39,12 +41,15 @@ class CipherOptInterface {
   }
 
   /**
-  * Create a new Asymmetric Cipher for the given key
-  * @param {EncKey} key
+  * Create a new Asymmetric Cipher for the given public encryption key
+  * @param {PubEncKey} pubEncKey
   * @returns {CipherOpt}
   */
-  newAsymmetric(key) {
-    return lib.cipher_opt_new_asymmetric(this.app.connection, key.ref)
+  newAsymmetric(pubEncKey) {
+    if (!pubEncKey) {
+      throw makeError(errConst.MISSING_PUB_ENC_KEY.code, errConst.MISSING_PUB_ENC_KEY.msg);
+    }
+    return lib.cipher_opt_new_asymmetric(this.app.connection, pubEncKey.ref)
         .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }
 

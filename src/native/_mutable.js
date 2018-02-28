@@ -5,6 +5,8 @@ const Enum = require('enum');
 const ArrayType = require('ref-array');
 const { SignPubKeyHandle } = require('./_crypto').types;
 const { types: t, helpers: h } = require('./_base');
+const errConst = require('../error_const');
+const makeError = require('./_error.js');
 
 const PromisifiedForEachCb = h.PromisifiedForEachCb;
 const Promisified = h.Promisified;
@@ -124,24 +126,25 @@ const keyValueCallBackLastEntry = (types, ...varArgs) => {
 }
 
 const translatePrivMDInput = (xorname, tag, secKey, nonce) => {
+  if(!Number.isInteger(tag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
   let name = xorname;
   if (!Buffer.isBuffer(xorname)) {
     const b = new Buffer(xorname);
-    if (b.length != t.XOR_NAME.size) throw Error(`XOR Names _must be_ ${t.XOR_NAME.size} bytes long.`)
+    if (b.length != t.XOR_NAME.size) throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size))
     name = t.XOR_NAME(b).ref().readPointer(0);
   }
 
   let sk = secKey;
   if (!Buffer.isBuffer(secKey)) {
     const b = new Buffer(secKey);
-    if (b.length != t.SYM_KEYBYTES.size) throw Error(`Secret Key _must be_ ${t.SYM_KEYBYTES.size} bytes long.`)
+    if (b.length != t.SYM_KEYBYTES.size) throw makeError(errConst.MISSING_SEC_ENC_KEY.code, errConst.MISSING_SEC_ENC_KEY.msg(t.SYM_KEYBYTES.size))
     sk = t.SYM_KEYBYTES(b).ref().readPointer(0);
   }
 
   let n = nonce;
   if (!Buffer.isBuffer(nonce)) {
     const b = new Buffer(nonce);
-    if (b.length != t.SYM_NONCEBYTES.size) throw Error(`Nonce _must be_ ${t.SYM_NONCEBYTES.size} bytes long.`)
+    if (b.length != t.SYM_NONCEBYTES.size) throw makeError(errConst.NONCE.code, errConst.NONCE.msg(t.SYM_NONCEBYTES.size))
     n = t.SYM_NONCEBYTES(b).ref().readPointer(0);
   }
 
@@ -201,9 +204,14 @@ const lastToPermissionSet = (...varArgs) => {
 }
 
 const makeMDataInfoObj = (mDataInfo) => {
-  const name = t.XOR_NAME(new Buffer(mDataInfo.name));
+  let name;
+  try {
+    name = t.XOR_NAME(new Buffer(mDataInfo.name));
+  } catch (err) {
+    throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size));
+  }
   const type_tag = mDataInfo.type_tag;
-
+  if(!Number.isInteger(type_tag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg); 
   const has_enc_info = mDataInfo.has_enc_info;
   const enc_key = t.SYM_KEYBYTES(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_key) : null);
   const enc_nonce = t.SYM_NONCEBYTES(mDataInfo.enc_nonce ? new Buffer(mDataInfo.enc_nonce) : null);

@@ -1,7 +1,7 @@
 const os = require('os');
 const path = require('path');
 
-const inTesting = (process.env.NODE_ENV || '').match(/dev|development|testing|test/) || typeof global.it === 'function';
+const inTesting = new RegExp('dev|development|testing|test').test(process.env.NODE_ENV || '');
 
 const TAG_TYPE_DNS = 15001;
 const TAG_TYPE_WWW = 15002;
