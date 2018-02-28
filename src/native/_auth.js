@@ -98,7 +98,7 @@ const AccessContInfo = Struct({
 
 const ContainerInfo = Struct({
   /// Container name as UTF-8 encoded null-terminated string.
-  name: 'string',
+  name: t.CString,
   /// Container's `MDataInfo`
   mdata_info: MDataInfo,
   /// App's permissions in the container.
@@ -166,7 +166,7 @@ const makeAccessContainerEntry = (accessContainerEntry) => {
       ManagePermissions: entry.permissions.ManagePermissions
     });
     contInfoArray[index] = new ContainerInfo({
-      name: entry.name,
+      name: ref.allocCString(entry.name),
       mdata_info: helpersForNative.makeMDataInfo(entry.mdata_info),
       permissions
     });
