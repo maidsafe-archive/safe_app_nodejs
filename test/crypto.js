@@ -45,7 +45,7 @@ describe('App Crypto Tests', () => {
 
   it('generate nonce', () => app.crypto.generateNonce().then((nonce) => {
     should(nonce).not.be.undefined();
-    should(nonce.length).be.equal(24);
+    return should(nonce.length).be.equal(24);
   }));
 });
 
@@ -61,7 +61,7 @@ describe('Encryption keys', () => {
     beforeEach(() => app.crypto.generateEncKeyPair()
           .then((kp) => {
             encKeyPair = kp;
-            should(encKeyPair).not.be.undefined();
+            return should(encKeyPair).not.be.undefined();
           }));
 
     it('generation creates appropriate keys', () => Promise.all([
@@ -104,7 +104,7 @@ describe('Encryption keys', () => {
           .then(() => kp.secEncKey.getRaw())
           .then((rawSecKeyFromRaw) => {
             should(rawSecKeyFromRaw.toString()).be.equal(rawSecKey.toString());
-            should(rawPubKeyFromRaw.toString()).be.equal(rawPubKey.toString());
+            return should(rawPubKeyFromRaw.toString()).be.equal(rawPubKey.toString());
           }));
     });
   });
@@ -157,9 +157,7 @@ describe('Encryption keys', () => {
         .then((cipher) => {
           should(cipher.toString()).not.equal(plaintext);
           return theirKeys.secEncKey.decrypt(cipher, theirHandleOnMyPubKey)
-            .then((raw) => {
-              should(plaintext).equal(raw.toString());
-            });
+            .then((raw) => should(plaintext).equal(raw.toString()));
         });
     });
 
@@ -169,14 +167,14 @@ describe('Encryption keys', () => {
         .then((cipher) => {
           should(cipher.toString()).not.equal(plaintext);
           const test = () => theirKeys.secEncKey.decrypt(cipher);
-          should(test).throw(errConst.MISSING_PUB_ENC_KEY.msg);
+          return should(test).throw(errConst.MISSING_PUB_ENC_KEY.msg);
         });
     });
 
     it('throws error if secret enc key not provided for encryption', () => {
       const plaintext = `all the ${Math.random()} places where I've been`;
       const test = () => myHandleOnTheirPubKey.encrypt(plaintext);
-      should(test).throw(errConst.MISSING_SEC_ENC_KEY.msg(32));
+      return should(test).throw(errConst.MISSING_SEC_ENC_KEY.msg(32));
     });
 
     it('encrypts and decrypts with seal', () => {
@@ -185,9 +183,16 @@ describe('Encryption keys', () => {
         .then((cipher) => {
           should(cipher.toString()).not.equal(plaintext);
           return theirKeys.decryptSealed(cipher)
-            .then((raw) => {
-              should(plaintext).equal(raw.toString());
-            });
+            .then((raw) => should(plaintext).equal(raw.toString()));
+        });
+    });
+
+    it('throws error if decryptSealed not provided with cipher', () => {
+      const plaintext = `all the ${Math.random()} places where I've been`;
+      return myHandleOnTheirPubKey.encryptSealed(plaintext)
+        .then((cipher) => {
+          should(cipher.toString()).not.equal(plaintext);
+          return should(theirKeys.decryptSealed()).be.rejectedWith('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.');
         });
     });
 
@@ -215,7 +220,7 @@ describe('Sign keys', () => {
     beforeEach(() => app.crypto.generateSignKeyPair()
           .then((kp) => {
             signKeyPair = kp;
-            should(signKeyPair).not.be.undefined();
+            return should(signKeyPair).not.be.undefined();
           }));
 
     it('generation creates appropriate keys', () => Promise.all([
@@ -286,7 +291,7 @@ describe('Sign keys', () => {
           .then(() => kp.secSignKey.getRaw())
           .then((rawSecKeyFromRaw) => {
             should(rawSecKeyFromRaw.toString()).be.equal(rawSecKey.toString());
-            should(rawPubKeyFromRaw.toString()).be.equal(rawPubKey.toString());
+            return should(rawPubKeyFromRaw.toString()).be.equal(rawPubKey.toString());
           }));
     });
   });
@@ -316,7 +321,7 @@ describe('Sign keys', () => {
         .then((r) => other.crypto.pubSignKeyFromRaw(r)
           .then((w) => {
             theirHandleOnMyPubKey = w;
-            should(theirHandleOnMyPubKey).not.be.undefined();
+            return should(theirHandleOnMyPubKey).not.be.undefined();
           })
         );
     });
