@@ -195,6 +195,16 @@ describe('Encryption keys', () => {
           return should(theirKeys.decryptSealed()).be.rejectedWith('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.');
         });
     });
+
+    it('throws error if decryptSealed not provided with cipher', () => {
+      const plaintext = `all the ${Math.random()} places where I've been`;
+      return myHandleOnTheirPubKey.encryptSealed(plaintext)
+        .then((cipher) => {
+          should(cipher.toString()).not.equal(plaintext);
+          const test = theirKeys.decryptSealed();
+          should(test).be.rejectedWith('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object');
+        });
+    });
   });
 });
 
