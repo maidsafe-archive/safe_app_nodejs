@@ -2,6 +2,7 @@ sudo: true
 dist: trusty
 os:
 - linux
+- osx
 language: node_js
 node_js:
 - '8.0.0'
@@ -37,3 +38,4 @@ deploy:
   tag: latest
   on:
     tags: true
+    condition: $TRAVIS_OS_NAME = linux
