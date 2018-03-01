@@ -26,6 +26,9 @@ describe('auth interface', () => {
       .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
+  // TODO: issue MAID-2542 has been raised for safe_app lib as it's panicking
+  // instead of returning an error code and message.
+  // We'll need to adapt the test accordingly nce that's fixed.
   it('throws error if permissions object contains invalid permission', async () => {
     const app = h.createTestApp();
     const test = () => app.auth.genAuthUri({ _public: ['Invalid'] });

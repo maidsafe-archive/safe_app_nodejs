@@ -4,7 +4,7 @@ const ArrayType = require('ref-array');
 const ref = require('ref');
 const Struct = require('ref-struct');
 const base = require('./_base.js');
-const makeFfiError = require('./_error.js');
+const makeError = require('./_error.js');
 const { helpersForNative, types: MDtypes } = require('./_mutable.js');
 
 const readMDataInfoPtr = helpersForNative.readMDataInfoPtr;
@@ -138,20 +138,20 @@ const toBuffer = (ptr, len) => {
 
 const makeAppKeys = (appKeys) => {
   return new AppKeys({
-    owner_key: t.SIGN_PUBLICKEYBYTES(new Buffer(appKeys.owner_key)),
-    enc_key: t.SYM_KEYBYTES(new Buffer(appKeys.enc_key)),
-    sign_pk: t.SIGN_PUBLICKEYBYTES(new Buffer(appKeys.sign_pk)),
-    sign_sk: t.SIGN_SECRETKEYBYTES(new Buffer(appKeys.sign_sk)),
-    enc_pk: t.ASYM_PUBLICKEYBYTES(new Buffer(appKeys.enc_pk)),
-    enc_sk: t.ASYM_SECRETKEYBYTES(new Buffer(appKeys.enc_sk)),
+    owner_key: new t.SIGN_PUBLICKEYBYTES(appKeys.owner_key),
+    enc_key: new t.SYM_KEYBYTES(appKeys.enc_key),
+    sign_pk: new t.SIGN_PUBLICKEYBYTES(appKeys.sign_pk),
+    sign_sk: new t.SIGN_SECRETKEYBYTES(appKeys.sign_sk),
+    enc_pk: new t.ASYM_PUBLICKEYBYTES(appKeys.enc_pk),
+    enc_sk: new t.ASYM_SECRETKEYBYTES(appKeys.enc_sk),
   });
 }
 
 const makeAccessContInfo = (accessContainer) => {
   return new AccessContInfo({
-    id: t.XOR_NAME(new Buffer(accessContainer.id)),
+    id: new t.XOR_NAME(accessContainer.id),
     tag: accessContainer.tag,
-    nonce: t.SYM_NONCEBYTES(new Buffer(accessContainer.nonce)),
+    nonce: new t.SYM_NONCEBYTES(accessContainer.nonce),
   });
 }
 
@@ -360,7 +360,7 @@ module.exports = {
                    }),
                    ffi.Callback('void', [t.VoidPtr, t.FfiResultPtr, 'uint32'], (user_data, resultPtr, req_id) => {
                       const result = helpers.makeFfiResult(resultPtr);
-                      reject(makeFfiError(result.error_code, result.error_description))
+                      reject(makeError(result.error_code, result.error_description))
                    }),
                    () => {}
               )

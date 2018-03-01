@@ -1,7 +1,7 @@
 const ffi = require('ffi');
 const ref = require("ref");
 const Struct = require('ref-struct');
-const makeFfiError = require('./_error.js');
+const makeError = require('./_error.js');
 const { types: t, helpers } = require('./_base');
 const { helpersForNative } = require('./_auth.js');
 const { types } = require('./_auth');
@@ -34,13 +34,13 @@ module.exports = {
       return ((app, uri) => {
         const disconnect_notifier_cb = ffi.Callback("void", [t.VoidPtr], (user_data) => app._networkStateUpdated(user_data, consts.NET_STATE_DISCONNECTED));
         return new Promise((resolve, reject) => {
-          if (!uri) reject(makeFfiError(-1, "Missing connection URI"));
+          if (!uri) reject(makeError(-1, "Missing connection URI"));
 
           const uriBuf = Buffer.isBuffer(uri) ? uri : (uri.buffer || new Buffer(uri));
           const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResultPtr, t.AppPtr], (user_data, resultPtr, appCon) => {
             const result = helpers.makeFfiResult(resultPtr);
             if (result.error_code !== 0) {
-              reject(makeFfiError(result.error_code, result.error_description));
+              reject(makeError(result.error_code, result.error_description));
               return;
             }
 
@@ -60,7 +60,7 @@ module.exports = {
           const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResultPtr, t.AppPtr], (user_data, resultPtr, appCon) => {
             const result = helpers.makeFfiResult(resultPtr);
             if (result.error_code !== 0) {
-              reject(makeFfiError(result.error_code, result.error_description));
+              reject(makeError(result.error_code, result.error_description));
               return;
             }
 

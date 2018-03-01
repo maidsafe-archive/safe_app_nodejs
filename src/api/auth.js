@@ -245,7 +245,7 @@ class AuthInterface {
   * Get the names of all containers found and the app's granted
   * permissions for each of them.
   *
-  * @return {Promise<ContainersPerms>}
+  * @return {Promise<Array>}
   */
   getContainersPermissions() {
     return lib.access_container_fetch(this.app.connection);
@@ -256,7 +256,7 @@ class AuthInterface {
   * without the need to connect to the network.
   * @arg {String} uri the IPC response string given
   *
-  * @return {Promise<ContainersPerms>}
+  * @return {Promise<Array>}
   */
   readGrantedPermissions(uri) {
     const sanitisedUri = removeSafeProcol(uri);
