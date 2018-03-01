@@ -178,7 +178,7 @@ const makeAccessContainerEntry = (accessContainerEntry) => {
   });
 }
 
-const makeAuthGranted = (authGrantedObj) => {
+const makeAuthGrantedFfiStruct = (authGrantedObj) => {
   return new AuthGranted({
     app_keys: makeAppKeys(authGrantedObj.app_keys),
     access_container: makeAccessContInfo(authGrantedObj.access_container),
@@ -288,7 +288,7 @@ module.exports = {
     AuthGranted,
   },
   helpersForNative: {
-    makeAuthGranted,
+    makeAuthGrantedFfiStruct,
   },
   functions: {
     encode_auth_req: [t.Void, [ ref.refType(AuthReq), 'pointer', 'pointer'] ],

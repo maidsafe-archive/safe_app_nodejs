@@ -34,7 +34,7 @@ module.exports = {
       return ((app, uri) => {
         const disconnect_notifier_cb = ffi.Callback("void", [t.VoidPtr], (user_data) => app._networkStateUpdated(user_data, consts.NET_STATE_DISCONNECTED));
         return new Promise((resolve, reject) => {
-          if (!uri) reject(makeError(-1, "Missing connection URI"));
+          if (!uri) reject(makeError(errConst.MISSING_AUTH_URI.code, errConst.MISSING_AUTH_URI.msg));
 
           const uriBuf = Buffer.isBuffer(uri) ? uri : (uri.buffer || new Buffer(uri));
           const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResultPtr, t.AppPtr], (user_data, resultPtr, appCon) => {
@@ -68,7 +68,7 @@ module.exports = {
             app.networkState = consts.NET_STATE_CONNECTED;
             resolve(app);
           });
-          const authGranted = helpersForNative.makeAuthGranted(authGrantedObj);
+          const authGranted = helpersForNative.makeAuthGrantedFfiStruct(authGrantedObj);
           fn.apply(fn, [app.appInfo.id, authGranted.ref(), ref.NULL, disconnect_notifier_cb, result_cb]);
         });
       });

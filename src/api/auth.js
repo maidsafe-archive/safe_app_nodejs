@@ -65,7 +65,7 @@ const addSafeAuthProtocol = (response) => {
 * This characters are not added by the authenticator, we therefore
 * don't have much choice than just make sure we remove them from here.
 */
-const removeSafeProcol = (uri) => uri.replace(/^safe-[^:]*:?[/]*/g, '');
+const removeSafeProtocol = (uri) => uri.replace(/^safe-[^:]*:?[/]*/g, '');
 
 /**
 * The AuthInterface contains all authentication related
@@ -259,12 +259,12 @@ class AuthInterface {
   * @return {Promise<Array>}
   */
   readGrantedPermissions(uri) {
-    const sanitisedUri = removeSafeProcol(uri);
+    const sanitisedUri = removeSafeProtocol(uri);
 
     return lib.decode_ipc_msg(sanitisedUri)
       .then((resp) => {
         if (resp[0] !== 'granted') {
-          throw Error('URI doesn\'t contain granted access information');
+          throw makeError(errConst.NON_AUTH_GRANTED_URI.code, errConst.NON_AUTH_GRANTED_URI.msg);
         }
         const authGranted = resp[1];
         const contsPerms = {};
@@ -351,7 +351,7 @@ class AuthInterface {
   */
   loginFromURI(uri) {
     if (!uri) throw makeError(errConst.MISSING_AUTH_URI.code, errConst.MISSING_AUTH_URI.msg);
-    const sanitisedUri = removeSafeProcol(uri);
+    const sanitisedUri = removeSafeProtocol(uri);
     return lib.decode_ipc_msg(sanitisedUri).then((resp) => {
       const ipcMsgType = resp[0];
       // we handle 'granted', 'unregistered', 'containers' and 'share_mdata' types
