@@ -117,6 +117,7 @@ describe('Encryption keys', () => {
     let theirKeys;
     let theirHandleOnMyPubKey;
 
+    /* eslint-disable func-names */
     before(function () {
       this.timeout(10000);
       return h.createAuthenticatedTestApp()

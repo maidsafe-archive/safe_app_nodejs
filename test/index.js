@@ -52,9 +52,15 @@ describe('Smoke testing', () => {
     return should.exist(console.warn);
   });
 
+  // TODO: there is an inconsistency between Linux and Windows
+  // for the `openUri` function behaviour.
+  // On Linux the promise is rejected as expected, while on Windows
+  // the promise is resolved with an undefined value. We need to research
+  // where the issue exactly is, i.e. system_uri lib or safe_app_nodejs.
+  // MAID-2553 was raised to solve this.
   it('system uri openUri function returns a promise', () => {
     const app = h.createTestApp();
-    return should(app.auth.openUri('')).be.a.Promise();
+    return should(app.auth.openUri('')).be.a.Promise(); // TODO: when isse fix add ``.and.be.rejected()` to remove the warning
   });
 
   it('system uri lib contains "mock" dir (as we\'re testing)', () => {
