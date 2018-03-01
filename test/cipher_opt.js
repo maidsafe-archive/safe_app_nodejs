@@ -17,7 +17,7 @@ describe('CipherOpt', () => {
     const idAddress = await idWriter.close(cipherOpt);
     const idReader = await app.immutableData.fetch(idAddress);
     const idData = await idReader.read();
-    should(idData.toString()).equal(testString);
+    return should(idData.toString()).equal(testString);
   });
 
   it('symmetrically encrypts data to be written to immutable structure', async () => {
@@ -28,7 +28,7 @@ describe('CipherOpt', () => {
     const idAddress = await idWriter.close(cipherOpt);
     const idReader = await app.immutableData.fetch(idAddress);
     const idData = await idReader.read();
-    should(idData.toString()).equal(testString);
+    return should(idData.toString()).equal(testString);
   });
 
   it('asymmetrically encrypts data to be written to immutable structure', async () => {
@@ -45,11 +45,11 @@ describe('CipherOpt', () => {
 
     const idReader = await differentApp.immutableData.fetch(idAddress);
     const idData = await idReader.read();
-    should(idData.toString()).equal(testString);
+    return should(idData.toString()).equal(testString);
   }).timeout(10000);
 
   it('throws error if key is not provided to newAsymmetric', () => {
     const test = () => app.cipherOpt.newAsymmetric();
-    should(test).throw(errConst.MISSING_PUB_ENC_KEY.msg);
+    return should(test).throw(errConst.MISSING_PUB_ENC_KEY.msg);
   });
 });
