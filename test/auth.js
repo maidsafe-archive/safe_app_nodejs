@@ -150,8 +150,15 @@ describe('Get granted containers permissions from auth URI', () => {
     return should(appNoConnect.auth.readGrantedPermissions(h.authUris.unregisteredUri)).be.rejectedWith('URI doesn\'t contain granted access information');
   });
 
+  it('valid auth uri but no containers permissions granted', async () => {
+    const appNoConnect = createTestApp();
+    const contsPerms = await should(appNoConnect.auth.readGrantedPermissions(
+                                      h.authUris.registeredUriNoContsPerms)).be.fulfilled();
+    should(Object.keys(contsPerms).length).be.equal(0);
+  });
+
   /* eslint-disable no-underscore-dangle */
-  it('valid uri with auth granted info', async () => {
+  it('valid auth uri with some containers permissions granted', async () => {
     const appNoConnect = createTestApp();
     const contsPerms = await appNoConnect.auth.readGrantedPermissions(h.authUris.registeredUri);
     should(Object.keys(contsPerms).length).be.equal(2);
