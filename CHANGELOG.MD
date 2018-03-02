@@ -1,15 +1,15 @@
 # safe_app nodejs Change Log
 
-## [Unreleased]
+## [0.8.0] - 2-3-2018
 ### Added
 - Tests for API modules
-- Informative error handling for cases not handled by native safe_app library
+- Informative error codes and messages for cases not handled by native safe_app library
 - Adapt code to upgrade safe_app lib to v0.6.0
 - Download safe_app lib for both live & mock routing when installing in development mode
 - Additional tests for verifying the size of keys generated from raw bytes
 - New binding `getOwnContainerName()` function to retrieve the app's own container name
 - New binding `readGrantedPermissions()` function to read the list of granted containers permissions from an auth URI without the need to connect beforehand
- 
+
 ### Fixed
 - The size of the secret encryption keys in the corresponding FFI array was corrected
 
