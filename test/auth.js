@@ -3,6 +3,7 @@ const h = require('./helpers');
 const errConst = require('../src/error_const');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
+const createTestApp = h.createTestApp;
 
 /* eslint-disable no-shadow */
 describe('auth interface', () => {
@@ -25,6 +26,9 @@ describe('auth interface', () => {
       .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
+  // TODO: issue MAID-2542 has been raised for safe_app lib as it's panicking
+  // instead of returning an error code and message.
+  // We'll need to adapt the test accordingly nce that's fixed.
   it('throws error if permissions object contains invalid permission', async () => {
     const app = h.createTestApp();
     const test = () => app.auth.genAuthUri({ _public: ['Invalid'] });
@@ -135,6 +139,50 @@ describe('auth interface', () => {
   }).timeout(20000);
 });
 
+describe('Get granted containers permissions from auth URI', () => {
+  it('invalid uri', async () => {
+    const appNoConnect = createTestApp();
+    should(appNoConnect.auth.readGrantedPermissions('safe-invalid-uri'))
+              .be.rejectedWith('Serialisation error');
+  });
+
+  it('uri with no auth granted information', async () => {
+    const appNoConnect = createTestApp();
+    return should(appNoConnect.auth.readGrantedPermissions(h.authUris.unregisteredUri))
+              .be.rejectedWith('The URI provided is not for an authenticated app with permissions information');
+  });
+
+  it('valid auth uri but no containers permissions granted', async () => {
+    const appNoConnect = createTestApp();
+    const contsPerms = await should(appNoConnect.auth.readGrantedPermissions(
+                                      h.authUris.registeredUriNoContsPerms)
+                                    ).be.fulfilled();
+    should(Object.keys(contsPerms).length).be.equal(0);
+  });
+
+  /* eslint-disable no-underscore-dangle */
+  it('valid auth uri with some containers permissions granted', async () => {
+    const appNoConnect = createTestApp();
+    const contsPerms = await appNoConnect.auth.readGrantedPermissions(h.authUris.registeredUri);
+    should(Object.keys(contsPerms).length).be.equal(2);
+    should(contsPerms._publicNames).be.eql({
+      Read: true,
+      Insert: true,
+      Delete: false,
+      Update: false,
+      ManagePermissions: false
+    });
+    const ownContainerName = 'apps/net.maidsafe.examples.mailtutorial';
+    should(contsPerms[ownContainerName]).be.eql({
+      Read: true,
+      Insert: true,
+      Delete: true,
+      Update: true,
+      ManagePermissions: true
+    });
+  });
+});
+
 describe('Access Container', () => {
   let app;
 
@@ -147,19 +195,19 @@ describe('Access Container', () => {
     should.exist(app.connection);
   });
 
-  /* eslint-disable dot-notation */
+  /* eslint-disable no-underscore-dangle */
   it('get container names', () => app.auth.refreshContainersPermissions().then(() =>
     app.auth.getContainersPermissions().then((contsPerms) => {
       // we always get a our own sandboxed container in tests
       should(Object.keys(contsPerms).length).be.equal(3);
-      should(contsPerms['_public']).be.eql({
+      should(contsPerms._public).be.eql({
         Read: true,
         Insert: false,
         Delete: false,
         Update: false,
         ManagePermissions: false
       });
-      return should(contsPerms['_publicNames']).be.eql({
+      should(contsPerms._publicNames).be.eql({
         Read: true,
         Insert: true,
         Delete: false,

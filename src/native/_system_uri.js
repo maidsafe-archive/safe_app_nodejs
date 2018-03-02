@@ -2,7 +2,7 @@ const path = require('path');
 const FFI = require('ffi');
 const ref = require('ref');
 const { SYSTEM_URI_LIB_FILENAME } = require('../consts');
-const makeFfiError = require('./_error.js');
+const makeError = require('./_error.js');
 const h = require('./helpers');
 const t = require('./types');
 const ArrayType = require('ref-array');
@@ -34,7 +34,7 @@ const _handleError = (resolve,  reject) => {
     (userData, resultPtr) => {
       const result = h.makeFfiResult(resultPtr);
       if (result.error_code !== 0) {
-        return reject(makeFfiError(result.error_code, result.error_description));
+        return reject(makeError(result.error_code, result.error_description));
       }
       return resolve();
     }

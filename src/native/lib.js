@@ -6,7 +6,7 @@ const os = require('os');
 const dir = path.dirname(__filename);
 
 const api = require('./api');
-const makeFfiError = require('./_error.js');
+const makeError = require('./_error.js');
 const errConst = require('./../error_const');
 const ffi = {};
 
@@ -41,9 +41,9 @@ ffi.init = (options) => {
         }
       //   Object.assign(mappings, mod.api);
       }
-      if (mod.helpersToExport) {
-        for (const key in mod.helpersToExport) {
-          let fn = mod.helpersToExport[key];
+      if (mod.helpersForNative) {
+        for (const key in mod.helpersForNative) {
+          let fn = mod.helpersForNative[key];
           fn.fn_name = "[mapped]" + key;
           ffi[key] = fn;
         }
@@ -55,7 +55,7 @@ ffi.init = (options) => {
     require('./_system_uri')(ffi, options);
   } catch(e) {
     console.error("ERROR: ", e)
-    throw makeFfiError(errConst.FAILED_TO_LOAD_LIB.code,
+    throw makeError(errConst.FAILED_TO_LOAD_LIB.code,
         errConst.FAILED_TO_LOAD_LIB.msg(e.toString()));
   }
 };

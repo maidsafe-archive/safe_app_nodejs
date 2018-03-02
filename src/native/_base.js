@@ -1,4 +1,4 @@
-const makeFfiError = require('./_error.js');
+const makeError = require('./_error.js');
 const errConst = require('../error_const');
 const ffi = require('ffi');
 const ref = require('ref');
@@ -42,7 +42,7 @@ const validPerms = new Enum({
 });
 
 const validatePermission = (perm) => {
-  if (!validPerms.get(perm)) throw makeFfiError(errConst.INVALID_PERM.code, errConst.INVALID_PERM.msg(perm));
+  if (!validPerms.get(perm)) throw makeError(errConst.INVALID_PERM.code, errConst.INVALID_PERM.msg(perm));
 }
 
 const FfiResult = Struct({
@@ -89,7 +89,7 @@ const callLibFn = (fn, args, types, postProcess) => {
           const result = makeFfiResult(resultPtr);
           if (result.error_code !== 0) {
             // error found, errback with translated error
-            return reject(makeFfiError(result.error_code, result.error_description));
+            return reject(makeError(result.error_code, result.error_description));
           }
 
           let res;

@@ -237,15 +237,18 @@ const readMDataInfoPtr = (mDataInfoPtr) => {
   return mDataInfoPtr[0] ? makeMDataInfoObj(mDataInfoPtr[0].deref()) : null;
 }
 
-const readPermissionSetPtr = (permSetPtr) => {
-  const permSet = permSetPtr[0].deref();
+const readPermsSet = (permsSet) => {
   return {
-    Read: permSet.Read,
-    Insert: permSet.Insert,
-    Update: permSet.Update,
-    Delete: permSet.Delete,
-    ManagePermissions: permSet.ManagePermissions
-  }
+    Read: permsSet.Read,
+    Insert: permsSet.Insert,
+    Update: permsSet.Update,
+    Delete: permsSet.Delete,
+    ManagePermissions: permsSet.ManagePermissions
+  };
+}
+
+const readPermissionSetPtr = (permSetPtr) => {
+  const permSet = readPermsSet(permSetPtr[0].deref());
 }
 
 module.exports = {
@@ -256,10 +259,12 @@ module.exports = {
     MDataEntryActionsHandle,
     UserMetadata
   },
-  helpersToExport: {
+  helpersForNative: {
+    makeMDataInfo,
     makeMDataInfoObj,
     toMDataInfo,
     readMDataInfoPtr,
+    readPermsSet,
   },
   functions: {
     mdata_info_new_private: [t.Void, [ref.refType(t.XOR_NAME), t.u64, ref.refType(t.SYM_KEYBYTES), ref.refType(t.SYM_NONCEBYTES), "pointer", "pointer"]],
@@ -323,13 +328,7 @@ module.exports = {
         let arr = UserPermissionSetArray(arrPtr);
         for (let i = 0; i < len ; i++) {
           const currUserPerm = arr[i];
-          const permSet =  {
-            Read: currUserPerm.perm_set.Read,
-            Insert: currUserPerm.perm_set.Insert,
-            Update: currUserPerm.perm_set.Update,
-            Delete: currUserPerm.perm_set.Delete,
-            ManagePermissions: currUserPerm.perm_set.ManagePermissions
-          }
+          const permSet = readPermsSet(currUserPerm.perm_set);
           userPermList.push({ signKey: currUserPerm.user_h, permSet });
         }
       }

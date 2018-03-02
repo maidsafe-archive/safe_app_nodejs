@@ -33,6 +33,7 @@ toc:
 
   - name: Types
   # - Types
+  - AccountInfo
   - EncKeyPair
   - SecEncKey
   - PubEncKey
@@ -42,7 +43,7 @@ toc:
   - CipherOpt
   - NameAndTag
   - ValueVersion
-  
+
   - name: Errors
   - ERR_NO_SUCH_DATA
   - ERR_NO_SUCH_ENTRY
@@ -65,4 +66,4 @@ toc:
   - NONCE
   - TYPE_TAG_NAN
   - SETUP_INCOMPLETE
-  - INVALID_PERM 
+  - INVALID_PERM

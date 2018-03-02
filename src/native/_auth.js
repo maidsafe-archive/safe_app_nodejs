@@ -4,10 +4,10 @@ const ArrayType = require('ref-array');
 const ref = require('ref');
 const Struct = require('ref-struct');
 const base = require('./_base.js');
-const makeFfiError = require('./_error.js');
-const { helpersToExport, types: MDtypes } = require('./_mutable.js');
+const makeError = require('./_error.js');
+const { helpersForNative, types: MDtypes } = require('./_mutable.js');
 
-const readMDataInfoPtr = helpersToExport.readMDataInfoPtr;
+const readMDataInfoPtr = helpersForNative.readMDataInfoPtr;
 const MDataInfo = MDtypes.MDataInfo;
 const MDataInfoPtr = MDtypes.MDataInfoPtr;
 const t = base.types;
@@ -98,7 +98,7 @@ const AccessContInfo = Struct({
 
 const ContainerInfo = Struct({
   /// Container name as UTF-8 encoded null-terminated string.
-  name: 'string',
+  name: t.CString,
   /// Container's `MDataInfo`
   mdata_info: MDataInfo,
   /// App's permissions in the container.
@@ -132,12 +132,115 @@ const AuthGranted = Struct({
   bootstrap_config_cap: t.usize
 });
 
-const makeAppInfo = (appInfo) => {
+const toBuffer = (ptr, len) => {
+  return new Buffer(ref.reinterpret(ptr, len, 0))
+}
+
+const makeAppKeys = (appKeys) => {
+  return new AppKeys({
+    owner_key: new t.SIGN_PUBLICKEYBYTES(appKeys.owner_key),
+    enc_key: new t.SYM_KEYBYTES(appKeys.enc_key),
+    sign_pk: new t.SIGN_PUBLICKEYBYTES(appKeys.sign_pk),
+    sign_sk: new t.SIGN_SECRETKEYBYTES(appKeys.sign_sk),
+    enc_pk: new t.ASYM_PUBLICKEYBYTES(appKeys.enc_pk),
+    enc_sk: new t.ASYM_SECRETKEYBYTES(appKeys.enc_sk),
+  });
+}
+
+const makeAccessContInfo = (accessContainer) => {
+  return new AccessContInfo({
+    id: new t.XOR_NAME(accessContainer.id),
+    tag: accessContainer.tag,
+    nonce: new t.SYM_NONCEBYTES(accessContainer.nonce),
+  });
+}
+
+const makeAccessContainerEntry = (accessContainerEntry) => {
+  const contInfoArray = new ContainerInfoArray(accessContainerEntry.length);
+  accessContainerEntry.forEach((entry, index) => {
+    const permissions = new t.PermissionSet({
+      Read: entry.permissions.Read,
+      Insert: entry.permissions.Insert,
+      Update: entry.permissions.Update,
+      Delete: entry.permissions.Delete,
+      ManagePermissions: entry.permissions.ManagePermissions
+    });
+    contInfoArray[index] = new ContainerInfo({
+      name: ref.allocCString(entry.name),
+      mdata_info: helpersForNative.makeMDataInfo(entry.mdata_info),
+      permissions
+    });
+  });
+
+  return new AccessContainerEntry({
+    containers: contInfoArray.buffer,
+    containers_len: contInfoArray.length
+  });
+}
+
+const makeAuthGrantedFfiStruct = (authGrantedObj) => {
+  return new AuthGranted({
+    app_keys: makeAppKeys(authGrantedObj.app_keys),
+    access_container: makeAccessContInfo(authGrantedObj.access_container),
+    access_container_entry: makeAccessContainerEntry(authGrantedObj.access_container_entry),
+    bootstrap_config_ptr: new Buffer(authGrantedObj.bootstrap_config),
+    bootstrap_config_len: authGrantedObj.bootstrap_config.length,
+  });
+}
+
+const readAppKeys = (appKeys) => {
+  return {
+    owner_key: new Buffer(appKeys.owner_key),
+    enc_key: new Buffer(appKeys.enc_key),
+    sign_pk: new Buffer(appKeys.sign_pk),
+    sign_sk: new Buffer(appKeys.sign_sk),
+    enc_pk: new Buffer(appKeys.enc_pk),
+    enc_sk: new Buffer(appKeys.enc_sk),
+  };
+}
+
+const readAccessContainer = (accessContainer) => {
+  return {
+    id: new Buffer(accessContainer.id),
+    tag: accessContainer.tag,
+    nonce: new Buffer(accessContainer.nonce),
+  };
+}
+
+const readAccessContainerEntry = (accessContainerEntry) => {
+  let ptr = accessContainerEntry.containers;
+  const len = accessContainerEntry.containers_len;
+  const arrPtr = ref.reinterpret(ptr, ContainerInfo.size * len);
+  const arr = ContainerInfoArray(arrPtr);
+  let containersList = [];
+  for (let i = 0; i < len ; i++) {
+    const currValue = arr[i];
+    containersList.push({
+      name: currValue.name,
+      mdata_info: helpersForNative.makeMDataInfoObj(currValue.mdata_info),
+      permissions: helpersForNative.readPermsSet(currValue.permissions),
+    });
+  }
+  return containersList;
+}
+
+const readAuthGrantedPtr = (authGrantedPtr) => {
+  const authGranted = authGrantedPtr.deref();
+  const authGrantedObj = {
+    app_keys: readAppKeys(authGranted.app_keys),
+    access_container: readAccessContainer(authGranted.access_container),
+    access_container_entry: readAccessContainerEntry(authGranted.access_container_entry),
+    bootstrap_config: toBuffer(authGranted.bootstrap_config_ptr, authGranted.bootstrap_config_len)
+  }
+  return authGrantedObj;
+}
+
+function makeAppInfo(appInfoObj) {
   return new AppExchangeInfo({
-    id: appInfo.id,
-    scope: appInfo.scope || ref.NULL,
-    name: appInfo.name,
-    vendor: appInfo.vendor
+    id: appInfoObj.id,
+    scope: appInfoObj.scope || ref.NULL,
+    name: appInfoObj.name,
+    vendor: appInfoObj.vendor
   });
 }
 
@@ -176,15 +279,16 @@ const remapEncodeValues = (resp) => {
 }
 
 module.exports = {
-  types : {
+  types: {
     // request
     AuthReq,
     ContainerReq,
     ShareMDataReq,
     // response
     AuthGranted,
-    AccessContInfo,
-    AppKeys,
+  },
+  helpersForNative: {
+    makeAuthGrantedFfiStruct,
   },
   functions: {
     encode_auth_req: [t.Void, [ ref.refType(AuthReq), 'pointer', 'pointer'] ],
@@ -216,17 +320,11 @@ module.exports = {
       const len = args[1];
       if(len === 0) return {};
       const arrPtr = ref.reinterpret(ptr, ContainerPermissions.size * len);
-      let arr = ContainerPermissionsArray(arrPtr)
+      const arr = ContainerPermissionsArray(arrPtr);
       const contsPerms = {};
       for (let i = 0; i < len ; i++) {
-        let cont = arr[i];
-        contsPerms[cont.cont_name] = {
-          Read: cont.access.Read,
-          Insert: cont.access.Insert,
-          Update: cont.access.Update,
-          Delete: cont.access.Delete,
-          ManagePermissions: cont.access.ManagePermissions
-        }
+        const cont = arr[i];
+        contsPerms[cont.cont_name] = helpersForNative.readPermsSet(cont.access);
       }
       return contsPerms;
     }),
@@ -244,11 +342,12 @@ module.exports = {
         return new Promise((resolve, reject) => {
           fn.async(str,
                    ref.NULL,
-                   ffi.Callback('void', [t.VoidPtr, 'uint32', ref.refType(AuthGranted)], (user_data, req_id, authGranted) => {
-                      resolve(["granted", authGranted])
+                   ffi.Callback('void', [t.VoidPtr, 'uint32', ref.refType(AuthGranted)], (user_data, req_id, authGrantedPtr) => {
+                      const authGrantedObj = readAuthGrantedPtr(authGrantedPtr);
+                      resolve(["granted", authGrantedObj])
                    }),
-                   ffi.Callback('void', [t.VoidPtr, 'uint32', t.u8Pointer, t.usize], (user_data, req_id, connUri, connUriLen) => {
-                      resolve(["unregistered", new Buffer(ref.reinterpret(connUri, connUriLen, 0))])
+                   ffi.Callback('void', [t.VoidPtr, 'uint32', t.u8Pointer, t.usize], function(user_data, req_id, connUriPtr, connUriLen) {
+                      resolve(["unregistered", toBuffer(connUriPtr, connUriLen)])
                    }),
                    ffi.Callback('void', [t.VoidPtr, 'uint32'], (user_data, req_id) => {
                       resolve(["containers", req_id])
@@ -261,7 +360,7 @@ module.exports = {
                    }),
                    ffi.Callback('void', [t.VoidPtr, t.FfiResultPtr, 'uint32'], (user_data, resultPtr, req_id) => {
                       const result = helpers.makeFfiResult(resultPtr);
-                      reject(makeFfiError(result.error_code, result.error_description))
+                      reject(makeError(result.error_code, result.error_description))
                    }),
                    () => {}
               )

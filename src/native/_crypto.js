@@ -37,6 +37,7 @@ const appStrToBuffer = (appPtr, str, ...varArgs) => {
 
 // Helper to create a copy of the received key bytes array as it might
 // be overwritten after the callback finishes.
+// TODO: it seems it's wrong to return the FFI struct type but just a buffer
 const copyKeyBytesArray = (type) => (res) => type(ref.reinterpret(res[0], type.size));
 
 module.exports = {

@@ -2,10 +2,10 @@ const ffi = require('ffi');
 const ref = require("ref");
 const Struct = require('ref-struct');
 const base = require('./_base');
-const { types, helpersToExport } = require('./_mutable');
+const { types, helpersForNative } = require('./_mutable');
 
 const MDataInfoPtr = types.MDataInfoPtr;
-const toMDataInfo = helpersToExport.toMDataInfo;
+const toMDataInfo = helpersForNative.toMDataInfo;
 const t = base.types;
 const h = base.helpers;
 

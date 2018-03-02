@@ -65,7 +65,7 @@ const addSafeAuthProtocol = (response) => {
 * This characters are not added by the authenticator, we therefore
 * don't have much choice than just make sure we remove them from here.
 */
-const removeSafeProcol = (uri) => uri.replace(/^safe-[^:]*:?[/]*/g, '');
+const removeSafeProtocol = (uri) => uri.replace(/^safe-[^:]*:?[/]*/g, '');
 
 /**
 * The AuthInterface contains all authentication related
@@ -244,10 +244,41 @@ class AuthInterface {
   /**
   * Get the names of all containers found and the app's granted
   * permissions for each of them.
-  * @return {Promise<[ContainersPerms]>}
+  *
+  * @return {Promise<Array>}
   */
   getContainersPermissions() {
     return lib.access_container_fetch(this.app.connection);
+  }
+
+  /**
+  * Read granted containers permissions from an auth URI
+  * without the need to connect to the network.
+  * @arg {String} uri the IPC response string given
+  *
+  * @return {Promise<Array>}
+  */
+  readGrantedPermissions(uri) {
+    const sanitisedUri = removeSafeProtocol(uri);
+
+    return lib.decode_ipc_msg(sanitisedUri)
+      .then((resp) => {
+        if (resp[0] !== 'granted') {
+          throw makeError(errConst.NON_AUTH_GRANTED_URI.code, errConst.NON_AUTH_GRANTED_URI.msg);
+        }
+        const authGranted = resp[1];
+        const contsPerms = {};
+        authGranted.access_container_entry.forEach((cont) => {
+          contsPerms[cont.name] = {
+            Read: cont.permissions.Read,
+            Insert: cont.permissions.Insert,
+            Update: cont.permissions.Update,
+            Delete: cont.permissions.Delete,
+            ManagePermissions: cont.permissions.ManagePermissions
+          };
+        });
+        return contsPerms;
+      }).catch((err) => Promise.reject(err));
   }
 
   /**
@@ -256,12 +287,8 @@ class AuthInterface {
   * @return {Promise<MutableData>}
   */
   getOwnContainer() {
-    const appInfo = this.app.appInfo;
-    let containerName = `apps/${appInfo.id}`;
-    if (appInfo.scope) {
-      containerName += `/${appInfo.scope}`;
-    }
-    let prms = this.getContainer(containerName);
+    let prms = this.app.getOwnContainerName()
+      .then((containerName) => this.getContainer(containerName));
 
     if (inTesting) {
       prms = prms.catch((err) => {
@@ -324,7 +351,7 @@ class AuthInterface {
   */
   loginFromURI(uri) {
     if (!uri) throw makeError(errConst.MISSING_AUTH_URI.code, errConst.MISSING_AUTH_URI.msg);
-    const sanitisedUri = removeSafeProcol(uri);
+    const sanitisedUri = removeSafeProtocol(uri);
     return lib.decode_ipc_msg(sanitisedUri).then((resp) => {
       const ipcMsgType = resp[0];
       // we handle 'granted', 'unregistered', 'containers' and 'share_mdata' types

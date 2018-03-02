@@ -16,7 +16,7 @@ describe('Smoke test', () => {
       null,
       networkCb
     );
-    return should.exist(app._networkStateCallBack); // eslint-disable-line no-underscore-dangle
+    should.exist(app._networkStateCallBack); // eslint-disable-line no-underscore-dangle
   });
 
   it('can take an options object to configure logging and scheme registration', () => {
@@ -34,15 +34,15 @@ describe('Smoke test', () => {
     const optionsObjectsEqual = Object.keys(app.options).every(
       (option) => app.options[option] === optionsObject[option]
     );
-    return should(optionsObjectsEqual).be.true();
+    should(optionsObjectsEqual).be.true();
   });
 
-  it('logs error if options object contains invalid configPath value', () => {
+  it('logs error if options object contains non-string configPath value', () => {
     const optionsObject = {
       log: true,
       registerScheme: false,
       joinSchemes: ['proto'],
-      configPath: { path: '/home' }
+      configPath: { path: '/home' } // this is expected to be a string
     };
     createTestAppWithOptions(
       null,
@@ -52,7 +52,7 @@ describe('Smoke test', () => {
 
   it('creates registered for testing', async () => {
     const app = await createAuthenticatedTestApp();
-    return should(app.auth.registered).be.true();
+    should(app.auth.registered).be.true();
   }).timeout(20000);
 
   it('clears object cache invalidating objects', () => createAuthenticatedTestApp()
@@ -67,7 +67,7 @@ describe('Smoke test', () => {
 
   it('validate is mock build', () => {
     const app = createTestApp();
-    return should(app.isMockBuild()).be.true();
+    should(app.isMockBuild()).be.true();
   });
 
   it('should build an alternative if there is a scope', () => {
@@ -89,7 +89,7 @@ describe('Smoke test', () => {
         scope: null
       }
     }));
-    return should(test).throw(errConst.MALFORMED_APP_INFO.msg);
+    should(test).throw(errConst.MALFORMED_APP_INFO.msg);
   });
 
   it('should throw informative error, if App properties, excepting scope, are empty', () => {
@@ -99,13 +99,19 @@ describe('Smoke test', () => {
       vendor: ' ',
       scope: null
     }));
-    return should(test).throw(errConst.MALFORMED_APP_INFO.msg);
+    should(test).throw(errConst.MALFORMED_APP_INFO.msg);
   });
 
   it('should return account information', async () => {
     const app = await createAuthenticatedTestApp();
     const accInfo = await app.getAccountInfo();
-    return should(accInfo).have.properties(['mutations_done', 'mutations_available']);
+    should(accInfo).have.properties(['mutations_done', 'mutations_available']);
+  }).timeout(10000);
+
+  it('should return own container name', async () => {
+    const app = await createAuthenticatedTestApp();
+    const contName = await app.getOwnContainerName();
+    should(contName).be.equal(`apps/${app.appInfo.id}`);
   }).timeout(10000);
 
   it('should increment/decrement mutation values', async () => {
@@ -118,7 +124,7 @@ describe('Smoke test', () => {
     await idWriter.close(cipherOpt);
     const accInfoAfter = await app.getAccountInfo();
     should(accInfoAfter.mutations_done).be.equal(accInfoBefore.mutations_done + 1);
-    return should(accInfoAfter.mutations_available).be.equal(accInfoBefore.mutations_available - 1);
+    should(accInfoAfter.mutations_available).be.equal(accInfoBefore.mutations_available - 1);
   }).timeout(20000);
 
   it('should throw error if getAccountInfo called on unregistered app', async () => {
@@ -130,7 +136,7 @@ describe('Smoke test', () => {
   it('should throw error if no auth URI is present during login', () => {
     const app = h.createTestApp();
     const test = () => app.auth.loginFromURI();
-    return should(test).throw(errConst.MISSING_AUTH_URI.msg);
+    should(test).throw(errConst.MISSING_AUTH_URI.msg);
   });
 
   it('returns safe_client_libs log path', async () => {
@@ -143,12 +149,12 @@ describe('Smoke test', () => {
 
   it('throws error if fromAuthUri missing authUri argument', async () => {
     const test = () => h.App.fromAuthUri(h.appInfo);
-    return should(test).throw(errConst.MISSING_AUTH_URI.msg);
+    should(test).throw(errConst.MISSING_AUTH_URI.msg);
   });
 
   it('throws error if fromAuthUri missing appInfo argument', async () => {
     const test = () => h.App.fromAuthUri(h.authUris.registeredUri);
-    return should(test).throw(errConst.MALFORMED_APP_INFO.msg);
+    should(test).throw(errConst.MALFORMED_APP_INFO.msg);
   });
 
   it('returns boolean for network state', async () => {
@@ -156,6 +162,6 @@ describe('Smoke test', () => {
     should(app.isNetStateInit()).be.true();
     should(app.isNetStateConnected()).be.false();
     should(app.isNetStateDisconnected()).be.false();
-    return should(app.networkState).be.equal('Init');
+    should(app.networkState).be.equal('Init');
   }).timeout(10000);
 }).timeout(15000);

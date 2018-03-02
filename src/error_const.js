@@ -153,14 +153,27 @@ module.exports = {
   },
 
   /**
+   * @name NON_AUTH_GRANTED_URI
+   * @type {object}
+   * @description Thrown when attempting extract granted access permissions
+   * from a URI which doesn't contain such information.
+   * @property {number} code 1009
+   * @property {string} msg
+   */
+  NON_AUTH_GRANTED_URI: {
+    code: 1009,
+    msg: 'The URI provided is not for an authenticated app with permissions information'
+  },
+
+  /**
    * @name INVALID_PERM
    * @type {object}
    * @description Thrown when invalid permission is requested on container.
-   * @property {number} code 1009
+   * @property {number} code 1010
    * @property {function} msg
    */
   INVALID_PERM: {
-    code: 1009,
+    code: 1010,
     msg: (perm) => `${perm} is not a valid permission`
   },
 
@@ -168,11 +181,11 @@ module.exports = {
    * @name MISSING_CONTAINER_STRING
    * @type {object}
    * @description Thrown when attempting to get a container without specifying name with a string.
-   * @property {number} code 1010
+   * @property {number} code 1011
    * @property {string} msg
    */
   MISSING_CONTAINER_STRING: {
-    code: 1010,
+    code: 1011,
     msg: 'Please provide container string argument'
   },
 
@@ -180,11 +193,11 @@ module.exports = {
    * @name NON_DEV
    * @type {object}
    * @description Thrown when functions unique to testing environment are attempted  to be used.
-   * @property {number} code 1011
+   * @property {number} code 1012
    * @property {string} msg
    */
   NON_DEV: {
-    code: 1011,
+    code: 1012,
     msg: `
     Not supported outside of Dev and Testing Environment.
     Set NODE_ENV=dev`
@@ -194,11 +207,11 @@ module.exports = {
    * @name MISSING_PUB_ENC_KEY
    * @type {object}
    * @description Thrown when public encryption key is not provided as necessary function argument.
-   * @property {number} code 1012
+   * @property {number} code 1013
    * @property {string} msg
    */
   MISSING_PUB_ENC_KEY: {
-    code: 1012,
+    code: 1013,
     msg: `
     Please provide public encryption key.
     For example:
@@ -211,11 +224,11 @@ module.exports = {
    * @name MISSING_SEC_ENC_KEY
    * @type {object}
    * @description Thrown when secret encryption key is not provided as necessary function argument.
-   * @property {number} code 1013
+   * @property {number} code 1014
    * @property {function} msg
    */
   MISSING_SEC_ENC_KEY: {
-    code: 1013,
+    code: 1014,
     msg: (size) => `
     Please provide ${size} byte secret encryption key:
     const encKeyPair = app.crypto.generateEncKeyPair();
@@ -226,11 +239,11 @@ module.exports = {
    * @name LOGGER_INIT_ERROR
    * @type {object}
    * @description Logger initialisation failed.
-   * @property {number} code 1014
+   * @property {number} code 1015
    * @property {function} msg
    */
   LOGGER_INIT_ERROR: {
-    code: 1014,
+    code: 1015,
     msg: (e) => `Logger initialisation failed. Reason: ${e}`
   },
 
@@ -238,11 +251,11 @@ module.exports = {
    * @name CONFIG_PATH_ERROR
    * @type {object}
    * @description Informs you when config search path has failed to set, with specific reason.
-   * @property {number} code 1015
+   * @property {number} code 1016
    * @property {function} msg
    */
   CONFIG_PATH_ERROR: {
-    code: 1015,
+    code: 1016,
     msg: (e) => `Failed to set additional config search path. Reason: ${e}`
   },
 
@@ -251,11 +264,11 @@ module.exports = {
    * @type {object}
    * @description Custom name used to create public or private
    * MutableData must be 32 bytes in length.
-   * @property {number} code 1016
+   * @property {number} code 1017
    * @property {function} msg
    */
   XOR_NAME: {
-    code: 1016,
+    code: 1017,
     msg: (size) => `Name _must be_ provided and ${size} bytes long.`
   },
 
@@ -264,11 +277,11 @@ module.exports = {
    * @type {object}
    * @description Any string or buffer provided to private MutableData
    * that is not 24 bytes in length will throw error.
-   * @property {number} code 1017
+   * @property {number} code 1018
    * @property {function} msg
    */
   NONCE: {
-    code: 1017,
+    code: 1018,
     msg: (size) => `Nonce _must be_ provided and ${size} bytes long.`
   },
 
@@ -276,11 +289,11 @@ module.exports = {
    * @name TYPE_TAG_NAN
    * @type {object}
    * @description Tag argument when creating private or public MutableData must be a number.
-   * @property {number} code 1018
+   * @property {number} code 1019
    * @property {string} msg
    */
   TYPE_TAG_NAN: {
-    code: 1018,
-    msg: 'Type tag provided must be an integer'
+    code: 1019,
+    msg: 'Type tag provided _must be_ an integer'
   }
 };
