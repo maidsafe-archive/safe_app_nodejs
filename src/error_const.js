@@ -162,7 +162,7 @@ module.exports = {
    */
   NON_AUTH_GRANTED_URI: {
     code: 1009,
-    msg: 'URI doesn\'t contain granted access information'
+    msg: 'The URI provided is not for an authenticated app with permissions information'
   },
 
   /**

@@ -142,18 +142,21 @@ describe('auth interface', () => {
 describe('Get granted containers permissions from auth URI', () => {
   it('invalid uri', async () => {
     const appNoConnect = createTestApp();
-    should(appNoConnect.auth.readGrantedPermissions('safe-invalid-uri')).be.rejectedWith('Serialisation error');
+    should(appNoConnect.auth.readGrantedPermissions('safe-invalid-uri'))
+              .be.rejectedWith('Serialisation error');
   });
 
   it('uri with no auth granted information', async () => {
     const appNoConnect = createTestApp();
-    return should(appNoConnect.auth.readGrantedPermissions(h.authUris.unregisteredUri)).be.rejectedWith('URI doesn\'t contain granted access information');
+    return should(appNoConnect.auth.readGrantedPermissions(h.authUris.unregisteredUri))
+              .be.rejectedWith('The URI provided is not for an authenticated app with permissions information');
   });
 
   it('valid auth uri but no containers permissions granted', async () => {
     const appNoConnect = createTestApp();
     const contsPerms = await should(appNoConnect.auth.readGrantedPermissions(
-                                      h.authUris.registeredUriNoContsPerms)).be.fulfilled();
+                                      h.authUris.registeredUriNoContsPerms)
+                                    ).be.fulfilled();
     should(Object.keys(contsPerms).length).be.equal(0);
   });
 
