@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@maidsafe/safe-node-app 0.7.0 | Documentation</title>
+  <title>@maidsafe/safe-node-app 0.8.0 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@maidsafe/safe-node-app</h3>
-          <div class='mb1'><code>0.7.0</code></div>
+          <div class='mb1'><code>0.8.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -197,6 +197,18 @@
                       </a></li>
                       
                       <li><a
+                        href='#safeappgetaccountinfo'
+                        class='regular pre-open'>
+                        #getAccountInfo
+                      </a></li>
+                      
+                      <li><a
+                        href='#safeappgetowncontainername'
+                        class='regular pre-open'>
+                        #getOwnContainerName
+                      </a></li>
+                      
+                      <li><a
                         href='#safeappreconnect'
                         class='regular pre-open'>
                         #reconnect
@@ -376,6 +388,12 @@
                         href='#authinterfacegetcontainerspermissions'
                         class='regular pre-open'>
                         #getContainersPermissions
+                      </a></li>
+                      
+                      <li><a
+                        href='#authinterfacereadgrantedpermissions'
+                        class='regular pre-open'>
+                        #readGrantedPermissions
                       </a></li>
                       
                       <li><a
@@ -1078,6 +1096,16 @@
               
                 
                 <li><a
+                  href='#accountinfo'
+                  class="">
+                  AccountInfo
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#enckeypair'
                   class=" toggle-sibling">
                   EncKeyPair
@@ -1336,6 +1364,236 @@
               
                 
                 <li><a
+                  href='#errors'
+                  class="h5 bold black caps">
+                  Errors
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#err_no_such_data'
+                  class="">
+                  ERR_NO_SUCH_DATA
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#err_no_such_entry'
+                  class="">
+                  ERR_NO_SUCH_ENTRY
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#err_file_not_found'
+                  class="">
+                  ERR_FILE_NOT_FOUND
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#failed_to_load_lib'
+                  class="">
+                  FAILED_TO_LOAD_LIB
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#malformed_app_info'
+                  class="">
+                  MALFORMED_APP_INFO
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#missing_perms_array'
+                  class="">
+                  MISSING_PERMS_ARRAY
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#invalid_share_md_permission'
+                  class="">
+                  INVALID_SHARE_MD_PERMISSION
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#invalid_perms_array'
+                  class="">
+                  INVALID_PERMS_ARRAY
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#missing_url'
+                  class="">
+                  MISSING_URL
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#invalid_url'
+                  class="">
+                  INVALID_URL
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#missing_auth_uri'
+                  class="">
+                  MISSING_AUTH_URI
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#missing_container_string'
+                  class="">
+                  MISSING_CONTAINER_STRING
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#non_dev'
+                  class="">
+                  NON_DEV
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#missing_pub_enc_key'
+                  class="">
+                  MISSING_PUB_ENC_KEY
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#missing_sec_enc_key'
+                  class="">
+                  MISSING_SEC_ENC_KEY
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#logger_init_error'
+                  class="">
+                  LOGGER_INIT_ERROR
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#config_path_error'
+                  class="">
+                  CONFIG_PATH_ERROR
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#xor_name'
+                  class="">
+                  XOR_NAME
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#nonce'
+                  class="">
+                  NONCE
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#type_tag_nan'
+                  class="">
+                  TYPE_TAG_NAN
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setup_incomplete'
+                  class="">
+                  SETUP_INCOMPLETE
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#invalid_perm'
+                  class="">
+                  INVALID_PERM
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#emulation'
                   class="">
                   Emulation
@@ -1349,6 +1607,16 @@
                   href='#webfetchoptions'
                   class="">
                   WebFetchOptions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#non_auth_granted_uri'
+                  class="">
+                  NON_AUTH_GRANTED_URI
                   
                 </a>
                 
@@ -1389,7 +1657,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/index.js#L59-L66'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/index.js#L59-L66'>
       <span>src/index.js</span>
       </a>
     
@@ -1503,7 +1771,7 @@ prms.then(<span class="hljs-function"><span class="hljs-params">app</span> =&gt;
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/index.js#L80-L81'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/index.js#L80-L81'>
       <span>src/index.js</span>
       </a>
     
@@ -1608,7 +1876,7 @@ to receive network state updates
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/index.js#L59-L66'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/index.js#L59-L66'>
       <span>src/index.js</span>
       </a>
     
@@ -1716,7 +1984,7 @@ to use when registering the URI with the system.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/index.js#L59-L66'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/index.js#L59-L66'>
       <span>src/index.js</span>
       </a>
     
@@ -1829,7 +2097,7 @@ additional search path.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/consts.js#L70-L80'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/consts.js#L85-L95'>
       <span>src/consts.js</span>
       </a>
     
@@ -2071,7 +2339,7 @@ signal that it should be committed to the network with an empty set of permissio
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L17-L460'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L17-L501'>
       <span>src/app.js</span>
       </a>
     
@@ -2158,7 +2426,7 @@ this session.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L407-L410'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L439-L442'>
       <span>src/app.js</span>
       </a>
     
@@ -2280,7 +2548,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L71-L73'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L55-L57'>
       <span>src/app.js</span>
       </a>
     
@@ -2343,7 +2611,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L79-L81'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L63-L65'>
       <span>src/app.js</span>
       </a>
     
@@ -2406,7 +2674,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L87-L89'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L71-L73'>
       <span>src/app.js</span>
       </a>
     
@@ -2469,7 +2737,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L95-L97'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L79-L81'>
       <span>src/app.js</span>
       </a>
     
@@ -2532,7 +2800,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L103-L105'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L87-L89'>
       <span>src/app.js</span>
       </a>
     
@@ -2595,7 +2863,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L151-L278'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L167-L294'>
       <span>src/app.js</span>
       </a>
     
@@ -2683,7 +2951,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L301-L304'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L317-L322'>
       <span>src/app.js</span>
       </a>
     
@@ -2746,7 +3014,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L321-L339'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L339-L357'>
       <span>src/app.js</span>
       </a>
     
@@ -2809,7 +3077,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L348-L350'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L366-L368'>
       <span>src/app.js</span>
       </a>
     
@@ -2874,7 +3142,7 @@ connection made with the network yet.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L357-L359'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L375-L377'>
       <span>src/app.js</span>
       </a>
     
@@ -2937,7 +3205,7 @@ connection made with the network yet.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L366-L368'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L384-L386'>
       <span>src/app.js</span>
       </a>
     
@@ -3000,7 +3268,7 @@ connection made with the network yet.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L373-L375'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L391-L393'>
       <span>src/app.js</span>
       </a>
     
@@ -3055,7 +3323,7 @@ connection made with the network yet.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L386-L392'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L404-L410'>
       <span>src/app.js</span>
       </a>
     
@@ -3121,6 +3389,132 @@ the path of where the safe_core log file is located.</p>
       </div>
     </div>
   
+    <div class='border-bottom' id='safeappgetaccountinfo'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getAccountInfo()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L426-L428'>
+      <span>src/app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns account information, e.g. number of mutations done and available.</p>
+
+
+  <div class='pre p1 fill-light mt0'>getAccountInfo(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#accountinfo">AccountInfo</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#accountinfo">AccountInfo</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='safeappgetowncontainername'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getOwnContainerName()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L449-L451'>
+      <span>src/app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns the name of the app's own container.</p>
+
+
+  <div class='pre p1 fill-light mt0'>getOwnContainerName(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='safeappreconnect'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -3135,7 +3529,7 @@ the path of where the safe_core log file is located.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L431-L434'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L472-L475'>
       <span>src/app.js</span>
       </a>
     
@@ -3191,7 +3585,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L450-L452'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L491-L493'>
       <span>src/app.js</span>
       </a>
     
@@ -3246,7 +3640,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L457-L459'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L498-L500'>
       <span>src/app.js</span>
       </a>
     
@@ -3307,7 +3701,7 @@ Must be invoked when the client decides to connect back after the connection was
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L273-L409'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L289-L425'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3372,7 +3766,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L288-L290'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L304-L306'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3448,7 +3842,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L299-L302'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L315-L318'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3511,7 +3905,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L308-L311'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L324-L327'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3574,7 +3968,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L317-L323'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L333-L339'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3637,7 +4031,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L329-L335'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L345-L351'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3700,7 +4094,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L341-L347'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L357-L363'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3784,7 +4178,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L353-L359'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L369-L375'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3868,7 +4262,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L366-L369'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L382-L385'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3945,7 +4339,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L376-L379'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L392-L395'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -4022,7 +4416,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L386-L389'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L402-L405'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -4099,7 +4493,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L396-L399'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L412-L415'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -4176,7 +4570,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L406-L408'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L422-L424'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -4245,7 +4639,7 @@ Must be invoked when the client decides to connect back after the connection was
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L75-L369'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L78-L420'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4313,7 +4707,7 @@ authentitcation protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L121-L123'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L124-L126'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4376,7 +4770,7 @@ authentitcation protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L143-L154'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L146-L157'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4504,7 +4898,7 @@ app.auth.genAuthUri({
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L176-L185'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L179-L189'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4600,7 +4994,7 @@ app.auth.genShareMDataUri([
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L195-L198'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L199-L202'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4671,7 +5065,7 @@ app.auth.genConnUri()</pre>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L204-L206'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L208-L210'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4739,7 +5133,7 @@ app.auth.genConnUri()</pre>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L219-L229'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L223-L233'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4825,7 +5219,7 @@ app.auth.genContainerAuthUri(
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L236-L238'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L240-L242'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4889,7 +5283,7 @@ connected or received a response from the authenticator in the IPC protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L245-L247'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L250-L252'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4900,7 +5294,7 @@ connected or received a response from the authenticator in the IPC protocol.</p>
 permissions for each of them.</p>
 
 
-  <div class='pre p1 fill-light mt0'>getContainersPermissions(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;[ContainersPerms]></div>
+  <div class='pre p1 fill-light mt0'>getContainersPermissions(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>></div>
   
   
 
@@ -4918,7 +5312,85 @@ permissions for each of them.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;[ContainersPerms]></code>:
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='authinterfacereadgrantedpermissions'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>readGrantedPermissions(uri)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L261-L282'>
+      <span>src/api/auth.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Read granted containers permissions from an auth URI
+without the need to connect to the network.</p>
+
+
+  <div class='pre p1 fill-light mt0'>readGrantedPermissions(uri: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>uri</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the IPC response string given
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>></code>:
         
 
       
@@ -4953,7 +5425,7 @@ permissions for each of them.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L254-L275'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L289-L306'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5017,7 +5489,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L283-L299'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L314-L330'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5103,7 +5575,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L306-L309'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L337-L344'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5181,7 +5653,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L317-L348'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L352-L384'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5249,7 +5721,7 @@ authenticated session.
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>loginForTest(access)</span>
+            <span class='code strong strong truncate'>loginForTest(access, opts)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -5259,7 +5731,7 @@ authenticated session.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/auth.js#L357-L368'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L393-L419'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5271,7 +5743,7 @@ authenticated session.
 a local unregistered App if permissions is <code>null</code>.</p>
 
 
-  <div class='pre p1 fill-light mt0'>loginForTest(access: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
+  <div class='pre p1 fill-light mt0'>loginForTest(access: any, opts: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
   
   
 
@@ -5289,6 +5761,14 @@ a local unregistered App if permissions is <code>null</code>.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>access</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>opts</span> <code class='quiet'>(any)</code>
 	    
           </div>
           
@@ -5343,7 +5823,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/cipher_opt.js#L17-L51'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/cipher_opt.js#L19-L56'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -5407,7 +5887,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/cipher_opt.js#L27-L30'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/cipher_opt.js#L29-L32'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -5470,7 +5950,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/cipher_opt.js#L36-L39'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/cipher_opt.js#L38-L41'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -5523,7 +6003,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>newAsymmetric(key)</span>
+            <span class='code strong strong truncate'>newAsymmetric(pubEncKey)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -5533,17 +6013,17 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/cipher_opt.js#L46-L49'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/cipher_opt.js#L48-L54'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
   </div>
   
 
-  <p>Create a new Asymmetric Cipher for the given key</p>
+  <p>Create a new Asymmetric Cipher for the given public encryption key</p>
 
 
-  <div class='pre p1 fill-light mt0'>newAsymmetric(key: EncKey): <a href="#cipheropt">CipherOpt</a></div>
+  <div class='pre p1 fill-light mt0'>newAsymmetric(pubEncKey: <a href="#pubenckey">PubEncKey</a>): <a href="#cipheropt">CipherOpt</a></div>
   
   
 
@@ -5560,7 +6040,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>key</span> <code class='quiet'>(EncKey)</code>
+            <span class='code bold'>pubEncKey</span> <code class='quiet'>(<a href="#pubenckey">PubEncKey</a>)</code>
 	    
           </div>
           
@@ -5615,7 +6095,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/immutable.js#L111-L139'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L111-L139'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5680,7 +6160,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/immutable.js#L125-L128'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L125-L128'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5743,7 +6223,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/immutable.js#L135-L138'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L135-L138'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -5826,7 +6306,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L539-L649'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L541-L654'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5907,7 +6387,7 @@ app.mutableData.newRandomPublic(<span class="hljs-number">15001</span>)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L555-L558'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L557-L563'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -5985,7 +6465,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L567-L570'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L572-L578'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6063,7 +6543,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L581-L584'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L589-L592'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6165,7 +6645,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L593-L599'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L601-L604'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6251,7 +6731,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L605-L608'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L610-L613'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6314,7 +6794,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L614-L617'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L619-L622'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6377,7 +6857,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L623-L626'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L628-L631'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6440,7 +6920,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L632-L635'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L637-L640'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6537,7 +7017,7 @@ access.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/immutable.js#L8-L51'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L8-L51'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6595,7 +7075,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/immutable.js#L16-L30'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L16-L30'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6701,7 +7181,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/immutable.js#L36-L38'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L36-L38'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6770,7 +7250,7 @@ access.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/immutable.js#L69-L104'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L69-L104'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6834,7 +7314,7 @@ app.immutableData.create()
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>write(string)</span>
+            <span class='code strong strong truncate'>write(data)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -6844,7 +7324,7 @@ app.immutableData.create()
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/immutable.js#L77-L79'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L77-L79'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6854,7 +7334,7 @@ app.immutableData.create()
   <p>Append the given data to immutable Data.</p>
 
 
-  <div class='pre p1 fill-light mt0'>write(string: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></div>
+  <div class='pre p1 fill-light mt0'>write(data: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>)): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;()></div>
   
   
 
@@ -6871,8 +7351,8 @@ app.immutableData.create()
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>string</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    the data to write
+            <span class='code bold'>data</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>))</code>
+	    The string or buffer to write
 
           </div>
           
@@ -6921,7 +7401,7 @@ app.immutableData.create()
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/immutable.js#L87-L91'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L87-L91'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -7019,7 +7499,7 @@ app.immutableData.create()
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L241-L520'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L243-L522'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7077,7 +7557,7 @@ app.immutableData.create()
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L266-L292'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L268-L294'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7190,7 +7670,7 @@ create the data with
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L309-L320'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L311-L322'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7283,7 +7763,7 @@ decision to either allow or deny such a request based on it.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L330-L332'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L332-L334'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7362,7 +7842,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L342-L344'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L344-L346'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7441,7 +7921,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L353-L355'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L355-L357'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7519,7 +7999,7 @@ contained in a Private MutableData.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L363-L368'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L365-L370'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7583,7 +8063,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L375-L377'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L377-L379'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7646,7 +8126,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L384-L386'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L386-L388'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7722,7 +8202,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L396-L401'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L398-L403'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7808,7 +8288,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L408-L411'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L410-L413'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7871,7 +8351,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L417-L419'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L419-L421'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7934,7 +8414,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L425-L427'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L427-L429'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7997,7 +8477,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L433-L436'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L435-L438'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8060,7 +8540,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L444-L449'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L446-L451'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8139,7 +8619,7 @@ a specifc key</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L459-L466'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L461-L468'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8228,7 +8708,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L477-L485'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L479-L487'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8326,7 +8806,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L492-L494'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L494-L496'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8403,7 +8883,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L500-L502'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L502-L504'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8466,7 +8946,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L508-L510'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L510-L512'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8529,7 +9009,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L517-L519'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L519-L521'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8612,7 +9092,7 @@ actually asking for the right one
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L161-L223'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L163-L225'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8670,7 +9150,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L167-L169'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L169-L171'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8733,7 +9213,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L187-L189'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L189-L191'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8810,7 +9290,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L196-L198'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L198-L200'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8887,7 +9367,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L210-L212'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L212-L214'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8975,7 +9455,7 @@ permissions to edit that mutable data.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L218-L221'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L220-L223'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9044,7 +9524,7 @@ permissions to edit that mutable data.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L91-L155'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L93-L157'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9119,7 +9599,7 @@ app.mutableData.newPublic(somename, tagtype)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L111-L118'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L113-L120'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9205,7 +9685,7 @@ app.mutableData.newPublic(somename, tagtype)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L128-L135'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L130-L137'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9292,7 +9772,7 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L146-L154'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L148-L156'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9394,7 +9874,7 @@ actually asking for the right version
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L11-L72'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L13-L74'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9452,7 +9932,7 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L17-L19'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L19-L21'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9515,7 +9995,7 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L36-L40'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L38-L42'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9593,7 +10073,7 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L50-L57'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L52-L59'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9682,7 +10162,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L63-L70'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L65-L72'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9766,7 +10246,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L170-L291'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L175-L296'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9830,7 +10310,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L186-L192'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L191-L197'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9907,7 +10387,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L199-L202'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L204-L207'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -9984,7 +10464,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L211-L220'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L216-L225'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10071,7 +10551,7 @@ to the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L230-L235'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L235-L240'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10167,7 +10647,7 @@ are overwriting the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L243-L245'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L248-L250'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10251,7 +10731,7 @@ are overwriting the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L264-L290'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L269-L295'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10346,7 +10826,7 @@ are overwriting the right one
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L14-L165'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L16-L170'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10428,7 +10908,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L67-L69'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L69-L71'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10491,7 +10971,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L75-L77'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L77-L79'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10554,7 +11034,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L83-L85'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L85-L87'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10617,7 +11097,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L91-L100'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L93-L102'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10680,7 +11160,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L111-L116'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L113-L119'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10767,7 +11247,7 @@ exposed by the safe-app-nodejs package.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L123-L128'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L126-L132'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10851,7 +11331,7 @@ exposed by the safe-app-nodejs package.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L134-L146'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L138-L151'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10914,7 +11394,7 @@ exposed by the safe-app-nodejs package.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/nfs.js#L152-L154'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L157-L159'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10993,12 +11473,92 @@ exposed by the safe-app-nodejs package.</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='accountinfo'>
+      AccountInfo
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L426-L428'>
+      <span>src/app.js</span>
+      </a>
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>AccountInfo</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>mutations_done</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    number of mutations performed
+with this account
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>mutations_available</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    number of remaining mutations
+allowed for this account
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='enckeypair'>
       EncKeyPair
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L135-L170'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L151-L186'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11078,7 +11638,7 @@ exposed by the safe-app-nodejs package.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L148-L150'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L164-L166'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11141,7 +11701,7 @@ exposed by the safe-app-nodejs package.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L157-L159'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L173-L175'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11204,7 +11764,7 @@ exposed by the safe-app-nodejs package.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L166-L169'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L182-L185'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11287,7 +11847,7 @@ this encryption key pair</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L86-L129'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L91-L145'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11345,7 +11905,7 @@ this encryption key pair</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L92-L94'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L97-L99'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11408,7 +11968,7 @@ this encryption key pair</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L114-L116'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L123-L128'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11417,6 +11977,9 @@ this encryption key pair</p>
 
   <p>Decrypt the given cipher text (buffer or string) using this secret
 encryption key and the given public key</p>
+<p>An example use case for this method is if you have received messages from multiple
+senders, you may fetch your secret key once, then iterate over the messages along
+with passing associated public encryption key to decrypt each message.</p>
 
 
   <div class='pre p1 fill-light mt0'>decrypt(cipher: <a href="https://nodejs.org/api/buffer.html">Buffer</a>, publicEncKey: <a href="#pubenckey">PubEncKey</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
@@ -11495,7 +12058,7 @@ encryption key and the given public key</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L126-L128'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L142-L144'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11504,6 +12067,9 @@ encryption key and the given public key</p>
 
   <p>Encrypt the input (buffer or string) using this secret encryption key
 and the recipient's public key</p>
+<p>An example use case for this method is if you have multiple intended recipients.
+You can fetch your secret key once, then use this method to iterate over
+recipient public encryption keys, encrypting data for each key.</p>
 
 
   <div class='pre p1 fill-light mt0'>encrypt(data: <a href="https://nodejs.org/api/buffer.html">Buffer</a>, recipientPubKey: <a href="#pubenckey">PubEncKey</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://nodejs.org/api/buffer.html">Buffer</a>></div>
@@ -11588,7 +12154,7 @@ and the recipient's public key</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L29-L80'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L31-L85'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11646,7 +12212,7 @@ and the recipient's public key</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L35-L37'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L37-L39'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11709,7 +12275,7 @@ and the recipient's public key</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L53-L55'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L55-L57'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11785,7 +12351,7 @@ and the recipient's public key</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L65-L67'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L67-L69'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11872,7 +12438,7 @@ encryption key and the given secret key</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L77-L79'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L79-L84'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11965,7 +12531,7 @@ and the given secret key.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L241-L266'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L257-L282'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12045,7 +12611,7 @@ and the given secret key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L254-L256'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L270-L272'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12108,7 +12674,7 @@ and the given secret key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L263-L265'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L279-L281'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12177,7 +12743,7 @@ and the given secret key.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L208-L236'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L224-L252'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12235,7 +12801,7 @@ and the given secret key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L214-L216'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L230-L232'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12298,7 +12864,7 @@ and the given secret key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L233-L235'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L249-L251'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12381,7 +12947,7 @@ and the given secret key.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L175-L203'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L191-L219'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12439,7 +13005,7 @@ and the given secret key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L181-L183'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L197-L199'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12502,7 +13068,7 @@ and the given secret key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/crypto.js#L200-L202'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L216-L218'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12585,7 +13151,7 @@ and the given secret key.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/cipher_opt.js#L8-L12'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/cipher_opt.js#L10-L14'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -12644,7 +13210,7 @@ either PlainText, Symmetric or Asymmetric</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L241-L520'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L243-L522'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -12722,7 +13288,7 @@ either PlainText, Symmetric or Asymmetric</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/mutable.js#L241-L520'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L243-L522'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -12791,6 +13357,1541 @@ Holds the informatation of a value of a MutableData
           
         
           
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='errors' class='mt0'>
+    Errors
+  </h2>
+
+  
+    
+
+  
+</section>
+</div>
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='err_no_such_data'>
+      ERR_NO_SUCH_DATA
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L10-L13'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown natively when data not found on network.</p>
+
+
+  <div class='pre p1 fill-light mt0'>ERR_NO_SUCH_DATA</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : -103
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='err_no_such_entry'>
+      ERR_NO_SUCH_ENTRY
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L22-L25'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown natively when entry on found in MutableData.</p>
+
+
+  <div class='pre p1 fill-light mt0'>ERR_NO_SUCH_ENTRY</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : -106
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='err_file_not_found'>
+      ERR_FILE_NOT_FOUND
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L34-L37'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown natively when NFS-style file not found.</p>
+
+
+  <div class='pre p1 fill-light mt0'>ERR_FILE_NOT_FOUND</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : -301
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='failed_to_load_lib'>
+      FAILED_TO_LOAD_LIB
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L46-L49'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown when a native library fails to load and which library.</p>
+
+
+  <div class='pre p1 fill-light mt0'>FAILED_TO_LOAD_LIB</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1000
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='malformed_app_info'>
+      MALFORMED_APP_INFO
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L70-L81'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Informs when app info provided during initialisation is invalid.</p>
+
+
+  <div class='pre p1 fill-light mt0'>MALFORMED_APP_INFO</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1002
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='missing_perms_array'>
+      MISSING_PERMS_ARRAY
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L90-L93'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Argument should be an array object.</p>
+
+
+  <div class='pre p1 fill-light mt0'>MISSING_PERMS_ARRAY</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1003
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='invalid_share_md_permission'>
+      INVALID_SHARE_MD_PERMISSION
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L102-L105'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Informs of a specific object in a share MData permissions array that is malformed.</p>
+
+
+  <div class='pre p1 fill-light mt0'>INVALID_SHARE_MD_PERMISSION</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1004
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='invalid_perms_array'>
+      INVALID_PERMS_ARRAY
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L114-L117'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown when share MD permissions is not an array.</p>
+
+
+  <div class='pre p1 fill-light mt0'>INVALID_PERMS_ARRAY</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1005
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='missing_url'>
+      MISSING_URL
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L126-L129'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Please provide URL</p>
+
+
+  <div class='pre p1 fill-light mt0'>MISSING_URL</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1006
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='invalid_url'>
+      INVALID_URL
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L138-L141'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Please provide URL in string format.</p>
+
+
+  <div class='pre p1 fill-light mt0'>INVALID_URL</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1007
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='missing_auth_uri'>
+      MISSING_AUTH_URI
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L150-L153'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown when attempting to connect without authorisation URI.</p>
+
+
+  <div class='pre p1 fill-light mt0'>MISSING_AUTH_URI</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1008
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='missing_container_string'>
+      MISSING_CONTAINER_STRING
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L187-L190'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown when attempting to get a container without specifying name with a string.</p>
+
+
+  <div class='pre p1 fill-light mt0'>MISSING_CONTAINER_STRING</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1011
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='non_dev'>
+      NON_DEV
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L199-L204'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown when functions unique to testing environment are attempted  to be used.</p>
+
+
+  <div class='pre p1 fill-light mt0'>NON_DEV</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1012
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='missing_pub_enc_key'>
+      MISSING_PUB_ENC_KEY
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L213-L221'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown when public encryption key is not provided as necessary function argument.</p>
+
+
+  <div class='pre p1 fill-light mt0'>MISSING_PUB_ENC_KEY</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1013
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='missing_sec_enc_key'>
+      MISSING_SEC_ENC_KEY
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L230-L236'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown when secret encryption key is not provided as necessary function argument.</p>
+
+
+  <div class='pre p1 fill-light mt0'>MISSING_SEC_ENC_KEY</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1014
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='logger_init_error'>
+      LOGGER_INIT_ERROR
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L245-L248'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Logger initialisation failed.</p>
+
+
+  <div class='pre p1 fill-light mt0'>LOGGER_INIT_ERROR</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1015
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='config_path_error'>
+      CONFIG_PATH_ERROR
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L257-L260'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Informs you when config search path has failed to set, with specific reason.</p>
+
+
+  <div class='pre p1 fill-light mt0'>CONFIG_PATH_ERROR</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1016
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='xor_name'>
+      XOR_NAME
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L270-L273'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Custom name used to create public or private
+MutableData must be 32 bytes in length.</p>
+
+
+  <div class='pre p1 fill-light mt0'>XOR_NAME</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1017
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='nonce'>
+      NONCE
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L283-L286'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Any string or buffer provided to private MutableData
+that is not 24 bytes in length will throw error.</p>
+
+
+  <div class='pre p1 fill-light mt0'>NONCE</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1018
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='type_tag_nan'>
+      TYPE_TAG_NAN
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L295-L298'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Tag argument when creating private or public MutableData must be a number.</p>
+
+
+  <div class='pre p1 fill-light mt0'>TYPE_TAG_NAN</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1019
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setup_incomplete'>
+      SETUP_INCOMPLETE
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L58-L61'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Informs that app is not yet connected to network.</p>
+
+
+  <div class='pre p1 fill-light mt0'>SETUP_INCOMPLETE</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1001
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='invalid_perm'>
+      INVALID_PERM
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L175-L178'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown when invalid permission is requested on container.</p>
+
+
+  <div class='pre p1 fill-light mt0'>INVALID_PERM</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1010
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
             <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
@@ -12801,7 +14902,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/api/emulations/index.js#L8-L10'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/index.js#L8-L10'>
       <span>src/api/emulations/index.js</span>
       </a>
     
@@ -12857,7 +14958,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/ffdb38058e922efa9948ddeea0b3b029e226c34d/src/app.js#L151-L278'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L167-L294'>
       <span>src/app.js</span>
       </a>
     
@@ -12922,6 +15023,76 @@ The ranges values are also used to populate the
     </div>
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='non_auth_granted_uri'>
+      NON_AUTH_GRANTED_URI
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L163-L166'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown when attempting extract granted access permissions
+from a URI which doesn't contain such information.</p>
+
+
+  <div class='pre p1 fill-light mt0'>NON_AUTH_GRANTED_URI</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1009
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
   
 
   
