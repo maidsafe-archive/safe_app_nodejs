@@ -1,6 +1,6 @@
 # safe_app nodejs Change Log
 
-## [Unreleased]
+## [0.8.1] - 9-3-2018
 ### Changed
 - Using "files" field in `package.json` to whitelist what's intended for packaing rather than blacklisting with .npmignore
 
