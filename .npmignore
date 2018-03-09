@@ -13,6 +13,6 @@ CONTRIBUTOR
 COPYING
 README.md
 
-src/native/*.so
-src/native/*.dll
-src/native/*.dylib
+*.so
+*.dll
+*.dylib
