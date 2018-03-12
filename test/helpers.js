@@ -29,47 +29,55 @@ const appInfo = {
   vendor: 'MaidSafe Ltd.'
 };
 
-const createTestApp = (scope) =>
-  h.autoref(new App({
+const createTestApp = async (scope) => {
+  const app = await App({
     id: 'net.maidsafe.test.javascript.id',
     name: 'NodeJS Test',
     vendor: 'MaidSafe.net Ltd',
     scope
-  }, null, { log: false }));
+  }, null, { log: false });
+
+  return h.autoref(app);
+};
 
 const createAltAuthTestApp = async (scope, access) => {
-  const app = h.autoref(new App({
+  let app = await App({
     id: 'alt-net.maidsafe.test.javascript.id',
     name: 'alt-NodeJS Test',
     vendor: 'alt-MaidSafe.net Ltd',
     scope
-  }, null, { log: false }));
+  }, null, { log: false });
+  app = h.autoref(app);
   return app.auth.loginForTest(access || {});
 };
 
-const createTestAppWithNetworkCB = (scope, networkCB) =>
-  h.autoref(new App({
+const createTestAppWithNetworkCB = async (scope, networkCB) => {
+  const app = await App({
     id: 'net.maidsafe.test.javascript.id',
     name: 'NodeJS Test',
     vendor: 'MaidSafe.net Ltd',
     scope
-  }, networkCB, { log: false }));
+  }, networkCB, { log: false });
+  return h.autoref(app);
+};
 
-const createTestAppWithOptions = (scope, options) =>
-  h.autoref(new App({
+const createTestAppWithOptions = async (scope, options) => {
+  const app = await App({
     id: 'net.maidsafe.test.javascript.id',
     name: 'NodeJS Test',
     vendor: 'MaidSafe.net Ltd',
     scope
-  }, null, options));
+  }, null, options);
+  return h.autoref(app);
+};
 
-const createAnonTestApp = (scope) => {
-  const app = createTestApp(scope);
+const createAnonTestApp = async (scope) => {
+  const app = await createTestApp(scope);
   return app.auth.loginForTest();
 };
 
-const createAuthenticatedTestApp = (scope, access, opts) => {
-  const app = createTestApp(scope);
+const createAuthenticatedTestApp = async (scope, access, opts) => {
+  const app = await createTestApp(scope);
   return app.auth.loginForTest(access || {}, opts);
 };
 

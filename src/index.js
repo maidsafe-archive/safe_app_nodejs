@@ -44,7 +44,7 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
 */
 
 /**
- * The main entry point to create a new SAFEApp
+ * The entry point to create a new SAFEApp
  * @param {AppInfo} appInfo
  * @param {Function} [networkStateCallBack=null] callback function
  *        to receive network state updates
@@ -69,10 +69,10 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
  *        // or wait for an authorisation URI
  *        )
  */
-const initializeApp = (appInfo, networkStateCallBack, options) => {
+const initializeApp = async (appInfo, networkStateCallBack, options) => {
   try {
-    const app = autoref(new App(appInfo, networkStateCallBack, options));
-    return Promise.resolve(app);
+    const app = await App(appInfo, networkStateCallBack, options);
+    return Promise.resolve(autoref(app));
   } catch (e) {
     return Promise.reject(e);
   }

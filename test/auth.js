@@ -27,14 +27,14 @@ describe('auth interface', () => {
     app = await createAuthenticatedTestApp('_test_scope', containersPermissions);
   });
 
-  it('should build some authentication uri', () => {
-    const app = h.createTestApp();
+  it('should build some authentication uri', async () => {
+    const app = await h.createTestApp();
     return app.auth.genAuthUri({ _public: ['Read'] })
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
-  it('should build some authentication uri if missing permissions object', () => {
-    const app = h.createTestApp();
+  it('should build some authentication uri if missing permissions object', async () => {
+    const app = await h.createTestApp();
     return app.auth.genAuthUri()
       .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
@@ -43,7 +43,7 @@ describe('auth interface', () => {
   // instead of returning an error code and message.
   // We'll need to adapt the test accordingly nce that's fixed.
   it('throws error if permissions object contains invalid permission', async () => {
-    const app = h.createTestApp();
+    const app = await h.createTestApp();
     const test = () => app.auth.genAuthUri({ _public: ['Invalid'] });
     return should(test).throw('Invalid is not a valid permission');
   });
@@ -56,40 +56,40 @@ describe('auth interface', () => {
 
   it('is authenticated for testing', () => should(app.auth.registered).be.true());
 
-  it('should build some containers uri', () => {
-    const app = h.createTestApp();
+  it('should build some containers uri', async () => {
+    const app = await h.createTestApp();
     return app.auth.genContainerAuthUri({ _public: ['Insert'] })
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
-  it('should build some containers uri if missing containers object', () => {
-    const app = h.createTestApp();
+  it('should build some containers uri if missing containers object', async () => {
+    const app = await h.createTestApp();
     return app.auth.genContainerAuthUri()
       .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
-  it('throws error if invalid container permission requested', () => {
-    const app = h.createTestApp();
+  it('throws error if invalid container permission requested', async () => {
+    const app = await h.createTestApp();
     const test = () => app.auth.genContainerAuthUri({ _public: ['Invalid'] });
     return should(test).throw('Invalid is not a valid permission');
   });
 
-  it('should build some shared MD uri', () => {
-    const app = h.createTestApp();
+  it('should build some shared MD uri', async () => {
+    const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
     const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
     return app.auth.genShareMDataUri(perms)
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
-  it('should throw error for non-existent permissions array for share MD request', () => {
-    const app = h.createTestApp();
+  it('should throw error for non-existent permissions array for share MD request', async () => {
+    const app = await h.createTestApp();
     const test = () => app.auth.genShareMDataUri();
     return should(test).throw(errConst.MISSING_PERMS_ARRAY.msg);
   });
 
   it('should throw error for misspelled or non-existent share MD request permission', async () => {
-    const app = h.createTestApp();
+    const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
     const perms = [{ name: sharedMdXorName, perms: ['Insert'] }];
     const test = () => app.auth.genShareMDataUri(perms);
@@ -97,7 +97,7 @@ describe('auth interface', () => {
   });
 
   it('should throw error for malformed share MD request permission', async () => {
-    const app = h.createTestApp();
+    const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
     const perms = { type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] };
     const test = () => app.auth.genShareMDataUri(perms);
@@ -105,7 +105,7 @@ describe('auth interface', () => {
   });
 
   it('should throw error for invalid share MD request permission', async () => {
-    const app = h.createTestApp();
+    const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
     const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Wrong'] }];
     const test = () => app.auth.genShareMDataUri(perms);
@@ -113,7 +113,7 @@ describe('auth interface', () => {
   });
 
   it('should throw error for share MD request if type_tag is non-integer', async () => {
-    const app = h.createTestApp();
+    const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
     const perms = [{ type_tag: 'non-integer', name: sharedMdXorName, perms: ['Insert'] }];
     const test = () => app.auth.genShareMDataUri(perms);
@@ -123,7 +123,7 @@ describe('auth interface', () => {
   });
 
   it('should throw error for share MD request if name is not 32 byte buffer', async () => {
-    const app = h.createTestApp();
+    const app = await h.createTestApp();
     const mdName = 'not 32 byte buffer';
     const perms = [{ type_tag: 15001, name: mdName, perms: ['Insert'] }];
     const test = () => app.auth.genShareMDataUri(perms);
@@ -132,8 +132,8 @@ describe('auth interface', () => {
     );
   });
 
-  it('creates unregistered connection', () => {
-    const app = h.createTestApp();
+  it('creates unregistered connection', async () => {
+    const app = await h.createTestApp();
     return app.auth.genConnUri()
       .then((resp) => {
         should(resp.uri).is.not.undefined();
@@ -141,32 +141,32 @@ describe('auth interface', () => {
       });
   });
 
-  it('logs in to network with URI response from authenticator', () => {
-    const app = h.createTestApp();
+  it('logs in to network with URI response from authenticator', async () => {
+    const app = await h.createTestApp();
     return should(app.auth.loginFromURI(h.authUris.registeredUri)).be.fulfilled();
   });
 
-  it('creates an authenticated session just for testing', () => {
-    const app = h.createTestApp();
+  it('creates an authenticated session just for testing', async () => {
+    const app = await h.createTestApp();
     return should(app.auth.loginForTest()).be.fulfilled();
   }).timeout(20000);
 });
 
 describe('Get granted containers permissions from auth URI', () => {
   it('invalid uri', async () => {
-    const appNoConnect = createTestApp();
+    const appNoConnect = await createTestApp();
     should(appNoConnect.auth.readGrantedPermissions('safe-invalid-uri'))
               .be.rejectedWith('Serialisation error');
   });
 
   it('uri with no auth granted information', async () => {
-    const appNoConnect = createTestApp();
+    const appNoConnect = await createTestApp();
     return should(appNoConnect.auth.readGrantedPermissions(h.authUris.unregisteredUri))
               .be.rejectedWith('The URI provided is not for an authenticated app with permissions information');
   });
 
   it('valid auth uri but no containers permissions granted', async () => {
-    const appNoConnect = createTestApp();
+    const appNoConnect = await createTestApp();
     const contsPerms = await should(appNoConnect.auth.readGrantedPermissions(
                                       h.authUris.registeredUriNoContsPerms)
                                     ).be.fulfilled();
@@ -175,7 +175,7 @@ describe('Get granted containers permissions from auth URI', () => {
 
   /* eslint-disable no-underscore-dangle */
   it('valid auth uri with some containers permissions granted', async () => {
-    const appNoConnect = createTestApp();
+    const appNoConnect = await createTestApp();
     const contsPerms = await appNoConnect.auth.readGrantedPermissions(h.authUris.registeredUri);
     should(Object.keys(contsPerms).length).be.equal(2);
     should(contsPerms._publicNames).be.eql({
