@@ -10,6 +10,7 @@
     "idata_symmetric": "cross-env NODE_ENV=dev node scripts/idata_symmetric",
     "mdata_private": "cross-env NODE_ENV=dev node scripts/mdata_private",
     "mdata_public": "cross-env NODE_ENV=dev node scripts/mdata_public",
+    "soak_test": "cross-env NODE_ENV=dev node scripts/soak_test",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
