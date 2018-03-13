@@ -21,6 +21,57 @@ const makeError = require('./native/_error.js');
 const webFetch = require('./web_fetch.js');
 
 /**
+* Validates appInfo and properly handles error
+*/
+const validateAppInfo = (_appInfo) => {
+  const appInfo = _appInfo;
+  const appInfoMustHaveProperties = ['id', 'name', 'vendor'];
+  let bool = false;
+  const hasCorrectProperties = appInfoMustHaveProperties.every((prop) => {
+    if (appInfo && appInfo[prop]) {
+      appInfo[prop] = appInfo[prop].trim();
+      bool = Object.prototype.hasOwnProperty.call(appInfo, prop) && appInfo[prop];
+    }
+
+    return bool;
+  });
+
+  if (!hasCorrectProperties) {
+    throw makeError(errConst.MALFORMED_APP_INFO.code, errConst.MALFORMED_APP_INFO.msg);
+  }
+};
+
+/**
+* Init logging on the underlying library only if it wasn't done already
+*/
+const initLogging = (appInfo, options) => {
+  if (options.log && !SAFEApp.logFilePath) {
+    let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
+    filename = `${filename}.log`;
+    return lib.app_init_logging(filename)
+      .then(() => lib.app_output_log_path(filename))
+      .then((logPath) => { SAFEApp.logFilePath = logPath; })
+      .catch((err) => {
+        throw makeError(errConst.LOGGER_INIT_ERR.code, errConst.LOGGER_INIT_ERR.msg(err));
+      });
+  }
+};
+
+/**
+* Set additional search path for the config files if it was requested in
+* the options. E.g. log.toml and crust.config files will be search
+* in this additional search path.
+*/
+const setSearchPath = (options) => {
+  if (options.configPath) {
+    return lib.app_set_additional_search_path(options.configPath)
+      .catch((err) => {
+        throw makeError(errConst.CONFIG_PATH_ERROR.code, errConst.CONFIG_PATH_ERROR.msg(err));
+      });
+  }
+};
+
+/**
  * Holds one sessions with the network and is the primary interface to interact
  * with the network. As such it also provides all API-Providers connected through
  * this session.
@@ -37,10 +88,16 @@ class SAFEApp extends EventEmitter {
   * to receive network state updates
   * @param {InitOptions} initilalisation options
   */
-  constructor(appInfo, networkStateCallBack, _options) {
+  constructor(appInfo, networkStateCallBack, options) {
     super();
+    validateAppInfo(appInfo);
+    this.options = Object.assign({
+      log: true,
+      registerScheme: true,
+      configPath: null
+    }, options);
+    lib.init(this.options);
     this._appInfo = appInfo;
-    this.options = _options;
     this.networkState = consts.NET_STATE_INIT;
     if (networkStateCallBack) {
       this._networkStateCallBack = networkStateCallBack;
@@ -50,6 +107,12 @@ class SAFEApp extends EventEmitter {
       this[`_${key}`] = new api[key](this);
     });
   }
+
+  async init() {
+    await initLogging(this.appInfo, this.options);
+    await setSearchPath(this.options);
+  }
+
 
   /**
   * get the AuthInterface instance connected to this session
@@ -238,8 +301,9 @@ class SAFEApp extends EventEmitter {
   * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp
   */
   static async fromAuthUri(appInfo, authUri, networkStateCallBack, options) {
-    const app = await asyncSAFEApp(appInfo, networkStateCallBack, options);
-    return autoref(app).auth.loginFromURI(authUri);
+    const app = autoref(new SAFEApp(appInfo, networkStateCallBack, options));
+    await app.init();
+    return app.auth.loginFromURI(authUri);
   }
 
   /**
@@ -303,76 +367,4 @@ class SAFEApp extends EventEmitter {
 
 SAFEApp.logFilename = null;
 
-/**
-* Init logging on the underlying library only if it wasn't done already
-*/
-const initLogging = (appInfo, options) => {
-  if (options.log && !SAFEApp.logFilePath) {
-    let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
-    filename = `${filename}.log`;
-    return lib.app_init_logging(filename)
-      .then(() => lib.app_output_log_path(filename))
-      .then((logPath) => { SAFEApp.logFilePath = logPath; })
-      .catch((err) => {
-        throw makeError(errConst.LOGGER_INIT_ERR.code, errConst.LOGGER_INIT_ERR.msg(err));
-      });
-  }
-};
-
-/**
-* Set additional search path for the config files if it was requested in
-* the options. E.g. log.toml and crust.config files will be search
-* in this additional search path.
-*/
-const setSearchPath = (options) => {
-  if (options.configPath) {
-    return lib.app_set_additional_search_path(options.configPath)
-      .catch((err) => {
-        throw makeError(errConst.CONFIG_PATH_ERROR.code, errConst.CONFIG_PATH_ERROR.msg(err));
-      });
-  }
-};
-
-/**
-* Validates appInfo and properly handles error
-*/
-const validateAppInfo = (_appInfo) => {
-  const appInfo = _appInfo;
-  const appInfoMustHaveProperties = ['id', 'name', 'vendor'];
-  let bool = false;
-  const hasCorrectProperties = appInfoMustHaveProperties.every((prop) => {
-    if (appInfo && appInfo[prop]) {
-      appInfo[prop] = appInfo[prop].trim();
-      bool = Object.prototype.hasOwnProperty.call(appInfo, prop) && appInfo[prop];
-    }
-
-    return bool;
-  });
-
-  if (!hasCorrectProperties) {
-    throw makeError(errConst.MALFORMED_APP_INFO.code, errConst.MALFORMED_APP_INFO.msg);
-  }
-};
-
-/**
- * Primary exported module handles async functions first, \
- * handles async error, \
- * returns instance of SAFEApp.
- */
-async function asyncSAFEApp(appInfo, networkStateCallBack, options) {
-  const defaultOptionsAssign = Object.assign({
-    log: true,
-    registerScheme: true,
-    configPath: null
-  }, options);
-  validateAppInfo(appInfo);
-  await lib.init(defaultOptionsAssign);
-  await initLogging(appInfo, defaultOptionsAssign);
-  await setSearchPath(defaultOptionsAssign);
-  const app = new SAFEApp(appInfo, networkStateCallBack, defaultOptionsAssign);
-  return app;
-}
-
-asyncSAFEApp.fromAuthUri = SAFEApp.fromAuthUri;
-
-module.exports = asyncSAFEApp;
+module.exports = SAFEApp;

@@ -71,8 +71,9 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
  */
 const initializeApp = async (appInfo, networkStateCallBack, options) => {
   try {
-    const app = await App(appInfo, networkStateCallBack, options);
-    return Promise.resolve(autoref(app));
+    const app = autoref(new App(appInfo, networkStateCallBack, options));
+    await app.init();
+    return Promise.resolve(app);
   } catch (e) {
     return Promise.reject(e);
   }

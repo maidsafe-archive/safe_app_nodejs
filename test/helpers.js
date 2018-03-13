@@ -30,44 +30,48 @@ const appInfo = {
 };
 
 const createTestApp = async (scope) => {
-  const app = await App({
+  const app = new App({
     id: 'net.maidsafe.test.javascript.id',
     name: 'NodeJS Test',
     vendor: 'MaidSafe.net Ltd',
     scope
   }, null, { log: false });
+  await app.init();
 
   return h.autoref(app);
 };
 
 const createAltAuthTestApp = async (scope, access) => {
-  let app = await App({
+  let app = new App({
     id: 'alt-net.maidsafe.test.javascript.id',
     name: 'alt-NodeJS Test',
     vendor: 'alt-MaidSafe.net Ltd',
     scope
   }, null, { log: false });
+  await app.init();
   app = h.autoref(app);
   return app.auth.loginForTest(access || {});
 };
 
 const createTestAppWithNetworkCB = async (scope, networkCB) => {
-  const app = await App({
+  const app = new App({
     id: 'net.maidsafe.test.javascript.id',
     name: 'NodeJS Test',
     vendor: 'MaidSafe.net Ltd',
     scope
   }, networkCB, { log: false });
+  await app.init();
   return h.autoref(app);
 };
 
 const createTestAppWithOptions = async (scope, options) => {
-  const app = await App({
+  const app = new App({
     id: 'net.maidsafe.test.javascript.id',
     name: 'NodeJS Test',
     vendor: 'MaidSafe.net Ltd',
     scope
   }, null, options);
+  await app.init();
   return h.autoref(app);
 };
 

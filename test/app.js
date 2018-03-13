@@ -92,25 +92,51 @@ describe('Smoke test', () => {
       });
   });
 
+  it('throws error if connection getter is called on unregistered app', () => {
+    const app = new App({
+      id: 'net.maidsafe.test.javascript.id',
+      name: 'NodeJS Test',
+      vendor: 'MaidSafe.net Ltd'
+    }, null, { log: false });
+    const test = () => app.connection;
+    should(test).throw(errConst.SETUP_INCOMPLETE.msg);
+  });
+
+  it('should resolve reconnect operation for registered app', async () => {
+    const app = await createAuthenticatedTestApp();
+    should(app.reconnect()).be.fulfilled();
+  });
+
+  it('throws error when reconnect operation called on unregistered app', async () => {
+    const app = new App({
+      id: 'net.maidsafe.test.javascript.id',
+      name: 'NodeJS Test',
+      vendor: 'MaidSafe.net Ltd'
+    }, null, { log: false });
+    const test = () => app.connection;
+    should(test).throw(errConst.SETUP_INCOMPLETE.msg);
+  });
+
   it('should throw informative error, if App info is malformed', () => {
-    should(App({
+    const test = () => new App({
       info: {
         id: 'net.maidsafe.test.javascript.id',
         name: 'JS Test',
         vendor: 'MaidSafe Ltd.',
         scope: null
       }
-    })).be.rejectedWith(errConst.MALFORMED_APP_INFO.msg);
+    });
+    should(test).throw(errConst.MALFORMED_APP_INFO.msg);
   });
 
   it('should throw informative error, if App properties, excepting scope, are empty', () => {
-    should(App({
+    const test = () => new App({
       id: 'net.maidsafe.test.javascript.id',
       name: 'JS Test',
       vendor: ' ',
       scope: null
-    }))
-    .be.rejectedWith(errConst.MALFORMED_APP_INFO.msg);
+    });
+    should(test).throw(errConst.MALFORMED_APP_INFO.msg);
   });
 
   it('should return account information', async () => {
@@ -158,12 +184,12 @@ describe('Smoke test', () => {
   it('logs in to netowrk from existing authUri', async () => should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri))
     .be.fulfilled());
 
-  it('throws error if fromAuthUri missing authUri argument', async () => {
+  it('throws error if fromAuthUri missing authUri argument', () => {
     should(h.App.fromAuthUri(h.appInfo))
       .be.rejectedWith(errConst.MISSING_AUTH_URI.msg);
   });
 
-  it('throws error if fromAuthUri missing appInfo argument', async () => {
+  it('throws error if fromAuthUri missing appInfo argument', () => {
     should(h.App.fromAuthUri(h.authUris.registeredUri))
       .be.rejectedWith(errConst.MALFORMED_APP_INFO.msg);
   });
