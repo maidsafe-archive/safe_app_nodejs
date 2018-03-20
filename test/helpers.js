@@ -25,8 +25,8 @@ const authUris = {
 
 const appInfo = {
   id: 'net.maidsafe.test.javascript.id',
-  name: 'JS Test',
-  vendor: 'MaidSafe Ltd.'
+  name: 'NodeJS Test',
+  vendor: 'MaidSafe.net Ltd'
 };
 
 const createTestApp = async (scope) => {
@@ -37,6 +37,19 @@ const createTestApp = async (scope) => {
     scope
   }, null, { log: false });
   await app.init();
+
+  return h.autoref(app);
+};
+
+const createTestAppNoInit = async (scope, options) => {
+  // This function differs from the previous\
+  // by not calling app.init()
+  const app = new App({
+    id: 'net.maidsafe.test.javascript.id2',
+    name: 'NodeJS Test',
+    vendor: 'MaidSafe.net Ltd',
+    scope
+  }, null, options);
 
   return h.autoref(app);
 };
@@ -99,6 +112,7 @@ module.exports = {
   appInfo,
   authUris,
   createTestApp,
+  createTestAppNoInit,
   createAnonTestApp,
   createAuthenticatedTestApp,
   createRandomXorName,

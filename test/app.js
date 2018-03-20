@@ -17,11 +17,33 @@ const App = require('../src/app');
 const errConst = require('../src/error_const');
 
 const createTestApp = h.createTestApp;
+const appInfo = h.appInfo;
+const createTestAppNoInit = h.createTestAppNoInit;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 const createTestAppWithNetworkCB = h.createTestAppWithNetworkCB;
 const createTestAppWithOptions = h.createTestAppWithOptions;
 
 describe('Smoke test', () => {
+  it('should return undefined value if log option is true, however app logging is not initialised', async () => {
+    const app = await createTestAppNoInit(null, { log: true });
+    // await app.init();
+    const logPath = await app.logPath();
+    should(logPath).be.undefined();
+  });
+
+  it('should natively reject if log path is retrieved with whitespace', async () => {
+    const app = await createTestApp();
+    should(app.logPath(' '))
+      .be.rejectedWith('Unexpected (probably a logic error): IO error: Access is denied. (os error 5)');
+  });
+
+  it('should native resolve log path if filename provided', async () => {
+    const app = await createTestApp();
+    const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
+    return should(app.logPath(filename)).be.fulfilled()
+      .then((res) => should(res).match(new RegExp(filename)));
+  });
+
   it('can take a network state callback', async () => {
     const networkCb = (state) => `NETWORK STATE: ${state}`;
     const app = await createTestAppWithNetworkCB(
