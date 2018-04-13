@@ -14,7 +14,7 @@
 const App = require('./app');
 const { autoref } = require('./helpers');
 const { version } = require('../package.json');
-const { pubConsts: CONSTANTS } = require('./consts.js');
+const { pubConsts: CONSTANTS, initializeOptions } = require('./consts.js');
 
 /**
 * @typedef {Object} AppInfo
@@ -71,6 +71,7 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
  */
 const initializeApp = async (appInfo, networkStateCallBack, options) => {
   try {
+    initializeOptions(options);
     const app = autoref(new App(appInfo, networkStateCallBack, options));
     await app.init();
     return Promise.resolve(app);
@@ -91,8 +92,10 @@ const initializeApp = async (appInfo, networkStateCallBack, options) => {
  * @param {InitOptions=} options initialisation options
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  */
-const fromAuthURI = (appInfo, authUri, networkStateCallBack, options) =>
-  App.fromAuthUri(appInfo, authUri, networkStateCallBack, options);
+const fromAuthURI = (appInfo, authUri, networkStateCallBack, options) => {
+  initializeOptions(options);
+  return App.fromAuthUri(appInfo, authUri, networkStateCallBack, options);
+};
 
 module.exports = {
   VERSION: version,

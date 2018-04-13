@@ -77,12 +77,12 @@ describe('Smoke testing', () => {
   });
 
   it('system uri lib contains "mock" dir (as we\'re testing)', () => {
-    const sysUriPath = LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME;
+    const sysUriPath = LIB_CONSTANTS.getSystemUriLibFilename();
     return should(sysUriPath.includes('mock')).be.true();
   });
 
   it('safe app lib contains "mock" dir (as we\'re testing)', () => {
-    const libPath = LIB_CONSTANTS.LIB_FILENAME;
+    const libPath = LIB_CONSTANTS.getLibFilename();
     return should(libPath.includes('mock')).be.true();
   });
 
@@ -92,14 +92,14 @@ describe('Smoke testing', () => {
   });
 
   it('throws error if lib fails to load', () => {
-    fs.renameSync(path.join(__dirname, `../src/native/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`), path.join(__dirname, '../src/native/hideLib.so'));
+    fs.renameSync(path.join(__dirname, `../src/native/${LIB_CONSTANTS.getSystemUriLibFilename()}`), path.join(__dirname, '../src/native/hideLib.so'));
     try {
       h.createAuthenticatedTestApp();
     } catch (err) {
       const errArray = err.message.split('libraries: ');
       should(errConst.FAILED_TO_LOAD_LIB.msg(errArray[1])).be.equal(err.message);
     }
-    return fs.renameSync(path.join(__dirname, '../src/native/hideLib.so'), path.join(__dirname, `../src/native/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`));
+    return fs.renameSync(path.join(__dirname, '../src/native/hideLib.so'), path.join(__dirname, `../src/native/${LIB_CONSTANTS.getSystemUriLibFilename()}`));
   }).timeout(10000);
 });
 
