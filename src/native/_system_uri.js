@@ -14,7 +14,8 @@ let ffi = null;
 let isSysUriLibLoadErr = null;
 
 const init = (options) => {
-  ffi = FFI.Library(path.join(options.libPath || dir, SYSTEM_URI_LIB_FILENAME), {
+  const pathToLibs = options.libPath || path.join( dir, 'prod');
+  ffi = FFI.Library( path.join( pathToLibs, SYSTEM_URI_LIB_FILENAME ), {
     open_uri: ["void", ['string', 'pointer', 'pointer'] ],
     install: ["void", ['string', //bundle
       'string', //vendor
