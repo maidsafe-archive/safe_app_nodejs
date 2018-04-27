@@ -260,18 +260,38 @@ class SAFEApp extends EventEmitter {
         let fileSize;
         let lengthToRead = consts.pubConsts.NFS_FILE_END;
         let endByte;
+        let data;
+        let multipart;
 
-        // TODO: how do we handle multipart Reqs
-        if (options && options.range && typeof options.range.start !== 'undefined') {
+        if (options && options.range) {
           range = options.range;
-          start = range.start;
-          fileSize = await openedFile.size();
-          end = range.end || fileSize - 1;
-
-          lengthToRead = (end - start) + 1; // account for 0 index
+          multipart = range.length > 1;
         }
-        const data = await openedFile.read(start, lengthToRead);
-        const mimeType = mime.getType(nodePath.extname(filePath)) || 'application/octet-stream';
+        const mimeType = multipart ? 'multipart/byteranges; boundary=3d6b6a416f9b5' : false
+            || mime.getType(nodePath.extname(filePath))
+            || 'application/octet-stream';
+
+        if (options && options.range && options.range.length > 1) {
+          // block handles multipart range requests
+          fileSize = await openedFile.size();
+          data = await Promise.all(range.map(async (part) => {
+            start = part.start;
+            end = part.end || fileSize - 1;
+            lengthToRead = (end - start) + 1; // account for 0 index
+            const byteSegment = await openedFile.read(start, lengthToRead);
+            endByte = (end === fileSize) ? fileSize - 1 : end;
+            return {
+              body: byteSegment,
+              headers: {
+                'Content-Type': mimeType,
+                'Content-Range': `bytes ${start}-${endByte}/${fileSize}`
+              }
+            };
+          }));
+        } else {
+          // handles non-partial requests and also single partial content requests
+          data = await openedFile.read(start, lengthToRead);
+        }
 
         const response = {
           headers: {
@@ -279,13 +299,13 @@ class SAFEApp extends EventEmitter {
           },
           body: data
         };
-
-        if (range) {
+        if (range && multipart) {
+          response.headers['Content-Length'] = JSON.stringify(data).length;
+        } else if (range) {
           endByte = (end === fileSize) ? fileSize - 1 : end;
           response.headers['Content-Range'] = `bytes ${start}-${endByte}/${fileSize}`;
           response.headers['Content-Length'] = lengthToRead;
         }
-
         resolve(response);
       } catch (e) {
         reject(e);
