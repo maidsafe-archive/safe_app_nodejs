@@ -93,6 +93,14 @@ describe('Browsing', () => {
       ));
   }).timeout(20000);
 
+  it('fetches file with non-explicit mime type', async () => {
+    const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
+    const domain = await createRandomDomain(content, '/streaming');
+    const app = await createAnonTestApp();
+    return should(app.webFetch(`safe://${domain}/streaming`))
+      .be.fulfilled();
+  }).timeout(20000);
+
   it('fetch any path on any url', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/any/path/html', 'whatever')
@@ -298,13 +306,12 @@ describe('Browsing', () => {
         ));
     }).timeout(20000);
 
-    it('range end beyond data length', () => {
+    it('range end beyond data length', async () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
-      return createRandomDomain(content, '/streaming.mp4')
-        .then((domain) => createAnonTestApp()
-          .then((app) => should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: content.length } }))
-            .be.rejectedWith('NFS error: Invalid byte range specified')
-        ));
+      const domain = await createRandomDomain(content, '/streaming.mp4');
+      const app = await createAnonTestApp();
+      return should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: content.length + 5 } }))
+        .be.rejectedWith(errConst.INVALID_BYTE_RANGE.msg);
     }).timeout(20000);
 
     // safe_app lib is not validating for invalid start offset
@@ -326,6 +333,99 @@ describe('Browsing', () => {
             .be.rejectedWith('Invalid range start value')
         ));
     }); // .timeout(20000);
+
+    it('fetches multipart ranges', async () => {
+      const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
+      const domain = await createRandomDomain(content, '/streaming.mp4');
+      const app = await createAnonTestApp();
+      const range = [
+        {
+          start: 2,
+          end: 4
+        },
+        {
+          start: 7,
+          end: 9,
+        },
+        {
+          start: 13,
+          end: 17,
+        },
+      ];
+      const data = await app.webFetch(`safe://${domain}/streaming.mp4`, { range });
+      should(data.body[0].body.toString()).be.equal(content.slice(2, 5));
+      should(data.body[1].body.toString()).be.equal(content.slice(7, 10));
+      return should(data.body[2].body.toString()).be.equal(content.slice(13, 18));
+    }).timeout(20000);
+
+    it('fetches multipart ranges for file without explicit mime types', async () => {
+      const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
+      const domain = await createRandomDomain(content, '/streaming');
+      const app = await createAnonTestApp();
+      const range = [
+        {
+          start: 2,
+          end: 4
+        },
+        {
+          start: 7,
+          end: 9,
+        },
+        {
+          start: 13,
+          end: 17,
+        },
+      ];
+      const data = await app.webFetch(`safe://${domain}/streaming`, { range });
+      should(data.body[0].body.toString()).be.equal(content.slice(2, 5));
+      should(data.body[1].body.toString()).be.equal(content.slice(7, 10));
+      return should(data.body[2].body.toString()).be.equal(content.slice(13, 18));
+    }).timeout(20000);
+
+    it('throws error for invalid multipart range', async () => {
+      const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
+      const domain = await createRandomDomain(content, '/streaming.mp4');
+      const app = await createAnonTestApp();
+      const range = [
+        {
+          start: 2,
+          end: 4
+        },
+        {
+          start: 7,
+          end: 50,
+        },
+        {
+          start: 13,
+          end: 17,
+        },
+      ];
+      return should(app.webFetch(`safe://${domain}/streaming.mp4`, { range }))
+        .be.rejectedWith(errConst.INVALID_BYTE_RANGE.msg);
+    }).timeout(20000);
+
+    it('multipart ranges: offset byte without byte length', async () => {
+      const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
+      const domain = await createRandomDomain(content, '/streaming.mp4');
+      const app = await createAnonTestApp();
+      const range = [
+        {
+          start: 2,
+          end: 4
+        },
+        {
+          start: 7,
+          end: 9,
+        },
+        {
+          start: 13
+        },
+      ];
+      const data = await app.webFetch(`safe://${domain}/streaming.mp4`, { range });
+      should(data.body[0].body.toString()).be.equal(content.slice(2, 5));
+      should(data.body[1].body.toString()).be.equal(content.slice(7, 10));
+      return should(data.body[2].body.toString()).be.equal(content.slice(13));
+    }).timeout(20000);
   });
 
   describe('errors', () => {

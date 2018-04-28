@@ -168,9 +168,6 @@ class SAFEApp extends EventEmitter {
     if (!url) return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
 
     const parsedUrl = parseUrl(url);
-    if (!parsedUrl) {
-      return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
-    }
     const hostname = parsedUrl.hostname;
     let path = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
     const tokens = path.split('/');
@@ -262,29 +259,33 @@ class SAFEApp extends EventEmitter {
         let endByte;
         let data;
         let multipart;
+        let rangeIsArray;
 
         if (options && options.range) {
+          rangeIsArray = Array.isArray(options.range);
+          fileSize = await openedFile.size();
           range = options.range;
           multipart = range.length > 1;
+          start = options.range.start || consts.pubConsts.NFS_FILE_START;
+          end = options.range.end || fileSize - 1;
+          lengthToRead = (end - start) + 1; // account for 0 index
         }
-        const mimeType = multipart ? 'multipart/byteranges; boundary=3d6b6a416f9b5' : false
-            || mime.getType(nodePath.extname(filePath))
-            || 'application/octet-stream';
 
-        if (options && options.range && options.range.length > 1) {
+        if (options && options.range && rangeIsArray) {
           // block handles multipart range requests
-          fileSize = await openedFile.size();
           data = await Promise.all(range.map(async (part) => {
-            start = part.start;
-            end = part.end || fileSize - 1;
-            lengthToRead = (end - start) + 1; // account for 0 index
-            const byteSegment = await openedFile.read(start, lengthToRead);
-            endByte = (end === fileSize) ? fileSize - 1 : end;
+            const partStart = part.start;
+            const partEnd = part.end || fileSize - 1;
+            const partLengthToRead = (partEnd - partStart) + 1; // account for 0 index
+            const byteSegment = await openedFile.read(partStart, partLengthToRead);
+            const partEndByte = (partEnd === fileSize - 1) ? fileSize - 1 : partEnd;
+            const mimeType = mime.getType(nodePath.extname(filePath))
+              || 'application/octet-stream';
             return {
               body: byteSegment,
               headers: {
                 'Content-Type': mimeType,
-                'Content-Range': `bytes ${start}-${endByte}/${fileSize}`
+                'Content-Range': `bytes ${partStart}-${partEndByte}/${fileSize}`
               }
             };
           }));
@@ -292,6 +293,10 @@ class SAFEApp extends EventEmitter {
           // handles non-partial requests and also single partial content requests
           data = await openedFile.read(start, lengthToRead);
         }
+
+        const mimeType = multipart ? 'multipart/byteranges' : false
+          || mime.getType(nodePath.extname(filePath))
+          || 'application/octet-stream';
 
         const response = {
           headers: {
@@ -302,7 +307,7 @@ class SAFEApp extends EventEmitter {
         if (range && multipart) {
           response.headers['Content-Length'] = JSON.stringify(data).length;
         } else if (range) {
-          endByte = (end === fileSize) ? fileSize - 1 : end;
+          endByte = (end === fileSize - 1) ? fileSize - 1 : end;
           response.headers['Content-Range'] = `bytes ${start}-${endByte}/${fileSize}`;
           response.headers['Content-Length'] = lengthToRead;
         }
