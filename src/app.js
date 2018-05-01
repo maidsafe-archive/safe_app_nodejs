@@ -251,6 +251,7 @@ class SAFEApp extends EventEmitter {
           file = await emulation.fetch(filePath);
         }
         const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
+        let mimeType = mime.getType(nodePath.extname(filePath)) || 'application/octet-stream';
         let range;
         let start = consts.pubConsts.NFS_FILE_START;
         let end;
@@ -260,6 +261,7 @@ class SAFEApp extends EventEmitter {
         let data;
         let multipart;
         let rangeIsArray;
+        let response;
 
         if (options && options.range) {
           rangeIsArray = Array.isArray(options.range);
@@ -274,18 +276,15 @@ class SAFEApp extends EventEmitter {
         if (options && options.range && rangeIsArray) {
           // block handles multipart range requests
           data = await Promise.all(range.map(async (part) => {
-            const partStart = part.start;
+            const partStart = part.start || consts.pubConsts.NFS_FILE_START;
             const partEnd = part.end || fileSize - 1;
             const partLengthToRead = (partEnd - partStart) + 1; // account for 0 index
             const byteSegment = await openedFile.read(partStart, partLengthToRead);
-            const partEndByte = (partEnd === fileSize - 1) ? fileSize - 1 : partEnd;
-            const mimeType = mime.getType(nodePath.extname(filePath))
-              || 'application/octet-stream';
             return {
               body: byteSegment,
               headers: {
                 'Content-Type': mimeType,
-                'Content-Range': `bytes ${partStart}-${partEndByte}/${fileSize}`
+                'Content-Range': `bytes ${partStart}-${partEnd}/${fileSize}`
               }
             };
           }));
@@ -294,22 +293,39 @@ class SAFEApp extends EventEmitter {
           data = await openedFile.read(start, lengthToRead);
         }
 
-        const mimeType = multipart ? 'multipart/byteranges' : false
-          || mime.getType(nodePath.extname(filePath))
-          || 'application/octet-stream';
+        if (multipart) {
+          mimeType = 'multipart/byteranges';
+        } else if (mime.getType(nodePath.extname(filePath))) {
+          mimeType = mime.getType(nodePath.extname(filePath));
+        } else {
+          mimeType = 'application/octet-stream';
+        }
 
-        const response = {
+        response = {
           headers: {
             'Content-Type': mimeType
           },
           body: data
         };
+
         if (range && multipart) {
-          response.headers['Content-Length'] = JSON.stringify(data).length;
+          response = {
+            headers: {
+              'Content-Type': mimeType,
+              'Content-Length': JSON.stringify(data).length
+            },
+            parts: data
+          };
         } else if (range) {
           endByte = (end === fileSize - 1) ? fileSize - 1 : end;
-          response.headers['Content-Range'] = `bytes ${start}-${endByte}/${fileSize}`;
-          response.headers['Content-Length'] = lengthToRead;
+          response = {
+            headers: {
+              'Content-Type': mimeType,
+              'Content-Length': lengthToRead,
+              'Content-Range': `bytes ${start}-${endByte}/${fileSize}`
+            },
+            body: data
+          };
         }
         resolve(response);
       } catch (e) {
