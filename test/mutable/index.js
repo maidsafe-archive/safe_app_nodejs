@@ -231,11 +231,6 @@ describe('Mutable Data', () => {
   });
 
   describe('Errors', () => {
-    it('missing callback in entries.forEach', () => app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup().then(() => m.getEntries()))
-      .then((entries) => should(entries.forEach()).be.rejectedWith('A function parameter _must be_ provided'))
-    );
-
     it('invalid user\'s permissions', () => app.mutableData.newRandomPublic(TYPE_TAG)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => {
