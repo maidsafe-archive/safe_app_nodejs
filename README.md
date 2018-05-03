@@ -48,7 +48,13 @@ Here's a good post to get started: [How to develop for the SAFE Network](https:/
 
 ## License
 
-Licensed under
+This SAFE Network library is dual-licensed under
 
-* [LICENSE-MIT](LICENSE-MIT)
-* [LICENSE-BSD](LICENSE-BSD)
+* the Modified BSD ([LICENSE-BSD](https://opensource.org/licenses/BSD-3-Clause)) or
+* the MIT license ([LICENSE-MIT](http://opensource.org/licenses/MIT))
+
+at your option.
+
+## Contribution
+
+Copyrights in the SAFE Network are retained by their contributors. No copyright assignment is required to contribute to this project.
