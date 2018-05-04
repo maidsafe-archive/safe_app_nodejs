@@ -4,6 +4,7 @@
 ### Changed
 - mdata_entries_for_each deprecated for mdata_list_entries, which returns an array of entry structs.
 - mdata_list_entries had a previous function, which is replaced by mdata_entries, which returns an mdata's entry object.
+- updates false positive tests
 
 ## SAFE libraries Dependencies
 - safe_app: a9b4c05

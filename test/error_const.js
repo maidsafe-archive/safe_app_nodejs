@@ -8,7 +8,6 @@ describe('Error Constants', () => {
     should(error.FAILED_TO_LOAD_LIB.msg('theReason')).endWith('theReason');
   });
 
-
   it('MALFORMED_APP_INFO', () => {
     should.exist(error.MALFORMED_APP_INFO);
   });
@@ -99,5 +98,10 @@ describe('Error Constants', () => {
   it('INVALID_PERM', () => {
     should(error.INVALID_PERM.msg('theReason')).startWith('theReason');
     should.exist(error.INVALID_PERM);
+  });
+
+  it('INVALID_SEC_KEY', () => {
+    should(new RegExp(32).test(error.INVALID_SEC_KEY.msg(32))).be.true();
+    should.exist(error.INVALID_SEC_KEY);
   });
 });

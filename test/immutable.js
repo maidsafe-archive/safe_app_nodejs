@@ -152,10 +152,10 @@ describe('Immutable Data', () => {
       .then(() => app.mutableData.newPublic(testXorName, TYPE_TAG))
       .then((md) => md.getEntries())
       .then((entries) => entries.listEntries())
-      .then((entriesArray) => entriesArray.forEach((entry) => {
-        app.immutableData.fetch(entry.value.buf)
-        .then((r) => r.read())
-        .then((res) => should(res.toString()).equal(testString));
-      }));
+      .then((entriesArray) => Promise.all(
+        entriesArray.map((entry) => app.immutableData.fetch(entry.value.buf)
+          .then((r) => r.read())
+          .then((res) => should(res.toString()).equal(testString))
+      )));
   });
 });

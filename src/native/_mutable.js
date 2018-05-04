@@ -8,7 +8,6 @@ const { types: t, helpers: h } = require('./_base');
 const errConst = require('../error_const');
 const makeError = require('./_error.js');
 
-const PromisifiedForEachCb = h.PromisifiedForEachCb;
 const Promisified = h.Promisified;
 
 const MDataPermissionsHandle = t.ObjectHandle;
@@ -116,42 +115,38 @@ const bufferLastEntry = (...varArgs) => {
         .concat([str, str.length]);
 }
 
-const keyValueCallBackLastEntry = (types, ...varArgs) => {
-  let fn = varArgs[varArgs.length - 1];
-  if (typeof fn !== 'function') throw Error('A function parameter _must be_ provided')
-
-  let cb = ffi.Callback("void", types, (uctx, ...cbVarArgs) => {
-    let args = [];
-    args.push(ref.reinterpret(cbVarArgs[0], cbVarArgs[1], 0));
-    args.push(readValueToBuffer([cbVarArgs[2], cbVarArgs[3], cbVarArgs[4]]));
-    fn.apply(fn, args);
-  });
-
-  return Array.prototype.slice.call(varArgs, 0, varArgs.length - 1)
-            .concat(cb);
-}
-
 const translatePrivMDInput = (xorname, tag, secKey, nonce) => {
+  let name;
+  let sk;
+  let n;
+
   if(!Number.isInteger(tag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
-  let name = xorname;
+
   if (!Buffer.isBuffer(xorname)) {
     const b = new Buffer(xorname);
     if (b.length != t.XOR_NAME.size) throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size))
     name = t.XOR_NAME(b).ref().readPointer(0);
+  } else {
+    name = xorname;
+    if (name.length != t.XOR_NAME.size) throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size))
   }
 
-  let sk = secKey;
   if (!Buffer.isBuffer(secKey)) {
     const b = new Buffer(secKey);
-    if (b.length != t.SYM_KEYBYTES.size) throw makeError(errConst.MISSING_SEC_ENC_KEY.code, errConst.MISSING_SEC_ENC_KEY.msg(t.SYM_KEYBYTES.size))
+    if (b.length != t.SYM_KEYBYTES.size) throw makeError(errConst.INVALID_SEC_KEY.code, errConst.INVALID_SEC_KEY.msg(t.SYM_KEYBYTES.size))
     sk = t.SYM_KEYBYTES(b).ref().readPointer(0);
+  } else {
+    sk = secKey;
+    if (sk.length != t.SYM_KEYBYTES.size) throw makeError(errConst.INVALID_SEC_KEY.code, errConst.INVALID_SEC_KEY.msg(t.SYM_KEYBYTES.size));
   }
 
-  let n = nonce;
   if (!Buffer.isBuffer(nonce)) {
     const b = new Buffer(nonce);
     if (b.length != t.SYM_NONCEBYTES.size) throw makeError(errConst.NONCE.code, errConst.NONCE.msg(t.SYM_NONCEBYTES.size))
     n = t.SYM_NONCEBYTES(b).ref().readPointer(0);
+  } else {
+    n = nonce;
+    if (n.length != t.SYM_NONCEBYTES.size) throw makeError(errConst.NONCE.code, errConst.NONCE.msg(t.SYM_NONCEBYTES.size));
   }
 
   return [name, tag, sk, n]
