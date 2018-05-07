@@ -63,30 +63,20 @@ describe('Smoke testing', () => {
     return should(app.auth.openUri('')).be.a.Promise(); // TODO: when isse fix add ``.and.be.rejected()` to remove the warning
   });
 
-  it('system uri lib contains "mock" dir (as we\'re testing)', () => {
-    const sysUriPath = LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME;
-    return should(sysUriPath.includes('mock')).be.true();
-  });
-
-  it('safe app lib contains "mock" dir (as we\'re testing)', () => {
-    const libPath = LIB_CONSTANTS.LIB_FILENAME;
-    return should(libPath.includes('mock')).be.true();
-  });
-
   it('hasMockFlag is set FALSE for testing', () => {
     const hasMock = LIB_CONSTANTS.hasMockFlag;
     return should(hasMock).be.false();
   });
 
   it('throws error if lib fails to load', () => {
-    fs.renameSync(path.join(__dirname, `../src/native/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`), path.join(__dirname, '../src/native/hideLib.so'));
+    fs.renameSync(path.join(__dirname, `../src/native/mock/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`), path.join(__dirname, '../src/native/hideLib.so'));
     try {
       h.createAuthenticatedTestApp();
     } catch (err) {
       const errArray = err.message.split('libraries: ');
       should(errConst.FAILED_TO_LOAD_LIB.msg(errArray[1])).be.equal(err.message);
     }
-    return fs.renameSync(path.join(__dirname, '../src/native/hideLib.so'), path.join(__dirname, `../src/native/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`));
+    return fs.renameSync(path.join(__dirname, '../src/native/hideLib.so'), path.join(__dirname, `../src/native/mock/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`));
   }).timeout(10000);
 });
 

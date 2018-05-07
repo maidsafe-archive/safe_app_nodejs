@@ -17,7 +17,8 @@ let lib = null;
 
 ffi.init = (options) => {
   try {
-    lib = FFI.DynamicLibrary(path.join(options.libPath || dir, LIB_FILENAME), mode);
+    const pathToLibs = options.libPath || path.join( dir, 'prod');
+    lib = FFI.DynamicLibrary(path.join(pathToLibs, LIB_FILENAME), mode);
 
     api.forEach((mod) => {
       if (!lib) {
