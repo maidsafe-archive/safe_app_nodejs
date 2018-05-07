@@ -216,42 +216,6 @@ module.exports = {
             .catch(reject);
         });
       });
-    },
-    PromisifiedForEachCb: (formatter, rTypes) => {
-      // This is similar to the function returned by the Promisifed function
-      // above, with the difference being that it expects a callback function
-      // as the last parameter which is passed down to the lib's function
-      // as the next to last parameter, and it doesn't support a post-processing
-      // function for the returned values.
-      return (lib, fn) => ((...varArgs) => {
-        // the internal function that wraps the actual function call
-        // compile the callback-types-definiton
-        let args;
-        let types = normaliseTypes(rTypes);
-
-        return new Promise((resolve, reject) => {
-          // if there is a formatter, we are reformatting
-          // the incoming arguments first
-          try {
-            args = formatter ? formatter(...varArgs): [...varArgs];
-          } catch(err) {
-            // reject promise if error is thrown by the formatter
-            return reject(err);
-          }
-
-          // append user-context and callbacks to the arguments,
-          // and the last argument we receive is the callback function
-          // to be passed as argument right after the user-context pointer but
-          // before the result calback (which is added and handlded by callLibFn)
-          let callback = args[args.length - 1];
-          args = Array.prototype.slice.call(args, 0, args.length - 1);
-          args.push(ref.NULL);
-          args.push(callback);
-          return callLibFn(fn, args, types, null)
-            .then(resolve)
-            .catch(reject);
-        });
-      });
     }
   }
 }

@@ -72,7 +72,7 @@
     },
     "safe_app": {
       "mirror": "https://s3.eu-west-2.amazonaws.com/safe-client-libs",
-      "version": "v0.6.0",
+      "version": "a9b4c05",
       "targetDir": "src/native/prod",
       "filename": "safe_app",
       "filePattern": "^.*\\.(dll|so|dylib)$",

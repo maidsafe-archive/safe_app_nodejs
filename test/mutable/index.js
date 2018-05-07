@@ -58,6 +58,36 @@ describe('Mutable Data', () => {
                                           h.createRandomSecKey(),
                                           h.createRandomNonce()))
         .be.rejectedWith(errConst.XOR_NAME.msg(32)));
+
+    it('create custom private with non-Buffer and invalid name', () => should(app.mutableData.newPrivate(h.createRandomInvalidXor().toString(), TYPE_TAG,
+                                    h.createRandomSecKey(), h.createRandomNonce()))
+        .be.rejectedWith(errConst.XOR_NAME.msg(32)));
+
+    it('create custom private with non-Buffer and invalid secret key', () => should(app.mutableData.newPrivate(
+                                    h.createRandomXorName(),
+                                    TYPE_TAG,
+                                    h.createRandomInvalidSecKey().toString(),
+                                    h.createRandomNonce()))
+        .be.rejectedWith(errConst.INVALID_SEC_KEY.msg(32)));
+
+    it('create custom private with non-Buffer and invalid nonce', () => should(app.mutableData.newPrivate(
+                                    h.createRandomXorName(),
+                                    TYPE_TAG,
+                                    h.createRandomSecKey(),
+                                    h.createRandomInvalidNonce().toString()))
+        .be.rejectedWith(errConst.NONCE.msg(24)));
+
+    it('create custom private with and invalid name as Buffer', () => should(app.mutableData.newPrivate(h.createRandomInvalidXor(), TYPE_TAG,
+                                    h.createRandomSecKey(), h.createRandomNonce()))
+        .be.rejectedWith(errConst.XOR_NAME.msg(32)));
+
+    it('create custom private with and invalid secret key as Buffer', () => should(app.mutableData.newPrivate(h.createRandomXorName(), TYPE_TAG,
+                                    h.createRandomInvalidSecKey(), h.createRandomNonce()))
+        .be.rejectedWith(errConst.INVALID_SEC_KEY.msg(32)));
+
+    it('create custom private with and invalid nonce as Buffer', () => should(app.mutableData.newPrivate(h.createRandomXorName(), TYPE_TAG,
+                                    h.createRandomSecKey(), h.createRandomInvalidNonce()))
+        .be.rejectedWith(errConst.NONCE.msg(24)));
   });
 
   describe('MutableData info', () => {
@@ -98,6 +128,13 @@ describe('Mutable Data', () => {
                                         nonce))
             .be.rejectedWith(errConst.NONCE.msg(24));
     });
+
+    it('throws error if custom private is created with invalid secret key', async () => should(
+             app.mutableData.newPrivate(h.createRandomXorName(),
+                                        TYPE_TAG,
+                                        h.createRandomInvalidSecKey(),
+                                        h.createRandomNonce()))
+            .be.rejectedWith(errConst.INVALID_SEC_KEY.msg(32)));
 
     it('create custom private and read its name', () =>
         app.mutableData.newPrivate(h.createRandomXorName(), TYPE_TAG,
@@ -244,11 +281,6 @@ describe('Mutable Data', () => {
   });
 
   describe('Errors', () => {
-    it('missing callback in entries.forEach', () => app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup().then(() => m.getEntries()))
-      .then((entries) => should(entries.forEach()).be.rejectedWith('A function parameter _must be_ provided'))
-    );
-
     it('invalid user\'s permissions', () => app.mutableData.newRandomPublic(TYPE_TAG)
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => {

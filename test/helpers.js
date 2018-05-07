@@ -77,7 +77,10 @@ const createRandomXorName = () => crypto.randomBytes(32);
 const createRandomSecKey = () => crypto.randomBytes(32);
 const createRandomSignPubKey = () => crypto.randomBytes(32);
 const createRandomSignSecKey = () => crypto.randomBytes(64);
-const createRandomNonce = () => crypto.randomBytes(32);
+const createRandomNonce = () => crypto.randomBytes(24);
+const createRandomInvalidSecKey = () => crypto.randomBytes(30);
+const createRandomInvalidXor = () => crypto.randomBytes(30);
+const createRandomInvalidNonce = () => crypto.randomBytes(30);
 
 module.exports = {
   App,
@@ -93,5 +96,8 @@ module.exports = {
   createRandomNonce,
   createTestAppWithNetworkCB,
   createTestAppWithOptions,
-  createAltAuthTestApp
+  createAltAuthTestApp,
+  createRandomInvalidSecKey,
+  createRandomInvalidXor,
+  createRandomInvalidNonce
 };
