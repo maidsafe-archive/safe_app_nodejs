@@ -55,7 +55,7 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
  * const safe = require('@maidsafe/safe-node-app');
  *
  * // starting initialisation
- * let prms = safe.initializeApp({
+ * let prms = safe.initialiseApp({
  *                      id: "net.maidsafe.example",
  *                      name: 'Example SAFE App',
  *                      vendor: 'MaidSafe.net Ltd'
@@ -92,11 +92,11 @@ const initializeApp = async (appInfo, networkStateCallBack, options) => {
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  */
 const fromAuthURI = (appInfo, authUri, networkStateCallBack, options) =>
-  App.fromAuthUri(appInfo, authUri, networkStateCallBack, options);
+  App.fromAuthURI(appInfo, authUri, networkStateCallBack, options);
 
 module.exports = {
   VERSION: version,
-  initializeApp,
+  initialiseApp,
   fromAuthURI,
   CONSTANTS
 };

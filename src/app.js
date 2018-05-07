@@ -292,9 +292,9 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
-  * Create a SAFEApp and try to login it through the `authUri`
+  * Create a SAFEApp and try to login it through the `authURI`
   * @param {AppInfo} appInfo - the AppInfo
-  * @param {String} authUri - URI containing the authentication info
+  * @param {String} authURI - URI containing the authentication info
   * @param {Function} [networkStateCallBack=null] optional callback function
   * to receive network state updates
   * @param {InitOptions}  initialisation options

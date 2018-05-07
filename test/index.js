@@ -13,7 +13,7 @@
 
 const lib = require('../src/native/lib');
 const should = require('should');
-const { fromAuthURI, CONSTANTS, initializeApp } = require('../src');
+const { fromAuthURI, CONSTANTS, initialiseApp } = require('../src');
 const h = require('./helpers');
 const api = require('../src/native/api');
 const fs = require('fs');
@@ -100,20 +100,20 @@ describe('Smoke testing', () => {
 });
 
 describe('External API', () => {
-  describe('initializeApp', () => {
+  describe('initialiseApp', () => {
     it('creates and returns new App instance to interface with network', async () => {
-      const app = await initializeApp(appInfo);
+      const app = await initialiseApp(appInfo);
       return should(app).have.properties(['auth', 'appInfo', 'crypto', 'cipherOpt', 'mutableData', 'immutableData', 'networkState']);
     });
 
     it('customExecPath with an array of args', async () => {
       const wrongAppInfo = Object.assign({}, appInfo, { customExecPath: ['arg0', 'arg1', 'arg2'] });
-      return should(initializeApp(wrongAppInfo)).be.fulfilled();
+      return should(initialiseApp(wrongAppInfo)).be.fulfilled();
     });
 
     it('invalid customExecPath param format', async () => {
       const wrongAppInfo = Object.assign({}, appInfo, { customExecPath: 'non-array-exec-path' });
-      return should(initializeApp(wrongAppInfo)).be.rejectedWith('Exec command must be an array of string arguments');
+      return should(initialiseApp(wrongAppInfo)).be.rejectedWith('Exec command must be an array of string arguments');
     });
   });
 

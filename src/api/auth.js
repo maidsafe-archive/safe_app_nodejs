@@ -79,7 +79,7 @@ class AuthInterface {
   constructor(app) {
     this.app = app;
     this._registered = false;
-    this.setupUri();
+    this.setupURI();
   }
 
   /**
@@ -87,7 +87,7 @@ class AuthInterface {
   * Generate the app's URI for the IPC protocol using the app's id
   * and register the URI scheme.
   */
-  setupUri() {
+  setupURI() {
     const appInfo = this.app.appInfo;
     const opts = this.app.options;
     let scheme;
@@ -129,12 +129,12 @@ class AuthInterface {
   *
   * @returns {String} `safe-auth://`-URI
   * @example // using an Authentication example:
-  * app.auth.genAuthUri({
+  * app.auth.genAuthURI({
   *  _public: ['Insert'], // request to insert into public
   *  _other: ['Insert', 'Update'] // request to insert and update
   * }, {own_container: true}) // and we want our own container, too
   */
-  genAuthUri(permissions, opts) {
+  genAuthURI(permissions, opts) {
     const perm = makePermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
     return lib.encode_auth_req(new types.AuthReq({
@@ -156,7 +156,7 @@ class AuthInterface {
   *
   * @returns {String} `safe-auth://`-URI
   * @example // example of requesting permissions for a couple of MutableData's:
-  * app.auth.genShareMDataUri([
+  * app.auth.genShareMDataURI([
   *  { type_tag: 15001,   // request for MD with tag 15001
   *    name: 'XoRname1',  // request for MD located at address 'XoRname1'
   *    perms: ['Insert'], // request for inserting into the referenced MD
@@ -167,7 +167,7 @@ class AuthInterface {
   *  }
   * ])
   */
-  genShareMDataUri(permissions) {
+  genShareMDataURI(permissions) {
     validateShareMDataPermissions(permissions);
     const mdatasPerms = makeShareMDataPermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
@@ -184,10 +184,10 @@ class AuthInterface {
   *
   * @returns {String} `safe-auth://`-URI
   * @example // using an Authentication example:
-  * app.auth.genConnUri()
+  * app.auth.genConnURI()
   */
   /* eslint-disable class-methods-use-this */
-  genConnUri() {
+  genConnURI() {
     return lib.encode_unregistered_req(this.app.appInfo.id)
       .then(addSafeAuthProtocol);
   }
@@ -196,8 +196,8 @@ class AuthInterface {
   * Open the given Authentication URI to the authenticator
   */
   /* eslint-disable class-methods-use-this */
-  openUri(uri) {
-    return lib.openUri(uri);
+  openURI(uri) {
+    return lib.openURI(uri);
   }
   /* eslint-enable class-methods-use-this */
 
@@ -205,13 +205,13 @@ class AuthInterface {
   * Generate a `'safe-auth'`-URI to request further container permissions
   *
   * @example // generating a container authorisation URI:
-  * app.auth.genContainerAuthUri(
+  * app.auth.genContainerAuthURI(
   *  _publicNames: ['Insert'], // request to insert into publicNames
   * })
   * @returns {String}
   * @arg {Object} containers mapping container name to list of permissions
   */
-  genContainerAuthUri(containers) {
+  genContainerAuthURI(containers) {
     const ctnrs = makePermissions(containers);
     const appInfo = makeAppInfo(this.app.appInfo);
     return lib.encode_containers_req(new types.ContainerReq({

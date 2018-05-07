@@ -204,7 +204,7 @@ describe('Smoke test', () => {
     return should(app.logPath()).be.fulfilled();
   }).timeout(10000);
 
-  it('logs in to netowrk from existing authUri', async () => should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri))
+  it('logs in to network from existing authURI', async () => should(h.App.fromAuthURI(h.appInfo, h.authUris.registeredUri))
     .be.fulfilled());
 
   it('throws error if fromAuthUri missing authUri argument', () => should(h.App.fromAuthUri(h.appInfo))
