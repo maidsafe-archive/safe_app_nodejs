@@ -177,4 +177,30 @@ describe('Smoke test', () => {
     should(app.isNetStateDisconnected()).be.false();
     should(app.networkState).be.equal('Init');
   }).timeout(10000);
+
+  it('network state upon network disconnection event', (done) => {
+    const networkCb = (state) => {
+      should(state).be.equal('Disconnected');
+      should(app.isNetStateInit()).be.false();
+      should(app.isNetStateConnected()).be.false();
+      should(app.isNetStateDisconnected()).be.true();
+      should(app.networkState).be.equal('Disconnected');
+      done();
+    };
+
+    const app = createTestAppWithNetworkCB(null, networkCb);
+    should(app.isNetStateInit()).be.true();
+    should(app.isNetStateConnected()).be.false();
+    should(app.isNetStateDisconnected()).be.false();
+    should(app.networkState).be.equal('Init');
+
+    app.auth.loginFromURI(h.authUris.registeredUri)
+      .then(() => {
+        should(app.isNetStateInit()).be.false();
+        should(app.isNetStateConnected()).be.true();
+        should(app.isNetStateDisconnected()).be.false();
+        should(app.networkState).be.equal('Connected');
+        app.auth.simulateNetworkDisconnect();
+      });
+  }).timeout(5000);
 }).timeout(15000);
