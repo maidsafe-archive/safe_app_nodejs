@@ -408,7 +408,15 @@ class AuthInterface {
         return this.app;
       });
   }
-}
 
+  /**
+  * *ONLY AVAILALBE IF RUN in NODE_ENV='development' || 'testing'*
+  *
+  * Simulates network disconnect event
+  */
+  simulateDisconnect() {
+    return lib.test_simulate_network_disconnect(this.app.connection);
+  }
+}
 
 module.exports = AuthInterface;

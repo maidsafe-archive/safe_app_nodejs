@@ -62,15 +62,17 @@ describe('Mutable Data Entries', () => {
         }))
   ));
 
-  it('forEach on list of entries', (done) => {
-    app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
-      .then((entries) => entries.forEach((key, value) => {
-        should(value.version).be.equal(0);
-        should(TEST_ENTRIES).have.ownProperty(key.toString());
-        should(TEST_ENTRIES[key.toString()]).be.equal(value.buf.toString());
-      }).then(() => done(), (err) => done(err)));
-  });
+  it('get list of entries', async () => {
+    const m = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await m.quickSetup(TEST_ENTRIES);
+    const entries = await m.getEntries();
+    const entriesArray = await entries.listEntries();
+    const testKeys = Object.keys(TEST_ENTRIES);
+    return entriesArray.map((entry, i) => {
+      should(entry.key.toString()).be.equal(testKeys[i]);
+      return should(entry.value.buf.toString()).be.equal(TEST_ENTRIES[testKeys[i]]);
+    });
+  }).timeout(10000);
 
   it('get list of keys', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))

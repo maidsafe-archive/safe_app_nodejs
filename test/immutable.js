@@ -164,8 +164,9 @@ describe('Immutable Data', () => {
         )
       .then(() => app.mutableData.newPublic(testXorName, TYPE_TAG))
       .then((md) => md.getEntries())
-      .then((entries) => entries.forEach((key, value) => {
-        app.immutableData.fetch(value.buf)
+      .then((entries) => entries.listEntries())
+      .then((entriesArray) => entriesArray.forEach((entry) => {
+        app.immutableData.fetch(entry.value.buf)
         .then((r) => r.read())
         .then((res) => should(res.toString()).equal(testString));
       }));

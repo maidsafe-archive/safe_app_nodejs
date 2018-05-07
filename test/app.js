@@ -16,6 +16,7 @@ const h = require('./helpers');
 const App = require('../src/app');
 const appHelpers = require('../src/helpers');
 const errConst = require('../src/error_const');
+const lib = require('../src/native/lib');
 
 const createTestApp = h.createTestApp;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
@@ -177,4 +178,21 @@ describe('Smoke test', () => {
     should(app.isNetStateDisconnected()).be.false();
     should(app.networkState).be.equal('Init');
   }).timeout(10000);
+
+  it.only('returns appropriate information for disconnected network state', async () => {
+    const networkCb = (state) => {
+      console.log(`NETWORK STATE: ${state}`);
+    };
+    const app = await createTestAppWithNetworkCB(null, networkCb);
+    await app.auth.loginForTest({});
+    await app.auth.simulateDisconnect();
+    function timeout(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    await timeout(39000);
+    //should(app.isNetStateInit()).be.true();
+    //should(app.isNetStateConnected()).be.false();
+    //should(app.isNetStateDisconnected()).be.true();
+    //return should(app.networkState).be.equal('Disconnected');
+  }).timeout(50000);
 }).timeout(15000);

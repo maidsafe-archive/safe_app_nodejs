@@ -243,7 +243,7 @@ describe('Access Container', () => {
   it('throws error if root container requested but was not created', async () => {
     const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
     const app = await createAuthenticatedTestApp('_test_scope_2', containersPermissions, { own_container: false });
-    return should(app.auth.getOwnContainer()).be.rejectedWith('Container not found');
+    return should(app.auth.getOwnContainer()).be.rejectedWith(`'apps/${h.appInfo.id}' not found in the access container`);
   });
 
   it('has read access to `_public`', () => app.auth.refreshContainersPermissions().then(() =>
