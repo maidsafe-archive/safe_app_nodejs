@@ -14,7 +14,7 @@
 const lib = require('../native/lib');
 const nativeH = require('../native/helpers');
 const types = require('../native/types');
-const { inTesting } = require('../consts');
+const { inTesting } = require('../helpers');
 const { validateShareMDataPermissions } = require('../helpers');
 const errConst = require('../error_const');
 const makeError = require('../native/_error.js');

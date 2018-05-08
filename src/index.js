@@ -14,7 +14,7 @@
 const App = require('./app');
 const { autoref } = require('./helpers');
 const { version } = require('../package.json');
-const { pubConsts: CONSTANTS, initializeOptions } = require('./consts.js');
+const { pubConsts: CONSTANTS } = require('./consts.js');
 
 /**
 * @typedef {Object} AppInfo
@@ -41,6 +41,8 @@ const { pubConsts: CONSTANTS, initializeOptions } = require('./consts.js');
 *        E.g. `log.toml` and `crust.config` files will be also searched not only
 *        in the same folder where the native library is, but also in this
 *        additional search path.
+* @param {Boolean=} forceUseMock to force the use of mock routing regardless
+*        the NODE_ENV environment variable value. Defaults to false
 */
 
 /**
@@ -71,7 +73,6 @@ const { pubConsts: CONSTANTS, initializeOptions } = require('./consts.js');
  */
 const initializeApp = async (appInfo, networkStateCallBack, options) => {
   try {
-    initializeOptions(options);
     const app = autoref(new App(appInfo, networkStateCallBack, options));
     await app.init();
     return Promise.resolve(app);
@@ -92,10 +93,8 @@ const initializeApp = async (appInfo, networkStateCallBack, options) => {
  * @param {InitOptions=} options initialisation options
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  */
-const fromAuthURI = (appInfo, authUri, networkStateCallBack, options) => {
-  initializeOptions(options);
-  return App.fromAuthUri(appInfo, authUri, networkStateCallBack, options);
-};
+const fromAuthURI = (appInfo, authUri, networkStateCallBack, options) =>
+  App.fromAuthUri(appInfo, authUri, networkStateCallBack, options);
 
 module.exports = {
   VERSION: version,

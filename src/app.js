@@ -94,7 +94,8 @@ class SAFEApp extends EventEmitter {
     this.options = Object.assign({
       log: true,
       registerScheme: true,
-      configPath: null
+      configPath: null,
+      forceUseMock: false
     }, options);
     lib.init(this.options);
     this._appInfo = appInfo;

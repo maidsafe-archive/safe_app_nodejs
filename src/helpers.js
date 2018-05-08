@@ -12,11 +12,21 @@
 
 
 const weak = require('weak');
+const path = require('path');
 const makeError = require('./native/_error.js');
+const consts = require('./consts');
 const errConst = require('./error_const');
 const base = require('./native/_base');
 
 const t = base.types;
+
+/* Determine if process is forced to use the mock routing.
+ * Either NODE_ENV env var can be set to 'dev'/'prod',
+ * or '--mock' can be passed as a command line argument.
+*/
+const hasMockArg = process.argv.includes('--mock');
+const env = hasMockArg ? 'development' : process.env.NODE_ENV || 'production';
+let inTesting = /^dev/.test(env);
 
 /**
 * General purpose interface to link a native handle
@@ -119,9 +129,40 @@ function validateShareMDataPermissions(permissions) {
   }
 }
 
+// Currently we only support the `forceUseMock` init option to force the use
+// of mock routing regardless the NODE_ENV environment variable value.
+const getLibPathModifier = (options) => {
+  let libPathModifier = inTesting ? consts.LIB_LOCATION_MOCK : consts.LIB_LOCATION_PROD;
+  if (!options) return libPathModifier;
+
+  const forceUseMock = options.forceUseMock;
+  if (typeof forceUseMock !== 'boolean') throw new Error('The \'forceUseMock\' option must be a boolean.');
+
+  if (forceUseMock) {
+    // TODO: find another way to propagate this value for enabling testing functions
+    inTesting = true;
+    libPathModifier = consts.LIB_LOCATION_MOCK;
+  }
+  return libPathModifier;
+};
+
+const getSafeAppLibFilename = (defaultDir, options) => {
+  const baseDir = (options && options.libPath) || defaultDir;
+  const libPath = path.join(baseDir, getLibPathModifier(options), consts.SAFE_APP_LIB_FILENAME);
+  return libPath;
+};
+
+const getSystemUriLibFilename = (defaultDir, options) => {
+  const baseDir = (options && options.libPath) || defaultDir;
+  const libPath = path.join(baseDir, getLibPathModifier(options), consts.SYSTEM_URI_LIB_FILENAME);
+  return libPath;
+};
 
 module.exports = {
+  inTesting,
   NetworkObject,
   autoref,
-  validateShareMDataPermissions
+  validateShareMDataPermissions,
+  getSafeAppLibFilename,
+  getSystemUriLibFilename
 };

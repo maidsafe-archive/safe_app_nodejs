@@ -58,12 +58,10 @@ describe('Smoke test', () => {
       log: false,
       registerScheme: false,
       joinSchemes: ['proto'],
-      configPath: '/home'
+      configPath: '/home',
+      forceUseMock: false,
     };
-    const app = await createTestAppWithOptions(
-      null,
-      optionsObject
-    );
+    const app = createTestAppWithOptions(null, optionsObject);
 
     const optionsObjectsEqual = Object.keys(app.options).every(
       (option) => app.options[option] === optionsObject[option]

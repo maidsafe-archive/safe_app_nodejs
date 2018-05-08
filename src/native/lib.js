@@ -1,11 +1,11 @@
 // Copyright 2018 MaidSafe.net limited.
 //
-// This SAFE Network Software is licensed to you under 
-// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or 
+// This SAFE Network Software is licensed to you under
+// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or
 // the Modified BSD license <LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
 // at your option.
 //
-// This file may not be copied, modified, or distributed except according to those terms. 
+// This file may not be copied, modified, or distributed except according to those terms.
 //
 // Please review the Licences for the specific language governing permissions and limitations
 // relating to use of the SAFE Network Software.
@@ -13,10 +13,10 @@
 
 const path = require('path');
 const FFI = require('ffi');
-const { getLibFilename } = require('../consts');
+const { getSafeAppLibFilename } = require('../helpers');
 const os = require('os');
 
-const dir = path.dirname(__filename);
+const currentDir = path.dirname(__filename);
 
 const api = require('./api');
 const makeError = require('./_error.js');
@@ -30,7 +30,7 @@ let lib = null;
 
 ffi.init = (options) => {
   try {
-    lib = FFI.DynamicLibrary(path.join(options.libPath || dir, getLibFilename() ), mode);
+    lib = FFI.DynamicLibrary(getSafeAppLibFilename(currentDir, options), mode);
 
     api.forEach((mod) => {
       if (!lib) {
