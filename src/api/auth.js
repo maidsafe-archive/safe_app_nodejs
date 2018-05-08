@@ -408,7 +408,18 @@ class AuthInterface {
         return this.app;
       });
   }
-}
 
+  /**
+  * *ONLY AVAILALBE IF RUN in NODE_ENV='development' || 'testing'*
+  *
+  * Simulates a network disconnection event. This can be used to
+  * test any logic to be executed by an application when a network
+  * diconnection notification is received.
+  */
+  simulateNetworkDisconnect() {
+    if (!inTesting) throw makeError(errConst.NON_DEV.code, errConst.NON_DEV.msg);
+    return lib.test_simulate_network_disconnect(this.app.connection);
+  }
+}
 
 module.exports = AuthInterface;
