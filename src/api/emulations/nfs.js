@@ -18,8 +18,6 @@ const { pubConsts: CONSTANTS } = require('../../consts');
 const errConst = require('../../error_const');
 const makeError = require('../../native/_error.js');
 
-const isString = (arg) => typeof arg === 'string' || (arg.toString ? arg.toString() === '[object String]' : false);
-
 /**
 * A NFS-style File
 *
@@ -54,24 +52,11 @@ class File {
       modified_sec: this._ref.modified_sec,
       modified_nsec: this._ref.modified_nsec,
       data_map_name: this.dataMapName,
+      user_metadata_ptr: this._ref.user_metadata_ptr,
+      user_metadata_len: this._ref.user_metadata_len,
+      user_metadata_cap: this._ref.user_metadata_cap
     };
 
-    if (this._ref.metadata) {
-      let mData = this._ref.metadata;
-      if (!isString(this._ref.metadata)) {
-        mData = JSON.stringify(this._ref.metadata);
-      }
-
-      const buf = new Buffer(mData);
-      data.user_metadata_ptr = buf.ref();
-      data.user_metadata_len = buf.length;
-      data.user_metadata_cap = buf.length;
-    } else {
-      const userData = Buffer.from([]);
-      data.user_metadata_ptr = userData;
-      data.user_metadata_len = userData.length;
-      data.user_metadata_cap = userData.byteLength;
-    }
     return new t.File(data);
   }
 
@@ -81,6 +66,14 @@ class File {
   */
   get dataMapName() {
     return this._ref.data_map_name;
+  }
+
+  /**
+  *
+  * @returns {Buffer} user_metadata
+  */
+  get userMetadata() {
+    return this._ref.user_metadata_ptr;
   }
 
   /**
@@ -199,10 +192,11 @@ class NFS {
   /**
   * Helper function to create and save file to the network
   * @param {String|Buffer} content - file contents
+  * @param {String|Buffer} userMetadata - optional user metadata
   * @returns {File} a newly created file
   */
-  create(content) {
-    return this.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)
+  create(content, userMetadata) {
+    return this.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE, userMetadata)
       .then((file) => file.write(content)
         .then(() => file.close())
         .then(() => file)
@@ -243,9 +237,17 @@ class NFS {
   * @param {File} file - the file to serialise and store
   * @param {Number} version - the version successor number, to ensure you
            are overwriting the right one
+  * @param {String|Buffer} userMetadata - optional parameter for updating user metadata
   * @returns {Promise<File>} - the same file
   */
-  update(fileName, file, version) {
+  update(fileName, file, version, userMetadata) {
+    if (userMetadata) {
+      const userMetadataPtr = Buffer.from(userMetadata);
+      const fileMeta = file._ref; // eslint-disable-line no-underscore-dangle
+      fileMeta.user_metadata_ptr = userMetadataPtr;
+      fileMeta.user_metadata_len = userMetadata.length;
+      fileMeta.user_metadata_cap = userMetadata.length;
+    }
     return lib.dir_update_file(this.mData.app.connection, this.mData.ref, fileName,
                            file.ref.ref(), version)
       .then(() => { file.version = version; })  // eslint-disable-line no-param-reassign
@@ -277,10 +279,15 @@ class NFS {
   * @param {Number|CONSTANTS.NFS_FILE_MODE_OVERWRITE|
   *         CONSTANTS.NFS_FILE_MODE_APPEND|
   *         CONSTANTS.NFS_FILE_MODE_READ} [openMode=CONSTANTS.NFS_FILE_MODE_OVERWRITE]
+  * @param {String|Buffer} userMetadata
   * @returns {Promise<File>}
   */
-  open(file, openMode) {
+  open(file, openMode, userMetadata) {
     const now = nativeH.toSafeLibTime(new Date());
+    let userMetadataPtr;
+    if (userMetadata) {
+      userMetadataPtr = Buffer.from(userMetadata);
+    }
     const metadata = {
       size: 0,
       data_map_name: new Array(32).fill(0),
@@ -288,9 +295,9 @@ class NFS {
       created_nsec: now.now_nsec_part,
       modified_sec: now.now_sec_part,
       modified_nsec: now.now_nsec_part,
-      user_metadata_ptr: [],
-      user_metadata_len: 0,
-      user_metadata_cap: 0
+      user_metadata_ptr: userMetadataPtr || Buffer.from([]),
+      user_metadata_len: userMetadataPtr ? userMetadata.length : 0,
+      user_metadata_cap: userMetadataPtr ? userMetadata.length : 0
     };
 
     let fileParam = file;

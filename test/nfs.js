@@ -65,6 +65,15 @@ describe('NFS emulation', () => {
     .then((nfs) => should(nfs.create('testing')).be.fulfilled())
   );
 
+  it('provides helper function to create file with user metadata', async () => {
+    const m = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await m.quickSetup({});
+    const nfs = await m.emulateAs('nfs');
+    const userMetadata = 'text/plain';
+    const file = await nfs.create('testing', userMetadata);
+    return should(file.ref.user_metadata_len).be.equal(userMetadata.length);
+  });
+
   it('deletes file', () => app.mutableData.newRandomPrivate(TYPE_TAG)
     // Note we use lowercase 'nfs' below to test that it is case insensitive
     .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
@@ -198,12 +207,63 @@ describe('NFS emulation', () => {
     const size = await file.size();
     return should(size).be.equal(18);
   });
-//  describe('internal function', () => {
-//    it.only('verifies if file meta data is String instance', async () => {
-//      const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
-//      await mData.quickSetup({});
-//      const nfs = await mData.emulateAs('nfs');
-//      const file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
-//    });
-//  });
+
+  it('creates file with user metadata', async () => {
+    const m = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await m.quickSetup({});
+    const nfs = await m.emulateAs('nfs');
+    const userMetadata = 'text/plain';
+    const file = await nfs.create('hello, SAFE world!', userMetadata);
+    return should(file.userMetadata.toString())
+      .be.equal(userMetadata);
+  });
+
+  it('fetches file and reads user meta data', async () => {
+    const m = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await m.quickSetup({});
+    const nfs = await m.emulateAs('nfs');
+    const userMetadata = 'text/plain';
+    let file = await nfs.create('hello, SAFE world!', userMetadata);
+    await nfs.insert('hello.txt', file);
+    file = await nfs.fetch('hello.txt');
+    return should(file.userMetadata.toString())
+      .be.equal(userMetadata);
+  });
+
+  it('updates file user metadata', async () => {
+    const m = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await m.quickSetup({});
+    const nfs = await m.emulateAs('nfs');
+    const userMetadata = 'text/plain';
+    let file = await nfs.create('hello, SAFE world!', userMetadata);
+    should(file.userMetadata.toString()).be.equal(userMetadata);
+    await nfs.insert('hello.txt', file);
+    file = await nfs.fetch('hello.txt');
+    const fileVersion = file.version;
+    await nfs.update('hello.txt', file, fileVersion + 1, 'text/javascript');
+    file = await nfs.fetch('hello.txt');
+    return should(file.userMetadata.toString())
+      .be.equal('text/javascript');
+  });
+
+  it('throws error if invalid user metadata type is passed while updating file', async () => {
+    const m = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await m.quickSetup({});
+    const nfs = await m.emulateAs('nfs');
+    let file = await nfs.create('hello, SAFE world!', 'text/plain');
+    await nfs.insert('hello.txt', file);
+    should(file.ref.user_metadata_len).be.equal(10);
+    file = await nfs.fetch('hello.txt');
+    const fileVersion = file.version;
+    const test = () => nfs.update('hello.txt', file, fileVersion + 1, { meta: 'data' });
+    return should(test).throw('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.');
+  });
+
+  it('throws error if invalid user metadata type is passed while creating file', async () => {
+    const m = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await m.quickSetup({});
+    const nfs = await m.emulateAs('nfs');
+    const test = () => nfs.create('hello, SAFE world!', 5);
+    return should(test).throw('"value" argument must not be a number');
+  });
 }).timeout(30000);
