@@ -14,7 +14,7 @@
 const os = require('os');
 const path = require('path');
 
-const inTesting = new RegExp('dev|development|testing|test').test(process.env.NODE_ENV || '');
+let inTesting = new RegExp('dev|development|testing|test').test(process.env.NODE_ENV || '');
 
 const TAG_TYPE_DNS = 15001;
 const TAG_TYPE_WWW = 15002;
@@ -26,16 +26,38 @@ const NET_STATE_CONNECTED = 0;
 // Determine if process is forced to mock
 const allPassedArgs = process.argv;
 
-const hasMockFlag = allPassedArgs.includes('--mock');
+let hasMockFlag = allPassedArgs.includes('--mock');
 
-const env = hasMockFlag ? 'development' : process.env.NODE_ENV || 'production';
-const isRunningDevelopment = /^dev/.test(env);
+let env = hasMockFlag ? 'development' : process.env.NODE_ENV || 'production';
+let isRunningDevelopment = /^dev/.test(env);
 
 let libLocationModifier = 'prod';
 
 if (isRunningDevelopment || inTesting) {
   libLocationModifier = 'mock';
 }
+
+/**
+ * Set up constants from options passed to the app intiialiser.
+ * Useful to force a mock network in production builds, where NODE_ENV cannot be guaranteed.
+ * @param  {Object} options application options
+ */
+const initializeOptions = (options) => {
+  if (!options) return;
+
+  const isMock = options.isMock;
+
+  if (!isMock) return;
+
+  if (typeof isMock !== 'boolean') throw new Error('The\'isMock\' option must be a boolean.');
+
+  hasMockFlag = isMock;
+  env = 'development';
+  isRunningDevelopment = true;
+  inTesting = true;
+  libLocationModifier = 'mock';
+};
+
 
 /**
 * @typedef {Object} CONSTANTS
@@ -107,23 +129,24 @@ const pubConsts = {
   MD_PERMISSION_EMPTY: 0,
 };
 
-const LIB_FILENAME = {
+const getLibFilename = () => ({
   win32: path.join('./', libLocationModifier, 'safe_app.dll'),
   darwin: path.join('./', libLocationModifier, 'libsafe_app.dylib'),
   linux: path.join('./', libLocationModifier, 'libsafe_app.so')
-}[os.platform()];
+})[os.platform()];
 
-const SYSTEM_URI_LIB_FILENAME = {
+const getSystemUriLibFilename = () => ({
   win32: path.join('./', libLocationModifier, 'system_uri.dll'),
   darwin: path.join('./', libLocationModifier, 'libsystem_uri.dylib'),
   linux: path.join('./', libLocationModifier, 'libsystem_uri.so')
-}[os.platform()];
+})[os.platform()];
+
 
 const INDEX_HTML = 'index.html';
 
 module.exports = {
-  LIB_FILENAME,
-  SYSTEM_URI_LIB_FILENAME,
+  getLibFilename,
+  getSystemUriLibFilename,
 
   TAG_TYPE_DNS,
   TAG_TYPE_WWW,
@@ -133,6 +156,7 @@ module.exports = {
   NET_STATE_CONNECTED,
 
   INDEX_HTML,
+  initializeOptions,
   inTesting,
   pubConsts,
   hasMockFlag

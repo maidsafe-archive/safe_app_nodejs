@@ -13,7 +13,7 @@
 
 const path = require('path');
 const FFI = require('ffi');
-const { LIB_FILENAME } = require('../consts');
+const { getLibFilename } = require('../consts');
 const os = require('os');
 
 const dir = path.dirname(__filename);
@@ -30,7 +30,7 @@ let lib = null;
 
 ffi.init = (options) => {
   try {
-    lib = FFI.DynamicLibrary(path.join(options.libPath || dir, LIB_FILENAME), mode);
+    lib = FFI.DynamicLibrary(path.join(options.libPath || dir, getLibFilename() ), mode);
 
     api.forEach((mod) => {
       if (!lib) {

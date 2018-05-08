@@ -14,7 +14,7 @@
 const path = require('path');
 const FFI = require('ffi');
 const ref = require('ref');
-const { SYSTEM_URI_LIB_FILENAME } = require('../consts');
+const { getSystemUriLibFilename } = require('../consts');
 const makeError = require('./_error.js');
 const h = require('./helpers');
 const t = require('./types');
@@ -27,7 +27,7 @@ let ffi = null;
 let isSysUriLibLoadErr = null;
 
 const init = (options) => {
-  ffi = FFI.Library(path.join(options.libPath || dir, SYSTEM_URI_LIB_FILENAME), {
+  ffi = FFI.Library(path.join(options.libPath || dir, getSystemUriLibFilename()), {
     open_uri: ["void", ['string', 'pointer', 'pointer'] ],
     install: ["void", ['string', //bundle
       'string', //vendor
