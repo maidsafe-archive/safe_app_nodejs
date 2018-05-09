@@ -10,9 +10,6 @@
 // Please review the Licences for the specific language governing permissions and limitations
 // relating to use of the SAFE Network Software.
 
-
-const { useMockByDefault } = require('../helpers');
-
 module.exports = [
   require('./_base'),
   require('./_crypto'),
@@ -23,5 +20,5 @@ module.exports = [
   require('./_mutable'),
   require('./_nfs'),
   require('./_logging'),
-  useMockByDefault ? require("./_testing") : {} // we have some testing helpers
+  require("./_testing") // we have some testing helpers
 ];

@@ -134,27 +134,22 @@ function validateShareMDataPermissions(permissions) {
 
 // Currently we only support the `forceUseMock` init option to force the use
 // of mock routing regardless the NODE_ENV environment variable value.
-const getLibPathModifier = (options) => {
+const getNativeLibPath = (defaultDir, options, filename) => {
+  const baseDir = (options && options.libPath) || defaultDir;
   let libPathModifier = useMockByDefault ? consts.LIB_LOCATION_MOCK : consts.LIB_LOCATION_PROD;
-  if (!options) return libPathModifier;
 
-  if (options.forceUseMock) {
+  if (options && options.forceUseMock) {
     libPathModifier = consts.LIB_LOCATION_MOCK;
   }
-  return libPathModifier;
-};
-
-const getSafeAppLibFilename = (defaultDir, options) => {
-  const baseDir = (options && options.libPath) || defaultDir;
-  const libPath = path.join(baseDir, getLibPathModifier(options), consts.SAFE_APP_LIB_FILENAME);
+  const libPath = path.join(baseDir, libPathModifier, filename);
   return libPath;
 };
 
-const getSystemUriLibFilename = (defaultDir, options) => {
-  const baseDir = (options && options.libPath) || defaultDir;
-  const libPath = path.join(baseDir, getLibPathModifier(options), consts.SYSTEM_URI_LIB_FILENAME);
-  return libPath;
-};
+const getSafeAppLibFilename = (defaultDir, options) =>
+  getNativeLibPath(defaultDir, options, consts.SAFE_APP_LIB_FILENAME);
+
+const getSystemUriLibFilename = (defaultDir, options) =>
+  getNativeLibPath(defaultDir, options, consts.SYSTEM_URI_LIB_FILENAME);
 
 module.exports = {
   useMockByDefault,
