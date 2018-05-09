@@ -20,13 +20,16 @@ const base = require('./native/_base');
 
 const t = base.types;
 
-/* Determine if process is forced to use the mock routing.
+/* Determine if by default the package shall use the mock routing.
  * Either NODE_ENV env var can be set to 'dev'/'prod',
  * or '--mock' can be passed as a command line argument.
+ *
+ * Note this can be overriden by each safeApp instance by
+ * providing the `forceUseMock` option at initialisation stage.
 */
 const hasMockArg = process.argv.includes('--mock');
 const env = hasMockArg ? 'development' : process.env.NODE_ENV || 'production';
-let inTesting = /^dev/.test(env);
+const useMockByDefault = /^dev/.test(env);
 
 /**
 * General purpose interface to link a native handle
@@ -132,15 +135,10 @@ function validateShareMDataPermissions(permissions) {
 // Currently we only support the `forceUseMock` init option to force the use
 // of mock routing regardless the NODE_ENV environment variable value.
 const getLibPathModifier = (options) => {
-  let libPathModifier = inTesting ? consts.LIB_LOCATION_MOCK : consts.LIB_LOCATION_PROD;
+  let libPathModifier = useMockByDefault ? consts.LIB_LOCATION_MOCK : consts.LIB_LOCATION_PROD;
   if (!options) return libPathModifier;
 
-  const forceUseMock = options.forceUseMock;
-  if (typeof forceUseMock !== 'boolean') throw new Error('The \'forceUseMock\' option must be a boolean.');
-
-  if (forceUseMock) {
-    // TODO: find another way to propagate this value for enabling testing functions
-    inTesting = true;
+  if (options.forceUseMock) {
     libPathModifier = consts.LIB_LOCATION_MOCK;
   }
   return libPathModifier;
@@ -159,7 +157,7 @@ const getSystemUriLibFilename = (defaultDir, options) => {
 };
 
 module.exports = {
-  inTesting,
+  useMockByDefault,
   NetworkObject,
   autoref,
   validateShareMDataPermissions,

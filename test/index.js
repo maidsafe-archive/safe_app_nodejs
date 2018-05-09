@@ -19,7 +19,7 @@ const api = require('../src/native/api');
 const fs = require('fs');
 const path = require('path');
 const errConst = require('../src/error_const');
-const { inTesting, getSafeAppLibFilename, getSystemUriLibFilename } = require('../src/helpers');
+const { useMockByDefault, getSafeAppLibFilename, getSystemUriLibFilename } = require('../src/helpers');
 
 const appInfo = {
   id: 'net.maidsafe.example.tests',
@@ -55,7 +55,7 @@ describe('Smoke testing', () => {
 
   it('requires additional functions for testing, if in non-production', () => {
     const testingApi = api[api.length - 1];
-    should(inTesting).be.true();
+    should(useMockByDefault).be.true();
     should.exist(testingApi.functions.test_create_app);
     return should.exist(testingApi.functions.test_create_app_with_access);
   });
@@ -83,6 +83,11 @@ describe('Smoke testing', () => {
 
   it('safe app lib contains "mock" dir (as we\'re testing)', () => {
     const libPath = getSafeAppLibFilename('./');
+    return should(libPath.includes('mock')).be.true();
+  });
+
+  it('safe app lib contains "mock" dir if we force use of mock', () => {
+    const libPath = getSafeAppLibFilename('./', { forceUseMock: true });
     return should(libPath.includes('mock')).be.true();
   });
 

@@ -11,7 +11,7 @@
 // relating to use of the SAFE Network Software.
 
 
-const { inTesting } = require('../helpers');
+const { useMockByDefault } = require('../helpers');
 
 module.exports = [
   require('./_base'),
@@ -23,5 +23,5 @@ module.exports = [
   require('./_mutable'),
   require('./_nfs'),
   require('./_logging'),
-  inTesting ? require("./_testing") : {} // we have some testing helpers
+  useMockByDefault ? require("./_testing") : {} // we have some testing helpers
 ];
