@@ -69,7 +69,7 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
  *        // or wait for an authorisation URI
  *        )
  */
-const initializeApp = async (appInfo, networkStateCallBack, options) => {
+const initialiseApp = async (appInfo, networkStateCallBack, options) => {
   try {
     const app = autoref(new App(appInfo, networkStateCallBack, options));
     await app.init();
@@ -91,12 +91,12 @@ const initializeApp = async (appInfo, networkStateCallBack, options) => {
  * @param {InitOptions=} options initialisation options
  * @returns {Promise<SAFEApp>} promise to a SAFEApp instance
  */
-const fromAuthURI = (appInfo, authUri, networkStateCallBack, options) =>
-  App.fromAuthURI(appInfo, authUri, networkStateCallBack, options);
+const fromAuthUri = (appInfo, authUri, networkStateCallBack, options) =>
+  App.fromAuthUri(appInfo, authUri, networkStateCallBack, options);
 
 module.exports = {
   VERSION: version,
   initialiseApp,
-  fromAuthURI,
+  fromAuthUri,
   CONSTANTS
 };

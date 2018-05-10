@@ -292,9 +292,9 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
-  * Create a SAFEApp and try to login it through the `authURI`
+  * Create a SAFEApp and try to login it through the `authUri`
   * @param {AppInfo} appInfo - the AppInfo
-  * @param {String} authURI - URI containing the authentication info
+  * @param {String} authUri - URI containing the authentication info
   * @param {Function} [networkStateCallBack=null] optional callback function
   * to receive network state updates
   * @param {InitOptions}  initialisation options
@@ -303,7 +303,7 @@ class SAFEApp extends EventEmitter {
   static async fromAuthUri(appInfo, authUri, networkStateCallBack, options) {
     const app = autoref(new SAFEApp(appInfo, networkStateCallBack, options));
     await app.init();
-    return app.auth.loginFromURI(authUri);
+    return app.auth.loginFromUri(authUri);
   }
 
   /**

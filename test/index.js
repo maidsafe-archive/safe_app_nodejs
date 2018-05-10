@@ -13,7 +13,7 @@
 
 const lib = require('../src/native/lib');
 const should = require('should');
-const { fromAuthURI, CONSTANTS, initialiseApp } = require('../src');
+const { fromAuthUri, CONSTANTS, initialiseApp } = require('../src');
 const h = require('./helpers');
 const api = require('../src/native/api');
 const fs = require('fs');
@@ -117,57 +117,57 @@ describe('External API', () => {
     });
   });
 
-  describe('fromAuthURI', () => {
-    it('should connect registered', () => fromAuthURI(appInfo, h.authUris.registeredUri, null, { log: false })
+  describe('fromAuthUri', () => {
+    it('should connect registered', () => fromAuthUri(appInfo, h.authUris.registeredUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
 
-    it('should connect unregistered', () => fromAuthURI(appInfo, h.authUris.unregisteredUri, null, { log: false })
+    it('should connect unregistered', () => fromAuthUri(appInfo, h.authUris.unregisteredUri, null, { log: false })
         .then((app) => should(app.auth.registered).not.be.true())
     );
 
-    it('should connect with authorised containers', () => fromAuthURI(appInfo, h.authUris.containersUri, null, { log: false })
+    it('should connect with authorised containers', () => fromAuthUri(appInfo, h.authUris.containersUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
 
-    it('should connect with authorised shared MD', () => fromAuthURI(appInfo, h.authUris.sharedMdataUri, null, { log: false })
+    it('should connect with authorised shared MD', () => fromAuthUri(appInfo, h.authUris.sharedMdataUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
   });
 
-  describe('fromAuthURI with URI variations', () => {
+  describe('fromAuthUri with URI variations', () => {
     it('URI == safe-:<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe-:');
-      return fromAuthURI(appInfo, uri, null, { log: false })
+      return fromAuthUri(appInfo, uri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true());
     });
 
     it('URI == <auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, '');
-      return fromAuthURI(appInfo, uri, null, { log: false })
+      return fromAuthUri(appInfo, uri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true());
     });
 
     // this is the case in Fedora where '/' characters are added after the ':' by the OS
     it('URI == safe-<app id>:///<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-([^:]*):?/g, 'safe-$1:///');
-      return fromAuthURI(appInfo, uri, null, { log: false })
+      return fromAuthUri(appInfo, uri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true());
     });
 
     it('fail with safe-<app info>://<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, '$&//$\'');
-      return should(fromAuthURI(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+      return should(fromAuthUri(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
     });
 
     it('fail with safe-<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe-');
-      return should(fromAuthURI(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+      return should(fromAuthUri(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
     });
 
     it('fail with safe:<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe:');
-      return should(fromAuthURI(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+      return should(fromAuthUri(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
     });
   });
 });

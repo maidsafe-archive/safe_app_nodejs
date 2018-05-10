@@ -11,6 +11,10 @@
 - Moves asynchronous app initialisation opertions out of SAFEApp constructor and into class method
 - The `initializeApp` function is now asynchronous
 - `webFetch` may receive multipart range requests
+- changes fromAuthURI to fromAuthUri
+- changes loginFromURI to loginFromUri
+- uses delete instead of remove as entry mutation action 
+- changes initializeApp to use an s instead of z
 
 ### Fixed
 - Fixed some tests which were giving false positive results

@@ -78,7 +78,7 @@ describe('auth interface', () => {
     const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
     const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
-    return app.auth.genShareMDataURI(perms)
+    return app.auth.genShareMDataUri(perms)
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
@@ -92,7 +92,7 @@ describe('auth interface', () => {
     const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
     const perms = [{ name: sharedMdXorName, perms: ['Insert'] }];
-    const test = () => app.auth.genShareMDataURI(perms);
+    const test = () => app.auth.genShareMDataUri(perms);
     return should(test).throw(errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(perms[0])));
   });
 
@@ -100,7 +100,7 @@ describe('auth interface', () => {
     const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
     const perms = { type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] };
-    const test = () => app.auth.genShareMDataURI(perms);
+    const test = () => app.auth.genShareMDataUri(perms);
     return should(test).throw(errConst.INVALID_PERMS_ARRAY.msg);
   });
 
@@ -108,7 +108,7 @@ describe('auth interface', () => {
     const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
     const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Wrong'] }];
-    const test = () => app.auth.genShareMDataURI(perms);
+    const test = () => app.auth.genShareMDataUri(perms);
     return should(test).throw(`${perms[0].perms[0]} is not a valid permission`);
   });
 
@@ -116,7 +116,7 @@ describe('auth interface', () => {
     const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
     const perms = [{ type_tag: 'non-integer', name: sharedMdXorName, perms: ['Insert'] }];
-    const test = () => app.auth.genShareMDataURI(perms);
+    const test = () => app.auth.genShareMDataUri(perms);
     return should(test).throw(
       errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(perms[0]))
     );
@@ -126,7 +126,7 @@ describe('auth interface', () => {
     const app = await h.createTestApp();
     const mdName = 'not 32 byte buffer';
     const perms = [{ type_tag: 15001, name: mdName, perms: ['Insert'] }];
-    const test = () => app.auth.genShareMDataURI(perms);
+    const test = () => app.auth.genShareMDataUri(perms);
     return should(test).throw(
       errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(perms[0]))
     );
@@ -143,7 +143,7 @@ describe('auth interface', () => {
 
   it('logs in to network with URI response from authenticator', async () => {
     const app = await h.createTestApp();
-    return should(app.auth.loginFromURI(h.authUris.registeredUri)).be.fulfilled();
+    return should(app.auth.loginFromUri(h.authUris.registeredUri)).be.fulfilled();
   });
 
   it('creates an authenticated session just for testing', async () => {

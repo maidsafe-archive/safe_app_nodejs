@@ -54,7 +54,7 @@ const _handleError = (resolve,  reject) => {
   );
 }
 
-const openURI = (uri) => {
+const openUri = (uri) => {
   if (!ffi) {
     return;
   }
@@ -96,7 +96,7 @@ const registerUriScheme = (appInfo, schemes) => {
 // patch it directly on it. This should later move into its own sub-module
 // and take care of mobile support for other platforms, too.
 module.exports = (other, options) => {
-  other.openURI = openURI;
+  other.openUri = openUri;
   other.registerUriScheme = registerUriScheme;
   init(options);
 }
