@@ -1,3 +1,16 @@
+// Copyright 2018 MaidSafe.net limited.
+//
+// This SAFE Network Software is licensed to you under
+// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or
+// the Modified BSD license <LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
+// at your option.
+//
+// This file may not be copied, modified, or distributed except according to those terms.
+//
+// Please review the Licences for the specific language governing permissions and limitations
+// relating to use of the SAFE Network Software.
+
+
 const h = require('../helpers');
 const lib = require('../native/lib');
 const t = require('../native/types');
@@ -191,12 +204,11 @@ class Entries extends h.NetworkObject {
   }
 
   /**
-  * Iterate over the entries, execute the function for each item
-  * @param {function(Buffer, ValueVersion)} fn the function to call
-  * @returns {Promise} resolves once the iteration is done
+  * Get a list with the entries contained in this MutableData
+  * @returns {Promise<(Array)>} the entries list
   */
-  forEach(fn) {
-    return lib.mdata_entries_for_each(this.app.connection, this.ref, fn);
+  listEntries() {
+    return lib.mdata_list_entries(this.app.connection, this.ref);
   }
 
   /**
@@ -402,14 +414,13 @@ class MutableData extends h.NetworkObject {
                           entries ? entries.ref : CONSTANTS.MD_ENTRIES_EMPTY);
   }
 
-
   /**
   * Get a Handle to the entries associated with this MutableData
   * @returns {Promise<(Entries)>} the entries representation object
   */
   getEntries() {
-    return lib.mdata_list_entries(this.app.connection, this.ref)
-        .then((r) => h.autoref(new Entries(this.app, r)));
+    return lib.mdata_entries(this.app.connection, this.ref)
+      .then((r) => h.autoref(new Entries(this.app, r)));
   }
 
   /**

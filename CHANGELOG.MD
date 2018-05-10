@@ -1,5 +1,21 @@
 # safe_app nodejs Change Log
 
+[Unreleased]
+### Added
+- New binding `simulateNetworkDisconnect()` function to simulate a network disconnection event useful for applications testing purposes.
+
+### Changed
+- Upgrade safe_app native library to commit `a9b4c05` and adapt to minor API changes
+- Removing `forEach` binding function from the MutableData entries API as it was removed from safe_app lib
+- Adding `listEntries` binding function to the MutableData entries API which returns an array with all entries
+
+### Fixed
+- Fixed some tests which were giving false positive results
+
+## SAFE libraries Dependencies
+- safe_app: a9b4c05
+- system_uri: v0.4.0
+
 ## [0.8.1] - 9-3-2018
 ### Changed
 - Using "files" field in `package.json` to whitelist what's intended for packaing rather than blacklisting with .npmignore

@@ -1,3 +1,16 @@
+// Copyright 2018 MaidSafe.net limited.
+//
+// This SAFE Network Software is licensed to you under 
+// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or 
+// the Modified BSD license <LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
+// at your option.
+//
+// This file may not be copied, modified, or distributed except according to those terms. 
+//
+// Please review the Licences for the specific language governing permissions and limitations
+// relating to use of the SAFE Network Software.
+
+
 const ffi = require('ffi');
 const ref = require("ref");
 const Struct = require('ref-struct');
@@ -8,7 +21,6 @@ const { types: t, helpers: h } = require('./_base');
 const errConst = require('../error_const');
 const makeError = require('./_error.js');
 
-const PromisifiedForEachCb = h.PromisifiedForEachCb;
 const Promisified = h.Promisified;
 
 const MDataPermissionsHandle = t.ObjectHandle;
@@ -34,6 +46,12 @@ const MDataValue = Struct({
     entry_version: t.u64,
 });
 const MDataValuesArray = new ArrayType(MDataValue);
+
+const MDataEntry = Struct({
+  key: MDataKey,
+  value: MDataValue,
+});
+const MDataEntriesArray = new ArrayType(MDataEntry);
 
 const UserPermissionSet = Struct({
     /// User's sign key handle.
@@ -110,42 +128,38 @@ const bufferLastEntry = (...varArgs) => {
         .concat([str, str.length]);
 }
 
-const keyValueCallBackLastEntry = (types, ...varArgs) => {
-  let fn = varArgs[varArgs.length - 1];
-  if (typeof fn !== 'function') throw Error('A function parameter _must be_ provided')
-
-  let cb = ffi.Callback("void", types, (uctx, ...cbVarArgs) => {
-    let args = [];
-    args.push(ref.reinterpret(cbVarArgs[0], cbVarArgs[1], 0));
-    args.push(readValueToBuffer([cbVarArgs[2], cbVarArgs[3], cbVarArgs[4]]));
-    fn.apply(fn, args);
-  });
-
-  return Array.prototype.slice.call(varArgs, 0, varArgs.length - 1)
-            .concat(cb);
-}
-
 const translatePrivMDInput = (xorname, tag, secKey, nonce) => {
+  let name;
+  let sk;
+  let n;
+
   if(!Number.isInteger(tag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
-  let name = xorname;
+
   if (!Buffer.isBuffer(xorname)) {
     const b = new Buffer(xorname);
     if (b.length != t.XOR_NAME.size) throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size))
     name = t.XOR_NAME(b).ref().readPointer(0);
+  } else {
+    name = xorname;
+    if (name.length != t.XOR_NAME.size) throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size))
   }
 
-  let sk = secKey;
   if (!Buffer.isBuffer(secKey)) {
     const b = new Buffer(secKey);
-    if (b.length != t.SYM_KEYBYTES.size) throw makeError(errConst.MISSING_SEC_ENC_KEY.code, errConst.MISSING_SEC_ENC_KEY.msg(t.SYM_KEYBYTES.size))
+    if (b.length != t.SYM_KEYBYTES.size) throw makeError(errConst.INVALID_SEC_KEY.code, errConst.INVALID_SEC_KEY.msg(t.SYM_KEYBYTES.size))
     sk = t.SYM_KEYBYTES(b).ref().readPointer(0);
+  } else {
+    sk = secKey;
+    if (sk.length != t.SYM_KEYBYTES.size) throw makeError(errConst.INVALID_SEC_KEY.code, errConst.INVALID_SEC_KEY.msg(t.SYM_KEYBYTES.size));
   }
 
-  let n = nonce;
   if (!Buffer.isBuffer(nonce)) {
     const b = new Buffer(nonce);
     if (b.length != t.SYM_NONCEBYTES.size) throw makeError(errConst.NONCE.code, errConst.NONCE.msg(t.SYM_NONCEBYTES.size))
     n = t.SYM_NONCEBYTES(b).ref().readPointer(0);
+  } else {
+    n = nonce;
+    if (n.length != t.SYM_NONCEBYTES.size) throw makeError(errConst.NONCE.code, errConst.NONCE.msg(t.SYM_NONCEBYTES.size));
   }
 
   return [name, tag, sk, n]
@@ -285,7 +299,7 @@ module.exports = {
     mdata_put: [t.Void, [t.AppPtr, MDataInfoPtr, MDataPermissionsHandle, MDataEntriesHandle, 'pointer', 'pointer']],
     mdata_get_version: [t.Void, [t.AppPtr, MDataInfoPtr, 'pointer', 'pointer']],
     mdata_get_value: [t.Void, [t.AppPtr, MDataInfoPtr, t.u8Pointer, t.usize, 'pointer', 'pointer']],
-    mdata_list_entries: [t.Void, [t.AppPtr, MDataInfoPtr, 'pointer', 'pointer']],
+    mdata_list_entries: [t.Void, [t.AppPtr, MDataEntriesHandle, 'pointer', 'pointer']],
     mdata_list_keys: [t.Void, [t.AppPtr, MDataInfoPtr, 'pointer', 'pointer']],
     mdata_list_values: [t.Void, [t.AppPtr, MDataInfoPtr, 'pointer', 'pointer']],
     mdata_mutate_entries: [t.Void, [t.AppPtr, MDataInfoPtr, MDataEntryActionsHandle, 'pointer', 'pointer']],
@@ -298,11 +312,11 @@ module.exports = {
     mdata_entry_actions_update: [t.Void, [t.AppPtr, MDataEntryActionsHandle, t.u8Pointer, t.usize, t.u8Pointer, t.usize, t.u64, 'pointer', 'pointer']],
     mdata_entry_actions_delete: [t.Void, [t.AppPtr, MDataEntryActionsHandle, t.u8Pointer, t.usize, t.u64, 'pointer', 'pointer']],
     mdata_entry_actions_free: [t.Void, [t.AppPtr, MDataEntryActionsHandle, 'pointer', 'pointer']],
+    mdata_entries: [t.Void, [t.AppPtr, MDataInfoPtr, 'pointer', 'pointer']],
     mdata_entries_new: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
     mdata_entries_insert: [t.Void, [t.AppPtr, MDataEntriesHandle, t.u8Pointer, t.usize, t.u8Pointer, t.usize, 'pointer', 'pointer']],
     mdata_entries_len: [t.Void, [t.AppPtr, MDataEntriesHandle, 'pointer', 'pointer']],
     mdata_entries_get: [t.Void, [t.AppPtr, MDataEntriesHandle, t.u8Pointer, t.usize, 'pointer', 'pointer']],
-    mdata_entries_for_each: [t.Void, [t.AppPtr, MDataEntriesHandle, 'pointer', 'pointer', 'pointer']],
     mdata_entries_free: [t.Void, [t.AppPtr, MDataEntriesHandle, 'pointer', 'pointer']],
     mdata_encode_metadata: [t.Void, [UserMetadataPtr, 'pointer', 'pointer']]
   },
@@ -342,7 +356,26 @@ module.exports = {
         const mDataInfo = toMDataInfo(...varArgs);
         return strToBuffer(...mDataInfo);
       }, valueVersionType, readValueToBuffer),
-    mdata_list_entries: Promisified(toMDataInfo, MDataEntriesHandle),
+    mdata_list_entries: Promisified(null, [ref.refType(MDataEntriesArray), t.usize] , (args) => {
+      const ptr = args[0];
+      const len = args[1];
+      const entriesList = [];
+      if (len > 0) {
+        let arrPtr = ref.reinterpret(ptr, MDataEntry.size * len);
+        let arr = MDataEntriesArray(arrPtr);
+        for (let i = 0; i < len ; i++) {
+          const currEntry = arr[i];
+          const keyStr = ref.reinterpret(currEntry.key.val_ptr, currEntry.key.val_len, 0);
+          const valueStr = ref.reinterpret(currEntry.value.content_ptr, currEntry.value.content_len, 0);
+          const entryObject = {
+            key: keyStr,
+            value: { buf: valueStr, version: currEntry.value.entry_version }
+          };
+          entriesList.push(entryObject);
+        }
+      }
+      return entriesList;
+    }),
     mdata_list_keys: Promisified(toMDataInfo, [ref.refType(MDataKeysArray), t.usize], (args) => {
       const ptr = args[0];
       const len = args[1];
@@ -387,12 +420,11 @@ module.exports = {
     mdata_entry_actions_update: Promisified(strToBufferButLastEntry, []),
     mdata_entry_actions_delete: Promisified(strToBufferButLastEntry, []),
     mdata_entry_actions_free: Promisified(null, []),
+    mdata_entries: Promisified(toMDataInfo, MDataEntriesHandle),
     mdata_entries_new: Promisified(null, MDataEntriesHandle),
     mdata_entries_insert: Promisified(strToBuffer, []),
     mdata_entries_len: Promisified(null, t.usize),
     mdata_entries_get: Promisified(strToBuffer, valueVersionType, readValueToBuffer),
-    mdata_entries_for_each: PromisifiedForEachCb(keyValueCallBackLastEntry.bind(null,
-          ['pointer', t.u8Pointer, t.usize, t.u8Pointer, t.usize, t.u64]), []),
     mdata_entries_free: Promisified(null, []),
     mdata_encode_metadata: Promisified((metadata) => {
       return [ref.alloc(UserMetadata, metadata)];

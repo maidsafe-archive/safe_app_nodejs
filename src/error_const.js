@@ -1,3 +1,16 @@
+// Copyright 2018 MaidSafe.net limited.
+//
+// This SAFE Network Software is licensed to you under
+// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or
+// the Modified BSD license <LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
+// at your option.
+//
+// This file may not be copied, modified, or distributed except according to those terms.
+//
+// Please review the Licences for the specific language governing permissions and limitations
+// relating to use of the SAFE Network Software.
+
+
 module.exports = {
 
   /**
@@ -310,5 +323,17 @@ module.exports = {
   TYPE_TAG_NAN: {
     code: 1019,
     msg: 'Type tag provided _must be_ an integer'
+  },
+
+  /**
+   * @name INVALID_SEC_KEY
+   * @type {object}
+   * @description Secret encryption key of improper length is provided to custom private MutableData
+   * @property {number} code 1020
+   * @property {function} msg
+   */
+  INVALID_SEC_KEY: {
+    code: 1020,
+    msg: (size) => `Secret encryption key _must be_ provided and ${size} bytes long.`
   }
 };

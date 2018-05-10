@@ -1,3 +1,16 @@
+// Copyright 2018 MaidSafe.net limited.
+//
+// This SAFE Network Software is licensed to you under
+// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or
+// the Modified BSD license <LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
+// at your option.
+//
+// This file may not be copied, modified, or distributed except according to those terms.
+//
+// Please review the Licences for the specific language governing permissions and limitations
+// relating to use of the SAFE Network Software.
+
+
 const crypto = require('crypto');
 const App = require('../src/app');
 const h = require('../src/helpers');
@@ -64,7 +77,10 @@ const createRandomXorName = () => crypto.randomBytes(32);
 const createRandomSecKey = () => crypto.randomBytes(32);
 const createRandomSignPubKey = () => crypto.randomBytes(32);
 const createRandomSignSecKey = () => crypto.randomBytes(64);
-const createRandomNonce = () => crypto.randomBytes(32);
+const createRandomNonce = () => crypto.randomBytes(24);
+const createRandomInvalidSecKey = () => crypto.randomBytes(30);
+const createRandomInvalidXor = () => crypto.randomBytes(30);
+const createRandomInvalidNonce = () => crypto.randomBytes(30);
 
 module.exports = {
   App,
@@ -80,5 +96,8 @@ module.exports = {
   createRandomNonce,
   createTestAppWithNetworkCB,
   createTestAppWithOptions,
-  createAltAuthTestApp
+  createAltAuthTestApp,
+  createRandomInvalidSecKey,
+  createRandomInvalidXor,
+  createRandomInvalidNonce
 };

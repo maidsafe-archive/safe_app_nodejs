@@ -1,3 +1,16 @@
+// Copyright 2018 MaidSafe.net limited.
+//
+// This SAFE Network Software is licensed to you under
+// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or
+// the Modified BSD license <LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
+// at your option.
+//
+// This file may not be copied, modified, or distributed except according to those terms.
+//
+// Please review the Licences for the specific language governing permissions and limitations
+// relating to use of the SAFE Network Software.
+
+
 const should = require('should');
 const h = require('./helpers');
 const errConst = require('../src/error_const');
@@ -230,7 +243,7 @@ describe('Access Container', () => {
   it('throws error if root container requested but was not created', async () => {
     const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
     const app = await createAuthenticatedTestApp('_test_scope_2', containersPermissions, { own_container: false });
-    return should(app.auth.getOwnContainer()).be.rejectedWith('Container not found');
+    return should(app.auth.getOwnContainer()).be.rejectedWith(`'apps/${h.appInfo.id}' not found in the access container`);
   });
 
   it('has read access to `_public`', () => app.auth.refreshContainersPermissions().then(() =>
