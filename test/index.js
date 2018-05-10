@@ -16,8 +16,8 @@ const should = require('should');
 const { fromAuthURI, CONSTANTS, initializeApp } = require('../src');
 const h = require('./helpers');
 const api = require('../src/native/api');
-const fs = require('fs');
-const path = require('path');
+const appHelpers = require('../src/helpers');
+const App = require('../src/app');
 const errConst = require('../src/error_const');
 const { useMockByDefault, getSafeAppLibFilename, getSystemUriLibFilename } = require('../src/helpers');
 
@@ -92,15 +92,21 @@ describe('Smoke testing', () => {
   });
 
   it('throws error if lib fails to load', () => {
-    fs.renameSync(path.join(__dirname, getSystemUriLibFilename('../src/native')), path.join(__dirname, '../src/native/hideLib.so'));
     try {
-      h.createAuthenticatedTestApp();
+      appHelpers.autoref(new App(h.appInfo, null, {
+        libPath: '/home'
+      }));
     } catch (err) {
       const errArray = err.message.split('libraries: ');
       should(errConst.FAILED_TO_LOAD_LIB.msg(errArray[1])).be.equal(err.message);
     }
-    return fs.renameSync(path.join(__dirname, '../src/native/hideLib.so'), path.join(__dirname, getSystemUriLibFilename('../src/native')));
-  }).timeout(10000);
+  });
+
+  it('autoref on object with no "free" function', () => {
+    class NoStaticFreeFn {}
+    const test = () => appHelpers.autoref(new NoStaticFreeFn());
+    should(test).throw('No static "free" function found on object to autoref');
+  });
 });
 
 describe('External API', () => {

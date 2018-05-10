@@ -67,7 +67,7 @@ ffi.init = (options) => {
     // and take care of mobile support for other platforms, too.
     require('./_system_uri')(ffi, options);
   } catch(e) {
-    console.error("ERROR: ", e)
+    console.error(e)
     throw makeError(errConst.FAILED_TO_LOAD_LIB.code,
         errConst.FAILED_TO_LOAD_LIB.msg(e.toString()));
   }

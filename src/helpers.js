@@ -89,9 +89,7 @@ const autoref = (obj) => {
     weakObj.forceCleanUp = freeResources(obj);
     return weakObj;
   }
-
-  console.warn('Can\'t clean up obj. No static "free" function found on obj:', obj);
-  return obj;
+  throw new Error('No static "free" function found on object to autoref');
 };
 
 
