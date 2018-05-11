@@ -6,9 +6,9 @@
   "scripts": {
     "lint": "eslint src test",
     "fix-lint": "eslint --fix src test",
-    "postinstall": "npm run install-prod && node install-dev-libs.js",
-    "install-prod": "cross-env NODE_ENV=prod download_deps --package package.json",
-    "install-mock": "cross-env NODE_ENV=dev download_deps --package package.json",
+    "postinstall": "node install-prod-libs.js && node install-dev-libs.js",
+    "install-prod": "cross-env NODE_ENV=prod download_deps",
+    "install-mock": "cross-env NODE_ENV=dev download_deps",
     "docs": "documentation build --config etc/documentation.yml --github true --output docs --format html src/**",
     "serve-docs": "documentation serve --config etc/documentation.yml --github true --output docs --format html src/**",
     "test": "mocha --recursive",

@@ -65,6 +65,10 @@ describe('Smoke testing', () => {
     return should.exist(console.warn);
   });
 
+  it('it fails to load invalid lib path', () => should(
+    h.createTestAppWithOptions(null, { libPath: 'invalid lib path' }))
+      .be.rejectedWith(errConst.FAILED_TO_LOAD_LIB.code));
+
   // TODO: there is an inconsistency between Linux and Windows
   // for the `openUri` function behaviour.
   // On Linux the promise is rejected as expected, while on Windows

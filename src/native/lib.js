@@ -26,6 +26,7 @@ const ffi = {};
 const RTLD_NOW = FFI.DynamicLibrary.FLAGS.RTLD_NOW;
 const RTLD_GLOBAL = FFI.DynamicLibrary.FLAGS.RTLD_GLOBAL;
 const mode = RTLD_NOW | RTLD_GLOBAL;
+const disableSystemUri = process.env.DISABLE_SAFE_SYSTEM_URI;
 let lib = null;
 
 ffi.init = (options) => {
@@ -65,9 +66,10 @@ ffi.init = (options) => {
     // FIXME: As long as `safe-app` doesn't expose system uri itself, we'll
     // patch it directly on it. This should later move into its own sub-module
     // and take care of mobile support for other platforms, too.
-    require('./_system_uri')(ffi, options);
+    if (!disableSystemUri) {
+      require('./_system_uri')(ffi, options);
+    }
   } catch(e) {
-    console.error("ERROR: ", e)
     throw makeError(errConst.FAILED_TO_LOAD_LIB.code,
         errConst.FAILED_TO_LOAD_LIB.msg(e.toString()));
   }
