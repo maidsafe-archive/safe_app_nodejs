@@ -19,6 +19,7 @@ const makeError = require('./_error.js');
 const h = require('./helpers');
 const t = require('./types');
 const ArrayType = require('ref-array');
+const errConst = require('../error_const');
 
 const StringArray = ArrayType(ref.types.CString);
 
@@ -61,7 +62,10 @@ const openUri = (uri) => {
   return new Promise((resolve,  reject) => {
     try {
       const cb = _handleError(resolve,  reject);
-      ffi.open_uri(uri.uri || uri, ref.NULL, cb);
+      if (uri) {
+        ffi.open_uri(uri.uri || uri, ref.NULL, cb);
+      }
+      return reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
     } catch (err) {
       return reject(err);
     }

@@ -65,15 +65,29 @@ describe('Smoke testing', () => {
     return should.exist(console.warn);
   });
 
-  // TODO: there is an inconsistency between Linux and Windows
-  // for the `openUri` function behaviour.
-  // On Linux the promise is rejected as expected, while on Windows
-  // the promise is resolved with an undefined value. We need to research
-  // where the issue exactly is, i.e. system_uri lib or safe_app_nodejs.
-  // MAID-2553 was raised to solve this.
-  it('system uri openUri function returns a promise', async () => {
-    const app = await h.createTestApp();
-    return should(app.auth.openUri('')).be.a.Promise(); // TODO: when isse fix add ``.and.be.rejected()` to remove the warning
+  it('system uri openUri function rejected when empty URL is passed', () => {
+    const app = h.createTestApp();
+    return should(app.auth.openUri('')).be.rejectedWith(errConst.MISSING_URL.msg);
+  });
+
+  it('system uri openUri function rejected when no URL is passed', () => {
+    const app = h.createTestApp();
+    return should(app.auth.openUri()).be.rejected();
+  });
+
+  it('system uri openUri function rejected when URL string as blankspace is passed', () => {
+    const app = h.createTestApp();
+    return should(app.auth.openUri(' ')).be.rejected();
+  });
+
+  it('system uri openUri function rejected when null URL is passed', () => {
+    const app = h.createTestApp();
+    return should(app.auth.openUri(null)).be.rejected();
+  });
+
+  it('system uri openUri function rejected when undefined URL is passed', () => {
+    const app = h.createTestApp();
+    return should(app.auth.openUri(undefined)).be.rejected();
   });
 
   it('system uri lib contains "mock" dir (as we\'re testing)', () => {
