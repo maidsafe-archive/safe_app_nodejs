@@ -234,7 +234,12 @@ describe('Smoke test', () => {
       done();
     };
 
-    const app = createTestAppWithNetworkCB(null, networkCb);
+    const appConfig = new App({
+      id: 'net.maidsafe.test.javascript.id',
+      name: 'NodeJS Test',
+      vendor: 'MaidSafe.net Ltd'
+    }, networkCb, { log: false });
+    const app = h.autoref(appConfig);
     should(app.isNetStateInit()).be.true();
     should(app.isNetStateConnected()).be.false();
     should(app.isNetStateDisconnected()).be.false();

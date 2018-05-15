@@ -106,6 +106,7 @@ const createRandomNonce = () => crypto.randomBytes(24);
 const createRandomInvalidSecKey = () => crypto.randomBytes(30);
 const createRandomInvalidXor = () => crypto.randomBytes(30);
 const createRandomInvalidNonce = () => crypto.randomBytes(30);
+const autoref = h.autoref;
 
 module.exports = {
   App,
@@ -125,5 +126,6 @@ module.exports = {
   createAltAuthTestApp,
   createRandomInvalidSecKey,
   createRandomInvalidXor,
-  createRandomInvalidNonce
+  createRandomInvalidNonce,
+  autoref
 };
