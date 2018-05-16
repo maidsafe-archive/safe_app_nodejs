@@ -8,6 +8,8 @@
 - Upgrade safe_app native library to commit `a9b4c05` and adapt to minor API changes
 - Removing `forEach` binding function from the MutableData entries API as it was removed from safe_app lib
 - Adding `listEntries` binding function to the MutableData entries API which returns an array with all entries
+- Moves asynchronous app initialisation opertions out of SAFEApp constructor and into class method
+- The `initializeApp` function is now asynchronous
 
 ### Fixed
 - Fixed some tests which were giving false positive results

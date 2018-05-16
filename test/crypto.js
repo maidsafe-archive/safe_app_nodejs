@@ -17,6 +17,7 @@ const l = require('../src/native/lib');
 const errConst = require('../src/error_const');
 
 describe('Crypto Smoke Test', () => {
+  l.init({});
   it('properly sha3 hashes strings', () => l.sha3_hash('test').then((resp) => {
     should(resp.toString())
         .equal(Buffer('36f028580bb02cc8272a9a020f4200e346e276ae664e45ee80745574e2f5ab80', 'hex').toString());
@@ -41,10 +42,12 @@ describe('App Crypto Tests', () => {
         .equal(Buffer('97bc11468af46662f6df912b8d47edb7652e5209062c1588046bccfc7ac2dd7d', 'hex').toString())
   ));
 
-  it('can hash nicely unauthorised', () => h.createTestApp().crypto.sha3Hash('testing input').then((resp) =>
-    should(resp.toString())
-        .equal(Buffer('97bc11468af46662f6df912b8d47edb7652e5209062c1588046bccfc7ac2dd7d', 'hex').toString())
-  ));
+  it('can hash nicely unauthorised', async () => {
+    const unAuthedApp = await h.createTestApp();
+    const hash = await unAuthedApp.crypto.sha3Hash('testing input');
+    return should(hash.toString())
+        .equal(Buffer('97bc11468af46662f6df912b8d47edb7652e5209062c1588046bccfc7ac2dd7d', 'hex').toString());
+  });
 
   it('can get app public sign key', () => app.crypto.getAppPubSignKey().then((key) => {
     should(key).not.be.undefined();

@@ -25,51 +25,76 @@ const authUris = {
 
 const appInfo = {
   id: 'net.maidsafe.test.javascript.id',
-  name: 'JS Test',
-  vendor: 'MaidSafe Ltd.'
+  name: 'NodeJS Test',
+  vendor: 'MaidSafe.net Ltd'
 };
 
-const createTestApp = (scope) =>
-  h.autoref(new App({
+const createTestApp = async (scope) => {
+  const app = new App({
     id: 'net.maidsafe.test.javascript.id',
     name: 'NodeJS Test',
     vendor: 'MaidSafe.net Ltd',
     scope
-  }, null, { log: false }));
+  }, null, { log: false });
+  await app.init();
+
+  return h.autoref(app);
+};
+
+const createTestAppNoInit = async (scope, options) => {
+  // This function differs from the previous\
+  // by not calling app.init()
+  const app = new App({
+    id: 'net.maidsafe.test.javascript.id2',
+    name: 'NodeJS Test',
+    vendor: 'MaidSafe.net Ltd',
+    scope
+  }, null, options);
+
+  return h.autoref(app);
+};
 
 const createAltAuthTestApp = async (scope, access) => {
-  const app = h.autoref(new App({
+  let app = new App({
     id: 'alt-net.maidsafe.test.javascript.id',
     name: 'alt-NodeJS Test',
     vendor: 'alt-MaidSafe.net Ltd',
     scope
-  }, null, { log: false }));
+  }, null, { log: false });
+  await app.init();
+  app = h.autoref(app);
   return app.auth.loginForTest(access || {});
 };
 
-const createTestAppWithNetworkCB = (scope, networkCB) =>
-  h.autoref(new App({
+const createTestAppWithNetworkCB = async (scope, networkCB) => {
+  const app = new App({
     id: 'net.maidsafe.test.javascript.id',
     name: 'NodeJS Test',
     vendor: 'MaidSafe.net Ltd',
     scope
-  }, networkCB, { log: false }));
+  }, networkCB, { log: false });
+  await app.init();
+  return h.autoref(app);
+};
 
-const createTestAppWithOptions = (scope, options) =>
-  h.autoref(new App({
+const createTestAppWithOptions = async (scope, options) => {
+  const app = new App({
     id: 'net.maidsafe.test.javascript.id',
     name: 'NodeJS Test',
     vendor: 'MaidSafe.net Ltd',
     scope
-  }, null, options));
+  }, null, options);
+  await app.init();
+  return h.autoref(app);
+};
 
-const createAnonTestApp = (scope) => {
-  const app = createTestApp(scope);
+const createAnonTestApp = async (scope) => {
+  const app = await createTestApp(scope);
   return app.auth.loginForTest();
 };
 
-const createAuthenticatedTestApp = (scope, access, opts) => {
-  const app = createTestApp(scope);
+const createAuthenticatedTestApp = async (scope, access, opts) => {
+  const app = await createTestApp(scope);
   return app.auth.loginForTest(access || {}, opts);
 };
 
@@ -87,6 +112,7 @@ module.exports = {
   appInfo,
   authUris,
   createTestApp,
+  createTestAppNoInit,
   createAnonTestApp,
   createAuthenticatedTestApp,
   createRandomXorName,
