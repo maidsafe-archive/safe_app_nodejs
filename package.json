@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint src test",
     "fix-lint": "eslint --fix src test",
-    "postinstall": "yarn run install-prod && node install-dev-libs.js",
+    "postinstall": "npm run install-prod && node install-dev-libs.js",
     "install-prod": "cross-env NODE_ENV=prod download_deps --package package.json",
     "install-mock": "cross-env NODE_ENV=dev download_deps --package package.json",
     "docs": "documentation build --config etc/documentation.yml --github true --output docs --format html src/**",
@@ -14,9 +14,9 @@
     "test": "mocha --recursive",
     "test-coverage": "istanbul cover _mocha --report lcovonly -- -R spec --recursive test",
     "publish-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "pre-pack": "yarn run lint",
-    "prepush": "yarn run lint && cross-env NODE_ENV=dev yarn run test",
-    "prepublish": "yarn run lint && yarn run test"
+    "pre-pack": "npm run lint",
+    "prepush": "npm run lint && cross-env NODE_ENV=dev npm run test",
+    "prepublish": "npm run lint && npm run test"
   },
   "repository": {
     "type": "git",
