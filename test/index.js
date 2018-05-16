@@ -94,7 +94,8 @@ describe('Smoke testing', () => {
   it('throws error if lib fails to load', () => {
     try {
       appHelpers.autoref(new App(h.appInfo, null, {
-        libPath: '/home'
+        libPath: '/home',
+        log: false
       }));
     } catch (err) {
       const errArray = err.message.split('libraries: ');

@@ -61,7 +61,7 @@ describe('Smoke test', () => {
       configPath: '/home',
       forceUseMock: false,
     };
-    const app = createTestAppWithOptions(null, optionsObject);
+    const app = await createTestAppWithOptions(null, optionsObject);
 
     const optionsObjectsEqual = Object.keys(app.options).every(
       (option) => app.options[option] === optionsObject[option]
@@ -83,7 +83,7 @@ describe('Smoke test', () => {
   });
 
   it('throw error if options object contains non-boolean forceUseMock value', () => {
-    const test = () => appHelpers.autoref(new App(appHelpers.appInfo, null, {
+    const test = () => autoref(new App(h.appInfo, null, {
       forceUseMock: 'true' // this is expected to be a boolean
     }));
     should(test).throw("The 'forceUseMock' option must be a boolean.");
