@@ -1,0 +1,20 @@
+{
+  "download_deps": {
+    "safe_app": {
+      "mirror": "https://s3.eu-west-2.amazonaws.com/safe-client-libs",
+      "version": "a9b4c05",
+      "targetDir": "src/native/prod",
+      "filename": "safe_app",
+      "filePattern": "^.*\\.(dll|so|dylib)$",
+      "force": true
+    },
+    "ENV": {
+      "dev": {
+        "safe_app": {
+          "targetDir": "src/native/mock",
+          "filename": "safe_app-mock"
+        }
+      }
+    }
+  }
+}

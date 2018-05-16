@@ -3,6 +3,7 @@
 [Unreleased]
 ### Added
 - New binding `simulateNetworkDisconnect()` function to simulate a network disconnection event useful for applications testing purposes.
+- Ability to prevent system_uri from downloading by setting environment variable
 
 ### Changed
 - Upgrade safe_app native library to commit `a9b4c05` and adapt to minor API changes
