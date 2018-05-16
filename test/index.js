@@ -28,13 +28,9 @@ const appInfo = {
 };
 
 describe('Smoke testing', () => {
-  it('confirms there is a lib', () => {
-    should(lib).be.Object();
-  });
+  it('confirms there is a lib', () => should(lib).be.Object());
 
-  it('confirms the CONSTANTS are exposed', () => {
-    should(CONSTANTS).be.Object();
-  });
+  it('confirms the CONSTANTS are exposed', () => should(CONSTANTS).be.Object());
 
   it('confirms the full list of constants', () => {
     // let's check all contants to make sure we don't break any app

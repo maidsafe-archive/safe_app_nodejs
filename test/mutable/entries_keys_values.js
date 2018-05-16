@@ -79,13 +79,10 @@ describe('Mutable Data Entries', () => {
       .then((keys) => should(keys.length).equal(Object.keys(TEST_ENTRIES).length))
   );
 
-  it('check list of keys', (done) => {
-    app.mutableData.newRandomPublic(TYPE_TAG)
+  it('check list of keys', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
       .then((keys) => Promise.all(keys.map((key) =>
-        should(TEST_ENTRIES).have.ownProperty(key.toString())
-      )).then(() => done(), (err) => done(err)));
-  });
+        should(TEST_ENTRIES).have.ownProperty(key.toString())))));
 
   it('get empty list of keys', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup({}).then(() => m.getKeys()))
@@ -97,15 +94,15 @@ describe('Mutable Data Entries', () => {
       .then((values) => should(values.length).equal(Object.keys(TEST_ENTRIES).length))
   );
 
-  it('check list of values', (done) => {
+  it('check list of values', () => {
     app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
       .then((values) => Promise.all(values.map((value) =>
         should(TEST_ENTRIES).matchAny((v) => {
           should(v).be.eql(value.buf.toString());
-          should(value.version).be.equal(0);
+          return should(value.version).be.equal(0);
         })
-      )).then(() => done(), (err) => done(err)));
+      )));
   });
 
   it('get empty list of values', () => app.mutableData.newRandomPublic(TYPE_TAG)

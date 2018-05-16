@@ -33,14 +33,13 @@ describe('Permissions', () => {
         ))
   );
 
-  it('list permission sets and remove them', (done) => {
+  it('list permission sets and remove them', () => {
     app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getPermissions())
         .then((perms) => perms.listPermissionSets()
           .then((permSets) => Promise.all(permSets.map((userPermSet) =>
             should(m.delUserPermissions(userPermSet.signKey, 1)).be.fulfilled()
           )))
-          .then(() => done(), (err) => done(err))
         )
       );
   });
