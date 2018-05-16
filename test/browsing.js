@@ -106,6 +106,14 @@ describe('Browsing', () => {
       ));
   }).timeout(20000);
 
+  it('fetches file with non-explicit mime type', async () => {
+    const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
+    const domain = await createRandomDomain(content, '/streaming');
+    const app = await createAnonTestApp();
+    const response = await app.webFetch(`safe://${domain}/streaming`);
+    return should(response.headers['Content-Type']).be.equal('application/octet-stream');
+  }).timeout(20000);
+
   it('fetch any path on any url', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/any/path/html', 'whatever')
@@ -311,13 +319,27 @@ describe('Browsing', () => {
         ));
     }).timeout(20000);
 
-    it('range end beyond data length', () => {
+    it('without range start param', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      const endByte = 4;
+
       return createRandomDomain(content, '/streaming.mp4')
         .then((domain) => createAnonTestApp()
-          .then((app) => should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: content.length } }))
-            .be.rejectedWith('NFS error: Invalid byte range specified')
+          .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { end: endByte } })
+            .then((data) => {
+              should(data.body.toString()).equal(content.substring(0, endByte + 1));
+              should(data.headers['Content-Range']).equal(`bytes ${0}-${endByte}/${content.length}`);
+              return should(data.headers['Content-Length']).equal(endByte + 1);
+            })
         ));
+    }).timeout(20000);
+
+    it('range end beyond data length', async () => {
+      const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      const domain = await createRandomDomain(content, '/streaming.mp4');
+      const app = await createAnonTestApp();
+      return should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: content.length } }))
+        .be.rejectedWith(errConst.INVALID_BYTE_RANGE.msg);
     }).timeout(20000);
 
     // safe_app lib is not validating for invalid start offset
@@ -339,6 +361,167 @@ describe('Browsing', () => {
             .be.rejectedWith('Invalid range start value')
         ));
     }); // .timeout(20000);
+
+    it('fetches multipart ranges', async () => {
+      const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
+      const domain = await createRandomDomain(content, '/streaming.mp4');
+      const app = await createAnonTestApp();
+      const range = [
+        {
+          start: 2,
+          end: 4
+        },
+        {
+          start: 7,
+          end: 9,
+        },
+        {
+          start: 13,
+          end: 17,
+        },
+      ];
+      const data = await app.webFetch(`safe://${domain}/streaming.mp4`, { range });
+      should(data).have.property('parts');
+      should(data.parts[0].body.toString()).be.equal(content.slice(2, 5));
+      should(data.parts[1].body.toString()).be.equal(content.slice(7, 10));
+      return should(data.parts[2].body.toString()).be.equal(content.slice(13, 18));
+    }).timeout(20000);
+
+    it('returns separate multipart headers for Content-Range', async () => {
+      const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
+      const domain = await createRandomDomain(content, '/streaming.mp4');
+      const app = await createAnonTestApp();
+      const range = [
+        {
+          start: 2,
+          end: 4
+        },
+        {
+          start: 7,
+          end: 9,
+        },
+        {
+          start: 13,
+          end: 17,
+        },
+      ];
+      const data = await app.webFetch(`safe://${domain}/streaming.mp4`, { range });
+      should(data.headers['Content-Type']).be.equal('multipart/byteranges');
+      should(data.parts[0].headers['Content-Range']).be.equal(`bytes 2-4/${content.length}`);
+      should(data.parts[1].headers['Content-Range']).be.equal(`bytes 7-9/${content.length}`);
+      return should(data.parts[2].headers['Content-Range']).be.equal(`bytes 13-17/${content.length}`);
+    }).timeout(20000);
+
+    it('fetches multipart ranges for file without explicit mime types', async () => {
+      const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
+      const domain = await createRandomDomain(content, '/streaming');
+      const app = await createAnonTestApp();
+      const range = [
+        {
+          start: 2,
+          end: 4
+        },
+        {
+          start: 7,
+          end: 9,
+        },
+        {
+          start: 13,
+          end: 17,
+        },
+      ];
+      const data = await app.webFetch(`safe://${domain}/streaming`, { range });
+      should(data).have.property('parts');
+      should(data.headers['Content-Type']).be.equal('multipart/byteranges');
+      return data.parts.map((part) => should(part.headers['Content-Type']).be.equal('application/octet-stream'));
+    }).timeout(20000);
+
+    it('throws error for invalid multipart range', async () => {
+      const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
+      const domain = await createRandomDomain(content, '/streaming.mp4');
+      const app = await createAnonTestApp();
+      const range = [
+        {
+          start: 2,
+          end: 4
+        },
+        {
+          start: 7,
+          end: 50,
+        },
+        {
+          start: 13,
+          end: 17,
+        },
+      ];
+      return should(app.webFetch(`safe://${domain}/streaming.mp4`, { range }))
+        .be.rejectedWith(errConst.INVALID_BYTE_RANGE.msg);
+    }).timeout(20000);
+
+    it('multipart ranges: offset byte without byte length', async () => {
+      const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
+      const domain = await createRandomDomain(content, '/streaming.mp4');
+      const app = await createAnonTestApp();
+      const range = [
+        {
+          start: 2,
+          end: 4
+        },
+        {
+          start: 7,
+          end: 9,
+        },
+        {
+          start: 13
+        },
+      ];
+      const data = await app.webFetch(`safe://${domain}/streaming.mp4`, { range });
+      should(data.parts[2].body.toString()).be.equal(content.slice(13, content.length + 1));
+      return should(data.parts[2].headers['Content-Range']).be.equal(`bytes 13-${content.length - 1}/${content.length}`);
+    }).timeout(20000);
+
+    it('fetches multipart ranges for file with explicit mime types', async () => {
+      const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
+      const domain = await createRandomDomain(content, '/streaming.mp4');
+      const app = await createAnonTestApp();
+      const range = [
+        {
+          start: 2,
+          end: 4
+        },
+        {
+          start: 7,
+          end: 9,
+        },
+        {
+          start: 13
+        },
+      ];
+      const data = await app.webFetch(`safe://${domain}/streaming.mp4`, { range });
+      return data.parts.map((part) => should(part.headers['Content-Type']).be.equal('video/mp4'));
+    }).timeout(20000);
+
+    it('multipart ranges: byte length provided with no starting byte position', async () => {
+      const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
+      const domain = await createRandomDomain(content, '/streaming.mp4');
+      const app = await createAnonTestApp();
+      const range = [
+        {
+          start: 2,
+          end: 4
+        },
+        {
+          start: 7,
+          end: 9,
+        },
+        {
+          end: 20
+        },
+      ];
+      const data = await app.webFetch(`safe://${domain}/streaming.mp4`, { range });
+      should(data.parts[2].body.toString()).be.equal(content.slice(0, 21));
+      return should(data.parts[2].headers['Content-Range']).be.equal(`bytes 0-20/${content.length}`);
+    }).timeout(20000);
   });
 
   describe('errors', () => {

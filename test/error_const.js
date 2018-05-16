@@ -40,6 +40,11 @@ describe('Error Constants', () => {
     should(error.ERR_FILE_NOT_FOUND.code).be.equal(-301);
   });
 
+  it('INVALID_BYTE_RANGE', () => {
+    should.exist(error.INVALID_BYTE_RANGE);
+    should(error.INVALID_BYTE_RANGE.code).be.equal(-302);
+  });
+
   it('MISSING_PERMS_ARRAY', () => {
     should.exist(error.MISSING_PERMS_ARRAY);
   });

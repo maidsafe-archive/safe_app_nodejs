@@ -50,6 +50,21 @@ module.exports = {
   },
 
   /**
+   * @name INVALID_BYTE_RANGE
+   * @type {object}
+   * @description Thrown natively when attempting to fetch partial
+   * byte range of NFS-style file that is not within the total byte range.
+   * For example, this error is thrown if a file is 10 bytes long,
+   * however a byte range of 20 is requested.
+   * @property {number} code -302
+   * @property {string} msg
+   */
+  INVALID_BYTE_RANGE: {
+    code: -302,
+    msg: 'NFS error: Invalid byte range specified'
+  },
+
+  /**
    * @name FAILED_TO_LOAD_LIB
    * @type {object}
    * @description Thrown when a native library fails to load and which library.
