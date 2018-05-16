@@ -192,11 +192,10 @@ class NFS {
   /**
   * Helper function to create and save file to the network
   * @param {String|Buffer} content - file contents
-  * @param {String|Buffer} userMetadata - optional user metadata
   * @returns {File} a newly created file
   */
-  create(content, userMetadata) {
-    return this.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE, userMetadata)
+  create(content) {
+    return this.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)
       .then((file) => file.write(content)
         .then(() => file.close())
         .then(() => file)
@@ -218,9 +217,17 @@ class NFS {
   * to the network.
   * @param {(String|Buffer)} fileName - the path to store the file under
   * @param {File} file - the file to serialise and store
+  * @param {String|Buffer} userMetadata
   * @returns {Promise<File>} - the same file
   */
-  insert(fileName, file) {
+  insert(fileName, file, userMetadata) {
+    if (userMetadata) {
+      const userMetadataPtr = Buffer.from(userMetadata);
+      const fileMeta = file._ref; // eslint-disable-line no-underscore-dangle
+      fileMeta.user_metadata_ptr = userMetadataPtr;
+      fileMeta.user_metadata_len = userMetadata.length;
+      fileMeta.user_metadata_cap = userMetadataPtr.length;
+    }
     return lib.dir_insert_file(
         this.mData.app.connection, this.mData.ref, fileName, file.ref.ref()
       )
@@ -246,7 +253,7 @@ class NFS {
       const fileMeta = file._ref; // eslint-disable-line no-underscore-dangle
       fileMeta.user_metadata_ptr = userMetadataPtr;
       fileMeta.user_metadata_len = userMetadata.length;
-      fileMeta.user_metadata_cap = userMetadata.length;
+      fileMeta.user_metadata_cap = userMetadataPtr.length;
     }
     return lib.dir_update_file(this.mData.app.connection, this.mData.ref, fileName,
                            file.ref.ref(), version)
@@ -279,15 +286,10 @@ class NFS {
   * @param {Number|CONSTANTS.NFS_FILE_MODE_OVERWRITE|
   *         CONSTANTS.NFS_FILE_MODE_APPEND|
   *         CONSTANTS.NFS_FILE_MODE_READ} [openMode=CONSTANTS.NFS_FILE_MODE_OVERWRITE]
-  * @param {String|Buffer} userMetadata
   * @returns {Promise<File>}
   */
-  open(file, openMode, userMetadata) {
+  open(file, openMode) {
     const now = nativeH.toSafeLibTime(new Date());
-    let userMetadataPtr;
-    if (userMetadata) {
-      userMetadataPtr = Buffer.from(userMetadata);
-    }
     const metadata = {
       size: 0,
       data_map_name: new Array(32).fill(0),
@@ -295,9 +297,9 @@ class NFS {
       created_nsec: now.now_nsec_part,
       modified_sec: now.now_sec_part,
       modified_nsec: now.now_nsec_part,
-      user_metadata_ptr: userMetadataPtr || Buffer.from([]),
-      user_metadata_len: userMetadataPtr ? userMetadata.length : 0,
-      user_metadata_cap: userMetadataPtr ? userMetadata.length : 0
+      user_metadata_ptr: Buffer.from([]),
+      user_metadata_len: 0,
+      user_metadata_cap: 0
     };
 
     let fileParam = file;

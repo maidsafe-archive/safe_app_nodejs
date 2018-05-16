@@ -4,6 +4,7 @@
 ### Added
 - New binding `simulateNetworkDisconnect()` function to simulate a network disconnection event useful for applications testing purposes.
 - Support for forcing the use of mock by providing `forceUseMock` boolean to the initialisation options of each safeApp instance, i.e. each safeApp instance can either use mock or prod libs independently.
+- Ability to pass user metadata when inserting and updating file in MutableData
 
 ### Changed
 - Upgrade safe_app native library to commit `a9b4c05` and adapt to minor API changes
