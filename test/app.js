@@ -22,11 +22,11 @@ const createTestAppNoInit = h.createTestAppNoInit;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 const createTestAppWithNetworkCB = h.createTestAppWithNetworkCB;
 const createTestAppWithOptions = h.createTestAppWithOptions;
+const { autoref } = require('../src/helpers');
 
 describe('Smoke test', () => {
   it('should return undefined value if log option is true, however app logging is not initialised', async () => {
     const app = await createTestAppNoInit(null, { log: true });
-    // await app.init();
     const logPath = await app.logPath();
     should(logPath).be.undefined();
   });
@@ -239,7 +239,7 @@ describe('Smoke test', () => {
       name: 'NodeJS Test',
       vendor: 'MaidSafe.net Ltd'
     }, networkCb, { log: false });
-    const app = h.autoref(appConfig);
+    const app = autoref(appConfig);
     should(app.isNetStateInit()).be.true();
     should(app.isNetStateConnected()).be.false();
     should(app.isNetStateDisconnected()).be.false();

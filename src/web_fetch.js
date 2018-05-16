@@ -31,9 +31,6 @@ async function webFetch(url, options) {
   if (!url) return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
 
   const parsedUrl = parseUrl(url);
-  if (!parsedUrl) {
-    return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
-  }
   const hostname = parsedUrl.hostname;
   let path = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
   const tokens = path.split('/');
@@ -117,38 +114,82 @@ async function webFetch(url, options) {
         file = await emulation.fetch(filePath);
       }
       const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
+      let mimeType = mime.getType(nodePath.extname(filePath)) || 'application/octet-stream';
       let range;
       let start = consts.pubConsts.NFS_FILE_START;
       let end;
       let fileSize;
       let lengthToRead = consts.pubConsts.NFS_FILE_END;
       let endByte;
+      let data;
+      let multipart;
+      let rangeIsArray;
+      let response;
 
-      // TODO: how do we handle multipart Reqs
-      if (options && options.range && typeof options.range.start !== 'undefined') {
-        range = options.range;
-        start = range.start;
+      if (options && options.range) {
+        rangeIsArray = Array.isArray(options.range);
         fileSize = await openedFile.size();
-        end = range.end || fileSize - 1;
-
+        range = options.range;
+        multipart = range.length > 1;
+        start = options.range.start || consts.pubConsts.NFS_FILE_START;
+        end = options.range.end || fileSize - 1;
         lengthToRead = (end - start) + 1; // account for 0 index
       }
-      const data = await openedFile.read(start, lengthToRead);
-      const mimeType = mime.getType(nodePath.extname(filePath)) || 'application/octet-stream';
 
-      const response = {
+      if (options && options.range && rangeIsArray) {
+        // block handles multipart range requests
+        data = await Promise.all(range.map(async (part) => {
+          const partStart = part.start || consts.pubConsts.NFS_FILE_START;
+          const partEnd = part.end || fileSize - 1;
+          const partLengthToRead = (partEnd - partStart) + 1; // account for 0 index
+          const byteSegment = await openedFile.read(partStart, partLengthToRead);
+          return {
+            body: byteSegment,
+            headers: {
+              'Content-Type': mimeType,
+              'Content-Range': `bytes ${partStart}-${partEnd}/${fileSize}`
+            }
+          };
+        }));
+      } else {
+        // handles non-partial requests and also single partial content requests
+        data = await openedFile.read(start, lengthToRead);
+      }
+
+      if (multipart) {
+        mimeType = 'multipart/byteranges';
+      } else if (mime.getType(nodePath.extname(filePath))) {
+        mimeType = mime.getType(nodePath.extname(filePath));
+      } else {
+        mimeType = 'application/octet-stream';
+      }
+
+      response = {
         headers: {
           'Content-Type': mimeType
         },
         body: data
       };
 
-      if (range) {
-        endByte = (end === fileSize) ? fileSize - 1 : end;
-        response.headers['Content-Range'] = `bytes ${start}-${endByte}/${fileSize}`;
-        response.headers['Content-Length'] = lengthToRead;
+      if (range && multipart) {
+        response = {
+          headers: {
+            'Content-Type': mimeType,
+            'Content-Length': JSON.stringify(data).length
+          },
+          parts: data
+        };
+      } else if (range) {
+        endByte = (end === fileSize - 1) ? fileSize - 1 : end;
+        response = {
+          headers: {
+            'Content-Type': mimeType,
+            'Content-Length': lengthToRead,
+            'Content-Range': `bytes ${start}-${endByte}/${fileSize}`
+          },
+          body: data
+        };
       }
-
       resolve(response);
     } catch (e) {
       reject(e);

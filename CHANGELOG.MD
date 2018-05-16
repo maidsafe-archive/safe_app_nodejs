@@ -9,7 +9,7 @@
 - Removing `forEach` binding function from the MutableData entries API as it was removed from safe_app lib
 - Adding `listEntries` binding function to the MutableData entries API which returns an array with all entries
 - Moves asynchronous app initialisation opertions out of SAFEApp constructor and into class method
-- Breaks API by making `initializeApp` asynchronous
+- The `initializeApp` function is now asynchronous
 
 ### Fixed
 - Fixed some tests which were giving false positive results
