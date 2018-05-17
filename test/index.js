@@ -65,29 +65,36 @@ describe('Smoke testing', () => {
     return should.exist(console.warn);
   });
 
-  it('system uri openUri function rejected when empty URL is passed', () => {
-    const app = h.createTestApp();
+  // TODO: openUri behaves differently on Windows than OSX or Linux,
+  // when a URI with unregistered protocol is passed.
+  // Until this is potentially resolved in `system_uri` lib, this test will exist
+  // to highlight the difference.
+  it('openUri behaves differently, based on platform, when handling unregistered protocol', async () => {
+    const app = await h.createTestApp();
+    if (process.platform === 'win32') {
+      // Why fulfilled? Because Windows opens a dialog for user to choose application
+      // to associate with unregistered protocol.
+      return should(app.auth.openUri('unregistered://resource')).be.fulfilled();
+    } else if (process.platform === 'linux') {
+      // Why fulfilled? Because Linux in Travis CI does not behave the same as on desktop env
+      return should(app.auth.openUri('unregistered://resource')).be.fulfilled();
+    }
+    return should(app.auth.openUri('unregistered://resource')).be.rejected();
+  });
+
+  it('system uri openUri function rejected when empty string URL is passed', async () => {
+    const app = await h.createTestApp();
     return should(app.auth.openUri('')).be.rejectedWith(errConst.MISSING_URL.msg);
   });
 
-  it('system uri openUri function rejected when no URL is passed', () => {
-    const app = h.createTestApp();
+  it('system uri openUri function rejected when no URL is passed', async () => {
+    const app = await h.createTestApp();
     return should(app.auth.openUri()).be.rejected();
   });
 
-  it('system uri openUri function rejected when URL string as blankspace is passed', () => {
-    const app = h.createTestApp();
+  it('system uri openUri function rejected when URL string as blankspace is passed', async () => {
+    const app = await h.createTestApp();
     return should(app.auth.openUri(' ')).be.rejected();
-  });
-
-  it('system uri openUri function rejected when null URL is passed', () => {
-    const app = h.createTestApp();
-    return should(app.auth.openUri(null)).be.rejected();
-  });
-
-  it('system uri openUri function rejected when undefined URL is passed', () => {
-    const app = h.createTestApp();
-    return should(app.auth.openUri(undefined)).be.rejected();
   });
 
   it('system uri lib contains "mock" dir (as we\'re testing)', () => {
