@@ -62,6 +62,22 @@ describe('NFS emulation', () => {
     )
   );
 
+  it.only('create file with NFS and read it with IMD API', async () => {
+    const md = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await md.quickSetup({});
+    const nfs = await md.emulateAs('nfs');
+    const file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
+    await file.write('hello, SAFE world!');
+    await file.close();
+    await nfs.insert('hello.txt', file);
+    const retrievedFile = await nfs.fetch('hello.txt');
+    // const fetchedFile = await nfs.open(retrievedFile, CONSTANTS.NFS_FILE_MODE_READ);
+    // const data = await fetchedFile.read(CONSTANTS.NFS_FILE_START, CONSTANTS.NFS_FILE_END);
+    const fetchedFile = await app.immutableData.fetch(retrievedFile.dataMapName);
+    const data = await fetchedFile.read();
+    should(data.toString()).be.equal('hello, SAFE world!');
+  });
+
   it('provides helper function to create and save file to the network', () => app.mutableData.newRandomPublic(TYPE_TAG)
     .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
     .then((nfs) => should(nfs.create('testing')).be.fulfilled())
