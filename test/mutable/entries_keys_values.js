@@ -94,16 +94,14 @@ describe('Mutable Data Entries', () => {
       .then((values) => should(values.length).equal(Object.keys(TEST_ENTRIES).length))
   );
 
-  it('check list of values', () => {
-    app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
-      .then((values) => Promise.all(values.map((value) =>
-        should(TEST_ENTRIES).matchAny((v) => {
-          should(v).be.eql(value.buf.toString());
-          return should(value.version).be.equal(0);
-        })
-      )));
-  });
+  it('check list of values', () => app.mutableData.newRandomPublic(TYPE_TAG)
+    .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
+    .then((values) => Promise.all(values.map((value) =>
+      should(TEST_ENTRIES).matchAny((v) => {
+        should(v).be.eql(value.buf.toString());
+        return should(value.version).be.equal(0);
+      })
+    ))));
 
   it('get empty list of values', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup({}).then(() => m.getValues()))
