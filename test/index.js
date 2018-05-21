@@ -69,6 +69,7 @@ describe('Smoke testing', () => {
   // when a URI with unregistered protocol is passed.
   // Until this is potentially resolved in `system_uri` lib, this test will exist
   // to highlight the difference.
+  // MAID-2553 was raised to solve this.
   it('openUri behaves differently, based on platform, when handling unregistered protocol', async () => {
     const app = await h.createTestApp();
     if (process.platform === 'win32') {
