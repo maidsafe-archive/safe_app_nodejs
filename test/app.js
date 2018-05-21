@@ -135,16 +135,6 @@ describe('Smoke test', () => {
     return should(app.reconnect()).be.fulfilled();
   });
 
-  it('throws error when reconnect operation called on unregistered app', async () => {
-    const app = new App({
-      id: 'net.maidsafe.test.javascript.id',
-      name: 'NodeJS Test',
-      vendor: 'MaidSafe.net Ltd'
-    }, null, { log: false });
-    const test = () => app.connection;
-    return should(test).throw(errConst.SETUP_INCOMPLETE.msg);
-  });
-
   it('should throw informative error, if App info is malformed', () => {
     const test = () => new App({
       info: {
@@ -226,13 +216,13 @@ describe('Smoke test', () => {
     return should(app.networkState).be.equal('Init');
   }).timeout(10000);
 
-  it('network state upon network disconnection event', (done) => {
+  it('network state upon network connection event', (done) => {
     const networkCb = (state) => {
-      should(state).be.equal('Disconnected');
+      should(state).be.equal('Connected');
       should(app.isNetStateInit()).be.false();
-      should(app.isNetStateConnected()).be.false();
-      should(app.isNetStateDisconnected()).be.true();
-      should(app.networkState).be.equal('Disconnected');
+      should(app.isNetStateConnected()).be.true();
+      should(app.isNetStateDisconnected()).be.false();
+      should(app.networkState).be.equal('Connected');
       done();
     };
 
@@ -253,7 +243,59 @@ describe('Smoke test', () => {
         should(app.isNetStateConnected()).be.true();
         should(app.isNetStateDisconnected()).be.false();
         should(app.networkState).be.equal('Connected');
+      });
+  }).timeout(5000);
+
+  it('network state upon network disconnection event', (done) => {
+    let cbCount = 0;
+    const networkCb = () => {
+      if (cbCount === 1) {
+        should(app.networkState).be.equal('Disconnected');
+        done();
+      }
+      cbCount++; // eslint-disable-line
+    };
+
+    const appConfig = new App({
+      id: 'net.maidsafe.test.javascript.id',
+      name: 'NodeJS Test',
+      vendor: 'MaidSafe.net Ltd'
+    }, networkCb, { log: false });
+    const app = autoref(appConfig);
+
+    app.auth.loginFromURI(h.authUris.registeredUri)
+      .then(() => {
+        should(app.networkState).be.equal('Connected');
         app.auth.simulateNetworkDisconnect();
+      });
+  }).timeout(5000);
+
+  it('network state upon network reconnect event', (done) => {
+    let cbCount = 0;
+    const networkCb = () => {
+      if (cbCount === 1) {
+        should(app.networkState).be.equal('Disconnected');
+      }
+
+      if (cbCount === 2) {
+        should(app.networkState).be.equal('Connected');
+        done();
+      }
+      cbCount++; // eslint-disable-line
+    };
+
+    const appConfig = new App({
+      id: 'net.maidsafe.test.javascript.id',
+      name: 'NodeJS Test',
+      vendor: 'MaidSafe.net Ltd'
+    }, networkCb, { log: false });
+    const app = autoref(appConfig);
+
+    app.auth.loginFromURI(h.authUris.registeredUri)
+      .then(() => {
+        should(app.networkState).be.equal('Connected');
+        app.auth.simulateNetworkDisconnect()
+          .then(() => setTimeout(() => app.reconnect(), 100));
       });
   }).timeout(5000);
 }).timeout(15000);
