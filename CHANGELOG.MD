@@ -11,6 +11,7 @@
 - Adding `listEntries` binding function to the MutableData entries API which returns an array with all entries
 - Moves asynchronous app initialisation opertions out of SAFEApp constructor and into class method
 - The `initializeApp` function is now asynchronous
+- `webFetch` may receive multipart range requests
 
 ### Fixed
 - Fixed some tests which were giving false positive results

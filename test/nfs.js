@@ -56,9 +56,7 @@ describe('NFS emulation', () => {
       .then(() => nfs.fetch('hello.txt'))
       .then((retrievedFile) => nfs.open(retrievedFile, CONSTANTS.NFS_FILE_MODE_READ))
       .then((file) => file.read(CONSTANTS.NFS_FILE_START, CONSTANTS.NFS_FILE_END))
-      .then((data) => {
-        should(data.toString()).be.equal('hello, SAFE world!');
-      })
+      .then((data) => should(data.toString()).be.equal('hello, SAFE world!'))
     )
   );
 
