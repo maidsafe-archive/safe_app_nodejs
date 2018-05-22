@@ -94,8 +94,14 @@ class SAFEApp extends EventEmitter {
     this.options = Object.assign({
       log: true,
       registerScheme: true,
-      configPath: null
+      configPath: null,
+      forceUseMock: false
     }, options);
+
+    if (typeof this.options.forceUseMock !== 'boolean') {
+      throw new Error('The \'forceUseMock\' option must be a boolean.');
+    }
+
     lib.init(this.options);
     this._appInfo = appInfo;
     this.networkState = consts.NET_STATE_INIT;

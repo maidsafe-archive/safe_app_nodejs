@@ -14,7 +14,7 @@
 const lib = require('../native/lib');
 const nativeH = require('../native/helpers');
 const types = require('../native/types');
-const { inTesting } = require('../consts');
+const { useMockByDefault } = require('../helpers');
 const { validateShareMDataPermissions } = require('../helpers');
 const errConst = require('../error_const');
 const makeError = require('../native/_error.js');
@@ -281,7 +281,7 @@ class AuthInterface {
     let prms = this.app.getOwnContainerName()
       .then((containerName) => this.getContainer(containerName));
 
-    if (inTesting) {
+    if (useMockByDefault || this.app.options.forceUseMock) {
       prms = prms.catch((err) => {
         // Error code -1002 corresponds to 'Container not found' case
         if (err.code !== -1002) return Promise.reject(err);
@@ -382,7 +382,9 @@ class AuthInterface {
   * @returns {Promise<SAFEApp>} the locally registered/unregistered App instance
   */
   loginForTest(access, opts) {
-    if (!inTesting) throw makeError(errConst.NON_DEV.code, errConst.NON_DEV.msg);
+    if (!useMockByDefault && !this.app.options.forceUseMock) {
+      throw makeError(errConst.NON_DEV.code, errConst.NON_DEV.msg);
+    }
     if (access) {
       const appInfo = makeAppInfo(this.app.appInfo);
       const perms = makePermissions(access || {});
@@ -417,7 +419,9 @@ class AuthInterface {
   * diconnection notification is received.
   */
   simulateNetworkDisconnect() {
-    if (!inTesting) throw makeError(errConst.NON_DEV.code, errConst.NON_DEV.msg);
+    if (!useMockByDefault && !this.app.options.forceUseMock) {
+      throw makeError(errConst.NON_DEV.code, errConst.NON_DEV.msg);
+    }
     return lib.test_simulate_network_disconnect(this.app.connection);
   }
 }

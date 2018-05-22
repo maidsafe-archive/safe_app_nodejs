@@ -41,6 +41,8 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
 *        E.g. `log.toml` and `crust.config` files will be also searched not only
 *        in the same folder where the native library is, but also in this
 *        additional search path.
+* @param {Boolean=} forceUseMock to force the use of mock routing regardless
+*        the NODE_ENV environment variable value. Defaults to false
 */
 
 /**

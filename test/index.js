@@ -16,10 +16,10 @@ const should = require('should');
 const { fromAuthUri, CONSTANTS, initialiseApp } = require('../src');
 const h = require('./helpers');
 const api = require('../src/native/api');
-const fs = require('fs');
-const LIB_CONSTANTS = require('../src/consts');
-const path = require('path');
+const appHelpers = require('../src/helpers');
+const App = require('../src/app');
 const errConst = require('../src/error_const');
+const { useMockByDefault, getSafeAppLibFilename, getSystemUriLibFilename } = require('../src/helpers');
 
 const appInfo = {
   id: 'net.maidsafe.example.tests',
@@ -51,7 +51,7 @@ describe('Smoke testing', () => {
 
   it('requires additional functions for testing, if in non-production', () => {
     const testingApi = api[api.length - 1];
-    should(LIB_CONSTANTS.inTesting).be.true();
+    should(useMockByDefault).be.true();
     should.exist(testingApi.functions.test_create_app);
     return should.exist(testingApi.functions.test_create_app_with_access);
   });
@@ -73,30 +73,37 @@ describe('Smoke testing', () => {
   });
 
   it('system uri lib contains "mock" dir (as we\'re testing)', () => {
-    const sysUriPath = LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME;
+    const sysUriPath = getSystemUriLibFilename('./');
     return should(sysUriPath.includes('mock')).be.true();
   });
 
   it('safe app lib contains "mock" dir (as we\'re testing)', () => {
-    const libPath = LIB_CONSTANTS.LIB_FILENAME;
+    const libPath = getSafeAppLibFilename('./');
     return should(libPath.includes('mock')).be.true();
   });
 
-  it('hasMockFlag is set FALSE for testing', () => {
-    const hasMock = LIB_CONSTANTS.hasMockFlag;
-    return should(hasMock).be.false();
+  it('safe app lib contains "mock" dir if we force use of mock', () => {
+    const libPath = getSafeAppLibFilename('./', { forceUseMock: true });
+    return should(libPath.includes('mock')).be.true();
   });
 
   it('throws error if lib fails to load', () => {
-    fs.renameSync(path.join(__dirname, `../src/native/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`), path.join(__dirname, '../src/native/hideLib.so'));
     try {
-      h.createAuthenticatedTestApp();
+      appHelpers.autoref(new App(h.appInfo, null, {
+        libPath: '/home',
+        log: false
+      }));
     } catch (err) {
       const errArray = err.message.split('libraries: ');
       should(errConst.FAILED_TO_LOAD_LIB.msg(errArray[1])).be.equal(err.message);
     }
-    return fs.renameSync(path.join(__dirname, '../src/native/hideLib.so'), path.join(__dirname, `../src/native/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`));
-  }).timeout(10000);
+  });
+
+  it('autoref on object with no "free" function', () => {
+    class NoStaticFreeFn {}
+    const test = () => appHelpers.autoref(new NoStaticFreeFn());
+    should(test).throw('No static "free" function found on object to autoref');
+  });
 });
 
 describe('External API', () => {

@@ -1,11 +1,11 @@
 // Copyright 2018 MaidSafe.net limited.
 //
-// This SAFE Network Software is licensed to you under 
-// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or 
+// This SAFE Network Software is licensed to you under
+// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or
 // the Modified BSD license <LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
 // at your option.
 //
-// This file may not be copied, modified, or distributed except according to those terms. 
+// This file may not be copied, modified, or distributed except according to those terms.
 //
 // Please review the Licences for the specific language governing permissions and limitations
 // relating to use of the SAFE Network Software.
@@ -14,7 +14,7 @@
 const path = require('path');
 const FFI = require('ffi');
 const ref = require('ref');
-const { SYSTEM_URI_LIB_FILENAME } = require('../consts');
+const { getSystemUriLibFilename } = require('../helpers');
 const makeError = require('./_error.js');
 const h = require('./helpers');
 const t = require('./types');
@@ -22,12 +22,12 @@ const ArrayType = require('ref-array');
 
 const StringArray = ArrayType(ref.types.CString);
 
-const dir = path.dirname(__filename);
+const currentDir = path.dirname(__filename);
 let ffi = null;
 let isSysUriLibLoadErr = null;
 
 const init = (options) => {
-  ffi = FFI.Library(path.join(options.libPath || dir, SYSTEM_URI_LIB_FILENAME), {
+  ffi = FFI.Library(getSystemUriLibFilename(currentDir, options), {
     open_uri: ["void", ['string', 'pointer', 'pointer'] ],
     install: ["void", ['string', //bundle
       'string', //vendor

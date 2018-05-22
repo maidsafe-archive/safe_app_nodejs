@@ -10,11 +10,7 @@
 // Please review the Licences for the specific language governing permissions and limitations
 // relating to use of the SAFE Network Software.
 
-
 const os = require('os');
-const path = require('path');
-
-const inTesting = new RegExp('dev|development|testing|test').test(process.env.NODE_ENV || '');
 
 const TAG_TYPE_DNS = 15001;
 const TAG_TYPE_WWW = 15002;
@@ -23,19 +19,8 @@ const NET_STATE_INIT = -100;
 const NET_STATE_DISCONNECTED = -1;
 const NET_STATE_CONNECTED = 0;
 
-// Determine if process is forced to mock
-const allPassedArgs = process.argv;
-
-const hasMockFlag = allPassedArgs.includes('--mock');
-
-const env = hasMockFlag ? 'development' : process.env.NODE_ENV || 'production';
-const isRunningDevelopment = /^dev/.test(env);
-
-let libLocationModifier = 'prod';
-
-if (isRunningDevelopment || inTesting) {
-  libLocationModifier = 'mock';
-}
+const LIB_LOCATION_MOCK = 'mock';
+const LIB_LOCATION_PROD = 'prod';
 
 /**
 * @typedef {Object} CONSTANTS
@@ -107,24 +92,21 @@ const pubConsts = {
   MD_PERMISSION_EMPTY: 0,
 };
 
-const LIB_FILENAME = {
-  win32: path.join('./', libLocationModifier, 'safe_app.dll'),
-  darwin: path.join('./', libLocationModifier, 'libsafe_app.dylib'),
-  linux: path.join('./', libLocationModifier, 'libsafe_app.so')
+const SAFE_APP_LIB_FILENAME = {
+  win32: 'safe_app.dll',
+  darwin: 'libsafe_app.dylib',
+  linux: 'libsafe_app.so'
 }[os.platform()];
 
 const SYSTEM_URI_LIB_FILENAME = {
-  win32: path.join('./', libLocationModifier, 'system_uri.dll'),
-  darwin: path.join('./', libLocationModifier, 'libsystem_uri.dylib'),
-  linux: path.join('./', libLocationModifier, 'libsystem_uri.so')
+  win32: 'system_uri.dll',
+  darwin: 'libsystem_uri.dylib',
+  linux: 'libsystem_uri.so'
 }[os.platform()];
 
 const INDEX_HTML = 'index.html';
 
 module.exports = {
-  LIB_FILENAME,
-  SYSTEM_URI_LIB_FILENAME,
-
   TAG_TYPE_DNS,
   TAG_TYPE_WWW,
 
@@ -132,8 +114,12 @@ module.exports = {
   NET_STATE_DISCONNECTED,
   NET_STATE_CONNECTED,
 
+  LIB_LOCATION_MOCK,
+  LIB_LOCATION_PROD,
+
   INDEX_HTML,
-  inTesting,
   pubConsts,
-  hasMockFlag
+
+  SAFE_APP_LIB_FILENAME,
+  SYSTEM_URI_LIB_FILENAME
 };
