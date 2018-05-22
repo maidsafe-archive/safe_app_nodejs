@@ -194,13 +194,13 @@ describe('Smoke test', () => {
 
   it('should throw error if getAccountInfo called on unregistered app', async () => {
     const app = await h.createTestApp();
-    await app.auth.loginFromURI(h.authUris.unregisteredUri);
+    await app.auth.loginFromUri(h.authUris.unregisteredUri);
     return should(app.getAccountInfo()).be.rejected();
   });
 
   it('should throw error if no auth URI is present during login', async () => {
     const app = await h.createTestApp();
-    const test = () => app.auth.loginFromURI();
+    const test = () => app.auth.loginFromUri();
     return should(test).throw(errConst.MISSING_AUTH_URI.msg);
   });
 
@@ -209,7 +209,7 @@ describe('Smoke test', () => {
     return should(app.logPath()).be.fulfilled();
   }).timeout(10000);
 
-  it('logs in to netowrk from existing authUri', async () => should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri))
+  it('logs in to network from existing authUri', async () => should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri))
     .be.fulfilled());
 
   it('throws error if fromAuthUri missing authUri argument', () => should(h.App.fromAuthUri(h.appInfo))
@@ -247,7 +247,7 @@ describe('Smoke test', () => {
     should(app.isNetStateDisconnected()).be.false();
     should(app.networkState).be.equal('Init');
 
-    app.auth.loginFromURI(h.authUris.registeredUri)
+    app.auth.loginFromUri(h.authUris.registeredUri)
       .then(() => {
         should(app.isNetStateInit()).be.false();
         should(app.isNetStateConnected()).be.true();

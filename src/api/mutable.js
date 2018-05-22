@@ -133,14 +133,14 @@ class EntryMutationTransaction extends h.NetworkObject {
   }
 
   /**
-  * Store a new `Remove`-Action in the transaction to remove an existing entry.
+  * Store a new `Delete`-Action in the transaction to delete an existing entry.
   *
-  * @param {(String|Buffer)} keyName the key you want to remove
+  * @param {(String|Buffer)} keyName the key you want to delete
   * @param {Number} version the version successor, to confirm you are
   *        actually asking for the right version
   * @returns {Promise} resolves once the storing is done
   */
-  remove(keyName, version) {
+  delete(keyName, version) {
     return lib.mdata_entry_actions_delete(
       this.app.connection,
       this.ref,

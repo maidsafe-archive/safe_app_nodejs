@@ -340,7 +340,7 @@ class AuthInterface {
   * @returns {Promise<SAFEApp>} the given app instance with a newly setup and
   *          authenticated session.
   */
-  loginFromURI(uri) {
+  loginFromUri(uri) {
     if (!uri) throw makeError(errConst.MISSING_AUTH_URI.code, errConst.MISSING_AUTH_URI.msg);
     const sanitisedUri = removeSafeProtocol(uri);
     return lib.decode_ipc_msg(sanitisedUri).then((resp) => {

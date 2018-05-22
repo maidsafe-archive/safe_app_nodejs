@@ -309,7 +309,7 @@ class SAFEApp extends EventEmitter {
   static async fromAuthUri(appInfo, authUri, networkStateCallBack, options) {
     const app = autoref(new SAFEApp(appInfo, networkStateCallBack, options));
     await app.init();
-    return app.auth.loginFromURI(authUri);
+    return app.auth.loginFromUri(authUri);
   }
 
   /**

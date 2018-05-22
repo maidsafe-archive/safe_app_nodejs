@@ -76,7 +76,7 @@ const deleteService = (app, domain, service) => app.crypto.sha3Hash(domain)
 const removeFromMData = (md, key) => md.getEntries()
     .then((entries) => entries.get(key)
       .then((value) => entries.mutate()
-        .then((mut) => mut.remove(key, value.version + 1)
+        .then((mut) => mut.delete(key, value.version + 1)
           .then(() => md.applyEntriesMutation(mut))
         )));
 

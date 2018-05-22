@@ -143,7 +143,7 @@ describe('auth interface', () => {
 
   it('logs in to network with URI response from authenticator', async () => {
     const app = await h.createTestApp();
-    return should(app.auth.loginFromURI(h.authUris.registeredUri)).be.fulfilled();
+    return should(app.auth.loginFromUri(h.authUris.registeredUri)).be.fulfilled();
   });
 
   it('creates an authenticated session just for testing', async () => {

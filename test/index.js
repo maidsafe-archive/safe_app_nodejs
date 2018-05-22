@@ -13,7 +13,7 @@
 
 const lib = require('../src/native/lib');
 const should = require('should');
-const { fromAuthURI, CONSTANTS, initializeApp } = require('../src');
+const { fromAuthUri, CONSTANTS, initialiseApp } = require('../src');
 const h = require('./helpers');
 const api = require('../src/native/api');
 const appHelpers = require('../src/helpers');
@@ -107,74 +107,74 @@ describe('Smoke testing', () => {
 });
 
 describe('External API', () => {
-  describe('initializeApp', () => {
+  describe('initialiseApp', () => {
     it('creates and returns new App instance to interface with network', async () => {
-      const app = await initializeApp(appInfo);
+      const app = await initialiseApp(appInfo);
       return should(app).have.properties(['auth', 'appInfo', 'crypto', 'cipherOpt', 'mutableData', 'immutableData', 'networkState']);
     });
 
     it('customExecPath with an array of args', async () => {
       const wrongAppInfo = Object.assign({}, appInfo, { customExecPath: ['arg0', 'arg1', 'arg2'] });
-      return should(initializeApp(wrongAppInfo)).be.fulfilled();
+      return should(initialiseApp(wrongAppInfo)).be.fulfilled();
     });
 
     it('invalid customExecPath param format', async () => {
       const wrongAppInfo = Object.assign({}, appInfo, { customExecPath: 'non-array-exec-path' });
-      return should(initializeApp(wrongAppInfo)).be.rejectedWith('Exec command must be an array of string arguments');
+      return should(initialiseApp(wrongAppInfo)).be.rejectedWith('Exec command must be an array of string arguments');
     });
   });
 
-  describe('fromAuthURI', () => {
-    it('should connect registered', () => fromAuthURI(appInfo, h.authUris.registeredUri, null, { log: false })
+  describe('fromAuthUri', () => {
+    it('should connect registered', () => fromAuthUri(appInfo, h.authUris.registeredUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
 
-    it('should connect unregistered', () => fromAuthURI(appInfo, h.authUris.unregisteredUri, null, { log: false })
+    it('should connect unregistered', () => fromAuthUri(appInfo, h.authUris.unregisteredUri, null, { log: false })
         .then((app) => should(app.auth.registered).not.be.true())
     );
 
-    it('should connect with authorised containers', () => fromAuthURI(appInfo, h.authUris.containersUri, null, { log: false })
+    it('should connect with authorised containers', () => fromAuthUri(appInfo, h.authUris.containersUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
 
-    it('should connect with authorised shared MD', () => fromAuthURI(appInfo, h.authUris.sharedMdataUri, null, { log: false })
+    it('should connect with authorised shared MD', () => fromAuthUri(appInfo, h.authUris.sharedMdataUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
   });
 
-  describe('fromAuthURI with URI variations', () => {
+  describe('fromAuthUri with URI variations', () => {
     it('URI == safe-:<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe-:');
-      return fromAuthURI(appInfo, uri, null, { log: false })
+      return fromAuthUri(appInfo, uri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true());
     });
 
     it('URI == <auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, '');
-      return fromAuthURI(appInfo, uri, null, { log: false })
+      return fromAuthUri(appInfo, uri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true());
     });
 
     // this is the case in Fedora where '/' characters are added after the ':' by the OS
     it('URI == safe-<app id>:///<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-([^:]*):?/g, 'safe-$1:///');
-      return fromAuthURI(appInfo, uri, null, { log: false })
+      return fromAuthUri(appInfo, uri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true());
     });
 
     it('fail with safe-<app info>://<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, '$&//$\'');
-      return should(fromAuthURI(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+      return should(fromAuthUri(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
     });
 
     it('fail with safe-<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe-');
-      return should(fromAuthURI(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+      return should(fromAuthUri(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
     });
 
     it('fail with safe:<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe:');
-      return should(fromAuthURI(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+      return should(fromAuthUri(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
     });
   });
 });
