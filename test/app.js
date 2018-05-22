@@ -59,12 +59,10 @@ describe('Smoke test', () => {
       log: false,
       registerScheme: false,
       joinSchemes: ['proto'],
-      configPath: '/home'
+      configPath: '/home',
+      forceUseMock: false,
     };
-    const app = await createTestAppWithOptions(
-      null,
-      optionsObject
-    );
+    const app = await createTestAppWithOptions(null, optionsObject);
 
     const optionsObjectsEqual = Object.keys(app.options).every(
       (option) => app.options[option] === optionsObject[option]
@@ -83,6 +81,13 @@ describe('Smoke test', () => {
       null,
       optionsObject
     )).be.rejectedWith(errConst.CONFIG_PATH_ERROR.msg('TypeError: error setting argument 0 - "string" must be a string, Buffer, or ArrayBuffer'));
+  });
+
+  it('throw error if options object contains non-boolean forceUseMock value', () => {
+    const test = () => autoref(new App(h.appInfo, null, {
+      forceUseMock: 'true' // this is expected to be a boolean
+    }));
+    should(test).throw("The 'forceUseMock' option must be a boolean.");
   });
 
   it('creates registered for testing', async () => {

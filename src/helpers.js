@@ -12,11 +12,24 @@
 
 
 const weak = require('weak');
+const path = require('path');
 const makeError = require('./native/_error.js');
+const consts = require('./consts');
 const errConst = require('./error_const');
 const base = require('./native/_base');
 
 const t = base.types;
+
+/* Determine if by default the package shall use the mock routing.
+ * Either NODE_ENV env var can be set to 'dev'/'prod',
+ * or '--mock' can be passed as a command line argument.
+ *
+ * Note this can be overriden by each safeApp instance by
+ * providing the `forceUseMock` option at initialisation stage.
+*/
+const hasMockArg = process.argv.includes('--mock');
+const env = hasMockArg ? 'development' : process.env.NODE_ENV || 'production';
+const useMockByDefault = /^dev/.test(env);
 
 /**
 * General purpose interface to link a native handle
@@ -76,9 +89,7 @@ const autoref = (obj) => {
     weakObj.forceCleanUp = freeResources(obj);
     return weakObj;
   }
-
-  console.warn('Can\'t clean up obj. No static "free" function found on obj:', obj);
-  return obj;
+  throw new Error('No static "free" function found on object to autoref');
 };
 
 
@@ -119,9 +130,30 @@ function validateShareMDataPermissions(permissions) {
   }
 }
 
+// Currently we only support the `forceUseMock` init option to force the use
+// of mock routing regardless the NODE_ENV environment variable value.
+const getNativeLibPath = (defaultDir, options, filename) => {
+  const baseDir = (options && options.libPath) || defaultDir;
+  let libPathModifier = useMockByDefault ? consts.LIB_LOCATION_MOCK : consts.LIB_LOCATION_PROD;
+
+  if (options && options.forceUseMock) {
+    libPathModifier = consts.LIB_LOCATION_MOCK;
+  }
+  const libPath = path.join(baseDir, libPathModifier, filename);
+  return libPath;
+};
+
+const getSafeAppLibFilename = (defaultDir, options) =>
+  getNativeLibPath(defaultDir, options, consts.SAFE_APP_LIB_FILENAME);
+
+const getSystemUriLibFilename = (defaultDir, options) =>
+  getNativeLibPath(defaultDir, options, consts.SYSTEM_URI_LIB_FILENAME);
 
 module.exports = {
+  useMockByDefault,
   NetworkObject,
   autoref,
-  validateShareMDataPermissions
+  validateShareMDataPermissions,
+  getSafeAppLibFilename,
+  getSystemUriLibFilename
 };
