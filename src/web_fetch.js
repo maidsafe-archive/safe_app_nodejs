@@ -44,14 +44,17 @@ async function webFetch(url, options) {
   // lets' unpack
   const hostParts = hostname.split('.');
   const lookupName = hostParts.pop(); // last one is 'domain'
-  const serviceName = hostParts.join('.') || 'www'; // all others are 'service'
+  const serviceName = hostParts.join('.'); // all others are 'service'
 
   return new Promise(async (resolve, reject) => {
-    const getServiceInfo = async (pubName, servName) => {
+    // Helper function to read fetch the Container
+    // from a public ID and service name provided
+    const getContainerFromPublicId = async (pubName, servName) => {
+      let serviceInfo;
       try {
         const address = await this.crypto.sha3Hash(pubName);
         const servicesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
-        return await servicesContainer.get(servName);
+        serviceInfo = await servicesContainer.get(servName || 'www'); // default it to www
       } catch (err) {
         if (err.code === errConst.ERR_NO_SUCH_DATA.code ||
             err.code === errConst.ERR_NO_SUCH_ENTRY.code) {
@@ -62,59 +65,73 @@ async function webFetch(url, options) {
         }
         throw err;
       }
-    };
 
-    const handleNfsFetchException = (error) => {
-      if (error.code !== errConst.ERR_FILE_NOT_FOUND.code) {
-        throw error;
-      }
-    };
-
-    try {
-      const serviceInfo = await getServiceInfo(lookupName, serviceName);
       if (serviceInfo.buf.length === 0) {
         const error = {};
         error.code = errConst.ERR_NO_SUCH_ENTRY.code;
         error.message = `Service not found. ${errConst.ERR_NO_SUCH_ENTRY.msg}`;
-        return reject(makeError(error.code, error.message));
+        throw makeError(error.code, error.message);
       }
+
       let serviceMd;
       try {
         serviceMd = await this.mutableData.fromSerial(serviceInfo.buf);
       } catch (e) {
         serviceMd = await this.mutableData.newPublic(serviceInfo.buf, consts.TAG_TYPE_WWW);
       }
-      const emulation = await serviceMd.emulateAs('NFS');
+
+      return serviceMd;
+    };
+
+    // Helper function to try different paths to find and
+    // fetch the index file from a web site container
+    const tryDifferentPaths = async (fetchFn, initialPath) => {
+      const handleNfsFetchException = (error) => {
+        if (error.code !== errConst.ERR_FILE_NOT_FOUND.code) {
+          throw error;
+        }
+      };
+
       let file;
       let filePath;
       try {
-        filePath = path;
-        file = await emulation.fetch(filePath);
+        filePath = initialPath;
+        file = await fetchFn(filePath);
       } catch (e) {
         handleNfsFetchException(e);
       }
-      if (!file && path.startsWith('/')) {
+      if (!file && initialPath.startsWith('/')) {
         try {
-          filePath = path.replace('/', '');
-          file = await emulation.fetch(filePath);
+          filePath = initialPath.replace('/', '');
+          file = await fetchFn(filePath);
         } catch (e) {
           handleNfsFetchException(e);
         }
       }
-      if (!file && path.split('/').length > 1) {
+      if (!file && initialPath.split('/').length > 1) {
         try {
-          filePath = `${path}/${consts.INDEX_HTML}`;
-          file = await emulation.fetch(filePath);
+          filePath = `${initialPath}/${consts.INDEX_HTML}`;
+          file = await fetchFn(filePath);
         } catch (e) {
           handleNfsFetchException(e);
         }
       }
       if (!file) {
-        filePath = `${path}/${consts.INDEX_HTML}`.replace('/', '');
-        file = await emulation.fetch(filePath);
+        filePath = `${initialPath}/${consts.INDEX_HTML}`.replace('/', '');
+        file = await fetchFn(filePath);
       }
-      const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
-      let mimeType = mime.getType(nodePath.extname(filePath)) || 'application/octet-stream';
+
+      const mimeType = mime.getType(nodePath.extname(filePath));
+      return { file, mimeType };
+    };
+
+    // Helper function to read the file's content, and return an
+    // http compliant response based on the mime-type and options provided
+    const readContentFromFile = async (openedFile, defaultMimeType, opts) => {
+      let mimeType = defaultMimeType;
+      if (!mimeType) {
+        mimeType = 'application/octet-stream';
+      }
       let range;
       let start = consts.pubConsts.NFS_FILE_START;
       let end;
@@ -124,20 +141,19 @@ async function webFetch(url, options) {
       let data;
       let multipart;
       let rangeIsArray;
-      let response;
 
-      if (options && options.range) {
-        rangeIsArray = Array.isArray(options.range);
+      if (opts && opts.range) {
+        rangeIsArray = Array.isArray(opts.range);
         fileSize = await openedFile.size();
-        range = options.range;
+        range = opts.range;
         multipart = range.length > 1;
-        start = options.range.start || consts.pubConsts.NFS_FILE_START;
-        end = options.range.end || fileSize - 1;
+        start = opts.range.start || consts.pubConsts.NFS_FILE_START;
+        end = opts.range.end || fileSize - 1;
         lengthToRead = (end - start) + 1; // account for 0 index
       }
 
-      if (options && options.range && rangeIsArray) {
-        // block handles multipart range requests
+      if (opts && opts.range && rangeIsArray) {
+        // handle the multipart range requests
         data = await Promise.all(range.map(async (part) => {
           const partStart = part.start || consts.pubConsts.NFS_FILE_START;
           const partEnd = part.end || fileSize - 1;
@@ -158,13 +174,9 @@ async function webFetch(url, options) {
 
       if (multipart) {
         mimeType = 'multipart/byteranges';
-      } else if (mime.getType(nodePath.extname(filePath))) {
-        mimeType = mime.getType(nodePath.extname(filePath));
-      } else {
-        mimeType = 'application/octet-stream';
       }
 
-      response = {
+      const response = {
         headers: {
           'Content-Type': mimeType
         },
@@ -172,25 +184,25 @@ async function webFetch(url, options) {
       };
 
       if (range && multipart) {
-        response = {
-          headers: {
-            'Content-Type': mimeType,
-            'Content-Length': JSON.stringify(data).length
-          },
-          parts: data
-        };
+        response.headers['Content-Length'] = JSON.stringify(data).length;
+        response.parts = data;
       } else if (range) {
         endByte = (end === fileSize - 1) ? fileSize - 1 : end;
-        response = {
-          headers: {
-            'Content-Type': mimeType,
-            'Content-Length': lengthToRead,
-            'Content-Range': `bytes ${start}-${endByte}/${fileSize}`
-          },
-          body: data
-        };
+        response.headers['Content-Length'] = lengthToRead;
+        response.headers['Content-Range'] = `bytes ${start}-${endByte}/${fileSize}`;
       }
-      resolve(response);
+      return response;
+    };
+
+    try {
+      // Let's try to find the container and read
+      // its content using the helpers functions
+      const serviceMd = await getContainerFromPublicId(lookupName, serviceName);
+      const emulation = await serviceMd.emulateAs('NFS');
+      const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), path);
+      const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
+      const data = await readContentFromFile(openedFile, mimeType, options);
+      resolve(data);
     } catch (e) {
       reject(e);
     }
