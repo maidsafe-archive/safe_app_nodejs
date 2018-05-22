@@ -155,7 +155,7 @@ describe('auth interface', () => {
 describe('Get granted containers permissions from auth URI', () => {
   it('invalid uri', async () => {
     const appNoConnect = await createTestApp();
-    should(appNoConnect.auth.readGrantedPermissions('safe-invalid-uri'))
+    return should(appNoConnect.auth.readGrantedPermissions('safe-invalid-uri'))
               .be.rejectedWith('Serialisation error');
   });
 
@@ -170,7 +170,7 @@ describe('Get granted containers permissions from auth URI', () => {
     const contsPerms = await should(appNoConnect.auth.readGrantedPermissions(
                                       h.authUris.registeredUriNoContsPerms)
                                     ).be.fulfilled();
-    should(Object.keys(contsPerms).length).be.equal(0);
+    return should(Object.keys(contsPerms).length).be.equal(0);
   });
 
   /* eslint-disable no-underscore-dangle */
@@ -186,7 +186,7 @@ describe('Get granted containers permissions from auth URI', () => {
       ManagePermissions: false
     });
     const ownContainerName = 'apps/net.maidsafe.examples.mailtutorial';
-    should(contsPerms[ownContainerName]).be.eql({
+    return should(contsPerms[ownContainerName]).be.eql({
       Read: true,
       Insert: true,
       Delete: true,
@@ -204,9 +204,7 @@ describe('Access Container', () => {
     app = await createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true });
   });
 
-  it('should have a connection object after completing app authentication', () => {
-    should.exist(app.connection);
-  });
+  it('should have a connection object after completing app authentication', () => should.exist(app.connection));
 
   /* eslint-disable no-underscore-dangle */
   it('get container names', () => app.auth.refreshContainersPermissions().then(() =>
@@ -220,7 +218,7 @@ describe('Access Container', () => {
         Update: false,
         ManagePermissions: false
       });
-      should(contsPerms._publicNames).be.eql({
+      return should(contsPerms._publicNames).be.eql({
         Read: true,
         Insert: true,
         Delete: false,

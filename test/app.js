@@ -28,13 +28,14 @@ describe('Smoke test', () => {
   it('should return undefined value if log option is true, however app logging is not initialised', async () => {
     const app = await createTestAppNoInit(null, { log: true });
     const logPath = await app.logPath();
-    should(logPath).be.undefined();
+    return should(logPath).be.undefined();
   });
 
-  it('should natively reject if log path is retrieved with whitespace', async () => {
-    const app = await createTestApp();
-    should(app.logPath(' '))
-      .be.rejectedWith('Unexpected (probably a logic error): IO error: Access is denied. (os error 5)');
+  it('should return log path string if app logging is initialised and no filename provided', async () => {
+    const app = await createTestAppWithOptions(null, { log: true });
+    const logPath = await app.logPath();
+    const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
+    return should(new RegExp(filename).test(logPath)).be.true();
   });
 
   it('should native resolve log path if filename provided', async () => {
@@ -50,7 +51,7 @@ describe('Smoke test', () => {
       null,
       networkCb
     );
-    should.exist(app._networkStateCallBack); // eslint-disable-line no-underscore-dangle
+    return should.exist(app._networkStateCallBack); // eslint-disable-line no-underscore-dangle
   });
 
   it('can take an options object to configure logging and scheme registration', async () => {
@@ -68,7 +69,7 @@ describe('Smoke test', () => {
     const optionsObjectsEqual = Object.keys(app.options).every(
       (option) => app.options[option] === optionsObject[option]
     );
-    should(optionsObjectsEqual).be.true();
+    return should(optionsObjectsEqual).be.true();
   });
 
   it('is rejected if options object contains non-string configPath value', () => {
@@ -78,7 +79,7 @@ describe('Smoke test', () => {
       joinSchemes: ['proto'],
       configPath: { path: '/home' } // this is expected to be a string
     };
-    should(createTestAppWithOptions(
+    return should(createTestAppWithOptions(
       null,
       optionsObject
     )).be.rejectedWith(errConst.CONFIG_PATH_ERROR.msg('TypeError: error setting argument 0 - "string" must be a string, Buffer, or ArrayBuffer'));
@@ -86,7 +87,7 @@ describe('Smoke test', () => {
 
   it('creates registered for testing', async () => {
     const app = await createAuthenticatedTestApp();
-    should(app.auth.registered).be.true();
+    return should(app.auth.registered).be.true();
   }).timeout(20000);
 
   it('clears object cache invalidating objects', () => createAuthenticatedTestApp()
@@ -101,7 +102,7 @@ describe('Smoke test', () => {
 
   it('validate is mock build', async () => {
     const app = await createTestApp();
-    should(app.isMockBuild()).be.true();
+    return should(app.isMockBuild()).be.true();
   });
 
   it('should build an alternative if there is a scope', async () => {
@@ -121,12 +122,12 @@ describe('Smoke test', () => {
       vendor: 'MaidSafe.net Ltd'
     }, null, { log: false });
     const test = () => app.connection;
-    should(test).throw(errConst.SETUP_INCOMPLETE.msg);
+    return should(test).throw(errConst.SETUP_INCOMPLETE.msg);
   });
 
   it('should resolve reconnect operation for registered app', async () => {
     const app = await createAuthenticatedTestApp();
-    should(app.reconnect()).be.fulfilled();
+    return should(app.reconnect()).be.fulfilled();
   });
 
   it('throws error when reconnect operation called on unregistered app', async () => {
@@ -136,7 +137,7 @@ describe('Smoke test', () => {
       vendor: 'MaidSafe.net Ltd'
     }, null, { log: false });
     const test = () => app.connection;
-    should(test).throw(errConst.SETUP_INCOMPLETE.msg);
+    return should(test).throw(errConst.SETUP_INCOMPLETE.msg);
   });
 
   it('should throw informative error, if App info is malformed', () => {
@@ -148,7 +149,7 @@ describe('Smoke test', () => {
         scope: null
       }
     });
-    should(test).throw(errConst.MALFORMED_APP_INFO.msg);
+    return should(test).throw(errConst.MALFORMED_APP_INFO.msg);
   });
 
   it('should throw informative error, if App properties, excepting scope, are empty', () => {
@@ -158,19 +159,19 @@ describe('Smoke test', () => {
       vendor: ' ',
       scope: null
     });
-    should(test).throw(errConst.MALFORMED_APP_INFO.msg);
+    return should(test).throw(errConst.MALFORMED_APP_INFO.msg);
   });
 
   it('should return account information', async () => {
     const app = await createAuthenticatedTestApp();
     const accInfo = await app.getAccountInfo();
-    should(accInfo).have.properties(['mutations_done', 'mutations_available']);
+    return should(accInfo).have.properties(['mutations_done', 'mutations_available']);
   }).timeout(10000);
 
   it('should return own container name', async () => {
     const app = await createAuthenticatedTestApp();
     const contName = await app.getOwnContainerName();
-    should(contName).be.equal(`apps/${app.appInfo.id}`);
+    return should(contName).be.equal(`apps/${app.appInfo.id}`);
   }).timeout(10000);
 
   it('should increment/decrement mutation values', async () => {
@@ -183,7 +184,7 @@ describe('Smoke test', () => {
     await idWriter.close(cipherOpt);
     const accInfoAfter = await app.getAccountInfo();
     should(accInfoAfter.mutations_done).be.equal(accInfoBefore.mutations_done + 1);
-    should(accInfoAfter.mutations_available).be.equal(accInfoBefore.mutations_available - 1);
+    return should(accInfoAfter.mutations_available).be.equal(accInfoBefore.mutations_available - 1);
   }).timeout(20000);
 
   it('should throw error if getAccountInfo called on unregistered app', async () => {
@@ -195,7 +196,7 @@ describe('Smoke test', () => {
   it('should throw error if no auth URI is present during login', async () => {
     const app = await h.createTestApp();
     const test = () => app.auth.loginFromURI();
-    should(test).throw(errConst.MISSING_AUTH_URI.msg);
+    return should(test).throw(errConst.MISSING_AUTH_URI.msg);
   });
 
   it('returns safe_client_libs log path', async () => {
@@ -206,22 +207,18 @@ describe('Smoke test', () => {
   it('logs in to netowrk from existing authUri', async () => should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri))
     .be.fulfilled());
 
-  it('throws error if fromAuthUri missing authUri argument', () => {
-    should(h.App.fromAuthUri(h.appInfo))
-      .be.rejectedWith(errConst.MISSING_AUTH_URI.msg);
-  });
+  it('throws error if fromAuthUri missing authUri argument', () => should(h.App.fromAuthUri(h.appInfo))
+      .be.rejectedWith(errConst.MISSING_AUTH_URI.msg));
 
-  it('throws error if fromAuthUri missing appInfo argument', () => {
-    should(h.App.fromAuthUri(h.authUris.registeredUri))
-      .be.rejectedWith(errConst.MALFORMED_APP_INFO.msg);
-  });
+  it('throws error if fromAuthUri missing appInfo argument', () => should(h.App.fromAuthUri(h.authUris.registeredUri))
+      .be.rejectedWith(errConst.MALFORMED_APP_INFO.msg));
 
   it('returns boolean for network state', async () => {
     const app = await createAuthenticatedTestApp();
     should(app.isNetStateInit()).be.true();
     should(app.isNetStateConnected()).be.false();
     should(app.isNetStateDisconnected()).be.false();
-    should(app.networkState).be.equal('Init');
+    return should(app.networkState).be.equal('Init');
   }).timeout(10000);
 
   it('network state upon network disconnection event', (done) => {
