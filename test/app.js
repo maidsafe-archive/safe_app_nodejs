@@ -249,9 +249,16 @@ describe('Smoke test', () => {
   it('network state upon network disconnection event', (done) => {
     let cbCount = 0;
     const networkCb = () => {
-      if (cbCount === 1) {
-        should(app.networkState).be.equal('Disconnected');
-        done();
+      switch (cbCount) {
+        case 0:
+          should(app.networkState).be.equal('Connected');
+          break;
+        case 1:
+          should(app.networkState).be.equal('Disconnected');
+          done();
+          break;
+        default:
+          return;
       }
       cbCount++; // eslint-disable-line
     };
@@ -263,7 +270,7 @@ describe('Smoke test', () => {
     }, networkCb, { log: false });
     const app = autoref(appConfig);
 
-    app.auth.loginFromURI(h.authUris.registeredUri)
+    app.auth.loginFromUri(h.authUris.registeredUri)
       .then(() => {
         should(app.networkState).be.equal('Connected');
         app.auth.simulateNetworkDisconnect();
@@ -273,13 +280,19 @@ describe('Smoke test', () => {
   it('network state upon network reconnect event', (done) => {
     let cbCount = 0;
     const networkCb = () => {
-      if (cbCount === 1) {
-        should(app.networkState).be.equal('Disconnected');
-      }
-
-      if (cbCount === 2) {
-        should(app.networkState).be.equal('Connected');
-        done();
+      switch (cbCount) {
+        case 0:
+          should(app.networkState).be.equal('Connected');
+          break;
+        case 1:
+          should(app.networkState).be.equal('Disconnected');
+          break;
+        case 2:
+          should(app.networkState).be.equal('Connected');
+          done();
+          break;
+        default:
+          return;
       }
       cbCount++; // eslint-disable-line
     };
@@ -291,7 +304,7 @@ describe('Smoke test', () => {
     }, networkCb, { log: false });
     const app = autoref(appConfig);
 
-    app.auth.loginFromURI(h.authUris.registeredUri)
+    app.auth.loginFromUri(h.authUris.registeredUri)
       .then(() => {
         should(app.networkState).be.equal('Connected');
         app.auth.simulateNetworkDisconnect()

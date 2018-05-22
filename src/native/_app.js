@@ -73,7 +73,7 @@ module.exports = {
           const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResultPtr, t.AppPtr], (user_data, resultPtr, appCon) => {
             const result = helpers.makeFfiResult(resultPtr);
             if (result.error_code !== 0) {
-              reject(makeError(result.error_code, result.error_description));
+              return reject(makeError(result.error_code, result.error_description));
             }
 
             app.connection = appCon;
