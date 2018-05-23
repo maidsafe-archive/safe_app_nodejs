@@ -185,6 +185,7 @@ async function webFetch(url, options) {
 
       if (range && multipart) {
         response.headers['Content-Length'] = JSON.stringify(data).length;
+        delete response.body;
         response.parts = data;
       } else if (range) {
         endByte = (end === fileSize - 1) ? fileSize - 1 : end;
