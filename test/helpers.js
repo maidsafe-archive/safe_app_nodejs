@@ -34,6 +34,7 @@ const createTestApp = async (scope) => {
     id: 'net.maidsafe.test.javascript.id',
     name: 'NodeJS Test',
     vendor: 'MaidSafe.net Ltd',
+    forceUseMock: true,
     scope
   }, null, { log: false });
   await app.init();
@@ -48,6 +49,7 @@ const createTestAppNoInit = async (scope, options) => {
     id: 'net.maidsafe.test.javascript.id2',
     name: 'NodeJS Test',
     vendor: 'MaidSafe.net Ltd',
+    forceUseMock: true,
     scope
   }, null, options);
 
@@ -59,6 +61,7 @@ const createAltAuthTestApp = async (scope, access) => {
     id: 'alt-net.maidsafe.test.javascript.id',
     name: 'alt-NodeJS Test',
     vendor: 'alt-MaidSafe.net Ltd',
+    forceUseMock: true,
     scope
   }, null, { log: false });
   await app.init();
@@ -71,6 +74,7 @@ const createTestAppWithNetworkCB = async (scope, networkCB) => {
     id: 'net.maidsafe.test.javascript.id',
     name: 'NodeJS Test',
     vendor: 'MaidSafe.net Ltd',
+    forceUseMock: true,
     scope
   }, networkCB, { log: false });
   await app.init();
@@ -82,6 +86,7 @@ const createTestAppWithOptions = async (scope, options) => {
     id: 'net.maidsafe.test.javascript.id',
     name: 'NodeJS Test',
     vendor: 'MaidSafe.net Ltd',
+    forceUseMock: true,
     scope
   }, null, options);
   await app.init();
