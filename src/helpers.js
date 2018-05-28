@@ -21,15 +21,14 @@ const base = require('./native/_base');
 const t = base.types;
 
 /* Determine if by default the package shall use the mock routing.
- * Either NODE_ENV env var can be set to 'dev'/'prod',
- * or '--mock' can be passed as a command line argument.
+ * '--mock' can be passed as a command line argument.
  *
  * Note this can be overriden by each safeApp instance by
  * providing the `forceUseMock` option at initialisation stage.
 */
 const hasMockArg = process.argv.includes('--mock');
-const env = hasMockArg ? 'development' : process.env.NODE_ENV || 'production';
-const useMockByDefault = /^dev/.test(env);
+const isTestEnv = /^test/.test(process.env.NODE_ENV);
+const useMockByDefault = isTestEnv ? true : hasMockArg;
 
 /**
 * General purpose interface to link a native handle
