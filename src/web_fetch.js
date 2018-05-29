@@ -140,19 +140,22 @@ async function webFetch(url, options) {
       let endByte;
       let data;
       let multipart;
-      let rangeIsArray;
 
       if (opts && opts.range) {
-        rangeIsArray = Array.isArray(opts.range);
         fileSize = await openedFile.size();
         range = opts.range;
-        multipart = range.length > 1;
-        start = opts.range.start || consts.pubConsts.NFS_FILE_START;
-        end = opts.range.end || fileSize - 1;
+        const rangeIsArray = Array.isArray(range);
+        multipart = rangeIsArray && range.length > 1;
+        start = range.start || consts.pubConsts.NFS_FILE_START;
+        end = range.end || fileSize - 1;
+        if (rangeIsArray && range.length === 1) {
+          start = range[0].start || consts.pubConsts.NFS_FILE_START;
+          end = range[0].end || fileSize - 1;
+        }
         lengthToRead = (end - start) + 1; // account for 0 index
       }
 
-      if (opts && opts.range && rangeIsArray) {
+      if (opts && opts.range && multipart) {
         // handle the multipart range requests
         data = await Promise.all(range.map(async (part) => {
           const partStart = part.start || consts.pubConsts.NFS_FILE_START;

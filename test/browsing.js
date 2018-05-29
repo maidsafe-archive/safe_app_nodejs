@@ -306,6 +306,51 @@ describe('Browsing', () => {
         ));
     }).timeout(20000);
 
+    it('with range option as array composed of single object, requesting complete file', () => {
+      const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      const numberOfBytes = content.length - 1;
+      return createRandomDomain(content, '/streaming.mp4')
+        .then((domain) => createAnonTestApp()
+          .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: [{ start: 0, end: numberOfBytes }] })
+            .then((data) => {
+              should.not.exist(data.parts);
+              should(data.body.toString()).equal(content);
+              should(data.headers['Content-Range']).equal(`bytes 0-${numberOfBytes}/${content.length}`);
+              return should(data.headers['Content-Length']).equal(content.length);
+            })
+        ));
+    }).timeout(20000);
+
+    it('with range option as array composed of single object', () => {
+      const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      const range = [{ start: 3, end: 12 }];
+      return createRandomDomain(content, '/streaming.mp4')
+        .then((domain) => createAnonTestApp()
+          .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range })
+            .then((data) => {
+              should.not.exist(data.parts);
+              should(data.body.toString()).equal(content.substring(3, 13));
+              should(data.headers['Content-Range']).equal(`bytes 3-12/${content.length}`);
+              return should(data.headers['Content-Length']).equal((range[0].end - range[0].start) + 1);
+            })
+        ));
+    }).timeout(20000);
+
+    it('with range option as array composed of single object, with start but no ending byte', () => {
+      const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      const range = [{ start: 6 }];
+      return createRandomDomain(content, '/streaming.mp4')
+        .then((domain) => createAnonTestApp()
+          .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range })
+            .then((data) => {
+              should.not.exist(data.parts);
+              should(data.body.toString()).equal(content.substring(6, content.length + 1));
+              should(data.headers['Content-Range']).equal(`bytes 6-${content.length - 1}/${content.length}`);
+              return should(data.headers['Content-Length']).equal(content.length - range[0].start);
+            })
+        ));
+    }).timeout(20000);
+
     it('without range end param', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const startByte = 4;
