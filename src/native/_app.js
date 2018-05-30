@@ -73,12 +73,11 @@ module.exports = {
           const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResultPtr, t.AppPtr], (user_data, resultPtr, appCon) => {
             const result = helpers.makeFfiResult(resultPtr);
             if (result.error_code !== 0) {
-              reject(makeError(result.error_code, result.error_description));
-              return;
+              return reject(makeError(result.error_code, result.error_description));
             }
 
             app.connection = appCon;
-            app.networkState = consts.NET_STATE_CONNECTED;
+            app._networkStateUpdated(null, consts.NET_STATE_CONNECTED);
             resolve(app);
           });
           const authGranted = helpersForNative.makeAuthGrantedFfiStruct(authGrantedObj);
@@ -86,7 +85,19 @@ module.exports = {
         });
       });
     },
-    app_reconnect: helpers.Promisified(null, []),
+    app_reconnect: (lib, fn) => {
+      return ((app) => {
+        return new Promise((resolve, reject) => {
+          const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResultPtr], (user_data, resultPtr) => {
+            const result = helpers.makeFfiResult(resultPtr);
+
+            app._networkStateUpdated(null, consts.NET_STATE_CONNECTED);
+            resolve(result);
+          });
+          fn.apply(fn, [app.connection, ref.NULL, result_cb]);
+        });
+      });  
+    },
     app_free: (lib, fn) => {
       return ((app) => {
         fn(app);

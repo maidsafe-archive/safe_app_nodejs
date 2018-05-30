@@ -16,6 +16,7 @@
 - changes loginFromURI to loginFromUri
 - uses delete instead of remove as entry mutation action 
 - changes initializeApp to use an s instead of z
+- Network state callback invoked from `INIT` to `CONNECTED` states
 
 ### Fixed
 - Fixed some tests which were giving false positive results
