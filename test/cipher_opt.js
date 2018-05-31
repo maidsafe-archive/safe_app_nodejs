@@ -14,6 +14,8 @@
 const should = require('should');
 const h = require('./helpers');
 const errConst = require('../src/error_const');
+const App = require('../src/app');
+const { autoref } = require('../src/helpers');
 
 describe('CipherOpt', () => {
   let app;
@@ -45,7 +47,14 @@ describe('CipherOpt', () => {
   });
 
   it('asymmetrically encrypts data to be written to immutable structure', async () => {
-    const differentApp = await h.createAltAuthTestApp();
+    let differentApp = autoref(new App({
+      id: 'alt-net.maidsafe.test.javascript.id',
+      name: 'alt-NodeJS Test',
+      vendor: 'alt-MaidSafe.net Ltd',
+      forceUseMock: true
+    }, null, { log: false }));
+    await differentApp.init();
+    differentApp = await app.auth.loginForTest({});
     const pubEncKey = await differentApp.crypto.getAppPubEncKey();
     const rawKey = await pubEncKey.getRaw();
 

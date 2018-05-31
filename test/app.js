@@ -18,21 +18,18 @@ const errConst = require('../src/error_const');
 
 const createTestApp = h.createTestApp;
 const appInfo = h.appInfo;
-const createTestAppNoInit = h.createTestAppNoInit;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
-const createTestAppWithNetworkCB = h.createTestAppWithNetworkCB;
-const createTestAppWithOptions = h.createTestAppWithOptions;
 const { autoref } = require('../src/helpers');
 
 describe('Smoke test', () => {
   it('should return undefined value if log option is true, however app logging is not initialised', async () => {
-    const app = await createTestAppNoInit(null, { log: true });
+    const app = autoref(new App(h.appInfo, null, { log: true }));
     const logPath = await app.logPath();
     return should(logPath).be.undefined();
   });
 
   it('should return log path string if app logging is initialised and no filename provided', async () => {
-    const app = await createTestAppWithOptions(null, { log: true });
+    const app = await createTestApp(null, { log: true });
     const logPath = await app.logPath();
     const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
     return should(new RegExp(filename).test(logPath)).be.true();
@@ -47,7 +44,8 @@ describe('Smoke test', () => {
 
   it('can take a network state callback', async () => {
     const networkCb = (state) => `NETWORK STATE: ${state}`;
-    const app = await createTestAppWithNetworkCB(
+    const app = await createTestApp(
+      null,
       null,
       networkCb
     );
@@ -62,7 +60,7 @@ describe('Smoke test', () => {
       configPath: '/home',
       forceUseMock: false,
     };
-    const app = await createTestAppWithOptions(null, optionsObject);
+    const app = await createTestApp(null, optionsObject);
 
     const optionsObjectsEqual = Object.keys(app.options).every(
       (option) => app.options[option] === optionsObject[option]
@@ -77,7 +75,7 @@ describe('Smoke test', () => {
       joinSchemes: ['proto'],
       configPath: { path: '/home' } // this is expected to be a string
     };
-    return should(createTestAppWithOptions(
+    return should(createTestApp(
       null,
       optionsObject
     )).be.rejectedWith(errConst.CONFIG_PATH_ERROR.msg('TypeError: error setting argument 0 - "string" must be a string, Buffer, or ArrayBuffer'));

@@ -16,7 +16,6 @@ const h = require('./helpers');
 const consts = require('../src/consts');
 const errConst = require('../src/error_const');
 
-const createAnonTestApp = h.createAnonTestApp;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 
 const createRandomDomain = async (content, path, service, authedApp) => {
@@ -84,14 +83,14 @@ describe('Browsing', () => {
   it('returns rejected promise if no url is provided', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '', '')
-      .then(() => createAnonTestApp()
+      .then(() => createAuthenticatedTestApp()
         .then((app) => should(app.webFetch()).be.rejectedWith(errConst.MISSING_URL.msg)));
   }).timeout(20000);
 
   it('fetch content', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '', '')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
           .then((data) => should(data.body.toString()).equal(content))
       ));
@@ -100,7 +99,7 @@ describe('Browsing', () => {
   it('fetch empty content', () => {
     const content = '';
     return createRandomDomain(content, 'emptyfile.txt', '')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://${domain}/emptyfile.txt`)
           .then((data) => should(data.body.toString()).equal(content))
       ));
@@ -109,7 +108,7 @@ describe('Browsing', () => {
   it('fetches file with non-explicit mime type', async () => {
     const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
     const domain = await createRandomDomain(content, '/streaming');
-    const app = await createAnonTestApp();
+    const app = await createAuthenticatedTestApp();
     const response = await app.webFetch(`safe://${domain}/streaming`);
     return should(response.headers['Content-Type']).be.equal('application/octet-stream');
   }).timeout(20000);
@@ -117,7 +116,7 @@ describe('Browsing', () => {
   it('fetch any path on any url', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/any/path/html', 'whatever')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://whatever.${domain}/any/path/html`)
           .then((data) => should(data.body.toString()).equal(content))
       ));
@@ -126,7 +125,7 @@ describe('Browsing', () => {
   it('find any service fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/yumyum.html', 'whatever.valid_service')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://whatever.valid_service.${domain}/yumyum.html`)
           .then((data) => should(data.body.toString()).equal(content))
       ));
@@ -135,7 +134,7 @@ describe('Browsing', () => {
   it('find private service', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomPrivateServiceDomain(content, '/yumyum.html', 'www')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://www.${domain}/yumyum.html`)
           .then((data) => should(data.body.toString()).equal(content))));
   }).timeout(20000);
@@ -143,7 +142,7 @@ describe('Browsing', () => {
   it('find missing slash fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, 'test.html', 'whatever.valid_service')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://whatever.valid_service.${domain}/test.html`)
           .then((data) => should(data.body.toString()).equal(content))
       ));
@@ -152,7 +151,7 @@ describe('Browsing', () => {
   it('fetch index.html fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/index.html', '')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
           .then((data) => should(data.body.toString()).equal(content))
       ));
@@ -161,7 +160,7 @@ describe('Browsing', () => {
   it('fetch www fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '', 'www')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
           .then((data) => should(data.body.toString()).equal(content))
       ));
@@ -170,7 +169,7 @@ describe('Browsing', () => {
   it('fetch index.html on www fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/index.html', 'www')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
           .then((data) => should(data.body.toString()).equal(content))
       ));
@@ -179,7 +178,7 @@ describe('Browsing', () => {
   it('subdirectory fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/subdir/index.html', 'www')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://${domain}/subdir/`)
           .then((data) => should(data.body.toString()).equal(content))
       ));
@@ -188,7 +187,7 @@ describe('Browsing', () => {
   it('empty subdirectory fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, 'index.html', '')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://${domain}`)
           .then((data) => should(data.body.toString()).equal(content))
         ));
@@ -197,7 +196,7 @@ describe('Browsing', () => {
   it('/my.folder/index.html', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/my.folder/index.html', '')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://${domain}/my.folder/index.html`)
           .then((data) => should(data.body.toString()).equal(content))
         ));
@@ -206,7 +205,7 @@ describe('Browsing', () => {
   it('/index.html', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/index.html', '')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://${domain}/index.html`)
           .then((data) => should(data.body.toString()).equal(content))
         ));
@@ -215,7 +214,7 @@ describe('Browsing', () => {
   it('/my.folder/', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/my.folder/index.html', '')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://${domain}/my.folder/`)
           .then((data) => should(data.body.toString()).equal(content))
         ));
@@ -224,7 +223,7 @@ describe('Browsing', () => {
   it('/path/my.file', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/path/my.file', '')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://${domain}/path/my.file`)
           .then((data) => should(data.body.toString()).equal(content))
         ));
@@ -233,7 +232,7 @@ describe('Browsing', () => {
   it('trailing slash after domain', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/index.html', 'www')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://${domain}/`)
           .then((data) => should(data.body.toString()).equal(content))
       ));
@@ -242,7 +241,7 @@ describe('Browsing', () => {
   it('url encoded filename', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/spa ce.ht"ml', '')
-      .then((domain) => createAnonTestApp()
+      .then((domain) => createAuthenticatedTestApp()
         .then((app) => app.webFetch(`safe://${domain}/spa ce.ht"ml`)
           .then((data) => should(data.body.toString()).equal(content))
       ));
@@ -256,7 +255,7 @@ describe('Browsing', () => {
       const exptedReturn = 'lo worl';
 
       return createRandomDomain(content, '/streaming.mp4')
-        .then((domain) => createAnonTestApp()
+        .then((domain) => createAuthenticatedTestApp()
           .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`,
                     { range: { start: startByte, end: endByte } })
             .then((data) => {
@@ -277,7 +276,7 @@ describe('Browsing', () => {
       const startByte = 0;
 
       return createRandomDomain(content, '/streaming.mp4')
-        .then((domain) => createAnonTestApp()
+        .then((domain) => createAuthenticatedTestApp()
           .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`,
                     { range: { start: startByte, end: endByte } })
             .then((data) => {
@@ -295,7 +294,7 @@ describe('Browsing', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const numberOfBytes = content.length - 1;
       return createRandomDomain(content, '/streaming.mp4')
-        .then((domain) => createAnonTestApp()
+        .then((domain) => createAuthenticatedTestApp()
           .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: numberOfBytes } })
             .then((data) => {
               should.not.exist(data.parts);
@@ -310,7 +309,7 @@ describe('Browsing', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const numberOfBytes = content.length - 1;
       return createRandomDomain(content, '/streaming.mp4')
-        .then((domain) => createAnonTestApp()
+        .then((domain) => createAuthenticatedTestApp()
           .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: [{ start: 0, end: numberOfBytes }] })
             .then((data) => {
               should.not.exist(data.parts);
@@ -325,7 +324,7 @@ describe('Browsing', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const range = [{ start: 3, end: 12 }];
       return createRandomDomain(content, '/streaming.mp4')
-        .then((domain) => createAnonTestApp()
+        .then((domain) => createAuthenticatedTestApp()
           .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range })
             .then((data) => {
               should.not.exist(data.parts);
@@ -340,7 +339,7 @@ describe('Browsing', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const range = [{ start: 6 }];
       return createRandomDomain(content, '/streaming.mp4')
-        .then((domain) => createAnonTestApp()
+        .then((domain) => createAuthenticatedTestApp()
           .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range })
             .then((data) => {
               should.not.exist(data.parts);
@@ -357,7 +356,7 @@ describe('Browsing', () => {
       const numberOfBytes = content.length - 1;
 
       return createRandomDomain(content, '/streaming.mp4')
-        .then((domain) => createAnonTestApp()
+        .then((domain) => createAuthenticatedTestApp()
           .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: startByte } })
             .then((data) => {
               should.not.exist(data.parts);
@@ -373,7 +372,7 @@ describe('Browsing', () => {
       const endByte = 4;
 
       return createRandomDomain(content, '/streaming.mp4')
-        .then((domain) => createAnonTestApp()
+        .then((domain) => createAuthenticatedTestApp()
           .then((app) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { end: endByte } })
             .then((data) => {
               should.not.exist(data.parts);
@@ -387,7 +386,7 @@ describe('Browsing', () => {
     it('range end beyond data length', async () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const domain = await createRandomDomain(content, '/streaming.mp4');
-      const app = await createAnonTestApp();
+      const app = await createAuthenticatedTestApp();
       return should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: content.length } }))
         .be.rejectedWith(errConst.INVALID_BYTE_RANGE.msg);
     }).timeout(20000);
@@ -396,7 +395,7 @@ describe('Browsing', () => {
     it.skip('range start beyond data length', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       return createRandomDomain(content, '/streaming.mp4')
-        .then((domain) => createAnonTestApp()
+        .then((domain) => createAuthenticatedTestApp()
           .then((app) => should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 1000 } }))
             .be.rejectedWith('NFS error: Invalid byte range specified')
         ));
@@ -406,7 +405,7 @@ describe('Browsing', () => {
     it.skip('negative range start param', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       return createRandomDomain(content, '/streaming.mp4')
-        .then((domain) => createAnonTestApp()
+        .then((domain) => createAuthenticatedTestApp()
           .then((app) => should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: -1 } }))
             .be.rejectedWith('Invalid range start value')
         ));
@@ -415,7 +414,7 @@ describe('Browsing', () => {
     it('fetches multipart ranges', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
       const domain = await createRandomDomain(content, '/streaming.mp4');
-      const app = await createAnonTestApp();
+      const app = await createAuthenticatedTestApp();
       const range = [
         { start: 2, end: 4 },
         { start: 7, end: 9 },
@@ -432,7 +431,7 @@ describe('Browsing', () => {
     it('returns separate multipart headers for Content-Range', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
       const domain = await createRandomDomain(content, '/streaming.mp4');
-      const app = await createAnonTestApp();
+      const app = await createAuthenticatedTestApp();
       const range = [
         { start: 2, end: 4 },
         { start: 7, end: 9 },
@@ -449,7 +448,7 @@ describe('Browsing', () => {
     it('fetches multipart ranges for file without explicit mime types', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
       const domain = await createRandomDomain(content, '/streaming');
-      const app = await createAnonTestApp();
+      const app = await createAuthenticatedTestApp();
       const range = [
         { start: 2, end: 4 },
         { start: 7, end: 9 },
@@ -465,7 +464,7 @@ describe('Browsing', () => {
     it('throws error for invalid multipart range', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
       const domain = await createRandomDomain(content, '/streaming.mp4');
-      const app = await createAnonTestApp();
+      const app = await createAuthenticatedTestApp();
       const range = [
         { start: 7, end: 50 }
       ];
@@ -476,7 +475,7 @@ describe('Browsing', () => {
     it('multipart ranges: offset byte without byte length', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
       const domain = await createRandomDomain(content, '/streaming.mp4');
-      const app = await createAnonTestApp();
+      const app = await createAuthenticatedTestApp();
       const range = [
         { start: 2, end: 4 },
         { start: 7, end: 9 },
@@ -491,7 +490,7 @@ describe('Browsing', () => {
     it('fetches multipart ranges for file with explicit mime types', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
       const domain = await createRandomDomain(content, '/streaming.mp4');
-      const app = await createAnonTestApp();
+      const app = await createAuthenticatedTestApp();
       const range = [
         { start: 2, end: 4 },
         { start: 7, end: 9 },
@@ -505,7 +504,7 @@ describe('Browsing', () => {
     it('multipart ranges: byte length provided with no starting byte position', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
       const domain = await createRandomDomain(content, '/streaming.mp4');
-      const app = await createAnonTestApp();
+      const app = await createAuthenticatedTestApp();
       const range = [
         { start: 2, end: 4 },
         { start: 7, end: 9 },
@@ -528,7 +527,7 @@ describe('Browsing', () => {
         .then((testDomain) => {
           domain = testDomain;
         }).then(() => {
-          createAnonTestApp().then((app) => {
+          createAuthenticatedTestApp().then((app) => {
             client = app;
           });
         });
@@ -569,14 +568,14 @@ describe('Browsing', () => {
     );
 
     it('wrong path', () => createRandomDomain(content, '/my.file', '')
-      .then((newdomain) => createAnonTestApp()
+      .then((newdomain) => createAuthenticatedTestApp()
         .then((app) => should(app.webFetch(`safe://${newdomain}/my.file/`))
           .be.rejectedWith('NFS error: File not found')
         ))
     ).timeout(20000);
 
     it('wrong deeper path', () => createRandomDomain(content, '/my.file/my.other.file', '')
-      .then((newdomain) => createAnonTestApp()
+      .then((newdomain) => createAuthenticatedTestApp()
         .then((app) => should(app.webFetch(`safe://${newdomain}/my.file/my.other.file/`))
           .be.rejectedWith('NFS error: File not found')
         ))
