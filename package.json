@@ -94,6 +94,11 @@
           "targetDir": "src/native/nightly",
           "filename": "safe_app-nightly"
         }
+      },
+      "mobile": {
+        "system_uri": {
+          "disable": true
+        }
       }
     }
   }
