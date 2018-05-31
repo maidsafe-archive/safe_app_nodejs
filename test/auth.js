@@ -198,9 +198,9 @@ describe('Get granted containers permissions from auth URI', () => {
 
 describe('Access Container', () => {
   let app;
+  const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
 
   before(async () => {
-    const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
     app = await createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true });
   });
 
@@ -239,7 +239,6 @@ describe('Access Container', () => {
     app.auth.getOwnContainer().then((mdata) => should(mdata).is.not.undefined())));
 
   it('throws error if root container requested but was not created', async () => {
-    const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
     const app = await createAuthenticatedTestApp('_test_scope_2', containersPermissions, { own_container: false });
     return should(app.auth.getOwnContainer()).be.rejectedWith(`'apps/${h.appInfo.id}' not found in the access container`);
   });
