@@ -1510,9 +1510,9 @@ delegates@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delegates/-/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
 
-"deps_downloader@https://s3.eu-west-2.amazonaws.com/deps-downloader/deps_downloader-0.1.0.tgz":
-  version "0.1.0"
-  resolved "https://s3.eu-west-2.amazonaws.com/deps-downloader/deps_downloader-0.1.0.tgz#5d2dacd4b2810b72dba5c56e51b1b37d140defb9"
+"deps_downloader@https://s3.eu-west-2.amazonaws.com/deps-downloader/deps_downloader-0.2.0.tgz":
+  version "0.2.0"
+  resolved "https://s3.eu-west-2.amazonaws.com/deps-downloader/deps_downloader-0.2.0.tgz#999325cf481c7b0a5b4291187bd59c7f9e1ce7ae"
   dependencies:
     async "^2.1.5"
     electron-download-fork "https://s3.eu-west-2.amazonaws.com/electron-download-fork/electron-download-fork-4.1.0.tgz"

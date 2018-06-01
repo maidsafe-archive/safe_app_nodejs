@@ -42,7 +42,7 @@ To run the tests locally, make sure you installed the [`safe_app`](https://githu
 Note: If you are compiling your own [`safe_app`](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library for testing purposes, and if you want to be able to run the tests, make sure to include `testing` in your build features when compiling `safe_app` in `safe_client_libs`, i.e. `cargo build --release --features "use-mock-routing testing"`.
 
 ### Mobile Development
-If you do not require [system_uri](https://github.com/maidsafe/system_uri) and would like to prevent it from downloading, first set the `PLATFORM_TYPE=mobile` environment variable before running `yarn`.
+If you do not require [system_uri](https://github.com/maidsafe/system_uri) and would like to prevent it from downloading, first set `NODE_ENV` environment variable to either `mobile_prod` or `mobile_dev` before running `yarn`.
 
 ## Further Help
 

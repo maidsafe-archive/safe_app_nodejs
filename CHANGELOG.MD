@@ -5,7 +5,7 @@
 - New binding `simulateNetworkDisconnect()` function to simulate a network disconnection event useful for applications testing purposes.
 - Support for forcing the use of mock by providing `forceUseMock` boolean to the initialisation options of each safeApp instance, i.e. each safeApp instance can either use mock or prod libs independently.
 - Ability to pass user metadata when inserting and updating file in MutableData
-- Prevents download of `system_uri` if `PLATFORM_TYPE=mobile`
+- Prevents download of `system_uri` if `NODE_ENV=mobile_prod` or `NODE_ENV=mobile_dev`
 
 ### Changed
 - Upgrade safe_app native library to commit `a9b4c05` and adapt to minor API changes
@@ -20,6 +20,7 @@
 - changes initializeApp to use an s instead of z
 - Network state callback invoked from `INIT` to `CONNECTED` states
 - Simplifies test helper functions
+- Upgrades deps_downloader to v0.2.0
 
 ### Fixed
 - Fixed some tests which were giving false positive results
@@ -27,6 +28,7 @@
 ## SAFE libraries Dependencies
 - safe_app: a9b4c05
 - system_uri: v0.4.0
+- deps_downloader: v0.2.0
 
 ## [0.8.1] - 9-3-2018
 ### Changed
