@@ -17,6 +17,7 @@ const consts = require('../src/consts');
 const errConst = require('../src/error_const');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
+const createUnregisteredTestApp = h.createUnregisteredTestApp;
 
 const createRandomDomain = async (content, path, service, authedApp) => {
   const domain = `test_${Math.round(Math.random() * 100000)}`;
@@ -79,145 +80,147 @@ const removeFromMData = (md, key) => md.getEntries()
           .then(() => md.applyEntriesMutation(mut))
         )));
 
+const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
+
 describe('Browsing', () => {
   let app;
-
+  let unregisteredApp;
   before(async () => {
-    const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
     app = await createAuthenticatedTestApp('_test_scope', containersPermissions);
+    unregisteredApp = await createUnregisteredTestApp();
   });
 
   it('returns rejected promise if no url is provided', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '', '', app)
-      .then(() => should(app.webFetch()).be.rejectedWith(errConst.MISSING_URL.msg));
-  }).timeout(20000);
+      .then(() => should(unregisteredApp.webFetch()).be.rejectedWith(errConst.MISSING_URL.msg));
+  });
 
   it('fetch content', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '', '', app)
-        .then((domain) => app.webFetch(`safe://${domain}`)
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('fetch empty content', () => {
     const content = '';
     return createRandomDomain(content, 'emptyfile.txt', '', app)
-        .then((domain) => app.webFetch(`safe://${domain}/emptyfile.txt`)
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/emptyfile.txt`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('fetches file with non-explicit mime type', async () => {
     const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
     const domain = await createRandomDomain(content, '/streaming', null, app);
-    const response = await app.webFetch(`safe://${domain}/streaming`);
+    const response = await unregisteredApp.webFetch(`safe://${domain}/streaming`);
     return should(response.headers['Content-Type']).be.equal('application/octet-stream');
-  }).timeout(20000);
+  });
 
   it('fetch any path on any url', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/any/path/html', 'whatever', app)
-        .then((domain) => app.webFetch(`safe://whatever.${domain}/any/path/html`)
+        .then((domain) => unregisteredApp.webFetch(`safe://whatever.${domain}/any/path/html`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('find any service fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/yumyum.html', 'whatever.valid_service', app)
-        .then((domain) => app.webFetch(`safe://whatever.valid_service.${domain}/yumyum.html`)
+        .then((domain) => unregisteredApp.webFetch(`safe://whatever.valid_service.${domain}/yumyum.html`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('find private service', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomPrivateServiceDomain(content, '/yumyum.html', 'www', app)
-        .then((domain) => app.webFetch(`safe://www.${domain}/yumyum.html`)
+        .then((domain) => unregisteredApp.webFetch(`safe://www.${domain}/yumyum.html`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('find missing slash fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, 'test.html', 'whatever.valid_service', app)
-        .then((domain) => app.webFetch(`safe://whatever.valid_service.${domain}/test.html`)
+        .then((domain) => unregisteredApp.webFetch(`safe://whatever.valid_service.${domain}/test.html`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('fetch index.html fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/index.html', '', app)
-        .then((domain) => app.webFetch(`safe://${domain}`)
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('fetch www fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '', 'www', app)
-        .then((domain) => app.webFetch(`safe://${domain}`)
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('fetch index.html on www fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/index.html', 'www', app)
-        .then((domain) => app.webFetch(`safe://${domain}`)
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('subdirectory fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/subdir/index.html', 'www', app)
-        .then((domain) => app.webFetch(`safe://${domain}/subdir/`)
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/subdir/`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('empty subdirectory fallback', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, 'index.html', '', app)
-        .then((domain) => app.webFetch(`safe://${domain}`)
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('/my.folder/index.html', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/my.folder/index.html', '', app)
-        .then((domain) => app.webFetch(`safe://${domain}/my.folder/index.html`)
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/my.folder/index.html`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('/index.html', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/index.html', '', app)
-        .then((domain) => app.webFetch(`safe://${domain}/index.html`)
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/index.html`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('/my.folder/', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/my.folder/index.html', '', app)
-        .then((domain) => app.webFetch(`safe://${domain}/my.folder/`)
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/my.folder/`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('/path/my.file', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/path/my.file', '', app)
-        .then((domain) => app.webFetch(`safe://${domain}/path/my.file`)
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/path/my.file`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('trailing slash after domain', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/index.html', 'www', app)
-        .then((domain) => app.webFetch(`safe://${domain}/`)
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   it('url encoded filename', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '/spa ce.ht"ml', '', app)
-        .then((domain) => app.webFetch(`safe://${domain}/spa ce.ht"ml`)
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/spa ce.ht"ml`)
           .then((data) => should(data.body.toString()).equal(content)));
-  }).timeout(20000);
+  });
 
   describe('WebFetch partial content', () => {
     it('fetch partial content', () => {
@@ -227,7 +230,7 @@ describe('Browsing', () => {
       const exptedReturn = 'lo worl';
 
       return createRandomDomain(content, '/streaming.mp4', null, app)
-        .then((domain) => app.webFetch(`safe://${domain}/streaming.mp4`,
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`,
                   { range: { start: startByte, end: endByte } })
           .then((data) => {
             should.not.exist(data.parts);
@@ -237,7 +240,7 @@ describe('Browsing', () => {
             should(data.headers['Content-Range']).equal(`bytes ${startByte}-${endByte}/${content.length}`);
             return should(data.headers['Content-Length']).equal(exptedReturn.length);
           }));
-    }).timeout(20000);
+    });
 
     it('fetches partial content starting at 0', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
@@ -246,7 +249,7 @@ describe('Browsing', () => {
       const startByte = 0;
 
       return createRandomDomain(content, '/streaming.mp4', null, app)
-        .then((domain) => app.webFetch(`safe://${domain}/streaming.mp4`,
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`,
                   { range: { start: startByte, end: endByte } })
           .then((data) => {
             should.not.exist(data.parts);
@@ -256,59 +259,59 @@ describe('Browsing', () => {
             should(data.headers['Content-Range']).equal(`bytes ${startByte}-${endByte}/${content.length}`);
             return should(data.headers['Content-Length']).equal(exptedReturn.length);
           }));
-    }).timeout(20000);
+    });
 
     it('fetch full length with range', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const numberOfBytes = content.length - 1;
       return createRandomDomain(content, '/streaming.mp4', null, app)
-        .then((domain) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: numberOfBytes } })
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: numberOfBytes } })
           .then((data) => {
             should.not.exist(data.parts);
             should(data.body.toString()).equal(content);
             should(data.headers['Content-Range']).equal(`bytes 0-${numberOfBytes}/${content.length}`);
             return should(data.headers['Content-Length']).equal(content.length);
           }));
-    }).timeout(20000);
+    });
 
     it('with range option as array composed of single object, requesting complete file', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const numberOfBytes = content.length - 1;
       return createRandomDomain(content, '/streaming.mp4', null, app)
-        .then((domain) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: [{ start: 0, end: numberOfBytes }] })
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range: [{ start: 0, end: numberOfBytes }] })
           .then((data) => {
             should.not.exist(data.parts);
             should(data.body.toString()).equal(content);
             should(data.headers['Content-Range']).equal(`bytes 0-${numberOfBytes}/${content.length}`);
             return should(data.headers['Content-Length']).equal(content.length);
           }));
-    }).timeout(20000);
+    });
 
     it('with range option as array composed of single object', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const range = [{ start: 3, end: 12 }];
       return createRandomDomain(content, '/streaming.mp4', null, app)
-          .then((domain) => app.webFetch(`safe://${domain}/streaming.mp4`, { range })
+          .then((domain) => unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range })
             .then((data) => {
               should.not.exist(data.parts);
               should(data.body.toString()).equal(content.substring(3, 13));
               should(data.headers['Content-Range']).equal(`bytes 3-12/${content.length}`);
               return should(data.headers['Content-Length']).equal((range[0].end - range[0].start) + 1);
             }));
-    }).timeout(20000);
+    });
 
     it('with range option as array composed of single object, with start but no ending byte', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const range = [{ start: 6 }];
       return createRandomDomain(content, '/streaming.mp4', null, app)
-          .then((domain) => app.webFetch(`safe://${domain}/streaming.mp4`, { range })
+          .then((domain) => unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range })
             .then((data) => {
               should.not.exist(data.parts);
               should(data.body.toString()).equal(content.substring(6, content.length + 1));
               should(data.headers['Content-Range']).equal(`bytes 6-${content.length - 1}/${content.length}`);
               return should(data.headers['Content-Length']).equal(content.length - range[0].start);
             }));
-    }).timeout(20000);
+    });
 
     it('without range end param', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
@@ -316,51 +319,51 @@ describe('Browsing', () => {
       const numberOfBytes = content.length - 1;
 
       return createRandomDomain(content, '/streaming.mp4', null, app)
-        .then((domain) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: startByte } })
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: startByte } })
           .then((data) => {
             should.not.exist(data.parts);
             should(data.body.toString()).equal(content.substring(startByte));
             should(data.headers['Content-Range']).equal(`bytes ${startByte}-${numberOfBytes}/${content.length}`);
             return should(data.headers['Content-Length']).equal(content.length - startByte);
           }));
-    }).timeout(20000);
+    });
 
     it('without range start param', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const endByte = 4;
 
       return createRandomDomain(content, '/streaming.mp4', null, app)
-        .then((domain) => app.webFetch(`safe://${domain}/streaming.mp4`, { range: { end: endByte } })
+        .then((domain) => unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range: { end: endByte } })
           .then((data) => {
             should.not.exist(data.parts);
             should(data.body.toString()).equal(content.substring(0, endByte + 1));
             should(data.headers['Content-Range']).equal(`bytes ${0}-${endByte}/${content.length}`);
             return should(data.headers['Content-Length']).equal(endByte + 1);
           }));
-    }).timeout(20000);
+    });
 
     it('range end beyond data length', async () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const domain = await createRandomDomain(content, '/streaming.mp4', null, app);
-      return should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: content.length } }))
+      return should(unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 0, end: content.length } }))
         .be.rejectedWith(errConst.INVALID_BYTE_RANGE.msg);
-    }).timeout(20000);
+    });
 
     // safe_app lib is not validating for invalid start offset
     it.skip('range start beyond data length', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       return createRandomDomain(content, '/streaming.mp4', null, app)
-        .then((domain) => should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 1000 } }))
+        .then((domain) => should(unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: 1000 } }))
           .be.rejectedWith('NFS error: Invalid byte range specified'));
-    }); // .timeout(20000);
+    }); // ;
 
     // safe_app lib is not making validating for invalid start offset
     it.skip('negative range start param', () => {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       return createRandomDomain(content, '/streaming.mp4', null, app)
-        .then((domain) => should(app.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: -1 } }))
+        .then((domain) => should(unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range: { start: -1 } }))
           .be.rejectedWith('Invalid range start value'));
-    }); // .timeout(20000);
+    }); // ;
 
     it('fetches multipart ranges', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
@@ -370,13 +373,13 @@ describe('Browsing', () => {
         { start: 7, end: 9 },
         { start: 13, end: 17 }
       ];
-      const data = await app.webFetch(`safe://${domain}/streaming.mp4`, { range });
+      const data = await unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range });
       should.not.exist(data.body);
       should(data).have.property('parts');
       should(data.parts[0].body.toString()).be.equal(content.slice(2, 5));
       should(data.parts[1].body.toString()).be.equal(content.slice(7, 10));
       return should(data.parts[2].body.toString()).be.equal(content.slice(13, 18));
-    }).timeout(20000);
+    });
 
     it('returns separate multipart headers for Content-Range', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
@@ -386,13 +389,13 @@ describe('Browsing', () => {
         { start: 7, end: 9 },
         { start: 13, end: 17 }
       ];
-      const data = await app.webFetch(`safe://${domain}/streaming.mp4`, { range });
+      const data = await unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range });
       should.not.exist(data.body);
       should(data.headers['Content-Type']).be.equal('multipart/byteranges');
       should(data.parts[0].headers['Content-Range']).be.equal(`bytes 2-4/${content.length}`);
       should(data.parts[1].headers['Content-Range']).be.equal(`bytes 7-9/${content.length}`);
       return should(data.parts[2].headers['Content-Range']).be.equal(`bytes 13-17/${content.length}`);
-    }).timeout(20000);
+    });
 
     it('fetches multipart ranges for file without explicit mime types', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
@@ -402,12 +405,12 @@ describe('Browsing', () => {
         { start: 7, end: 9 },
         { start: 13, end: 17 }
       ];
-      const data = await app.webFetch(`safe://${domain}/streaming`, { range });
+      const data = await unregisteredApp.webFetch(`safe://${domain}/streaming`, { range });
       should.not.exist(data.body);
       should(data).have.property('parts');
       should(data.headers['Content-Type']).be.equal('multipart/byteranges');
       return data.parts.map((part) => should(part.headers['Content-Type']).be.equal('application/octet-stream'));
-    }).timeout(20000);
+    });
 
     it('throws error for invalid multipart range', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
@@ -415,9 +418,9 @@ describe('Browsing', () => {
       const range = [
         { start: 7, end: 50 }
       ];
-      return should(app.webFetch(`safe://${domain}/streaming.mp4`, { range }))
+      return should(unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range }))
         .be.rejectedWith(errConst.INVALID_BYTE_RANGE.msg);
-    }).timeout(20000);
+    });
 
     it('multipart ranges: offset byte without byte length', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
@@ -427,11 +430,11 @@ describe('Browsing', () => {
         { start: 7, end: 9 },
         { start: 13 }
       ];
-      const data = await app.webFetch(`safe://${domain}/streaming.mp4`, { range });
+      const data = await unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range });
       should.not.exist(data.body);
       should(data.parts[2].body.toString()).be.equal(content.slice(13, content.length + 1));
       return should(data.parts[2].headers['Content-Range']).be.equal(`bytes 13-${content.length - 1}/${content.length}`);
-    }).timeout(20000);
+    });
 
     it('fetches multipart ranges for file with explicit mime types', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
@@ -441,10 +444,10 @@ describe('Browsing', () => {
         { start: 7, end: 9 },
         { start: 13 }
       ];
-      const data = await app.webFetch(`safe://${domain}/streaming.mp4`, { range });
+      const data = await unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range });
       should.not.exist(data.body);
       return data.parts.map((part) => should(part.headers['Content-Type']).be.equal('video/mp4'));
-    }).timeout(20000);
+    });
 
     it('multipart ranges: byte length provided with no starting byte position', async () => {
       const content = `hello world, lorem ipsum on ${Math.round(Math.random() * 100000)}`;
@@ -454,28 +457,21 @@ describe('Browsing', () => {
         { start: 7, end: 9 },
         { end: 20 }
       ];
-      const data = await app.webFetch(`safe://${domain}/streaming.mp4`, { range });
+      const data = await unregisteredApp.webFetch(`safe://${domain}/streaming.mp4`, { range });
       should.not.exist(data.body);
       should(data.parts[2].body.toString()).be.equal(content.slice(0, 21));
       return should(data.parts[2].headers['Content-Range']).be.equal(`bytes 0-20/${content.length}`);
-    }).timeout(20000);
+    });
   });
 
   describe('errors', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     let domain; // eslint-disable-line no-unused-vars
     let client;
-    before(function bfore() {
-      this.timeout(20000);
-      return createRandomDomain(content, '/subdir/index.html', 'www')
-        .then((testDomain) => {
-          domain = testDomain;
-        }).then(() => {
-          createAuthenticatedTestApp().then((authedApp) => {
-            client = authedApp;
-          });
-        });
-    });
+    before(() => createRandomDomain(content, '/subdir/index.html', 'www', app)
+      .then((testDomain) => {
+        domain = testDomain;
+      }).then(() => { client = unregisteredApp; }));
 
     it('should throw error when a previously existing service is removed', async () => {
       const deletedService = 'nonexistant';
@@ -485,9 +481,9 @@ describe('Browsing', () => {
             testDomain = returnedDomain;
             return deleteService(app, testDomain, deletedService);
           })
-          .then(() => should(app.webFetch(`safe://${deletedService}.${testDomain}`))
+          .then(() => should(unregisteredApp.webFetch(`safe://${deletedService}.${testDomain}`))
             .be.rejectedWith('Service not found. Entry does not exist.'));
-    }).timeout(20000);
+    });
 
     it('should not find dns', () => should(client.webFetch('safe://domain_doesnt_exist'))
       .be.rejectedWith('Requested public name is not found'));
@@ -511,13 +507,13 @@ describe('Browsing', () => {
     );
 
     it('wrong path', () => createRandomDomain(content, '/my.file', '', app)
-      .then((newdomain) => should(app.webFetch(`safe://${newdomain}/my.file/`))
+      .then((newdomain) => should(unregisteredApp.webFetch(`safe://${newdomain}/my.file/`))
         .be.rejectedWith('NFS error: File not found')
-      )).timeout(20000);
+      ));
 
     it('wrong deeper path', () => createRandomDomain(content, '/my.file/my.other.file', '', app)
-      .then((newdomain) => should(app.webFetch(`safe://${newdomain}/my.file/my.other.file/`))
+      .then((newdomain) => should(unregisteredApp.webFetch(`safe://${newdomain}/my.file/my.other.file/`))
         .be.rejectedWith('NFS error: File not found')
-      )).timeout(20000);
+      ));
   });
 });

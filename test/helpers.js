@@ -30,18 +30,24 @@ const appInfo = {
   forceUseMock: true
 };
 
-const createTestApp = async (scope, options, networkCB) => {
-  if (scope) {
-    appInfo.scope = scope;
+const createTestApp = async (partialAppInfo, networkCB, options, preventInit) => {
+  const composedAppInfo = Object.assign(appInfo, partialAppInfo);
+  const app = new App(composedAppInfo, networkCB, options);
+  if (preventInit) {
+    return h.autoref(app);
   }
-  const app = new App(appInfo, networkCB, options);
   await app.init();
   return h.autoref(app);
 };
 
-const createAuthenticatedTestApp = async (scope, access, opts) => {
-  const app = await createTestApp(scope);
+const createAuthenticatedTestApp = async (partialAppInfo, access, opts) => {
+  const app = await createTestApp(partialAppInfo);
   return app.auth.loginForTest(access || {}, opts);
+};
+
+const createUnregisteredTestApp = async (scope) => {
+  const app = await createTestApp(scope);
+  return app.auth.loginForTest();
 };
 
 const createRandomXorName = () => crypto.randomBytes(32);
@@ -59,6 +65,7 @@ module.exports = {
   authUris,
   createTestApp,
   createAuthenticatedTestApp,
+  createUnregisteredTestApp,
   createRandomXorName,
   createRandomSecKey,
   createRandomSignPubKey,

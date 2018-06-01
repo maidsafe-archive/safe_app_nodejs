@@ -18,12 +18,12 @@ const errConst = require('../src/error_const');
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 const createTestApp = h.createTestApp;
 
+const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
+
 /* eslint-disable no-shadow */
 describe('auth interface', () => {
   let app;
-
   before(async () => {
-    const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
     app = await createAuthenticatedTestApp('_test_scope', containersPermissions);
   });
 
@@ -149,7 +149,7 @@ describe('auth interface', () => {
   it('creates an authenticated session just for testing', async () => {
     const app = await h.createTestApp();
     return should(app.auth.loginForTest()).be.fulfilled();
-  }).timeout(20000);
+  });
 });
 
 describe('Get granted containers permissions from auth URI', () => {
@@ -303,4 +303,4 @@ describe('Access Container', () => {
             return should(value.buf.toString()).equal('value1');
           })
   ));
-}).timeout(15000);
+});
