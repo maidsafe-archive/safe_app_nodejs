@@ -39,9 +39,6 @@ describe('auth interface', () => {
       .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
-  // TODO: issue MAID-2542 has been raised for safe_app lib as it's panicking
-  // instead of returning an error code and message.
-  // We'll need to adapt the test accordingly nce that's fixed.
   it('throws error if permissions object contains invalid permission', async () => {
     const app = await h.createTestApp();
     const test = () => app.auth.genAuthUri({ _public: ['Invalid'] });
@@ -49,9 +46,12 @@ describe('auth interface', () => {
   });
 
   it('should throw error if non-standard container is requested', () => {
-    const containersPermissions = { _app: ['Read', 'Insert', 'ManagePermissions'] };
+    const containersPermissions = {
+      _public: ['Insert', 'Read', 'Update'],
+      _second: ['Read']
+    };
     return should(createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true }))
-      .be.rejected();
+      .be.rejectedWith("'_second' not found in the access container");
   });
 
   it('is authenticated for testing', () => should(app.auth.registered).be.true());
