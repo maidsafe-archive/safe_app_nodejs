@@ -43,7 +43,7 @@ const ContainerPermissionsArray = new ArrayType(ContainerPermissions);
 
 /// For use in `ShareMDataReq`. Represents a specific `MutableData` that is being shared.
 const ShareMData = Struct({
-  typeTag: t.u64,
+  type_tag: t.u64,
   name: t.XOR_NAME,
   access: t.PermissionSet
 });
@@ -277,7 +277,7 @@ const makeShareMDataPermissions = (permissions) => {
   return new ShareMDataArray(permissions.map((perm) => {
     const permsArray = helpers.makePermissionSet(perm.perms);
     return ShareMData({
-      typeTag: perm.typeTag,
+      type_tag: perm.typeTag,
       name: translateXorName(perm.name),
       access: permsArray
     });

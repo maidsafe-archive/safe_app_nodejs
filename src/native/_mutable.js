@@ -1,11 +1,11 @@
 // Copyright 2018 MaidSafe.net limited.
 //
-// This SAFE Network Software is licensed to you under 
-// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or 
+// This SAFE Network Software is licensed to you under
+// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or
 // the Modified BSD license <LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
 // at your option.
 //
-// This file may not be copied, modified, or distributed except according to those terms. 
+// This file may not be copied, modified, or distributed except according to those terms.
 //
 // Please review the Licences for the specific language governing permissions and limitations
 // relating to use of the SAFE Network Software.
@@ -65,7 +65,7 @@ const MDataInfo = Struct({
   /// Name of the mutable data.
   name: t.XOR_NAME,
   /// Type tag of the mutable data.
-  typeTag: t.u64,
+  type_tag: t.u64,
 
   /// Flag indicating whether the encryption info (`enc_key` and `enc_nonce`).
   /// is set.
@@ -105,7 +105,7 @@ const makeMDataInfo = (mDataInfoObj) => {
   }
   return new MDataInfo({
     name: mDataInfoObj.name,
-    typeTag: mDataInfoObj.typeTag,
+    type_tag: mDataInfoObj.typeTag,
     has_enc_info: mDataInfoObj.has_enc_info,
     enc_key,
     enc_nonce,
@@ -224,8 +224,8 @@ const makeMDataInfoObj = (mDataInfo) => {
   } catch (err) {
     throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size));
   }
-  const typeTag = mDataInfo.typeTag;
-  if(!Number.isInteger(typeTag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg); 
+  const typeTag = mDataInfo.type_tag;
+  if(!Number.isInteger(typeTag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
   const has_enc_info = mDataInfo.has_enc_info;
   const enc_key = t.SYM_KEYBYTES(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_key) : null);
   const enc_nonce = t.SYM_NONCEBYTES(mDataInfo.enc_nonce ? new Buffer(mDataInfo.enc_nonce) : null);
@@ -234,7 +234,7 @@ const makeMDataInfoObj = (mDataInfo) => {
   const new_enc_key = t.SYM_KEYBYTES(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_key) : null);
   const new_enc_nonce = t.SYM_NONCEBYTES(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_nonce) : null);
 
-  let retMDataInfo = {
+  let retMDataInfoObj = {
     name,
     typeTag,
     has_enc_info,
@@ -244,7 +244,7 @@ const makeMDataInfoObj = (mDataInfo) => {
     new_enc_key,
     new_enc_nonce
   }
-  return retMDataInfo;
+  return retMDataInfoObj;
 }
 
 const readMDataInfoPtr = (mDataInfoPtr) => {
