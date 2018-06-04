@@ -246,7 +246,7 @@ class Entries extends h.NetworkObject {
 /**
 * @typedef {Object} NameAndTag
 * @param {Buffer} name - the XoR-name/address on the network
-* @param {Number} type_tag - the type tag
+* @param {Number} typeTag - the type tag
 */
 
 /**
@@ -377,7 +377,7 @@ class MutableData extends h.NetworkObject {
   getNameAndTag() {
     return Promise.resolve({
       name: this.ref.name,
-      type_tag: this.ref.type_tag
+      typeTag: this.ref.typeTag
     });
   }
 
