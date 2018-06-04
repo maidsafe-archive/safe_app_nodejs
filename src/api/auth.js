@@ -127,7 +127,7 @@ class AuthInterface {
   * @param {Boolean} [opts.own_container=false] - whether or not to request
   *    our own container to be created for us, too
   *
-  * @returns {String} `safe-auth://`-URI
+  * @returns {Object} `{id: <id>, uri: 'safe-auth://' }`
   * @example // using an Authentication example:
   * app.auth.genAuthUri({
   *  _public: ['Insert'], // request to insert into public
@@ -182,7 +182,7 @@ class AuthInterface {
   /**
   * Generate an unregistered connection URI for the app.
   *
-  * @returns {String} `safe-auth://`-URI
+  * @returns {Object} `{id: <id>, uri: 'safe-auth://' }`
   * @example // using an Authentication example:
   * app.auth.genConnUri()
   */
