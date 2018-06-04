@@ -39,9 +39,6 @@ describe('auth interface', () => {
       .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
-  // TODO: issue MAID-2542 has been raised for safe_app lib as it's panicking
-  // instead of returning an error code and message.
-  // We'll need to adapt the test accordingly nce that's fixed.
   it('throws error if permissions object contains invalid permission', async () => {
     const app = await h.createTestApp();
     const test = () => app.auth.genAuthUri({ _public: ['Invalid'] });
@@ -49,9 +46,12 @@ describe('auth interface', () => {
   });
 
   it('should throw error if non-standard container is requested', () => {
-    const containersPermissions = { _app: ['Read', 'Insert', 'ManagePermissions'] };
+    const containersPermissions = {
+      _public: ['Insert', 'Read', 'Update'],
+      _second: ['Read']
+    };
     return should(createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true }))
-      .be.rejected();
+      .be.rejectedWith("'_second' not found in the access container");
   });
 
   it('is authenticated for testing', () => should(app.auth.registered).be.true());
@@ -77,7 +77,7 @@ describe('auth interface', () => {
   it('should build some shared MD uri', async () => {
     const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
-    const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
+    const perms = [{ typeTag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
     return app.auth.genShareMDataUri(perms)
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
@@ -99,7 +99,7 @@ describe('auth interface', () => {
   it('should throw error for malformed share MD request permission', async () => {
     const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
-    const perms = { type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] };
+    const perms = { typeTag: 15001, name: sharedMdXorName, perms: ['Insert'] };
     const test = () => app.auth.genShareMDataUri(perms);
     return should(test).throw(errConst.INVALID_PERMS_ARRAY.msg);
   });
@@ -107,15 +107,15 @@ describe('auth interface', () => {
   it('should throw error for invalid share MD request permission', async () => {
     const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
-    const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Wrong'] }];
+    const perms = [{ typeTag: 15001, name: sharedMdXorName, perms: ['Wrong'] }];
     const test = () => app.auth.genShareMDataUri(perms);
     return should(test).throw(`${perms[0].perms[0]} is not a valid permission`);
   });
 
-  it('should throw error for share MD request if type_tag is non-integer', async () => {
+  it('should throw error for share MD request if typeTag is non-integer', async () => {
     const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
-    const perms = [{ type_tag: 'non-integer', name: sharedMdXorName, perms: ['Insert'] }];
+    const perms = [{ typeTag: 'non-integer', name: sharedMdXorName, perms: ['Insert'] }];
     const test = () => app.auth.genShareMDataUri(perms);
     return should(test).throw(
       errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(perms[0]))
@@ -125,7 +125,7 @@ describe('auth interface', () => {
   it('should throw error for share MD request if name is not 32 byte buffer', async () => {
     const app = await h.createTestApp();
     const mdName = 'not 32 byte buffer';
-    const perms = [{ type_tag: 15001, name: mdName, perms: ['Insert'] }];
+    const perms = [{ typeTag: 15001, name: mdName, perms: ['Insert'] }];
     const test = () => app.auth.genShareMDataUri(perms);
     return should(test).throw(
       errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(perms[0]))
@@ -260,7 +260,7 @@ describe('Access Container', () => {
   it('read info of `_public`', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.getContainer('_public').then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
         should(resp.name).is.not.undefined();
-        return should(resp.type_tag).equal(15000);
+        return should(resp.typeTag).equal(15000);
       })));
 
   it('throws error is no container name provided', () => app.auth.refreshContainersPermissions().then(() => {
@@ -271,7 +271,7 @@ describe('Access Container', () => {
   it('read info of own container', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.getOwnContainer().then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
         should(resp.name).is.not.undefined();
-        return should(resp.type_tag).equal(15000);
+        return should(resp.typeTag).equal(15000);
       })));
 
   it('mutate info of `_publicNames` container', () => app.auth.refreshContainersPermissions().then(() =>
