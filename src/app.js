@@ -52,7 +52,7 @@ const initLogging = (appInfo, options) => {
       .then(() => lib.app_output_log_path(filename))
       .then((logPath) => { SAFEApp.logFilePath = logPath; })
       .catch((err) => {
-        throw makeError(errConst.LOGGER_INIT_ERR.code, errConst.LOGGER_INIT_ERR.msg(err));
+        throw makeError(errConst.LOGGER_INIT_ERROR.code, errConst.LOGGER_INIT_ERROR.msg(err));
       });
   }
 };

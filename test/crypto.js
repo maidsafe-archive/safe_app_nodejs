@@ -130,9 +130,7 @@ describe('Encryption keys', () => {
     let theirHandleOnMyPubKey;
 
     /* eslint-disable func-names */
-    before(function () {
-      this.timeout(10000);
-      return h.createAuthenticatedTestApp()
+    before(() => h.createAuthenticatedTestApp()
         .then((app) => {
           me = app;
           return h.createAuthenticatedTestApp();
@@ -161,8 +159,7 @@ describe('Encryption keys', () => {
         .then((w) => {
           myHandleOnTheirPubKey = w;
           should(myHandleOnTheirPubKey).not.be.undefined();
-        });
-    });
+        }));
 
     it('encrypts and decrypts', () => {
       const plaintext = `all the ${Math.random()} places where I've been`;
@@ -305,9 +302,7 @@ describe('Sign keys', () => {
     let myKeys;
     let theirHandleOnMyPubKey;
 
-    before(function () {
-      this.timeout(10000);
-      return h.createAuthenticatedTestApp()
+    before(() => h.createAuthenticatedTestApp()
         .then((app) => {
           me = app;
           return h.createAuthenticatedTestApp();
@@ -326,8 +321,7 @@ describe('Sign keys', () => {
             theirHandleOnMyPubKey = w;
             return should(theirHandleOnMyPubKey).not.be.undefined();
           })
-        );
-    });
+        ));
 
     it('sign and verify', () => {
       const plaintext = `random ${Math.random()} plain text`;

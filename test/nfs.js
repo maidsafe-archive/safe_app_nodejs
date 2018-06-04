@@ -244,4 +244,4 @@ describe('NFS emulation', () => {
     const test = () => nfs.insert('hello.txt', file, 5);
     return should(test).throw('"value" argument must not be a number');
   });
-}).timeout(30000);
+});

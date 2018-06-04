@@ -18,28 +18,40 @@ const errConst = require('../src/error_const');
 
 const createTestApp = h.createTestApp;
 const appInfo = h.appInfo;
-const createTestAppNoInit = h.createTestAppNoInit;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
-const createTestAppWithNetworkCB = h.createTestAppWithNetworkCB;
-const createTestAppWithOptions = h.createTestAppWithOptions;
 const { autoref } = require('../src/helpers');
 
+/* eslint-disable no-shadow */
 describe('Smoke test', () => {
-  it('should return undefined value if log option is true, however app logging is not initialised', async () => {
-    const app = await createTestAppNoInit(null, { log: true });
-    const logPath = await app.logPath();
-    return should(logPath).be.undefined();
+  let app;
+  let holdFilePath;
+  before(async () => {
+    it('should return undefined value if log option is true, however app logging is not initialised', async () => {
+      const app = await createTestApp(null, null, { log: true }, true);
+      const logPath = await app.logPath();
+      return should(logPath).be.undefined();
+    });
+
+    app = await createAuthenticatedTestApp();
+  });
+
+  it('rejects if logging already initialised and logFilePath undefined', async () => {
+    holdFilePath = App.logFilePath;
+    delete App.logFilePath;
+    return should(createTestApp(null, null, { log: true }))
+      .be.rejectedWith('Logger initialisation failed. Reason: -2000: Unexpected (probably a logic error): Logger already initialised')
+      .then(() => {
+        App.logFilePath = holdFilePath;
+      });
   });
 
   it('should return log path string if app logging is initialised and no filename provided', async () => {
-    const app = await createTestAppWithOptions(null, { log: true });
     const logPath = await app.logPath();
     const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
     return should(new RegExp(filename).test(logPath)).be.true();
   });
 
   it('should native resolve log path if filename provided', async () => {
-    const app = await createTestApp();
     const filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
     return should(app.logPath(filename)).be.fulfilled()
       .then((res) => should(res).match(new RegExp(filename)));
@@ -47,9 +59,10 @@ describe('Smoke test', () => {
 
   it('can take a network state callback', async () => {
     const networkCb = (state) => `NETWORK STATE: ${state}`;
-    const app = await createTestAppWithNetworkCB(
+    const app = await createTestApp(
       null,
-      networkCb
+      networkCb,
+      null
     );
     return should.exist(app._networkStateCallBack); // eslint-disable-line no-underscore-dangle
   });
@@ -62,7 +75,7 @@ describe('Smoke test', () => {
       configPath: '/home',
       forceUseMock: false,
     };
-    const app = await createTestAppWithOptions(null, optionsObject);
+    const app = await createTestApp(null, null, optionsObject);
 
     const optionsObjectsEqual = Object.keys(app.options).every(
       (option) => app.options[option] === optionsObject[option]
@@ -77,7 +90,8 @@ describe('Smoke test', () => {
       joinSchemes: ['proto'],
       configPath: { path: '/home' } // this is expected to be a string
     };
-    return should(createTestAppWithOptions(
+    return should(createTestApp(
+      null,
       null,
       optionsObject
     )).be.rejectedWith(errConst.CONFIG_PATH_ERROR.msg('TypeError: error setting argument 0 - "string" must be a string, Buffer, or ArrayBuffer'));
@@ -90,37 +104,28 @@ describe('Smoke test', () => {
     should(test).throw("The 'forceUseMock' option must be a boolean.");
   });
 
-  it('creates registered for testing', async () => {
-    const app = await createAuthenticatedTestApp();
-    return should(app.auth.registered).be.true();
-  }).timeout(20000);
+  it('creates registered for testing', () => should(app.auth.registered).be.true());
 
-  it('clears object cache invalidating objects', () => createAuthenticatedTestApp()
-    .then((app) => app.mutableData.newMutation()
-      .then((mut) => should(mut.insert('key1', 'value1')).be.fulfilled()
-        .then(() => should(app.clearObjectCache()).be.fulfilled())
-        .then(() => should(mut.insert('key2', 'value2')).be.rejectedWith('Invalid MutableData entry actions handle'))
-      )
-      .then(() => should(app.mutableData.newMutation()).be.fulfilled())
+  it('clears object cache invalidating objects', () => app.mutableData.newMutation()
+    .then((mut) => should(mut.insert('key1', 'value1')).be.fulfilled()
+      .then(() => should(app.clearObjectCache()).be.fulfilled())
+      .then(() => should(mut.insert('key2', 'value2')).be.rejectedWith('Invalid MutableData entry actions handle'))
     )
-  ).timeout(20000);
+    .then(() => should(app.mutableData.newMutation()).be.fulfilled()));
 
-  it('validate is mock build', async () => {
-    const app = await createTestApp();
-    return should(app.isMockBuild()).be.true();
-  });
+  it('validate is mock build', () => should(app.isMockBuild()).be.true());
 
   it('should build an alternative if there is a scope', async () => {
     const firstApp = await createTestApp();
     return firstApp.auth.genAuthUri({ _public: ['Insert'] })
       .then(async (firstResp) => {
-        const secondApp = await createTestApp('website');
+        const secondApp = await createTestApp({ scope: 'website' });
         return secondApp.auth.genAuthUri({ _public: ['Insert'] })
             .then((secondResp) => should(secondResp.uri).startWith('safe-auth:').not.equal(firstResp.uri));
       });
   });
 
-  it('throws error if connection getter is called on unregistered app', () => {
+  it('throws error if connection getter is called on non connected app', async () => {
     const app = new App({
       id: 'net.maidsafe.test.javascript.id',
       name: 'NodeJS Test',
@@ -130,10 +135,7 @@ describe('Smoke test', () => {
     return should(test).throw(errConst.SETUP_INCOMPLETE.msg);
   });
 
-  it('should resolve reconnect operation for registered app', async () => {
-    const app = await createAuthenticatedTestApp();
-    return should(app.reconnect()).be.fulfilled();
-  });
+  it('should resolve reconnect operation for registered app', () => should(app.reconnect()).be.fulfilled());
 
   it('should throw informative error, if App info is malformed', () => {
     const test = () => new App({
@@ -158,19 +160,16 @@ describe('Smoke test', () => {
   });
 
   it('should return account information', async () => {
-    const app = await createAuthenticatedTestApp();
     const accInfo = await app.getAccountInfo();
     return should(accInfo).have.properties(['mutations_done', 'mutations_available']);
-  }).timeout(10000);
+  });
 
   it('should return own container name', async () => {
-    const app = await createAuthenticatedTestApp();
     const contName = await app.getOwnContainerName();
     return should(contName).be.equal(`apps/${app.appInfo.id}`);
-  }).timeout(10000);
+  });
 
   it('should increment/decrement mutation values', async () => {
-    const app = await createAuthenticatedTestApp();
     const accInfoBefore = await app.getAccountInfo();
     const idWriter = await app.immutableData.create();
     const testString = `test-${Math.random()}`;
@@ -180,7 +179,7 @@ describe('Smoke test', () => {
     const accInfoAfter = await app.getAccountInfo();
     should(accInfoAfter.mutations_done).be.equal(accInfoBefore.mutations_done + 1);
     return should(accInfoAfter.mutations_available).be.equal(accInfoBefore.mutations_available - 1);
-  }).timeout(20000);
+  });
 
   it('should throw error if getAccountInfo called on unregistered app', async () => {
     const app = await h.createTestApp();
@@ -194,13 +193,9 @@ describe('Smoke test', () => {
     return should(test).throw(errConst.MISSING_AUTH_URI.msg);
   });
 
-  it('returns safe_client_libs log path', async () => {
-    const app = await createAuthenticatedTestApp();
-    return should(app.logPath()).be.fulfilled();
-  }).timeout(10000);
+  it('returns safe_client_libs log path', () => should(app.logPath()).be.fulfilled());
 
-  it('logs in to network from existing authUri', async () => should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri))
-    .be.fulfilled());
+  it('logs in to network from existing authUri', () => should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri)).be.fulfilled());
 
   it('throws error if fromAuthUri missing authUri argument', () => should(h.App.fromAuthUri(h.appInfo))
       .be.rejectedWith(errConst.MISSING_AUTH_URI.msg));
@@ -208,13 +203,12 @@ describe('Smoke test', () => {
   it('throws error if fromAuthUri missing appInfo argument', () => should(h.App.fromAuthUri(h.authUris.registeredUri))
       .be.rejectedWith(errConst.MALFORMED_APP_INFO.msg));
 
-  it('returns boolean for network state', async () => {
-    const app = await createAuthenticatedTestApp();
-    should(app.isNetStateInit()).be.true();
-    should(app.isNetStateConnected()).be.false();
+  it('returns boolean for network state', () => {
+    should(app.isNetStateInit()).be.false();
+    should(app.isNetStateConnected()).be.true();
     should(app.isNetStateDisconnected()).be.false();
-    return should(app.networkState).be.equal('Init');
-  }).timeout(10000);
+    return should(app.networkState).be.equal('Connected');
+  });
 
   it('network state upon network connection event', (done) => {
     const networkCb = (state) => {
@@ -244,7 +238,7 @@ describe('Smoke test', () => {
         should(app.isNetStateDisconnected()).be.false();
         should(app.networkState).be.equal('Connected');
       });
-  }).timeout(5000);
+  });
 
   it('network state upon network disconnection event', (done) => {
     let cbCount = 0;
@@ -275,7 +269,7 @@ describe('Smoke test', () => {
         should(app.networkState).be.equal('Connected');
         app.auth.simulateNetworkDisconnect();
       });
-  }).timeout(5000);
+  });
 
   it('network state upon network reconnect event', (done) => {
     let cbCount = 0;
@@ -310,5 +304,5 @@ describe('Smoke test', () => {
         app.auth.simulateNetworkDisconnect()
           .then(() => setTimeout(() => app.reconnect(), 100));
       });
-  }).timeout(5000);
-}).timeout(15000);
+  });
+});
