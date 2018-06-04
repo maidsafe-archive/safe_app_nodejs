@@ -99,7 +99,7 @@ function validateShareMDataPermissions(permissions) {
   if (!Array.isArray(permissions)) {
     throw makeError(errConst.INVALID_PERMS_ARRAY.code, errConst.INVALID_PERMS_ARRAY.msg);
   }
-  const permissionMustHaveProperties = ['type_tag', 'name', 'perms'];
+  const permissionMustHaveProperties = ['typeTag', 'name', 'perms'];
   let badPerm = {};
   const hasCorrectProperties = permissions.every(
     (perm) => permissionMustHaveProperties.every((prop) => {
@@ -112,7 +112,7 @@ function validateShareMDataPermissions(permissions) {
           badPerm = perm;
           return false;
         }
-      } else if (bool && prop === 'type_tag') {
+      } else if (bool && prop === 'typeTag') {
         if (!Number.isInteger(perm[prop])) {
           badPerm = perm;
           return false;

@@ -65,7 +65,7 @@ const MDataInfo = Struct({
   /// Name of the mutable data.
   name: t.XOR_NAME,
   /// Type tag of the mutable data.
-  type_tag: t.u64,
+  typeTag: t.u64,
 
   /// Flag indicating whether the encryption info (`enc_key` and `enc_nonce`).
   /// is set.
@@ -105,7 +105,7 @@ const makeMDataInfo = (mDataInfoObj) => {
   }
   return new MDataInfo({
     name: mDataInfoObj.name,
-    type_tag: mDataInfoObj.type_tag,
+    typeTag: mDataInfoObj.typeTag,
     has_enc_info: mDataInfoObj.has_enc_info,
     enc_key,
     enc_nonce,
@@ -224,8 +224,8 @@ const makeMDataInfoObj = (mDataInfo) => {
   } catch (err) {
     throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size));
   }
-  const type_tag = mDataInfo.type_tag;
-  if(!Number.isInteger(type_tag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg); 
+  const typeTag = mDataInfo.typeTag;
+  if(!Number.isInteger(typeTag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg); 
   const has_enc_info = mDataInfo.has_enc_info;
   const enc_key = t.SYM_KEYBYTES(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_key) : null);
   const enc_nonce = t.SYM_NONCEBYTES(mDataInfo.enc_nonce ? new Buffer(mDataInfo.enc_nonce) : null);
@@ -236,7 +236,7 @@ const makeMDataInfoObj = (mDataInfo) => {
 
   let retMDataInfo = {
     name,
-    type_tag,
+    typeTag,
     has_enc_info,
     enc_key,
     enc_nonce,

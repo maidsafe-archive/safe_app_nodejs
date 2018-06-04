@@ -96,7 +96,7 @@ describe('Mutable Data', () => {
             .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
             .then((r) => {
               should(r.name).not.be.undefined();
-              return should(r.type_tag).equal(TYPE_TAG);
+              return should(r.typeTag).equal(TYPE_TAG);
             })
     );
 
@@ -105,7 +105,7 @@ describe('Mutable Data', () => {
             .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
             .then((r) => {
               should(r.name).not.be.undefined();
-              return should(r.type_tag).equal(TYPE_TAG);
+              return should(r.typeTag).equal(TYPE_TAG);
             })
     );
 
@@ -115,7 +115,7 @@ describe('Mutable Data', () => {
             .then((r) => {
               should(r.name).not.be.undefined();
               should(r.name).have.length(32);
-              return should(r.type_tag).equal(TYPE_TAG);
+              return should(r.typeTag).equal(TYPE_TAG);
             })
     );
 
@@ -143,7 +143,7 @@ describe('Mutable Data', () => {
             .then((r) => {
               should(r.name).not.be.undefined();
               should(r.name).have.length(32);
-              return should(r.type_tag).equal(TYPE_TAG);
+              return should(r.typeTag).equal(TYPE_TAG);
             })
     );
 
@@ -246,7 +246,7 @@ describe('Mutable Data', () => {
           .then(() => m.getNameAndTag())
           .then((r) => {
             should(r.name).not.be.undefined();
-            should(r.type_tag).equal(TYPE_TAG);
+            should(r.typeTag).equal(TYPE_TAG);
           })
           .then(() => m.getEntries())
           .then((entries) => entries.len()
