@@ -127,7 +127,7 @@ class AuthInterface {
   * @param {Boolean} [opts.own_container=false] - whether or not to request
   *    our own container to be created for us, too
   *
-  * @returns {String} `safe-auth://`-URI
+  * @returns {Object} `{id: <id>, uri: 'safe-auth://' }`
   * @example // using an Authentication example:
   * app.auth.genAuthUri({
   *  _public: ['Insert'], // request to insert into public
@@ -157,11 +157,11 @@ class AuthInterface {
   * @returns {String} `safe-auth://`-URI
   * @example // example of requesting permissions for a couple of MutableData's:
   * app.auth.genShareMDataUri([
-  *  { type_tag: 15001,   // request for MD with tag 15001
+  *  { typeTag: 15001,   // request for MD with tag 15001
   *    name: 'XoRname1',  // request for MD located at address 'XoRname1'
   *    perms: ['Insert'], // request for inserting into the referenced MD
   *  },
-  *  { type_tag: 15020,   // request for MD with tag 15020
+  *  { typeTag: 15020,   // request for MD with tag 15020
   *    name: 'XoRname2',  // request for MD located at address 'XoRname2'
   *    perms: ['Insert', `Update`], // request for updating and inserting into the referenced MD
   *  }
@@ -182,7 +182,7 @@ class AuthInterface {
   /**
   * Generate an unregistered connection URI for the app.
   *
-  * @returns {String} `safe-auth://`-URI
+  * @returns {Object} `{id: <id>, uri: 'safe-auth://' }`
   * @example // using an Authentication example:
   * app.auth.genConnUri()
   */
