@@ -12,12 +12,15 @@
 
 
 const lib = require('../src/native/lib');
+const fs = require('fs');
+const path = require('path');
 const should = require('should');
 const { fromAuthUri, CONSTANTS, initialiseApp } = require('../src');
 const h = require('./helpers');
 const api = require('../src/native/api');
 const appHelpers = require('../src/helpers');
 const App = require('../src/app');
+const consts = require('../src/consts');
 const errConst = require('../src/error_const');
 const { useMockByDefault, getSafeAppLibFilename, getSystemUriLibFilename } = require('../src/helpers');
 
@@ -97,6 +100,17 @@ describe('Smoke testing', () => {
       const errArray = err.message.split('libraries: ');
       should(errConst.FAILED_TO_LOAD_LIB.msg(errArray[1])).be.equal(err.message);
     }
+  });
+
+  it('will not init system_uri if library does not exist at expected path', async () => {
+    delete lib.registerUriScheme;
+    delete lib.openUri;
+    const libDir = path.dirname(getSystemUriLibFilename('./src/native/'));
+    fs.renameSync(path.join(libDir, consts.SYSTEM_URI_LIB_FILENAME), path.join(libDir, 'hideLib'));
+    await h.createTestApp(null, null, { registerScheme: false });
+    fs.renameSync(path.join(libDir, 'hideLib'), path.join(libDir, consts.SYSTEM_URI_LIB_FILENAME));
+    should.not.exist(lib.registerUriScheme);
+    return should.not.exist(lib.openUri);
   });
 
   it('autoref on object with no "free" function', () => {

@@ -12,8 +12,10 @@
 
 
 const path = require('path');
+const fs = require('fs');
 const FFI = require('ffi');
 const { getSafeAppLibFilename } = require('../helpers');
+const { getSystemUriLibFilename } = require('../helpers');
 const os = require('os');
 
 const currentDir = path.dirname(__filename);
@@ -65,7 +67,10 @@ ffi.init = (options) => {
     // FIXME: As long as `safe-app` doesn't expose system uri itself, we'll
     // patch it directly on it. This should later move into its own sub-module
     // and take care of mobile support for other platforms, too.
-    require('./_system_uri')(ffi, options);
+    const mobileEnv = !fs.existsSync(getSystemUriLibFilename(currentDir));
+    if (!mobileEnv) {
+      require('./_system_uri')(ffi, options);
+    }
   } catch(e) {
     console.error(e)
     throw makeError(errConst.FAILED_TO_LOAD_LIB.code,
