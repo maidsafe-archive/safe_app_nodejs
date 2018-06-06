@@ -15,6 +15,11 @@ const should = require('should');
 const h = require('./helpers');
 const consts = require('../src/consts');
 const errConst = require('../src/error_const');
+const {
+  getContainerFromPublicId,
+  tryDifferentPaths,
+  readContentFromFile
+} = require('../src/web_fetch.js');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 const createUnregisteredTestApp = h.createUnregisteredTestApp;
@@ -515,5 +520,81 @@ describe('Browsing', () => {
       .then((newdomain) => should(unregisteredApp.webFetch(`safe://${newdomain}/my.file/my.other.file/`))
         .be.rejectedWith('NFS error: File not found')
       ));
+  });
+
+  describe('webFetch helper functions', () => {
+    let content;
+    let domain;
+    before(async () => {
+      content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      domain = await createRandomDomain(content, '', '', app);
+    });
+    describe('getContainerFromPublicId', () => {
+      it('returns MutableData interface service', async () => {
+        const md = await getContainerFromPublicId.call(app, domain);
+        return should.exist(md.getNameAndTag);
+      });
+
+      it('rejects with error for non-existent public ID', async () => should(getContainerFromPublicId.call(app, 'publicID')).be.rejectedWith('Requested public name is not found'));
+
+      it('rejects with error for non-existent service', async () => should(getContainerFromPublicId.call(app, domain, 'serviceName')).be.rejectedWith('Requested service is not found'));
+    });
+
+    describe('tryDifferentPaths', () => {
+      it('returns file and mime type as object', async () => {
+        const md = await getContainerFromPublicId.call(app, domain);
+        const emulation = await md.emulateAs('NFS');
+        const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
+        should(mimeType).be.equal('text/html');
+        return should.exist(file.size);
+      });
+
+      it('rejects with error if first argument is not a function', async () => should(tryDifferentPaths('not a function', '/')).be.rejectedWith('fetchFn is not a function'));
+
+      it('rejects with error if second argument is not passed', async () => should(tryDifferentPaths(() => {})).be.rejectedWith('Cannot read property \'startsWith\' of undefined'));
+    });
+
+    describe('readContentFromFile', () => {
+      it('returns file contents as HTTP compliant response', async () => {
+        const md = await getContainerFromPublicId.call(app, domain);
+        const emulation = await md.emulateAs('NFS');
+        const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
+        const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
+        const { headers, body } = await readContentFromFile(openedFile, mimeType);
+        should.exist(headers);
+        should.exist(headers['Content-Type']);
+        return should.exist(body);
+      });
+
+      it('returns file content range as HTTP compliant response', async () => {
+        const md = await getContainerFromPublicId.call(app, domain);
+        const emulation = await md.emulateAs('NFS');
+        const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
+        const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
+        const { headers, body } = await readContentFromFile(openedFile, mimeType, { range: { start: 3, end: 12 } }); // eslint-disable-line max-len
+        should.exist(headers['Content-Range']);
+        should.exist(headers['Content-Length']);
+        return should(body.toString()).be.equal(content.slice(3, 13));
+      });
+
+      it('returns file content multipart range as HTTP compliant response', async () => {
+        const md = await getContainerFromPublicId.call(app, domain);
+        const emulation = await md.emulateAs('NFS');
+        const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
+        const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
+        const { headers, parts } = await readContentFromFile(openedFile, mimeType, { range: [{ start: 3, end: 6 }, { start: 8, end: 14 }] }); // eslint-disable-line max-len
+        should.exist(headers['Content-Type']);
+        should(headers['Content-Type']).be.equal('multipart/byteranges');
+        should.exist(parts);
+        return should(parts.length).be.equal(2);
+      });
+
+      it('requires opened file as first argument', async () => {
+        const md = await getContainerFromPublicId.call(app, domain);
+        const emulation = await md.emulateAs('NFS');
+        const { file } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
+        return should(readContentFromFile(file)).be.rejectedWith('File not found.');
+      });
+    });
   });
 });

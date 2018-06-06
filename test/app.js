@@ -21,17 +21,19 @@ const appInfo = h.appInfo;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 const { autoref } = require('../src/helpers');
 
+describe('Sandbox', () => {
+  it('should return undefined value if log option is true, however app logging is not initialised', async () => {
+    const app = await createTestApp(null, null, { log: true }, true);
+    const logPath = await app.logPath();
+    return should(logPath).be.undefined();
+  });
+});
+
 /* eslint-disable no-shadow */
 describe('Smoke test', () => {
   let app;
   let holdFilePath;
   before(async () => {
-    it('should return undefined value if log option is true, however app logging is not initialised', async () => {
-      const app = await createTestApp(null, null, { log: true }, true);
-      const logPath = await app.logPath();
-      return should(logPath).be.undefined();
-    });
-
     app = await createAuthenticatedTestApp();
   });
 
