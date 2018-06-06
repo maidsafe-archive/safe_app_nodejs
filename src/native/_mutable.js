@@ -365,8 +365,10 @@ module.exports = {
         let arr = MDataEntriesArray(arrPtr);
         for (let i = 0; i < len ; i++) {
           const currEntry = arr[i];
-          const keyStr = ref.reinterpret(currEntry.key.val_ptr, currEntry.key.val_len, 0);
-          const valueStr = ref.reinterpret(currEntry.value.content_ptr, currEntry.value.content_len, 0);
+          const keyStr = ref.reinterpret(currEntry.key.val_ptr, currEntry.key.val_len);
+          const valueStr = currEntry.value.content_len === 0
+                ? new Buffer(0)
+                : new Buffer(ref.reinterpret(currEntry.value.content_ptr, currEntry.value.content_len));
           const entryObject = {
             key: keyStr,
             value: { buf: valueStr, version: currEntry.value.entry_version }
