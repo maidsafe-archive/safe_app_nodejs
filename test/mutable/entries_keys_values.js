@@ -74,6 +74,27 @@ describe('Mutable Data Entries', () => {
     });
   }).timeout(10000);
 
+  it('list entries after deleting an entry', async () => {
+    const md = await app.mutableData.newRandomPrivate(TYPE_TAG);
+    await md.quickSetup({ key1: 'value1' });
+    let entries = await md.getEntries();
+    let listEntries = await entries.listEntries();
+    let value = listEntries[0].value;
+    should(value).not.be.undefined();
+    should(value.buf.toString()).equal('value1');
+    should(value.version).equal(0);
+
+    const mut = await app.mutableData.newMutation();
+    await mut.delete('key1', 1);
+    await md.applyEntriesMutation(mut);
+    entries = await md.getEntries();
+    listEntries = await entries.listEntries();
+    value = listEntries[0].value;
+    should(value).not.be.undefined();
+    should(value.buf.toString()).equal('');
+    return should(value.version).equal(1);
+  });
+
   it('get list of keys', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
       .then((keys) => should(keys.length).equal(Object.keys(TEST_ENTRIES).length))
