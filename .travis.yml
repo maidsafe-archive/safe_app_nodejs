@@ -21,10 +21,13 @@ cache:
     - node_modules
 
 before_install:
-  - "[[ ${TRAVIS_OS_NAME} = linux ]] && export CXX=g++-4.8 || echo 'skipped'"
+- "[[ ${TRAVIS_OS_NAME} = linux ]] && export CXX=g++-4.8 || echo 'skipped'"
+- npm install npm@latest -g
 
 install:
-- yarn
+- export NODE_ENV=dev
+- npm install
+- npm audit
 script:
 - yarn lint
 - yarn test-coverage
