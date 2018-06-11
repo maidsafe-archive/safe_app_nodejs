@@ -19,6 +19,9 @@ The documentation for the safe_app Node.js API is available at <http://docs.maid
     * [Node.js](https://nodejs.org) ^8.0.0 (we recommend installing it via [nvm](https://github.com/creationix/nvm))
     * [Git](https://git-scm.com/)
     * [Yarn](https://yarnpkg.com) (as a replacement for `npm`).
+    * Windows-specific:
+      - Yarn attempts to build modules concurrently with multiple child processes, which causes intermittent timing issues on Windows. Users need to run `yarn config set child-concurrency 1` just once to effect local yarn settings.
+      - In order to be able to build native Node modules for this library, run `npm install --global --production windows-build-tools` which installs Python 2.x, Visual Studio 2015 build tools, and Visual C++ build tools.
 
 2. Clone this GitHub repository:
 
@@ -34,6 +37,9 @@ The documentation for the safe_app Node.js API is available at <http://docs.maid
     ```
 
     If you are working on a development environment, you can run `NODE_ENV=dev yarn` instead in order to get the [`safe_app`](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library which uses the `MockVault` file rather than connecting to the actual SAFE Network.
+    ##### Windows-specific
+    - In powershell, use `$env:NODE_ENV = "dev"`, which sets the environment variable for the duration of the terminal session.
+    - In command prompt, use `set NODE_ENV=dev`, which also sets the environment variable for the duration of the terminal session.
 
 ### Testing
 
