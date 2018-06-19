@@ -22,6 +22,7 @@
 - Simplifies test helper functions
 - Upgrades deps_downloader to v0.2.0
 - isolates webFetch helper functions for testing
+- unregistered client connection event triggers network status update
 
 ### Fixed
 - Fixed some tests which were giving false positive results

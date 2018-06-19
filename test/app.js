@@ -307,4 +307,34 @@ describe('Smoke test', () => {
           .then(() => setTimeout(() => app.reconnect(), 100));
       });
   });
+
+  it('network state upon network connection event for unregistered connection', (done) => {
+    const networkCb = (state) => {
+      should(state).be.equal('Connected');
+      should(app.isNetStateInit()).be.false();
+      should(app.isNetStateConnected()).be.true();
+      should(app.isNetStateDisconnected()).be.false();
+      should(app.networkState).be.equal('Connected');
+      done();
+    };
+
+    const appConfig = new App({
+      id: 'net.maidsafe.test.javascript.id',
+      name: 'NodeJS Test',
+      vendor: 'MaidSafe.net Ltd'
+    }, networkCb, { log: false });
+    const app = autoref(appConfig);
+    should(app.isNetStateInit()).be.true();
+    should(app.isNetStateConnected()).be.false();
+    should(app.isNetStateDisconnected()).be.false();
+    should(app.networkState).be.equal('Init');
+
+    app.auth.loginFromUri(h.authUris.unregisteredUri)
+      .then(() => {
+        should(app.isNetStateInit()).be.false();
+        should(app.isNetStateConnected()).be.true();
+        should(app.isNetStateDisconnected()).be.false();
+        should(app.networkState).be.equal('Connected');
+      });
+  });
 });

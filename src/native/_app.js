@@ -58,7 +58,7 @@ module.exports = {
             }
 
             app.connection = appCon;
-            app.networkState = consts.NET_STATE_CONNECTED;
+            app._networkStateUpdated(null, consts.NET_STATE_CONNECTED);
             resolve(app);
           });
 
