@@ -53,22 +53,6 @@ const readFileInfo = (fileInfo) => {
         ? new Buffer(0)
         : new Buffer(ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len));
 
-  if (user_metadata_ptr) {
-    try {
-      if(typeof user_metadata_ptr === 'object') {
-        user_metadata_ptr = user_metadata_ptr;
-      } else {
-        user_metadata_ptr = JSON.parse(user_metadata_ptr.toString());
-      }
-
-    } catch (e) {
-      // we can safely ignore this
-      if (console && console.warn) {
-        console.warn(`Parsing user metadata '${user_metadata_ptr}' of '${data_map_name}' failed: ${e}`)
-      }
-    }
-  }
-
   let retFile = {
     data_map_name,
     size,
