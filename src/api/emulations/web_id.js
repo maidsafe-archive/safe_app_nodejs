@@ -33,6 +33,7 @@ class WebID {
     this.RDF = this.rdf.namespace('http://www.w3.org/2000/01/rdf-schema#');
     this.RDFS = this.rdf.namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#');
     this.FOAF = this.rdf.namespace('http://xmlns.com/foaf/0.1/');
+    this.OWL = this.rdf.namespace("http://www.w3.org/2002/07/owl#");
     this.DCTERMS = this.rdf.namespace('http://purl.org/dc/terms/');
   }
 
@@ -52,8 +53,8 @@ class WebID {
     //this.rdf.add(this.rdf.literal('#me'), this.FOAF('image'), this.rdf.literal(profile.avatar));
     //this.rdf.add(this.rdf.literal('#me'), this.FOAF('website'), this.rdf.literal(profile.website));
 
-    //const serialised = await this.rdf.serialise('text/turtle');
-    const serialised = await this.rdf.serialise('application/ld+json');
+    const serialised = await this.rdf.serialise('text/turtle');
+    //const serialised = await this.rdf.serialise('application/ld+json');
     console.log("PROFILE:", serialised)
     //await this.rdf.commit();
   }
@@ -65,21 +66,27 @@ class WebID {
     this.rdf.add(id, this.RDFS('type'), this.LDP('Container'));
     this.rdf.add(id, this.RDFS('type'), this.LDP('BasicContainer'));
     this.rdf.add(id, this.DCTERMS('title'), this.rdf.literal('_publicNames default container'));
+    this.rdf.add(id, this.LDP('contains'), this.rdf.sym(uri)); // TODO: link to the WebID container
 
     const serialised = await this.rdf.serialise('text/turtle');
+    //const serialised = await this.rdf.serialise('application/ld+json');
     console.log("PUBLIC NAMES:", serialised)
   }
 
   async createPublicId(uri) {
-    const id = this.rdf.sym(uri);
-    const serviceName = 'service'; // TODO: parse the uri to extract the service name
-    this.rdf.setId(uri);
+    const publicId = 'safe://manu'; // TODO: parse the uri to extract the public ID
+    const serviceName = 'mywebid'; // TODO: parse the uri to extract the service name
+
+    const id = this.rdf.sym(publicId);
+    this.rdf.setId(publicId);
 
     this.rdf.add(id, this.RDFS('type'), this.LDP('Container'));
     this.rdf.add(id, this.RDFS('type'), this.LDP('BasicContainer'));
     this.rdf.add(id, this.DCTERMS('title'), this.rdf.literal(`Services Container for public ID ${serviceName}`));
+    this.rdf.add(id, this.LDP('contains'), this.rdf.sym(uri)); // TODO: link to the services container
 
     const serialised = await this.rdf.serialise('text/turtle');
+    //const serialised = await this.rdf.serialise('application/ld+json');
     console.log("PUBLIC ID:", serialised)
   }
 

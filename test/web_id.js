@@ -16,7 +16,7 @@ const h = require('./helpers');
 describe.only('WebID emulation', () => {
   let app, md, xorname;
   const TYPE_TAG = 15639;
-  const myUri = 'safe://webid.manu';
+  const myUri = 'safe://mywebid.manu';
   //const myAvatar = require('./avatar.base64');
 
   beforeEach(async () => {
