@@ -15,18 +15,23 @@ const rdflib = require('rdflib');
 const JSON_LD_MIME_TYPE = 'application/ld+json';
 
 /**
-* RDF Emulation on top of an MutableData
+* RDF Emulation on top of a MutableData
 */
 class RDF {
   /**
   * @private
-  * Instantiate the RDF emulation layer rapping a MutableData instance
+  * Instantiate the RDF emulation layer wrapping a MutableData instance
   *
   * @param {MutableData} mData - the MutableData to wrap around
   */
   constructor(mData) {
     this.mData = mData;
     this.graphStore = rdflib.graph();
+    this.id = undefined;
+  }
+
+  setId(id) {
+    this.id = id;
   }
 
   async nowOrWhenFetched() {
@@ -93,7 +98,7 @@ class RDF {
         if (err) {
           return reject(err);
         }
-        this.id = id;
+        this.setId(id);
         resolve(parsed);
       }
 
@@ -118,6 +123,7 @@ class RDF {
         }
         resolve(parsed);
       }
+      // TODO: serialise it with compact when is jsonld
       rdflib.serialize(null, this.graphStore, this.id, mimeType, cb);
     });
   }

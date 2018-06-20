@@ -189,13 +189,16 @@ describe.only('RDF emulation', () => {
   it('parse Turtle RDF and serialise it as JSON-LD', async () => {
     await md.quickSetup({});
     const rdf = await md.emulateAs('rdf');
-    const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
-    const me = rdf.sym(myUri);
+    const turtle = "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\
+                    @prefix anything: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\
+                    \
+                    <> anything:type foaf:PersonalProfileDocument ;\
+                      foaf:maker <#me> ;\
+                      foaf:primaryTopic <#me> .\
+                    <#me> a foaf:Person ;\
+                      foaf:name \"Bob\" .";
 
-    const turtle = '<a> <b> <c> .';
     await rdf.parse(turtle, 'text/turtle', myUri);
-    rdf.add(me, FOAF('knows'), "Josh");
-    rdf.add(me, FOAF('knows'), "Gabriel");
 
     const jsonld = await rdf.serialise('application/ld+json');
     console.log("JSON-LD:", jsonld)
