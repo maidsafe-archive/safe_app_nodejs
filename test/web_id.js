@@ -16,11 +16,11 @@ const h = require('./helpers');
 describe.only('WebID emulation', () => {
   let app, md, xorname;
   const TYPE_TAG = 15639;
-  const myUri = 'safe://mywebid.manu';
-  //const myAvatar = require('./avatar.base64');
+  const myUri = 'safe://mywebid.gabriel';
+  const containersPermissions = { _publicNames: ['Insert', 'Update', 'Delete'] };
 
   beforeEach(async () => {
-    app = await h.createAuthenticatedTestApp();
+    app = await h.createAuthenticatedTestApp(null, containersPermissions);
     xorname = h.createRandomXorName();
     md = await app.mutableData.newPublic(xorname, TYPE_TAG);
   });
@@ -34,15 +34,18 @@ describe.only('WebID emulation', () => {
   it.only('create WebID from basic profile info', async () => {
     const profile = {
       uri: myUri,
-      name: 'Manu Sporny',
-      nickname: 'Manu',
+      name: 'Gabriel Viganotti',
+      nickname: 'bochaco',
       //website: "{ xorname: 'fdgdfgdgdfdffdgdf'}",
-      //avatar: myAvatar,
+      avatar: 'safe://mywebsite.gabriel/images/myavatar',
     }
 
     await md.quickSetup({});
     const webId = await md.emulateAs('WebID');
-    await webId.createProfileDoc(profile);
-    //await webId.createPublicId(profile.uri);
+    await webId.create(profile);
+    //await webId.createProfileDoc(webId.rdf, webId.vocabs, profile);
+    //await webId.createPublicId(webId.rdf, webId.vocabs, profile.uri);
+    //await webId.recordInPublicNames(webId.rdf, webId.vocabs, profile.uri);
+    await webId.commit(profile.uri);
   });
 });

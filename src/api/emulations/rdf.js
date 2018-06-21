@@ -165,6 +165,8 @@ class RDF {
     });
 
     await this.mData.applyEntriesMutation(mutation);
+    const nameAndTag = await this.mData.getNameAndTag();
+    return nameAndTag;
   }
 }
 

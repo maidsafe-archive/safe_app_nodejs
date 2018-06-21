@@ -186,7 +186,7 @@ describe.only('RDF emulation', () => {
     console.log("Turtle:", turtle)
   });
 
-  it('parse Turtle RDF and serialise it as JSON-LD', async () => {
+  it.only('parse Turtle RDF and serialise it as JSON-LD', async () => {
     await md.quickSetup({});
     const rdf = await md.emulateAs('rdf');
     const turtle = "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\
@@ -198,7 +198,15 @@ describe.only('RDF emulation', () => {
                     <#me> a foaf:Person ;\
                       foaf:name \"Bob\" .";
 
-    await rdf.parse(turtle, 'text/turtle', myUri);
+    const turtle2 = "@prefix dcterms: <http://purl.org/dc/terms/> .\
+                    @prefix ldp: <http://www.w3.org/ns/ldp#> .\
+                    \
+                    <http://example.org/alice/> a ldp:Container, ldp:BasicContainer;\
+                      dcterms:title \"Alice’s data storage on the Web\" ;\
+                      ldp:contains <http://example.org/alice/foaf> . ";
+
+
+    await rdf.parse(turtle2, 'text/turtle', myUri);
 
     const jsonld = await rdf.serialise('application/ld+json');
     console.log("JSON-LD:", jsonld)
