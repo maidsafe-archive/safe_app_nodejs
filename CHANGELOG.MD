@@ -14,18 +14,19 @@
 - Moves asynchronous app initialisation opertions out of SAFEApp constructor and into class method
 - The `initializeApp` function is now asynchronous
 - `webFetch` may receive multipart range requests
-- changes fromAuthURI to fromAuthUri
-- changes loginFromURI to loginFromUri
-- uses delete instead of remove as entry mutation action 
-- changes initializeApp to use an s instead of z
+- Changes fromAuthURI to fromAuthUri
+- Changes loginFromURI to loginFromUri
+- Uses delete instead of remove as entry mutation action 
+- Changes initializeApp to use an s instead of z
 - Network state callback invoked from `INIT` to `CONNECTED` states
 - Simplifies test helper functions
 - Upgrades deps_downloader to v0.2.0
-- isolates webFetch helper functions for testing
-- unregistered client connection event triggers network status update
+- Isolates webFetch helper functions for testing
+- Unregistered client connection event triggers network status update
 
 ### Fixed
 - Fixed some tests which were giving false positive results
+- Adds missing error handling for app_reconnect to prevent false connection status 
 
 ## SAFE libraries Dependencies
 - safe_app: a9b4c05

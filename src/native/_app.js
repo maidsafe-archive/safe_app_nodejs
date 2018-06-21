@@ -90,6 +90,9 @@ module.exports = {
         return new Promise((resolve, reject) => {
           const result_cb = ffi.Callback("void", [t.VoidPtr, t.FfiResultPtr], (user_data, resultPtr) => {
             const result = helpers.makeFfiResult(resultPtr);
+            if (result.error_code !== 0) {
+              return reject(makeError(result.error_code, result.error_description));
+            }
 
             app._networkStateUpdated(null, consts.NET_STATE_CONNECTED);
             resolve(result);
