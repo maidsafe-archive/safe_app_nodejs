@@ -16,7 +16,6 @@ const h = require('./helpers');
 describe.only('WebID emulation', () => {
   let app, md, xorname;
   const TYPE_TAG = 15639;
-  const myUri = 'safe://mywebid.gabriel';
   const containersPermissions = { _publicNames: ['Insert', 'Update', 'Delete'] };
 
   beforeEach(async () => {
@@ -31,21 +30,41 @@ describe.only('WebID emulation', () => {
     return should(webId).not.be.undefined();
   });
 
-  it.only('create WebID from basic profile info', async () => {
+  it('create WebID from basic profile info and update', async () => {
     const profile = {
-      uri: myUri,
+      uri: 'safe://mywebid.gabriel',
       name: 'Gabriel Viganotti',
       nickname: 'bochaco',
-      //website: "{ xorname: 'fdgdfgdgdfdffdgdf'}",
+      website: 'safe://mywebsite.gabriel',
       avatar: 'safe://mywebsite.gabriel/images/myavatar',
     }
 
     await md.quickSetup({});
     const webId = await md.emulateAs('WebID');
     await webId.create(profile);
-    //await webId.createProfileDoc(webId.rdf, webId.vocabs, profile);
-    //await webId.createPublicId(webId.rdf, webId.vocabs, profile.uri);
-    //await webId.recordInPublicNames(webId.rdf, webId.vocabs, profile.uri);
-    await webId.commit(profile.uri);
+
+    profile.name = 'Gabriel Updated';
+    await webId.update(profile);
+  });
+
+  it.only('fetch existing WebID', async () => {
+    const profile = {
+      uri: 'safe://mywebid.gabriel',
+      name: 'Gabriel Viganotti',
+      nickname: 'bochaco',
+      website: 'safe://mywebsite.gabriel',
+      avatar: 'safe://mywebsite.gabriel/images/myavatar',
+    }
+
+    await md.quickSetup({});
+    const webId = await md.emulateAs('WebID');
+    await webId.create(profile);
+
+    const newMd = await app.mutableData.newPublic(xorname, TYPE_TAG);
+    const fetchedWebId = await newMd.emulateAs('WebID');
+    await fetchedWebId.fetchContent();
+    const serialised = await fetchedWebId.serialise('text/turtle');
+    //const serialised = await fetchedWebId.serialise('application/ld+json');
+    console.log("FETCHED WebID:", serialised)
   });
 });

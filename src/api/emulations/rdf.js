@@ -13,6 +13,7 @@
 const rdflib = require('rdflib');
 
 const JSON_LD_MIME_TYPE = 'application/ld+json';
+const RDF_GRAPH_ID = '@id';
 
 /**
 * RDF Emulation on top of a MutableData
@@ -37,23 +38,18 @@ class RDF {
   async nowOrWhenFetched() {
     const entries = await this.mData.getEntries();
     const entriesList = await entries.listEntries();
-    const jsonld = {};
+    const graphs = [];
     let id;
     entriesList.forEach((e) => {
       const keyStr = e.key.toString();
-      if (keyStr === "@id") {
-        id = keyStr;
-      }
       const valueStr = e.value.buf.toString();
-      let valueObj;
-      try {
-        valueObj = JSON.parse(valueStr);
-      } catch(e) {
-        valueObj = valueStr;
+      let valueObj = JSON.parse(valueStr);
+      if (!id) { // FIXME: we need to know which is the main graph in a deterministic way
+        id = valueObj[RDF_GRAPH_ID];
       }
-      jsonld[keyStr] = valueObj;
+      graphs.push(valueObj);
     });
-    await this.parse(JSON.stringify(jsonld), JSON_LD_MIME_TYPE, id);
+    await this.parse(JSON.stringify(graphs), JSON_LD_MIME_TYPE, id);
   }
 
   namespace(uri) {
@@ -134,28 +130,28 @@ class RDF {
   */
   async commit() {
     const serialJsonLd = await this.serialise(JSON_LD_MIME_TYPE);
-    const jsonld = JSON.parse(serialJsonLd)[0];
+    const graphs = JSON.parse(serialJsonLd);
     const entries = await this.mData.getEntries();
     let entriesList = await entries.listEntries();
     const mutation = await this.mData.app.mutableData.newMutation();
-    for (var key in jsonld) {
-      if( jsonld.hasOwnProperty(key) ) {
-        // find the current property in the entries
-        const match = entriesList.find((e, i, a) => {
-          if (e && key === e.key.toString()) {
-            delete a[i];
-            return true;
-          }
-          return false;
-        });
-
-        if (match) {
-          mutation.update(key, JSON.stringify(jsonld[key]), match.value.version + 1);
-        } else {
-          mutation.insert(key, JSON.stringify(jsonld[key]));
+    graphs.forEach((e, i) => {
+      const key = e[RDF_GRAPH_ID];
+      // find the current graph in the entries
+      const match = entriesList.find((e, i, a) => {
+        if (e && key === e.key.toString()) {
+          delete a[i];
+          return true;
         }
+        return false;
+      });
+
+      const stringifiedGraph = JSON.stringify(e);
+      if (match) {
+        mutation.update(key, stringifiedGraph, match.value.version + 1);
+      } else {
+        mutation.insert(key, stringifiedGraph);
       }
-    }
+    });
 
     // remove the entries which are not present in new RDF
     entriesList.forEach((e, i, a) => {
