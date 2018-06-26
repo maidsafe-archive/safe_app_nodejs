@@ -95,6 +95,30 @@ describe('Browsing', () => {
     unregisteredApp = await createUnregisteredTestApp();
   });
 
+  it.only('fetch existing WebID', async () => {
+    const TYPE_TAG = 15639;
+    const profile = {
+      uri: 'safe://mywebid.gabriel',
+      name: 'Gabriel Viganotti',
+      nickname: 'bochaco',
+      website: 'safe://mywebsite.gabriel',
+      avatar: 'safe://mywebsite.gabriel/images/myavatar',
+    }
+
+    xorname = h.createRandomXorName();
+    md = await app.mutableData.newPublic(xorname, TYPE_TAG);
+    await md.quickSetup({});
+    const webId = await md.emulateAs('WebID');
+    await webId.create(profile);
+
+    // let's fetch it now
+    //const options = { Accept: 'text/turtle' }
+    const options = { accept: 'application/ld+json' }
+    //const options = { accept: 'application/rdf+xml' }
+    const turtleWebId = await unregisteredApp.webFetch(profile.uri, options);
+    console.log("FETCHED WebID:", turtleWebId)
+  });
+
   it('returns rejected promise if no url is provided', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     return createRandomDomain(content, '', '', app)
@@ -531,7 +555,7 @@ describe('Browsing', () => {
     });
     describe('getContainerFromPublicId', () => {
       it('returns MutableData interface service', async () => {
-        const md = await getContainerFromPublicId.call(app, domain);
+        const { serviceMd: md } = await getContainerFromPublicId.call(app, domain);
         return should.exist(md.getNameAndTag);
       });
 
@@ -542,7 +566,7 @@ describe('Browsing', () => {
 
     describe('tryDifferentPaths', () => {
       it('returns file and mime type as object', async () => {
-        const md = await getContainerFromPublicId.call(app, domain);
+        const { serviceMd: md } = await getContainerFromPublicId.call(app, domain);
         const emulation = await md.emulateAs('NFS');
         const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
         should(mimeType).be.equal('text/html');
@@ -556,7 +580,7 @@ describe('Browsing', () => {
 
     describe('readContentFromFile', () => {
       it('returns file contents as HTTP compliant response', async () => {
-        const md = await getContainerFromPublicId.call(app, domain);
+        const { serviceMd: md } = await getContainerFromPublicId.call(app, domain);
         const emulation = await md.emulateAs('NFS');
         const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
         const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
@@ -567,7 +591,7 @@ describe('Browsing', () => {
       });
 
       it('returns file content range as HTTP compliant response', async () => {
-        const md = await getContainerFromPublicId.call(app, domain);
+        const { serviceMd: md } = await getContainerFromPublicId.call(app, domain);
         const emulation = await md.emulateAs('NFS');
         const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
         const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
@@ -578,7 +602,7 @@ describe('Browsing', () => {
       });
 
       it('returns file content multipart range as HTTP compliant response', async () => {
-        const md = await getContainerFromPublicId.call(app, domain);
+        const { serviceMd: md } = await getContainerFromPublicId.call(app, domain);
         const emulation = await md.emulateAs('NFS');
         const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
         const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
@@ -590,7 +614,7 @@ describe('Browsing', () => {
       });
 
       it('requires opened file as first argument', async () => {
-        const md = await getContainerFromPublicId.call(app, domain);
+        const { serviceMd: md } = await getContainerFromPublicId.call(app, domain);
         const emulation = await md.emulateAs('NFS');
         const { file } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
         return should(readContentFromFile(file)).be.rejectedWith('File not found.');

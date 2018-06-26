@@ -5,21 +5,48 @@ const { parse: parseUrl } = require('url');
 const mime = require('mime');
 const nodePath = require('path');
 
-// Helper function to read fetch the Container
+// Helper function to fetch the Container
+// treating the public ID container as an RDF
+async function readPublicIdAsRdf(servicesContainer, pubName, servName) {
+  let serviceMd;
+  try {
+    const graphId = `safe://${servName}.${pubName}`;
+    console.log("Looking up graph ID:", graphId)
+    const rdfEmulation = await servicesContainer.emulateAs('rdf');
+    await rdfEmulation.nowOrWhenFetched([graphId]);
+    const SAFETERMS = rdfEmulation.namespace('http://safenetwork.org/safevocab/');
+    let match = rdfEmulation.statementsMatching(rdfEmulation.sym(graphId), SAFETERMS('xorName'), undefined);
+    const xorName = match[0].object.value.split(',');
+    match = rdfEmulation.statementsMatching(rdfEmulation.sym(graphId), SAFETERMS('typeTag'), undefined);
+    const typeTag = match[0].object.value;
+    serviceMd = await this.mutableData.newPublic(xorName, parseInt(typeTag));
+  } catch (err) {
+    const error = {};
+    error.code = err.code;
+    error.message = 'Requested service is not found';
+    throw makeError(error.code, error.message);
+  }
+
+  return { serviceMd, type: 'RDF' };
+}
+
+// Helper function to fetch the Container
 // from a public ID and service name provided
 async function getContainerFromPublicId(pubName, servName) {
-  let serviceInfo;
+  let servicesContainer, serviceInfo;
   try {
     const address = await this.crypto.sha3Hash(pubName);
-    const servicesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
+    servicesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
     serviceInfo = await servicesContainer.get(servName || 'www'); // default it to www
   } catch (err) {
-    if (err.code === errConst.ERR_NO_SUCH_DATA.code ||
-        err.code === errConst.ERR_NO_SUCH_ENTRY.code) {
+    if (err.code === errConst.ERR_NO_SUCH_DATA.code) {
       const error = {};
       error.code = err.code;
-      error.message = `Requested ${err.code === errConst.ERR_NO_SUCH_DATA.code ? 'public name' : 'service'} is not found`;
+      error.message = 'Requested public name is not found';
       throw makeError(error.code, error.message);
+    } else if (err.code === errConst.ERR_NO_SUCH_ENTRY.code) {
+      // Let's then try to read it as an RDF container
+      return readPublicIdAsRdf.call(this, servicesContainer, pubName, servName);
     }
     throw err;
   }
@@ -38,7 +65,7 @@ async function getContainerFromPublicId(pubName, servName) {
     serviceMd = await this.mutableData.newPublic(serviceInfo.buf, consts.TAG_TYPE_WWW);
   }
 
-  return serviceMd;
+  return { serviceMd, type: 'NFS' };
 }
 
 // Helper function to try different paths to find and
@@ -194,20 +221,37 @@ async function webFetch(url, options) {
 
   // lets' unpack
   const hostParts = hostname.split('.');
-  const lookupName = hostParts.pop(); // last one is 'domain'
+  const publicName = hostParts.pop(); // last one is 'domain'
   const serviceName = hostParts.join('.'); // all others are 'service'
 
   return new Promise(async (resolve, reject) => {
-    const boundGetContainerFromPublicId = getContainerFromPublicId.bind(this);
     try {
       // Let's try to find the container and read
       // its content using the helpers functions
-      const serviceMd = await boundGetContainerFromPublicId(lookupName, serviceName);
-      const emulation = await serviceMd.emulateAs('NFS');
-      const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), path);
-      const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
-      const data = await readContentFromFile(openedFile, mimeType, options);
-      resolve(data);
+      const { serviceMd, type } = await getContainerFromPublicId.call(this, publicName, serviceName);
+      if (type === 'RDF') {
+        const emulation = await serviceMd.emulateAs('RDF');
+        await emulation.nowOrWhenFetched();
+
+        // TODO: support qvalue in the Accept header with multile mime types and weights
+        const mimeType = (options && options.accept) ? options.accept : 'text/turtle';
+
+        const serialisedRdf = await emulation.serialise(mimeType);
+        const response = {
+          headers: {
+            'Content-Type': mimeType,
+            //'Accept-Post': 'text/turtle, application/ld+json, application/rdf+xml, application/nquads'
+          },
+          body: serialisedRdf
+        }
+        resolve(response);
+      } else {
+        const emulation = await serviceMd.emulateAs('NFS');
+        const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), path);
+        const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
+        const data = await readContentFromFile(openedFile, mimeType, options);
+        resolve(data);
+      }
     } catch (e) {
       reject(e);
     }

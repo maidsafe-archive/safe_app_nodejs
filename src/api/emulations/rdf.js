@@ -35,9 +35,19 @@ class RDF {
     this.id = id;
   }
 
-  async nowOrWhenFetched() {
-    const entries = await this.mData.getEntries();
-    const entriesList = await entries.listEntries();
+  // param is to accept list of id's to fetch
+  // e.g. ['safe://mywebid.mypubname', 'safe://mypubname']
+  async nowOrWhenFetched(ids) {
+    let entriesList = [];
+    if (ids && ids.length > 0) {
+      //Promise.all(ids.map(async (e) => {
+        const serialisedGraph = await this.mData.get(ids[0]);
+        entriesList.push({ key: ids[0], value: serialisedGraph });
+      //}));
+    } else {
+      const entries = await this.mData.getEntries();
+      entriesList = await entries.listEntries();
+    }
     const graphs = [];
     let id;
     entriesList.forEach((e) => {

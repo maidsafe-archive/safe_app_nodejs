@@ -51,9 +51,9 @@ const createProfileDoc = async (rdf, vocabs, profile) => {
   rdf.add(webIdWithHashTag, vocabs.FOAF('image'), rdf.literal(profile.avatar)); // TODO: this needs to be created as an LDP-NR
   rdf.add(webIdWithHashTag, vocabs.FOAF('website'), rdf.literal(profile.website));
 
-  const serialised = await rdf.serialise('text/turtle');
+  //const serialised = await rdf.serialise('text/turtle');
   //const serialised = await rdf.serialise('application/ld+json');
-  console.log("PROFILE:", serialised)
+  //console.log("PROFILE:", serialised)
 }
 
 // Helper for creating a Public ID container as an RDF resource
@@ -81,9 +81,9 @@ const createPublicId = async (rdf, vocabs, webIdLocation, publicName, serviceNam
   rdf.add(serviceResource, vocabs.SAFETERMS('xorName'), rdf.literal(webIdLocation.name.toString()));
   rdf.add(serviceResource, vocabs.SAFETERMS('typeTag'), rdf.literal(webIdLocation.typeTag.toString()));
 
-  const serialised = await rdf.serialise('text/turtle');
+  //const serialised = await rdf.serialise('text/turtle');
   //const serialised = await rdf.serialise('application/ld+json');
-  console.log("PUBLIC ID:", serialised)
+  //console.log("PUBLIC ID STORED:", serialised)
 }
 
 // Helper for recording public names in the _publicNames container as an RDF resource
@@ -110,9 +110,9 @@ const recordInPublicNames = async (rdf, vocabs, servicesLocation, publicName) =>
   rdf.add(newResourceName, vocabs.SAFETERMS('xorName'), rdf.literal(servicesLocation.name.toString()));
   rdf.add(newResourceName, vocabs.SAFETERMS('typeTag'), rdf.literal(servicesLocation.typeTag.toString()));
 
-  const serialised = await rdf.serialise('text/turtle');
+  //const serialised = await rdf.serialise('text/turtle');
   //const serialised = await rdf.serialise('application/ld+json');
-  console.log("PUBLIC NAMES:", serialised)
+  //console.log("PUBLIC NAMES:", serialised)
 }
 
 /**
@@ -151,10 +151,9 @@ class WebID {
     const hostParts = parsedUrl.hostname.split('.');
     const publicName = hostParts.pop(); // last one is 'domain'
     const serviceName = hostParts.join('.'); // all others are 'service'
-    const publicId = await this.mData.app.crypto.sha3Hash(publicName);
     await createProfileDoc(this.rdf, this.vocabs, profile);
     const webIdLocation = await this.rdf.commit();
-
+    const publicId = await this.mData.app.crypto.sha3Hash(publicName);
     const servicesContainer = await this.mData.app.mutableData.newPublic(publicId, consts.TAG_TYPE_DNS);
     await servicesContainer.quickSetup();
     const servicesRdf = servicesContainer.emulateAs('rdf');
