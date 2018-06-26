@@ -95,7 +95,7 @@ describe('Browsing', () => {
     unregisteredApp = await createUnregisteredTestApp();
   });
 
-  it.only('fetch existing WebID', async () => {
+  it('fetch existing WebID', async () => {
     const TYPE_TAG = 15639;
     const profile = {
       uri: 'safe://mywebid.gabriel',

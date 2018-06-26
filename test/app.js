@@ -242,6 +242,8 @@ describe('Smoke test', () => {
       });
   });
 
+
+
   it('network state upon network disconnection event', (done) => {
     let cbCount = 0;
     const networkCb = () => {
@@ -337,4 +339,5 @@ describe('Smoke test', () => {
         should(app.networkState).be.equal('Connected');
       });
   });
+
 });

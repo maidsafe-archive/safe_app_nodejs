@@ -29,11 +29,21 @@ class RDF {
     this.mData = mData;
     this.graphStore = rdflib.graph();
     this.id = undefined;
+    this.vocabs = {
+      LDP: this.namespace('http://www.w3.org/ns/ldp#'),
+      RDF: this.namespace('http://www.w3.org/2000/01/this-schema#'),
+      RDFS: this.namespace('http://www.w3.org/1999/02/22-this-syntax-ns#'),
+      FOAF: this.namespace('http://xmlns.com/foaf/0.1/'),
+      OWL: this.namespace("http://www.w3.org/2002/07/owl#"),
+      DCTERMS: this.namespace('http://purl.org/dc/terms/'),
+      SAFETERMS: this.namespace("http://safenetwork.org/safevocab/")
+    }
   }
 
   setId(id) {
     this.id = id;
   }
+
 
   // param is to accept list of id's to fetch
   // e.g. ['safe://mywebid.mypubname', 'safe://mypubname']

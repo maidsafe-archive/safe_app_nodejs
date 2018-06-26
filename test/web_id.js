@@ -13,7 +13,7 @@
 const should = require('should');
 const h = require('./helpers');
 
-describe.only('WebID emulation', () => {
+describe('WebID emulation', () => {
   let app, md, xorname;
   const TYPE_TAG = 15639;
   const containersPermissions = { _publicNames: ['Insert', 'Update', 'Delete'] };
@@ -47,7 +47,7 @@ describe.only('WebID emulation', () => {
     await webId.update(profile);
   });
 
-  it.only('fetch existing WebID', async () => {
+  it('fetch existing WebID', async () => {
     const profile = {
       uri: 'safe://mywebid.gabriel',
       name: 'Gabriel Viganotti',

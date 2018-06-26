@@ -13,7 +13,7 @@
 const should = require('should');
 const h = require('./helpers');
 
-describe.only('RDF emulation', () => {
+describe('RDF emulation', () => {
   let app, md, xorname;
   const TYPE_TAG = 15639;
   const myUri = 'safe://manu';
@@ -186,7 +186,7 @@ describe.only('RDF emulation', () => {
     console.log("Turtle:", turtle)
   });
 
-  it.only('parse Turtle RDF and serialise it as JSON-LD', async () => {
+  it('parse Turtle RDF and serialise it as JSON-LD', async () => {
     await md.quickSetup({});
     const rdf = await md.emulateAs('rdf');
     const turtle = "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\
