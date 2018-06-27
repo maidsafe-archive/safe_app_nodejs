@@ -36,7 +36,7 @@ const { parse: parseUrl } = require('url');
 
 
 // Helper for creating a WebID profile document RDF resource
-const createProfileDoc = async (rdf, vocabs, profile) => {
+const createWebIdProfileDoc = async (rdf, vocabs, profile) => {
   const id = rdf.sym(profile.uri);
   rdf.setId(profile.uri);
   const webIdWithHashTag = rdf.sym(`${profile.uri}#me`);
@@ -52,69 +52,98 @@ const createProfileDoc = async (rdf, vocabs, profile) => {
   rdf.add(webIdWithHashTag, vocabs.FOAF('image'), rdf.literal(profile.avatar)); // TODO: this needs to be created as an LDP-NR
   rdf.add(webIdWithHashTag, vocabs.FOAF('website'), rdf.literal(profile.website));
 
-  //const serialised = await rdf.serialise('text/turtle');
-  //const serialised = await rdf.serialise('application/ld+json');
-  //console.log("PROFILE:", serialised)
-}
+  const location = await rdf.commit();
+
+  return location;
+  // const serialised = await rdf.serialise('text/turtle');
+  // const serialised = await rdf.serialise('application/ld+json');
+  // console.log("PROFILE:", serialised)
+};
 
 // Helper for creating a Public ID container as an RDF resource
-const createPublicId = async (rdf, vocabs, webIdLocation, publicName, serviceName) => {
-  const publicIdUri = `safe://${publicName}`; // TODO: parse the uri to extract the public ID
+const addServiceAndSubdomain = async (app, vocabs, service, publicName, subdomain) => {
+  const subdomainLocation = await app.crypto.sha3Hash(publicName);
 
-  const id = rdf.sym(publicIdUri);
-  rdf.setId(publicIdUri);
-  const publicIdWithHashTag = rdf.sym(`${publicIdUri}#it`);
-  const serviceResource = rdf.sym(`safe://${serviceName}.${publicName}`);
+  const subdomainsContainer = await app.mutableData.newPublic(subdomainLocation, consts.TAG_TYPE_DNS);
+  try {
+    await subdomainsContainer.quickSetup();
+  } catch (err) {
+    // If the subdomain container already exists we are then ok
+    if (err.code !== errConst.ERR_DATA_GIVEN_ALREADY_EXISTS.code) {
+      throw err;
+    }
+  }
+  const subdomainsRdf = subdomainsContainer.emulateAs('rdf');
 
-  rdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
-  rdf.add(id, vocabs.LDP('membershipResource'), publicIdWithHashTag);
-  rdf.add(id, vocabs.LDP('hasMemberRelation'), vocabs.SAFETERMS('hasService'));
-  rdf.add(id, vocabs.DCTERMS('title'), rdf.literal(`Services Container for public ID '${publicName}'`));
-  rdf.add(id, vocabs.DCTERMS('description'), rdf.literal('List of public services exposed by a particular public ID'));
-  rdf.add(id, vocabs.LDP('contains'), serviceResource);
 
-  rdf.add(publicIdWithHashTag, vocabs.RDFS('type'), vocabs.SAFETERMS('Services'));
-  rdf.add(publicIdWithHashTag, vocabs.DCTERMS('title'), rdf.literal(`Services available for public ID '${publicName}'`));
-  rdf.add(publicIdWithHashTag, vocabs.SAFETERMS('hasService'), serviceResource);
+  // add to or create subdomain container.
+  const fullUri = `safe://${publicName}`;
+  // TODO: parse the uri to extract the subdomain
 
-  rdf.add(serviceResource, vocabs.RDFS('type'), vocabs.SAFETERMS('Service'));
-  rdf.add(serviceResource, vocabs.DCTERMS('title'), rdf.literal(`'${serviceName}' service`));
-  rdf.add(serviceResource, vocabs.SAFETERMS('xorName'), rdf.literal(webIdLocation.name.toString()));
-  rdf.add(serviceResource, vocabs.SAFETERMS('typeTag'), rdf.literal(webIdLocation.typeTag.toString()));
+  const id = subdomainsRdf.sym(fullUri);
+  subdomainsRdf.setId(fullUri);
+  const uriWithHashTag = subdomainsRdf.sym(`${fullUri}#it`);
+  const serviceResource = subdomainsRdf.sym(`safe://${subdomain}.${publicName}`);
 
-  //const serialised = await rdf.serialise('text/turtle');
-  //const serialised = await rdf.serialise('application/ld+json');
-  //console.log("PUBLIC ID STORED:", serialised)
-}
+  subdomainsRdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
+  subdomainsRdf.add(id, vocabs.LDP('membershipResource'), uriWithHashTag);
+  subdomainsRdf.add(id, vocabs.LDP('hasMemberRelation'), vocabs.SAFETERMS('hasService'));
+  subdomainsRdf.add(id, vocabs.DCTERMS('title'), subdomainsRdf.literal(`Services Container for subdomain: '${publicName}'`));
+  subdomainsRdf.add(id, vocabs.DCTERMS('description'), subdomainsRdf.literal('List of public services exposed by a particular subdomain'));
+  subdomainsRdf.add(id, vocabs.LDP('contains'), serviceResource);
+
+  subdomainsRdf.add(uriWithHashTag, vocabs.RDFS('type'), vocabs.SAFETERMS('Services'));
+  subdomainsRdf.add(uriWithHashTag, vocabs.DCTERMS('title'), subdomainsRdf.literal(`Services available for subdomain: '${publicName}'`));
+  subdomainsRdf.add(uriWithHashTag, vocabs.SAFETERMS('hasService'), serviceResource);
+
+  subdomainsRdf.add(serviceResource, vocabs.RDFS('type'), vocabs.SAFETERMS('Service'));
+  subdomainsRdf.add(serviceResource, vocabs.DCTERMS('title'), subdomainsRdf.literal(`'${subdomain}' service`));
+  subdomainsRdf.add(serviceResource, vocabs.SAFETERMS('xorName'), subdomainsRdf.literal(service.name.toString()));
+  subdomainsRdf.add(serviceResource, vocabs.SAFETERMS('typeTag'), subdomainsRdf.literal(service.typeTag.toString()));
+
+  const location = subdomainsRdf.commit();
+
+  return location;
+  // const serialised = await rdf.serialise('text/turtle');
+  // const serialised = await rdf.serialise('application/ld+json');
+  // console.log("PUBLIC ID STORED:", serialised)
+};
 
 // Helper for recording public names in the _publicNames container as an RDF resource
-const recordInPublicNames = async (rdf, vocabs, servicesLocation, publicName) => {
+const addToPublicNames = async (app, vocabs, subdomainsRdfLocation, publicName) => {
+  const publicNamesContainer = await app.auth.getContainer('_publicNames');
+  const publicNamesRdf = publicNamesContainer.emulateAs('rdf');
+
+
   const graphName = 'safe://_publicNames'; // TODO: this graph name is not a valid URI on the SAFE network
-  const id = rdf.sym(graphName);
-  rdf.setId(graphName);
-  const graphNameWithHashTag = rdf.sym(`${graphName}#it`);
-  const newResourceName = rdf.sym(`${graphName}#${publicName}`);
+  const id = publicNamesRdf.sym(graphName);
+  publicNamesRdf.setId(graphName);
+  const graphNameWithHashTag = publicNamesRdf.sym(`${graphName}#it`);
+  const newResourceName = publicNamesRdf.sym(`${graphName}#${publicName}`);
 
-  rdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
-  rdf.add(id, vocabs.LDP('membershipResource'), graphNameWithHashTag);
-  rdf.add(id, vocabs.LDP('hasMemberRelation'), vocabs.SAFETERMS('hasPublicName'));
-  rdf.add(id, vocabs.DCTERMS('title'), rdf.literal('_publicNames default container'));
-  rdf.add(id, vocabs.DCTERMS('description'), rdf.literal('Container to keep track of public names owned by the account'));
-  rdf.add(id, vocabs.LDP('contains'), newResourceName);
+  publicNamesRdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
+  publicNamesRdf.add(id, vocabs.LDP('membershipResource'), graphNameWithHashTag);
+  publicNamesRdf.add(id, vocabs.LDP('hasMemberRelation'), vocabs.SAFETERMS('hasPublicName'));
+  publicNamesRdf.add(id, vocabs.DCTERMS('title'), publicNamesRdf.literal('_publicNames default container'));
+  publicNamesRdf.add(id, vocabs.DCTERMS('description'), publicNamesRdf.literal('Container to keep track of public names owned by the account'));
+  publicNamesRdf.add(id, vocabs.LDP('contains'), newResourceName);
 
-  rdf.add(graphNameWithHashTag, vocabs.RDFS('type'), vocabs.SAFETERMS('PublicNames'));
-  rdf.add(graphNameWithHashTag, vocabs.DCTERMS('title'), rdf.literal('Public names owned by an account'));
-  rdf.add(graphNameWithHashTag, vocabs.SAFETERMS('hasPublicName'), newResourceName);
+  publicNamesRdf.add(graphNameWithHashTag, vocabs.RDFS('type'), vocabs.SAFETERMS('PublicNames'));
+  publicNamesRdf.add(graphNameWithHashTag, vocabs.DCTERMS('title'), publicNamesRdf.literal('Public names owned by an account'));
+  publicNamesRdf.add(graphNameWithHashTag, vocabs.SAFETERMS('hasPublicName'), newResourceName);
 
-  rdf.add(newResourceName, vocabs.RDFS('type'), vocabs.SAFETERMS('PublicName'));
-  rdf.add(newResourceName, vocabs.DCTERMS('title'), rdf.literal(`'${publicName}' public name`));
-  rdf.add(newResourceName, vocabs.SAFETERMS('xorName'), rdf.literal(servicesLocation.name.toString()));
-  rdf.add(newResourceName, vocabs.SAFETERMS('typeTag'), rdf.literal(servicesLocation.typeTag.toString()));
+  publicNamesRdf.add(newResourceName, vocabs.RDFS('type'), vocabs.SAFETERMS('PublicName'));
+  publicNamesRdf.add(newResourceName, vocabs.DCTERMS('title'), publicNamesRdf.literal(`'${publicName}' public name`));
+  publicNamesRdf.add(newResourceName, vocabs.SAFETERMS('xorName'), publicNamesRdf.literal(subdomainsRdfLocation.name.toString()));
+  publicNamesRdf.add(newResourceName, vocabs.SAFETERMS('typeTag'), publicNamesRdf.literal(subdomainsRdfLocation.typeTag.toString()));
 
-  //const serialised = await rdf.serialise('text/turtle');
-  //const serialised = await rdf.serialise('application/ld+json');
-  //console.log("PUBLIC NAMES:", serialised)
-}
+
+  await publicNamesRdf.commit();
+
+  // const serialised = await rdf.serialise('text/turtle');
+  // const serialised = await rdf.serialise('application/ld+json');
+  // console.log("PUBLIC NAMES:", serialised)
+};
 
 /**
 * WebID Emulation on top of a MutableData using RDF emulation
@@ -135,10 +164,10 @@ class WebID {
       RDF: this.rdf.namespace('http://www.w3.org/2000/01/rdf-schema#'),
       RDFS: this.rdf.namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
       FOAF: this.rdf.namespace('http://xmlns.com/foaf/0.1/'),
-      OWL: this.rdf.namespace("http://www.w3.org/2002/07/owl#"),
+      OWL: this.rdf.namespace('http://www.w3.org/2002/07/owl#'),
       DCTERMS: this.rdf.namespace('http://purl.org/dc/terms/'),
-      SAFETERMS: this.rdf.namespace("http://safenetwork.org/safevocab/")
-    }
+      SAFETERMS: this.rdf.namespace('http://safenetwork.org/safevocab/')
+    };
   }
 
   async fetchContent() {
@@ -146,38 +175,26 @@ class WebID {
   }
 
   async create(profile) {
+    const app = this.mData.app;
+
     // TODO: support for URIs containing a path, e.g. safe://mywebid.gabriel/card
     // We may need to create an NFS container to reference it?
     const parsedUrl = parseUrl(profile.uri);
     const hostParts = parsedUrl.hostname.split('.');
     const publicName = hostParts.pop(); // last one is 'domain'
-    const serviceName = hostParts.join('.'); // all others are 'service'
-    await createProfileDoc(this.rdf, this.vocabs, profile);
-    const webIdLocation = await this.rdf.commit();
+    const subdomain = hostParts.join('.'); // all others are 'service'
 
-    const publicId = await this.mData.app.crypto.sha3Hash(publicName);
-    const servicesContainer = await this.mData.app.mutableData.newPublic(publicId, consts.TAG_TYPE_DNS);
-    try {
-      await servicesContainer.quickSetup();
-    } catch (err) {
-      // If the public ID container already exists we are then ok
-      if (err.code !== errConst.ERR_DATA_GIVEN_ALREADY_EXISTS.code) {
-        throw err;
-      }
-    }
-    const servicesRdf = servicesContainer.emulateAs('rdf');
-    await createPublicId(servicesRdf, this.vocabs, webIdLocation, publicName, serviceName);
-    const servicesLocation = await servicesRdf.commit();
+    // TODO: Do we create the md in here? Is it needed quicksetup outside?
+    const webIdLocation = await createWebIdProfileDoc(this.rdf, this.vocabs, profile);
 
-    const publicNamesContainer = await this.mData.app.auth.getContainer('_publicNames');
-    const publicNamesRdf = publicNamesContainer.emulateAs('rdf');
-    await recordInPublicNames(publicNamesRdf, this.vocabs, servicesLocation, publicName);
-    await publicNamesRdf.commit();
+    const subdomainsRdfLocation = await addServiceAndSubdomain(app, this.vocabs, webIdLocation, publicName, subdomain);
+
+    await addToPublicNames(app, this.vocabs, subdomainsRdfLocation, publicName);
   }
 
   async update(profile) {
     this.rdf.removeMany(undefined, undefined, undefined);
-    await createProfileDoc(this.rdf, this.vocabs, profile);
+    await createWebIdProfileDoc(this.rdf, this.vocabs, profile);
     const webIdLocation = await this.rdf.commit();
   }
 

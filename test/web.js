@@ -21,20 +21,28 @@ const appInfo = h.appInfo;
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 const { autoref } = require('../src/helpers');
 
+const containersPermissions = { _publicNames: ['Insert', 'Update', 'Delete'] };
+
 /* eslint-disable no-shadow */
-describe.only('getPublicNames', () => {
+describe('getPublicNames', () => {
   let app;
   let xorname;
+  // let authedPublicNamesApp;
   const TYPE_TAG = 15639;
 
-  before(async () => {
-    app = await createAuthenticatedTestApp();
+  let authedPublicNamesApp;
+
+
+  before( async() => {
+
+    authedPublicNamesApp = await createAuthenticatedTestApp(null, containersPermissions);
     xorname = h.createRandomXorName();
   });
 
 
   it('should throw when app perms are not given for _publicNames',
     async () => {
+      app = await createAuthenticatedTestApp();
       try {
         await app.web.getPublicNames();
       } catch (e) {
@@ -45,7 +53,8 @@ describe.only('getPublicNames', () => {
   it('should return empty array of getPublicNames when none set', async () => {
     const containersPermissions = { _publicNames: ['Insert', 'Update', 'Delete'] };
 
-    const authedApp = await h.createAuthenticatedTestApp(null, containersPermissions);
+    // console.log(authedPublicNamesApp);
+    const authedApp = authedPublicNamesApp;
 
 
     console.log('it is contained....');
@@ -58,8 +67,8 @@ describe.only('getPublicNames', () => {
 
 
   it('should return the array of getPublicNames', async () => {
-    const containersPermissions = { _publicNames: ['Insert', 'Update', 'Delete'] };
-    const authedApp = await h.createAuthenticatedTestApp(null, containersPermissions);
+    // const containersPermissions = { _publicNames: ['Insert', 'Update', 'Delete'] };
+    const authedApp = authedPublicNamesApp;
     const profile = {
       uri: 'safe://mywebid.gabriel',
       name: 'Gabriel Viganotti',
