@@ -11,6 +11,7 @@
 // relating to use of the SAFE Network Software.
 
 const consts = require('../../consts');
+const errConst = require('../../error_const');
 const { parse: parseUrl } = require('url');
 
 // TODO: perhaps we want a set of functions which are LDPC helpers,
@@ -153,9 +154,17 @@ class WebID {
     const serviceName = hostParts.join('.'); // all others are 'service'
     await createProfileDoc(this.rdf, this.vocabs, profile);
     const webIdLocation = await this.rdf.commit();
+
     const publicId = await this.mData.app.crypto.sha3Hash(publicName);
     const servicesContainer = await this.mData.app.mutableData.newPublic(publicId, consts.TAG_TYPE_DNS);
-    await servicesContainer.quickSetup();
+    try {
+      await servicesContainer.quickSetup();
+    } catch (err) {
+      // If the public ID container already exists we are then ok
+      if (err.code !== errConst.ERR_DATA_GIVEN_ALREADY_EXISTS.code) {
+        throw err;
+      }
+    }
     const servicesRdf = servicesContainer.emulateAs('rdf');
     await createPublicId(servicesRdf, this.vocabs, webIdLocation, publicName, serviceName);
     const servicesLocation = await servicesRdf.commit();

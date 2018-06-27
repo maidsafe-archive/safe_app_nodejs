@@ -26,6 +26,18 @@ module.exports = {
   },
 
   /**
+   * @name ERR_DATA_GIVEN_ALREADY_EXISTS
+   * @type {object}
+   * @description Thrown natively when data already exists at the target address on network.
+   * @property {number} code -104
+   * @property {string} msg
+   */
+  ERR_DATA_GIVEN_ALREADY_EXISTS: {
+    code: -104,
+    msg: 'Data already exists at the target address'
+  },
+
+  /**
    * @name ERR_NO_SUCH_ENTRY
    * @type {object}
    * @description Thrown natively when entry on found in MutableData.
