@@ -1,80 +1,11 @@
 const lib = require('../native/lib');
 const nativeH = require('../native/helpers');
-// const types = require('../native/types');
-// const { useMockByDefault } = require('../helpers');
-// // const { validateShareMDataPermissions } = require('../helpers');
 const errConst = require('../error_const');
 const consts = require('../consts');
 const makeError = require('../native/_error.js');
 
 const { parse: parseUrl } = require('url');
 
-// const makeAppInfo = nativeH.makeAppInfo;
-// const makePermissions = nativeH.makePermissions;
-// const makeShareMDataPermissions = nativeH.makeShareMDataPermissions;
-
-
-
-// Helper for recording public names in the _publicNames container as an RDF resource
-const recordInPublicNames = async (rdf, vocabs, servicesLocation, publicName) => {
-  const graphName = 'safe://_publicNames'; // TODO: this graph name is not a valid URI on the SAFE network
-  const id = rdf.sym(graphName);
-  rdf.setId(graphName);
-  const graphNameWithHashTag = rdf.sym(`${graphName}#it`);
-  const newResourceName = rdf.sym(`${graphName}#${publicName}`);
-
-  rdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
-  rdf.add(id, vocabs.LDP('membershipResource'), graphNameWithHashTag);
-  rdf.add(id, vocabs.LDP('hasMemberRelation'), vocabs.SAFETERMS('hasPublicName'));
-  rdf.add(id, vocabs.DCTERMS('title'), rdf.literal('_publicNames default container'));
-  rdf.add(id, vocabs.DCTERMS('description'), rdf.literal('Container to keep track of public names owned by the account'));
-  rdf.add(id, vocabs.LDP('contains'), newResourceName);
-
-  rdf.add(graphNameWithHashTag, vocabs.RDFS('type'), vocabs.SAFETERMS('PublicNames'));
-  rdf.add(graphNameWithHashTag, vocabs.DCTERMS('title'), rdf.literal('Public names owned by an account'));
-  rdf.add(graphNameWithHashTag, vocabs.SAFETERMS('hasPublicName'), newResourceName);
-
-  rdf.add(newResourceName, vocabs.RDFS('type'), vocabs.SAFETERMS('PublicName'));
-  rdf.add(newResourceName, vocabs.DCTERMS('title'), rdf.literal(`'${publicName}' public name`));
-  rdf.add(newResourceName, vocabs.SAFETERMS('xorName'), rdf.literal(servicesLocation.name.toString()));
-  rdf.add(newResourceName, vocabs.SAFETERMS('typeTag'), rdf.literal(servicesLocation.typeTag.toString()));
-
-  console.log('done recodring in public')
-  //const serialised = await rdf.serialise('text/turtle');
-  //const serialised = await rdf.serialise('application/ld+json');
-  //console.log("PUBLIC NAMES:", serialised)
-}
-
-
-
-// Helper for creating a Public ID container as an RDF resource
-const createPublicId = async (rdf, vocabs, servicesLocation, publicName, serviceName) => {
-  const publicIdUri = `safe://${publicName}`; // TODO: parse the uri to extract the public ID
-
-  const id = rdf.sym(publicIdUri);
-  rdf.setId(publicIdUri);
-  const publicIdWithHashTag = rdf.sym(`${publicIdUri}#it`);
-  const serviceResource = rdf.sym(`safe://${serviceName}.${publicName}`);
-
-  rdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
-  rdf.add(id, vocabs.LDP('membershipResource'), publicIdWithHashTag);
-  rdf.add(id, vocabs.LDP('hasMemberRelation'), vocabs.SAFETERMS('hasService'));
-  rdf.add(id, vocabs.DCTERMS('title'), rdf.literal(`Services Container for public ID '${publicName}'`));
-  rdf.add(id, vocabs.DCTERMS('description'), rdf.literal('List of public services exposed by a particular public ID'));
-  rdf.add(id, vocabs.LDP('contains'), serviceResource);
-
-  rdf.add(publicIdWithHashTag, vocabs.RDFS('type'), vocabs.SAFETERMS('Services'));
-  rdf.add(publicIdWithHashTag, vocabs.DCTERMS('title'), rdf.literal(`Services available for public ID '${publicName}'`));
-  rdf.add(publicIdWithHashTag, vocabs.SAFETERMS('hasService'), serviceResource);
-
-  rdf.add(serviceResource, vocabs.RDFS('type'), vocabs.SAFETERMS('Service'));
-  rdf.add(serviceResource, vocabs.DCTERMS('title'), rdf.literal(`'${serviceName}' service`));
-  rdf.add(serviceResource, vocabs.SAFETERMS('xorName'), rdf.literal(servicesLocation.name.toString()));
-  rdf.add(serviceResource, vocabs.SAFETERMS('typeTag'), rdf.literal(servicesLocation.typeTag.toString()));
-  //const serialised = await rdf.serialise('text/turtle');
-  //const serialised = await rdf.serialise('application/ld+json');
-  //console.log("PUBLIC ID STORED:", serialised)
-}
 
 const RDF_TYPE_TAG = 15639;
 
@@ -93,6 +24,60 @@ class WebInterface {
     this.app = app;
   }
 
+  getVocabs(rdf) {
+    return {
+      LDP: rdf.namespace('http://www.w3.org/ns/ldp#'),
+      RDF: rdf.namespace('http://www.w3.org/2000/01/rdf-schema#'),
+      RDFS: rdf.namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
+      FOAF: rdf.namespace('http://xmlns.com/foaf/0.1/'),
+      OWL: rdf.namespace('http://www.w3.org/2002/07/owl#'),
+      DCTERMS: rdf.namespace('http://purl.org/dc/terms/'),
+      SAFETERMS: rdf.namespace('http://safenetwork.org/safevocab/')
+    };
+  }
+
+  async createPublicName( publicName, subdomainsRdfLocation) {
+    if( typeof subdomainsRdfLocation !== 'object' ||
+        !subdomainsRdfLocation.name || !subdomainsRdfLocation.typeTag )
+    {
+
+      throw makeError(errConst.INVALID_RDF_LOCATION.code, errConst.INVALID_RDF_LOCATION.msg )
+    }
+
+    if( typeof publicName !== 'string' ) throw makeError(errConst.INVALID_URL.code, errConst.INVALID_URL.msg )
+
+    const app = this.app;
+
+    const publicNamesContainer = await app.auth.getContainer('_publicNames');
+    const publicNamesRdf = publicNamesContainer.emulateAs('rdf');
+
+    const vocabs = this.getVocabs(publicNamesRdf);
+
+    const graphName = 'safe://_publicNames'; // TODO: this graph name is not a valid URI on the SAFE network
+    const id = publicNamesRdf.sym(graphName);
+    publicNamesRdf.setId(graphName);
+    const graphNameWithHashTag = publicNamesRdf.sym(`${graphName}#it`);
+    const newResourceName = publicNamesRdf.sym(`${graphName}#${publicName}`);
+
+    publicNamesRdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
+    publicNamesRdf.add(id, vocabs.LDP('membershipResource'), graphNameWithHashTag);
+    publicNamesRdf.add(id, vocabs.LDP('hasMemberRelation'), vocabs.SAFETERMS('hasPublicName'));
+    publicNamesRdf.add(id, vocabs.DCTERMS('title'), publicNamesRdf.literal('_publicNames default container'));
+    publicNamesRdf.add(id, vocabs.DCTERMS('description'), publicNamesRdf.literal('Container to keep track of public names owned by the account'));
+    publicNamesRdf.add(id, vocabs.LDP('contains'), newResourceName);
+
+    publicNamesRdf.add(graphNameWithHashTag, vocabs.RDFS('type'), vocabs.SAFETERMS('PublicNames'));
+    publicNamesRdf.add(graphNameWithHashTag, vocabs.DCTERMS('title'), publicNamesRdf.literal('Public names owned by an account'));
+    publicNamesRdf.add(graphNameWithHashTag, vocabs.SAFETERMS('hasPublicName'), newResourceName);
+
+    publicNamesRdf.add(newResourceName, vocabs.RDFS('type'), vocabs.SAFETERMS('PublicName'));
+    publicNamesRdf.add(newResourceName, vocabs.DCTERMS('title'), publicNamesRdf.literal(`'${publicName}' public name`));
+    publicNamesRdf.add(newResourceName, vocabs.SAFETERMS('xorName'), publicNamesRdf.literal(subdomainsRdfLocation.name.toString()));
+    publicNamesRdf.add(newResourceName, vocabs.SAFETERMS('typeTag'), publicNamesRdf.literal(subdomainsRdfLocation.typeTag.toString()));
+
+
+    await publicNamesRdf.commit();
+  }
 
   /**
    * Return an Array of publicNames

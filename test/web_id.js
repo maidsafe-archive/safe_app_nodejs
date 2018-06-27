@@ -47,7 +47,7 @@ describe('WebID emulation', () => {
     await webId.update(profile);
   });
 
-  it.only('fetch existing WebID', async () => {
+  it('fetch existing WebID', async () => {
     const profile = {
       uri: 'safe://mywebid.gabriel',
       name: 'Gabriel Viganotti',

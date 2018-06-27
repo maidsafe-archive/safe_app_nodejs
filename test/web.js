@@ -13,36 +13,24 @@
 
 const should = require('should');
 const h = require('./helpers');
-const App = require('../src/app');
 const errConst = require('../src/error_const');
 
-const createTestApp = h.createTestApp;
-const appInfo = h.appInfo;
-const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
-const { autoref } = require('../src/helpers');
-
-const containersPermissions = { _publicNames: ['Insert', 'Update', 'Delete'] };
+const TYPE_TAG = 15689;
 
 /* eslint-disable no-shadow */
 describe('getPublicNames', () => {
   let app;
   let xorname;
-  // let authedPublicNamesApp;
   const TYPE_TAG = 15639;
 
-  let authedPublicNamesApp;
-
-
-  before( async() => {
-
-    authedPublicNamesApp = await createAuthenticatedTestApp(null, containersPermissions);
+  before(async () => {
+    app = await h.createAuthenticatedTestApp();
     xorname = h.createRandomXorName();
   });
 
 
   it('should throw when app perms are not given for _publicNames',
     async () => {
-      app = await createAuthenticatedTestApp();
       try {
         await app.web.getPublicNames();
       } catch (e) {
@@ -51,13 +39,8 @@ describe('getPublicNames', () => {
     });
 
   it('should return empty array of getPublicNames when none set', async () => {
-    const containersPermissions = { _publicNames: ['Insert', 'Update', 'Delete'] };
+    const authedApp = await h.publicNamesTestApp;
 
-    // console.log(authedPublicNamesApp);
-    const authedApp = authedPublicNamesApp;
-
-
-    console.log('it is contained....');
     let names;
     names = await authedApp.web.getPublicNames();
 
@@ -67,8 +50,8 @@ describe('getPublicNames', () => {
 
 
   it('should return the array of getPublicNames', async () => {
-    // const containersPermissions = { _publicNames: ['Insert', 'Update', 'Delete'] };
-    const authedApp = authedPublicNamesApp;
+
+    const authedApp = await h.publicNamesTestApp;
     const profile = {
       uri: 'safe://mywebid.gabriel',
       name: 'Gabriel Viganotti',
@@ -83,14 +66,70 @@ describe('getPublicNames', () => {
     const webId = await md.emulateAs('WebID');
     await webId.create(profile);
 
-    let names;
-    names = await authedApp.web.getPublicNames();
+    const names = await authedApp.web.getPublicNames();
 
     should(names).be.a.Array();
 
     should(names).have.length(3);
   });
 
+});
 
+
+/* eslint-disable no-shadow */
+describe.only('createPublicName', () => {
+  let app;
+  let authedApp;
+  let md;
+  let fakeSubdomainRDF;
+  before(async () => {
+    authedApp = await h.publicNamesTestApp;
+    app = await h.createAuthenticatedTestApp();
+    const xorname = h.createRandomXorName();
+    md = await authedApp.mutableData.newPublic(xorname, TYPE_TAG);
+    fakeSubdomainRDF = await md.getNameAndTag()
+
+  });
+
+  it('should throw when a non string URL is passed',
+  async () => {
+    try {
+      await authedApp.web.createPublicName({}, fakeSubdomainRDF);
+    } catch (e) {
+      should(e.message).match(errConst.INVALID_URL.msg);
+      should(e.code).match(errConst.INVALID_URL.code);
+    }
+  });
+
+it('should throw when no RDF location is provided',
+  async () => {
+    try {
+      await authedApp.web.createPublicName('llll', {});
+    } catch (e) {
+      should(e.message).match(errConst.INVALID_RDF_LOCATION.msg);
+      should(e.code).match(errConst.INVALID_RDF_LOCATION.code);
+    }
+  });
+
+it('should throw when authedApp perms are not given for _publicNames',
+  async () => {
+    try {
+      await app.web.createPublicName('llll', fakeSubdomainRDF);
+    } catch (e) {
+      should(e.message).match(/_publicNames/);
+    }
+  });
+
+  it('should create a publicName', async () => {
+
+    await authedApp.web.createPublicName('thisIsATestDomain', fakeSubdomainRDF )
+    const names = await authedApp.web.getPublicNames();
+
+    should(names).be.a.Array();
+
+    // TODO: Will the array always be 3?
+    should(names[2]).equal('safe://_publicNames#thisIsATestDomain');
+    should(names).have.length(3);
+  });
 
 });

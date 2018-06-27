@@ -347,5 +347,17 @@ module.exports = {
   INVALID_SEC_KEY: {
     code: 1020,
     msg: (size) => `Secret encryption key _must be_ provided and ${size} bytes long.`
+  },
+
+  /**
+   * @name @INVALID_RDF_LOCATION
+   * @type {Object}
+   * @description RDF Location provided is not and object with name/typeTag
+   * @property {number} code 1021
+   * @property {function} msg
+   */
+  INVALID_RDF_LOCATION: {
+    code: 1021,
+    msg: 'RDF Location _must_ be an object of the form { name, typeTag }.'
   }
 };
