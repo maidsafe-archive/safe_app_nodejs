@@ -13,13 +13,12 @@
 const should = require('should');
 const h = require('./helpers');
 
-describe('WebID emulation', () => {
+describe.only('WebID emulation', () => {
   let app, md, xorname;
   const TYPE_TAG = 15639;
-  const containersPermissions = { _publicNames: ['Insert', 'Update', 'Delete'] };
 
   beforeEach(async () => {
-    app = await h.createAuthenticatedTestApp(null, containersPermissions);
+    app = await h.publicNamesTestApp;
     xorname = h.createRandomXorName();
     md = await app.mutableData.newPublic(xorname, TYPE_TAG);
   });
