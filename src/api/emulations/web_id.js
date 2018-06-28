@@ -109,41 +109,6 @@ const addServiceAndSubdomain = async (app, vocabs, service, publicName, subdomai
   // console.log("PUBLIC ID STORED:", serialised)
 };
 
-// Helper for recording public names in the _publicNames container as an RDF resource
-const addToPublicNames = async (app, vocabs, subdomainsRdfLocation, publicName) => {
-  const publicNamesContainer = await app.auth.getContainer('_publicNames');
-  const publicNamesRdf = publicNamesContainer.emulateAs('rdf');
-
-
-  const graphName = 'safe://_publicNames'; // TODO: this graph name is not a valid URI on the SAFE network
-  const id = publicNamesRdf.sym(graphName);
-  publicNamesRdf.setId(graphName);
-  const graphNameWithHashTag = publicNamesRdf.sym(`${graphName}#it`);
-  const newResourceName = publicNamesRdf.sym(`${graphName}#${publicName}`);
-
-  publicNamesRdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
-  publicNamesRdf.add(id, vocabs.LDP('membershipResource'), graphNameWithHashTag);
-  publicNamesRdf.add(id, vocabs.LDP('hasMemberRelation'), vocabs.SAFETERMS('hasPublicName'));
-  publicNamesRdf.add(id, vocabs.DCTERMS('title'), publicNamesRdf.literal('_publicNames default container'));
-  publicNamesRdf.add(id, vocabs.DCTERMS('description'), publicNamesRdf.literal('Container to keep track of public names owned by the account'));
-  publicNamesRdf.add(id, vocabs.LDP('contains'), newResourceName);
-
-  publicNamesRdf.add(graphNameWithHashTag, vocabs.RDFS('type'), vocabs.SAFETERMS('PublicNames'));
-  publicNamesRdf.add(graphNameWithHashTag, vocabs.DCTERMS('title'), publicNamesRdf.literal('Public names owned by an account'));
-  publicNamesRdf.add(graphNameWithHashTag, vocabs.SAFETERMS('hasPublicName'), newResourceName);
-
-  publicNamesRdf.add(newResourceName, vocabs.RDFS('type'), vocabs.SAFETERMS('PublicName'));
-  publicNamesRdf.add(newResourceName, vocabs.DCTERMS('title'), publicNamesRdf.literal(`'${publicName}' public name`));
-  publicNamesRdf.add(newResourceName, vocabs.SAFETERMS('xorName'), publicNamesRdf.literal(subdomainsRdfLocation.name.toString()));
-  publicNamesRdf.add(newResourceName, vocabs.SAFETERMS('typeTag'), publicNamesRdf.literal(subdomainsRdfLocation.typeTag.toString()));
-
-
-  await publicNamesRdf.commit();
-
-  // const serialised = await rdf.serialise('text/turtle');
-  // const serialised = await rdf.serialise('application/ld+json');
-  // console.log("PUBLIC NAMES:", serialised)
-};
 
 /**
 * WebID Emulation on top of a MutableData using RDF emulation
@@ -187,9 +152,10 @@ class WebID {
     // TODO: Do we create the md in here? Is it needed quicksetup outside?
     const webIdLocation = await createWebIdProfileDoc(this.rdf, this.vocabs, profile);
 
-    const subdomainsRdfLocation = await addServiceAndSubdomain(app, this.vocabs, webIdLocation, publicName, subdomain);
+    const subdomainsRdfLocation =
+      await addServiceAndSubdomain(app, this.vocabs, webIdLocation, publicName, subdomain);
 
-    await addToPublicNames(app, this.vocabs, subdomainsRdfLocation, publicName);
+    await app.web.createPublicName(publicName, subdomainsRdfLocation);
   }
 
   async update(profile) {

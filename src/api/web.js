@@ -36,15 +36,13 @@ class WebInterface {
     };
   }
 
-  async createPublicName( publicName, subdomainsRdfLocation) {
-    if( typeof subdomainsRdfLocation !== 'object' ||
-        !subdomainsRdfLocation.name || !subdomainsRdfLocation.typeTag )
-    {
-
-      throw makeError(errConst.INVALID_RDF_LOCATION.code, errConst.INVALID_RDF_LOCATION.msg )
+  async createPublicName(publicName, subdomainsRdfLocation) {
+    if (typeof subdomainsRdfLocation !== 'object' ||
+        !subdomainsRdfLocation.name || !subdomainsRdfLocation.typeTag) {
+      throw makeError(errConst.INVALID_RDF_LOCATION.code, errConst.INVALID_RDF_LOCATION.msg);
     }
 
-    if( typeof publicName !== 'string' ) throw makeError(errConst.INVALID_URL.code, errConst.INVALID_URL.msg )
+    if (typeof publicName !== 'string') throw makeError(errConst.INVALID_URL.code, errConst.INVALID_URL.msg);
 
     const app = this.app;
 
@@ -74,7 +72,6 @@ class WebInterface {
     publicNamesRdf.add(newResourceName, vocabs.DCTERMS('title'), publicNamesRdf.literal(`'${publicName}' public name`));
     publicNamesRdf.add(newResourceName, vocabs.SAFETERMS('xorName'), publicNamesRdf.literal(subdomainsRdfLocation.name.toString()));
     publicNamesRdf.add(newResourceName, vocabs.SAFETERMS('typeTag'), publicNamesRdf.literal(subdomainsRdfLocation.typeTag.toString()));
-
 
     await publicNamesRdf.commit();
   }
