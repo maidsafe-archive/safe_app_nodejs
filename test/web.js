@@ -18,7 +18,7 @@ const errConst = require('../src/error_const');
 const TYPE_TAG = 15689;
 
 /* eslint-disable no-shadow */
-describe('getPublicNames', () => {
+describe.only('getPublicNames', () => {
   let app;
   let xorname;
   const TYPE_TAG = 15639;
@@ -40,9 +40,7 @@ describe('getPublicNames', () => {
 
   it('should return empty array of getPublicNames when none set', async () => {
     const authedApp = await h.publicNamesTestApp;
-
-    let names;
-    names = await authedApp.web.getPublicNames();
+    const names = await authedApp.web.getPublicNames();
 
     should(names).be.a.Array();
     should(names).have.length(0);
@@ -50,7 +48,6 @@ describe('getPublicNames', () => {
 
 
   it('should return the array of getPublicNames', async () => {
-
     const authedApp = await h.publicNamesTestApp;
     const profile = {
       uri: 'safe://mywebid.gabriel',
@@ -72,11 +69,9 @@ describe('getPublicNames', () => {
 
     should(names).have.length(3);
   });
-
 });
 
 
-/* eslint-disable no-shadow */
 describe.only('createPublicName', () => {
   let app;
   let authedApp;
@@ -87,8 +82,7 @@ describe.only('createPublicName', () => {
     app = await h.createAuthenticatedTestApp();
     const xorname = h.createRandomXorName();
     md = await authedApp.mutableData.newPublic(xorname, TYPE_TAG);
-    fakeSubdomainRDF = await md.getNameAndTag()
-
+    fakeSubdomainRDF = await md.getNameAndTag();
   });
 
   it('should throw when a non string URL is passed',
@@ -101,7 +95,7 @@ describe.only('createPublicName', () => {
     }
   });
 
-it('should throw when no RDF location is provided',
+  it('should throw when no RDF location is provided',
   async () => {
     try {
       await authedApp.web.createPublicName('llll', {});
@@ -111,7 +105,7 @@ it('should throw when no RDF location is provided',
     }
   });
 
-it('should throw when authedApp perms are not given for _publicNames',
+  it('should throw when authedApp perms are not given for _publicNames',
   async () => {
     try {
       await app.web.createPublicName('llll', fakeSubdomainRDF);
@@ -121,15 +115,63 @@ it('should throw when authedApp perms are not given for _publicNames',
   });
 
   it('should create a publicName', async () => {
-
-    await authedApp.web.createPublicName('thisIsATestDomain', fakeSubdomainRDF )
+    await authedApp.web.createPublicName('thisIsATestDomain', fakeSubdomainRDF);
     const names = await authedApp.web.getPublicNames();
 
     should(names).be.a.Array();
+    should(names).containDeep(['safe://_publicNames#thisIsATestDomain']);
+  });
+});
 
-    // TODO: Will the array always be 3?
-    should(names[2]).equal('safe://_publicNames#thisIsATestDomain');
-    should(names).have.length(3);
+
+
+describe.only('addServiceToSubdomain', () => {
+  let app;
+  let authedApp;
+  let md;
+  let fakeServiceRDF;
+  before(async () => {
+    authedApp = await h.publicNamesTestApp;
+    app = await h.createAuthenticatedTestApp();
+    const xorname = h.createRandomXorName();
+    md = await authedApp.mutableData.newPublic(xorname, TYPE_TAG);
+    fakeServiceRDF = await md.getNameAndTag();
   });
 
+  it('should throw when a non string subdomain is passed',
+  async () => {
+    try {
+      await authedApp.web.addServiceToSubdomain({}, 'sss', {});
+    } catch (e) {
+      should(e.message).match(errConst.INVALID_SUBDOMAIN.msg);
+      should(e.code).match(errConst.INVALID_SUBDOMAIN.code);
+    }
+  });
+
+  it('should throw when no RDF location is provided',
+  async () => {
+    try {
+      await authedApp.web.addServiceToSubdomain('llll', 'aaaaa' ,{});
+    } catch (e) {
+      should(e.message).match(errConst.INVALID_RDF_LOCATION.msg);
+      should(e.code).match(errConst.INVALID_RDF_LOCATION.code);
+    }
+  });
+
+  it('should throw when authedApp perms are not given for _publicNames',
+  async () => {
+    try {
+      await app.web.addServiceToSubdomain('llll', 'laaaa', fakeServiceRDF);
+    } catch (e) {
+      should(e.message).match(/_publicNames/);
+    }
+  });
+
+  it('should return a subdomain MD location', async () => {
+    const location = await authedApp.web.addServiceToSubdomain('thisIsATestDomain', 'domaiin', fakeServiceRDF);
+
+    should(location).be.a.Object();
+    should(location).have.property('typeTag');
+    should(location).have.property('name');
+  });
 });

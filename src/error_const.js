@@ -359,5 +359,17 @@ module.exports = {
   INVALID_RDF_LOCATION: {
     code: 1021,
     msg: 'RDF Location _must_ be an object of the form { name, typeTag }.'
+  },
+
+  /**
+   * @name @INVALID_SUBDOMAIN
+   * @type {Object}
+   * @description RDF Location provided is not and object with name/typeTag
+   * @property {number} code 1021
+   * @property {function} msg
+   */
+  INVALID_SUBDOMAIN: {
+    code: 1022,
+    msg: 'A subdomain string _must_ be passed for adding services to a publicName.'
   }
 };

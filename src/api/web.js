@@ -24,6 +24,11 @@ class WebInterface {
     this.app = app;
   }
 
+  /**
+   * Retrieve vocab for RDF/SAFE Implementation of DNS (publicNames/subDomains/services)
+   * @param  {RDF} rdf RDF object to utilise for namespace func
+   * @return {Object}  object containing keys with RDF namespace values.
+   */
   getVocabs(rdf) {
     return {
       LDP: rdf.namespace('http://www.w3.org/ns/ldp#'),
@@ -36,6 +41,13 @@ class WebInterface {
     };
   }
 
+  /**
+   * Add entry to _publicNames container, linking to a specific RDF/MD
+   * object for subdomain discovery/service resolution.catch
+   * @param  {String}  publicName            string, valid URL
+   * @param  {Object}  subdomainsRdfLocation MutableData name/typeTag
+   * @return {Promise}                       resolves upon commit of data to _publicNames
+   */
   async createPublicName(publicName, subdomainsRdfLocation) {
     if (typeof subdomainsRdfLocation !== 'object' ||
         !subdomainsRdfLocation.name || !subdomainsRdfLocation.typeTag) {
@@ -74,6 +86,64 @@ class WebInterface {
     publicNamesRdf.add(newResourceName, vocabs.SAFETERMS('typeTag'), publicNamesRdf.literal(subdomainsRdfLocation.typeTag.toString()));
 
     await publicNamesRdf.commit();
+  }
+
+  async addServiceToSubdomain(subdomain, publicName, serviceLocation) {
+
+    if (typeof subdomain !== 'string') throw makeError(errConst.INVALID_SUBDOMAIN.code, errConst.INVALID_SUBDOMAIN.msg);
+    if (typeof publicName !== 'string') throw makeError(errConst.INVALID_URL.code, errConst.INVALID_URL.msg);
+
+    if (typeof serviceLocation !== 'object' ||
+        !serviceLocation.name || !serviceLocation.typeTag) {
+      throw makeError(errConst.INVALID_RDF_LOCATION.code, errConst.INVALID_RDF_LOCATION.msg);
+    }
+
+
+    const app = this.app;
+    const subdomainLocation = await app.crypto.sha3Hash(publicName);
+    const subdomainsContainer =
+      await app.mutableData.newPublic(subdomainLocation, consts.TAG_TYPE_DNS);
+
+    try {
+      await subdomainsContainer.quickSetup();
+    } catch (err) {
+      // If the subdomain container already exists we are then ok
+      if (err.code !== errConst.ERR_DATA_GIVEN_ALREADY_EXISTS.code) {
+        throw err;
+      }
+    }
+
+    const subdomainsRdf = subdomainsContainer.emulateAs('rdf');
+    const vocabs = this.getVocabs(subdomainsRdf);
+
+    // add to or create subdomain container.
+    const fullUri = `safe://${publicName}`;
+    // TODO: parse the uri to extract the subdomain
+
+    const id = subdomainsRdf.sym(fullUri);
+    subdomainsRdf.setId(fullUri);
+    const uriWithHashTag = subdomainsRdf.sym(`${fullUri}#it`);
+    const serviceResource = subdomainsRdf.sym(`safe://${subdomain}.${publicName}`);
+
+    subdomainsRdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
+    subdomainsRdf.add(id, vocabs.LDP('membershipResource'), uriWithHashTag);
+    subdomainsRdf.add(id, vocabs.LDP('hasMemberRelation'), vocabs.SAFETERMS('hasService'));
+    subdomainsRdf.add(id, vocabs.DCTERMS('title'), subdomainsRdf.literal(`Services Container for subdomain: '${publicName}'`));
+    subdomainsRdf.add(id, vocabs.DCTERMS('description'), subdomainsRdf.literal('List of public services exposed by a particular subdomain'));
+    subdomainsRdf.add(id, vocabs.LDP('contains'), serviceResource);
+
+    subdomainsRdf.add(uriWithHashTag, vocabs.RDFS('type'), vocabs.SAFETERMS('Services'));
+    subdomainsRdf.add(uriWithHashTag, vocabs.DCTERMS('title'), subdomainsRdf.literal(`Services available for subdomain: '${publicName}'`));
+    subdomainsRdf.add(uriWithHashTag, vocabs.SAFETERMS('hasService'), serviceResource);
+
+    subdomainsRdf.add(serviceResource, vocabs.RDFS('type'), vocabs.SAFETERMS('Service'));
+    subdomainsRdf.add(serviceResource, vocabs.DCTERMS('title'), subdomainsRdf.literal(`'${subdomain}' service`));
+    subdomainsRdf.add(serviceResource, vocabs.SAFETERMS('xorName'), subdomainsRdf.literal(serviceLocation.name.toString()));
+    subdomainsRdf.add(serviceResource, vocabs.SAFETERMS('typeTag'), subdomainsRdf.literal(serviceLocation.typeTag.toString()));
+
+    const location = subdomainsRdf.commit();
+
+    return location;
   }
 
   /**
