@@ -89,7 +89,6 @@ class WebInterface {
   }
 
   async addServiceToSubdomain(subdomain, publicName, serviceLocation) {
-
     if (typeof subdomain !== 'string') throw makeError(errConst.INVALID_SUBDOMAIN.code, errConst.INVALID_SUBDOMAIN.msg);
     if (typeof publicName !== 'string') throw makeError(errConst.INVALID_URL.code, errConst.INVALID_URL.msg);
 

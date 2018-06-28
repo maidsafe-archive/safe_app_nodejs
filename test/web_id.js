@@ -14,7 +14,9 @@ const should = require('should');
 const h = require('./helpers');
 
 describe.only('WebID emulation', () => {
-  let app, md, xorname;
+  let app,
+    md,
+    xorname;
   const TYPE_TAG = 15639;
 
   beforeEach(async () => {
@@ -36,7 +38,7 @@ describe.only('WebID emulation', () => {
       nickname: 'bochaco',
       website: 'safe://mywebsite.gabriel',
       avatar: 'safe://mywebsite.gabriel/images/myavatar',
-    }
+    };
 
     await md.quickSetup({});
     const webId = await md.emulateAs('WebID');
@@ -53,7 +55,7 @@ describe.only('WebID emulation', () => {
       nickname: 'bochaco',
       website: 'safe://mywebsite.gabriel',
       avatar: 'safe://mywebsite.gabriel/images/myavatar',
-    }
+    };
 
     await md.quickSetup({});
     const webId = await md.emulateAs('WebID');
@@ -63,7 +65,7 @@ describe.only('WebID emulation', () => {
     const fetchedWebId = await newMd.emulateAs('WebID');
     await fetchedWebId.fetchContent();
     const serialised = await fetchedWebId.serialise('text/turtle');
-    //const serialised = await fetchedWebId.serialise('application/ld+json');
-    console.log("FETCHED WebID:", serialised)
+    // const serialised = await fetchedWebId.serialise('application/ld+json');
+    console.log('FETCHED WebID:', serialised);
   });
 });

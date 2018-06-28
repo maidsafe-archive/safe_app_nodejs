@@ -133,7 +133,6 @@ class SAFEApp extends EventEmitter {
    * @return {WebInterface} Manage Web RDF Data.
    */
   get web() {
-
     return this._web;
   }
 

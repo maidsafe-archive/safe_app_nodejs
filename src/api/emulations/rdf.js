@@ -34,10 +34,10 @@ class RDF {
       RDF: this.namespace('http://www.w3.org/2000/01/this-schema#'),
       RDFS: this.namespace('http://www.w3.org/1999/02/22-this-syntax-ns#'),
       FOAF: this.namespace('http://xmlns.com/foaf/0.1/'),
-      OWL: this.namespace("http://www.w3.org/2002/07/owl#"),
+      OWL: this.namespace('http://www.w3.org/2002/07/owl#'),
       DCTERMS: this.namespace('http://purl.org/dc/terms/'),
-      SAFETERMS: this.namespace("http://safenetwork.org/safevocab/")
-    }
+      SAFETERMS: this.namespace('http://safenetwork.org/safevocab/')
+    };
   }
 
   setId(id) {
@@ -51,10 +51,10 @@ class RDF {
     let entriesList = [];
     if (ids && ids.length > 0) {
       // TODO: support a list of more than one id
-      //Promise.all(ids.map(async (e) => {
-        const serialisedGraph = await this.mData.get(ids[0]);
-        entriesList.push({ key: ids[0], value: serialisedGraph });
-      //}));
+      // Promise.all(ids.map(async (e) => {
+      const serialisedGraph = await this.mData.get(ids[0]);
+      entriesList.push({ key: ids[0], value: serialisedGraph });
+      // }));
     } else {
       const entries = await this.mData.getEntries();
       entriesList = await entries.listEntries();
@@ -64,7 +64,7 @@ class RDF {
     entriesList.forEach((e) => {
       const keyStr = e.key.toString();
       const valueStr = e.value.buf.toString();
-      let valueObj = JSON.parse(valueStr);
+      const valueObj = JSON.parse(valueStr);
       if (!id) { // FIXME: we need to know which is the main graph in a deterministic way
         id = valueObj[RDF_GRAPH_ID];
       }
@@ -117,7 +117,7 @@ class RDF {
         }
         this.setId(id);
         resolve(parsed);
-      }
+      };
 
       try {
         // since we provide a callback then parse becomes async
@@ -139,7 +139,7 @@ class RDF {
           return reject(err);
         }
         resolve(parsed);
-      }
+      };
       // TODO: serialise it with compact when is jsonld
       rdflib.serialize(null, this.graphStore, this.id, mimeType, cb);
     });
@@ -153,7 +153,7 @@ class RDF {
     const serialJsonLd = await this.serialise(JSON_LD_MIME_TYPE);
     const graphs = JSON.parse(serialJsonLd);
     const entries = await this.mData.getEntries();
-    let entriesList = await entries.listEntries();
+    const entriesList = await entries.listEntries();
     const mutation = await this.mData.app.mutableData.newMutation();
     graphs.forEach((e, i) => {
       const key = e[RDF_GRAPH_ID];

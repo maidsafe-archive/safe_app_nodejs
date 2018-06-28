@@ -14,26 +14,28 @@ const should = require('should');
 const h = require('./helpers');
 
 describe('RDF emulation', () => {
-  let app, md, xorname;
+  let app,
+    md,
+    xorname;
   const TYPE_TAG = 15639;
   const myUri = 'safe://manu';
   const myJsonLd = {
-    "@context": {
-      "name": "http://schema.org/name",
-      "homepage": {
-        "@id": "http://schema.org/url",
-        "@type": "@id"
+    '@context': {
+      name: 'http://schema.org/name',
+      homepage: {
+        '@id': 'http://schema.org/url',
+        '@type': '@id'
       },
-      "image": {
-        "@id": "http://schema.org/image",
-        "@type": "@id"
+      image: {
+        '@id': 'http://schema.org/image',
+        '@type': '@id'
       }
     },
-    "@id": myUri,
-    "name": "Manu Sporny",
-    "homepage": "http://manu.sporny.org/",
-    "image": "http://manu.sporny.org/images/manu.png"
-  }
+    '@id': myUri,
+    name: 'Manu Sporny',
+    homepage: 'http://manu.sporny.org/',
+    image: 'http://manu.sporny.org/images/manu.png'
+  };
 
   beforeEach(async () => {
     app = await h.createAuthenticatedTestApp();
@@ -49,11 +51,11 @@ describe('RDF emulation', () => {
 
   it('create RDF emulation from MD which already contains triples', async () => {
     const rawJsonLd = {
-      "@id": "safe://manu",
-      "http://schema.org/image": JSON.stringify([{"@id":"http://manu.sporny.org/images/manu.png"}]),
-      "http://schema.org/name": JSON.stringify([{"@value":"Manu Sporny"}]),
-      "http://schema.org/url": JSON.stringify([{"@id":"http://manu.sporny.org/"}]),
-      "http://xmlns.com/foaf/0.1/knows": JSON.stringify([{"@value":"Gabriel"},{"@value":"Josh"}])
+      '@id': 'safe://manu',
+      'http://schema.org/image': JSON.stringify([{ '@id': 'http://manu.sporny.org/images/manu.png' }]),
+      'http://schema.org/name': JSON.stringify([{ '@value': 'Manu Sporny' }]),
+      'http://schema.org/url': JSON.stringify([{ '@id': 'http://manu.sporny.org/' }]),
+      'http://xmlns.com/foaf/0.1/knows': JSON.stringify([{ '@value': 'Gabriel' }, { '@value': 'Josh' }])
     };
     await md.quickSetup(rawJsonLd);
 
@@ -61,7 +63,7 @@ describe('RDF emulation', () => {
     const rdf = await md.emulateAs('rdf');
     await rdf.nowOrWhenFetched();
     const jsonld = await rdf.serialise('application/ld+json');
-    console.log("JSON-LD:", jsonld)
+    console.log('JSON-LD:', jsonld);
   });
 
   it('parse a Turtle document', async () => {
@@ -83,11 +85,11 @@ describe('RDF emulation', () => {
     await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const me = rdf.sym(myUri);
-    rdf.add(me, FOAF('knows'), "Josh");
-    rdf.add(me, FOAF('knows'), "Gabriel");
+    rdf.add(me, FOAF('knows'), 'Josh');
+    rdf.add(me, FOAF('knows'), 'Gabriel');
 
-    const friend = rdf.any(me, FOAF('knows'), undefined)
-    console.log(friend)
+    const friend = rdf.any(me, FOAF('knows'), undefined);
+    console.log(friend);
   });
 
   it('add triples and find with each', async () => {
@@ -96,13 +98,13 @@ describe('RDF emulation', () => {
     await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const me = rdf.sym(myUri);
-    rdf.add(me, FOAF('knows'), "Josh");
-    rdf.add(me, FOAF('knows'), "Gabriel");
+    rdf.add(me, FOAF('knows'), 'Josh');
+    rdf.add(me, FOAF('knows'), 'Gabriel');
 
-    const friends = rdf.each(me, FOAF('knows'), undefined)
-    for (var i=0; i<friends.length;i++) {
-        friend = friends[i]
-        console.log(friend)
+    const friends = rdf.each(me, FOAF('knows'), undefined);
+    for (let i = 0; i < friends.length; i++) {
+      friend = friends[i];
+      console.log(friend);
     }
   });
 
@@ -112,13 +114,13 @@ describe('RDF emulation', () => {
     await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const me = rdf.sym(myUri);
-    rdf.add(me, FOAF('knows'), "Josh");
-    rdf.add(me, FOAF('knows'), "Gabriel");
+    rdf.add(me, FOAF('knows'), 'Josh');
+    rdf.add(me, FOAF('knows'), 'Gabriel');
 
-    const friends = rdf.statementsMatching(undefined, FOAF('knows'), undefined)
-    for (var i=0; i<friends.length;i++) {
-        friend = friends[i]
-        console.log(friend)
+    const friends = rdf.statementsMatching(undefined, FOAF('knows'), undefined);
+    for (let i = 0; i < friends.length; i++) {
+      friend = friends[i];
+      console.log(friend);
     }
   });
 
@@ -129,13 +131,13 @@ describe('RDF emulation', () => {
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const XSD = rdf.namespace('http://www.w3.org/2001/XMLSchema#');
     const me = rdf.sym(myUri);
-    const birthday = rdf.literal('1977-06-30T10:00:00+00:00', '', XSD('dateTime'))
+    const birthday = rdf.literal('1977-06-30T10:00:00+00:00', '', XSD('dateTime'));
     rdf.add(me, FOAF('birthday'), birthday);
 
-    const friends = rdf.each(me, FOAF('birthday'), undefined)
-    for (var i=0; i<friends.length;i++) {
-        friend = friends[i]
-        console.log(friend)
+    const friends = rdf.each(me, FOAF('birthday'), undefined);
+    for (let i = 0; i < friends.length; i++) {
+      friend = friends[i];
+      console.log(friend);
     }
   });
 
@@ -145,23 +147,23 @@ describe('RDF emulation', () => {
     await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const me = rdf.sym(myUri);
-    rdf.add(me, FOAF('knows'), "Josh");
-    rdf.add(me, FOAF('knows'), "Gabriel");
+    rdf.add(me, FOAF('knows'), 'Josh');
+    rdf.add(me, FOAF('knows'), 'Gabriel');
 
     rdf.removeMany(undefined, FOAF('knows'), undefined);
-    const friend = rdf.any(me, FOAF('knows'), undefined)
-    console.log(friend)
+    const friend = rdf.any(me, FOAF('knows'), undefined);
+    console.log(friend);
   });
 
   it('add triples and commit them', async () => {
-    await md.quickSetup({"@id": "asas", "bbbb": "b2b2b2b"});
+    await md.quickSetup({ '@id': 'asas', bbbb: 'b2b2b2b' });
     const rdf = await md.emulateAs('rdf');
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const me = rdf.sym(myUri);
 
     await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
-    rdf.add(me, FOAF('knows'), "Josh");
-    rdf.add(me, FOAF('knows'), "Gabriel");
+    rdf.add(me, FOAF('knows'), 'Josh');
+    rdf.add(me, FOAF('knows'), 'Gabriel');
 
     await rdf.commit();
 
@@ -169,7 +171,7 @@ describe('RDF emulation', () => {
     const entries = await md2.getEntries();
     const entriesList = await entries.listEntries();
 
-    entriesList.forEach((e) => console.log("ENTRY:", e.key.toString(), e.value.buf.toString(), e.value.version))
+    entriesList.forEach((e) => console.log('ENTRY:', e.key.toString(), e.value.buf.toString(), e.value.version));
   });
 
   it('parse JSON-LD RDF and serialise it as Turtle', async () => {
@@ -179,36 +181,36 @@ describe('RDF emulation', () => {
     const me = rdf.sym(myUri);
 
     await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
-    rdf.add(me, FOAF('knows'), "Josh");
-    rdf.add(me, FOAF('knows'), "Gabriel");
+    rdf.add(me, FOAF('knows'), 'Josh');
+    rdf.add(me, FOAF('knows'), 'Gabriel');
 
     const turtle = await rdf.serialise('text/turtle');
-    console.log("Turtle:", turtle)
+    console.log('Turtle:', turtle);
   });
 
   it('parse Turtle RDF and serialise it as JSON-LD', async () => {
     await md.quickSetup({});
     const rdf = await md.emulateAs('rdf');
-    const turtle = "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\
+    const turtle = '@prefix foaf: <http://xmlns.com/foaf/0.1/> .\
                     @prefix anything: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\
                     \
                     <> anything:type foaf:PersonalProfileDocument ;\
                       foaf:maker <#me> ;\
                       foaf:primaryTopic <#me> .\
                     <#me> a foaf:Person ;\
-                      foaf:name \"Bob\" .";
+                      foaf:name "Bob" .';
 
-    const turtle2 = "@prefix dcterms: <http://purl.org/dc/terms/> .\
+    const turtle2 = '@prefix dcterms: <http://purl.org/dc/terms/> .\
                     @prefix ldp: <http://www.w3.org/ns/ldp#> .\
                     \
                     <http://example.org/alice/> a ldp:Container, ldp:BasicContainer;\
-                      dcterms:title \"Alice’s data storage on the Web\" ;\
-                      ldp:contains <http://example.org/alice/foaf> . ";
+                      dcterms:title "Alice’s data storage on the Web" ;\
+                      ldp:contains <http://example.org/alice/foaf> . ';
 
 
     await rdf.parse(turtle2, 'text/turtle', myUri);
 
     const jsonld = await rdf.serialise('application/ld+json');
-    console.log("JSON-LD:", jsonld)
+    console.log('JSON-LD:', jsonld);
   });
 });

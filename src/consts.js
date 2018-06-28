@@ -116,7 +116,7 @@ const PUBLIC_NAMES = {
     INVALID_SERVICE_NAME: -10007,
     ENTRY_VALUE_NOT_EMPTY: -10008,
   }
-}
+};
 
 const SAFE_APP_LIB_FILENAME = {
   win32: 'safe_app.dll',

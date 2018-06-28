@@ -124,7 +124,6 @@ describe.only('createPublicName', () => {
 });
 
 
-
 describe.only('addServiceToSubdomain', () => {
   let app;
   let authedApp;
@@ -151,7 +150,7 @@ describe.only('addServiceToSubdomain', () => {
   it('should throw when no RDF location is provided',
   async () => {
     try {
-      await authedApp.web.addServiceToSubdomain('llll', 'aaaaa' ,{});
+      await authedApp.web.addServiceToSubdomain('llll', 'aaaaa', {});
     } catch (e) {
       should(e.message).match(errConst.INVALID_RDF_LOCATION.msg);
       should(e.code).match(errConst.INVALID_RDF_LOCATION.code);

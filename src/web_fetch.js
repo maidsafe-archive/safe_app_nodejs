@@ -11,7 +11,7 @@ async function readPublicIdAsRdf(servicesContainer, pubName, servName) {
   let serviceMd;
   try {
     const graphId = `safe://${servName}.${pubName}`;
-    console.log("Looking up graph ID:", graphId)
+    console.log('Looking up graph ID:', graphId);
     const rdfEmulation = await servicesContainer.emulateAs('rdf');
     await rdfEmulation.nowOrWhenFetched([graphId]);
     const SAFETERMS = rdfEmulation.namespace('http://safenetwork.org/safevocab/');
@@ -33,7 +33,8 @@ async function readPublicIdAsRdf(servicesContainer, pubName, servName) {
 // Helper function to fetch the Container
 // from a public ID and service name provided
 async function getContainerFromPublicId(pubName, servName) {
-  let servicesContainer, serviceInfo;
+  let servicesContainer,
+    serviceInfo;
   try {
     const address = await this.crypto.sha3Hash(pubName);
     servicesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
@@ -243,7 +244,7 @@ async function webFetch(url, options) {
             //'Accept-Post': 'text/turtle, application/ld+json, application/rdf+xml, application/nquads'
           },
           body: serialisedRdf
-        }
+        };
         resolve(response);
       } else {
         const emulation = await serviceMd.emulateAs('NFS');

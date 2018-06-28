@@ -103,7 +103,7 @@ describe('Browsing', () => {
       nickname: 'bochaco',
       website: 'safe://mywebsite.gabriel',
       avatar: 'safe://mywebsite.gabriel/images/myavatar',
-    }
+    };
 
     xorname = h.createRandomXorName();
     md = await app.mutableData.newPublic(xorname, TYPE_TAG);
@@ -112,11 +112,11 @@ describe('Browsing', () => {
     await webId.create(profile);
 
     // let's fetch it now
-    //const options = { Accept: 'text/turtle' }
-    const options = { accept: 'application/ld+json' }
-    //const options = { accept: 'application/rdf+xml' }
+    // const options = { Accept: 'text/turtle' }
+    const options = { accept: 'application/ld+json' };
+    // const options = { accept: 'application/rdf+xml' }
     const turtleWebId = await unregisteredApp.webFetch(profile.uri, options);
-    console.log("FETCHED WebID:", turtleWebId)
+    console.log('FETCHED WebID:', turtleWebId);
   });
 
   it('returns rejected promise if no url is provided', () => {
