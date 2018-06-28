@@ -112,10 +112,12 @@ class RDF {
   parse(data, mimeType, id) {
     return new Promise((resolve, reject) => {
       const cb = (err, parsed) => {
+
         if (err) {
           return reject(err);
         }
         this.setId(id);
+        // console.log('PARSED!?!?!?!?', parsed)
         resolve(parsed);
       };
 

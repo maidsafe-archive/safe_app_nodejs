@@ -90,7 +90,8 @@ class WebID {
     await this.rdf.nowOrWhenFetched();
   }
 
-  async create(profile) {
+  // TODO: displayname = nickname?
+  async create(profile, displayName) {
     const app = this.mData.app;
 
     // TODO: support for URIs containing a path, e.g. safe://mywebid.gabriel/card
@@ -103,10 +104,18 @@ class WebID {
     // TODO: Do we create the md in here? Is it needed quicksetup outside?
     const webIdLocation = await createWebIdProfileDoc(this.rdf, this.vocabs, profile);
 
+    // const webIdLocation = webIdProfileObject.location;
+    // const webIdRdf = webIdProfileObject.rdf;
+
+    // TODO: grab name and add displayName here...
+    await app.web.addWebIdToDirectory(webIdLocation, displayName);
+
     const subdomainsRdfLocation =
       await app.web.addServiceToSubdomain(subdomain, publicName, webIdLocation);
 
     await app.web.createPublicName(publicName, subdomainsRdfLocation);
+
+    // return webIdProfileObject;
   }
 
   async update(profile) {

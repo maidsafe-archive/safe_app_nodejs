@@ -17,11 +17,19 @@ const errConst = require('../src/error_const');
 
 const TYPE_TAG = 15689;
 
-/* eslint-disable no-shadow */
+const profile = {
+  uri: 'safe://mywebid.gabriel',
+  name: 'Gabriel Viganotti',
+  nickname: 'bochaco',
+  website: 'safe://mywebsite.gabriel',
+  avatar: 'safe://mywebsite.gabriel/images/myavatar',
+};
+
 describe.only('getPublicNames', () => {
   let app;
   let xorname;
   const TYPE_TAG = 15639;
+
 
   before(async () => {
     app = await h.createAuthenticatedTestApp();
@@ -40,34 +48,75 @@ describe.only('getPublicNames', () => {
 
   it('should return empty array of getPublicNames when none set', async () => {
     const authedApp = await h.publicNamesTestApp;
-    const names = await authedApp.web.getPublicNames();
-
-    should(names).be.a.Array();
-    should(names).have.length(0);
+    const webIds = await authedApp.web.getPublicNames();
+    //
+    // should(webIds).be.a.Array();
+    // should(webIds).have.length(0);
   });
 
 
   it('should return the array of getPublicNames', async () => {
     const authedApp = await h.publicNamesTestApp;
-    const profile = {
-      uri: 'safe://mywebid.gabriel',
-      name: 'Gabriel Viganotti',
-      nickname: 'bochaco',
-      website: 'safe://mywebsite.gabriel',
-      avatar: 'safe://mywebsite.gabriel/images/myavatar',
-    };
-
 
     const md = await authedApp.mutableData.newPublic(xorname, TYPE_TAG);
     await md.quickSetup({});
     const webId = await md.emulateAs('WebID');
     await webId.create(profile);
 
-    const names = await authedApp.web.getPublicNames();
+    const webIds = await authedApp.web.getPublicNames();
 
-    should(names).be.a.Array();
+    // should(webIds).be.a.Array();
+    //
+    // should(webIds).have.length(3);
+  });
+});
 
-    should(names).have.length(3);
+
+describe.only('getWebIds', () => {
+  let app;
+  let xorname;
+  const TYPE_TAG = 15639;
+
+  before(async () => {
+    app = await h.createAuthenticatedTestApp();
+    xorname = h.createRandomXorName();
+  });
+
+
+  it('should throw when app perms are not given for _public',
+    async () => {
+      try {
+        await app.web.getWebIds();
+      } catch (e) {
+        should(e.message).match(/\'_public\' not found/);
+      }
+    });
+
+  // not guaranteed none set.
+  // it('should return empty array of _public when none set', async () => {
+  //   const authedApp = await h.publicNamesTestApp;
+  //   const webIds = await authedApp.web.getWebIds();
+  //
+  //   should(webIds).be.a.Array();
+  //   should(webIds).have.length(0);
+  // });
+
+
+  it('should return an RDF representing webIds in the _public directory', async () => {
+    const authedApp = await h.publicNamesTestApp;
+
+    const md = await authedApp.mutableData.newPublic(xorname, TYPE_TAG);
+    await md.quickSetup({});
+    const webId = await md.emulateAs('WebID');
+    await webId.create({ ...profile, name: 'THISTEST' }, 'searchName');
+
+    const webIdsRdf = await authedApp.web.getWebIds();
+
+    const ourName = webIdsRdf.statementsMatching(undefined, webIdsRdf.vocabs.DCTERMS('title'), 'searchName');
+
+    should(webIdsRdf).be.a.Object();
+    should(ourName).be.a.Array();
+    should(ourName).have.length(1);
   });
 });
 
@@ -116,10 +165,10 @@ describe.only('createPublicName', () => {
 
   it('should create a publicName', async () => {
     await authedApp.web.createPublicName('thisIsATestDomain', fakeSubdomainRDF);
-    const names = await authedApp.web.getPublicNames();
+    const publicNames = await authedApp.web.getPublicNames();
 
-    should(names).be.a.Array();
-    should(names).containDeep(['safe://_publicNames#thisIsATestDomain']);
+    should(publicNames).be.a.Array();
+    should(publicNames).containDeep(['safe://_publicNames#thisIsATestDomain']);
   });
 });
 
@@ -172,5 +221,75 @@ describe.only('addServiceToSubdomain', () => {
     should(location).be.a.Object();
     should(location).have.property('typeTag');
     should(location).have.property('name');
+  });
+});
+
+
+describe.only('addWebIdToDirectory', () => {
+  let app;
+  let authedApp;
+  let md;
+  let fakeWebIdRdf;
+
+  before(async () => {
+    authedApp = await h.publicNamesTestApp;
+    app = await h.createAuthenticatedTestApp();
+    const xorname = h.createRandomXorName();
+    md = await authedApp.mutableData.newPublic(xorname, TYPE_TAG);
+    fakeWebIdRdf = await md.getNameAndTag();
+  });
+
+
+  it('should throw when no RDF location is provided',
+  async () => {
+    try {
+      await authedApp.web.addWebIdToDirectory({});
+    } catch (e) {
+      should(e.message).match(errConst.INVALID_RDF_LOCATION.msg);
+      should(e.code).match(errConst.INVALID_RDF_LOCATION.code);
+    }
+  });
+
+  it('should throw when authedApp perms are not given for _public',
+  async () => {
+    try {
+      await app.web.addWebIdToDirectory(fakeWebIdRdf);
+    } catch (e) {
+      should(e.message).match(/\'_public\' not found/);
+    }
+  });
+
+  it('should create a directory listing for the webId', async () => {
+    await authedApp.web.addWebIdToDirectory(fakeWebIdRdf, 'displayName...');
+
+    // todo. DO and check this in webId + tests.
+    const webIdsRdf = await authedApp.web.getWebIds();
+    const ourName = webIdsRdf.each(undefined, webIdsRdf.vocabs.SAFETERMS('xorName'));
+    // ourName.serialse();
+    // console.log('serial', await webIdsRdf.serialise('application/ld+json'))
+    ourName.forEach( name =>
+    {
+      console.log('OURNAME', name)
+    });
+
+  //   var parsedQuery = webIdsRdf.graph.SPARQLToQuery(
+  // // 'PREFIX foaf: <http://xmlns.com/foaf/0.1/> ' +
+  // 'SELECT * { ? foaf:name "Mickey Mouse"@en; foaf:knows ?other. }');
+
+
+    const answer = webIdsRdf.graph.query()
+    should(webIdsRdf).be.a.Object();
+    should(ourName).be.a.Array();
+    should(ourName).have.length(1);
+
+    // TODO: We cannot get from the RDF a specific title AND it's xorName :|
+
+
+    // should(webIds).be.a.Array();
+    // should(webIds).containDeep([`safe://_public/webId/${fakeWebIdRdf.name.toString()}`]);
+
+    // should(location).be.a.Object();
+    // should(location).have.property('typeTag');
+    // should(location).have.property('name');
   });
 });

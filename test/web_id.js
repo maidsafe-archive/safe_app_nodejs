@@ -68,4 +68,22 @@ describe.only('WebID emulation', () => {
     // const serialised = await fetchedWebId.serialise('application/ld+json');
     console.log('FETCHED WebID:', serialised);
   });
+
+  it('fetch existing WebID via webId directory', async () => {
+    const profile = {
+      uri: 'safe://mywebid.gabriel',
+      name: 'Gabriel Viganotti',
+      nickname: 'bochaco',
+      website: 'safe://mywebsite.gabriel',
+      avatar: 'safe://mywebsite.gabriel/images/myavatar',
+    };
+
+    await md.quickSetup({});
+    const webId = await md.emulateAs('WebID');
+    await webId.create(profile);
+
+    const webIds = await app.web.getWebIds();
+    // should(webIds).containDeep([`safe://_public/webId/`]);
+
+  });
 });

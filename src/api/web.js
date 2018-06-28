@@ -160,14 +160,87 @@ class WebInterface {
     entriesList.forEach((entry) => {
       const key = entry.key.toString();
       const value = entry.value.buf.toString();
-      console.log('Key: ', key);
-      console.log('Value: ', value);
       publicNamesArray.push(key);
     });
 
     return publicNamesArray;
   }
 
+
+  async addWebIdToDirectory(webIdLocation, displayName) {
+    const app = this.app;
+
+    if (typeof webIdLocation !== 'object' ||
+        !webIdLocation.name || !webIdLocation.typeTag) {
+      throw makeError(errConst.INVALID_RDF_LOCATION.code, errConst.INVALID_RDF_LOCATION.msg);
+    }
+
+    console.log('ADDINF DISPLAYYYY', displayName)
+    // could be any dir MD...
+    const directory = await app.auth.getContainer('_public');
+    // does this as RDF affect? ... Should we? why/whynot?
+    const directoryRDF = await directory.emulateAs('rdf');
+    const vocabs = this.getVocabs(directoryRDF);
+
+    const graphName = 'safe://_public/webId'; // TODO: this graph name is not a valid URI on the SAFE network
+    const id = directoryRDF.sym(graphName);
+    directoryRDF.setId(graphName);
+
+    const newResourceName = directoryRDF.sym(`${graphName}/${webIdLocation.name.toString()}`);
+
+    directoryRDF.add(id, vocabs.DCTERMS('title'), directoryRDF.literal('_public default container'));
+    directoryRDF.add(id, vocabs.DCTERMS('description'), directoryRDF.literal('Container to keep track of public data for the account'));
+
+    directoryRDF.add(newResourceName, vocabs.RDFS('type'), vocabs.FOAF('PersonalProfileDocument'));
+    directoryRDF.add(newResourceName, vocabs.DCTERMS('title'), directoryRDF.literal(`${displayName || ''}`));
+    directoryRDF.add(newResourceName, vocabs.SAFETERMS('xorName'), directoryRDF.literal(webIdLocation.name.toString()));
+    directoryRDF.add(newResourceName, vocabs.SAFETERMS('typeTag'), directoryRDF.literal(webIdLocation.typeTag.toString()));
+
+    await directoryRDF.commit();
+  }
+
+
+  async getWebIds() {
+    const app = this.app;
+
+    const directory = await app.auth.getContainer('_public');
+    let directoryRDF;
+    directoryRDF = directory.emulateAs('rdf');
+
+
+    const graphName = 'safe://_public/webId'; // TODO: this graph name is not a valid URI on the SAFE network
+    directoryRDF.setId(graphName);
+
+    const entries = await directory.getEntries();
+    const entriesList = await entries.listEntries();
+
+    // TODO: Encrypt/Decrypting.
+    const array = await entriesList.filter( entry => {
+      const key = entry.key.toString();
+      const value = entry.value.buf.toString();
+
+      return key.includes('/webId/') && value.length;
+
+    }).map( async (entry) => {
+      const key = entry.key.toString();
+      const value = entry.value.buf.toString();
+
+        console.log('String value:', value);
+
+        // TODO: This is _NOT_ added to the rdf graph as expected. The fault seems to be rdflib.js... using oollldd jsonld.js
+        let graf;
+        graf = await directoryRDF.parse(value, 'application/ld+json', graphName);
+        graf.statements.forEach( async (statement) =>
+        {
+          // console.log('statemennnt', statement)
+          await directoryRDF.add( statement.subject, statement.predicate , statement.object );
+
+        })
+      } );
+
+      await Promise.all(array);
+      return directoryRDF;
+  }
 }
 
 

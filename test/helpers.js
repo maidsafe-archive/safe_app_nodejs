@@ -60,7 +60,11 @@ const createRandomInvalidXor = () => crypto.randomBytes(30);
 const createRandomInvalidNonce = () => crypto.randomBytes(30);
 
 
-const publicNamesContainerPerms = { _publicNames: ['Insert', 'Update', 'Delete'] };
+const publicNamesContainerPerms = {
+  // _public as used for webId directory for now...
+  _public: ['Insert', 'Update', 'Delete'],
+  _publicNames: ['Insert', 'Update', 'Delete'],
+};
 
 const publicNamesTestApp = createAuthenticatedTestApp(null, publicNamesContainerPerms);
 
