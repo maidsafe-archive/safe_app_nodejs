@@ -214,8 +214,9 @@ class WebInterface {
     const entries = await directory.getEntries();
     const entriesList = await entries.listEntries();
 
+
     // TODO: Encrypt/Decrypting.
-    const array = await entriesList.filter( entry => {
+    const webIds = await entriesList.filter( entry => {
       const key = entry.key.toString();
       const value = entry.value.buf.toString();
 
@@ -225,21 +226,33 @@ class WebInterface {
       const key = entry.key.toString();
       const value = entry.value.buf.toString();
 
+        //parsing to get something to work with as RDF is not that helpful...
+        // perhaps sparql is needed to get it all...
+        // perhaps this is what we should be doing.. parsing out to being helpful?
+        // probably can be simplified via jsonLD compact encoding etc.
         console.log('String value:', value);
+        const json = JSON.parse( value );
+
+        return {
+          title: json['http://purl.org/dc/terms/title'][0]['@value'],
+          typeTag: json['http://safenetwork.org/safevocab/typeTag'][0]['@value'],
+          xorName: json['http://safenetwork.org/safevocab/xorName'][0]['@value']
+        }
 
         // TODO: This is _NOT_ added to the rdf graph as expected. The fault seems to be rdflib.js... using oollldd jsonld.js
-        let graf;
-        graf = await directoryRDF.parse(value, 'application/ld+json', graphName);
-        graf.statements.forEach( async (statement) =>
-        {
-          // console.log('statemennnt', statement)
-          await directoryRDF.add( statement.subject, statement.predicate , statement.object );
-
-        })
+        // let graf;
+        // graf = await directoryRDF.parse(value, 'application/ld+json', graphName);
+        // graf.statements.forEach( async (statement) =>
+        // {
+        //   console.log('statemennnt', statement)
+        //   // await directoryRDF.add( statement.subject, statement.predicate , statement.object );
+        //
+        // })
       } );
 
-      await Promise.all(array);
-      return directoryRDF;
+      return Promise.all(webIds);
+      // return webIds;
+      // return directoryRDF;
   }
 }
 

@@ -72,55 +72,6 @@ describe.only('getPublicNames', () => {
 });
 
 
-describe.only('getWebIds', () => {
-  let app;
-  let xorname;
-  const TYPE_TAG = 15639;
-
-  before(async () => {
-    app = await h.createAuthenticatedTestApp();
-    xorname = h.createRandomXorName();
-  });
-
-
-  it('should throw when app perms are not given for _public',
-    async () => {
-      try {
-        await app.web.getWebIds();
-      } catch (e) {
-        should(e.message).match(/\'_public\' not found/);
-      }
-    });
-
-  // not guaranteed none set.
-  // it('should return empty array of _public when none set', async () => {
-  //   const authedApp = await h.publicNamesTestApp;
-  //   const webIds = await authedApp.web.getWebIds();
-  //
-  //   should(webIds).be.a.Array();
-  //   should(webIds).have.length(0);
-  // });
-
-
-  it('should return an RDF representing webIds in the _public directory', async () => {
-    const authedApp = await h.publicNamesTestApp;
-
-    const md = await authedApp.mutableData.newPublic(xorname, TYPE_TAG);
-    await md.quickSetup({});
-    const webId = await md.emulateAs('WebID');
-    await webId.create({ ...profile, name: 'THISTEST' }, 'searchName');
-
-    const webIdsRdf = await authedApp.web.getWebIds();
-
-    const ourName = webIdsRdf.statementsMatching(undefined, webIdsRdf.vocabs.DCTERMS('title'), 'searchName');
-
-    should(webIdsRdf).be.a.Object();
-    should(ourName).be.a.Array();
-    should(ourName).have.length(1);
-  });
-});
-
-
 describe.only('createPublicName', () => {
   let app;
   let authedApp;
@@ -225,6 +176,60 @@ describe.only('addServiceToSubdomain', () => {
 });
 
 
+
+describe.only('getWebIds', () => {
+  let app;
+  let xorname;
+  const TYPE_TAG = 15639;
+
+  before(async () => {
+    app = await h.createAuthenticatedTestApp();
+    xorname = h.createRandomXorName();
+  });
+
+
+  it('should throw when app perms are not given for _public',
+    async () => {
+      try {
+        await app.web.getWebIds();
+      } catch (e) {
+        should(e.message).match(/\'_public\' not found/);
+      }
+    });
+
+  // not guaranteed none set.
+  // it('should return empty array of _public when none set', async () => {
+  //   const authedApp = await h.publicNamesTestApp;
+  //   const webIds = await authedApp.web.getWebIds();
+  //
+  //   should(webIds).be.a.Array();
+  //   should(webIds).have.length(0);
+  // });
+
+
+  it('should return an array representing webIds in the _public directory', async () => {
+    const authedApp = await h.publicNamesTestApp;
+
+    const md = await authedApp.mutableData.newPublic(xorname, TYPE_TAG);
+    await md.quickSetup({});
+    const webId = await md.emulateAs('WebID');
+    await webId.create({ ...profile, name: 'THISTEST' }, 'searchName');
+
+    // const webIdsRdf = await authedApp.web.getWebIds();
+    const webIds = await authedApp.web.getWebIds();
+
+    // const ourName = webIdsRdf.statementsMatching(undefined, webIdsRdf.vocabs.DCTERMS('title'), 'searchName');
+    should(webIds).be.a.Array();
+    should(webIds).have.length(1);
+    should(webIds).containDeep([{title:'searchName'}]);
+
+    // should(webIdsRdf).be.a.Object();
+    // should(ourName).be.a.Array();
+    // should(ourName).have.length(1);
+  });
+});
+
+
 describe.only('addWebIdToDirectory', () => {
   let app;
   let authedApp;
@@ -263,24 +268,23 @@ describe.only('addWebIdToDirectory', () => {
     await authedApp.web.addWebIdToDirectory(fakeWebIdRdf, 'displayName...');
 
     // todo. DO and check this in webId + tests.
-    const webIdsRdf = await authedApp.web.getWebIds();
-    const ourName = webIdsRdf.each(undefined, webIdsRdf.vocabs.SAFETERMS('xorName'));
-    // ourName.serialse();
-    // console.log('serial', await webIdsRdf.serialise('application/ld+json'))
-    ourName.forEach( name =>
-    {
-      console.log('OURNAME', name)
-    });
-
-  //   var parsedQuery = webIdsRdf.graph.SPARQLToQuery(
-  // // 'PREFIX foaf: <http://xmlns.com/foaf/0.1/> ' +
-  // 'SELECT * { ? foaf:name "Mickey Mouse"@en; foaf:knows ?other. }');
+    // const webIdsRdf = await authedApp.web.getWebIds();
+    const webIds = await authedApp.web.getWebIds();
 
 
-    const answer = webIdsRdf.graph.query()
-    should(webIdsRdf).be.a.Object();
-    should(ourName).be.a.Array();
-    should(ourName).have.length(1);
+    // const ourName = webIdsRdf.each(undefined, webIdsRdf.vocabs.SAFETERMS('xorName'));
+    // // ourName.serialse();
+    // // console.log('serial', await webIdsRdf.serialise('application/ld+json'))
+    // ourName.forEach( name =>
+    // {
+    //   console.log('OURNAME', name)
+    // });
+
+
+    // const answer = webIdsRdf.graph.query()
+    // should(webIdsRdf).be.a.Object();
+    should(webIds).be.a.Array();
+    should(webIds).have.length(1);
 
     // TODO: We cannot get from the RDF a specific title AND it's xorName :|
 
