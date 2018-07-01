@@ -365,11 +365,23 @@ module.exports = {
    * @name @INVALID_SUBDOMAIN
    * @type {Object}
    * @description RDF Location provided is not and object with name/typeTag
-   * @property {number} code 1021
+   * @property {number} code 1022
    * @property {function} msg
    */
   INVALID_SUBDOMAIN: {
     code: 1022,
     msg: 'A subdomain string _must_ be passed for adding services to a publicName.'
+  },
+
+  /**
+   * @name @MISSING_RDF_ID
+   * @type {Object}
+   * @description RDF object does not have an ID.
+   * @property {number} code 1023
+   * @property {function} msg
+   */
+  MISSING_RDF_ID: {
+    code: 1023,
+    msg: 'No ID has been found in the RDF graph.'
   }
 };

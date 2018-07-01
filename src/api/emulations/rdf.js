@@ -11,6 +11,8 @@
 // relating to use of the SAFE Network Software.
 
 const rdflib = require('rdflib');
+const errConst = require('../../error_const');
+const makeError = require('../../native/_error.js');
 
 const JSON_LD_MIME_TYPE = 'application/ld+json';
 const RDF_GRAPH_ID = '@id';
@@ -49,6 +51,8 @@ class RDF {
   // e.g. ['safe://mywebid.mypubname', 'safe://mypubname']
   async nowOrWhenFetched(ids) {
     let entriesList = [];
+    let entries;
+
     if (ids && ids.length > 0) {
       // TODO: support a list of more than one id
       // Promise.all(ids.map(async (e) => {
@@ -56,21 +60,40 @@ class RDF {
       entriesList.push({ key: ids[0], value: serialisedGraph });
       // }));
     } else {
-      const entries = await this.mData.getEntries();
+      entries = await this.mData.getEntries();
       entriesList = await entries.listEntries();
     }
-    const graphs = [];
+
     let id;
-    entriesList.forEach((e) => {
+    const entriesGraphs = entriesList.map( (e, i) => {
       const keyStr = e.key.toString();
       const valueStr = e.value.buf.toString();
-      const valueObj = JSON.parse(valueStr);
-      if (!id) { // FIXME: we need to know which is the main graph in a deterministic way
-        id = valueObj[RDF_GRAPH_ID];
+
+      if (!id) {
+        // FIXME: we need to know which is the main graph in a deterministic way
+        if (keyStr === RDF_GRAPH_ID) {
+          // incase of compacted.
+          id = valueStr;
+        } else {
+          id = JSON.parse(valueStr)[RDF_GRAPH_ID];
+        }
       }
-      graphs.push(valueObj);
+
+      let valueAsAStringForSure = valueStr;
+
+      if (typeof valueAsAStringForSure !== 'string') {
+        valueAsAStringForSure = JSON.stringify(valueAsAStringForSure);
+      }
+
+      return valueAsAStringForSure;
+
     });
-    await this.parse(JSON.stringify(graphs), JSON_LD_MIME_TYPE, id);
+
+    if (!id) {
+      throw makeError( errConst.MISSING_RDF_ID.code, errConst.MISSING_RDF_ID.msg);
+    }
+
+    return Promise.all( entriesGraphs.map( g => this.parse(g, JSON_LD_MIME_TYPE, id) ) )
   }
 
   namespace(uri) {
@@ -112,7 +135,6 @@ class RDF {
   parse(data, mimeType, id) {
     return new Promise((resolve, reject) => {
       const cb = (err, parsed) => {
-
         if (err) {
           return reject(err);
         }

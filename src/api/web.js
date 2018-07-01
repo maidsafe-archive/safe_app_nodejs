@@ -166,7 +166,11 @@ class WebInterface {
     return publicNamesArray;
   }
 
-
+  /**
+   * Adds a web id to the _public container, using
+   * @param  {[type]}  webIdLocation name/typetag object from SAFE MD.
+   * @param  {[type]}  displayName   optional displayName which will be used when listing webIds. (should fallback to nickname?)
+   */
   async addWebIdToDirectory(webIdLocation, displayName) {
     const app = this.app;
 
@@ -174,23 +178,37 @@ class WebInterface {
         !webIdLocation.name || !webIdLocation.typeTag) {
       throw makeError(errConst.INVALID_RDF_LOCATION.code, errConst.INVALID_RDF_LOCATION.msg);
     }
-
-    console.log('ADDINF DISPLAYYYY', displayName)
     // could be any dir MD...
     const directory = await app.auth.getContainer('_public');
     // does this as RDF affect? ... Should we? why/whynot?
     const directoryRDF = await directory.emulateAs('rdf');
+    let existingRDF = false;
     const vocabs = this.getVocabs(directoryRDF);
-
     const graphName = 'safe://_public/webId'; // TODO: this graph name is not a valid URI on the SAFE network
+
     const id = directoryRDF.sym(graphName);
+
     directoryRDF.setId(graphName);
+    try{
+
+      await directoryRDF.nowOrWhenFetched();
+      existingRDF = true;
+    }
+    catch(e)
+    {
+      // ignore no ID set incase nothing has been added yet.
+      if( e.code !== errConst.MISSING_RDF_ID.code ) throw new Error({code: e.code, message: e.message});
+    }
+
+    if( !existingRDF )
+    {
+      directoryRDF.add(id, vocabs.DCTERMS('title'), directoryRDF.literal('_public default container'));
+      directoryRDF.add(id, vocabs.DCTERMS('description'), directoryRDF.literal('Container to keep track of public data for the account'));
+    }
 
     const newResourceName = directoryRDF.sym(`${graphName}/${webIdLocation.name.toString()}`);
 
-    directoryRDF.add(id, vocabs.DCTERMS('title'), directoryRDF.literal('_public default container'));
-    directoryRDF.add(id, vocabs.DCTERMS('description'), directoryRDF.literal('Container to keep track of public data for the account'));
-
+    directoryRDF.add(newResourceName, vocabs.DCTERMS('identifier'), vocabs.FOAF(`safe://_public/webId/${webIdLocation.name.toString()}`));
     directoryRDF.add(newResourceName, vocabs.RDFS('type'), vocabs.FOAF('PersonalProfileDocument'));
     directoryRDF.add(newResourceName, vocabs.DCTERMS('title'), directoryRDF.literal(`${displayName || ''}`));
     directoryRDF.add(newResourceName, vocabs.SAFETERMS('xorName'), directoryRDF.literal(webIdLocation.name.toString()));
@@ -200,6 +218,11 @@ class WebInterface {
   }
 
 
+  /**
+   * Retrieve all webIds... Currently as array of JSON objects...
+   *
+   * @return {Promise} Resolves to array of webIds objects.
+   */
   async getWebIds() {
     const app = this.app;
 
@@ -214,11 +237,13 @@ class WebInterface {
     const entries = await directory.getEntries();
     const entriesList = await entries.listEntries();
 
-
     // TODO: Encrypt/Decrypting.
     const webIds = await entriesList.filter( entry => {
       const key = entry.key.toString();
       const value = entry.value.buf.toString();
+
+      // console.log('KEY', key)
+      // console.log('value', value)
 
       return key.includes('/webId/') && value.length;
 
@@ -230,7 +255,6 @@ class WebInterface {
         // perhaps sparql is needed to get it all...
         // perhaps this is what we should be doing.. parsing out to being helpful?
         // probably can be simplified via jsonLD compact encoding etc.
-        console.log('String value:', value);
         const json = JSON.parse( value );
 
         return {

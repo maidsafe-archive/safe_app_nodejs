@@ -25,7 +25,7 @@ const profile = {
   avatar: 'safe://mywebsite.gabriel/images/myavatar',
 };
 
-describe.only('getPublicNames', () => {
+describe('getPublicNames', () => {
   let app;
   let xorname;
   const TYPE_TAG = 15639;
@@ -72,7 +72,7 @@ describe.only('getPublicNames', () => {
 });
 
 
-describe.only('createPublicName', () => {
+describe('createPublicName', () => {
   let app;
   let authedApp;
   let md;
@@ -124,7 +124,7 @@ describe.only('createPublicName', () => {
 });
 
 
-describe.only('addServiceToSubdomain', () => {
+describe('addServiceToSubdomain', () => {
   let app;
   let authedApp;
   let md;
@@ -177,7 +177,7 @@ describe.only('addServiceToSubdomain', () => {
 
 
 
-describe.only('getWebIds', () => {
+describe('getWebIds', () => {
   let app;
   let xorname;
   const TYPE_TAG = 15639;
@@ -265,35 +265,77 @@ describe.only('addWebIdToDirectory', () => {
   });
 
   it('should create a directory listing for the webId', async () => {
-    await authedApp.web.addWebIdToDirectory(fakeWebIdRdf, 'displayName...');
+    const name1 = 'dirExists';
+    await authedApp.web.addWebIdToDirectory(fakeWebIdRdf, name1);
 
-    // todo. DO and check this in webId + tests.
-    // const webIdsRdf = await authedApp.web.getWebIds();
-    const webIds = await authedApp.web.getWebIds();
+    const directory = await authedApp.auth.getContainer('_public');
+    const directoryRDF = await directory.emulateAs('rdf');
 
+    await directoryRDF.nowOrWhenFetched();
 
-    // const ourName = webIdsRdf.each(undefined, webIdsRdf.vocabs.SAFETERMS('xorName'));
-    // // ourName.serialse();
-    // // console.log('serial', await webIdsRdf.serialise('application/ld+json'))
-    // ourName.forEach( name =>
-    // {
-    //   console.log('OURNAME', name)
-    // });
+    const serlialised = await directoryRDF.serialise('application/ld+json')
 
+    const parsed = JSON.parse(serlialised);
 
-    // const answer = webIdsRdf.graph.query()
-    // should(webIdsRdf).be.a.Object();
-    should(webIds).be.a.Array();
-    should(webIds).have.length(1);
+    should(directoryRDF).be.a.Object();
+    should(parsed).be.a.Object();
+    should(parsed).containDeep([{ "@id":"safe://_public/webId" }]);
 
-    // TODO: We cannot get from the RDF a specific title AND it's xorName :|
-
-
-    // should(webIds).be.a.Array();
-    // should(webIds).containDeep([`safe://_public/webId/${fakeWebIdRdf.name.toString()}`]);
-
-    // should(location).be.a.Object();
-    // should(location).have.property('typeTag');
-    // should(location).have.property('name');
   });
+
+
+    it('should create and store multiple webIds', async () => {
+      const name1 = 'displayName';
+      const xorname1 = h.createRandomXorName();
+      const md1 = await authedApp.mutableData.newPublic(xorname1, TYPE_TAG);
+      const fakeWebIdRdf1 = await md1.getNameAndTag();
+
+      await authedApp.web.addWebIdToDirectory(fakeWebIdRdf1, name1);
+
+      const name2 = 'displayName2...';
+      const xorname2 = h.createRandomXorName();
+      const md2 = await authedApp.mutableData.newPublic(xorname2, TYPE_TAG);
+      const fakeWebIdRdf2 = await md2.getNameAndTag();
+
+      await authedApp.web.addWebIdToDirectory(fakeWebIdRdf2, name2);
+
+      const name3 = 'displayName77772...';
+      const xorname3 = h.createRandomXorName();
+      const md3 = await authedApp.mutableData.newPublic(xorname3, TYPE_TAG);
+      const fakeWebIdRdf3 = await md3.getNameAndTag();
+
+      await authedApp.web.addWebIdToDirectory(fakeWebIdRdf3, name3);
+
+      // todo. DO and check this in webId + tests.
+      // const webIdsRdf = await authedApp.web.getWebIds();
+      const webIds = await authedApp.web.getWebIds();
+
+
+      // const ourName = webIdsRdf.each(undefined, webIdsRdf.vocabs.SAFETERMS('xorName'));
+      // // ourName.serialse();
+      // // console.log('serial', await webIdsRdf.serialise('application/ld+json'))
+      // ourName.forEach( name =>
+      // {
+      //   console.log('OURNAME', name)
+      // });
+
+
+      // const answer = webIdsRdf.graph.query()
+      // should(webIdsRdf).be.a.Object();
+      // TODO: We cannot get from the RDF a specific title AND it's xorName :|
+      should(webIds).be.a.Array();
+      should(webIds.length).be.above(3);
+      should(webIds).containDeep([{ title: name1 }]);
+      should(webIds).containDeep([{ title: name2 }]);
+      should(webIds).containDeep([{ title: name3 }]);
+
+
+
+      // should(webIds).be.a.Array();
+      // should(webIds).containDeep([`safe://_public/webId/${fakeWebIdRdf.name.toString()}`]);
+
+      // should(location).be.a.Object();
+      // should(location).have.property('typeTag');
+      // should(location).have.property('name');
+    });
 });

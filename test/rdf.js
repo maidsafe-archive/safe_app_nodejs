@@ -13,7 +13,7 @@
 const should = require('should');
 const h = require('./helpers');
 
-describe('RDF emulation', () => {
+describe.only('RDF emulation', () => {
   let app,
     md,
     xorname;
@@ -51,7 +51,10 @@ describe('RDF emulation', () => {
 
   it('create RDF emulation from MD which already contains triples', async () => {
     const rawJsonLd = {
-      '@id': 'safe://manu',
+      // FIXME: This is not the JSON that we actually have saved though...
+      // (though we want this style...)
+      // '@id': 'safe://nowOrWhenFetchedTest',
+      'safe://nowOrWhenFetchedTest':JSON.stringify( {"@id":"safe://_public/webId"} ),
       'http://schema.org/image': JSON.stringify([{ '@id': 'http://manu.sporny.org/images/manu.png' }]),
       'http://schema.org/name': JSON.stringify([{ '@value': 'Manu Sporny' }]),
       'http://schema.org/url': JSON.stringify([{ '@id': 'http://manu.sporny.org/' }]),
