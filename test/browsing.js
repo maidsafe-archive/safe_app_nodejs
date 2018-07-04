@@ -85,7 +85,7 @@ const removeFromMData = (md, key) => md.getEntries()
           .then(() => md.applyEntriesMutation(mut))
         )));
 
-const containersPermissions = { _public: ['Read', 'Insert'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
+const containersPermissions = { _public: ['Read', 'Insert'], _publicNames: ['Read', 'Insert'] };
 
 describe('Browsing', () => {
   let app;
@@ -96,13 +96,14 @@ describe('Browsing', () => {
   });
 
   it('fetch existing WebID', async () => {
+    const domain = `test_${Math.round(Math.random() * 100000)}`;
     const TYPE_TAG = 15639;
     const profile = {
-      uri: 'safe://mywebid.gabriel',
+      uri: `safe://mywebid.${domain}`,
       name: 'Gabriel Viganotti',
       nickname: 'bochaco',
-      website: 'safe://mywebsite.gabriel',
-      avatar: 'safe://mywebsite.gabriel/images/myavatar',
+      website: `safe://mywebsite.${domain}`,
+      avatar: `safe://mywebsite.${domain}/images/myavatar`,
     };
 
     xorname = h.createRandomXorName();
@@ -116,7 +117,27 @@ describe('Browsing', () => {
     const options = { accept: 'application/ld+json' };
     // const options = { accept: 'application/rdf+xml' }
     const turtleWebId = await unregisteredApp.webFetch(profile.uri, options);
-    console.log('FETCHED WebID:', turtleWebId);
+  });
+
+  it('retrieving WebID object from URI', async () => {
+    const domain = `test_${Math.round(Math.random() * 100000)}`;
+    const TYPE_TAG = 15639;
+    const profile = {
+      uri: `safe://mywebid.${domain}`,
+      name: 'Gabriel Viganotti',
+      nickname: 'bochaco',
+      website: `safe://mywebsite.${domain}`,
+      avatar: `safe://mywebsite.${domain}/images/myavatar`,
+    };
+
+    xorname = h.createRandomXorName();
+    md = await app.mutableData.newPublic(xorname, TYPE_TAG);
+    await md.quickSetup({});
+    const webId = await md.emulateAs('WebID');
+    await webId.create(profile);
+
+    const webIdObj = await unregisteredApp.fetch(profile.uri);
+    should(webIdObj.type).be.equal('RDF');
   });
 
   it('returns rejected promise if no url is provided', () => {

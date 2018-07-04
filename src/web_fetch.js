@@ -184,6 +184,35 @@ const readContentFromFile = async (openedFile, defaultMimeType, opts) => {
   return response;
 };
 
+async function fetch(url, options) {
+  if (!url) return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
+
+  const parsedUrl = parseUrl(url);
+  const hostname = parsedUrl.hostname;
+  let path = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
+  const tokens = path.split('/');
+  if (!tokens[tokens.length - 1] && tokens.length > 1) {
+    tokens.pop();
+    tokens.push(consts.INDEX_HTML);
+  }
+
+  path = tokens.join('/') || `/${consts.INDEX_HTML}`;
+
+  // lets' unpack
+  const hostParts = hostname.split('.');
+  const publicName = hostParts.pop(); // last one is 'domain'
+  const serviceName = hostParts.join('.'); // all others are 'service'
+
+  // Let's try to find the container and read
+  // its content using the helpers functions
+  const md = await getContainerFromPublicId.call(this, publicName, serviceName);
+  return {
+    serviceMd: md.serviceMd,
+    type: md.type,
+    path
+  };
+}
+
 /**
 * @typedef {Object} WebFetchOptions
 * holds additional options for the `webFetch` function.
@@ -207,59 +236,34 @@ const readContentFromFile = async (openedFile, defaultMimeType, opts) => {
 * @returns {Promise<Object>} the object with body of content and headers
 */
 async function webFetch(url, options) {
-  if (!url) return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
+  const { serviceMd, type, path } = await fetch.call(this, url, options);
+  if (type === 'RDF') {
+    const emulation = await serviceMd.emulateAs('RDF');
+    await emulation.nowOrWhenFetched();
 
-  const parsedUrl = parseUrl(url);
-  const hostname = parsedUrl.hostname;
-  let path = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
-  const tokens = path.split('/');
-  if (!tokens[tokens.length - 1] && tokens.length > 1) {
-    tokens.pop();
-    tokens.push(consts.INDEX_HTML);
+    // TODO: support qvalue in the Accept header with multile mime types and weights
+    const mimeType = (options && options.accept) ? options.accept : 'text/turtle';
+
+    const serialisedRdf = await emulation.serialise(mimeType);
+    const response = {
+      headers: {
+        'Content-Type': mimeType,
+        //'Accept-Post': 'text/turtle, application/ld+json, application/rdf+xml, application/nquads'
+      },
+      body: serialisedRdf
+    };
+    return response;
+  } else {
+    const emulation = await serviceMd.emulateAs('NFS');
+    const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), path);
+    const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
+    const data = await readContentFromFile(openedFile, mimeType, options);
+    return data;
   }
-
-  path = tokens.join('/') || `/${consts.INDEX_HTML}`;
-
-  // lets' unpack
-  const hostParts = hostname.split('.');
-  const publicName = hostParts.pop(); // last one is 'domain'
-  const serviceName = hostParts.join('.'); // all others are 'service'
-
-  return new Promise(async (resolve, reject) => {
-    try {
-      // Let's try to find the container and read
-      // its content using the helpers functions
-      const { serviceMd, type } = await getContainerFromPublicId.call(this, publicName, serviceName);
-      if (type === 'RDF') {
-        const emulation = await serviceMd.emulateAs('RDF');
-        await emulation.nowOrWhenFetched();
-
-        // TODO: support qvalue in the Accept header with multile mime types and weights
-        const mimeType = (options && options.accept) ? options.accept : 'text/turtle';
-
-        const serialisedRdf = await emulation.serialise(mimeType);
-        const response = {
-          headers: {
-            'Content-Type': mimeType,
-            //'Accept-Post': 'text/turtle, application/ld+json, application/rdf+xml, application/nquads'
-          },
-          body: serialisedRdf
-        };
-        resolve(response);
-      } else {
-        const emulation = await serviceMd.emulateAs('NFS');
-        const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), path);
-        const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
-        const data = await readContentFromFile(openedFile, mimeType, options);
-        resolve(data);
-      }
-    } catch (e) {
-      reject(e);
-    }
-  });
 }
 
 module.exports = {
+  fetch,
   webFetch,
   getContainerFromPublicId,
   tryDifferentPaths,
