@@ -85,7 +85,7 @@ const removeFromMData = (md, key) => md.getEntries()
           .then(() => md.applyEntriesMutation(mut))
         )));
 
-const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
+const containersPermissions = { _public: ['Read', 'Insert'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
 
 describe('Browsing', () => {
   let app;
