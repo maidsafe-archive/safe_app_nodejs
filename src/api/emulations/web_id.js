@@ -36,10 +36,11 @@ const { parse: parseUrl } = require('url');
 
 
 // Helper for creating a WebID profile document RDF resource
-const createWebIdProfileDoc = async (rdf, vocabs, profile) => {
+const createWebIdProfileDoc = async (rdf, vocabs, profile, postsLocation) => {
   const id = rdf.sym(profile.uri);
   rdf.setId(profile.uri);
   const webIdWithHashTag = rdf.sym(`${profile.uri}#me`);
+  const webIdPosts = rdf.sym(`${profile.uri}/posts`);
 
   rdf.add(id, vocabs.RDFS('type'), vocabs.FOAF('PersonalProfileDocument'));
   rdf.add(id, vocabs.DCTERMS('title'), rdf.literal(`${profile.name}'s profile document`));
@@ -51,6 +52,11 @@ const createWebIdProfileDoc = async (rdf, vocabs, profile) => {
   rdf.add(webIdWithHashTag, vocabs.FOAF('nick'), rdf.literal(profile.nickname));
   rdf.add(webIdWithHashTag, vocabs.FOAF('image'), rdf.literal(profile.avatar)); // TODO: this needs to be created as an LDP-NR
   rdf.add(webIdWithHashTag, vocabs.FOAF('website'), rdf.literal(profile.website));
+
+  rdf.add(webIdPosts, vocabs.RDFS('type'), vocabs.SAFETERMS('Posts'));
+  rdf.add(webIdPosts, vocabs.DCTERMS('title'), rdf.literal('Container for social apps posts'));
+  rdf.add(webIdPosts, vocabs.SAFETERMS('xorName'), rdf.literal(postsLocation.name.toString()));
+  rdf.add(webIdPosts, vocabs.SAFETERMS('typeTag'), rdf.literal(postsLocation.typeTag.toString()));
 
   const location = await rdf.commit();
 
@@ -101,8 +107,18 @@ class WebID {
     const publicName = hostParts.pop(); // last one is 'domain'
     const subdomain = hostParts.join('.'); // all others are 'service'
 
+    // Create inbox container for posts
+    const postsMd = await app.mutableData.newRandomPublic(303030);
+    const perms = await app.mutableData.newPermissions();
+    const appKey = await app.crypto.getAppPubSignKey();
+    const pmSet = ['Insert', 'Update', 'Delete', 'ManagePermissions'];
+    await perms.insertPermissionSet(appKey, pmSet);
+    await perms.insertPermissionSet(consts.pubConsts.USER_ANYONE, ['Insert']);
+    await postsMd.put(perms);
+    const postsLocation = await postsMd.getNameAndTag();
+
     // TODO: Do we create the md in here? Is it needed quicksetup outside?
-    const webIdLocation = await createWebIdProfileDoc(this.rdf, this.vocabs, profile);
+    const webIdLocation = await createWebIdProfileDoc(this.rdf, this.vocabs, profile, postsLocation);
 
     // const webIdLocation = webIdProfileObject.location;
     // const webIdRdf = webIdProfileObject.rdf;
@@ -119,6 +135,7 @@ class WebID {
   }
 
   async update(profile) {
+    // FIXME: we nee to keep the posts graph unless that's been also updated, which shouldn't be expected really
     this.rdf.removeMany(undefined, undefined, undefined);
     await createWebIdProfileDoc(this.rdf, this.vocabs, profile);
     const webIdLocation = await this.rdf.commit();
