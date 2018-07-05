@@ -9,6 +9,57 @@ const { parse: parseUrl } = require('url');
 
 const RDF_TYPE_TAG = 15639;
 
+const cleanRdfValue = (value ) =>
+{
+
+    let cleanValue = value;
+
+    if( Array.isArray( value ) && value.length === 1 )
+    {
+      cleanValue = value[0];
+    }
+
+    if( cleanValue["@value"] )
+    {
+      cleanValue = cleanValue["@value"];
+    }
+
+    return cleanValue;
+}
+
+// make this usefullll..... so, purposefully pull out useful, but ignore RDF....
+const flattenWebId = (theData, rootTerm) => {
+  const newObject = {
+    '@id': rootTerm
+  };
+
+  theData.forEach((graph) => {
+    const graphId = graph['@id'];
+
+    if (graphId === rootTerm) {
+
+      newObject['@type'] = cleanRdfValue(graph['@type']);
+
+      return;
+    }
+
+
+    //split.pop maybe unneeded...
+    const strippedGraphID = graphId.replace( rootTerm, '').split('/').pop();
+
+    newObject[strippedGraphID] = {};
+
+    Object.keys( graph ).forEach( key =>
+    {
+      const cleanKey = key.split('/').pop();
+      const cleanValue = cleanRdfValue(graph[key]);
+
+      newObject[strippedGraphID][cleanKey] = cleanValue;
+    })
+
+  });
+  return newObject;
+};
 
 /**
 * Interact with RDF Data of the Network through this Interface.
@@ -188,19 +239,15 @@ class WebInterface {
     const id = directoryRDF.sym(graphName);
 
     directoryRDF.setId(graphName);
-    try{
-
+    try {
       await directoryRDF.nowOrWhenFetched();
       existingRDF = true;
-    }
-    catch(e)
-    {
+    } catch (e) {
       // ignore no ID set incase nothing has been added yet.
-      if( e.code !== errConst.MISSING_RDF_ID.code ) throw new Error({code: e.code, message: e.message});
+      if (e.code !== errConst.MISSING_RDF_ID.code) throw new Error({ code: e.code, message: e.message });
     }
 
-    if( !existingRDF )
-    {
+    if (!existingRDF) {
       directoryRDF.add(id, vocabs.DCTERMS('title'), directoryRDF.literal('_public default container'));
       directoryRDF.add(id, vocabs.DCTERMS('description'), directoryRDF.literal('Container to keep track of public data for the account'));
     }
@@ -239,7 +286,7 @@ class WebInterface {
     const entriesList = await entries.listEntries();
 
     // TODO: Encrypt/Decrypting.
-    const webIds = await entriesList.filter( entry => {
+    const webIds = await entriesList.filter((entry) => {
       const key = entry.key.toString();
       const value = entry.value.buf.toString();
 
@@ -247,31 +294,29 @@ class WebInterface {
       // console.log('value', value)
 
       return key.includes('/webId/') && value.length;
-
-    }).map( async (entry) => {
-
+    }).map(async (entry) => {
       const key = entry.key.toString();
       const value = entry.value.buf.toString();
 
-        //parsing to get something to work with as RDF is not that helpful...
+        // parsing to get something to work with as RDF is not that helpful...
         // perhaps sparql is needed to get it all...
         // perhaps this is what we should be doing.. parsing out to being helpful?
         // probably can be simplified via jsonLD compact encoding etc.
-        const json = JSON.parse( value );
-        const uri = json['http://safenetwork.org/safevocab/uri'][0]['@value'];
+      const json = JSON.parse(value);
+      const uri = json['http://safenetwork.org/safevocab/uri'][0]['@value'];
 
-        const response = await app.webFetch(uri, { accept: 'application/ld+json' });
-        const data = JSON.parse(response.body);
-        //
-        // console.log('.................')
-        // console.log(data)
-        // console.log('.................')
+      const response = await app.webFetch(uri, { accept: 'application/ld+json' });
+      const data = JSON.parse(response.body);
 
-        return data;
+      const initialId = data[0]['@id'];
 
-      } );
 
-      return Promise.all(webIds);
+      const flatVersion = flattenWebId(data, initialId);
+
+      return flatVersion;
+    });
+
+    return Promise.all(webIds);
   }
 }
 

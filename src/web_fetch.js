@@ -11,7 +11,7 @@ async function readPublicIdAsRdf(servicesContainer, pubName, servName) {
   let serviceMd;
   try {
     const graphId = `safe://${servName}.${pubName}`;
-    console.log('Looking up graph ID:', graphId);
+
     const rdfEmulation = await servicesContainer.emulateAs('rdf');
     await rdfEmulation.nowOrWhenFetched([graphId]);
     const SAFETERMS = rdfEmulation.namespace('http://safenetwork.org/safevocab/');

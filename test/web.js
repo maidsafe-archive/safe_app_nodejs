@@ -214,18 +214,18 @@ describe.only('getWebIds', () => {
     const webId = await md.emulateAs('WebID');
     await webId.create({ ...profile, name: 'THISTEST' }, 'searchName');
 
-    // const webIdsRdf = await authedApp.web.getWebIds();
     const webIds = await authedApp.web.getWebIds();
 
-    // const ourName = webIdsRdf.statementsMatching(undefined, webIdsRdf.vocabs.DCTERMS('title'), 'searchName');
     should(webIds).be.a.Array();
     should(webIds).have.length(1);
-    // should(webIds).containDeep([{ title: 'searchName' }]);
+
 
     should(webIds[0]).be.a.Object();
     //first el of webId statement array, in the array...
-    should(webIds[0][0]["@type"]).deepEqual(['http://xmlns.com/foaf/0.1/PersonalProfileDocument']);
-    // should(webIds[0][0]['http://purl.org/dc/terms/title']).match(/THISTEST/);
+    should(webIds[0]["@type"]).equal('http://xmlns.com/foaf/0.1/PersonalProfileDocument');
+    should(webIds[0]["#me"]).not.be.undefined();
+    should(webIds[0]["#me"]).be.a.Object();
+    should(webIds[0].posts).be.a.Object();
 
   });
 });
