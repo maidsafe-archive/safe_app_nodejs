@@ -65,9 +65,14 @@ class RDF {
     }
 
     let id;
-    const entriesGraphs = entriesList.map( (e, i) => {
+    const entriesGraphs = entriesList.reduce( (graphs, e, i) => {
       const keyStr = e.key.toString();
       const valueStr = e.value.buf.toString();
+
+      // If the entry was soft-deleted skip it
+      if (valueStr.length === 0) {
+          return graphs;
+      }
 
       if (!id) {
         // FIXME: we need to know which is the main graph in a deterministic way
@@ -84,10 +89,10 @@ class RDF {
       if (typeof valueAsAStringForSure !== 'string') {
         valueAsAStringForSure = JSON.stringify(valueAsAStringForSure);
       }
+      graphs.push(valueAsAStringForSure);
+      return graphs;
 
-      return valueAsAStringForSure;
-
-    });
+    }, []);
 
     if (!id) {
       throw makeError( errConst.MISSING_RDF_ID.code, errConst.MISSING_RDF_ID.msg);
