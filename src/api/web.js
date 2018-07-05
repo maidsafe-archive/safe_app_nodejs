@@ -171,12 +171,11 @@ class WebInterface {
    * @param  {[type]}  webIdLocation name/typetag object from SAFE MD.
    * @param  {[type]}  displayName   optional displayName which will be used when listing webIds. (should fallback to nickname?)
    */
-  async addWebIdToDirectory(webIdLocation, displayName) {
+  async addWebIdToDirectory(webIdUri, displayName) {
     const app = this.app;
 
-    if (typeof webIdLocation !== 'object' ||
-        !webIdLocation.name || !webIdLocation.typeTag) {
-      throw makeError(errConst.INVALID_RDF_LOCATION.code, errConst.INVALID_RDF_LOCATION.msg);
+    if (typeof webIdUri !== 'string') {
+      throw makeError(errConst.INVALID_URL.code, errConst.INVALID_URL.msg);
     }
     // could be any dir MD...
     const directory = await app.auth.getContainer('_public');
@@ -206,13 +205,15 @@ class WebInterface {
       directoryRDF.add(id, vocabs.DCTERMS('description'), directoryRDF.literal('Container to keep track of public data for the account'));
     }
 
-    const newResourceName = directoryRDF.sym(`${graphName}/${webIdLocation.name.toString()}`);
+    const hostname = parseUrl(webIdUri).hostname;
 
-    directoryRDF.add(newResourceName, vocabs.DCTERMS('identifier'), vocabs.FOAF(`safe://_public/webId/${webIdLocation.name.toString()}`));
+    const newResourceName = directoryRDF.sym(`${graphName}/${hostname}`);
+
+    directoryRDF.add(newResourceName, vocabs.DCTERMS('identifier'), vocabs.FOAF(`safe://_public/webId/${hostname}`));
     directoryRDF.add(newResourceName, vocabs.RDFS('type'), vocabs.FOAF('PersonalProfileDocument'));
     directoryRDF.add(newResourceName, vocabs.DCTERMS('title'), directoryRDF.literal(`${displayName || ''}`));
-    directoryRDF.add(newResourceName, vocabs.SAFETERMS('xorName'), directoryRDF.literal(webIdLocation.name.toString()));
-    directoryRDF.add(newResourceName, vocabs.SAFETERMS('typeTag'), directoryRDF.literal(webIdLocation.typeTag.toString()));
+    directoryRDF.add(newResourceName, vocabs.SAFETERMS('uri'), directoryRDF.literal(webIdUri));
+    directoryRDF.add(newResourceName, vocabs.SAFETERMS('typeTag'), directoryRDF.literal(webIdUri));
 
     await directoryRDF.commit();
   }
@@ -223,12 +224,12 @@ class WebInterface {
    *
    * @return {Promise} Resolves to array of webIds objects.
    */
+  // TODO: Should this actually be a webIdList... and NOT retrieve ALLLLL the webIds?
   async getWebIds() {
     const app = this.app;
 
     const directory = await app.auth.getContainer('_public');
-    let directoryRDF;
-    directoryRDF = directory.emulateAs('rdf');
+    const directoryRDF = directory.emulateAs('rdf');
 
 
     const graphName = 'safe://_public/webId'; // TODO: this graph name is not a valid URI on the SAFE network
@@ -248,6 +249,7 @@ class WebInterface {
       return key.includes('/webId/') && value.length;
 
     }).map( async (entry) => {
+
       const key = entry.key.toString();
       const value = entry.value.buf.toString();
 
@@ -256,27 +258,20 @@ class WebInterface {
         // perhaps this is what we should be doing.. parsing out to being helpful?
         // probably can be simplified via jsonLD compact encoding etc.
         const json = JSON.parse( value );
+        const uri = json['http://safenetwork.org/safevocab/uri'][0]['@value'];
 
-        return {
-          title: json['http://purl.org/dc/terms/title'][0]['@value'],
-          typeTag: json['http://safenetwork.org/safevocab/typeTag'][0]['@value'],
-          xorName: json['http://safenetwork.org/safevocab/xorName'][0]['@value']
-        }
-
-        // TODO: This is _NOT_ added to the rdf graph as expected. The fault seems to be rdflib.js... using oollldd jsonld.js
-        // let graf;
-        // graf = await directoryRDF.parse(value, 'application/ld+json', graphName);
-        // graf.statements.forEach( async (statement) =>
-        // {
-        //   console.log('statemennnt', statement)
-        //   // await directoryRDF.add( statement.subject, statement.predicate , statement.object );
+        const response = await app.webFetch(uri, { accept: 'application/ld+json' });
+        const data = JSON.parse(response.body);
         //
-        // })
+        // console.log('.................')
+        // console.log(data)
+        // console.log('.................')
+
+        return data;
+
       } );
 
       return Promise.all(webIds);
-      // return webIds;
-      // return directoryRDF;
   }
 }
 

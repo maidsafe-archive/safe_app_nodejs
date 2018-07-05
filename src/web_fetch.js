@@ -188,6 +188,9 @@ async function fetch(url, options) {
   if (!url) return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
 
   const parsedUrl = parseUrl(url);
+
+  if (!parsedUrl.protocol) return Promise.reject(makeError(errConst.INVALID_URL.code, `${errConst.INVALID_URL.msg}, complete with protocol.`));
+
   const hostname = parsedUrl.hostname;
   let path = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
   const tokens = path.split('/');
@@ -197,7 +200,6 @@ async function fetch(url, options) {
   }
 
   path = tokens.join('/') || `/${consts.INDEX_HTML}`;
-
   // lets' unpack
   const hostParts = hostname.split('.');
   const publicName = hostParts.pop(); // last one is 'domain'
@@ -253,13 +255,12 @@ async function webFetch(url, options) {
       body: serialisedRdf
     };
     return response;
-  } else {
-    const emulation = await serviceMd.emulateAs('NFS');
-    const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), path);
-    const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
-    const data = await readContentFromFile(openedFile, mimeType, options);
-    return data;
   }
+  const emulation = await serviceMd.emulateAs('NFS');
+  const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), path);
+  const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
+  const data = await readContentFromFile(openedFile, mimeType, options);
+  return data;
 }
 
 module.exports = {

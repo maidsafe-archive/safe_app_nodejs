@@ -37,6 +37,7 @@ const { parse: parseUrl } = require('url');
 
 // Helper for creating a WebID profile document RDF resource
 const createWebIdProfileDoc = async (rdf, vocabs, profile, postsLocation) => {
+
   const id = rdf.sym(profile.uri);
   rdf.setId(profile.uri);
   const webIdWithHashTag = rdf.sym(`${profile.uri}#me`);
@@ -55,8 +56,12 @@ const createWebIdProfileDoc = async (rdf, vocabs, profile, postsLocation) => {
 
   rdf.add(webIdPosts, vocabs.RDFS('type'), vocabs.SAFETERMS('Posts'));
   rdf.add(webIdPosts, vocabs.DCTERMS('title'), rdf.literal('Container for social apps posts'));
-  rdf.add(webIdPosts, vocabs.SAFETERMS('xorName'), rdf.literal(postsLocation.name.toString()));
-  rdf.add(webIdPosts, vocabs.SAFETERMS('typeTag'), rdf.literal(postsLocation.typeTag.toString()));
+
+  if( postsLocation )
+  {
+    rdf.add(webIdPosts, vocabs.SAFETERMS('xorName'), rdf.literal(postsLocation.name.toString()));
+    rdf.add(webIdPosts, vocabs.SAFETERMS('typeTag'), rdf.literal(postsLocation.typeTag.toString()));
+  }
 
   const location = await rdf.commit();
 
@@ -124,7 +129,7 @@ class WebID {
     // const webIdRdf = webIdProfileObject.rdf;
 
     // TODO: grab name and add displayName here...
-    await app.web.addWebIdToDirectory(webIdLocation, displayName);
+    await app.web.addWebIdToDirectory(profile.uri, displayName);
 
     const subdomainsRdfLocation =
       await app.web.addServiceToSubdomain(subdomain, publicName, webIdLocation);

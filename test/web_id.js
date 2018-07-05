@@ -83,7 +83,7 @@ describe.only('WebID emulation', () => {
     await webId.create(profile);
 
     const webIds = await app.web.getWebIds();
-    // should(webIds).containDeep([`safe://_public/webId/`]);
+    should(webIds).be.a.Array();
 
   });
 });
