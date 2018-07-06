@@ -40,7 +40,8 @@ const createWebIdProfileDoc = async (rdf, vocabs, profile, postsLocation) => {
 
   const id = rdf.sym(profile.uri);
   rdf.setId(profile.uri);
-  const webIdWithHashTag = rdf.sym(`${profile.uri}#me`);
+  const hasMeAlready = profile.uri.includes('#me');
+  const webIdWithHashTag = hasMeAlready ? rdf.sym( profile.uri ) : rdf.sym(`${profile.uri}#me`);
   const webIdPosts = rdf.sym(`${profile.uri}/posts`);
 
   rdf.add(id, vocabs.RDFS('type'), vocabs.FOAF('PersonalProfileDocument'));
@@ -142,6 +143,7 @@ class WebID {
   async update(profile) {
     // FIXME: we nee to keep the posts graph unless that's been also updated, which shouldn't be expected really
     this.rdf.removeMany(undefined, undefined, undefined);
+
     await createWebIdProfileDoc(this.rdf, this.vocabs, profile);
     const webIdLocation = await this.rdf.commit();
   }
