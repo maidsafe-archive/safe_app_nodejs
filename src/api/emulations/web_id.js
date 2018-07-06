@@ -50,8 +50,8 @@ const createWebIdProfileDoc = async (rdf, vocabs, profile, postsLocation) => {
 
   rdf.add(webIdWithHashTag, vocabs.RDFS('type'), vocabs.FOAF('Person'));
   rdf.add(webIdWithHashTag, vocabs.FOAF('name'), rdf.literal(profile.name));
-  rdf.add(webIdWithHashTag, vocabs.FOAF('nick'), rdf.literal(profile.nickname));
-  rdf.add(webIdWithHashTag, vocabs.FOAF('image'), rdf.literal(profile.avatar)); // TODO: this needs to be created as an LDP-NR
+  rdf.add(webIdWithHashTag, vocabs.FOAF('nick'), rdf.literal(profile.nick));
+  rdf.add(webIdWithHashTag, vocabs.FOAF('image'), rdf.literal(profile.image)); // TODO: this needs to be created as an LDP-NR
   rdf.add(webIdWithHashTag, vocabs.FOAF('website'), rdf.literal(profile.website));
 
   rdf.add(webIdPosts, vocabs.RDFS('type'), vocabs.SAFETERMS('Posts'));

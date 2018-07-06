@@ -35,9 +35,9 @@ describe.only('WebID emulation', () => {
     const profile = {
       uri: 'safe://mywebid.gabriel',
       name: 'Gabriel Viganotti',
-      nickname: 'bochaco',
+      nick: 'bochaco',
       website: 'safe://mywebsite.gabriel',
-      avatar: 'safe://mywebsite.gabriel/images/myavatar',
+      image: 'safe://mywebsite.gabriel/images/myavatar',
     };
 
     await md.quickSetup({});
@@ -52,9 +52,9 @@ describe.only('WebID emulation', () => {
     const profile = {
       uri: 'safe://mywebid.gabriel',
       name: 'Gabriel Viganotti',
-      nickname: 'bochaco',
+      nick: 'bochaco',
       website: 'safe://mywebsite.gabriel',
-      avatar: 'safe://mywebsite.gabriel/images/myavatar',
+      image: 'safe://mywebsite.gabriel/images/myavatar',
     };
 
     await md.quickSetup({});
@@ -73,9 +73,9 @@ describe.only('WebID emulation', () => {
     const profile = {
       uri: 'safe://mywebid.gabriel',
       name: 'Gabriel Viganotti',
-      nickname: 'bochaco',
+      nick: 'bochaco',
       website: 'safe://mywebsite.gabriel',
-      avatar: 'safe://mywebsite.gabriel/images/myavatar',
+      image: 'safe://mywebsite.gabriel/images/myavatar',
     };
 
     await md.quickSetup({});

@@ -20,9 +20,9 @@ const TYPE_TAG = 15689;
 const profile = {
   uri: 'safe://mywebid.gabriel',
   name: 'Gabriel Viganotti',
-  nickname: 'bochaco',
+  nick: 'bochaco',
   website: 'safe://mywebsite.gabriel',
-  avatar: 'safe://mywebsite.gabriel/images/myavatar',
+  image: 'safe://mywebsite.gabriel/images/myavatar',
 };
 
 describe.only('getPublicNames', () => {
