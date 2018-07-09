@@ -101,9 +101,9 @@ describe('Browsing', () => {
     const profile = {
       uri: `safe://mywebid.${domain}`,
       name: 'Gabriel Viganotti',
-      nickname: 'bochaco',
+      nick: 'bochaco',
       website: `safe://mywebsite.${domain}`,
-      avatar: `safe://mywebsite.${domain}/images/myavatar`,
+      image: `safe://mywebsite.${domain}/images/myavatar`,
     };
 
     xorname = h.createRandomXorName();
@@ -119,15 +119,15 @@ describe('Browsing', () => {
     const turtleWebId = await unregisteredApp.webFetch(profile.uri, options);
   });
 
-  it.only('retrieving WebID object from URI', async () => {
-    const domain = 'gabriel';//`test_${Math.round(Math.random() * 100000)}`;
+  it('retrieving WebID object from URI', async () => {
+    const domain = `test_${Math.round(Math.random() * 100000)}`;
     const TYPE_TAG = 15639;
     const profile = {
       uri: `safe://mywebid.${domain}`,
       name: 'Gabriel Viganotti',
-      nickname: 'bochaco',
+      nick: 'bochaco',
       website: `safe://mywebsite.${domain}`,
-      avatar: `safe://mywebsite.${domain}/images/myavatar`,
+      image: `safe://mywebsite.${domain}/images/myavatar`,
     };
 
     xorname = h.createRandomXorName();
