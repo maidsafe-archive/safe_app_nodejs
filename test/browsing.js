@@ -119,8 +119,8 @@ describe('Browsing', () => {
     const turtleWebId = await unregisteredApp.webFetch(profile.uri, options);
   });
 
-  it('retrieving WebID object from URI', async () => {
-    const domain = `test_${Math.round(Math.random() * 100000)}`;
+  it.only('retrieving WebID object from URI', async () => {
+    const domain = 'gabriel';//`test_${Math.round(Math.random() * 100000)}`;
     const TYPE_TAG = 15639;
     const profile = {
       uri: `safe://mywebid.${domain}`,

@@ -177,6 +177,35 @@ describe.only('RDF emulation', () => {
     entriesList.forEach((e) => console.log('ENTRY:', e.key.toString(), e.value.buf.toString(), e.value.version));
   });
 
+  it('add triples and append them', async () => {
+    await md.quickSetup({ '@id': 'asas', bbbb: 'b2b2b2b' });
+    const rdf = await md.emulateAs('rdf');
+    const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
+    const me = rdf.sym(myUri);
+
+    await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
+    rdf.add(me, FOAF('knows'), 'Josh');
+    rdf.add(me, FOAF('knows'), 'Gabriel');
+
+    await rdf.commit();
+
+    // now append
+    const md2 = await app.mutableData.newPublic(xorname, TYPE_TAG);
+    const rdf2 = await md2.emulateAs('rdf');
+    const me2 = rdf.sym(`${myUri}/1`);
+
+    rdf2.setId(`${myUri}/1`);
+    rdf2.add(me2, FOAF('knows'), 'Krishna');
+
+    await rdf2.append();
+
+    const md3 = await app.mutableData.newPublic(xorname, TYPE_TAG);
+    entries = await md3.getEntries();
+    entriesList = await entries.listEntries();
+
+    entriesList.forEach((e) => console.log('AFTER APPENDED ENTRIES:', e.key.toString(), e.value.buf.toString(), e.value.version));
+  });
+
   it('parse JSON-LD RDF and serialise it as Turtle', async () => {
     await md.quickSetup({});
     const rdf = await md.emulateAs('rdf');

@@ -214,6 +214,26 @@ class RDF {
     const nameAndTag = await this.mData.getNameAndTag();
     return nameAndTag;
   }
+
+  /**
+  * Append the triples to the RDF document into the underlying MutableData on the network
+  * @returns {Promise}
+  */
+  async append() {
+    // TODO: this currently only supports adding graphs with different ID
+    const serialJsonLd = await this.serialise(JSON_LD_MIME_TYPE);
+    const graphs = JSON.parse(serialJsonLd);
+    const mutation = await this.mData.app.mutableData.newMutation();
+    graphs.forEach((e, i) => {
+      const key = e[RDF_GRAPH_ID];
+      const stringifiedGraph = JSON.stringify(e);
+      mutation.insert(key, stringifiedGraph);
+    });
+
+    await this.mData.applyEntriesMutation(mutation);
+    const nameAndTag = await this.mData.getNameAndTag();
+    return nameAndTag;
+  }
 }
 
 module.exports = RDF;
