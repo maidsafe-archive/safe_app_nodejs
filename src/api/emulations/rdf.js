@@ -64,6 +64,8 @@ class RDF {
       entriesList = await entries.listEntries();
     }
 
+    if (entriesList.length === 0) return;
+    
     let id;
     const entriesGraphs = entriesList.reduce( (graphs, e, i) => {
       const keyStr = e.key.toString();

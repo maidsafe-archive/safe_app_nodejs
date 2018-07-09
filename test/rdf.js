@@ -69,6 +69,12 @@ describe.only('RDF emulation', () => {
     console.log('JSON-LD:', jsonld);
   });
 
+  it('fetch entries with RDF emulation from empty MD', async () => {
+    await md.quickSetup();
+    const rdf = await md.emulateAs('rdf');
+    await rdf.nowOrWhenFetched();
+  });
+
   it('parse a Turtle document', async () => {
     await md.quickSetup({});
     const rdf = await md.emulateAs('rdf');
