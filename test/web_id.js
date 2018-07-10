@@ -48,6 +48,22 @@ describe.only('WebID emulation', () => {
     await webId.update(profile);
   });
 
+
+  it('create WebID from basic profile without image or website', async () => {
+    const profile = {
+      uri: 'safe://mywebid.gabriel',
+      name: 'Gabriel Viganotti',
+      nick: 'bochaco'
+    };
+
+    await md.quickSetup({});
+    const webId = await md.emulateAs('WebID');
+    await webId.create(profile);
+
+    profile.name = 'Gabriel Updated';
+    await webId.update(profile);
+  });
+
   it('fetch existing WebID', async () => {
     const profile = {
       uri: 'safe://mywebid.gabriel',

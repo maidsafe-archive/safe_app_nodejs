@@ -52,8 +52,14 @@ const createWebIdProfileDoc = async (rdf, vocabs, profile, postsLocation) => {
   rdf.add(webIdWithHashTag, vocabs.RDFS('type'), vocabs.FOAF('Person'));
   rdf.add(webIdWithHashTag, vocabs.FOAF('name'), rdf.literal(profile.name));
   rdf.add(webIdWithHashTag, vocabs.FOAF('nick'), rdf.literal(profile.nick));
-  rdf.add(webIdWithHashTag, vocabs.FOAF('image'), rdf.literal(profile.image)); // TODO: this needs to be created as an LDP-NR
-  rdf.add(webIdWithHashTag, vocabs.FOAF('website'), rdf.literal(profile.website));
+
+  if( profile.image )
+    rdf.add(webIdWithHashTag, vocabs.FOAF('image'), rdf.literal(profile.image)); // TODO: this needs to be created as an LDP-NR
+
+  if( profile.website )
+    rdf.add(webIdWithHashTag, vocabs.FOAF('website'), rdf.literal(profile.website));
+
+    // TODO: Test to make sure image/website are optional.
 
   rdf.add(webIdPosts, vocabs.RDFS('type'), vocabs.SAFETERMS('Posts'));
   rdf.add(webIdPosts, vocabs.DCTERMS('title'), rdf.literal('Container for social apps posts'));
