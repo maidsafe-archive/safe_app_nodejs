@@ -147,8 +147,9 @@ class WebID {
   }
 
   async update(profile) {
+
     // FIXME: we nee to keep the posts graph unless that's been also updated, which shouldn't be expected really
-    this.rdf.removeMany(undefined, undefined, undefined);
+    // this.rdf.removeMany( undefined, undefined, this.vocabs.FOAF('Person'));
 
     await createWebIdProfileDoc(this.rdf, this.vocabs, profile);
     const webIdLocation = await this.rdf.commit();

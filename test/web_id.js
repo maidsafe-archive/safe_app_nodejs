@@ -44,8 +44,19 @@ describe.only('WebID emulation', () => {
     const webId = await md.emulateAs('WebID');
     await webId.create(profile);
 
+    const firstId = await webId.rdf.serialise('application/ld+json');
+    const firstPosts = JSON.parse(firstId)[2];
+
     profile.name = 'Gabriel Updated';
+    profile.image = 'New Image';
     await webId.update(profile);
+    const secondId = await webId.rdf.serialise('application/ld+json')
+    const secondPosts = JSON.parse(secondId)[2];
+
+    should( secondId ).match( /Gabriel Updated/ );
+    should( secondId ).match( /New Image/ );
+    should( secondPosts ).deepEqual( firstPosts );
+
   });
 
 
