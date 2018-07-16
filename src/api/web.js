@@ -278,7 +278,6 @@ class WebInterface {
     const directory = await app.auth.getContainer('_public');
     const directoryRDF = directory.emulateAs('rdf');
 
-
     const graphName = 'safe://_public/webId'; // TODO: this graph name is not a valid URI on the SAFE network
     directoryRDF.setId(graphName);
 
@@ -305,18 +304,25 @@ class WebInterface {
       const json = JSON.parse(value);
       const uri = json['http://safenetwork.org/safevocab/uri'][0]['@value'];
 
-      const response = await app.webFetch(uri, { accept: 'application/ld+json' });
-      const data = JSON.parse(response.body);
+      try {
+        const response = await app.webFetch(uri, { accept: 'application/ld+json' });
+        const data = JSON.parse(response.body);
 
-      const initialId = data[0]['@id'];
+        const initialId = data[0]['@id'];
 
+        const flatVersion = flattenWebId(data, initialId);
 
-      const flatVersion = flattenWebId(data, initialId);
-
-      return flatVersion;
+        return flatVersion;
+      } catch (e) {
+        console.log("WebID not found at specified URI:", uri);
+        return null;
+      }
     });
 
-    return Promise.all(webIds);
+    const list = await Promise.all(webIds);
+    return list.filter((entry) => {
+      return (entry !== null);
+    });
   }
 }
 
