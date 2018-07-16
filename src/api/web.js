@@ -154,6 +154,9 @@ class WebInterface {
     const subdomainsContainer =
       await app.mutableData.newPublic(subdomainLocation, consts.TAG_TYPE_DNS);
 
+    let makeContainerStructure = false;
+    const subdomainsRdf = subdomainsContainer.emulateAs('rdf');
+
     try {
       await subdomainsContainer.quickSetup();
     } catch (err) {
@@ -161,29 +164,39 @@ class WebInterface {
       if (err.code !== errConst.ERR_DATA_GIVEN_ALREADY_EXISTS.code) {
         throw err;
       }
+      // We need to only add a service rather than populating it
+      // with the whole LDP Container structure.
+      // TODO: This first version we assume that it contains the
+      // LDP Container definitions if the container exists, but
+      // this is not good enough in the future
+      makeContainerStructure = true;
+      await subdomainsRdf.nowOrWhenFetched();
     }
 
-    const subdomainsRdf = subdomainsContainer.emulateAs('rdf');
     const vocabs = this.getVocabs(subdomainsRdf);
-
-    // add to or create subdomain container.
     const fullUri = `safe://${publicName}`;
-    // TODO: parse the uri to extract the subdomain
 
     const id = subdomainsRdf.sym(fullUri);
     subdomainsRdf.setId(fullUri);
     const uriWithHashTag = subdomainsRdf.sym(`${fullUri}#it`);
     const serviceResource = subdomainsRdf.sym(`safe://${subdomain}.${publicName}`);
 
-    subdomainsRdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
-    subdomainsRdf.add(id, vocabs.LDP('membershipResource'), uriWithHashTag);
-    subdomainsRdf.add(id, vocabs.LDP('hasMemberRelation'), vocabs.SAFETERMS('hasService'));
-    subdomainsRdf.add(id, vocabs.DCTERMS('title'), subdomainsRdf.literal(`Services Container for subdomain: '${publicName}'`));
-    subdomainsRdf.add(id, vocabs.DCTERMS('description'), subdomainsRdf.literal('List of public services exposed by a particular subdomain'));
+    if (makeContainerStructure) {
+      // Add the triples which define the LDP Container first.
+      subdomainsRdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
+      subdomainsRdf.add(id, vocabs.LDP('membershipResource'), uriWithHashTag);
+      subdomainsRdf.add(id, vocabs.LDP('hasMemberRelation'), vocabs.SAFETERMS('hasService'));
+      subdomainsRdf.add(id, vocabs.DCTERMS('title'), subdomainsRdf.literal(`Services Container for subdomain: '${publicName}'`));
+      subdomainsRdf.add(id, vocabs.DCTERMS('description'), subdomainsRdf.literal('List of public services exposed by a particular subdomain'));
+
+      subdomainsRdf.add(uriWithHashTag, vocabs.RDFS('type'), vocabs.SAFETERMS('Services'));
+      subdomainsRdf.add(uriWithHashTag, vocabs.DCTERMS('title'), subdomainsRdf.literal(`Services available for subdomain: '${publicName}'`));
+
+    }
+
+    // Now add the triples specific for the new service
     subdomainsRdf.add(id, vocabs.LDP('contains'), serviceResource);
 
-    subdomainsRdf.add(uriWithHashTag, vocabs.RDFS('type'), vocabs.SAFETERMS('Services'));
-    subdomainsRdf.add(uriWithHashTag, vocabs.DCTERMS('title'), subdomainsRdf.literal(`Services available for subdomain: '${publicName}'`));
     subdomainsRdf.add(uriWithHashTag, vocabs.SAFETERMS('hasService'), serviceResource);
 
     subdomainsRdf.add(serviceResource, vocabs.RDFS('type'), vocabs.SAFETERMS('Service'));
