@@ -65,7 +65,7 @@ class RDF {
     }
 
     if (entriesList.length === 0) return;
-    
+
     let id;
     const entriesGraphs = entriesList.reduce( (graphs, e, i) => {
       const keyStr = e.key.toString();
@@ -79,7 +79,7 @@ class RDF {
       if (!id) {
         // FIXME: we need to know which is the main graph in a deterministic way
         if (keyStr === RDF_GRAPH_ID) {
-          // incase of compacted.
+          // in case of compacted.
           id = valueStr;
         } else {
           id = JSON.parse(valueStr)[RDF_GRAPH_ID];

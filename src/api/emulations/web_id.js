@@ -44,6 +44,8 @@ const createWebIdProfileDoc = async (rdf, vocabs, profile, postsLocation) => {
   const webIdWithHashTag = hasMeAlready ? rdf.sym( profile.uri ) : rdf.sym(`${profile.uri}#me`);
   const webIdPosts = rdf.sym(`${profile.uri}/posts`);
 
+  // TODO: we are overwritting the entire RDF when updating, we could make it
+  // more efficient and only add the new triples when updating.
   rdf.add(id, vocabs.RDFS('type'), vocabs.FOAF('PersonalProfileDocument'));
   rdf.add(id, vocabs.DCTERMS('title'), rdf.literal(`${profile.name}'s profile document`));
   rdf.add(id, vocabs.FOAF('maker'), webIdWithHashTag);
@@ -61,11 +63,10 @@ const createWebIdProfileDoc = async (rdf, vocabs, profile, postsLocation) => {
 
     // TODO: Test to make sure image/website are optional.
 
-  rdf.add(webIdPosts, vocabs.RDFS('type'), vocabs.SAFETERMS('Posts'));
-  rdf.add(webIdPosts, vocabs.DCTERMS('title'), rdf.literal('Container for social apps posts'));
-
   if( postsLocation )
   {
+    rdf.add(webIdPosts, vocabs.RDFS('type'), vocabs.SAFETERMS('Posts'));
+    rdf.add(webIdPosts, vocabs.DCTERMS('title'), rdf.literal('Container for social apps posts'));
     rdf.add(webIdPosts, vocabs.SAFETERMS('xorName'), rdf.literal(postsLocation.name.toString()));
     rdf.add(webIdPosts, vocabs.SAFETERMS('typeTag'), rdf.literal(postsLocation.typeTag.toString()));
   }
@@ -147,12 +148,11 @@ class WebID {
   }
 
   async update(profile) {
-
-    // FIXME: we nee to keep the posts graph unless that's been also updated, which shouldn't be expected really
-    // this.rdf.removeMany( undefined, undefined, this.vocabs.FOAF('Person'));
-
+    // FIXME: we need to keep the posts graph unless that's been also updated, which shouldn't be expected really.
+    // We should look for better ways of supporting the update as this is inefficient.
+    this.rdf.removeMany( undefined, undefined, undefined);
+    await this.rdf.nowOrWhenFetched([`${profile.uri}/posts`]);
     await createWebIdProfileDoc(this.rdf, this.vocabs, profile);
-    const webIdLocation = await this.rdf.commit();
   }
 
   async serialise(mimeType) {
