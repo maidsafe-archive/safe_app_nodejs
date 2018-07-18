@@ -72,7 +72,8 @@ class RDF {
       const valueStr = e.value.buf.toString();
 
       // If the entry was soft-deleted skip it
-      if (valueStr.length === 0) {
+      if (valueStr.length === 0 ||
+         !keyStr.startsWith('safe://') ) {
           return graphs;
       }
 

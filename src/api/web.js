@@ -224,6 +224,9 @@ class WebInterface {
     entriesList.forEach((entry) => {
       const key = entry.key.toString();
       const value = entry.value.buf.toString();
+
+      if( !key.startsWith('safe://_publicNames') ) return;
+
       publicNamesArray.push(key);
     });
 
