@@ -25,7 +25,7 @@ const profile = {
   image: 'safe://mywebsite.gabriel/images/myavatar',
 };
 
-describe.only('getPublicNames', () => {
+describe('getPublicNames', () => {
   let app;
   let xorname;
   const TYPE_TAG = 15639;
@@ -72,7 +72,7 @@ describe.only('getPublicNames', () => {
 });
 
 
-describe.only('createPublicName', () => {
+describe('createPublicName', () => {
   let app;
   let authedApp;
   let md;
@@ -121,10 +121,20 @@ describe.only('createPublicName', () => {
     should(publicNames).be.a.Array();
     should(publicNames).containDeep(['safe://_publicNames#thisIsATestDomain']);
   });
+
+  it.only('should create two publicNames', async () => {
+    await authedApp.web.createPublicName('thisIsATestDomain', fakeSubdomainRDF);
+    await authedApp.web.createPublicName('thisIsASecondTestDomain', fakeSubdomainRDF);
+    const publicNames = await authedApp.web.getPublicNames();
+
+    should(publicNames).be.a.Array();
+    should(publicNames).containDeep(['safe://_publicNames#thisIsATestDomain']);
+    should(publicNames).containDeep(['safe://_publicNames#thisIsASecondTestDomain']);
+  });
 });
 
 
-describe.only('addServiceToSubdomain', () => {
+describe('addServiceToSubdomain', () => {
   let app;
   let authedApp;
   let md;
@@ -176,7 +186,7 @@ describe.only('addServiceToSubdomain', () => {
 });
 
 
-describe.only('getWebIds', () => {
+describe('getWebIds', () => {
   let app;
   let xorname;
   const TYPE_TAG = 15639;
@@ -230,7 +240,7 @@ describe.only('getWebIds', () => {
 });
 
 
-describe.only('addWebIdToDirectory', () => {
+describe('addWebIdToDirectory', () => {
   let app;
   let authedApp;
   let md;
