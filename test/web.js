@@ -65,9 +65,9 @@ describe.only('getPublicNames', () => {
 
     const webIds = await authedApp.web.getPublicNames();
 
-    // should(webIds).be.a.Array();
+    should(webIds).be.a.Array();
     //
-    // should(webIds).have.length(3);
+    should(webIds).have.length(3);
   });
 });
 

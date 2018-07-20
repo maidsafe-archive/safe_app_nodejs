@@ -181,35 +181,62 @@ class RDF {
   * Commit the RDF document to the underlying MutableData on the network
   * @returns {Promise}
   */
-  async commit() {
+  async commit( toEncrypt = false ) {
     const serialJsonLd = await this.serialise(JSON_LD_MIME_TYPE);
     const graphs = JSON.parse(serialJsonLd);
     const entries = await this.mData.getEntries();
     const entriesList = await entries.listEntries();
     const mutation = await this.mData.app.mutableData.newMutation();
-    graphs.forEach((e, i) => {
-      const key = e[RDF_GRAPH_ID];
-      // find the current graph in the entries
-      const match = entriesList.find((e, i, a) => {
-        if (e && key === e.key.toString()) {
-          delete a[i];
-          return true;
-        }
-        return false;
-      });
+    const mData = this.mData;
 
-      const stringifiedGraph = JSON.stringify(e);
+    const graphPromises =  graphs.map( async (graph, i) => {
+      const unencryptedKey = graph[RDF_GRAPH_ID];
+      let key = unencryptedKey;
+
+      let match = false;
+
+      // find the current graph in the entries list and remove it (before replacing via the rdf graph)
+      // this is to be able to remove any remainging entries (not readded via rdf) as they have been
+      // removed from this graph.
+      await Promise.all( entriesList.map( async (entry, i, a) => {
+
+        if( !entry || !entry.key || match ) return;
+
+        let keyToCheck = await entry.key.toString();
+
+        if( toEncrypt )
+        {
+          const decryptedKey = await mData.decrypt( entry.key );
+          keyToCheck = await decryptedKey.toString();
+        }
+
+        if ( unencryptedKey === keyToCheck ) {
+          delete a[i];
+
+          match = entry;
+        }
+      }) );
+
+      let stringifiedGraph = JSON.stringify(graph);
+
+      if( toEncrypt )
+      {
+        key = await mData.encryptKey( key );
+      }
+
       if (match) {
-        mutation.update(key, stringifiedGraph, match.value.version + 1);
+        return mutation.update(key, stringifiedGraph, match.value.version + 1);
       } else {
-        mutation.insert(key, stringifiedGraph);
+        return mutation.insert(key, stringifiedGraph);
       }
     });
 
+    await Promise.all( graphPromises );
+
     // remove the entries which are not present in new RDF
-    entriesList.forEach((e, i, a) => {
-      if (e) {
-        mutation.delete(e.key, e.value.version + 1);
+    await entriesList.forEach( async (entry, i, a) => {
+      if (entry) {
+        await mutation.delete(entry.key, entry.value.version + 1);
       }
     });
 

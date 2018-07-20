@@ -112,11 +112,16 @@ class WebInterface {
     const publicNamesContainer = await app.auth.getContainer('_publicNames');
     const publicNamesRdf = publicNamesContainer.emulateAs('rdf');
 
+
     const vocabs = this.getVocabs(publicNamesRdf);
 
+    //Here we do basic container setup for RDF entries. Doesn't matter if already existing, will just write
+    //same entries.
     const graphName = 'safe://_publicNames'; // TODO: this graph name is not a valid URI on the SAFE network
     const id = publicNamesRdf.sym(graphName);
+
     publicNamesRdf.setId(graphName);
+
     const graphNameWithHashTag = publicNamesRdf.sym(`${graphName}#it`);
     const newResourceName = publicNamesRdf.sym(`${graphName}#${publicName}`);
 
@@ -131,12 +136,14 @@ class WebInterface {
     publicNamesRdf.add(graphNameWithHashTag, vocabs.DCTERMS('title'), publicNamesRdf.literal('Public names owned by an account'));
     publicNamesRdf.add(graphNameWithHashTag, vocabs.SAFETERMS('hasPublicName'), newResourceName);
 
+    // and adding the actual name.
     publicNamesRdf.add(newResourceName, vocabs.RDFS('type'), vocabs.SAFETERMS('PublicName'));
     publicNamesRdf.add(newResourceName, vocabs.DCTERMS('title'), publicNamesRdf.literal(`'${publicName}' public name`));
     publicNamesRdf.add(newResourceName, vocabs.SAFETERMS('xorName'), publicNamesRdf.literal(subdomainsRdfLocation.name.toString()));
     publicNamesRdf.add(newResourceName, vocabs.SAFETERMS('typeTag'), publicNamesRdf.literal(subdomainsRdfLocation.typeTag.toString()));
 
-    await publicNamesRdf.commit();
+    const encryptThis = true;
+    await publicNamesRdf.commit( encryptThis );
   }
 
   async addServiceToSubdomain(subdomain, publicName, serviceLocation) {
@@ -220,15 +227,16 @@ class WebInterface {
     const entriesList = await entries.listEntries();
 
     const publicNamesArray = [];
-    // TODO: Encrypt/Decrypting.
-    entriesList.forEach((entry) => {
-      const key = entry.key.toString();
-      const value = entry.value.buf.toString();
 
-      if( !key.startsWith('safe://_publicNames') ) return;
+    await Promise.all( entriesList.map( async (entry) => {
 
-      publicNamesArray.push(key);
-    });
+        let key = await pubNamesCntr.decrypt(entry.key);
+        let keyString = await key.toString();
+
+      if( !keyString.startsWith('safe://_publicNames') ) return;
+
+      publicNamesArray.push(keyString);
+    }) );
 
     return publicNamesArray;
   }
