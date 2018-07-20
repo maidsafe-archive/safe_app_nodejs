@@ -54,7 +54,7 @@ describe.only('RDF emulation', () => {
       // FIXME: This is not the JSON that we actually have saved though...
       // (though we want this style...)
       // '@id': 'safe://nowOrWhenFetchedTest',
-      'safe://nowOrWhenFetchedTest':JSON.stringify( {"@id":"safe://_public/webId"} ),
+      'safe://nowOrWhenFetchedTest': JSON.stringify({ '@id': 'safe://_public/webId' }),
       'http://schema.org/image': JSON.stringify([{ '@id': 'http://manu.sporny.org/images/manu.png' }]),
       'http://schema.org/name': JSON.stringify([{ '@value': 'Manu Sporny' }]),
       'http://schema.org/url': JSON.stringify([{ '@id': 'http://manu.sporny.org/' }]),

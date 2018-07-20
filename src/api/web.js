@@ -9,23 +9,19 @@ const { parse: parseUrl } = require('url');
 
 const RDF_TYPE_TAG = 15639;
 
-const cleanRdfValue = (value ) =>
-{
+const cleanRdfValue = (value) => {
+  let cleanValue = value;
 
-    let cleanValue = value;
+  if (Array.isArray(value) && value.length === 1) {
+    cleanValue = value[0];
+  }
 
-    if( Array.isArray( value ) && value.length === 1 )
-    {
-      cleanValue = value[0];
-    }
+  if (cleanValue['@value']) {
+    cleanValue = cleanValue['@value'];
+  }
 
-    if( cleanValue["@value"] )
-    {
-      cleanValue = cleanValue["@value"];
-    }
-
-    return cleanValue;
-}
+  return cleanValue;
+};
 
 // make this usefullll..... so, purposefully pull out useful, but ignore RDF....
 const flattenWebId = (theData, rootTerm) => {
@@ -37,26 +33,23 @@ const flattenWebId = (theData, rootTerm) => {
     const graphId = graph['@id'];
 
     if (graphId === rootTerm) {
-
       newObject['@type'] = cleanRdfValue(graph['@type']);
 
       return;
     }
 
 
-    //split.pop maybe unneeded...
-    const strippedGraphID = graphId.replace( rootTerm, '').split('/').pop();
+    // split.pop maybe unneeded...
+    const strippedGraphID = graphId.replace(rootTerm, '').split('/').pop();
 
     newObject[strippedGraphID] = {};
 
-    Object.keys( graph ).forEach( key =>
-    {
+    Object.keys(graph).forEach((key) => {
       const cleanKey = key.split('/').pop();
       const cleanValue = cleanRdfValue(graph[key]);
 
       newObject[strippedGraphID][cleanKey] = cleanValue;
-    })
-
+    });
   });
   return newObject;
 };
@@ -115,8 +108,8 @@ class WebInterface {
 
     const vocabs = this.getVocabs(publicNamesRdf);
 
-    //Here we do basic container setup for RDF entries. Doesn't matter if already existing, will just write
-    //same entries.
+    // Here we do basic container setup for RDF entries. Doesn't matter if already existing, will just write
+    // same entries.
     const graphName = 'safe://_publicNames'; // TODO: this graph name is not a valid URI on the SAFE network
     const id = publicNamesRdf.sym(graphName);
 
@@ -143,7 +136,7 @@ class WebInterface {
     publicNamesRdf.add(newResourceName, vocabs.SAFETERMS('typeTag'), publicNamesRdf.literal(subdomainsRdfLocation.typeTag.toString()));
 
     const encryptThis = true;
-    await publicNamesRdf.commit( encryptThis );
+    await publicNamesRdf.commit(encryptThis);
   }
 
   async addServiceToSubdomain(subdomain, publicName, serviceLocation) {
@@ -198,7 +191,6 @@ class WebInterface {
 
       subdomainsRdf.add(uriWithHashTag, vocabs.RDFS('type'), vocabs.SAFETERMS('Services'));
       subdomainsRdf.add(uriWithHashTag, vocabs.DCTERMS('title'), subdomainsRdf.literal(`Services available for subdomain: '${publicName}'`));
-
     }
 
     // Now add the triples specific for the new service
@@ -228,15 +220,14 @@ class WebInterface {
 
     const publicNamesArray = [];
 
-    await Promise.all( entriesList.map( async (entry) => {
+    await Promise.all(entriesList.map(async (entry) => {
+      const key = await pubNamesCntr.decrypt(entry.key);
+      const keyString = await key.toString();
 
-        let key = await pubNamesCntr.decrypt(entry.key);
-        let keyString = await key.toString();
-
-      if( !keyString.startsWith('safe://_publicNames') ) return;
+      if (!keyString.startsWith('safe://_publicNames')) return;
 
       publicNamesArray.push(keyString);
-    }) );
+    }));
 
     return publicNamesArray;
   }
@@ -338,15 +329,13 @@ class WebInterface {
 
         return flatVersion;
       } catch (e) {
-        console.log("WebID not found at specified URI:", uri);
+        console.log('WebID not found at specified URI:', uri);
         return null;
       }
     });
 
     const list = await Promise.all(webIds);
-    return list.filter((entry) => {
-      return (entry !== null);
-    });
+    return list.filter((entry) => (entry !== null));
   }
 }
 

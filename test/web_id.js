@@ -50,13 +50,12 @@ describe.only('WebID emulation', () => {
     profile.name = 'Gabriel Updated';
     profile.image = 'New Image';
     await webId.update(profile);
-    const secondId = await webId.rdf.serialise('application/ld+json')
+    const secondId = await webId.rdf.serialise('application/ld+json');
     const secondPosts = JSON.parse(secondId)[2];
 
-    should( secondId ).match( /Gabriel Updated/ );
-    should( secondId ).match( /New Image/ );
-    should( secondPosts ).deepEqual( firstPosts );
-
+    should(secondId).match(/Gabriel Updated/);
+    should(secondId).match(/New Image/);
+    should(secondPosts).deepEqual(firstPosts);
   });
 
 
@@ -111,6 +110,5 @@ describe.only('WebID emulation', () => {
 
     const webIds = await app.web.getWebIds();
     should(webIds).be.a.Array();
-
   });
 });

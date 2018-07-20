@@ -221,12 +221,11 @@ describe.only('getWebIds', () => {
 
 
     should(webIds[0]).be.a.Object();
-    //first el of webId statement array, in the array...
-    should(webIds[0]["@type"]).equal('http://xmlns.com/foaf/0.1/PersonalProfileDocument');
-    should(webIds[0]["#me"]).not.be.undefined();
-    should(webIds[0]["#me"]).be.a.Object();
+    // first el of webId statement array, in the array...
+    should(webIds[0]['@type']).equal('http://xmlns.com/foaf/0.1/PersonalProfileDocument');
+    should(webIds[0]['#me']).not.be.undefined();
+    should(webIds[0]['#me']).be.a.Object();
     should(webIds[0].posts).be.a.Object();
-
   });
 });
 
@@ -271,9 +270,8 @@ describe.only('addWebIdToDirectory', () => {
   });
 
   it('should create a directory listing for the webId', async () => {
-
     const name1 = 'dirCreated';
-    await webId.create({ ...profile, uri: 'safe://aaaa.fakeWebIdUri' }, name1 );
+    await webId.create({ ...profile, uri: 'safe://aaaa.fakeWebIdUri' }, name1);
 
     const directory = await authedApp.auth.getContainer('_public');
     const directoryRDF = await directory.emulateAs('rdf');
@@ -291,8 +289,6 @@ describe.only('addWebIdToDirectory', () => {
 
 
   it('should create and store multiple webIds', async () => {
-
-
     const xorname1 = h.createRandomXorName();
     const md1 = await authedApp.mutableData.newPublic(xorname1, TYPE_TAG);
     await md1.quickSetup({});
@@ -300,7 +296,7 @@ describe.only('addWebIdToDirectory', () => {
     const webId1 = await md1.emulateAs('WebID');
 
     const name1 = 'displayName';
-    await webId1.create({ ...profile, uri: 'safe://bbba.fakeWebIdUri1' }, name1 );
+    await webId1.create({ ...profile, uri: 'safe://bbba.fakeWebIdUri1' }, name1);
 
     const xorname2 = h.createRandomXorName();
     const md2 = await authedApp.mutableData.newPublic(xorname2, TYPE_TAG);
@@ -308,7 +304,7 @@ describe.only('addWebIdToDirectory', () => {
     const webId2 = await md2.emulateAs('WebID');
 
     const name2 = 'displayName2...';
-    await webId2.create({ ...profile, uri: 'safe://accc.fakeWebIdUri2' }, name2 );
+    await webId2.create({ ...profile, uri: 'safe://accc.fakeWebIdUri2' }, name2);
 
     const directory = await authedApp.auth.getContainer('_public');
     const directoryRDF = directory.emulateAs('rdf');

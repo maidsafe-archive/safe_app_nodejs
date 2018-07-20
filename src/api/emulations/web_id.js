@@ -37,11 +37,10 @@ const { parse: parseUrl } = require('url');
 
 // Helper for creating a WebID profile document RDF resource
 const createWebIdProfileDoc = async (rdf, vocabs, profile, postsLocation) => {
-
   const id = rdf.sym(profile.uri);
   rdf.setId(profile.uri);
   const hasMeAlready = profile.uri.includes('#me');
-  const webIdWithHashTag = hasMeAlready ? rdf.sym( profile.uri ) : rdf.sym(`${profile.uri}#me`);
+  const webIdWithHashTag = hasMeAlready ? rdf.sym(profile.uri) : rdf.sym(`${profile.uri}#me`);
   const webIdPosts = rdf.sym(`${profile.uri}/posts`);
 
   // TODO: we are overwritting the entire RDF when updating, we could make it
@@ -55,16 +54,13 @@ const createWebIdProfileDoc = async (rdf, vocabs, profile, postsLocation) => {
   rdf.add(webIdWithHashTag, vocabs.FOAF('name'), rdf.literal(profile.name));
   rdf.add(webIdWithHashTag, vocabs.FOAF('nick'), rdf.literal(profile.nick));
 
-  if( profile.image )
-    rdf.add(webIdWithHashTag, vocabs.FOAF('image'), rdf.literal(profile.image)); // TODO: this needs to be created as an LDP-NR
+  if (profile.image) { rdf.add(webIdWithHashTag, vocabs.FOAF('image'), rdf.literal(profile.image)); } // TODO: this needs to be created as an LDP-NR
 
-  if( profile.website )
-    rdf.add(webIdWithHashTag, vocabs.FOAF('website'), rdf.literal(profile.website));
+  if (profile.website) { rdf.add(webIdWithHashTag, vocabs.FOAF('website'), rdf.literal(profile.website)); }
 
     // TODO: Test to make sure image/website are optional.
 
-  if( postsLocation )
-  {
+  if (postsLocation) {
     rdf.add(webIdPosts, vocabs.RDFS('type'), vocabs.SAFETERMS('Posts'));
     rdf.add(webIdPosts, vocabs.DCTERMS('title'), rdf.literal('Container for social apps posts'));
     rdf.add(webIdPosts, vocabs.SAFETERMS('xorName'), rdf.literal(postsLocation.name.toString()));
@@ -150,7 +146,7 @@ class WebID {
   async update(profile) {
     // FIXME: we need to keep the posts graph unless that's been also updated, which shouldn't be expected really.
     // We should look for better ways of supporting the update as this is inefficient.
-    this.rdf.removeMany( undefined, undefined, undefined);
+    this.rdf.removeMany(undefined, undefined, undefined);
     await this.rdf.nowOrWhenFetched([`${profile.uri}/posts`]);
     await createWebIdProfileDoc(this.rdf, this.vocabs, profile);
   }
