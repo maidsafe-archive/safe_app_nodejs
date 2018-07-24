@@ -259,7 +259,11 @@ class WebInterface {
       existingRDF = true;
     } catch (e) {
       // ignore no ID set incase nothing has been added yet.
-      if (e.code !== errConst.MISSING_RDF_ID.code) throw new Error({ code: e.code, message: e.message });
+      if (e.code !== errConst.MISSING_RDF_ID.code){
+        console.log('Error in addWebIdToDirectory', e )
+        throw new Error({ code: e.code, message: e.message });
+      }
+
     }
 
     if (!existingRDF) {
