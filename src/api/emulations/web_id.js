@@ -36,6 +36,8 @@ const { parse: parseUrl } = require('url');
 
 
 // Helper for creating a WebID profile document RDF resource
+//
+// TODO: Webid URI validation: https://github.com/joshuef/webIdManager/issues/2
 const createWebIdProfileDoc = async (rdf, vocabs, profile, postsLocation) => {
   const id = rdf.sym(profile.uri);
   rdf.setId(profile.uri);
