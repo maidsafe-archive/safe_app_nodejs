@@ -228,10 +228,20 @@ class RDF {
 
     await Promise.all(graphPromises);
 
-    // remove the entries which are not present in new RDF
+    // remove RDF entries which are not present in new RDF
     await entriesList.forEach(async (entry, i, a) => {
       if (entry) {
-        await mutation.delete(entry.key, entry.value.version + 1);
+        let keyToCheck = await entry.key.toString();
+
+        if (toEncrypt) {
+          const decryptedKey = await mData.decrypt(entry.key);
+          keyToCheck = await decryptedKey.toString();
+        }
+
+        if( keyToCheck.startsWith('safe://') )
+        {
+          await mutation.delete(entry.key, entry.value.version + 1);
+        }
       }
     });
 
