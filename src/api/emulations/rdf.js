@@ -203,8 +203,17 @@ class RDF {
         let keyToCheck = await entry.key.toString();
 
         if (toEncrypt) {
-          const decryptedKey = await mData.decrypt(entry.key);
-          keyToCheck = await decryptedKey.toString();
+
+          try {
+            const decryptedKey = await mData.decrypt(entry.key);
+            keyToCheck = await decryptedKey.toString();
+
+          }
+          catch( e )
+          {
+            console.error('Error decrypting MD key in rdf.commit.', e )
+          }
+
         }
 
         if (unencryptedKey === keyToCheck) {
@@ -234,8 +243,15 @@ class RDF {
         let keyToCheck = await entry.key.toString();
 
         if (toEncrypt) {
-          const decryptedKey = await mData.decrypt(entry.key);
-          keyToCheck = await decryptedKey.toString();
+          try {
+            const decryptedKey = await mData.decrypt(entry.key);
+            keyToCheck = await decryptedKey.toString();
+
+          }
+          catch( e )
+          {
+            console.error('Error decrypting MD key in rdf.commit.', e )
+          }
         }
 
         if( keyToCheck.startsWith('safe://') )
