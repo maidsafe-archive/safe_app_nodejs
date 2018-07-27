@@ -1,6 +1,6 @@
 {
   "name": "@maidsafe/safe-node-app",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "A safe_app library for Node.js",
   "license": "(MIT OR BSD-3-Clause)",
   "main": "src/index.js",
@@ -72,7 +72,7 @@
     },
     "safe_app": {
       "mirror": "https://s3.eu-west-2.amazonaws.com/safe-client-libs",
-      "version": "a9b4c05",
+      "version": "0.8.0",
       "targetDir": "src/native/prod",
       "filename": "safe_app",
       "filePattern": "^.*\\.(dll|so|dylib)$",
