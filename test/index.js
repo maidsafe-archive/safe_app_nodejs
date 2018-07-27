@@ -136,6 +136,8 @@ describe('External API', () => {
       const wrongAppInfo = Object.assign({}, appInfo, { customExecPath: 'non-array-exec-path' });
       return should(initialiseApp(wrongAppInfo)).be.rejectedWith('Exec command must be an array of string arguments');
     });
+
+    it('throws error for appInfo property', () => should(initialiseApp({ id: 'id1', vendor: 'vendor' })).be.rejected());
   });
 
   describe('fromAuthUri', () => {

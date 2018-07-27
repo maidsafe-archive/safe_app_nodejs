@@ -27,6 +27,7 @@
 ### Fixed
 - Fixed some tests which were giving false positive results
 - Added missing error handling for `app_reconnect` to prevent false connection status
+- Error handling for malformed appInfo object passed to initialiseApp
 
 ## SAFE libraries Dependencies
 - safe_app: v0.8.0
