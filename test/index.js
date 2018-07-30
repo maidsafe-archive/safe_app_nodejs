@@ -137,7 +137,7 @@ describe('External API', () => {
       return should(initialiseApp(wrongAppInfo)).be.rejectedWith('Exec command must be an array of string arguments');
     });
 
-    it('throws error for appInfo property', () => should(initialiseApp({ id: 'id1', vendor: 'vendor' })).be.rejected());
+    it('throws error for missing appInfo property', () => should(initialiseApp({ id: 'id1', vendor: 'vendor' })).be.rejectedWith(errConst.MALFORMED_APP_INFO.msg));
   });
 
   describe('fromAuthUri', () => {
