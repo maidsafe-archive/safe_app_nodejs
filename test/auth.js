@@ -229,7 +229,7 @@ describe('Access Container', () => {
 
   it.only('request permissons for other app\' own container', async () => {
     const primaryAppInfo = { id: 'primary', vendor: '1' };
-    const primaryApp = await createAuthenticatedTestApp(primaryAppInfo, {}, { own_container: true });
+    await createAuthenticatedTestApp(primaryAppInfo, {}, { own_container: true });
     const perms = {
       'apps/primary': ['Read']
     };
