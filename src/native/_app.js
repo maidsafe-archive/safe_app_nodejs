@@ -20,6 +20,7 @@ const { helpersForNative } = require('./_auth.js');
 const { types } = require('./_auth');
 const AuthGranted = types.AuthGranted;
 const consts = require('../consts');
+const errConst = require('../error_const');
 
 const AccountInfo = Struct({
   mutations_done: t.u64,

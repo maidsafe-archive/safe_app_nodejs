@@ -26,14 +26,13 @@ const { webFetch } = require('./web_fetch.js');
 const validateAppInfo = (_appInfo) => {
   const appInfo = _appInfo;
   const appInfoMustHaveProperties = ['id', 'name', 'vendor'];
-  let bool = false;
   const hasCorrectProperties = appInfoMustHaveProperties.every((prop) => {
     if (appInfo && appInfo[prop]) {
       appInfo[prop] = appInfo[prop].trim();
-      bool = Object.prototype.hasOwnProperty.call(appInfo, prop) && appInfo[prop];
+      return Object.prototype.hasOwnProperty.call(appInfo, prop) && appInfo[prop];
     }
 
-    return bool;
+    return false;
   });
 
   if (!hasCorrectProperties) {

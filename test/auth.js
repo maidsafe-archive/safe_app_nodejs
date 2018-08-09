@@ -14,6 +14,7 @@
 const should = require('should');
 const h = require('./helpers');
 const errConst = require('../src/error_const');
+const lib = require('../src/native/lib');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 const createTestApp = h.createTestApp;
@@ -139,6 +140,11 @@ describe('auth interface', () => {
         should(resp.uri).is.not.undefined();
         return should(resp.uri).startWith('safe-auth:');
       });
+  });
+
+  it('throws error if no URI provided to app_unregistered', async () => {
+    const app = await createTestApp();
+    return should(lib.app_unregistered(app)).be.rejectedWith(errConst.MISSING_AUTH_URI.msg);
   });
 
   it('logs in to network with URI response from authenticator', async () => {

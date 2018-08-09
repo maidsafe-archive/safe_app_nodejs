@@ -1,5 +1,16 @@
 # safe_app nodejs Change Log
 
+[Unreleased]
+### Added
+
+### Changed
+
+### Fixed
+- Error handling for malformed appInfo object passed to initialiseApp
+
+## SAFE libraries Dependencies
+
+
 [0.9.0] - 27-7-2018
 ### Added
 - New binding `simulateNetworkDisconnect()` function to simulate a network disconnection event useful for applications testing purposes.
