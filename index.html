@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@maidsafe/safe-node-app 0.8.0 | Documentation</title>
+  <title>@maidsafe/safe-node-app 0.9.0 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@maidsafe/safe-node-app</h3>
-          <div class='mb1'><code>0.8.0</code></div>
+          <div class='mb1'><code>0.9.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -35,9 +35,9 @@
               
                 
                 <li><a
-                  href='#initializeapp'
+                  href='#initialiseapp'
                   class="">
-                  initializeApp
+                  initialiseApp
                   
                 </a>
                 
@@ -47,7 +47,7 @@
                 <li><a
                   href='#fromauthuri'
                   class="">
-                  fromAuthURI
+                  fromAuthUri
                   
                 </a>
                 
@@ -146,12 +146,6 @@
                         href='#safeappmutabledata'
                         class='regular pre-open'>
                         #mutableData
-                      </a></li>
-                      
-                      <li><a
-                        href='#safeappwebfetch'
-                        class='regular pre-open'>
-                        #webFetch
                       </a></li>
                       
                       <li><a
@@ -417,13 +411,19 @@
                       <li><a
                         href='#authinterfaceloginfromuri'
                         class='regular pre-open'>
-                        #loginFromURI
+                        #loginFromUri
                       </a></li>
                       
                       <li><a
                         href='#authinterfaceloginfortest'
                         class='regular pre-open'>
                         #loginForTest
+                      </a></li>
+                      
+                      <li><a
+                        href='#authinterfacesimulatenetworkdisconnect'
+                        class='regular pre-open'>
+                        #simulateNetworkDisconnect
                       </a></li>
                       
                     </ul>
@@ -835,9 +835,9 @@
                       </a></li>
                       
                       <li><a
-                        href='#entriesforeach'
+                        href='#entrieslistentries'
                         class='regular pre-open'>
-                        #forEach
+                        #listEntries
                       </a></li>
                       
                       <li><a
@@ -881,9 +881,9 @@
                       </a></li>
                       
                       <li><a
-                        href='#entrymutationtransactionremove'
+                        href='#entrymutationtransactiondelete'
                         class='regular pre-open'>
-                        #remove
+                        #delete
                       </a></li>
                       
                       <li><a
@@ -1032,6 +1032,12 @@
                         href='#filedatamapname'
                         class='regular pre-open'>
                         #dataMapName
+                      </a></li>
+                      
+                      <li><a
+                        href='#fileusermetadata'
+                        class='regular pre-open'>
+                        #userMetadata
                       </a></li>
                       
                       <li><a
@@ -1604,9 +1610,39 @@
               
                 
                 <li><a
-                  href='#webfetchoptions'
+                  href='#validateappinfo'
                   class="">
-                  WebFetchOptions
+                  validateAppInfo
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#initlogging'
+                  class="">
+                  initLogging
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setsearchpath'
+                  class="">
+                  setSearchPath
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#invalid_byte_range'
+                  class="">
+                  INVALID_BYTE_RANGE
                   
                 </a>
                 
@@ -1617,6 +1653,36 @@
                   href='#non_auth_granted_uri'
                   class="">
                   NON_AUTH_GRANTED_URI
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#invalid_sec_key'
+                  class="">
+                  INVALID_SEC_KEY
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#webfetch'
+                  class="">
+                  webFetch
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#webfetchoptions'
+                  class="">
+                  WebFetchOptions
                   
                 </a>
                 
@@ -1652,22 +1718,22 @@
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='initializeapp'>
-      initializeApp
+    <h3 class='fl m0' id='initialiseapp'>
+      initialiseApp
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/index.js#L59-L66'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/index.js#L74-L82'>
       <span>src/index.js</span>
       </a>
     
   </div>
   
 
-  <p>The main entry point to create a new SAFEApp</p>
+  <p>The entry point to create a new SAFEApp</p>
 
 
-  <div class='pre p1 fill-light mt0'>initializeApp</div>
+  <div class='pre p1 fill-light mt0'>initialiseApp</div>
   
   
 
@@ -1735,7 +1801,7 @@ to receive network state updates
 <span class="hljs-keyword">const</span> safe = <span class="hljs-built_in">require</span>(<span class="hljs-string">'@maidsafe/safe-node-app'</span>);
 
 <span class="hljs-comment">// starting initialisation</span>
-<span class="hljs-keyword">let</span> prms = safe.initializeApp({
+<span class="hljs-keyword">let</span> prms = safe.initialiseApp({
                      <span class="hljs-attr">id</span>: <span class="hljs-string">"net.maidsafe.example"</span>,
                      <span class="hljs-attr">name</span>: <span class="hljs-string">'Example SAFE App'</span>,
                      <span class="hljs-attr">vendor</span>: <span class="hljs-string">'MaidSafe.net Ltd'</span>
@@ -1767,11 +1833,11 @@ prms.then(<span class="hljs-function"><span class="hljs-params">app</span> =&gt;
   <div class='clearfix'>
     
     <h3 class='fl m0' id='fromauthuri'>
-      fromAuthURI
+      fromAuthUri
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/index.js#L80-L81'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/index.js#L96-L97'>
       <span>src/index.js</span>
       </a>
     
@@ -1784,7 +1850,7 @@ connection by using this helper function. Just provide said URI as the
 second value.</p>
 
 
-  <div class='pre p1 fill-light mt0'>fromAuthURI</div>
+  <div class='pre p1 fill-light mt0'>fromAuthUri</div>
   
   
 
@@ -1876,7 +1942,7 @@ to receive network state updates
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/index.js#L59-L66'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/index.js#L74-L82'>
       <span>src/index.js</span>
       </a>
     
@@ -1984,7 +2050,7 @@ to use when registering the URI with the system.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/index.js#L59-L66'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/index.js#L74-L82'>
       <span>src/index.js</span>
       </a>
     
@@ -2066,6 +2132,16 @@ additional search path.
           
         </div>
       
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>forceUseMock</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>?)</code>
+	    to force the use of mock routing regardless
+the NODE_ENV environment variable value. Defaults to false
+
+          </div>
+          
+        </div>
+      
     </div>
   
 
@@ -2097,7 +2173,7 @@ additional search path.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/consts.js#L85-L95'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/consts.js#L83-L93'>
       <span>src/consts.js</span>
       </a>
     
@@ -2339,7 +2415,7 @@ signal that it should be committed to the network with an empty set of permissio
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L17-L501'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L78-L370'>
       <span>src/app.js</span>
       </a>
     
@@ -2426,7 +2502,7 @@ this session.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L439-L442'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L308-L312'>
       <span>src/app.js</span>
       </a>
     
@@ -2548,7 +2624,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L55-L57'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L126-L128'>
       <span>src/app.js</span>
       </a>
     
@@ -2611,7 +2687,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L63-L65'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L134-L136'>
       <span>src/app.js</span>
       </a>
     
@@ -2674,7 +2750,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L71-L73'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L142-L144'>
       <span>src/app.js</span>
       </a>
     
@@ -2737,7 +2813,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L79-L81'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L150-L152'>
       <span>src/app.js</span>
       </a>
     
@@ -2800,7 +2876,7 @@ to receive network state updates
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L87-L89'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L158-L160'>
       <span>src/app.js</span>
       </a>
     
@@ -2849,94 +2925,6 @@ to receive network state updates
       </div>
     </div>
   
-    <div class='border-bottom' id='safeappwebfetch'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>webFetch(url, options)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L167-L294'>
-      <span>src/app.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Helper to lookup a given <code>safe://</code>-url in accordance with the
-convention and find the requested object.</p>
-
-
-  <div class='pre p1 fill-light mt0'>webFetch(url: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, options: <a href="#webfetchoptions">WebFetchOptions</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>url</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    the url you want to fetch
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#webfetchoptions">WebFetchOptions</a>
-            = <code>null</code>)</code>
-	    additional options
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></code>:
-        the object with body of content and headers
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='safeappconnection'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -2951,7 +2939,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L317-L322'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L186-L191'>
       <span>src/app.js</span>
       </a>
     
@@ -3014,7 +3002,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L339-L357'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L208-L226'>
       <span>src/app.js</span>
       </a>
     
@@ -3077,7 +3065,7 @@ convention and find the requested object.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L366-L368'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L235-L237'>
       <span>src/app.js</span>
       </a>
     
@@ -3142,7 +3130,7 @@ connection made with the network yet.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L375-L377'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L244-L246'>
       <span>src/app.js</span>
       </a>
     
@@ -3205,7 +3193,7 @@ connection made with the network yet.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L384-L386'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L253-L255'>
       <span>src/app.js</span>
       </a>
     
@@ -3268,7 +3256,7 @@ connection made with the network yet.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L391-L393'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L260-L262'>
       <span>src/app.js</span>
       </a>
     
@@ -3323,7 +3311,7 @@ connection made with the network yet.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L404-L410'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L273-L279'>
       <span>src/app.js</span>
       </a>
     
@@ -3403,7 +3391,7 @@ the path of where the safe_core log file is located.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L426-L428'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L295-L297'>
       <span>src/app.js</span>
       </a>
     
@@ -3466,7 +3454,7 @@ the path of where the safe_core log file is located.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L449-L451'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L319-L321'>
       <span>src/app.js</span>
       </a>
     
@@ -3529,7 +3517,7 @@ the path of where the safe_core log file is located.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L472-L475'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L342-L344'>
       <span>src/app.js</span>
       </a>
     
@@ -3585,7 +3573,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L491-L493'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L360-L362'>
       <span>src/app.js</span>
       </a>
     
@@ -3640,7 +3628,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L498-L500'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L367-L369'>
       <span>src/app.js</span>
       </a>
     
@@ -3701,7 +3689,7 @@ Must be invoked when the client decides to connect back after the connection was
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L289-L425'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L280-L416'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3766,7 +3754,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L304-L306'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L295-L297'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3842,7 +3830,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L315-L318'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L306-L309'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3905,7 +3893,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L324-L327'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L315-L318'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -3968,7 +3956,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L333-L339'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L324-L330'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -4031,7 +4019,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L345-L351'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L336-L342'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -4094,7 +4082,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L357-L363'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L348-L354'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -4178,7 +4166,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L369-L375'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L360-L366'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -4262,7 +4250,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L382-L385'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L373-L376'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -4339,7 +4327,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L392-L395'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L383-L386'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -4416,7 +4404,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L402-L405'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L393-L396'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -4493,7 +4481,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L412-L415'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L403-L406'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -4570,7 +4558,7 @@ Must be invoked when the client decides to connect back after the connection was
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L422-L424'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L413-L415'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -4639,7 +4627,7 @@ Must be invoked when the client decides to connect back after the connection was
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L78-L420'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L69-L427'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4707,7 +4695,7 @@ authentitcation protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L124-L126'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L115-L117'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4770,7 +4758,7 @@ authentitcation protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L146-L157'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L137-L148'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4781,7 +4769,7 @@ authentitcation protocol.</p>
 the given permissions and optional parameters.</p>
 
 
-  <div class='pre p1 fill-light mt0'>genAuthUri(permissions: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, opts: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></div>
+  <div class='pre p1 fill-light mt0'>genAuthUri(permissions: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, opts: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
   
   
 
@@ -4852,9 +4840,8 @@ our own container to be created for us, too
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>:
-        <code>safe-auth://</code>
--URI
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
+        <code>{id: &#x3C;id>, uri: 'safe-auth://' }</code>
 
       
     
@@ -4898,7 +4885,7 @@ app.auth.genAuthUri({
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L179-L189'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L170-L180'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -4958,11 +4945,11 @@ to a list of permissions you want to request
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// example of requesting permissions for a couple of MutableData's:</span>
 app.auth.genShareMDataUri([
- { <span class="hljs-attr">type_tag</span>: <span class="hljs-number">15001</span>,   <span class="hljs-comment">// request for MD with tag 15001</span>
+ { <span class="hljs-attr">typeTag</span>: <span class="hljs-number">15001</span>,   <span class="hljs-comment">// request for MD with tag 15001</span>
    name: <span class="hljs-string">'XoRname1'</span>,  <span class="hljs-comment">// request for MD located at address 'XoRname1'</span>
    perms: [<span class="hljs-string">'Insert'</span>], <span class="hljs-comment">// request for inserting into the referenced MD</span>
  },
- { <span class="hljs-attr">type_tag</span>: <span class="hljs-number">15020</span>,   <span class="hljs-comment">// request for MD with tag 15020</span>
+ { <span class="hljs-attr">typeTag</span>: <span class="hljs-number">15020</span>,   <span class="hljs-comment">// request for MD with tag 15020</span>
    name: <span class="hljs-string">'XoRname2'</span>,  <span class="hljs-comment">// request for MD located at address 'XoRname2'</span>
    perms: [<span class="hljs-string">'Insert'</span>, <span class="hljs-string">`Update`</span>], <span class="hljs-comment">// request for updating and inserting into the referenced MD</span>
  }
@@ -4994,7 +4981,7 @@ app.auth.genShareMDataUri([
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L199-L202'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L190-L193'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5004,7 +4991,7 @@ app.auth.genShareMDataUri([
   <p>Generate an unregistered connection URI for the app.</p>
 
 
-  <div class='pre p1 fill-light mt0'>genConnUri(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></div>
+  <div class='pre p1 fill-light mt0'>genConnUri(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
   
   
 
@@ -5022,9 +5009,8 @@ app.auth.genShareMDataUri([
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>:
-        <code>safe-auth://</code>
--URI
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
+        <code>{id: &#x3C;id>, uri: 'safe-auth://' }</code>
 
       
     
@@ -5065,7 +5051,7 @@ app.auth.genConnUri()</pre>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L208-L210'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L199-L201'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5133,7 +5119,7 @@ app.auth.genConnUri()</pre>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L223-L233'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L214-L224'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5219,7 +5205,7 @@ app.auth.genContainerAuthUri(
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L240-L242'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L231-L233'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5283,7 +5269,7 @@ connected or received a response from the authenticator in the IPC protocol.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L250-L252'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L241-L243'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5347,7 +5333,7 @@ permissions for each of them.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L261-L282'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L252-L273'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5425,7 +5411,7 @@ without the need to connect to the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L289-L306'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L280-L297'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5489,7 +5475,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L314-L330'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L305-L321'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5575,7 +5561,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L337-L344'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L328-L335'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5643,7 +5629,7 @@ When run in tests, this falls back to the randomly generated version</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>loginFromURI(uri)</span>
+            <span class='code strong strong truncate'>loginFromUri(uri)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -5653,7 +5639,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L352-L384'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L343-L375'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5663,7 +5649,7 @@ When run in tests, this falls back to the randomly generated version</p>
   <p>Create a new authenticated or unregistered session using the provided IPC response.</p>
 
 
-  <div class='pre p1 fill-light mt0'>loginFromURI(uri: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
+  <div class='pre p1 fill-light mt0'>loginFromUri(uri: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#safeapp">SAFEApp</a>></div>
   
   
 
@@ -5731,7 +5717,7 @@ authenticated session.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/auth.js#L393-L419'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L384-L412'>
       <span>src/api/auth.js</span>
       </a>
     
@@ -5803,6 +5789,64 @@ a local unregistered App if permissions is <code>null</code>.</p>
       </div>
     </div>
   
+    <div class='border-bottom' id='authinterfacesimulatenetworkdisconnect'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>simulateNetworkDisconnect()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/auth.js#L421-L426'>
+      <span>src/api/auth.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p><em>ONLY AVAILALBE IF RUN in NODE_ENV='development' || 'testing'</em></p>
+<p>Simulates a network disconnection event. This can be used to
+test any logic to be executed by an application when a network
+diconnection notification is received.</p>
+
+
+  <div class='pre p1 fill-light mt0'>simulateNetworkDisconnect()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
 </div>
 
   
@@ -5823,7 +5867,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/cipher_opt.js#L19-L56'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/cipher_opt.js#L32-L69'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -5887,7 +5931,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/cipher_opt.js#L29-L32'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/cipher_opt.js#L42-L45'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -5950,7 +5994,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/cipher_opt.js#L38-L41'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/cipher_opt.js#L51-L54'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -6013,7 +6057,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/cipher_opt.js#L48-L54'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/cipher_opt.js#L61-L67'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -6095,7 +6139,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L111-L139'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/immutable.js#L123-L151'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6160,7 +6204,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L125-L128'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/immutable.js#L137-L140'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6223,7 +6267,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L135-L138'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/immutable.js#L147-L150'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -6306,7 +6350,7 @@ a local unregistered App if permissions is <code>null</code>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L541-L654'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L552-L665'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6387,7 +6431,7 @@ app.mutableData.newRandomPublic(<span class="hljs-number">15001</span>)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L557-L563'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L568-L574'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6465,7 +6509,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L572-L578'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L583-L589'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6543,7 +6587,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L589-L592'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L600-L603'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6645,7 +6689,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L601-L604'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L612-L615'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6731,7 +6775,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L610-L613'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L621-L624'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6794,7 +6838,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L619-L622'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L630-L633'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6857,7 +6901,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L628-L631'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L639-L642'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -6920,7 +6964,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L637-L640'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L648-L651'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7017,7 +7061,7 @@ access.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L8-L51'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/immutable.js#L20-L63'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -7075,7 +7119,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L16-L30'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/immutable.js#L28-L42'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -7181,7 +7225,7 @@ access.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L36-L38'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/immutable.js#L48-L50'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -7250,7 +7294,7 @@ access.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L69-L104'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/immutable.js#L81-L116'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -7324,7 +7368,7 @@ app.immutableData.create()
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L77-L79'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/immutable.js#L89-L91'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -7401,7 +7445,7 @@ app.immutableData.create()
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/immutable.js#L87-L91'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/immutable.js#L99-L103'>
       <span>src/api/immutable.js</span>
       </a>
     
@@ -7499,7 +7543,7 @@ app.immutableData.create()
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L243-L522'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L255-L533'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7557,7 +7601,7 @@ app.immutableData.create()
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L268-L294'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L280-L306'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7670,7 +7714,7 @@ create the data with
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L311-L322'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L323-L334'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7763,7 +7807,7 @@ decision to either allow or deny such a request based on it.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L332-L334'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L344-L346'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7842,7 +7886,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L344-L346'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L356-L358'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7921,7 +7965,7 @@ contained in a Private MutableData. If the MutableData is Public, the same
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L355-L357'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L367-L369'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -7999,7 +8043,7 @@ contained in a Private MutableData.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L365-L370'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L377-L382'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8063,7 +8107,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L377-L379'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L389-L391'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8126,7 +8170,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L386-L388'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L398-L400'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8202,7 +8246,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L398-L403'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L410-L415'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8288,7 +8332,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L410-L413'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L421-L424'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8351,7 +8395,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L419-L421'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L430-L432'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8414,7 +8458,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L427-L429'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L438-L440'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8477,7 +8521,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L435-L438'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L446-L449'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8540,7 +8584,7 @@ up on the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L446-L451'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L457-L462'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8619,7 +8663,7 @@ a specifc key</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L461-L468'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L472-L479'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8708,7 +8752,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L479-L487'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L490-L498'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8806,7 +8850,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L494-L496'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L505-L507'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8883,7 +8927,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L502-L504'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L513-L515'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -8946,7 +8990,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L510-L512'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L521-L523'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9009,7 +9053,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L519-L521'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L530-L532'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9092,7 +9136,7 @@ actually asking for the right one
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L163-L225'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L176-L237'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9150,7 +9194,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L169-L171'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L182-L184'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9213,7 +9257,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L189-L191'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L202-L204'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9276,11 +9320,11 @@ actually asking for the right one
       </div>
     </div>
   
-    <div class='border-bottom' id='entriesforeach'>
+    <div class='border-bottom' id='entrieslistentries'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>forEach(fn)</span>
+            <span class='code strong strong truncate'>listEntries()</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -9290,41 +9334,27 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L198-L200'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L210-L212'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Iterate over the entries, execute the function for each item</p>
+  <p>Get a list with the entries contained in this MutableData</p>
 
 
-  <div class='pre p1 fill-light mt0'>forEach(fn: function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>, <a href="#valueversion">ValueVersion</a>)): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
-  
-  
-
-  
-  
-  
-  
+  <div class='pre p1 fill-light mt0'>listEntries(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)></div>
   
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>fn</span> <code class='quiet'>(function (<a href="https://nodejs.org/api/buffer.html">Buffer</a>, <a href="#valueversion">ValueVersion</a>))</code>
-	    the function to call
+  
+  
+  
+  
+  
 
-          </div>
-          
-        </div>
-      
-    </div>
   
 
   
@@ -9332,8 +9362,8 @@ actually asking for the right one
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        resolves once the iteration is done
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)></code>:
+        the entries list
 
       
     
@@ -9367,7 +9397,7 @@ actually asking for the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L212-L214'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L224-L226'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9455,7 +9485,7 @@ permissions to edit that mutable data.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L220-L223'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L232-L235'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9524,7 +9554,7 @@ permissions to edit that mutable data.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L93-L157'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L106-L170'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9599,7 +9629,7 @@ app.mutableData.newPublic(somename, tagtype)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L113-L120'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L126-L133'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9671,11 +9701,11 @@ app.mutableData.newPublic(somename, tagtype)
       </div>
     </div>
   
-    <div class='border-bottom' id='entrymutationtransactionremove'>
+    <div class='border-bottom' id='entrymutationtransactiondelete'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>remove(keyName, version)</span>
+            <span class='code strong strong truncate'>delete(keyName, version)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -9685,17 +9715,17 @@ app.mutableData.newPublic(somename, tagtype)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L130-L137'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L143-L150'>
       <span>src/api/mutable.js</span>
       </a>
     
   </div>
   
 
-  <p>Store a new <code>Remove</code>-Action in the transaction to remove an existing entry.</p>
+  <p>Store a new <code>Delete</code>-Action in the transaction to delete an existing entry.</p>
 
 
-  <div class='pre p1 fill-light mt0'>remove(keyName: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), version: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>delete(keyName: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), version: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -9713,7 +9743,7 @@ app.mutableData.newPublic(somename, tagtype)
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>keyName</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>))</code>
-	    the key you want to remove
+	    the key you want to delete
 
           </div>
           
@@ -9772,7 +9802,7 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L148-L156'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L161-L169'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9874,7 +9904,7 @@ actually asking for the right version
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L13-L74'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L26-L87'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9932,7 +9962,7 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L19-L21'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L32-L34'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -9995,7 +10025,7 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L38-L42'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L51-L55'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -10073,7 +10103,7 @@ actually asking for the right version
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L52-L59'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L65-L72'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -10162,7 +10192,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L65-L72'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L78-L85'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -10246,7 +10276,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L175-L296'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L181-L318'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10310,7 +10340,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L191-L197'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L197-L203'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10387,7 +10417,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L204-L207'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L210-L213'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10454,7 +10484,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>insert(fileName, file)</span>
+            <span class='code strong strong truncate'>insert(fileName, file, userMetadata)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -10464,7 +10494,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L216-L225'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L223-L239'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10475,7 +10505,7 @@ Requires 'ManagePermissions'-Permission for the app.</p>
 to the network.</p>
 
 
-  <div class='pre p1 fill-light mt0'>insert(fileName: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), file: <a href="#file">File</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#file">File</a>></div>
+  <div class='pre p1 fill-light mt0'>insert(fileName: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), file: <a href="#file">File</a>, userMetadata: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>)): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#file">File</a>></div>
   
   
 
@@ -10504,6 +10534,14 @@ to the network.</p>
             <span class='code bold'>file</span> <code class='quiet'>(<a href="#file">File</a>)</code>
 	    the file to serialise and store
 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>userMetadata</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>))</code>
+	    
           </div>
           
         </div>
@@ -10541,7 +10579,7 @@ to the network.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>update(fileName, file, version)</span>
+            <span class='code strong strong truncate'>update(fileName, file, version, userMetadata)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -10551,7 +10589,7 @@ to the network.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L235-L240'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L250-L262'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10561,7 +10599,7 @@ to the network.</p>
   <p>Replace a path with a new file. Directly commit to the network.</p>
 
 
-  <div class='pre p1 fill-light mt0'>update(fileName: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), file: <a href="#file">File</a>, version: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#file">File</a>></div>
+  <div class='pre p1 fill-light mt0'>update(fileName: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>), file: <a href="#file">File</a>, version: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, userMetadata: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>)): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#file">File</a>></div>
   
   
 
@@ -10599,6 +10637,15 @@ to the network.</p>
             <span class='code bold'>version</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
 	    the version successor number, to ensure you
 are overwriting the right one
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>userMetadata</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://nodejs.org/api/buffer.html">Buffer</a>))</code>
+	    optional parameter for updating user metadata
 
           </div>
           
@@ -10647,7 +10694,7 @@ are overwriting the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L248-L250'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L270-L272'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10731,7 +10778,7 @@ are overwriting the right one
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L269-L295'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L291-L317'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10826,7 +10873,7 @@ are overwriting the right one
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L16-L170'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L27-L176'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10908,7 +10955,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L69-L71'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L67-L69'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -10957,6 +11004,68 @@ of the metadata provided.</p>
       </div>
     </div>
   
+    <div class='border-bottom' id='fileusermetadata'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>userMetadata</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L75-L77'>
+      <span>src/api/emulations/nfs.js</span>
+      </a>
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>userMetadata</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://nodejs.org/api/buffer.html">Buffer</a></code>:
+        user_metadata
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='filecreated'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -10971,7 +11080,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L77-L79'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L83-L85'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -11034,7 +11143,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L85-L87'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L91-L93'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -11097,7 +11206,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L93-L102'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L99-L108'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -11160,7 +11269,7 @@ of the metadata provided.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L113-L119'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L119-L125'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -11247,7 +11356,7 @@ exposed by the safe-app-nodejs package.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L126-L132'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L132-L138'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -11331,7 +11440,7 @@ exposed by the safe-app-nodejs package.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L138-L151'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L144-L157'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -11394,7 +11503,7 @@ exposed by the safe-app-nodejs package.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/nfs.js#L157-L159'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/nfs.js#L163-L165'>
       <span>src/api/emulations/nfs.js</span>
       </a>
     
@@ -11478,7 +11587,7 @@ exposed by the safe-app-nodejs package.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L426-L428'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L295-L297'>
       <span>src/app.js</span>
       </a>
     
@@ -11558,7 +11667,7 @@ allowed for this account
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L151-L186'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L142-L177'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11638,7 +11747,7 @@ allowed for this account
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L164-L166'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L155-L157'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11701,7 +11810,7 @@ allowed for this account
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L173-L175'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L164-L166'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11764,7 +11873,7 @@ allowed for this account
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L182-L185'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L173-L176'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11847,7 +11956,7 @@ this encryption key pair</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L91-L145'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L82-L136'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11905,7 +12014,7 @@ this encryption key pair</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L97-L99'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L88-L90'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -11968,7 +12077,7 @@ this encryption key pair</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L123-L128'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L114-L119'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12058,7 +12167,7 @@ with passing associated public encryption key to decrypt each message.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L142-L144'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L133-L135'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12154,7 +12263,7 @@ recipient public encryption keys, encrypting data for each key.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L31-L85'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L22-L76'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12212,7 +12321,7 @@ recipient public encryption keys, encrypting data for each key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L37-L39'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L28-L30'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12275,7 +12384,7 @@ recipient public encryption keys, encrypting data for each key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L55-L57'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L46-L48'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12351,7 +12460,7 @@ recipient public encryption keys, encrypting data for each key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L67-L69'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L58-L60'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12438,7 +12547,7 @@ encryption key and the given secret key</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L79-L84'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L70-L75'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12531,7 +12640,7 @@ and the given secret key.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L257-L282'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L248-L273'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12611,7 +12720,7 @@ and the given secret key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L270-L272'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L261-L263'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12674,7 +12783,7 @@ and the given secret key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L279-L281'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L270-L272'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12743,7 +12852,7 @@ and the given secret key.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L224-L252'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L215-L243'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12801,7 +12910,7 @@ and the given secret key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L230-L232'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L221-L223'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12864,7 +12973,7 @@ and the given secret key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L249-L251'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L240-L242'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -12947,7 +13056,7 @@ and the given secret key.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L191-L219'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L182-L210'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -13005,7 +13114,7 @@ and the given secret key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L197-L199'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L188-L190'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -13068,7 +13177,7 @@ and the given secret key.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/crypto.js#L216-L218'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/crypto.js#L207-L209'>
       <span>src/api/crypto.js</span>
       </a>
     
@@ -13151,7 +13260,7 @@ and the given secret key.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/cipher_opt.js#L10-L14'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/cipher_opt.js#L23-L27'>
       <span>src/api/cipher_opt.js</span>
       </a>
     
@@ -13210,7 +13319,7 @@ either PlainText, Symmetric or Asymmetric</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L243-L522'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L255-L533'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -13250,7 +13359,7 @@ either PlainText, Symmetric or Asymmetric</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>type_tag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+            <span class='code bold'>typeTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
 	    the type tag
 
           </div>
@@ -13288,7 +13397,7 @@ either PlainText, Symmetric or Asymmetric</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/mutable.js#L243-L522'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/mutable.js#L255-L533'>
       <span>src/api/mutable.js</span>
       </a>
     
@@ -13382,7 +13491,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L10-L13'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L23-L26'>
       <span>src/error_const.js</span>
       </a>
     
@@ -13451,7 +13560,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L22-L25'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L35-L38'>
       <span>src/error_const.js</span>
       </a>
     
@@ -13520,7 +13629,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L34-L37'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L47-L50'>
       <span>src/error_const.js</span>
       </a>
     
@@ -13589,7 +13698,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L46-L49'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L74-L77'>
       <span>src/error_const.js</span>
       </a>
     
@@ -13658,7 +13767,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L70-L81'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L98-L109'>
       <span>src/error_const.js</span>
       </a>
     
@@ -13727,7 +13836,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L90-L93'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L118-L121'>
       <span>src/error_const.js</span>
       </a>
     
@@ -13796,7 +13905,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L102-L105'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L130-L133'>
       <span>src/error_const.js</span>
       </a>
     
@@ -13865,7 +13974,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L114-L117'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L142-L145'>
       <span>src/error_const.js</span>
       </a>
     
@@ -13934,7 +14043,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L126-L129'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L154-L157'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14003,7 +14112,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L138-L141'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L166-L169'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14072,7 +14181,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L150-L153'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L178-L181'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14141,7 +14250,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L187-L190'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L215-L218'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14210,7 +14319,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L199-L204'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L227-L232'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14279,7 +14388,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L213-L221'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L241-L249'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14348,7 +14457,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L230-L236'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L258-L264'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14417,7 +14526,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L245-L248'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L273-L276'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14486,7 +14595,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L257-L260'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L285-L288'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14555,7 +14664,7 @@ Holds the informatation of a value of a MutableData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L270-L273'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L298-L301'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14625,7 +14734,7 @@ MutableData must be 32 bytes in length.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L283-L286'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L311-L314'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14695,7 +14804,7 @@ that is not 24 bytes in length will throw error.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L295-L298'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L323-L326'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14764,7 +14873,7 @@ that is not 24 bytes in length will throw error.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L58-L61'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L86-L89'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14833,7 +14942,7 @@ that is not 24 bytes in length will throw error.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L175-L178'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L203-L206'>
       <span>src/error_const.js</span>
       </a>
     
@@ -14902,7 +15011,7 @@ that is not 24 bytes in length will throw error.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/api/emulations/index.js#L8-L10'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/api/emulations/index.js#L21-L23'>
       <span>src/api/emulations/index.js</span>
       </a>
     
@@ -14953,13 +15062,510 @@ that is not 24 bytes in length will throw error.</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='validateappinfo'>
+      validateAppInfo
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L26-L41'>
+      <span>src/app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Validates appInfo and properly handles error</p>
+
+
+  <div class='pre p1 fill-light mt0'>validateAppInfo</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>_appInfo</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='initlogging'>
+      initLogging
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L46-L57'>
+      <span>src/app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Init logging on the underlying library only if it wasn't done already</p>
+
+
+  <div class='pre p1 fill-light mt0'>initLogging</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>appInfo</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setsearchpath'>
+      setSearchPath
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/app.js#L64-L71'>
+      <span>src/app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Set additional search path for the config files if it was requested in
+the options. E.g. log.toml and crust.config files will be search
+in this additional search path.</p>
+
+
+  <div class='pre p1 fill-light mt0'>setSearchPath</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='invalid_byte_range'>
+      INVALID_BYTE_RANGE
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L62-L65'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown natively when attempting to fetch partial
+byte range of NFS-style file that is not within the total byte range.
+For example, this error is thrown if a file is 10 bytes long,
+however a byte range of 20 is requested.</p>
+
+
+  <div class='pre p1 fill-light mt0'>INVALID_BYTE_RANGE</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : -302
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='non_auth_granted_uri'>
+      NON_AUTH_GRANTED_URI
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L191-L194'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Thrown when attempting extract granted access permissions
+from a URI which doesn't contain such information.</p>
+
+
+  <div class='pre p1 fill-light mt0'>NON_AUTH_GRANTED_URI</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1009
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='invalid_sec_key'>
+      INVALID_SEC_KEY
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/error_const.js#L335-L338'>
+      <span>src/error_const.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Secret encryption key of improper length is provided to custom private MutableData</p>
+
+
+  <div class='pre p1 fill-light mt0'>INVALID_SEC_KEY</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : 1020
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='webfetch'>
+      webFetch
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/web_fetch.js#L181-L215'>
+      <span>src/web_fetch.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Helper to lookup a given <code>safe://</code>-url in accordance with the
+convention and find the requested object.</p>
+
+
+  <div class='pre p1 fill-light mt0'>webFetch(url: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, options: <a href="#webfetchoptions">WebFetchOptions</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>url</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the url you want to fetch
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#webfetchoptions">WebFetchOptions</a>
+            = <code>null</code>)</code>
+	    additional options
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></code>:
+        the object with body of content and headers
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='webfetchoptions'>
       WebFetchOptions
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/app.js#L167-L294'>
-      <span>src/app.js</span>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/bochaco/safe_app_nodejs/blob/5f95eb5e5e3af7c05a492ad7db53d47f5c60dd96/src/web_fetch.js#L181-L215'>
+      <span>src/web_fetch.js</span>
       </a>
     
   </div>
@@ -15023,76 +15629,6 @@ The ranges values are also used to populate the
     </div>
   
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='non_auth_granted_uri'>
-      NON_AUTH_GRANTED_URI
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/maidsafe/safe_app_nodejs/blob/9b3a263cade8315370422400561088495d3ec5d9/src/error_const.js#L163-L166'>
-      <span>src/error_const.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Thrown when attempting extract granted access permissions
-from a URI which doesn't contain such information.</p>
-
-
-  <div class='pre p1 fill-light mt0'>NON_AUTH_GRANTED_URI</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>code</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-          : 1009
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>msg</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-          
-          
-        </div>
-      
-    </div>
   
 
   
