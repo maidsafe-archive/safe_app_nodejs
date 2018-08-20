@@ -81,7 +81,7 @@ module.exports = {
             resolve(app);
           });
           const authGranted = helpersForNative.makeAuthGrantedFfiStruct(authGrantedObj);
-          fn.apply(fn, [app.appInfo.id, authGranted.ref(), ref.NULL, disconnect_notifier_cb, result_cb]);
+          fn.apply(fn, [app.appInfo.id, authGranted.authGranted.ref(), ref.NULL, disconnect_notifier_cb, result_cb]);
         });
       });
     },

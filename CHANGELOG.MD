@@ -2,6 +2,17 @@
 
 [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+- Error handling for malformed appInfo object passed to initialiseApp
+- Prevents allocated CString reference from being reassigned to a corrupted value
+
+## SAFE libraries Dependencies
+
+[0.9.0] - 27-7-2018
+### Added
 - New binding `simulateNetworkDisconnect()` function to simulate a network disconnection event useful for applications testing purposes.
 - Support for forcing the use of mock by providing `forceUseMock` boolean to the initialisation options of each safeApp instance, i.e. each safeApp instance can either use mock or prod libs independently.
 - Ability to pass user metadata when inserting and updating file in MutableData
@@ -16,7 +27,7 @@
 - `webFetch` may receive multipart range requests
 - Changes fromAuthURI to fromAuthUri
 - Changes loginFromURI to loginFromUri
-- Uses delete instead of remove as entry mutation action 
+- Uses delete instead of remove as entry mutation action
 - Changes initializeApp to use an s instead of z
 - Network state callback invoked from `INIT` to `CONNECTED` states
 - Simplifies test helper functions
@@ -26,7 +37,7 @@
 
 ### Fixed
 - Fixed some tests which were giving false positive results
-- Adds missing error handling for app_reconnect to prevent false connection status 
+- Adds missing error handling for app_reconnect to prevent false connection status
 
 ## SAFE libraries Dependencies
 - safe_app: a9b4c05
