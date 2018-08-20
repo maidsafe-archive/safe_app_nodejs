@@ -10,6 +10,7 @@
 // Please review the Licences for the specific language governing permissions and limitations
 // relating to use of the SAFE Network Software.
 
+
 const rdflib = require('rdflib');
 const errConst = require('../../error_const');
 const makeError = require('../../native/_error.js');
@@ -103,6 +104,7 @@ class RDF {
     return Promise.all(entriesGraphs.map((g) => this.parse(g, JSON_LD_MIME_TYPE, id)));
   }
 
+  /* eslint-disable class-methods-use-this */
   namespace(uri) {
     return rdflib.Namespace(uri);
   }
@@ -122,6 +124,8 @@ class RDF {
   sym(uri) {
     return rdflib.sym(uri);
   }
+
+  /* eslint-enable class-methods-use-this */
 
   any(subject, predicate, object) {
     return this.graphStore.any(subject, predicate, object);
