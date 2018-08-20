@@ -15,6 +15,7 @@
     "no-underscore-dangle": ["error", {
       "allowAfterThis": true
     }],
+    "no-multi-str" : 0,
     "no-console": ["error", { "allow": ["warn", "error"] }],
     "linebreak-style": 0
   },
