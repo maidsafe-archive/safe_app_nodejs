@@ -63,6 +63,8 @@ class WebInterface {
     this.app = app;
   }
 
+  /* eslint-disable class-methods-use-this */
+
   /**
    * Retrieve vocab for RDF/SAFE Implementation of DNS (publicNames/subDomains/services)
    * @param  {RDF} rdf RDF object to utilise for namespace func
@@ -79,6 +81,8 @@ class WebInterface {
       SAFETERMS: rdf.namespace('http://safenetwork.org/safevocab/')
     };
   }
+
+  /* eslint-enable class-methods-use-this */
 
   /**
    * Add entry to _publicNames container, linking to a specific RDF/MD
