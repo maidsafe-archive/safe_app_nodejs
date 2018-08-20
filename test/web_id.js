@@ -14,9 +14,10 @@ const should = require('should');
 const h = require('./helpers');
 
 describe.only('WebID emulation', () => {
-  let app,
-    md,
-    xorname;
+  let app;
+  let md;
+  let xorname;
+
   const TYPE_TAG = 15639;
 
   beforeEach(async () => {
@@ -91,8 +92,10 @@ describe.only('WebID emulation', () => {
     const fetchedWebId = await newMd.emulateAs('WebID');
     await fetchedWebId.fetchContent();
     const serialised = await fetchedWebId.serialise('text/turtle');
-    // const serialised = await fetchedWebId.serialise('application/ld+json');
-    console.log('FETCHED WebID:', serialised);
+
+    should(serialised.length).be.above(0);
+    should(serialised).match(/Gabriel/);
+    should(serialised).match(/bochaco/);
   });
 
   it('fetch existing WebID via webId directory', async () => {

@@ -19,7 +19,7 @@ async function readPublicIdAsRdf(servicesContainer, pubName, servName) {
     const xorName = match[0].object.value.split(',');
     match = rdfEmulation.statementsMatching(rdfEmulation.sym(graphId), SAFETERMS('typeTag'), undefined);
     const typeTag = match[0].object.value;
-    serviceMd = await this.mutableData.newPublic(xorName, parseInt(typeTag));
+    serviceMd = await this.mutableData.newPublic(xorName, parseInt(typeTag, 10));
   } catch (err) {
     const error = {};
     error.code = err.code;
@@ -33,8 +33,9 @@ async function readPublicIdAsRdf(servicesContainer, pubName, servName) {
 // Helper function to fetch the Container
 // from a public ID and service name provided
 async function getContainerFromPublicId(pubName, servName) {
-  let servicesContainer,
-    serviceInfo;
+  let servicesContainer;
+  let serviceInfo;
+
   try {
     const address = await this.crypto.sha3Hash(pubName);
     servicesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
@@ -184,7 +185,7 @@ const readContentFromFile = async (openedFile, defaultMimeType, opts) => {
   return response;
 };
 
-async function fetch(url, options) {
+async function fetch(url) {
   if (!url) return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
 
   const parsedUrl = parseUrl(url);

@@ -67,7 +67,7 @@ class RDF {
     if (entriesList.length === 0) return;
 
     let id;
-    const entriesGraphs = entriesList.reduce((graphs, e, i) => {
+    const entriesGraphs = entriesList.reduce((graphs, e) => {
       const keyStr = e.key.toString();
       const valueStr = e.value.buf.toString();
 
@@ -188,36 +188,32 @@ class RDF {
     const mutation = await this.mData.app.mutableData.newMutation();
     const mData = this.mData;
 
-    const graphPromises = graphs.map(async (graph, i) => {
+    const graphPromises = graphs.map(async (graph) => {
       const unencryptedKey = graph[RDF_GRAPH_ID];
       let key = unencryptedKey;
 
       let match = false;
 
-      // find the current graph in the entries list and remove it (before replacing via the rdf graph)
-      // this is to be able to remove any remainging entries (not readded via rdf) as they have been
+      // find the current graph in the entries list and remove it
+      // (before replacing via the rdf graph) this is to be able to remove any
+      // remainging entries (not readded via rdf) as they have been
       // removed from this graph.
-      await Promise.all(entriesList.map(async (entry, i, a) => {
+      await Promise.all(entriesList.map(async (entry, i) => {
         if (!entry || !entry.key || match) return;
 
         let keyToCheck = await entry.key.toString();
 
         if (toEncrypt) {
-
           try {
             const decryptedKey = await mData.decrypt(entry.key);
             keyToCheck = await decryptedKey.toString();
-
+          } catch (e) {
+            console.error('Error decrypting MD key in rdf.commit.', e);
           }
-          catch( e )
-          {
-            console.error('Error decrypting MD key in rdf.commit.', e )
-          }
-
         }
 
         if (unencryptedKey === keyToCheck) {
-          delete a[i];
+          delete entriesList[i];
 
           match = entry;
         }
@@ -238,7 +234,7 @@ class RDF {
     await Promise.all(graphPromises);
 
     // remove RDF entries which are not present in new RDF
-    await entriesList.forEach(async (entry, i, a) => {
+    await entriesList.forEach(async (entry) => {
       if (entry) {
         let keyToCheck = await entry.key.toString();
 
@@ -246,16 +242,12 @@ class RDF {
           try {
             const decryptedKey = await mData.decrypt(entry.key);
             keyToCheck = await decryptedKey.toString();
-
-          }
-          catch( e )
-          {
-            console.error('Error decrypting MD key in rdf.commit.', e )
+          } catch (e) {
+            console.error('Error decrypting MD key in rdf.commit.', e);
           }
         }
 
-        if( keyToCheck.startsWith('safe://') )
-        {
+        if (keyToCheck.startsWith('safe://')) {
           await mutation.delete(entry.key, entry.value.version + 1);
         }
       }
@@ -275,7 +267,7 @@ class RDF {
     const serialJsonLd = await this.serialise(JSON_LD_MIME_TYPE);
     const graphs = JSON.parse(serialJsonLd);
     const mutation = await this.mData.app.mutableData.newMutation();
-    graphs.forEach((e, i) => {
+    graphs.forEach((e) => {
       const key = e[RDF_GRAPH_ID];
       const stringifiedGraph = JSON.stringify(e);
       mutation.insert(key, stringifiedGraph);

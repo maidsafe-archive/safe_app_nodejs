@@ -14,9 +14,9 @@ const should = require('should');
 const h = require('./helpers');
 
 describe.only('RDF emulation', () => {
-  let app,
-    md,
-    xorname;
+  let app;
+  let md;
+  let xorname;
   const TYPE_TAG = 15639;
   const myUri = 'safe://manu';
   const myJsonLd = {
@@ -66,7 +66,8 @@ describe.only('RDF emulation', () => {
     const rdf = await md.emulateAs('rdf');
     await rdf.nowOrWhenFetched();
     const jsonld = await rdf.serialise('application/ld+json');
-    console.log('JSON-LD:', jsonld);
+
+    should(jsonld.length).be.above(0);
   });
 
   it('fetch entries with RDF emulation from empty MD', async () => {
@@ -98,7 +99,7 @@ describe.only('RDF emulation', () => {
     rdf.add(me, FOAF('knows'), 'Gabriel');
 
     const friend = rdf.any(me, FOAF('knows'), undefined);
-    console.log(friend);
+    should(friend.value).match('Josh');
   });
 
   it('add triples and find with each', async () => {
@@ -111,10 +112,8 @@ describe.only('RDF emulation', () => {
     rdf.add(me, FOAF('knows'), 'Gabriel');
 
     const friends = rdf.each(me, FOAF('knows'), undefined);
-    for (let i = 0; i < friends.length; i++) {
-      friend = friends[i];
-      console.log(friend);
-    }
+
+    should(friends.length).be.above(0);
   });
 
   it('add triples and match statements', async () => {
@@ -127,10 +126,8 @@ describe.only('RDF emulation', () => {
     rdf.add(me, FOAF('knows'), 'Gabriel');
 
     const friends = rdf.statementsMatching(undefined, FOAF('knows'), undefined);
-    for (let i = 0; i < friends.length; i++) {
-      friend = friends[i];
-      console.log(friend);
-    }
+
+    should(friends).have.length(2);
   });
 
   it('add literal and find with each', async () => {
@@ -144,10 +141,7 @@ describe.only('RDF emulation', () => {
     rdf.add(me, FOAF('birthday'), birthday);
 
     const friends = rdf.each(me, FOAF('birthday'), undefined);
-    for (let i = 0; i < friends.length; i++) {
-      friend = friends[i];
-      console.log(friend);
-    }
+    should(friends.length).be.above(0);
   });
 
   it('remove matching statements', async () => {
@@ -161,7 +155,7 @@ describe.only('RDF emulation', () => {
 
     rdf.removeMany(undefined, FOAF('knows'), undefined);
     const friend = rdf.any(me, FOAF('knows'), undefined);
-    console.log(friend);
+    should(typeof friend).be.equal('undefined');
   });
 
   it('add triples and commit them', async () => {
@@ -180,7 +174,9 @@ describe.only('RDF emulation', () => {
     const entries = await md2.getEntries();
     const entriesList = await entries.listEntries();
 
-    entriesList.forEach((e) => console.log('ENTRY:', e.key.toString(), e.value.buf.toString(), e.value.version));
+    entriesList.forEach((e) => {
+      should(e.key.toString().length).be.above(0);
+    });
   });
 
   it('add triples and append them', async () => {
@@ -206,10 +202,12 @@ describe.only('RDF emulation', () => {
     await rdf2.append();
 
     const md3 = await app.mutableData.newPublic(xorname, TYPE_TAG);
-    entries = await md3.getEntries();
-    entriesList = await entries.listEntries();
+    const entries = await md3.getEntries();
+    const entriesList = await entries.listEntries();
 
-    entriesList.forEach((e) => console.log('AFTER APPENDED ENTRIES:', e.key.toString(), e.value.buf.toString(), e.value.version));
+    entriesList.forEach((e) => {
+      should(e.key.toString().length).be.above(0);
+    });
   });
 
   it('parse JSON-LD RDF and serialise it as Turtle', async () => {
@@ -223,7 +221,10 @@ describe.only('RDF emulation', () => {
     rdf.add(me, FOAF('knows'), 'Gabriel');
 
     const turtle = await rdf.serialise('text/turtle');
-    console.log('Turtle:', turtle);
+
+    should(turtle.length).be.above(0);
+    should(turtle).match(/Josh/);
+    should(turtle).match(/Gabriel/);
   });
 
   it('parse Turtle RDF and serialise it as JSON-LD', async () => {
@@ -246,9 +247,14 @@ describe.only('RDF emulation', () => {
                       ldp:contains <http://example.org/alice/foaf> . ';
 
 
+    await rdf.parse(turtle, 'text/turtle', myUri);
     await rdf.parse(turtle2, 'text/turtle', myUri);
 
     const jsonld = await rdf.serialise('application/ld+json');
-    console.log('JSON-LD:', jsonld);
+
+    should(jsonld.length).be.above(0);
+    should(jsonld).match(/xmlns.com/);
+    should(jsonld).match(/w3.org/);
+    should(jsonld).match(/purl.org/);
   });
 });
