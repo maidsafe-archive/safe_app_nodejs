@@ -92,6 +92,32 @@ const pubConsts = {
   MD_PERMISSION_EMPTY: 0,
 };
 
+
+const PUBLIC_NAMES = {
+  ACCESS_CONTAINERS: {
+    PUBLIC_NAMES: '_publicNames',
+  },
+  ERROR_CODE: {
+    ACCESS_DENIED: -100,
+    DATA_EXISTS: -104,
+    NO_SUCH_ENTRY: -106,
+    ENTRY_EXISTS: -107,
+    TOO_MANY_ENTRIES: -108,
+    NO_SUCH_KEY: -109,
+    LOW_BALANCE: -113,
+    INVALID_SIGN_KEY_HANDLE: -1011,
+    EMPTY_DIR: -1029,
+  },
+  APP_ERR_CODE: {
+    INVALID_PUBLIC_NAME: -10001,
+    APP_NOT_INITIALISED: -10004,
+    INVALID_SERVICE_PATH: -10005,
+    INVALID_SERVICE_META: -10006,
+    INVALID_SERVICE_NAME: -10007,
+    ENTRY_VALUE_NOT_EMPTY: -10008,
+  }
+};
+
 const SAFE_APP_LIB_FILENAME = {
   win32: 'safe_app.dll',
   darwin: 'libsafe_app.dylib',
@@ -116,6 +142,8 @@ module.exports = {
 
   LIB_LOCATION_MOCK,
   LIB_LOCATION_PROD,
+
+  PUBLIC_NAMES,
 
   INDEX_HTML,
   pubConsts,

@@ -18,7 +18,7 @@ const lib = require('./native/lib');
 const consts = require('./consts');
 const errConst = require('./error_const');
 const makeError = require('./native/_error.js');
-const { webFetch } = require('./web_fetch.js');
+const { webFetch, fetch } = require('./web_fetch.js');
 
 /**
 * Validates appInfo and properly handles error
@@ -128,6 +128,14 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
+   * Get the public names
+   * @return {WebInterface} Manage Web RDF Data.
+   */
+  get web() {
+    return this._web;
+  }
+
+  /**
   * get the Crypto instance connected to this session
   * @returns {CryptoInterface}
   */
@@ -161,6 +169,10 @@ class SAFEApp extends EventEmitter {
 
   webFetch(url, options) {
     return webFetch.call(this, url, options);
+  }
+
+  fetch(url, options) {
+    return fetch.call(this, url, options);
   }
 
   /**

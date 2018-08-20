@@ -13,6 +13,7 @@
 
 const immutableData = require('./immutable');
 const mutableData = require('./mutable');
+const web = require('./web');
 const cipherOpt = require('./cipher_opt');
 const { CryptoInterface: crypto } = require('./crypto');
 const auth = require('./auth');
@@ -22,5 +23,6 @@ module.exports = {
   cipherOpt,
   immutableData,
   mutableData,
+  web,
   auth
 };
