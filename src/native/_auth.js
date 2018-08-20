@@ -169,36 +169,49 @@ const makeAccessContInfo = (accessContainer) => {
 }
 
 const makeAccessContainerEntry = (accessContainerEntry) => {
-  const contInfoArray = new ContainerInfoArray(accessContainerEntry.length);
-  accessContainerEntry.forEach((entry, index) => {
-    const permissions = new t.PermissionSet({
-      Read: entry.permissions.Read,
-      Insert: entry.permissions.Insert,
-      Update: entry.permissions.Update,
-      Delete: entry.permissions.Delete,
-      ManagePermissions: entry.permissions.ManagePermissions
-    });
-    contInfoArray[index] = new ContainerInfo({
-      name: ref.allocCString(entry.name),
-      mdata_info: helpersForNative.makeMDataInfo(entry.mdata_info),
-      permissions
-    });
-  });
+  const accessContainerEntryCache = {
+    containerInfoArrayCache: null,
+    containerInfoCaches: [],
+  };
+  accessContainerEntryCache.containerInfoArrayCache = new ContainerInfoArray(
+    accessContainerEntry.map((entry) => {
+      const permissions = new t.PermissionSet({
+        Read: entry.permissions.Read,
+        Insert: entry.permissions.Insert,
+        Update: entry.permissions.Update,
+        Delete: entry.permissions.Delete,
+        ManagePermissions: entry.permissions.ManagePermissions
+      });
+      const containerInfo = {
+        name: ref.allocCString(entry.name),
+        mdata_info: helpersForNative.makeMDataInfo(entry.mdata_info),
+        permissions
+      };
+      accessContainerEntryCache.containerInfoCaches.push(containerInfo);
+      return new ContainerInfo(containerInfo);
+    }));
 
-  return new AccessContainerEntry({
-    containers: contInfoArray.buffer,
-    containers_len: contInfoArray.length
-  });
+  return {
+    accessContainerEntry: new AccessContainerEntry({
+      containers: accessContainerEntryCache.containerInfoArrayCache.buffer,
+      containers_len: accessContainerEntryCache.containerInfoArrayCache.length
+    }),
+    accessContainerEntryCache,
+  };
 }
 
 const makeAuthGrantedFfiStruct = (authGrantedObj) => {
-  return new AuthGranted({
-    app_keys: makeAppKeys(authGrantedObj.app_keys),
-    access_container: makeAccessContInfo(authGrantedObj.access_container),
-    access_container_entry: makeAccessContainerEntry(authGrantedObj.access_container_entry),
-    bootstrap_config_ptr: new Buffer(authGrantedObj.bootstrap_config),
-    bootstrap_config_len: authGrantedObj.bootstrap_config.length,
-  });
+  const accessContainerEntry = makeAccessContainerEntry(authGrantedObj.access_container_entry);
+  return {
+    authGranted: new AuthGranted({
+      app_keys: makeAppKeys(authGrantedObj.app_keys),
+      access_container: makeAccessContInfo(authGrantedObj.access_container),
+      access_container_entry: accessContainerEntry.accessContainerEntry,
+      bootstrap_config_ptr: new Buffer(authGrantedObj.bootstrap_config),
+      bootstrap_config_len: authGrantedObj.bootstrap_config.length,
+    }),
+    authGrantedCache: accessContainerEntry.accessContainerEntryCache,
+  };
 }
 
 const readAppKeys = (appKeys) => {

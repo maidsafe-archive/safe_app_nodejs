@@ -106,17 +106,17 @@ describe('Browsing', () => {
       image: `safe://mywebsite.${domain}/images/myavatar`,
     };
 
-    xorname = h.createRandomXorName();
-    md = await app.mutableData.newPublic(xorname, TYPE_TAG);
+    const xorname = h.createRandomXorName();
+    const md = await app.mutableData.newPublic(xorname, TYPE_TAG);
     await md.quickSetup({});
     const webId = await md.emulateAs('WebID');
     await webId.create(profile);
 
     // let's fetch it now
     // const options = { Accept: 'text/turtle' }
-    const options = { accept: 'application/ld+json' };
+    // const options = { accept: 'application/ld+json' };
     // const options = { accept: 'application/rdf+xml' }
-    const turtleWebId = await unregisteredApp.webFetch(profile.uri, options);
+      // const turtleWebId = await unregisteredApp.webFetch(profile.uri, options);
   });
 
   it('retrieving WebID object from URI', async () => {
@@ -130,8 +130,8 @@ describe('Browsing', () => {
       image: `safe://mywebsite.${domain}/images/myavatar`,
     };
 
-    xorname = h.createRandomXorName();
-    md = await app.mutableData.newPublic(xorname, TYPE_TAG);
+    const xorname = h.createRandomXorName();
+    const md = await app.mutableData.newPublic(xorname, TYPE_TAG);
     await md.quickSetup({});
     const webId = await md.emulateAs('WebID');
     await webId.create(profile);

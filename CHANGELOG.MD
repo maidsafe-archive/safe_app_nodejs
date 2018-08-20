@@ -7,9 +7,9 @@
 
 ### Fixed
 - Error handling for malformed appInfo object passed to initialiseApp
+- Prevents allocated CString reference from being reassigned to a corrupted value
 
 ## SAFE libraries Dependencies
-
 
 [0.9.0] - 27-7-2018
 ### Added

@@ -25,11 +25,9 @@ const profile = {
   image: 'safe://mywebsite.gabriel/images/myavatar',
 };
 
-describe('getPublicNames', () => {
+describe.only('getPublicNames', () => {
   let app;
   let xorname;
-  const TYPE_TAG = 15639;
-
 
   before(async () => {
     app = await h.createAuthenticatedTestApp();
@@ -49,9 +47,9 @@ describe('getPublicNames', () => {
   it('should return empty array of getPublicNames when none set', async () => {
     const authedApp = await h.publicNamesTestApp;
     const webIds = await authedApp.web.getPublicNames();
-    //
-    // should(webIds).be.a.Array();
-    // should(webIds).have.length(0);
+
+    should(webIds).be.a.Array();
+    should(webIds).have.length(0);
   });
 
 
@@ -66,13 +64,12 @@ describe('getPublicNames', () => {
     const webIds = await authedApp.web.getPublicNames();
 
     should(webIds).be.a.Array();
-    //
     should(webIds).have.length(3);
   });
 });
 
 
-describe('createPublicName', () => {
+describe.only('createPublicName', () => {
   let app;
   let authedApp;
   let md;
@@ -121,20 +118,10 @@ describe('createPublicName', () => {
     should(publicNames).be.a.Array();
     should(publicNames).containDeep(['safe://_publicNames#thisIsATestDomain']);
   });
-
-  it.only('should create two publicNames', async () => {
-    await authedApp.web.createPublicName('thisIsATestDomain', fakeSubdomainRDF);
-    await authedApp.web.createPublicName('thisIsASecondTestDomain', fakeSubdomainRDF);
-    const publicNames = await authedApp.web.getPublicNames();
-
-    should(publicNames).be.a.Array();
-    should(publicNames).containDeep(['safe://_publicNames#thisIsATestDomain']);
-    should(publicNames).containDeep(['safe://_publicNames#thisIsASecondTestDomain']);
-  });
 });
 
 
-describe('addServiceToSubdomain', () => {
+describe.only('addServiceToSubdomain', () => {
   let app;
   let authedApp;
   let md;
@@ -186,10 +173,9 @@ describe('addServiceToSubdomain', () => {
 });
 
 
-describe('getWebIds', () => {
+describe.only('getWebIds', () => {
   let app;
   let xorname;
-  const TYPE_TAG = 15639;
 
   before(async () => {
     app = await h.createAuthenticatedTestApp();
@@ -202,7 +188,7 @@ describe('getWebIds', () => {
       try {
         await app.web.getWebIds();
       } catch (e) {
-        should(e.message).match(/\'_public\' not found/);
+        should(e.message).match(/'_public' not found/);
       }
     });
 
@@ -240,12 +226,11 @@ describe('getWebIds', () => {
 });
 
 
-describe('addWebIdToDirectory', () => {
+describe.only('addWebIdToDirectory', () => {
   let app;
   let authedApp;
   let md;
   let xorname;
-  let fakeWebIdUri;
   let webId;
 
   beforeEach(async () => {
@@ -255,8 +240,6 @@ describe('addWebIdToDirectory', () => {
     md = await authedApp.mutableData.newPublic(xorname, TYPE_TAG);
     await md.quickSetup({});
     webId = await md.emulateAs('WebID');
-
-    // fakeWebIdUri = await md.getNameAndTag();
   });
 
 
@@ -275,7 +258,7 @@ describe('addWebIdToDirectory', () => {
     try {
       await app.web.addWebIdToDirectory('aaa.fakeWebIdUri');
     } catch (e) {
-      should(e.message).match(/\'_public\' not found/);
+      should(e.message).match(/'_public' not found/);
     }
   });
 

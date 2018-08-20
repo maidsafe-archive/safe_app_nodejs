@@ -11,7 +11,7 @@
 // relating to use of the SAFE Network Software.
 
 const consts = require('../../consts');
-const errConst = require('../../error_const');
+// const errConst = require('../../error_const');
 const { parse: parseUrl } = require('url');
 
 // TODO: perhaps we want a set of functions which are LDPC helpers,
@@ -129,7 +129,8 @@ class WebID {
     const postsLocation = await postsMd.getNameAndTag();
 
     // TODO: Do we create the md in here? Is it needed quicksetup outside?
-    const webIdLocation = await createWebIdProfileDoc(this.rdf, this.vocabs, profile, postsLocation);
+    const webIdLocation =
+      await createWebIdProfileDoc(this.rdf, this.vocabs, profile, postsLocation);
 
     // const webIdLocation = webIdProfileObject.location;
     // const webIdRdf = webIdProfileObject.rdf;
@@ -146,7 +147,8 @@ class WebID {
   }
 
   async update(profile) {
-    // FIXME: we need to keep the posts graph unless that's been also updated, which shouldn't be expected really.
+    // FIXME: we need to keep the posts graph unless that's been also updated,
+    // which shouldn't be expected really.
     // We should look for better ways of supporting the update as this is inefficient.
     this.rdf.removeMany(undefined, undefined, undefined);
     await this.rdf.nowOrWhenFetched([`${profile.uri}/posts`]);

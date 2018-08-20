@@ -1,13 +1,8 @@
-const lib = require('../native/lib');
-const nativeH = require('../native/helpers');
 const errConst = require('../error_const');
 const consts = require('../consts');
 const makeError = require('../native/_error.js');
 
 const { parse: parseUrl } = require('url');
-
-
-const RDF_TYPE_TAG = 15639;
 
 const cleanRdfValue = (value) => {
   let cleanValue = value;
@@ -68,6 +63,8 @@ class WebInterface {
     this.app = app;
   }
 
+  /* eslint-disable class-methods-use-this */
+
   /**
    * Retrieve vocab for RDF/SAFE Implementation of DNS (publicNames/subDomains/services)
    * @param  {RDF} rdf RDF object to utilise for namespace func
@@ -84,6 +81,8 @@ class WebInterface {
       SAFETERMS: rdf.namespace('http://safenetwork.org/safevocab/')
     };
   }
+
+  /* eslint-enable class-methods-use-this */
 
   /**
    * Add entry to _publicNames container, linking to a specific RDF/MD
@@ -109,8 +108,8 @@ class WebInterface {
 
     const vocabs = this.getVocabs(publicNamesRdf);
 
-    // Here we do basic container setup for RDF entries. Doesn't matter if already existing, will just write
-    // same entries.
+    // Here we do basic container setup for RDF entries.
+    // Doesn't matter if already existing, will just write same entries.
     const graphName = 'safe://_publicNames'; // TODO: this graph name is not a valid URI on the SAFE network
     const id = publicNamesRdf.sym(graphName);
 
@@ -236,7 +235,8 @@ class WebInterface {
   /**
    * Adds a web id to the _public container, using
    * @param  {[type]}  webIdLocation name/typetag object from SAFE MD.
-   * @param  {[type]}  displayName   optional displayName which will be used when listing webIds. (should fallback to nickname?)
+   * @param  {[type]}  displayName   optional displayName which will be used when listing webIds.
+   *                                 (should fallback to nickname?)
    */
   async addWebIdToDirectory(webIdUri, displayName) {
     const app = this.app;
@@ -260,11 +260,9 @@ class WebInterface {
       existingRDF = true;
     } catch (e) {
       // ignore no ID set incase nothing has been added yet.
-      if (e.code !== errConst.MISSING_RDF_ID.code){
-        console.log('Error in addWebIdToDirectory', e )
+      if (e.code !== errConst.MISSING_RDF_ID.code) {
         throw new Error({ code: e.code, message: e.message });
       }
-
     }
 
     if (!existingRDF) {
@@ -314,7 +312,6 @@ class WebInterface {
 
       return key.includes('/webId/') && value.length;
     }).map(async (entry) => {
-      const key = entry.key.toString();
       const value = entry.value.buf.toString();
 
         // parsing to get something to work with as RDF is not that helpful...
@@ -334,7 +331,7 @@ class WebInterface {
 
         return flatVersion;
       } catch (e) {
-        console.log('WebID not found at specified URI:', uri);
+        // throw new Error('WebID not found at specified URI:', uri);
         return null;
       }
     });
