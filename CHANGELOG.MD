@@ -19,28 +19,28 @@
 - Prevents download of `system_uri` if `NODE_ENV=mobile_prod` or `NODE_ENV=mobile_dev`
 
 ### Changed
-- Upgrade safe_app native library to commit `a9b4c05` and adapt to minor API changes
+- Upgrade safe_app native library to v0.8.0
 - Removing `forEach` binding function from the MutableData entries API as it was removed from safe_app lib
 - Adding `listEntries` binding function to the MutableData entries API which returns an array with all entries
-- Moves asynchronous app initialisation opertions out of SAFEApp constructor and into class method
+- Moves asynchronous app initialisation operations out of SAFEApp constructor and into class method
 - The `initializeApp` function is now asynchronous
-- `webFetch` may receive multipart range requests
-- Changes fromAuthURI to fromAuthUri
-- Changes loginFromURI to loginFromUri
-- Uses delete instead of remove as entry mutation action
-- Changes initializeApp to use an s instead of z
+- `webFetch` can now receive multipart range requests
+- Changed `fromAuthURI` to `fromAuthUri`
+- Changed `loginFromURI` to `loginFromUri`
+- Uses `delete` instead of `remove` as entry mutation action
+- Changed `initializeApp` to use an `s` instead of `z`
 - Network state callback invoked from `INIT` to `CONNECTED` states
-- Simplifies test helper functions
-- Upgrades deps_downloader to v0.2.0
-- Isolates webFetch helper functions for testing
+- Simplified test helper functions
+- Upgraded deps_downloader to v0.2.0
+- Isolated `webFetch` helper functions for testing
 - Unregistered client connection event triggers network status update
 
 ### Fixed
 - Fixed some tests which were giving false positive results
-- Adds missing error handling for app_reconnect to prevent false connection status
+- Added missing error handling for `app_reconnect` to prevent false connection status
 
 ## SAFE libraries Dependencies
-- safe_app: a9b4c05
+- safe_app: v0.8.0
 - system_uri: v0.4.0
 - deps_downloader: v0.2.0
 
