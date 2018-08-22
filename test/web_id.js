@@ -13,7 +13,7 @@
 const should = require('should');
 const h = require('./helpers');
 
-describe.only('WebID emulation', () => {
+describe('WebID emulation', () => {
   let app;
   let md;
   let xorname;

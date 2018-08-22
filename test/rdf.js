@@ -13,7 +13,7 @@
 const should = require('should');
 const h = require('./helpers');
 
-describe.only('RDF emulation', () => {
+describe('RDF emulation', () => {
   let app;
   let md;
   let xorname;
