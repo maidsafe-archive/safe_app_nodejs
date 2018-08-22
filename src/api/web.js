@@ -103,8 +103,6 @@ class WebInterface {
 
     const publicNamesContainer = await app.auth.getContainer('_publicNames');
     const publicNamesRdf = publicNamesContainer.emulateAs('rdf');
-    await publicNamesRdf.nowOrWhenFetched();
-
 
     const vocabs = this.getVocabs(publicNamesRdf);
 
