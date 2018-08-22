@@ -122,6 +122,8 @@ describe('Browsing', () => {
   it('retrieving WebID object from URI', async () => {
     const domain = `test_${Math.round(Math.random() * 100000)}`;
     const TYPE_TAG = 15639;
+
+    const publicNamesTestApp = await h.publicNamesTestApp;
     const profile = {
       uri: `safe://mywebid.${domain}`,
       name: 'Gabriel Viganotti',
@@ -131,7 +133,7 @@ describe('Browsing', () => {
     };
 
     const xorname = h.createRandomXorName();
-    const md = await app.mutableData.newPublic(xorname, TYPE_TAG);
+    const md = await publicNamesTestApp.mutableData.newPublic(xorname, TYPE_TAG);
     await md.quickSetup({});
     const webId = await md.emulateAs('WebID');
     await webId.create(profile);
