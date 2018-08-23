@@ -22,7 +22,7 @@ const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 const { autoref } = require('../src/helpers');
 
 describe('Sandbox', () => {
-  it('should return undefined value if log option is true, however app logging is not initialised', async () => {
+  xit('should return undefined value if log option is true, however app logging is not initialised', async () => {
     const app = await createTestApp(null, null, { log: true }, true);
     const logPath = await app.logPath();
     return should(logPath).be.undefined();
