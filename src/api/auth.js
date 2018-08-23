@@ -397,6 +397,8 @@ class AuthInterface {
       });
       return lib.test_create_app_with_access(authReq.ref())
         .then((appPtr) => {
+          // Timeout used as temporary workaround for FFI hanging: https://github.com/maidsafe/safe_app_nodejs/issues/250
+          setTimeout(() => {}, 10);
           this.app.connection = appPtr;
           this._registered = true;
           return this.app;
@@ -405,6 +407,8 @@ class AuthInterface {
 
     return lib.test_create_app(this.app.appInfo.id)
       .then((appPtr) => {
+        // Timeout used as temporary workaround for FFI hanging: https://github.com/maidsafe/safe_app_nodejs/issues/250
+        setTimeout(() => {}, 10);
         this.app.connection = appPtr;
         this._registered = false;
         return this.app;

@@ -1,4 +1,12 @@
 # safe_app nodejs Change Log
+#
+[Unreleased]
+### Added
+
+### Fixed
+- Workaround for FFI callback timing issue
+
+## SAFE libraries Dependencies
 
 [0.9.1] - 27-8-2018
 ### Added
@@ -6,6 +14,8 @@
 
 ### Fixed
 - Error "invalid utf-8: corrupt contents" fixed by preventing allocated CString reference from being reassigned to a corrupted value (issue #258)
+- Error handling for malformed appInfo object passed to initialiseApp
+- Prevents allocated CString reference from being reassigned to a corrupted value
 
 ## SAFE libraries Dependencies
 - safe_app: v0.8.0
