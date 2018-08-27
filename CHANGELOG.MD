@@ -1,15 +1,16 @@
 # safe_app nodejs Change Log
 
-[Unreleased]
+[0.9.1] - 27-8-2018
 ### Added
-
-### Changed
+- Error handling for malformed `appInfo` object passed to `initialiseApp` (issue #257)
 
 ### Fixed
-- Error handling for malformed appInfo object passed to initialiseApp
-- Prevents allocated CString reference from being reassigned to a corrupted value
+- Error "invalid utf-8: corrupt contents" fixed by preventing allocated CString reference from being reassigned to a corrupted value (issue #258)
 
 ## SAFE libraries Dependencies
+- safe_app: v0.8.0
+- system_uri: v0.4.0
+- deps_downloader: v0.2.0
 
 [0.9.0] - 27-7-2018
 ### Added
