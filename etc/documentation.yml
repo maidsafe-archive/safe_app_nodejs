@@ -2,8 +2,8 @@ toc:
 
   - name: External API
     description: The externally exposed API
-  - initializeApp
-  - fromAuthURI
+  - initialiseApp
+  - fromAuthUri
   - AppInfo
   - InitOptions
   - CONSTANTS
