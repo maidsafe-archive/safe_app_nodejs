@@ -227,8 +227,8 @@ module.exports = {
   NON_DEV: {
     code: 1012,
     msg: `
-    Not supported outside of Dev and Testing Environment.
-    Set NODE_ENV=dev`
+    Not supported outside of Testing Environment.
+    Set NODE_ENV=testing`
   },
 
   /**
