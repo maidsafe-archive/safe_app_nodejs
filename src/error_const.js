@@ -228,7 +228,7 @@ module.exports = {
     code: 1012,
     msg: `
     Not supported outside of Testing Environment.
-    Set NODE_ENV=testing`
+    Set NODE_ENV=test`
   },
 
   /**
