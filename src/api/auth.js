@@ -375,7 +375,7 @@ class AuthInterface {
   }
 
   /**
-  * *ONLY AVAILALBE IF RUN in NODE_ENV='testing' OR WITH 'forceUseMock' option*
+  * *ONLY AVAILALBE IF RUN in NODE_ENV='test' OR WITH 'forceUseMock' option*
   *
   * Generate a _locally_ registered App with the given permissions, or
   * a local unregistered App if permissions is `null`.
@@ -412,7 +412,7 @@ class AuthInterface {
   }
 
   /**
-  * *ONLY AVAILALBE IF RUN in NODE_ENV='testing' OR WITH 'forceUseMock' option*
+  * *ONLY AVAILALBE IF RUN in NODE_ENV='test' OR WITH 'forceUseMock' option*
   *
   * Simulates a network disconnection event. This can be used to
   * test any logic to be executed by an application when a network
