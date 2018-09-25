@@ -1,5 +1,17 @@
 # safe_app nodejs Change Log
 
+[Unreleased]
+### Added
+- Add instructions to the README for how to generate API docs locally
+
+### Fixed
+- Change docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions.
+
+## SAFE libraries Dependencies
+- safe_app: v0.8.0
+- system_uri: v0.4.0
+- deps_downloader: v0.2.0
+
 [0.9.1] - 27-8-2018
 ### Added
 - Error handling for malformed `appInfo` object passed to `initialiseApp` (issue #257)
