@@ -75,12 +75,14 @@ describe('Fetching native objects', () => {
   });
 
   it('fail if experimental apis not enabled', async () => {
+    let error;
     const safeApp = await createUnregisteredTestApp({ enableExperimentalApis: false });
     try {
       await safeApp.fetch();
     } catch (err) {
-      return should(err.message).equal(errConst.EXPERIMENTAL_API_DISABLED.msg('fetch'));
+      error = err;
     }
+    return should(error.message).equal(errConst.EXPERIMENTAL_API_DISABLED.msg('fetch'));
   });
 
   it('fetch content', async () => {
