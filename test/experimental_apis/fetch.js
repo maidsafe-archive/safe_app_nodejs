@@ -14,6 +14,7 @@
 const should = require('should');
 const h = require('../helpers');
 const consts = require('../../src/consts');
+const errConst = require('../../src/error_const');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 const createUnregisteredTestApp = h.createUnregisteredTestApp;
@@ -71,6 +72,15 @@ describe('Fetching native objects', () => {
     app = await createAuthenticatedTestApp({ scope: '_test_scope' }, containersPermissions);
     // we enable the experimental APIs for this set of tests
     unregisteredApp = await createUnregisteredTestApp({ enableExperimentalApis: true });
+  });
+
+  it('fail if experimental apis not enabled', async () => {
+    const safeApp = await createUnregisteredTestApp({ enableExperimentalApis: false });
+    try {
+      await safeApp.fetch();
+    } catch (err) {
+      return should(err.message).equal(errConst.EXPERIMENTAL_API_DISABLED.msg('fetch'));
+    }
   });
 
   it('fetch content', async () => {
