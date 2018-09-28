@@ -59,6 +59,26 @@ yarn docs
 ```
 The API docs will be generated under the `docs` folder, you can simply open the `docs/index.html` file with your default browser.
 
+### Experimental APIs
+
+You are free to use any of the experimental APIs to explore the features that are being actively designed and developed.
+
+Although you should be aware of the fact that all/any of the experimental APIs may be changed, deprecated, or even removed in the future, and without much anticipated notification by the core developers.
+
+The reason they are exposed is to just allow developers to experiment and start learning about the APIs at an early stage.
+
+In order to enable the experimental APIs the `--enable-experimental-apis` flag needs to be provided when running the application that depends on this package, or alternatively, the `enableExperimentalApis` flag can be set to true in the initialisation options.
+
+When any of the experimental APIs is called by an application, a warning message like the following will be logged in the console:
+```
+** Experimental API WARNING **
+* The application is making use of a safe-node-app experimental API *
+The '<function name>' function is part of a set of experimental functions.
+Any/all of them may be deprecated, removed, or very likely change in the future.
+Also regular users won't have this APIs enabled by default unless the flag is provided, so be aware of all these limitations.
+For more information, updates, or to submit ideas and suggestions, please visit https://github.com/maidsafe/safe_app_nodejs
+```
+
 ## Further Help
 
 You can discuss development-related questions on the [SAFE Dev Forum](https://forum.safedev.org/).

@@ -3,6 +3,7 @@
 [Unreleased]
 ### Added
 - Add instructions to the README for how to generate API docs locally
+- Support for exposing experimental APIs when `--enable-experimental-apis` argument is passed, or when `enableExperimentalApis` flag is set in the initialisation option
 
 ### Fixed
 - Change docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions.

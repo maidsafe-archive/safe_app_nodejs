@@ -25,7 +25,7 @@ const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Inser
 describe('auth interface', () => {
   let app;
   before(async () => {
-    app = await createAuthenticatedTestApp('_test_scope', containersPermissions);
+    app = await createAuthenticatedTestApp({ scope: '_test_scope' }, containersPermissions);
   });
 
   it('should build some authentication uri', async () => {
@@ -51,7 +51,7 @@ describe('auth interface', () => {
       _public: ['Insert', 'Read', 'Update'],
       _second: ['Read']
     };
-    return should(createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true }))
+    return should(createAuthenticatedTestApp({ scope: '_test_scope' }, containersPermissions, { own_container: true }))
       .be.rejectedWith("'_second' not found in the access container");
   });
 
@@ -207,7 +207,7 @@ describe('Access Container', () => {
   const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
 
   before(async () => {
-    app = await createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true });
+    app = await createAuthenticatedTestApp({ scope: '_test_scope' }, containersPermissions, { own_container: true });
   });
 
   it('should have a connection object after completing app authentication', () => should.exist(app.connection));

@@ -4,6 +4,7 @@ const makeError = require('./native/_error.js');
 const { parse: parseUrl } = require('url');
 const mime = require('mime');
 const nodePath = require('path');
+const { EXPOSE_AS_EXPERIMENTAL_API } = require('./helpers');
 
 // Helper function to read fetch the Container
 // from a public ID and service name provided
@@ -157,6 +158,21 @@ const readContentFromFile = async (openedFile, defaultMimeType, opts) => {
 };
 
 /**
+* Helper to lookup a given `safe://`-url in accordance with the
+* convention and find the requested object.
+*
+* @param {String} url the url you want to fetch
+* @returns {Promise<Object>} the native object
+*/
+async function fetch(url) {
+  /* eslint-disable no-shadow, prefer-arrow-callback */
+  return EXPOSE_AS_EXPERIMENTAL_API.call(this, async function fetch() {
+    // implementation of fetch function goes here
+    return url;
+  });
+}
+
+/**
 * @typedef {Object} WebFetchOptions
 * holds additional options for the `webFetch` function.
 * @param {Object} range range of bytes to be retrieved.
@@ -215,6 +231,7 @@ async function webFetch(url, options) {
 }
 
 module.exports = {
+  fetch,
   webFetch,
   getContainerFromPublicId,
   tryDifferentPaths,

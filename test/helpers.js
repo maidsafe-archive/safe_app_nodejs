@@ -26,8 +26,7 @@ const authUris = {
 const appInfo = {
   id: 'net.maidsafe.test.javascript.id',
   name: 'NodeJS Test',
-  vendor: 'MaidSafe.net Ltd',
-  forceUseMock: true
+  vendor: 'MaidSafe.net Ltd'
 };
 
 const createTestApp = async (partialAppInfo, networkCB, options, preventInit) => {
@@ -45,8 +44,8 @@ const createAuthenticatedTestApp = async (partialAppInfo, access, opts) => {
   return app.auth.loginForTest(access || {}, opts);
 };
 
-const createUnregisteredTestApp = async (scope) => {
-  const app = await createTestApp(scope);
+const createUnregisteredTestApp = async (opts) => {
+  const app = await createTestApp(null, null, opts);
   return app.auth.loginForTest();
 };
 

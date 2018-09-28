@@ -18,7 +18,7 @@ const lib = require('./native/lib');
 const consts = require('./consts');
 const errConst = require('./error_const');
 const makeError = require('./native/_error.js');
-const { webFetch } = require('./web_fetch.js');
+const { webFetch, fetch } = require('./web_fetch.js');
 
 /**
 * Validates appInfo and properly handles error
@@ -94,11 +94,16 @@ class SAFEApp extends EventEmitter {
       log: true,
       registerScheme: true,
       configPath: null,
-      forceUseMock: false
+      forceUseMock: false,
+      enableExperimentalApis: false,
     }, options);
 
     if (typeof this.options.forceUseMock !== 'boolean') {
       throw new Error('The \'forceUseMock\' option must be a boolean.');
+    }
+
+    if (typeof this.options.enableExperimentalApis !== 'boolean') {
+      throw new Error('The \'enableExperimentalApis\' option must be a boolean.');
     }
 
     lib.init(this.options);
@@ -161,6 +166,10 @@ class SAFEApp extends EventEmitter {
 
   webFetch(url, options) {
     return webFetch.call(this, url, options);
+  }
+
+  fetch(url) {
+    return fetch.call(this, url);
   }
 
   /**
