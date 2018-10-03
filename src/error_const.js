@@ -335,5 +335,21 @@ module.exports = {
   INVALID_SEC_KEY: {
     code: 1020,
     msg: (size) => `Secret encryption key _must be_ provided and ${size} bytes long.`
-  }
+  },
+
+  /**
+   * @name EXPERIMENTAL_API_DISABLED
+   * @type {object}
+   * @description Thrown when functions that are experimental APIs were
+   * not enabled but attempted to be used
+   * @property {number} code 1021
+   * @property {string} msg
+   */
+  EXPERIMENTAL_API_DISABLED: {
+    code: 1021,
+    msg: (fn) => `
+    The '${fn}' function is disabled as it's part of the set of experimental APIs.
+    Pass --enable-experimental-apis argument to the application, or programatically
+    set the 'enableExperimentalApis' flag in the initialisation options to enable them.`
+  },
 };

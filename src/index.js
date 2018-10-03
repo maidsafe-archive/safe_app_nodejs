@@ -32,9 +32,9 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
 /**
 * @typedef {Object} InitOptions
 * holds the additional intialisation options for the App.
-* @param {Boolean=} registerScheme to register auth scheme with the OS. Defaults to true
+* @param {Boolean=} registerScheme to register auth scheme with the OS. Defaults to true.
 * @param {Array=} joinSchemes to additionally register custom protocol schemes
-* @param {Boolean=} log to enable or disable back end logging. Defaults to true
+* @param {Boolean=} log to enable or disable back end logging. Defaults to true.
 * @param {String=} libPath path to the folder where the native libs can
 *        be found. Defaults to current folder path.
 * @param {String=} configPath set additional search path for the config files.
@@ -42,7 +42,10 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
 *        in the same folder where the native library is, but also in this
 *        additional search path.
 * @param {Boolean=} forceUseMock to force the use of mock routing regardless
-*        the NODE_ENV environment variable value. Defaults to false
+*        the NODE_ENV environment variable value. Defaults to false.
+* @param {Boolean=} enableExperimentalApis to enable the experimental APIs
+*        regardless if the --enable-experimental-apis flag was passed as argument
+*        to the application. Defaults to false.
 */
 
 /**

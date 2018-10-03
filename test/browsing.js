@@ -91,15 +91,13 @@ describe('Browsing', () => {
   let app;
   let unregisteredApp;
   before(async () => {
-    app = await createAuthenticatedTestApp('_test_scope', containersPermissions);
+    app = await createAuthenticatedTestApp({ scope: '_test_scope' }, containersPermissions);
     unregisteredApp = await createUnregisteredTestApp();
   });
 
-  it('returns rejected promise if no url is provided', () => {
-    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
-    return createRandomDomain(content, '', '', app)
-      .then(() => should(unregisteredApp.webFetch()).be.rejectedWith(errConst.MISSING_URL.msg));
-  });
+  it('returns rejected promise if no url is provided', () =>
+    should(unregisteredApp.webFetch()).be.rejectedWith(errConst.MISSING_URL.msg)
+  );
 
   it('fetch content', () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;

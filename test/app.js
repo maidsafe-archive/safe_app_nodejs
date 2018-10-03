@@ -76,6 +76,7 @@ describe('Smoke test', () => {
       joinSchemes: ['proto'],
       configPath: '/home',
       forceUseMock: false,
+      enableExperimentalApis: false,
     };
     const app = await createTestApp(null, null, optionsObject);
 
@@ -104,6 +105,13 @@ describe('Smoke test', () => {
       forceUseMock: 'true' // this is expected to be a boolean
     }));
     should(test).throw("The 'forceUseMock' option must be a boolean.");
+  });
+
+  it('throw error if options object contains non-boolean enableExperimentalApis value', () => {
+    const test = () => autoref(new App(h.appInfo, null, {
+      enableExperimentalApis: 'true' // this is expected to be a boolean
+    }));
+    should(test).throw("The 'enableExperimentalApis' option must be a boolean.");
   });
 
   it('creates registered for testing', () => should(app.auth.registered).be.true());
