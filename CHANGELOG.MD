@@ -5,6 +5,9 @@
 - Add instructions to the README for how to generate API docs locally
 - Support for exposing experimental APIs when `--enable-experimental-apis` argument is passed, or when `enableExperimentalApis` flag is set in the initialisation option
 
+### Changed
+- Dependency downloader configuration to download both mock and prod libs without `NODE_ENV=dev`
+
 ### Fixed
 - Change docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions.
 - NFS write argument to match documentation annotation

@@ -16,7 +16,6 @@ install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - node --version
   - npm --version
-  - SET NODE_ENV=dev
   - npm install
 
 test_script:
