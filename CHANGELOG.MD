@@ -7,6 +7,7 @@
 
 ### Fixed
 - Change docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions.
+- NFS write argument to match documentation annotation
 
 ### SAFE libraries Dependencies
 - safe_app: v0.8.0
