@@ -238,9 +238,12 @@ class NFS {
 
   /**
   * Replace a path with a new file. Directly commit to the network.
+  *
+  * CONSTANTS.GET_NEXT_VERSION: Applies update to next file version.
+  *
   * @param {(String|Buffer)} fileName - the path to store the file under
   * @param {File} file - the file to serialise and store
-  * @param {Number} version - the version successor number, to ensure you
+  * @param {Number|CONSTANTS.GET_NEXT_VERSION} version - the version successor number, to ensure you
            are overwriting the right one
   * @param {String|Buffer} userMetadata - optional parameter for updating user metadata
   * @returns {Promise<File>} - the same file
@@ -253,10 +256,17 @@ class NFS {
       fileMeta.user_metadata_len = userMetadata.length;
       fileMeta.user_metadata_cap = userMetadataPtr.length;
     }
+    const fileContext = file;
     return lib.dir_update_file(this.mData.app.connection, this.mData.ref, fileName,
-                           file.ref.ref(), version)
-      .then(() => { file.version = version; })  // eslint-disable-line no-param-reassign
-      .then(() => file);
+                           fileContext.ref.ref(), version)
+      .then(() => {
+        if (version === CONSTANTS.GET_NEXT_VERSION) {
+          fileContext.version = version + 1;
+        } else {
+          fileContext.version = version;
+        }
+      })
+      .then(() => fileContext);
   }
 
   /**

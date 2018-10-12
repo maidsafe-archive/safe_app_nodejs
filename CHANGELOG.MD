@@ -9,6 +9,7 @@
 - Experimental WebID emulation layer which provides an abstraction to generate and manipulate WebID profile documents on the SAFE network.
 - Experimental Web API which provides utilities to manage public names and subNames, get the list of owned WebIDs, get list of owned public names, etc.
 - Rename `isMockBuild` function to `appIsMock` to match the renaming in safe_app lib v0.9.0.
+- Constant to automatically obtain correct file version for updates and deletes
 
 ### Changed
 - Dependency downloader configuration to download both mock and prod libs without `NODE_ENV=dev`

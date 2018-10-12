@@ -47,7 +47,8 @@ describe('Smoke testing', () => {
       USER_ANYONE: 0,
       MD_METADATA_KEY: '_metadata',
       MD_ENTRIES_EMPTY: 0,
-      MD_PERMISSION_EMPTY: 0
+      MD_PERMISSION_EMPTY: 0,
+      GET_NEXT_VERSION: 0
     };
     return should(CONSTANTS).be.eql(expectedConsts);
   });

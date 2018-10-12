@@ -79,6 +79,10 @@ const LIB_LOCATION_PROD = 'prod';
 * This can be used when invoking the `put` function of the MutableData API to
 * signal that it should be committed to the network with an empty set of permissions.
 *
+* @param {Number} GET_NEXT_VERSION Gets next correct file version.
+* This constant may be used in place of the version argument when
+* invoking `update` function of the NFS API to automatically obtain correct file version.
+*
 */
 const pubConsts = {
   NFS_FILE_MODE_OVERWRITE: 1,
@@ -90,6 +94,7 @@ const pubConsts = {
   MD_METADATA_KEY: '_metadata',
   MD_ENTRIES_EMPTY: 0,
   MD_PERMISSION_EMPTY: 0,
+  GET_NEXT_VERSION: 0
 };
 
 const SAFE_APP_LIB_FILENAME = {
