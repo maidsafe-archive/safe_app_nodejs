@@ -129,12 +129,12 @@ class File {
   * @param {Buffer|String} content
   * @returns {Promise}
   */
-  write(fileContent) {
+  write(content) {
     if (!this._fileCtx) {
       return Promise
         .reject(makeError(errConst.ERR_FILE_NOT_FOUND.code, errConst.ERR_FILE_NOT_FOUND.msg));
     }
-    return lib.file_write(this._connection, this._fileCtx, fileContent);
+    return lib.file_write(this._connection, this._fileCtx, content);
   }
 
   /**
