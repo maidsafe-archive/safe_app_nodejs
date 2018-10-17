@@ -36,14 +36,9 @@ The documentation for the latest `safe_app_nodejs` API is available at <http://d
     yarn
     ```
 
-    If you are working on a development environment, you can run `NODE_ENV=dev yarn` instead in order to get the [`safe_app`](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library which uses the `MockVault` file rather than connecting to the actual SAFE Network.
-    ##### Windows-specific
-    - In powershell, use `$env:NODE_ENV = "dev"`, which sets the environment variable for the duration of the terminal session.
-    - In command prompt, use `set NODE_ENV=dev`, which also sets the environment variable for the duration of the terminal session.
-
 ### Testing
 
-To run the tests locally, make sure you installed the [`safe_app`](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library with `NODE_ENV=dev yarn`, then you can run them by executing `yarn test`.
+To run the tests locally, run `yarn test`.
 
 Note: If you are compiling your own [`safe_app`](https://github.com/maidsafe/safe_client_libs/tree/master/safe_app) library for testing purposes, and if you want to be able to run the tests, make sure to include `testing` in your build features when compiling `safe_app` in `safe_client_libs`, i.e. `cargo build --release --features "use-mock-routing testing"`.
 

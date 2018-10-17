@@ -5,6 +5,10 @@
 - Add instructions to the README for how to generate API docs locally
 - Support for exposing experimental APIs when `--enable-experimental-apis` argument is passed, or when `enableExperimentalApis` flag is set in the initialisation option
 
+### Changed
+- Dependency downloader configuration to download both mock and prod libs without `NODE_ENV=dev`
+- Upgrades deps_downloader to v0.3.0
+
 ### Fixed
 - Change docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions.
 - NFS write argument to match documentation annotation
@@ -12,7 +16,7 @@
 ### SAFE libraries Dependencies
 - safe_app: v0.8.0
 - system_uri: v0.4.0
-- deps_downloader: v0.2.0
+- deps_downloader: v0.3.0
 
 ## [0.9.1] - 27-8-2018
 ### Added
