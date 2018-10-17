@@ -16,10 +16,10 @@ install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - node --version
   - npm --version
-  - npm install
+  - appveyor-retry npm install
 
 test_script:
   - npm run lint
-  - npm test
+  - appveyor-retry npm test
 
 build: false
