@@ -204,7 +204,15 @@ describe('Get granted containers permissions from auth URI', () => {
 
 describe('Access Container', () => {
   let app;
-  const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
+  const containersPermissions = {
+    _documents: ['Read'],
+    _downloads: ['Insert'],
+    _music: ['Delete'],
+    // _pictures: ['Read'], TODO: remove/uncomment according to resolution of https://github.com/maidsafe/safe_client_libs/issues/680
+    _videos: ['Update', 'ManagePermissions'],
+    _public: ['Read'],
+    _publicNames: ['Read', 'Insert', 'ManagePermissions']
+  };
 
   before(async () => {
     app = await createAuthenticatedTestApp({ scope: '_test_scope' }, containersPermissions, { own_container: true });
@@ -216,7 +224,35 @@ describe('Access Container', () => {
   it('get container names', () => app.auth.refreshContainersPermissions().then(() =>
     app.auth.getContainersPermissions().then((contsPerms) => {
       // we always get a our own sandboxed container in tests
-      should(Object.keys(contsPerms).length).be.equal(3);
+      should(Object.keys(contsPerms).length).be.equal(7);
+      should(contsPerms._documents).be.eql({
+        Read: true,
+        Insert: false,
+        Delete: false,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms._downloads).be.eql({
+        Read: false,
+        Insert: true,
+        Delete: false,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms._music).be.eql({
+        Read: false,
+        Insert: false,
+        Delete: true,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms._videos).be.eql({
+        Read: false,
+        Insert: false,
+        Delete: false,
+        Update: true,
+        ManagePermissions: true
+      });
       should(contsPerms._public).be.eql({
         Read: true,
         Insert: false,
