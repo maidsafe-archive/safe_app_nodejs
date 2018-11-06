@@ -91,8 +91,8 @@ module.exports = {
   api: {
     dir_fetch_file: h.Promisified(toMDataInfo, [FilePtr, t.u64], readFileInfo),
     dir_insert_file: h.Promisified(toMDataInfo, []),
-    dir_update_file: h.Promisified(toMDataInfo, []),
-    dir_delete_file: h.Promisified(toMDataInfo, []),
+    dir_update_file: h.Promisified(toMDataInfo, [t.u64]),
+    dir_delete_file: h.Promisified(toMDataInfo, [t.u64]),
     file_open: h.Promisified(toMDataInfo, FileContextHandle),
     file_size: h.Promisified(null, [t.u64]),
     file_read: h.Promisified(null, [t.u8Pointer, t.usize], h.asBuffer),

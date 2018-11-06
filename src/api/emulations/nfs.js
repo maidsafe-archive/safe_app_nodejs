@@ -259,12 +259,8 @@ class NFS {
     const fileContext = file;
     return lib.dir_update_file(this.mData.app.connection, this.mData.ref, fileName,
                            fileContext.ref.ref(), version)
-      .then(() => {
-        if (version === CONSTANTS.GET_NEXT_VERSION) {
-          fileContext.version = version + 1;
-        } else {
-          fileContext.version = version;
-        }
+      .then((newVersion) => {
+        fileContext.version = newVersion;
       })
       .then(() => fileContext);
   }
@@ -272,11 +268,13 @@ class NFS {
   /**
   * Delete a file from path. Directly commit to the network.
   * @param {(String|Buffer)} fileName
-  * @param {Number} version
-  * @returns {Promise}
+  * @param {Number|CONSTANTS.GET_NEXT_VERSION} version - the version successor number, to ensure you
+           are deleting the right one
+  * @returns {Promise<Number>} - version of deleted file
   */
   delete(fileName, version) {
-    return lib.dir_delete_file(this.mData.app.connection, this.mData.ref, fileName, version);
+    return lib.dir_delete_file(this.mData.app.connection, this.mData.ref, fileName, version)
+      .then((newVersion) => newVersion);
   }
 
   /**
