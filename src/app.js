@@ -21,6 +21,7 @@ const makeError = require('./native/_error.js');
 const { webFetch, fetch } = require('./web_fetch.js');
 
 /**
+* @private
 * Validates appInfo and properly handles error
 */
 const validateAppInfo = (_appInfo) => {
@@ -41,6 +42,7 @@ const validateAppInfo = (_appInfo) => {
 };
 
 /**
+* @private
 * Init logging on the underlying library only if it wasn't done already
 */
 const initLogging = (appInfo, options) => {
@@ -57,6 +59,7 @@ const initLogging = (appInfo, options) => {
 };
 
 /**
+* @private
 * Set additional search path for the config files if it was requested in
 * the options. E.g. log.toml and crust.config files will be search
 * in this additional search path.
@@ -164,10 +167,25 @@ class SAFEApp extends EventEmitter {
     return this._mutableData;
   }
 
+  /**
+  * Function to lookup a given `safe://`-URL in accordance with the
+  * public name resolution and find the requested network resource.
+  *
+  * @param {String} url the url you want to fetch
+  * @param {WebFetchOptions} [options=null] additional options
+  * @returns {Promise<Object>} the object with body of content and headers
+  */
   webFetch(url, options) {
     return webFetch.call(this, url, options);
   }
 
+  /**
+  * Experipental function to lookup a given `safe://`-URL in accordance with the
+  * public name resolution and find the requested network resource.
+  *
+  * @param {String} url the url you want to fetch
+  * @returns {Promise<NetworkResource>} the network resource found from the passed URL
+  */
   fetch(url) {
     return fetch.call(this, url);
   }

@@ -352,4 +352,28 @@ module.exports = {
     Pass --enable-experimental-apis argument to the application, or programatically
     set the 'enableExperimentalApis' flag in the initialisation options to enable them.`
   },
+
+  /**
+   * @name @ERR_SERVICE_NOT_FOUND
+   * @type {Object}
+   * @description the service/subname was not found
+   * @property {number} code 1022
+   * @property {function} msg
+   */
+  ERR_SERVICE_NOT_FOUND: {
+    code: 1022,
+    msg: 'Requested service is not found.'
+  },
+
+  /**
+   * @name @ERR_CONTENT_NOT_FOUND
+   * @type {Object}
+   * @description the content was not found at the address provided
+   * @property {number} code 1023
+   * @property {function} msg
+   */
+  ERR_CONTENT_NOT_FOUND: {
+    code: 1023,
+    msg: 'No content found at requested address.'
+  },
 };

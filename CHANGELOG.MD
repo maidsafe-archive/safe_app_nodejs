@@ -4,10 +4,12 @@
 ### Added
 - Add instructions to the README for how to generate API docs locally
 - Support for exposing experimental APIs when `--enable-experimental-apis` argument is passed, or when `enableExperimentalApis` flag is set in the initialisation option
+- Experimental function `fetch` which can fetch a network resource from a URL, returning the target network object (`content`), the type of the resource fetched (`resourceType`), and the parsed path from the provided URL (`parsedPath`)
 
 ### Changed
 - Dependency downloader configuration to download both mock and prod libs without `NODE_ENV=dev`
 - Upgrades deps_downloader to v0.3.0
+- Code refactoring in the browsing tests cases
 
 ### Fixed
 - Change docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions.
