@@ -162,7 +162,7 @@ describe('Get granted containers permissions from auth URI', () => {
   it('invalid uri', async () => {
     const appNoConnect = await createTestApp();
     return should(appNoConnect.auth.readGrantedPermissions('safe-invalid-uri'))
-              .be.rejectedWith('Serialisation error');
+              .be.rejectedWith('IPC error: InvalidMsg');
   });
 
   it('uri with no auth granted information', async () => {

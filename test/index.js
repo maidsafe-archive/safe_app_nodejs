@@ -185,7 +185,7 @@ describe('External API', () => {
 
     it('fail with safe-<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe-');
-      return should(fromAuthUri(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+      return should(fromAuthUri(appInfo, uri, null, { log: false })).be.rejectedWith('IPC error: InvalidMsg');
     });
 
     it('fail with safe:<auth info>', () => {
