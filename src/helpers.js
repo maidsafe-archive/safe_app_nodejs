@@ -51,17 +51,18 @@ const isExperimentalApisEnabled = process.argv.includes('--enable-experimental-a
  * }
 */
 async function EXPOSE_AS_EXPERIMENTAL_API(fn) {
+  const featureName = fn.name.replace('_', ' ');
   // the experimental APIs can be also enabled by setting
   // the `enableExperimentalApis` flag can be set to true in the initialisation options.
   if (!isExperimentalApisEnabled && !this.options.enableExperimentalApis) {
     throw makeError(errConst.EXPERIMENTAL_API_DISABLED.code,
-                    errConst.EXPERIMENTAL_API_DISABLED.msg(fn.name));
+                    errConst.EXPERIMENTAL_API_DISABLED.msg(featureName));
   }
 
   console.warn(`
     ** Experimental API WARNING **
     * The application is making use of a SAFE experimental API *
-    The '${fn.name}' function is part of a set of experimental functions.
+    The '${featureName}' is part of a set of experimental functions.
     Any/all of them may be deprecated, removed, or very likely change in the future.
     Also regular users won't have this APIs enabled by default unless the flag is provided, so be aware of all these limitations.
     For more information, updates, or to submit ideas and suggestions, please visit https://github.com/maidsafe/safe_app_nodejs.

@@ -176,15 +176,13 @@ class File {
 }
 
 /**
-* NFS Emulation on top of an MData
+* NFS Emulation on top of a MutableData
+*
+* Instantiate the NFS emulation layer rapping a MutableData instance
+*
+* @param {MutableData} mData the MutableData to wrap around
 */
 class NFS {
-  /**
-  * @private
-  * Instantiate the NFS emulation layer rapping a MutableData instance
-  *
-  * @param {MutableData} mData - the MutableData to wrap around
-  */
   constructor(mData) {
     this.mData = mData;
   }
