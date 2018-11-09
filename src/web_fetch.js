@@ -172,6 +172,12 @@ const readContentFromFile = async (openedFile, defaultMimeType, opts) => {
   return response;
 };
 
+// Helper function which is able to fetch a resource from the network
+// using a URL. It parses the URL and calls the subName/publicName resolver helper
+// (it can also call other type of resolvers like XOR-URL resolver in the future),
+// returning the network object that it's found with the applied URL resolution,
+// along with the type of the resolved network object and the path that was
+// parsed out from the URL.
 async function fetchHelper(url) {
   if (!url) return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
 
