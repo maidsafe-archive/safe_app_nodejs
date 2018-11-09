@@ -348,7 +348,7 @@ module.exports = {
   EXPERIMENTAL_API_DISABLED: {
     code: 1021,
     msg: (fn) => `
-    The '${fn}' function is disabled as it's part of the set of experimental APIs.
+    The '${fn}' is disabled as it's part of the set of experimental APIs.
     Pass --enable-experimental-apis argument to the application, or programatically
     set the 'enableExperimentalApis' flag in the initialisation options to enable them.`
   },
