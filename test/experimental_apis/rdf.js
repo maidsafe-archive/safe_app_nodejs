@@ -11,8 +11,8 @@
 // relating to use of the SAFE Network Software.
 
 const should = require('should');
-const h = require('./helpers');
-const errConst = require('../src/error_const');
+const h = require('../helpers');
+const errConst = require('../../src/error_const');
 
 describe('RDF emulation', () => {
   let app;
@@ -51,7 +51,7 @@ describe('RDF emulation', () => {
       const name = h.createRandomXorName();
       const mdata = await safeApp.mutableData.newPublic(name, TYPE_TAG);
       await mdata.quickSetup({});
-      await mdata.emulateAs('rdf');
+      mdata.emulateAs('rdf');
     } catch (err) {
       error = err;
     }
@@ -60,7 +60,7 @@ describe('RDF emulation', () => {
 
   it('create RDF emulation from MD', async () => {
     await md.quickSetup({});
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
     return should(rdf).not.be.undefined();
   });
 
@@ -78,7 +78,7 @@ describe('RDF emulation', () => {
     await md.quickSetup(rawJsonLd);
 
     md = await app.mutableData.newPublic(xorname, TYPE_TAG);
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
     await rdf.nowOrWhenFetched();
     const jsonld = await rdf.serialise('application/ld+json');
 
@@ -87,26 +87,26 @@ describe('RDF emulation', () => {
 
   it('fetch entries with RDF emulation from empty MD', async () => {
     await md.quickSetup();
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
     await rdf.nowOrWhenFetched();
   });
 
   it('parse a Turtle document', async () => {
     await md.quickSetup({});
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
     const turtle = '<a> <b> <c> .';
     await rdf.parse(turtle, 'text/turtle', myUri);
   });
 
   it('parse a JSON-LD document', async () => {
     await md.quickSetup({});
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
     await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
   });
 
   it('add triples and find any friend', async () => {
     await md.quickSetup({});
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
     await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const me = rdf.sym(myUri);
@@ -119,7 +119,7 @@ describe('RDF emulation', () => {
 
   it('add triples and find with each', async () => {
     await md.quickSetup({});
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
     await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const me = rdf.sym(myUri);
@@ -133,7 +133,7 @@ describe('RDF emulation', () => {
 
   it('add triples and match statements', async () => {
     await md.quickSetup({});
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
     await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const me = rdf.sym(myUri);
@@ -147,7 +147,7 @@ describe('RDF emulation', () => {
 
   it('add literal and find with each', async () => {
     await md.quickSetup({});
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
     await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const XSD = rdf.namespace('http://www.w3.org/2001/XMLSchema#');
@@ -161,7 +161,7 @@ describe('RDF emulation', () => {
 
   it('remove matching statements', async () => {
     await md.quickSetup({});
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
     await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const me = rdf.sym(myUri);
@@ -175,7 +175,7 @@ describe('RDF emulation', () => {
 
   it('add triples and commit them', async () => {
     await md.quickSetup({ '@id': 'asas', bbbb: 'b2b2b2b' });
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const me = rdf.sym(myUri);
 
@@ -196,7 +196,7 @@ describe('RDF emulation', () => {
 
   it('add triples and append them', async () => {
     await md.quickSetup({ '@id': 'asas', bbbb: 'b2b2b2b' });
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const me = rdf.sym(myUri);
 
@@ -208,7 +208,7 @@ describe('RDF emulation', () => {
 
     // now append
     const md2 = await app.mutableData.newPublic(xorname, TYPE_TAG);
-    const rdf2 = await md2.emulateAs('rdf');
+    const rdf2 = md2.emulateAs('rdf');
     const me2 = rdf.sym(`${myUri}/1`);
 
     rdf2.setId(`${myUri}/1`);
@@ -227,7 +227,7 @@ describe('RDF emulation', () => {
 
   it('parse JSON-LD RDF and serialise it as Turtle', async () => {
     await md.quickSetup({});
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
     const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
     const me = rdf.sym(myUri);
 
@@ -244,7 +244,7 @@ describe('RDF emulation', () => {
 
   it('parse Turtle RDF and serialise it as JSON-LD', async () => {
     await md.quickSetup({});
-    const rdf = await md.emulateAs('rdf');
+    const rdf = md.emulateAs('rdf');
      /* eslint-disable no-multi-str */
     const turtle = '@prefix foaf: <http://xmlns.com/foaf/0.1/> .\
                     @prefix anything: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\
