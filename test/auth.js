@@ -208,7 +208,7 @@ describe('Access Container', () => {
     _documents: ['Read'],
     _downloads: ['Insert'],
     _music: ['Delete'],
-    // _pictures: ['Read'], TODO: remove/uncomment according to resolution of https://github.com/maidsafe/safe_client_libs/issues/680
+    _pictures: ['Read', 'Delete'],
     _videos: ['Update', 'ManagePermissions'],
     _public: ['Read'],
     _publicNames: ['Read', 'Insert', 'ManagePermissions']
@@ -241,6 +241,13 @@ describe('Access Container', () => {
       });
       should(contsPerms._music).be.eql({
         Read: false,
+        Insert: false,
+        Delete: true,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms._pictures).be.eql({
+        Read: true,
         Insert: false,
         Delete: true,
         Update: false,
