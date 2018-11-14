@@ -433,6 +433,9 @@ describe('Browsing', () => {
         domain = testDomain;
       }).then(() => { client = unregisteredApp; }));
 
+    it('no protocol in url', () => should(client.webFetch('domain_doesnt_exist'))
+      .be.rejectedWith(`${errConst.INVALID_URL.msg}, complete with protocol.`));
+
     it('should throw error when a previously existing service is removed', async () => {
       const deletedService = 'nonexistant';
       const { domain: testDomain } = await createRandomDomain(content, '', deletedService, app);
