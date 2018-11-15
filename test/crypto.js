@@ -161,6 +161,19 @@ describe('Encryption keys', () => {
           should(myHandleOnTheirPubKey).not.be.undefined();
         }));
 
+    it('encrypt with secret key', async () => {
+      const text = 'some-text';
+      const cipher = await myKeys.secEncKey.encrypt(text, theirKeys.pubEncKey);
+      return should(text).not.equal(cipher);
+    });
+
+    it('decrypt with public key', async () => {
+      const text = 'some-text';
+      const cipher = await theirKeys.pubEncKey.encrypt(text, theirKeys.secEncKey);
+      const decrypted = await theirKeys.pubEncKey.decrypt(cipher, theirKeys.secEncKey);
+      return should(text).be.equal(decrypted.toString());
+    });
+
     it('encrypts and decrypts', () => {
       const plaintext = `all the ${Math.random()} places where I've been`;
       return myHandleOnTheirPubKey.encrypt(plaintext, myKeys.secEncKey)
@@ -205,6 +218,10 @@ describe('Encryption keys', () => {
           return should(theirKeys.decryptSealed()).be.rejectedWith('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.');
         });
     });
+
+    it('forceCleanUp on pubEncKey objects', () => myKeys.pubEncKey.forceCleanUp());
+
+    it('forceCleanUp on secEncKey objects', () => myKeys.secEncKey.forceCleanUp());
   });
 });
 
@@ -294,6 +311,10 @@ describe('Sign keys', () => {
             return should(rawPubKeyFromRaw.toString()).be.equal(rawPubKey.toString());
           }));
     });
+
+    it('forceCleanUp on pubSignKey objects', () => signKeyPair.pubSignKey.forceCleanUp());
+
+    it('forceCleanUp on secSignKey objects', () => signKeyPair.secSignKey.forceCleanUp());
   });
 
   describe('signing messages between two apps', () => {
