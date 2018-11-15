@@ -13,13 +13,14 @@
 - Dependency downloader configuration to download both mock and prod libs without `NODE_ENV=dev`
 - Upgrades deps_downloader to v0.3.0
 - Code refactoring in the browsing tests cases
+- Upgrade safe_app native library to v0.9.0
 
 ### Fixed
 - Change docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions.
 - NFS write argument to match documentation annotation
 
 ### SAFE libraries Dependencies
-- safe_app: v0.8.0
+- safe_app: v0.9.0
 - system_uri: v0.4.0
 - deps_downloader: v0.3.0
 
