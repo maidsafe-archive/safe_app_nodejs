@@ -6,30 +6,37 @@ const mime = require('mime');
 const nodePath = require('path');
 const { EXPOSE_AS_EXPERIMENTAL_API } = require('./helpers');
 
-// Helper function to read fetch the Container
+const MIME_TYPE_BYTERANGES = 'multipart/byteranges';
+const MIME_TYPE_OCTET_STREAM = 'application/octet-stream';
+const HEADERS_CONTENT_TYPE = 'Content-Type';
+const HEADERS_CONTENT_LENGTH = 'Content-Length';
+const HEADERS_CONTENT_RANGE = 'Content-Range';
+const DATA_TYPE_NFS = 'NFS';
+
+// Helper function to fetch the Container
 // from a public ID and service name provided
-async function getContainerFromPublicId(pubName, servName) {
+async function getContainerFromPublicId(pubName, subName) {
   let serviceInfo;
   try {
     const address = await this.crypto.sha3Hash(pubName);
     const servicesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
-    serviceInfo = await servicesContainer.get(servName || 'www'); // default it to www
+    serviceInfo = await servicesContainer.get(subName || 'www'); // default it to www
   } catch (err) {
-    if (err.code === errConst.ERR_NO_SUCH_DATA.code ||
-        err.code === errConst.ERR_NO_SUCH_ENTRY.code) {
-      const error = {};
-      error.code = err.code;
-      error.message = `Requested ${err.code === errConst.ERR_NO_SUCH_DATA.code ? 'public name' : 'service'} is not found`;
-      throw makeError(error.code, error.message);
+    switch (err.code) {
+      case errConst.ERR_NO_SUCH_DATA.code:
+        // there is no container stored at the location
+        throw makeError(errConst.ERR_CONTENT_NOT_FOUND.code, errConst.ERR_CONTENT_NOT_FOUND.msg);
+      case errConst.ERR_NO_SUCH_ENTRY.code:
+        // there is no matching service name
+        throw makeError(errConst.ERR_SERVICE_NOT_FOUND.code, errConst.ERR_SERVICE_NOT_FOUND.msg);
+      default:
+        throw err;
     }
-    throw err;
   }
 
   if (serviceInfo.buf.length === 0) {
-    const error = {};
-    error.code = errConst.ERR_NO_SUCH_ENTRY.code;
-    error.message = `Service not found. ${errConst.ERR_NO_SUCH_ENTRY.msg}`;
-    throw makeError(error.code, error.message);
+    // the matching service name was soft-deleted
+    throw makeError(errConst.ERR_SERVICE_NOT_FOUND.code, errConst.ERR_SERVICE_NOT_FOUND.msg);
   }
 
   let serviceMd;
@@ -39,13 +46,14 @@ async function getContainerFromPublicId(pubName, servName) {
     serviceMd = await this.mutableData.newPublic(serviceInfo.buf, consts.TAG_TYPE_WWW);
   }
 
-  return serviceMd;
+  return { serviceMd, type: DATA_TYPE_NFS };
 }
 
 // Helper function to try different paths to find and
 // fetch the index file from a web site container
 const tryDifferentPaths = async (fetchFn, initialPath) => {
   const handleNfsFetchException = (error) => {
+    // only if it's an unexpected error throw it
     if (error.code !== errConst.ERR_FILE_NOT_FOUND.code) {
       throw error;
     }
@@ -76,8 +84,15 @@ const tryDifferentPaths = async (fetchFn, initialPath) => {
     }
   }
   if (!file) {
-    filePath = `${initialPath}/${consts.INDEX_HTML}`.replace('/', '');
-    file = await fetchFn(filePath);
+    try {
+      filePath = `${initialPath}/${consts.INDEX_HTML}`.replace('/', '');
+      file = await fetchFn(filePath);
+    } catch (error) {
+      if (error.code !== errConst.ERR_FILE_NOT_FOUND.code) {
+        throw error;
+      }
+      throw makeError(error.code, errConst.ERR_FILE_NOT_FOUND.msg);
+    }
   }
 
   const mimeType = mime.getType(nodePath.extname(filePath));
@@ -89,7 +104,7 @@ const tryDifferentPaths = async (fetchFn, initialPath) => {
 const readContentFromFile = async (openedFile, defaultMimeType, opts) => {
   let mimeType = defaultMimeType;
   if (!mimeType) {
-    mimeType = 'application/octet-stream';
+    mimeType = MIME_TYPE_OCTET_STREAM;
   }
   let range;
   let start = consts.pubConsts.NFS_FILE_START;
@@ -124,8 +139,8 @@ const readContentFromFile = async (openedFile, defaultMimeType, opts) => {
       return {
         body: byteSegment,
         headers: {
-          'Content-Type': mimeType,
-          'Content-Range': `bytes ${partStart}-${partEnd}/${fileSize}`
+          [HEADERS_CONTENT_TYPE]: mimeType,
+          [HEADERS_CONTENT_RANGE]: `bytes ${partStart}-${partEnd}/${fileSize}`
         }
       };
     }));
@@ -135,40 +150,76 @@ const readContentFromFile = async (openedFile, defaultMimeType, opts) => {
   }
 
   if (multipart) {
-    mimeType = 'multipart/byteranges';
+    mimeType = MIME_TYPE_BYTERANGES;
   }
 
   const response = {
     headers: {
-      'Content-Type': mimeType
+      [HEADERS_CONTENT_TYPE]: mimeType
     },
     body: data
   };
 
   if (range && multipart) {
-    response.headers['Content-Length'] = JSON.stringify(data).length;
+    response.headers[HEADERS_CONTENT_LENGTH] = JSON.stringify(data).length;
     delete response.body;
     response.parts = data;
   } else if (range) {
     endByte = (end === fileSize - 1) ? fileSize - 1 : end;
-    response.headers['Content-Length'] = lengthToRead;
-    response.headers['Content-Range'] = `bytes ${start}-${endByte}/${fileSize}`;
+    response.headers[HEADERS_CONTENT_LENGTH] = lengthToRead;
+    response.headers[HEADERS_CONTENT_RANGE] = `bytes ${start}-${endByte}/${fileSize}`;
   }
   return response;
 };
 
+// Helper function which is able to fetch a resource from the network
+// using a URL. It parses the URL and calls the subName/publicName resolver helper
+// (it can also call other type of resolvers like XOR-URL resolver in the future),
+// returning the network object that it's found with the applied URL resolution,
+// along with the type of the resolved network object and the path that was
+// parsed out from the URL.
+async function fetchHelper(url) {
+  if (!url) return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
+
+  const parsedUrl = parseUrl(url);
+
+  if (!parsedUrl.protocol) return Promise.reject(makeError(errConst.INVALID_URL.code, `${errConst.INVALID_URL.msg}, complete with protocol.`));
+
+  const hostParts = parsedUrl.hostname.split('.');
+  const publicName = hostParts.pop(); // last one is 'publicName'
+  const subName = hostParts.join('.'); // all others are the 'subName'
+  const parsedPath = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
+
+  // Let's try to find the container and read
+  // its content using the helpers functions
+  const md = await getContainerFromPublicId.call(this, publicName, subName);
+  return {
+    content: md.serviceMd,
+    resourceType: md.type,
+    parsedPath
+  };
+}
+
 /**
-* Helper to lookup a given `safe://`-url in accordance with the
-* convention and find the requested object.
+* @typedef {Object} NetworkResource
+* holds information about a network resource fetched from a `safe://`-URL
+* @param {Object} content the network resource object
+* @param {Object} resourceType the type of the resource fetched, e.g. 'NFS'
+* @param {Object} parsedPath the parsed path from the provided URL
+*/
+
+/**
+* @private
+* Helper experipental function to lookup a given `safe://`-URL in accordance with the
+* public name resolution and find the requested network resource.
 *
 * @param {String} url the url you want to fetch
-* @returns {Promise<Object>} the native object
+* @returns {Promise<NetworkResource>} the network resource found from the passed URL
 */
 async function fetch(url) {
   /* eslint-disable no-shadow, prefer-arrow-callback */
   return EXPOSE_AS_EXPERIMENTAL_API.call(this, async function fetch() {
-    // implementation of fetch function goes here
-    return url;
+    return fetchHelper.call(this, url);
   });
 }
 
@@ -187,47 +238,28 @@ async function fetch(url) {
 */
 
 /**
-* Helper to lookup a given `safe://`-url in accordance with the
-* convention and find the requested object.
+* @private
+* Helper function to lookup a given `safe://`-URL in accordance with the
+* public name resolution and find the requested network resource.
 *
 * @param {String} url the url you want to fetch
 * @param {WebFetchOptions} [options=null] additional options
 * @returns {Promise<Object>} the object with body of content and headers
 */
 async function webFetch(url, options) {
-  if (!url) return Promise.reject(makeError(errConst.MISSING_URL.code, errConst.MISSING_URL.msg));
+  const { content, resourceType, parsedPath } = await fetchHelper.call(this, url);
 
-  const parsedUrl = parseUrl(url);
-  const hostname = parsedUrl.hostname;
-  let path = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
-  const tokens = path.split('/');
+  const emulation = await content.emulateAs(resourceType);
+  const tokens = parsedPath.split('/');
   if (!tokens[tokens.length - 1] && tokens.length > 1) {
     tokens.pop();
     tokens.push(consts.INDEX_HTML);
   }
-
-  path = tokens.join('/') || `/${consts.INDEX_HTML}`;
-
-  // lets' unpack
-  const hostParts = hostname.split('.');
-  const lookupName = hostParts.pop(); // last one is 'domain'
-  const serviceName = hostParts.join('.'); // all others are 'service'
-
-  return new Promise(async (resolve, reject) => {
-    const boundGetContainerFromPublicId = getContainerFromPublicId.bind(this);
-    try {
-      // Let's try to find the container and read
-      // its content using the helpers functions
-      const serviceMd = await boundGetContainerFromPublicId(lookupName, serviceName);
-      const emulation = await serviceMd.emulateAs('NFS');
-      const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), path);
-      const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
-      const data = await readContentFromFile(openedFile, mimeType, options);
-      resolve(data);
-    } catch (e) {
-      reject(e);
-    }
-  });
+  const path = tokens.join('/') || `/${consts.INDEX_HTML}`;
+  const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), path);
+  const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
+  const data = await readContentFromFile(openedFile, mimeType, options);
+  return data;
 }
 
 module.exports = {

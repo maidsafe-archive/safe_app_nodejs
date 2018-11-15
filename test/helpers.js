@@ -14,6 +14,7 @@
 const crypto = require('crypto');
 const App = require('../src/app');
 const h = require('../src/helpers');
+const consts = require('../src/consts');
 
 const authUris = {
   registeredUri: 'safe-bmv0lm1hawrzywzllmv4yw1wbgvzlm1hawx0dxrvcmlhba:AQAAAPN-m2AAAAAAAAAAACAAAAAAAAAAMxWYyOUEdIA2VNGJTmAjKFvg9yCrceomf_dZC3AdguAgAAAAAAAAALXtHOU3NtIxjIfIX4hk-pTxOeDxMiQnrXxBOqF8sp70IAAAAAAAAACjjbSMVLfM6fKxHaUwOE9ToK0mKMCLNjpstT3TqZP9KkAAAAAAAAAAbAl79zGmd3Dq5vTSVusCT8JKtr_1yYu320p24viIDG2jjbSMVLfM6fKxHaUwOE9ToK0mKMCLNjpstT3TqZP9KiAAAAAAAAAA661BaoE9k13thtGd8MVVR9gLutkSM_NUq67dnmuGBEMgAAAAAAAAAFBM4tDw2fjP-O3PryNeEf2tu56-CA1LdTidE2GIMHKYAAAAAAAAAAAAAAAAAAAAAKtRs_fd7jF0mYyq8bNyDN86wCCiowPQRQi7Db3tfRpRmDoAAAAAAAAYAAAAAAAAACcJjCl2_amfKTMP53W_gMNUxq_YCzVH0wIAAAAAAAAAJwAAAAAAAABhcHBzL25ldC5tYWlkc2FmZS5leGFtcGxlcy5tYWlsdHV0b3JpYWxPDqh1LvjMfruqH92sGoOBa9pKbeoyCyQm8HElHtfbR5g6AAAAAAAAASAAAAAAAAAA_ZaHRjRZ9gfbqCd_ZKjNUYewymCf5sNybZKM5-cT0qgYAAAAAAAAAAn89-_PuZAMk57uoVXS1YNbHR6o3uv-RAAFAAAAAAAAAAAAAAABAAAAAgAAAAMAAAAEAAAADAAAAAAAAABfcHVibGljTmFtZXMjGtQ2VkRH4VMMsrpUChdxTK6U41KgA-FmGue5Z2-dMZg6AAAAAAAAASAAAAAAAAAAFuKBLte-nkyuuXV6ovGbsfaZRBr_OFf2CRLNZ2dyRrcYAAAAAAAAAGnXgCQRN9rBO-Eh8HNZ-SLeokyCPkBMegACAAAAAAAAAAAAAAABAAAA',
@@ -39,8 +40,8 @@ const createTestApp = async (partialAppInfo, networkCB, options, preventInit) =>
   return h.autoref(app);
 };
 
-const createAuthenticatedTestApp = async (partialAppInfo, access, opts) => {
-  const app = await createTestApp(partialAppInfo);
+const createAuthenticatedTestApp = async (partialAppInfo, access, opts, initOpts) => {
+  const app = await createTestApp(partialAppInfo, null, initOpts);
   return app.auth.loginForTest(access || {}, opts);
 };
 
@@ -58,6 +59,46 @@ const createRandomInvalidSecKey = () => crypto.randomBytes(30);
 const createRandomInvalidXor = () => crypto.randomBytes(30);
 const createRandomInvalidNonce = () => crypto.randomBytes(30);
 
+const createDomain = async (domain, content, path, service, authedApp) => {
+  const app = authedApp || await createAuthenticatedTestApp();
+  const serviceMd = await app.mutableData.newRandomPublic(consts.TAG_TYPE_WWW);
+  await serviceMd.quickSetup();
+  const nfs = serviceMd.emulateAs('NFS');
+   // let's write the file
+  const file = await nfs.create(content);
+  await nfs.insert(path || '/index.html', file);
+  const dnsName = await app.crypto.sha3Hash(domain);
+  const dnsData = await app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS);
+  const serviceMdInfo = await serviceMd.getNameAndTag();
+  const payload = {};
+  payload[service || 'www'] = serviceMdInfo.name;
+  await dnsData.quickSetup(payload);
+  return { serviceMd, domain };
+};
+
+const createRandomDomain = async (content, path, service, authedApp) => {
+  const domain = `test_${Math.round(Math.random() * 100000)}`;
+  return createDomain(domain, content, path, service, authedApp);
+};
+
+const createRandomPrivateServiceDomain = async (content, path, service, authedApp) => {
+  const domain = `test_${Math.round(Math.random() * 100000)}`;
+  const app = authedApp || await createAuthenticatedTestApp();
+  const serviceMd = await app.mutableData.newRandomPrivate(consts.TAG_TYPE_WWW);
+  await serviceMd.quickSetup();
+  const nfs = serviceMd.emulateAs('NFS');
+   // let's write the file
+  const file = await nfs.create(content);
+  await nfs.insert(path || '', file);
+  const dnsName = await app.crypto.sha3Hash(domain);
+  const dnsData = await app.mutableData.newPublic(dnsName, consts.TAG_TYPE_DNS);
+  const serial = await serviceMd.serialise();
+  const payload = {};
+  payload[service || ''] = serial;
+  await dnsData.quickSetup(payload);
+  return { domain };
+};
+
 module.exports = {
   App,
   appInfo,
@@ -72,5 +113,7 @@ module.exports = {
   createRandomNonce,
   createRandomInvalidSecKey,
   createRandomInvalidXor,
-  createRandomInvalidNonce
+  createRandomInvalidNonce,
+  createRandomDomain,
+  createRandomPrivateServiceDomain,
 };

@@ -28,6 +28,7 @@ toc:
 
   - name: Emulations
     description: Emulations and Abstractions on top of MData
+  - Emulation
   - NFS
   - File
 
@@ -43,6 +44,8 @@ toc:
   - CipherOpt
   - NameAndTag
   - ValueVersion
+  - NetworkResource
+  - WebFetchOptions
 
   - name: Errors
   - ERR_NO_SUCH_DATA
