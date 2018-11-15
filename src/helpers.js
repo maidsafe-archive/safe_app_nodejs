@@ -39,35 +39,58 @@ const useMockByDefault = isTestEnv ? true : hasMockArg;
 */
 const isExperimentalApisEnabled = process.argv.includes('--enable-experimental-apis');
 
-/* Helper to be used by all experimental APIs (note this is async).
- * For example, the following snippet shows how an experimental (async) function
- * called 'testFn' can be exposed:
- * async function testFn(arg1, arg2) {
-     return EXPOSE_AS_EXPERIMENTAL_API.call(this, async function testFn() {
-       // 'testFn' function's actual implementation goes here
-       console.log("Test Fn which uses arg1 and arg2: ", arg1, arg2);
-       ...
-     });
- * }
-*/
-async function EXPOSE_AS_EXPERIMENTAL_API(fn) {
+// Helper function to check the experimental APIs flag and
+// either throw an error or log a warning message
+function checkExperimentalApisFlag(fn) {
+  const featureName = fn.name.replace('_', ' ');
   // the experimental APIs can be also enabled by setting
   // the `enableExperimentalApis` flag can be set to true in the initialisation options.
   if (!isExperimentalApisEnabled && !this.options.enableExperimentalApis) {
     throw makeError(errConst.EXPERIMENTAL_API_DISABLED.code,
-                    errConst.EXPERIMENTAL_API_DISABLED.msg(fn.name));
+                    errConst.EXPERIMENTAL_API_DISABLED.msg(featureName));
   }
 
   console.warn(`
     ** Experimental API WARNING **
     * The application is making use of a SAFE experimental API *
-    The '${fn.name}' function is part of a set of experimental functions.
+    The '${featureName}' is part of a set of experimental functions.
     Any/all of them may be deprecated, removed, or very likely change in the future.
     Also regular users won't have this APIs enabled by default unless the flag is provided, so be aware of all these limitations.
     For more information, updates, or to submit ideas and suggestions, please visit https://github.com/maidsafe/safe_app_nodejs.
     `);
+}
+
+/* Helper to be used by all __ASYNC__ experimental APIs.
+ * For example, the following snippet shows how an experimental (async) function
+ * called 'testFn' can be exposed:
+ * async function testFn(arg1, arg2) {
+     return EXPOSE_AS_EXPERIMENTAL_API.call(this, async function testFn() {
+       // 'testFn' function's actual implementation goes here
+       console.log("Experimental Async Function which uses arg1 and arg2: ", arg1, arg2);
+       ...
+     });
+ * }
+*/
+async function EXPOSE_AS_EXPERIMENTAL_API(fn) {
+  checkExperimentalApisFlag.call(this, fn);
   const res = await fn.call(this);
   return res;
+}
+
+/* Helper to be used by all __SYNC__ experimental APIs (only for sync APIs).
+ * For example, the following snippet shows how an experimental (sync) function
+ * called 'testSyncFn' can be exposed:
+ * async function testSyncFn(arg1, arg2) {
+     return EXPOSE_AS_EXPERIMENTAL_API_SYNC.call(this, function testSyncFn() {
+       // 'testSyncFn' function's actual implementation goes here
+       console.log("Experimental Sync Function which uses arg1 and arg2: ", arg1, arg2);
+       ...
+     });
+ * }
+*/
+function EXPOSE_AS_EXPERIMENTAL_API_SYNC(fn) {
+  checkExperimentalApisFlag.call(this, fn);
+  return fn.call(this);
 }
 
 /**
@@ -190,6 +213,7 @@ const getSystemUriLibFilename = (defaultDir, options) =>
 
 module.exports = {
   EXPOSE_AS_EXPERIMENTAL_API,
+  EXPOSE_AS_EXPERIMENTAL_API_SYNC,
   useMockByDefault,
   NetworkObject,
   autoref,

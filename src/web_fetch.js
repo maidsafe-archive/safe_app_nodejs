@@ -249,7 +249,7 @@ async function fetch(url) {
 async function webFetch(url, options) {
   const { content, resourceType, parsedPath } = await fetchHelper.call(this, url);
 
-  const emulation = await content.emulateAs(resourceType);
+  const emulation = content.emulateAs(resourceType);
   const tokens = parsedPath.split('/');
   if (!tokens[tokens.length - 1] && tokens.length > 1) {
     tokens.pop();

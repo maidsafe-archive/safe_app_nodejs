@@ -78,6 +78,16 @@ describe('Immutable Data', () => {
       const idReader = await app.immutableData.fetch(idAddress);
       return should(await idReader.size()).equal(11);
     });
+
+    it('forceCleanUp on immutableData reader objects', async () => {
+      const testString = `test-${Math.random()}`;
+      const idWriter = await app.immutableData.create();
+      await idWriter.write(testString);
+      const cipherOpt = await app.cipherOpt.newPlainText();
+      const idAddress = await idWriter.close(cipherOpt);
+      const idReader = await app.immutableData.fetch(idAddress);
+      return idReader.forceCleanUp();
+    });
   });
 
   describe('Writer', () => {
@@ -100,6 +110,11 @@ describe('Immutable Data', () => {
       const cipherOpt = await app.cipherOpt.newPlainText();
       const idAddress = await idWriter.close(cipherOpt);
       return should(idAddress.length).be.equal(32);
+    });
+
+    it('forceCleanUp on immutableData writer objects', async () => {
+      const idWriter = await app.immutableData.create();
+      return idWriter.forceCleanUp();
     });
   });
 

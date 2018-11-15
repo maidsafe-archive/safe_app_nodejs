@@ -500,7 +500,7 @@ describe('Browsing', () => {
     describe('tryDifferentPaths', () => {
       it('returns file and mime type as object', async () => {
         const { serviceMd: md } = await getContainerFromPublicId.call(app, domain);
-        const emulation = await md.emulateAs('NFS');
+        const emulation = md.emulateAs('NFS');
         const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
         should(mimeType).be.equal('text/html');
         return should.exist(file.size);
@@ -514,7 +514,7 @@ describe('Browsing', () => {
     describe('readContentFromFile', () => {
       it('returns file contents as HTTP compliant response', async () => {
         const { serviceMd: md } = await getContainerFromPublicId.call(app, domain);
-        const emulation = await md.emulateAs('NFS');
+        const emulation = md.emulateAs('NFS');
         const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
         const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
         const { headers, body } = await readContentFromFile(openedFile, mimeType);
@@ -525,7 +525,7 @@ describe('Browsing', () => {
 
       it('returns file content range as HTTP compliant response', async () => {
         const { serviceMd: md } = await getContainerFromPublicId.call(app, domain);
-        const emulation = await md.emulateAs('NFS');
+        const emulation = md.emulateAs('NFS');
         const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
         const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
         const { headers, body } = await readContentFromFile(openedFile, mimeType, { range: { start: 3, end: 12 } }); // eslint-disable-line max-len
@@ -536,7 +536,7 @@ describe('Browsing', () => {
 
       it('returns file content multipart range as HTTP compliant response', async () => {
         const { serviceMd: md } = await getContainerFromPublicId.call(app, domain);
-        const emulation = await md.emulateAs('NFS');
+        const emulation = md.emulateAs('NFS');
         const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
         const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
         const { headers, parts } = await readContentFromFile(openedFile, mimeType, { range: [{ start: 3, end: 6 }, { start: 8, end: 14 }] }); // eslint-disable-line max-len
@@ -548,7 +548,7 @@ describe('Browsing', () => {
 
       it('requires opened file as first argument', async () => {
         const { serviceMd: md } = await getContainerFromPublicId.call(app, domain);
-        const emulation = await md.emulateAs('NFS');
+        const emulation = md.emulateAs('NFS');
         const { file } = await tryDifferentPaths(emulation.fetch.bind(emulation), `/${consts.INDEX_HTML}`);
         return should(readContentFromFile(file)).be.rejectedWith('File not found.');
       });

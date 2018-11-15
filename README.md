@@ -68,7 +68,7 @@ When any of the experimental APIs is called by an application, a warning message
 ```
 ** Experimental API WARNING **
 * The application is making use of a safe-node-app experimental API *
-The '<function name>' function is part of a set of experimental functions.
+The '<function/feature name>' is part of a set of experimental functions.
 Any/all of them may be deprecated, removed, or very likely change in the future.
 Also regular users won't have this APIs enabled by default unless the flag is provided, so be aware of all these limitations.
 For more information, updates, or to submit ideas and suggestions, please visit https://github.com/maidsafe/safe_app_nodejs
