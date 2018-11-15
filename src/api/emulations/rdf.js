@@ -73,9 +73,9 @@ class RDF {
       const keyStr = e.key.toString();
       const valueStr = e.value.buf.toString();
 
-      // If the entry was soft-deleted skip it
-      if (valueStr.length === 0 ||
-         !keyStr.startsWith('safe://')) {
+      // If the entry was soft-deleted skip it, or if it's not
+      // an RDF graph entry also ignore it
+      if (valueStr.length === 0 || !keyStr.startsWith('safe://')) {
         return graphs;
       }
 
@@ -153,12 +153,8 @@ class RDF {
         resolve(parsed);
       };
 
-      try {
-        // since we provide a callback then parse becomes async
-        rdflib.parse(data, this.graphStore, id, mimeType, cb);
-      } catch (err) {
-        reject(err);
-      }
+      // since we provide a callback then parse becomes async
+      rdflib.parse(data, this.graphStore, id, mimeType, cb);
     });
   }
 
@@ -191,11 +187,9 @@ class RDF {
     const entriesList = await entries.listEntries();
     const mutation = await this.mData.app.mutableData.newMutation();
     const mData = this.mData;
-
     const graphPromises = graphs.map(async (graph) => {
       const unencryptedKey = graph[RDF_GRAPH_ID];
       let key = unencryptedKey;
-
       let match = false;
 
       // find the current graph in the entries list and remove it

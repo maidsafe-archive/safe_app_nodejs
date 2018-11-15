@@ -18,7 +18,12 @@ describe('RDF emulation', () => {
   let app;
   let md;
   let xorname;
+  let rdf;
+  let me;
+  let foaf;
   const TYPE_TAG = 15639;
+  const JSON_LD_MIME_TYPE = 'application/ld+json';
+  const TURTLE_MIME_TYPE = 'text/turtle';
   const myUri = 'safe://manu';
   const myJsonLd = {
     '@context': {
@@ -37,11 +42,24 @@ describe('RDF emulation', () => {
     homepage: 'http://manu.sporny.org/',
     image: 'http://manu.sporny.org/images/manu.png'
   };
+  const rawJsonLd = {
+    // FIXME: This is not the JSON that we actually have saved though...
+    // (though we want this style...)
+    // '@id': 'safe://nowOrWhenFetchedTest',
+    'safe://nowOrWhenFetchedTest': JSON.stringify({ '@id': 'safe://_public/webId' }),
+    'http://schema.org/image': JSON.stringify({ '@id': 'http://manu.sporny.org/images/manu.png' }),
+    'http://schema.org/name': JSON.stringify({ '@value': 'Manu Sporny' }),
+    'http://schema.org/url': JSON.stringify({ '@id': 'http://manu.sporny.org/' }),
+    'http://xmlns.com/foaf/0.1/knows': JSON.stringify([{ '@value': 'Gabriel' }, { '@value': 'Josh' }])
+  };
 
   beforeEach(async () => {
     app = await h.createAuthenticatedTestApp(null, null, null, { enableExperimentalApis: true });
     xorname = h.createRandomXorName();
     md = await app.mutableData.newPublic(xorname, TYPE_TAG);
+    rdf = md.emulateAs('rdf');
+    me = rdf.sym(myUri);
+    foaf = rdf.namespace('http://xmlns.com/foaf/0.1/');
   });
 
   it('fail if experimental apis flag is not set', async () => {
@@ -60,129 +78,109 @@ describe('RDF emulation', () => {
 
   it('create RDF emulation from MD', async () => {
     await md.quickSetup({});
-    const rdf = md.emulateAs('rdf');
-    return should(rdf).not.be.undefined();
+    const rdf2 = md.emulateAs('rdf');
+    return should(rdf2).not.be.undefined();
   });
 
   it('create RDF emulation from MD which already contains triples', async () => {
-    const rawJsonLd = {
-      // FIXME: This is not the JSON that we actually have saved though...
-      // (though we want this style...)
-      // '@id': 'safe://nowOrWhenFetchedTest',
-      'safe://nowOrWhenFetchedTest': JSON.stringify({ '@id': 'safe://_public/webId' }),
-      'http://schema.org/image': JSON.stringify([{ '@id': 'http://manu.sporny.org/images/manu.png' }]),
-      'http://schema.org/name': JSON.stringify([{ '@value': 'Manu Sporny' }]),
-      'http://schema.org/url': JSON.stringify([{ '@id': 'http://manu.sporny.org/' }]),
-      'http://xmlns.com/foaf/0.1/knows': JSON.stringify([{ '@value': 'Gabriel' }, { '@value': 'Josh' }])
-    };
     await md.quickSetup(rawJsonLd);
-
-    md = await app.mutableData.newPublic(xorname, TYPE_TAG);
-    const rdf = md.emulateAs('rdf');
-    await rdf.nowOrWhenFetched();
-    const jsonld = await rdf.serialise('application/ld+json');
-
+    const md2 = await app.mutableData.newPublic(xorname, TYPE_TAG);
+    const rdf2 = md2.emulateAs('rdf');
+    await rdf2.nowOrWhenFetched();
+    const jsonld = await rdf2.serialise(TURTLE_MIME_TYPE);
     should(jsonld.length).be.above(0);
   });
 
   it('fetch entries with RDF emulation from empty MD', async () => {
     await md.quickSetup();
-    const rdf = md.emulateAs('rdf');
-    await rdf.nowOrWhenFetched();
+    return should(rdf.nowOrWhenFetched()).be.fulfilled();
+  });
+
+  it.skip('fetch an specific graph with RDF emulation', async () => {
+    await md.quickSetup(rawJsonLd);
+    return should(rdf.nowOrWhenFetched(['http://schema.org/url'])).be.fulfilled();
+  });
+
+  it('fetch an non-existing graph with RDF emulation', async () => {
+    await md.quickSetup(rawJsonLd);
+    return should(rdf.nowOrWhenFetched(['non-existing-graph'])).be.rejected();
   });
 
   it('parse a Turtle document', async () => {
     await md.quickSetup({});
-    const rdf = md.emulateAs('rdf');
     const turtle = '<a> <b> <c> .';
-    await rdf.parse(turtle, 'text/turtle', myUri);
+    await rdf.parse(turtle, TURTLE_MIME_TYPE, myUri);
   });
 
   it('parse a JSON-LD document', async () => {
     await md.quickSetup({});
-    const rdf = md.emulateAs('rdf');
-    await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
+    return should(rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri)).be.fulfilled();
+  });
+
+  it('fail to parse a JSON-LD document', async () => {
+    await md.quickSetup({});
+    return should(rdf.parse({}, JSON_LD_MIME_TYPE, myUri)).be.rejected();
   });
 
   it('add triples and find any friend', async () => {
     await md.quickSetup({});
-    const rdf = md.emulateAs('rdf');
-    await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
-    const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
-    const me = rdf.sym(myUri);
-    rdf.add(me, FOAF('knows'), 'Josh');
-    rdf.add(me, FOAF('knows'), 'Gabriel');
+    await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
+    rdf.add(me, foaf('knows'), 'Josh');
+    rdf.add(me, foaf('knows'), 'Gabriel');
 
-    const friend = rdf.any(me, FOAF('knows'), undefined);
+    const friend = rdf.any(me, foaf('knows'), undefined);
     should(friend.value).match('Josh');
   });
 
   it('add triples and find with each', async () => {
     await md.quickSetup({});
-    const rdf = md.emulateAs('rdf');
-    await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
-    const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
-    const me = rdf.sym(myUri);
-    rdf.add(me, FOAF('knows'), 'Josh');
-    rdf.add(me, FOAF('knows'), 'Gabriel');
+    await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
+    rdf.add(me, foaf('knows'), 'Josh');
+    rdf.add(me, foaf('knows'), 'Gabriel');
 
-    const friends = rdf.each(me, FOAF('knows'), undefined);
+    const friends = rdf.each(me, foaf('knows'), undefined);
 
     should(friends.length).be.above(0);
   });
 
   it('add triples and match statements', async () => {
     await md.quickSetup({});
-    const rdf = md.emulateAs('rdf');
-    await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
-    const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
-    const me = rdf.sym(myUri);
-    rdf.add(me, FOAF('knows'), 'Josh');
-    rdf.add(me, FOAF('knows'), 'Gabriel');
+    await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
+    rdf.add(me, foaf('knows'), 'Josh');
+    rdf.add(me, foaf('knows'), 'Gabriel');
 
-    const friends = rdf.statementsMatching(undefined, FOAF('knows'), undefined);
+    const friends = rdf.statementsMatching(undefined, foaf('knows'), undefined);
 
     should(friends).have.length(2);
   });
 
   it('add literal and find with each', async () => {
     await md.quickSetup({});
-    const rdf = md.emulateAs('rdf');
-    await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
-    const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
+    await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
     const XSD = rdf.namespace('http://www.w3.org/2001/XMLSchema#');
-    const me = rdf.sym(myUri);
     const birthday = rdf.literal('1977-06-30T10:00:00+00:00', '', XSD('dateTime'));
-    rdf.add(me, FOAF('birthday'), birthday);
+    rdf.add(me, foaf('birthday'), birthday);
 
-    const friends = rdf.each(me, FOAF('birthday'), undefined);
+    const friends = rdf.each(me, foaf('birthday'), undefined);
     should(friends.length).be.above(0);
   });
 
   it('remove matching statements', async () => {
     await md.quickSetup({});
-    const rdf = md.emulateAs('rdf');
-    await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
-    const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
-    const me = rdf.sym(myUri);
-    rdf.add(me, FOAF('knows'), 'Josh');
-    rdf.add(me, FOAF('knows'), 'Gabriel');
+    await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
+    rdf.add(me, foaf('knows'), 'Josh');
+    rdf.add(me, foaf('knows'), 'Gabriel');
 
-    rdf.removeMany(undefined, FOAF('knows'), undefined);
-    const friend = rdf.any(me, FOAF('knows'), undefined);
+    rdf.removeMany(undefined, foaf('knows'), undefined);
+    const friend = rdf.any(me, foaf('knows'), undefined);
     should(typeof friend).be.equal('undefined');
   });
 
   it('add triples and commit them', async () => {
     await md.quickSetup({ '@id': 'asas', bbbb: 'b2b2b2b' });
-    const rdf = md.emulateAs('rdf');
-    const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
-    const me = rdf.sym(myUri);
-
-    await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
-    rdf.add(me, FOAF('knows'), 'Josh');
-    rdf.add(me, FOAF('knows'), 'Gabriel');
-
+    await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
+    rdf.add(me, foaf('knows'), 'Josh');
+    rdf.add(me, foaf('knows'), 'Gabriel');
     await rdf.commit();
 
     const md2 = await app.mutableData.newPublic(xorname, TYPE_TAG);
@@ -194,25 +192,32 @@ describe('RDF emulation', () => {
     });
   });
 
+  it('add triples and commit them encrypted', async () => {
+    await md.quickSetup({ '@id': 'asas' });
+    const md2 = await app.mutableData.newPublic(xorname, TYPE_TAG);
+    const rdf2 = md2.emulateAs('rdf');
+    rdf2.setId(myUri);
+    rdf2.add(me, foaf('knows'), 'Josh');
+    rdf2.add(me, foaf('knows'), 'Gabriel');
+    return should(rdf2.commit(true)).be.fulfilled();
+  });
+
   it('add triples and append them', async () => {
     await md.quickSetup({ '@id': 'asas', bbbb: 'b2b2b2b' });
-    const rdf = md.emulateAs('rdf');
-    const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
-    const me = rdf.sym(myUri);
 
-    await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
-    rdf.add(me, FOAF('knows'), 'Josh');
-    rdf.add(me, FOAF('knows'), 'Gabriel');
+    await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
+    rdf.add(me, foaf('knows'), 'Josh');
+    rdf.add(me, foaf('knows'), 'Gabriel');
 
     await rdf.commit();
 
     // now append
     const md2 = await app.mutableData.newPublic(xorname, TYPE_TAG);
     const rdf2 = md2.emulateAs('rdf');
-    const me2 = rdf.sym(`${myUri}/1`);
+    const me2 = rdf2.sym(`${myUri}/1`);
 
     rdf2.setId(`${myUri}/1`);
-    rdf2.add(me2, FOAF('knows'), 'Krishna');
+    rdf2.add(me2, foaf('knows'), 'Krishna');
 
     await rdf2.append();
 
@@ -225,26 +230,32 @@ describe('RDF emulation', () => {
     });
   });
 
+  it('commit after removing a graph', async () => {
+    await md.quickSetup();
+    await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
+    await rdf.commit();
+    // now remove one of the committed graphs
+    const SCHEMA = rdf.namespace('http://schema.org/');
+    rdf.removeMany(rdf.sym(myUri), SCHEMA('name'), null);
+    return should(rdf.commit()).be.fulfilled();
+  });
+
   it('parse JSON-LD RDF and serialise it as Turtle', async () => {
     await md.quickSetup({});
-    const rdf = md.emulateAs('rdf');
-    const FOAF = rdf.namespace('http://xmlns.com/foaf/0.1/');
-    const me = rdf.sym(myUri);
 
-    await rdf.parse(JSON.stringify(myJsonLd), 'application/ld+json', myUri);
-    rdf.add(me, FOAF('knows'), 'Josh');
-    rdf.add(me, FOAF('knows'), 'Gabriel');
+    await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
+    rdf.add(me, foaf('knows'), 'Josh');
+    rdf.add(me, foaf('knows'), 'Gabriel');
 
-    const turtle = await rdf.serialise('text/turtle');
+    const turtle = await rdf.serialise(TURTLE_MIME_TYPE);
 
     should(turtle.length).be.above(0);
     should(turtle).match(/Josh/);
-    should(turtle).match(/Gabriel/);
+    return should(turtle).match(/Gabriel/);
   });
 
   it('parse Turtle RDF and serialise it as JSON-LD', async () => {
     await md.quickSetup({});
-    const rdf = md.emulateAs('rdf');
      /* eslint-disable no-multi-str */
     const turtle = '@prefix foaf: <http://xmlns.com/foaf/0.1/> .\
                     @prefix anything: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\
@@ -264,14 +275,25 @@ describe('RDF emulation', () => {
     /* eslint-enable no-multi-str */
 
 
-    await rdf.parse(turtle, 'text/turtle', myUri);
-    await rdf.parse(turtle2, 'text/turtle', myUri);
+    await rdf.parse(turtle, TURTLE_MIME_TYPE, myUri);
+    await rdf.parse(turtle2, TURTLE_MIME_TYPE, myUri);
 
-    const jsonld = await rdf.serialise('application/ld+json');
+    const jsonld = await rdf.serialise(JSON_LD_MIME_TYPE);
 
     should(jsonld.length).be.above(0);
     should(jsonld).match(/xmlns.com/);
     should(jsonld).match(/w3.org/);
-    should(jsonld).match(/purl.org/);
+    return should(jsonld).match(/purl.org/);
+  });
+
+  it('fail to serialise with empty RDF', async () => {
+    await md.quickSetup({});
+    return should(rdf.serialise(JSON_LD_MIME_TYPE)).be.rejectedWith('Cannot read property \'uri\' of null');
+  });
+
+  it('fail to serialise with invalid mimeType', async () => {
+    await md.quickSetup({});
+    await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
+    return should(rdf.serialise('invalid-mime-type')).be.rejectedWith('Serialize: Content-type invalid-mime-type not supported for data write.');
   });
 });
