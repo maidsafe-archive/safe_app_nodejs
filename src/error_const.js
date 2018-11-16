@@ -26,6 +26,18 @@ module.exports = {
   },
 
   /**
+   * @name ERR_DATA_GIVEN_ALREADY_EXISTS
+   * @type {object}
+   * @description Thrown natively when data already exists at the target address on network.
+   * @property {number} code -104
+   * @property {string} msg
+   */
+  ERR_DATA_GIVEN_ALREADY_EXISTS: {
+    code: -104,
+    msg: 'Data already exists at the target address.'
+  },
+
+  /**
    * @name ERR_NO_SUCH_ENTRY
    * @type {object}
    * @description Thrown natively when entry on found in MutableData.
@@ -375,5 +387,53 @@ module.exports = {
   ERR_CONTENT_NOT_FOUND: {
     code: 1023,
     msg: 'No content found at requested address.'
+  },
+
+  /**
+   * @name @INVALID_RDF_LOCATION
+   * @type {Object}
+   * @description RDF Location provided is not and object with name/typeTag
+   * @property {number} code 1024
+   * @property {function} msg
+   */
+  INVALID_RDF_LOCATION: {
+    code: 1024,
+    msg: 'RDF Location _must_ be an object of the form { name, typeTag }.'
+  },
+
+  /**
+   * @name @INVALID_PUBNAME
+   * @type {Object}
+   * @description public name provided is not valid
+   * @property {number} code 1025
+   * @property {function} msg
+   */
+  INVALID_PUBNAME: {
+    code: 1025,
+    msg: 'A publicName string _must_ be passed for adding services to a publicName.'
+  },
+
+  /**
+   * @name @INVALID_SUBNAME
+   * @type {Object}
+   * @description RDF Location provided is not and object with name/typeTag
+   * @property {number} code 1026
+   * @property {function} msg
+   */
+  INVALID_SUBNAME: {
+    code: 1026,
+    msg: 'A subName string _must_ be passed for adding services to a publicName.'
+  },
+
+  /**
+   * @name @MISSING_RDF_ID
+   * @type {Object}
+   * @description RDF object does not have an ID.
+   * @property {number} code 1027
+   * @property {function} msg
+   */
+  MISSING_RDF_ID: {
+    code: 1027,
+    msg: 'No ID has been found in the RDF graph.'
   },
 };

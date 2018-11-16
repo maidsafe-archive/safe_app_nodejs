@@ -50,6 +50,8 @@ function checkExperimentalApisFlag(fn) {
                     errConst.EXPERIMENTAL_API_DISABLED.msg(featureName));
   }
 
+  if (this._warningLoggedAlready) return;
+
   console.warn(`
     ** Experimental API WARNING **
     * The application is making use of a SAFE experimental API *
@@ -58,6 +60,8 @@ function checkExperimentalApisFlag(fn) {
     Also regular users won't have this APIs enabled by default unless the flag is provided, so be aware of all these limitations.
     For more information, updates, or to submit ideas and suggestions, please visit https://github.com/maidsafe/safe_app_nodejs.
     `);
+
+  this._warningLoggedAlready = true;
 }
 
 /* Helper to be used by all __ASYNC__ experimental APIs.
