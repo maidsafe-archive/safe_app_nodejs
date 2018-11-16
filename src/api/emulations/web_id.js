@@ -83,7 +83,7 @@ class WebID {
     await this.rdf.nowOrWhenFetched();
   }
 
-  async create(profile) {
+  async create(profile, displayName) {
     await this.init();
     const app = this.mData.app;
 
@@ -108,9 +108,12 @@ class WebID {
     const webIdLocation =
       await createWebIdProfileDoc(this.rdf, this.vocabs, profile, postsLocation);
 
-    await app.web.addWebIdToDirectory(profile.uri, profile.nick);
+    await app.web.addWebIdToDirectory(profile.uri, displayName || profile.nick);
 
-    await app.web.addServiceToSubdomain(subName, publicName, webIdLocation);
+    const subdomainsRdfLocation =
+      await app.web.linkServiceToSubname(subName, publicName, webIdLocation);
+
+    await app.web.addPublicNameToDirectory(publicName, subdomainsRdfLocation);
   }
 
   async update(profile) {

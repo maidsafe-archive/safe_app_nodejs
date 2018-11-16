@@ -57,22 +57,20 @@ describe('Experimental Web API', () => {
       return should(error.message).match(/'_publicNames' not found in the access container/);
     });
 
-    // TODO: the publicName created with the WebID is currently
-    // not being added to the _publicNames container
-    it.skip('should return the array of getPublicNames (a length greater than 0)', async () => {
+    it('should return the array of getPublicNames (a length greater than 0)', async () => {
       const authedApp = await h.publicNamesTestApp();
       const md = await authedApp.mutableData.newPublic(xorname, TYPE_TAG);
       await md.quickSetup({});
       const webId = md.emulateAs('WebID');
-      // the following call is expected to add the publicName to _publicNames container
       await webId.create(profile);
+
       const webIds = await authedApp.web.getPublicNames();
       should(webIds).be.a.Array();
       return should(webIds.length).be.greaterThan(0);
     });
   });
 
-  describe('createPublicName', () => {
+  describe('addPublicNameToDirectory', () => {
     let app;
     let authedApp;
     let md;
@@ -88,7 +86,7 @@ describe('Experimental Web API', () => {
     it('should throw when a non string URL is passed', async () => {
       let error;
       try {
-        await authedApp.web.createPublicName({}, fakeSubdomainRDF);
+        await authedApp.web.addPublicNameToDirectory({}, fakeSubdomainRDF);
       } catch (e) {
         error = e;
       }
@@ -99,7 +97,7 @@ describe('Experimental Web API', () => {
     it('should throw when no RDF location is provided', async () => {
       let error;
       try {
-        await authedApp.web.createPublicName('publicname', {});
+        await authedApp.web.addPublicNameToDirectory('publicname', {});
       } catch (e) {
         error = e;
       }
@@ -110,7 +108,7 @@ describe('Experimental Web API', () => {
     it('should throw when authedApp perms are not given for _publicNames', async () => {
       let error;
       try {
-        await app.web.createPublicName('publicname', fakeSubdomainRDF);
+        await app.web.addPublicNameToDirectory('publicname', fakeSubdomainRDF);
       } catch (e) {
         error = e;
       }
@@ -118,15 +116,15 @@ describe('Experimental Web API', () => {
     });
 
     it('should create a publicName', async () => {
-      await authedApp.web.createPublicName('thisIsATestDomain', fakeSubdomainRDF);
+      await authedApp.web.addPublicNameToDirectory('thisIsATestDomain', fakeSubdomainRDF);
       const publicNames = await authedApp.web.getPublicNames();
       should(publicNames).be.a.Array();
       return should(publicNames).containDeep(['safe://_publicNames#thisIsATestDomain']);
     });
 
     it('should create two publicNames', async () => {
-      await authedApp.web.createPublicName('thisIsATestDomain', fakeSubdomainRDF);
-      await authedApp.web.createPublicName('thisIsASecondTestDomain', fakeSubdomainRDF);
+      await authedApp.web.addPublicNameToDirectory('thisIsATestDomain', fakeSubdomainRDF);
+      await authedApp.web.addPublicNameToDirectory('thisIsASecondTestDomain', fakeSubdomainRDF);
       const publicNames = await authedApp.web.getPublicNames();
       should(publicNames).be.a.Array();
       should(publicNames).containDeep(['safe://_publicNames#thisIsATestDomain']);
@@ -134,36 +132,21 @@ describe('Experimental Web API', () => {
     });
   });
 
-  describe('addServiceToSubdomain', () => {
-    let app;
+  describe('linkServiceToSubname', () => {
     let authedApp;
     let md;
     let fakeServiceRDF;
     before(async () => {
       authedApp = await h.publicNamesTestApp();
-      app = await h.createAuthenticatedTestApp(null, null, null, { enableExperimentalApis: true });
       const xorname = h.createRandomXorName();
       md = await authedApp.mutableData.newPublic(xorname, TYPE_TAG);
       fakeServiceRDF = await md.getNameAndTag();
     });
 
-    // TODO: the publicName created is currently
-    // not being added to the _publicNames container
-    it.skip('should throw when authedApp perms are not given for _publicNames', async () => {
-      let error;
-      const randomPubName = `test_${Math.round(Math.random() * 100000)}`;
-      try {
-        await app.web.addServiceToSubdomain('subname', randomPubName, fakeServiceRDF);
-      } catch (e) {
-        error = e;
-      }
-      return should(error.message).match(/'_publicNames' not found in the access container/);
-    });
-
     it('should throw when a non string pubName is passed', async () => {
       let error;
       try {
-        await authedApp.web.addServiceToSubdomain('subname', {}, {});
+        await authedApp.web.linkServiceToSubname('subname', {}, {});
       } catch (e) {
         error = e;
       }
@@ -174,7 +157,7 @@ describe('Experimental Web API', () => {
     it('should throw when a non string subName is passed', async () => {
       let error;
       try {
-        await authedApp.web.addServiceToSubdomain({}, 'publicname', {});
+        await authedApp.web.linkServiceToSubname({}, 'publicname', {});
       } catch (e) {
         error = e;
       }
@@ -185,7 +168,7 @@ describe('Experimental Web API', () => {
     it('should throw when no RDF location is provided', async () => {
       let error;
       try {
-        await authedApp.web.addServiceToSubdomain('subname', 'publicname', {});
+        await authedApp.web.linkServiceToSubname('subname', 'publicname', {});
       } catch (e) {
         error = e;
       }
@@ -195,7 +178,7 @@ describe('Experimental Web API', () => {
 
     it('should return a service MD location', async () => {
       const randomPubName = `test_${Math.round(Math.random() * 100000)}`;
-      const location = await authedApp.web.addServiceToSubdomain('thisIsATestSubName', randomPubName, fakeServiceRDF);
+      const location = await authedApp.web.linkServiceToSubname('thisIsATestSubName', randomPubName, fakeServiceRDF);
       should(location).be.a.Object();
       should(location).have.property('typeTag');
       return should(location).have.property('name');
@@ -203,8 +186,8 @@ describe('Experimental Web API', () => {
 
     it('should add subName to existing subNames container', async () => {
       const randomPubName = `test_${Math.round(Math.random() * 100000)}`;
-      await authedApp.web.addServiceToSubdomain('thisIsATestSubName', randomPubName, fakeServiceRDF);
-      const location = await authedApp.web.addServiceToSubdomain('thisIsASecondTestSubName', randomPubName, fakeServiceRDF);
+      await authedApp.web.linkServiceToSubname('thisIsATestSubName', randomPubName, fakeServiceRDF);
+      const location = await authedApp.web.linkServiceToSubname('thisIsASecondTestSubName', randomPubName, fakeServiceRDF);
       should(location).be.a.Object();
       should(location).have.property('typeTag');
       return should(location).have.property('name');
@@ -334,11 +317,9 @@ describe('Experimental Web API', () => {
 
       const directory = await authedApp.auth.getContainer('_public');
       const directoryRDF = directory.emulateAs('rdf');
-
       await directoryRDF.nowOrWhenFetched();
 
       const serlialised = await directoryRDF.serialise('application/ld+json');
-
       const parsed = JSON.parse(serlialised);
 
       should(directoryRDF).be.a.Object();
@@ -346,13 +327,11 @@ describe('Experimental Web API', () => {
       return should(parsed[0]['@id']).match(/_public\/webId/);
     });
 
-    it.skip('should create and store multiple webIds', async () => {
+    it('should create and store multiple webIds', async () => {
       const xorname1 = h.createRandomXorName();
       const md1 = await authedApp.mutableData.newPublic(xorname1, TYPE_TAG);
       await md1.quickSetup({});
-
       const webId1 = md1.emulateAs('WebID');
-
       const randomPubName1 = `test_${Math.round(Math.random() * 100000)}`;
       const name1 = 'displayName';
       await webId1.create(Object.assign(profile, { uri: `safe://bbba.${randomPubName1}` }), name1);
@@ -361,16 +340,11 @@ describe('Experimental Web API', () => {
       const md2 = await authedApp.mutableData.newPublic(xorname2, TYPE_TAG);
       await md2.quickSetup({});
       const webId2 = md2.emulateAs('WebID');
-
       const randomPubName2 = `test_${Math.round(Math.random() * 100000)}`;
       const name2 = 'displayName2...';
       await webId2.create(Object.assign(profile, { uri: `safe://accc.${randomPubName2}` }), name2);
 
       const directory = await authedApp.auth.getContainer('_public');
-      const directoryRDF = directory.emulateAs('rdf');
-      const graphName = 'safe://_public/webId';
-      directoryRDF.setId(graphName);
-
       const entries = await directory.getEntries();
       const entriesList = await entries.listEntries();
 

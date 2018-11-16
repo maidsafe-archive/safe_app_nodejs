@@ -62,13 +62,12 @@ class WebInterface {
     this.app = app;
   }
 
-  /* eslint-disable class-methods-use-this */
-
   /**
    * Retrieve vocab for RDF/SAFE Implementation of DNS (publicNames/subDomains/services)
    * @param  {RDF} rdf RDF object to utilise for namespace func
    * @return {Object}  object containing keys with RDF namespace values.
    */
+  /* eslint-disable class-methods-use-this */
   getVocabs(rdf) {
     return {
       LDP: rdf.namespace('http://www.w3.org/ns/ldp#'),
@@ -80,17 +79,16 @@ class WebInterface {
       SAFETERMS: rdf.namespace('http://safenetwork.org/safevocab/')
     };
   }
-
   /* eslint-enable class-methods-use-this */
 
   /**
    * Add entry to _publicNames container, linking to a specific RDF/MD
-   * object for subName discovery/service resolution.catch
-   * @param  {String}  publicName            string, valid URL
-   * @param  {Object}  subNamesRdfLocation MutableData name/typeTag
-   * @return {Promise}                       resolves upon commit of data to _publicNames
+   * object for subName discovery/service resolution
+   * @param  {String} publicName public name string, valid URL
+   * @param  {Object} subNamesRdfLocation MutableData name/typeTag object
+   * @return {Promise} resolves upon commit of data to _publicNames
    */
-  async createPublicName(publicName, subNamesRdfLocation) {
+  async addPublicNameToDirectory(publicName, subNamesRdfLocation) {
     if (typeof subNamesRdfLocation !== 'object' ||
         !subNamesRdfLocation.name || !subNamesRdfLocation.typeTag) {
       throw makeError(errConst.INVALID_RDF_LOCATION.code, errConst.INVALID_RDF_LOCATION.msg);
@@ -135,7 +133,13 @@ class WebInterface {
     await publicNamesRdf.commit(encryptThis);
   }
 
-  async addServiceToSubdomain(subName, publicName, serviceLocation) {
+  /**
+   * Links a service/resource to a publicName, with a provided subName
+   *
+   * @return {Promise<Object>} Resolves to an object with xorname and
+   * typeTag of the publicName RDF location
+   */
+  async linkServiceToSubname(subName, publicName, serviceLocation) {
     if (typeof subName !== 'string') throw makeError(errConst.INVALID_SUBNAME.code, errConst.INVALID_SUBNAME.msg);
     if (typeof publicName !== 'string') throw makeError(errConst.INVALID_PUBNAME.code, errConst.INVALID_PUBNAME.msg);
 
@@ -274,13 +278,11 @@ class WebInterface {
     await directoryRDF.commit();
   }
 
-
   /**
    * Retrieve all webIds... Currently as array of JSON objects...
    *
    * @return {Promise} Resolves to array of webIds objects.
    */
-  // TODO: Should this actually be a webIdList... and NOT retrieve ALLLLL the webIds?
   async getWebIds() {
     const directory = await this.app.auth.getContainer('_public');
     const directoryRDF = directory.emulateAs('rdf');
