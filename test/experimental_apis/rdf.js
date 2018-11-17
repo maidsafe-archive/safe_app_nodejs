@@ -202,23 +202,47 @@ describe('Experimental RDF emulation', () => {
     return should(rdf2.commit(true)).be.fulfilled();
   });
 
+  it('fetch triples which are encrypted', async () => {
+    const pubNamesApp = await h.publicNamesTestApp();
+    const pubNameMd = await pubNamesApp.auth.getContainer('_publicNames');
+    const pubNameRdf = pubNameMd.emulateAs('rdf');
+    pubNameRdf.setId(myUri);
+    pubNameRdf.add(me, foaf('knows'), 'Josh');
+    pubNameRdf.add(me, foaf('knows'), 'Gabriel');
+    const encrypted = true;
+    await pubNameRdf.commit(encrypted);
+    return should(pubNameRdf.nowOrWhenFetched(null, encrypted)).be.fulfilled();
+  });
+
+  // This maybe temporary and just to assure backward compatibility
+  // with previous version of API where entries were not encrypted
+  // that now are always being encrypted, like when
+  // storing WebIDs in _public container
+  it('fetch triples from _publicNames which were not encrypted', async () => {
+    const pubNamesApp = await h.publicNamesTestApp();
+    const pubNameMd = await pubNamesApp.auth.getContainer('_publicNames');
+    const pubNameRdf = pubNameMd.emulateAs('rdf');
+    pubNameRdf.setId(myUri);
+    pubNameRdf.add(me, foaf('knows'), 'Josh');
+    pubNameRdf.add(me, foaf('knows'), 'Gabriel');
+    const encrypted = true;
+    await pubNameRdf.commit(!encrypted);
+    return should(pubNameRdf.nowOrWhenFetched(null, encrypted)).be.fulfilled();
+  });
+
   it('add triples and append them', async () => {
     await md.quickSetup({ '@id': 'asas', bbbb: 'b2b2b2b' });
-
     await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
     rdf.add(me, foaf('knows'), 'Josh');
     rdf.add(me, foaf('knows'), 'Gabriel');
-
     await rdf.commit();
 
     // now append
     const md2 = await app.mutableData.newPublic(xorname, TYPE_TAG);
     const rdf2 = md2.emulateAs('rdf');
     const me2 = rdf2.sym(`${myUri}/1`);
-
     rdf2.setId(`${myUri}/1`);
     rdf2.add(me2, foaf('knows'), 'Krishna');
-
     await rdf2.append();
 
     const md3 = await app.mutableData.newPublic(xorname, TYPE_TAG);
@@ -242,7 +266,6 @@ describe('Experimental RDF emulation', () => {
 
   it('parse JSON-LD RDF and serialise it as Turtle', async () => {
     await md.quickSetup({});
-
     await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
     rdf.add(me, foaf('knows'), 'Josh');
     rdf.add(me, foaf('knows'), 'Gabriel');
@@ -273,7 +296,6 @@ describe('Experimental RDF emulation', () => {
                       dcterms:title "Alice’s data storage on the Web" ;\
                       ldp:contains <http://example.org/alice/foaf> . ';
     /* eslint-enable no-multi-str */
-
 
     await rdf.parse(turtle, TURTLE_MIME_TYPE, myUri);
     await rdf.parse(turtle2, TURTLE_MIME_TYPE, myUri);
