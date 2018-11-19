@@ -99,8 +99,8 @@ class WebInterface {
 
     const publicNamesContainer = await app.auth.getContainer(PUBLIC_NAMES_CONTAINER);
     const publicNamesRdf = publicNamesContainer.emulateAs('rdf');
-
-    const vocabs = this.getVocabs(publicNamesRdf);
+    const toDecrypt = true;
+    await publicNamesRdf.nowOrWhenFetched(null, toDecrypt);
 
     // Here we do basic container setup for RDF entries.
     // Doesn't matter if already existing, will just write same entries.
@@ -111,6 +111,7 @@ class WebInterface {
 
     publicNamesRdf.setId(graphName);
 
+    const vocabs = this.getVocabs(publicNamesRdf);
     publicNamesRdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
     publicNamesRdf.add(id, vocabs.LDP('membershipResource'), graphNameWithHashTag);
     publicNamesRdf.add(id, vocabs.LDP('hasMemberRelation'), vocabs.SAFETERMS('hasPublicName'));
