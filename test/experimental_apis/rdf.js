@@ -14,7 +14,7 @@ const should = require('should');
 const h = require('../helpers');
 const errConst = require('../../src/error_const');
 
-describe('RDF emulation', () => {
+describe('Experimental RDF emulation', () => {
   let app;
   let md;
   let xorname;

@@ -16,6 +16,7 @@ toc:
   - CipherOptInterface
   - ImmutableDataInterface
   - MutableDataInterface
+  - WebInterface
 
   - name: Immutable
   - Reader
@@ -32,6 +33,7 @@ toc:
   - NFS
   - File
   - RDF
+  - WebID
 
   - name: Types
   # - Types

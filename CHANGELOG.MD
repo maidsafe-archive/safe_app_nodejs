@@ -6,6 +6,8 @@
 - Support for exposing experimental APIs when `--enable-experimental-apis` argument is passed, or when `enableExperimentalApis` flag is set in the initialisation option
 - Experimental function `fetch` which can fetch a network resource from a URL, returning the target network object (`content`), the type of the resource fetched (`resourceType`), and the parsed path from the provided URL (`parsedPath`)
 - Experimental RDF emulation layer which provides an abstraction to generate and manipulate RDF data on the SAFE network
+- Experimental WebID emulation layer which provides an abstraction to generate and manipulate WebID profile documents on the SAFE network.
+- Experimental Web API which provides utilities to manage public names and subNames, get the list of owned WebIDs, get list of owned public names, etc.
 
 ### Changed
 - Dependency downloader configuration to download both mock and prod libs without `NODE_ENV=dev`

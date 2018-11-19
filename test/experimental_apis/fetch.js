@@ -21,7 +21,7 @@ const createRandomDomain = helpers.createRandomDomain;
 
 const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
 
-describe('Fetching native objects', () => {
+describe('Experimental fetch function', () => {
   let app;
   let unregisteredApp;
   before(async () => {

@@ -99,6 +99,16 @@ const createRandomPrivateServiceDomain = async (content, path, service, authedAp
   return { domain };
 };
 
+const publicNamesContainerPerms = {
+  // _public is used for WebID directory for now...
+  _public: ['Insert', 'Update', 'Delete'],
+  _publicNames: ['Insert', 'Update', 'Delete'],
+};
+
+const publicNamesTestApp = () => createAuthenticatedTestApp(null,
+                                            publicNamesContainerPerms, null,
+                                            { enableExperimentalApis: true });
+
 module.exports = {
   App,
   appInfo,
@@ -116,4 +126,5 @@ module.exports = {
   createRandomInvalidNonce,
   createRandomDomain,
   createRandomPrivateServiceDomain,
+  publicNamesTestApp
 };

@@ -12,23 +12,47 @@ const HEADERS_CONTENT_TYPE = 'Content-Type';
 const HEADERS_CONTENT_LENGTH = 'Content-Length';
 const HEADERS_CONTENT_RANGE = 'Content-Range';
 const DATA_TYPE_NFS = 'NFS';
+const DATA_TYPE_RDF = 'RDF';
+
+// Helper function to fetch the Container
+// treating the public ID container as an RDF
+async function readPublicIdAsRdf(subNamesContainer, pubName, subName) {
+  let serviceMd;
+  try {
+    const graphId = `safe://${subName}.${pubName}`;
+    const rdfEmulation = await subNamesContainer.emulateAs('rdf');
+    await rdfEmulation.nowOrWhenFetched([graphId]);
+    const SAFETERMS = rdfEmulation.namespace('http://safenetwork.org/safevocab/');
+    let match = rdfEmulation.statementsMatching(rdfEmulation.sym(graphId), SAFETERMS('xorName'), undefined);
+    const xorName = match[0].object.value.split(',');
+    match = rdfEmulation.statementsMatching(rdfEmulation.sym(graphId), SAFETERMS('typeTag'), undefined);
+    const typeTag = match[0].object.value;
+    serviceMd = await this.mutableData.newPublic(xorName, parseInt(typeTag, 10));
+  } catch (err) {
+    // there is no matching subName name
+    throw makeError(errConst.ERR_SERVICE_NOT_FOUND.code, errConst.ERR_SERVICE_NOT_FOUND.msg);
+  }
+
+  return { serviceMd, type: DATA_TYPE_RDF };
+}
 
 // Helper function to fetch the Container
 // from a public ID and service name provided
 async function getContainerFromPublicId(pubName, subName) {
   let serviceInfo;
+  let subNamesContainer;
   try {
     const address = await this.crypto.sha3Hash(pubName);
-    const servicesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
-    serviceInfo = await servicesContainer.get(subName || 'www'); // default it to www
+    subNamesContainer = await this.mutableData.newPublic(address, consts.TAG_TYPE_DNS);
+    serviceInfo = await subNamesContainer.get(subName || 'www'); // default it to www
   } catch (err) {
     switch (err.code) {
       case errConst.ERR_NO_SUCH_DATA.code:
         // there is no container stored at the location
         throw makeError(errConst.ERR_CONTENT_NOT_FOUND.code, errConst.ERR_CONTENT_NOT_FOUND.msg);
       case errConst.ERR_NO_SUCH_ENTRY.code:
-        // there is no matching service name
-        throw makeError(errConst.ERR_SERVICE_NOT_FOUND.code, errConst.ERR_SERVICE_NOT_FOUND.msg);
+        // Let's then try to read it as an RDF container
+        return readPublicIdAsRdf.call(this, subNamesContainer, pubName, subName);
       default:
         throw err;
     }
@@ -248,8 +272,24 @@ async function fetch(url) {
 */
 async function webFetch(url, options) {
   const { content, resourceType, parsedPath } = await fetchHelper.call(this, url);
-
   const emulation = content.emulateAs(resourceType);
+  if (resourceType === DATA_TYPE_RDF) {
+    await emulation.nowOrWhenFetched();
+
+    // TODO: support qvalue in the Accept header with multile mime types and weights
+    const reqMimeType = (options && options.accept) ? options.accept : 'text/turtle';
+
+    const serialisedRdf = await emulation.serialise(reqMimeType);
+    const response = {
+      headers: {
+        [HEADERS_CONTENT_TYPE]: reqMimeType,
+        //'Accept-Post': 'text/turtle, application/ld+json, application/rdf+xml, application/nquads'
+      },
+      body: serialisedRdf
+    };
+    return response;
+  }
+
   const tokens = parsedPath.split('/');
   if (!tokens[tokens.length - 1] && tokens.length > 1) {
     tokens.pop();
