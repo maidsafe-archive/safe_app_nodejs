@@ -86,8 +86,8 @@ class RDF {
           valueStr = decryptedValue.toString();
         } catch (error) {
           if (error.code !== errConst.ERR_SERIALISING_DESERIALISING.code) {
-            console.error('Error decrypting MutableData entry in rdf.nowOrWhenFetched():', error);
-            return reducedGraphs;
+            console.error('Error decrypting MutableData entry in rdf.nowOrWhenFetched()');
+            throw error;
           }
           // ok, let's then assume the entry is not encrypted
           // this maybe temporary, just for backward compatibility,
@@ -103,20 +103,12 @@ class RDF {
 
       if (!id) {
         // FIXME: we need to know which is the main graph in a deterministic way
-        if (keyStr === RDF_GRAPH_ID) {
-          // in case of compacted.
-          id = valueStr;
-        } else {
-          id = JSON.parse(valueStr)[RDF_GRAPH_ID];
-        }
+        // perhaps when we have XOR-URLs we will be able to check a match between
+        // this MD's location and the @id value which will be set to the XOR-URL.
+        id = JSON.parse(valueStr)[RDF_GRAPH_ID];
       }
 
-      let valueAsAStringForSure = valueStr;
-      if (typeof valueAsAStringForSure !== 'string') {
-        valueAsAStringForSure = JSON.stringify(valueAsAStringForSure);
-      }
-
-      reducedGraphs.push(valueAsAStringForSure);
+      reducedGraphs.push(valueStr);
       return reducedGraphs;
     }, Promise.resolve([]));
 
@@ -125,7 +117,7 @@ class RDF {
       throw makeError(errConst.MISSING_RDF_ID.code, errConst.MISSING_RDF_ID.msg);
     }
 
-    return Promise.all(entriesGraphs.map((g) => this.parse(g, JSON_LD_MIME_TYPE, id)));
+    return Promise.all(entriesGraphs.map((graph) => this.parse(graph, JSON_LD_MIME_TYPE, id)));
   }
 
   /* eslint-disable class-methods-use-this */

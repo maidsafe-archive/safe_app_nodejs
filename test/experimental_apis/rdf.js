@@ -264,6 +264,21 @@ describe('Experimental RDF emulation', () => {
     return should(rdf.commit()).be.fulfilled();
   });
 
+  it('check deleted entry after a new commit removes a whole graph', async () => {
+    await md.quickSetup();
+    await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
+    await rdf.commit();
+    let statements = rdf.statementsMatching(undefined, undefined, undefined);
+    should(statements.length).be.above(0);
+
+    // now remove the committed graphs
+    rdf.removeMany(rdf.sym(myUri), null, null);
+    await rdf.commit();
+    should(rdf.nowOrWhenFetched()).be.rejected();
+    statements = rdf.statementsMatching(me, undefined, undefined);
+    return should(statements.length).be.equal(0);
+  });
+
   it('parse JSON-LD RDF and serialise it as Turtle', async () => {
     await md.quickSetup({});
     await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
@@ -308,6 +323,11 @@ describe('Experimental RDF emulation', () => {
     return should(jsonld).match(/purl.org/);
   });
 
+  it('fail to fetch RDF data due to missing graph ID', async () => {
+    await md.quickSetup({ key: 'value' });
+    return should(rdf.nowOrWhenFetched()).be.rejectedWith(errConst.MISSING_RDF_ID.msg);
+  });
+
   it('fail to serialise with empty RDF', async () => {
     await md.quickSetup({});
     return should(rdf.serialise(JSON_LD_MIME_TYPE)).be.rejectedWith('Cannot read property \'uri\' of null');
@@ -317,5 +337,23 @@ describe('Experimental RDF emulation', () => {
     await md.quickSetup({});
     await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
     return should(rdf.serialise('invalid-mime-type')).be.rejectedWith('Serialize: Content-type invalid-mime-type not supported for data write.');
+  });
+
+  it('fail to read RDF from private MD with wrong decryption key', async () => {
+    const privMd = await app.mutableData.newRandomPrivate(TYPE_TAG);
+    await privMd.quickSetup();
+    const nameAndTag = await privMd.getNameAndTag();
+    const privRdf = privMd.emulateAs('rdf');
+    privRdf.setId(myUri);
+    privRdf.add(me, foaf('knows'), 'Josh');
+    privRdf.add(me, foaf('knows'), 'Gabriel');
+    const encrypted = true;
+    await privRdf.commit(encrypted);
+    const notMyMd = await app.mutableData.newPrivate(nameAndTag.name,
+                                                nameAndTag.typeTag,
+                                                h.createRandomSecKey(),
+                                                h.createRandomNonce());
+    const notMyRdf = notMyMd.emulateAs('rdf');
+    return should(notMyRdf.nowOrWhenFetched(null, encrypted)).be.rejectedWith('Core error: Symmetric decryption failed');
   });
 });
