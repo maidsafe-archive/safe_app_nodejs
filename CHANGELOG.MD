@@ -19,6 +19,9 @@
 ### Fixed
 - Change docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions.
 - NFS write argument to match documentation annotation
+- RDF emulation now encrypts also the entries' values (issue #281)
+- RDF emulation now can decrypt data fetched from a private MutableData (issue #283)
+- Resolved issue #282, populate `_publicNames` correctly when creating multiple WebIDs
 
 ### SAFE libraries Dependencies
 - safe_app: v0.9.0

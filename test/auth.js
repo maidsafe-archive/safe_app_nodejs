@@ -352,4 +352,15 @@ describe('Access Container', () => {
             return should(value.buf.toString()).equal('value1');
           })
   ));
+
+  it('check _public container is a Public MD', async () => {
+    const app = await h.publicNamesTestApp();
+    const md = await app.auth.getContainer('_public');
+    const encKey = await md.encryptKey('_testkey');
+    const mut = await app.mutableData.newMutation();
+    await mut.insert(encKey, 'plain-text');
+    await md.applyEntriesMutation(mut);
+    const value = await md.get('_testkey');
+    should(value.buf.toString()).be.equal('plain-text');
+  });
 });

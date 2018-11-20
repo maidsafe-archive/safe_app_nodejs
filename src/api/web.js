@@ -3,6 +3,9 @@ const consts = require('../consts');
 const makeError = require('../native/_error.js');
 const { parse: parseUrl } = require('url');
 
+const PUBLIC_NAMES_CONTAINER = '_publicNames';
+const PUBLIC_CONTAINER = '_public';
+
 const cleanRdfValue = (value) => {
   let cleanValue = value;
 
@@ -25,13 +28,10 @@ const flattenWebId = (theData, rootTerm) => {
 
   theData.forEach((graph) => {
     const graphId = graph['@id'];
-
     if (graphId === rootTerm) {
       newObject['@type'] = cleanRdfValue(graph['@type']);
-
       return;
     }
-
 
     // split.pop maybe unneeded...
     const strippedGraphID = graphId.replace(rootTerm, '').split('/').pop();
@@ -41,7 +41,6 @@ const flattenWebId = (theData, rootTerm) => {
     Object.keys(graph).forEach((key) => {
       const cleanKey = key.split('/').pop();
       const cleanValue = cleanRdfValue(graph[key]);
-
       newObject[strippedGraphID][cleanKey] = cleanValue;
     });
   });
@@ -98,24 +97,25 @@ class WebInterface {
 
     const app = this.app;
 
-    const publicNamesContainer = await app.auth.getContainer('_publicNames');
+    const publicNamesContainer = await app.auth.getContainer(PUBLIC_NAMES_CONTAINER);
     const publicNamesRdf = publicNamesContainer.emulateAs('rdf');
-
-    const vocabs = this.getVocabs(publicNamesRdf);
+    const toDecrypt = true;
+    await publicNamesRdf.nowOrWhenFetched(null, toDecrypt);
 
     // Here we do basic container setup for RDF entries.
     // Doesn't matter if already existing, will just write same entries.
-    const graphName = 'safe://_publicNames'; // TODO: this graph name is not a valid URI on the SAFE network
+    const graphName = `safe://${PUBLIC_NAMES_CONTAINER}`; // TODO: this graph name is not a valid URI on the SAFE network
     const id = publicNamesRdf.sym(graphName);
     const graphNameWithHashTag = publicNamesRdf.sym(`${graphName}#it`);
     const newResourceName = publicNamesRdf.sym(`${graphName}#${publicName}`);
 
     publicNamesRdf.setId(graphName);
 
+    const vocabs = this.getVocabs(publicNamesRdf);
     publicNamesRdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
     publicNamesRdf.add(id, vocabs.LDP('membershipResource'), graphNameWithHashTag);
     publicNamesRdf.add(id, vocabs.LDP('hasMemberRelation'), vocabs.SAFETERMS('hasPublicName'));
-    publicNamesRdf.add(id, vocabs.DCTERMS('title'), publicNamesRdf.literal('_publicNames default container'));
+    publicNamesRdf.add(id, vocabs.DCTERMS('title'), publicNamesRdf.literal(`${PUBLIC_NAMES_CONTAINER} default container`));
     publicNamesRdf.add(id, vocabs.DCTERMS('description'), publicNamesRdf.literal('Container to keep track of public names owned by the account'));
     publicNamesRdf.add(id, vocabs.LDP('contains'), newResourceName);
 
@@ -212,7 +212,7 @@ class WebInterface {
    * @return {Promise} Returns <Array> of PublicNames
    */
   async getPublicNames() {
-    const pubNamesCntr = await this.app.auth.getContainer('_publicNames');
+    const pubNamesCntr = await this.app.auth.getContainer(PUBLIC_NAMES_CONTAINER);
 
     const entries = await pubNamesCntr.getEntries();
     const entriesList = await entries.listEntries();
@@ -222,7 +222,7 @@ class WebInterface {
       const key = await pubNamesCntr.decrypt(entry.key);
       const keyString = await key.toString();
 
-      if (!keyString.startsWith('safe://_publicNames')) return;
+      if (!keyString.startsWith(`safe://${PUBLIC_NAMES_CONTAINER}`)) return;
 
       publicNamesArray.push(keyString);
     }));
@@ -236,17 +236,14 @@ class WebInterface {
    * @param  {String}  displayName   optional displayName which will be used when listing webIds.
    */
   async addWebIdToDirectory(webIdUri, displayName) {
-    const app = this.app;
-
     if (typeof webIdUri !== 'string') {
       throw makeError(errConst.INVALID_URL.code, errConst.INVALID_URL.msg);
     }
-    // could be any dir MD...
-    const directory = await app.auth.getContainer('_public');
-    // does this as RDF affect? ... Should we? why/whynot?
+
+    const directory = await this.app.auth.getContainer(PUBLIC_CONTAINER);
     const directoryRDF = directory.emulateAs('rdf');
     const vocabs = this.getVocabs(directoryRDF);
-    const graphName = 'safe://_public/webId'; // TODO: this graph name is not a valid URI on the SAFE network
+    const graphName = `safe://${PUBLIC_CONTAINER}/webId`; // TODO: this graph name is not a valid URI on the SAFE network
     const id = directoryRDF.sym(graphName);
     directoryRDF.setId(graphName);
 
@@ -262,14 +259,14 @@ class WebInterface {
     }
 
     if (!existingRDF) {
-      directoryRDF.add(id, vocabs.DCTERMS('title'), directoryRDF.literal('_public default container'));
+      directoryRDF.add(id, vocabs.DCTERMS('title'), directoryRDF.literal(`${PUBLIC_CONTAINER} default container`));
       directoryRDF.add(id, vocabs.DCTERMS('description'), directoryRDF.literal('Container to keep track of public data for the account'));
     }
 
     const hostname = parseUrl(webIdUri).hostname;
     const newResourceName = directoryRDF.sym(`${graphName}/${hostname}`);
 
-    directoryRDF.add(newResourceName, vocabs.DCTERMS('identifier'), vocabs.FOAF(`safe://_public/webId/${hostname}`));
+    directoryRDF.add(newResourceName, vocabs.DCTERMS('identifier'), vocabs.FOAF(`safe://${PUBLIC_CONTAINER}/webId/${hostname}`));
     directoryRDF.add(newResourceName, vocabs.RDFS('type'), vocabs.FOAF('PersonalProfileDocument'));
     directoryRDF.add(newResourceName, vocabs.DCTERMS('title'), directoryRDF.literal(`${displayName || ''}`));
     directoryRDF.add(newResourceName, vocabs.SAFETERMS('uri'), directoryRDF.literal(webIdUri));
@@ -279,19 +276,15 @@ class WebInterface {
   }
 
   /**
-   * Retrieve all webIds... Currently as array of JSON objects...
+   * Retrieve all webIds. Currently as array of JSON objects...
    *
    * @return {Promise} Resolves to array of webIds objects.
    */
   async getWebIds() {
-    const directory = await this.app.auth.getContainer('_public');
-    const directoryRDF = directory.emulateAs('rdf');
-    const graphName = 'safe://_public/webId'; // TODO: this graph name is not a valid URI on the SAFE network
-    directoryRDF.setId(graphName);
+    const directory = await this.app.auth.getContainer(PUBLIC_CONTAINER);
     const entries = await directory.getEntries();
     const entriesList = await entries.listEntries();
 
-    // TODO: Encrypt/Decrypting.
     const webIds = await entriesList.filter((entry) => {
       const key = entry.key.toString();
       const value = entry.value.buf.toString();

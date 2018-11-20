@@ -46,12 +46,17 @@ class RDF {
     this.id = id;
   }
 
-  // param is to accept list of id's to fetch
-  // e.g. ['safe://mywebid.mypubname', 'safe://mypubname']
-  async nowOrWhenFetched(ids /* , toDecrypt = false */) {
-    // FIXME: issue #283 we need to use the 'toDecrypt' param
-    // value to decrypt the entries
-
+  /**
+  * Fetch the RDF data stored in the underlying MutableData on the network
+  * and load it in memory to allow manipulating triples before commit them again.
+  *
+  * @param {Array} ids list of RDF graph IDs to use as a filter for fetching
+  * graphs, e.g. ['safe://mywebid.mypubname', 'safe://mypubname']
+  * @param {Boolean} [toDecrypt=false] flag to decrypt the data being fetched
+  *
+  * @returns {Promise}
+  */
+  async nowOrWhenFetched(ids, toDecrypt = false) {
     let entriesList = [];
     let entries;
 
@@ -69,40 +74,50 @@ class RDF {
     if (entriesList.length === 0) return;
 
     let id;
-    const entriesGraphs = entriesList.reduce((graphs, e) => {
-      const keyStr = e.key.toString();
-      const valueStr = e.value.buf.toString();
+    const validGraphs = await entriesList.reduce(async (graphs, entry) => {
+      const reducedGraphs = await graphs;
+      let keyStr = entry.key.toString();
+      let valueStr = entry.value.buf.toString();
+      if (toDecrypt) {
+        try {
+          const decryptedKey = await this.mData.decrypt(entry.key);
+          keyStr = decryptedKey.toString();
+          const decryptedValue = await this.mData.decrypt(entry.value.buf);
+          valueStr = decryptedValue.toString();
+        } catch (error) {
+          if (error.code !== errConst.ERR_SERIALISING_DESERIALISING.code) {
+            console.error('Error decrypting MutableData entry in rdf.nowOrWhenFetched()');
+            throw error;
+          }
+          // ok, let's then assume the entry is not encrypted
+          // this maybe temporary, just for backward compatibility,
+          // but in the future we should always expect them to be encrpyted
+        }
+      }
 
       // If the entry was soft-deleted skip it, or if it's not
       // an RDF graph entry also ignore it
       if (valueStr.length === 0 || !keyStr.startsWith('safe://')) {
-        return graphs;
+        return reducedGraphs;
       }
 
       if (!id) {
         // FIXME: we need to know which is the main graph in a deterministic way
-        if (keyStr === RDF_GRAPH_ID) {
-          // in case of compacted.
-          id = valueStr;
-        } else {
-          id = JSON.parse(valueStr)[RDF_GRAPH_ID];
-        }
+        // perhaps when we have XOR-URLs we will be able to check a match between
+        // this MD's location and the @id value which will be set to the XOR-URL.
+        id = JSON.parse(valueStr)[RDF_GRAPH_ID];
       }
 
-      let valueAsAStringForSure = valueStr;
+      reducedGraphs.push(valueStr);
+      return reducedGraphs;
+    }, Promise.resolve([]));
 
-      if (typeof valueAsAStringForSure !== 'string') {
-        valueAsAStringForSure = JSON.stringify(valueAsAStringForSure);
-      }
-      graphs.push(valueAsAStringForSure);
-      return graphs;
-    }, []);
-
+    const entriesGraphs = await Promise.all(validGraphs);
     if (!id) {
       throw makeError(errConst.MISSING_RDF_ID.code, errConst.MISSING_RDF_ID.msg);
     }
 
-    return Promise.all(entriesGraphs.map((g) => this.parse(g, JSON_LD_MIME_TYPE, id)));
+    return Promise.all(entriesGraphs.map((graph) => this.parse(graph, JSON_LD_MIME_TYPE, id)));
   }
 
   /* eslint-disable class-methods-use-this */
@@ -178,6 +193,9 @@ class RDF {
 
   /**
   * Commit the RDF document to the underlying MutableData on the network
+  *
+  * @param {Boolean} [toEncrypt=false] flag to encrypt the data to be committed
+  *
   * @returns {Promise}
   */
   async commit(toEncrypt = false) {
@@ -194,33 +212,37 @@ class RDF {
 
       // find the current graph in the entries list and remove it
       // (before replacing via the rdf graph) this is to be able to remove any
-      // remainging entries (not readded via rdf) as they have been
+      // remaining entries (not readded via rdf) as they have been
       // removed from this graph.
       await Promise.all(entriesList.map(async (entry, i) => {
         if (!entry || !entry.key || match) return;
 
-        let keyToCheck = await entry.key.toString();
+        let keyToCheck = entry.key.toString();
 
         if (toEncrypt) {
           try {
             const decryptedKey = await mData.decrypt(entry.key);
             keyToCheck = decryptedKey.toString();
-          } catch (e) {
-            console.error('Error decrypting MD key in rdf.commit:', e);
+          } catch (error) {
+            if (error.code !== errConst.ERR_SERIALISING_DESERIALISING.code) {
+              console.error('Error decrypting MutableData entry in rdf.commit():', error);
+            }
+            // ok, let's then assume the entry is not encrypted
+            // this maybe temporary, just for backward compatibility,
+            // but in the future we should always expect them to be encrpyted
           }
         }
 
         if (unencryptedKey === keyToCheck) {
           delete entriesList[i];
-
           match = entry;
         }
       }));
 
-      const stringifiedGraph = JSON.stringify(graph);
-
+      let stringifiedGraph = JSON.stringify(graph);
       if (toEncrypt) {
         key = await mData.encryptKey(key);
+        stringifiedGraph = await mData.encryptValue(stringifiedGraph);
       }
 
       if (match) {
@@ -234,14 +256,19 @@ class RDF {
     // remove RDF entries which are not present in new RDF
     await entriesList.forEach(async (entry) => {
       if (entry) {
-        let keyToCheck = await entry.key.toString();
+        let keyToCheck = entry.key.toString();
 
         if (toEncrypt) {
           try {
             const decryptedKey = await mData.decrypt(entry.key);
-            keyToCheck = await decryptedKey.toString();
-          } catch (e) {
-            console.error('Error decrypting MD key in rdf.commit.', e);
+            keyToCheck = decryptedKey.toString();
+          } catch (error) {
+            if (error.code !== errConst.ERR_SERIALISING_DESERIALISING.code) {
+              console.error('Error decrypting MutableData entry in rdf.commit():', error);
+            }
+            // ok, let's then assume the entry is not encrypted
+            // this maybe temporary, just for backward compatibility,
+            // but in the future we should always expect them to be encrpyted
           }
         }
 
