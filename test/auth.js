@@ -224,7 +224,7 @@ describe('Access Container', () => {
   it('get container names', () => app.auth.refreshContainersPermissions().then(() =>
     app.auth.getContainersPermissions().then((contsPerms) => {
       // we always get a our own sandboxed container in tests
-      should(Object.keys(contsPerms).length).be.equal(7);
+      should(Object.keys(contsPerms).length).be.equal(8);
       should(contsPerms._documents).be.eql({
         Read: true,
         Insert: false,

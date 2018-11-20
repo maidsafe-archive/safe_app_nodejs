@@ -403,8 +403,8 @@ class SAFEApp extends EventEmitter {
   /**
   * Retuns true if the underlyging library was compiled against mock-routing.
   */
-  isMockBuild() {
-    return lib.is_mock_build();
+  appIsMock() {
+    return lib.app_is_mock();
   }
 }
 
