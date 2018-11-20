@@ -14,6 +14,18 @@
 module.exports = {
 
   /**
+   * @name ERR_SERIALISING_DESERIALISING
+   * @type {object}
+   * @description Thrown natively when failing to encrypt/decrypt a MD entry
+   * @property {number} code -1
+   * @property {string} msg
+   */
+  ERR_SERIALISING_DESERIALISING: {
+    code: -1,
+    msg: 'Error while serialising/deserialising.'
+  },
+
+  /**
    * @name ERR_NO_SUCH_DATA
    * @type {object}
    * @description Thrown natively when data not found on network.
