@@ -123,7 +123,7 @@ describe('Smoke test', () => {
     )
     .then(() => should(app.mutableData.newMutation()).be.fulfilled()));
 
-  it('validate is mock build', () => should(app.isMockBuild()).be.true());
+  it('validate is mock build', () => should(app.appIsMock()).be.true());
 
   it('should build an alternative if there is a scope', async () => {
     const firstApp = await createTestApp();

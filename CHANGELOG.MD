@@ -8,11 +8,13 @@
 - Experimental RDF emulation layer which provides an abstraction to generate and manipulate RDF data on the SAFE network
 - Experimental WebID emulation layer which provides an abstraction to generate and manipulate WebID profile documents on the SAFE network.
 - Experimental Web API which provides utilities to manage public names and subNames, get the list of owned WebIDs, get list of owned public names, etc.
+- Rename `isMockBuild` function to `appIsMock` to match the renaming in safe_app lib v0.9.0.
 
 ### Changed
 - Dependency downloader configuration to download both mock and prod libs without `NODE_ENV=dev`
 - Upgrades deps_downloader to v0.3.0
 - Code refactoring in the browsing tests cases
+- Upgrade safe_app native library to v0.9.0
 
 ### Fixed
 - Change docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions.
@@ -22,7 +24,7 @@
 - Resolved issue #282, populate `_publicNames` correctly when creating multiple WebIDs
 
 ### SAFE libraries Dependencies
-- safe_app: v0.8.0
+- safe_app: v0.9.0
 - system_uri: v0.4.0
 - deps_downloader: v0.3.0
 

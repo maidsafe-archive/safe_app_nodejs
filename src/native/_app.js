@@ -35,7 +35,7 @@ module.exports = {
     app_reconnect: [t.Void, [t.AppPtr, t.VoidPtr, 'pointer']],
     app_free: [t.Void, [t.AppPtr]],
     app_reset_object_cache: [t.Void, [t.AppPtr, 'pointer', 'pointer']],
-    is_mock_build: [t.bool, []],
+    app_is_mock: [t.bool, []],
     app_set_additional_search_path: [t.Void, ['string', 'pointer', 'pointer']],
     app_container_name: [t.Void, ['string', t.VoidPtr, 'pointer']]
   },
@@ -109,7 +109,7 @@ module.exports = {
       });
     },
     app_reset_object_cache: helpers.Promisified(null, []),
-    is_mock_build: (lib, fn) => (() => { return fn(); }),
+    app_is_mock: (lib, fn) => (() => { return fn(); }),
     app_set_additional_search_path: helpers.Promisified(null, []),
     app_container_name: helpers.Promisified(null, 'string')
   }

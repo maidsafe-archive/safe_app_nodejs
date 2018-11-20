@@ -162,7 +162,7 @@ describe('Get granted containers permissions from auth URI', () => {
   it('invalid uri', async () => {
     const appNoConnect = await createTestApp();
     return should(appNoConnect.auth.readGrantedPermissions('safe-invalid-uri'))
-              .be.rejectedWith('Serialisation error');
+              .be.rejectedWith('IPC error: InvalidMsg');
   });
 
   it('uri with no auth granted information', async () => {
@@ -208,7 +208,7 @@ describe('Access Container', () => {
     _documents: ['Read'],
     _downloads: ['Insert'],
     _music: ['Delete'],
-    // _pictures: ['Read'], TODO: remove/uncomment according to resolution of https://github.com/maidsafe/safe_client_libs/issues/680
+    _pictures: ['Read', 'Delete'],
     _videos: ['Update', 'ManagePermissions'],
     _public: ['Read'],
     _publicNames: ['Read', 'Insert', 'ManagePermissions']
@@ -224,7 +224,7 @@ describe('Access Container', () => {
   it('get container names', () => app.auth.refreshContainersPermissions().then(() =>
     app.auth.getContainersPermissions().then((contsPerms) => {
       // we always get a our own sandboxed container in tests
-      should(Object.keys(contsPerms).length).be.equal(7);
+      should(Object.keys(contsPerms).length).be.equal(8);
       should(contsPerms._documents).be.eql({
         Read: true,
         Insert: false,
@@ -241,6 +241,13 @@ describe('Access Container', () => {
       });
       should(contsPerms._music).be.eql({
         Read: false,
+        Insert: false,
+        Delete: true,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms._pictures).be.eql({
+        Read: true,
         Insert: false,
         Delete: true,
         Update: false,
