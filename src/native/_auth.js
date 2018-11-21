@@ -146,7 +146,7 @@ const AuthGranted = Struct({
 });
 
 const toBuffer = (ptr, len) => {
-  return new Buffer(ref.reinterpret(ptr, len, 0))
+  return Buffer.from(ref.reinterpret(ptr, len, 0))
 }
 
 const makeAppKeys = (appKeys) => {
@@ -207,7 +207,7 @@ const makeAuthGrantedFfiStruct = (authGrantedObj) => {
       app_keys: makeAppKeys(authGrantedObj.app_keys),
       access_container: makeAccessContInfo(authGrantedObj.access_container),
       access_container_entry: accessContainerEntry.accessContainerEntry,
-      bootstrap_config_ptr: new Buffer(authGrantedObj.bootstrap_config),
+      bootstrap_config_ptr: Buffer.from(authGrantedObj.bootstrap_config),
       bootstrap_config_len: authGrantedObj.bootstrap_config.length,
     }),
     authGrantedCache: accessContainerEntry.accessContainerEntryCache,
@@ -216,20 +216,20 @@ const makeAuthGrantedFfiStruct = (authGrantedObj) => {
 
 const readAppKeys = (appKeys) => {
   return {
-    owner_key: new Buffer(appKeys.owner_key),
-    enc_key: new Buffer(appKeys.enc_key),
-    sign_pk: new Buffer(appKeys.sign_pk),
-    sign_sk: new Buffer(appKeys.sign_sk),
-    enc_pk: new Buffer(appKeys.enc_pk),
-    enc_sk: new Buffer(appKeys.enc_sk),
+    owner_key: Buffer.from(appKeys.owner_key),
+    enc_key: Buffer.from(appKeys.enc_key),
+    sign_pk: Buffer.from(appKeys.sign_pk),
+    sign_sk: Buffer.from(appKeys.sign_sk),
+    enc_pk: Buffer.from(appKeys.enc_pk),
+    enc_sk: Buffer.from(appKeys.enc_sk),
   };
 }
 
 const readAccessContainer = (accessContainer) => {
   return {
-    id: new Buffer(accessContainer.id),
+    id: Buffer.from(accessContainer.id),
     tag: accessContainer.tag,
-    nonce: new Buffer(accessContainer.nonce),
+    nonce: Buffer.from(accessContainer.nonce),
   };
 }
 
@@ -271,7 +271,7 @@ function makeAppInfo(appInfoObj) {
 }
 
 const translateXorName = (str) => {
-  const b = new Buffer(str);
+  const b = Buffer.from(str);
   return t.XOR_NAME(b);
 }
 
@@ -360,7 +360,7 @@ module.exports = {
     encode_auth_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_share_mdata_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_unregistered_req: helpers.Promisified((appId) => {
-      let str = new Buffer(appId);
+      let str = Buffer.from(appId);
       return [str, str.length];
     }, ['uint32', 'char *'], remapEncodeValues),
     decode_ipc_msg: (lib, fn) => {

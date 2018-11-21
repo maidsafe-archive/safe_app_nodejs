@@ -157,7 +157,7 @@ module.exports = {
   helpers: {
     fromCString: (cstr) => cstr.readCString(),
     asBuffer: (res) => {
-      let b = ref.isNull(res[0]) ? new Buffer(0) : new Buffer(ref.reinterpret(res[0], res[1]));
+      let b = ref.isNull(res[0]) ? Buffer.alloc(0) : Buffer.from(ref.reinterpret(res[0], res[1]));
       return b;
     },
     toSafeLibTime: (now) => {
