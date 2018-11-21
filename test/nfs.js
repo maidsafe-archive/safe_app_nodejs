@@ -220,8 +220,21 @@ describe('NFS emulation', () => {
     should(file.userMetadata.toString()).be.equal(userMetadata);
     const fileVersion = file.version;
     file = await nfs.update('hello.txt', file, fileVersion + 1, 'text/javascript');
+    should(file.version).be.equal(1);
     return should(file.userMetadata.toString())
       .be.equal('text/javascript');
+  });
+
+  it('automatically obtains correct file version when passing constant', async () => {
+    const m = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await m.quickSetup({});
+    const nfs = await m.emulateAs('nfs');
+    const userMetadata = 'text/plain';
+    let file = await nfs.create('hello, SAFE world!');
+    file = await nfs.insert('hello.txt', file, userMetadata);
+    should(file.version).be.equal(0);
+    file = await nfs.update('hello.txt', file, CONSTANTS.GET_NEXT_VERSION, 'text/javascript');
+    return should(file.version).be.equal(1);
   });
 
   it('throws error if invalid user metadata type is passed while updating file', async () => {
