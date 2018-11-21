@@ -152,6 +152,17 @@ describe('WebFetch with XOR URL', () => {
     return should(data.headers).eql({ 'Content-Type': 'text/html' });
   });
 
+  it('returns a MD explorer html even after removing entries from MD', async () => {
+    const md = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await md.quickSetup({ key1: 'value' });
+    const mut = await app.mutableData.newMutation();
+    await mut.delete('key1', 1);
+    await md.applyEntriesMutation(mut);
+    const info = await md.getNameAndTag();
+    const data = await unregisteredApp.webFetch(`${info.xorUrl.toUpperCase()}`);
+    return should(data.headers).eql({ 'Content-Type': 'text/html' });
+  });
+
   it('does not return a MD explorer if experimental apis is disabled', async () => {
     const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
     const { domain } = await createRandomDomain(content, '/noindex.html', '', app);
