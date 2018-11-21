@@ -13,6 +13,10 @@
 
 const helpers = require('../helpers');
 const lib = require('../native/lib');
+const multihash = require('multihashes');
+const CID = require('cids');
+const consts = require('../consts');
+const { EXPOSE_AS_EXPERIMENTAL_API } = require('../helpers');
 
 /**
 * Holds the connection to read an existing ImmutableData
@@ -94,12 +98,32 @@ class Writer extends helpers.NetworkObject {
   * Close and write the immutable Data to the network.
   *
   * @param {CipherOpt} cipherOpt the Cipher Opt to encrypt data with
+  * @param {Boolean} getXorUrl (experimental) if the XOR-URL shall also
+  * be returned along with the xor address
+  * @param {String} mimeType (experimental) the MIME type to encode in
+  * the XOR-URL as the codec of the content
   * @returns {Promise<String>} the address to the data once written to the network
   */
-  close(cipherOpt) {
-    return lib.idata_close_self_encryptor(this.app.connection,
-                                          this.ref,
-                                          cipherOpt.ref);
+  async close(cipherOpt, getXorUrl, mimeType) {
+    const name = await lib.idata_close_self_encryptor(this.app.connection,
+                                                        this.ref, cipherOpt.ref);
+    if (!getXorUrl) {
+      return name;
+    }
+
+    // Let's either generate the XOR-URL, or generate an error if the
+    // experimental apis are not enabled
+    /* eslint-disable camelcase, prefer-arrow-callback */
+    const xorUrl = EXPOSE_AS_EXPERIMENTAL_API.call(this.app, function XOR_URLs() {
+      const address = Buffer.from(name);
+      const encodedHash = multihash.encode(address, consts.CID_HASH_FN);
+      const codec = mimeType ? `${consts.CID_MIME_CODEC_PREFIX}${mimeType}` : consts.CID_DEFAULT_CODEC;
+      const newCid = new CID(consts.CID_VERSION, codec, encodedHash);
+      const cidStr = newCid.toBaseEncodedString(consts.CID_BASE_ENCODING);
+      return `safe://${cidStr}`;
+    });
+
+    return { name, xorUrl };
   }
 
   /**

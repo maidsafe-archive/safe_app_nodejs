@@ -12,7 +12,7 @@
 
 const consts = require('../../consts');
 const { parse: parseUrl } = require('url');
-const { EXPOSE_AS_EXPERIMENTAL_API_SYNC } = require('../../helpers');
+const { EXPOSE_AS_EXPERIMENTAL_API } = require('../../helpers');
 
 // Helper for creating a WebID profile document RDF resource
 const createWebIdProfileDoc = async (rdf, vocabs, profile, postsLocation) => {
@@ -144,7 +144,7 @@ class WebIdEmulationFactory {
   */
   constructor(mData) {
     /* eslint-disable camelcase, prefer-arrow-callback */
-    return EXPOSE_AS_EXPERIMENTAL_API_SYNC.call(mData.app, function WebID_Emulation() {
+    return EXPOSE_AS_EXPERIMENTAL_API.call(mData.app, function WebID_Emulation() {
       return new WebID(mData);
     });
   }

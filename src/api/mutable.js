@@ -16,9 +16,14 @@ const lib = require('../native/lib');
 const t = require('../native/types');
 const emulations = require('./emulations');
 const { PubSignKey } = require('./crypto');
-const { pubConsts: CONSTANTS } = require('../consts');
+const consts = require('../consts');
 const errConst = require('../error_const');
 const makeError = require('../native/_error.js');
+const { ONLY_IF_EXPERIMENTAL_API_ENABLED } = require('../helpers');
+const multihash = require('multihashes');
+const CID = require('cids');
+
+const CONSTANTS = consts.pubConsts;
 
 /**
 * Holds the permissions of a MutableData object
@@ -372,13 +377,24 @@ class MutableData extends h.NetworkObject {
   * Look up the name and tag of the MutableData as required to look it
   * up on the network.
   *
-  * @returns {Promise<NameAndTag>} the XoR-name and type tag
+  * @returns {Promise<NameAndTag>} the XoR-name and type tag. If the
+  * experimental APIs are enabled the XOR-URL is also returned in the object.
   */
-  getNameAndTag() {
-    return Promise.resolve({
-      name: this.ref.name,
-      typeTag: this.ref.typeTag
+  async getNameAndTag() {
+    // If the experimental apis are enabled we also return the XOR-URL
+    const xorUrl = ONLY_IF_EXPERIMENTAL_API_ENABLED.call(this.app, () => {
+      const address = Buffer.from(this.ref.name);
+      const encodedHash = multihash.encode(address, consts.CID_HASH_FN);
+      const newCid = new CID(consts.CID_VERSION, consts.CID_DEFAULT_CODEC, encodedHash);
+      const cidStr = newCid.toBaseEncodedString(consts.CID_BASE_ENCODING);
+      return `safe://${cidStr}:${this.ref.typeTag}`;
     });
+
+    return {
+      name: this.ref.name,
+      typeTag: this.ref.typeTag,
+      xorUrl
+    };
   }
 
   /**

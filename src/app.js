@@ -19,7 +19,7 @@ const consts = require('./consts');
 const errConst = require('./error_const');
 const makeError = require('./native/_error.js');
 const { webFetch, fetch } = require('./web_fetch.js');
-const { EXPOSE_AS_EXPERIMENTAL_API_SYNC } = require('./helpers');
+const { EXPOSE_AS_EXPERIMENTAL_API } = require('./helpers');
 
 /**
 * @private
@@ -142,7 +142,7 @@ class SAFEApp extends EventEmitter {
    */
   get web() {
     /* eslint-disable camelcase, prefer-arrow-callback */
-    return EXPOSE_AS_EXPERIMENTAL_API_SYNC.call(this, function Web_API() {
+    return EXPOSE_AS_EXPERIMENTAL_API.call(this, function Web_API() {
       return this._web;
     });
   }

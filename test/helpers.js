@@ -124,6 +124,7 @@ module.exports = {
   createRandomInvalidSecKey,
   createRandomInvalidXor,
   createRandomInvalidNonce,
+  createDomain,
   createRandomDomain,
   createRandomPrivateServiceDomain,
   publicNamesTestApp
