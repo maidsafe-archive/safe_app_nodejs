@@ -16,6 +16,7 @@
 - Upgrades deps_downloader to v0.3.0
 - Code refactoring in the browsing tests cases
 - Upgrade safe_app native library to v0.9.0
+- Refactors instances of deprecated `new Buffer` to `Buffer.from` to comply with Node v10
 
 ### Fixed
 - Change docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions.

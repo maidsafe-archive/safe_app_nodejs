@@ -175,7 +175,7 @@ function validateShareMDataPermissions(permissions) {
         badPerm = perm;
         return false;
       } else if (bool && prop === 'name') {
-        if (new Buffer(perm[prop]).length !== t.XOR_NAME(32).length) {
+        if (Buffer.from(perm[prop]).length !== t.XOR_NAME(32).length) {
           badPerm = perm;
           return false;
         }

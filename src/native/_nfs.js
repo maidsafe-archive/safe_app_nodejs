@@ -39,7 +39,7 @@ const FileContextHandle = t.ObjectHandle;
 
 const readFileInfo = (fileInfo) => {
   const file = fileInfo[0].deref();
-  let b = new Buffer(file.data_map_name);
+  let b = Buffer.from(file.data_map_name);
   const data_map_name = t.XOR_NAME(b);
   const size = file.size;
   const created_sec = file.created_sec;
@@ -50,8 +50,8 @@ const readFileInfo = (fileInfo) => {
   const user_metadata_cap = file.user_metadata_cap;
 
   let user_metadata_ptr = file.user_metadata_len === 0 
-        ? new Buffer(0)
-        : new Buffer(ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len));
+        ? Buffer.alloc(0)
+        : Buffer.from(ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len));
 
   let retFile = {
     data_map_name,
