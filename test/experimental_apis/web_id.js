@@ -106,6 +106,46 @@ describe('Experimental WebID emulation', () => {
     return should(serialised.length).be.above(0);
   });
 
+  it('retrieving WebID object from URI as Turtle', async () => {
+    const randomName = `test_${Math.round(Math.random() * 100000)}`;
+    const profile = {
+      uri: `safe://mywebid.${randomName}`,
+      name: randomName,
+      nick: randomName,
+      website: `safe://mywebsite.${randomName}`,
+      image: `safe://mywebsite.${randomName}/images/myavatar`,
+    };
+
+    const webId = md.emulateAs('WebID');
+    await webId.create(profile);
+    const serialised = await webId.serialise('text/turtle');
+
+    // Turtle is the default format for RDFs returned by webFetch
+    const webIdResponse = await app.webFetch(profile.uri);
+    should(webIdResponse.headers['Content-Type']).be.equal('text/turtle');
+    return should(serialised).be.equal(webIdResponse.body);
+  });
+
+  it('retrieving WebID object from URI as JSON-LD', async () => {
+    const randomName = `test_${Math.round(Math.random() * 100000)}`;
+    const profile = {
+      uri: `safe://mywebid.${randomName}`,
+      name: randomName,
+      nick: randomName,
+      website: `safe://mywebsite.${randomName}`,
+      image: `safe://mywebsite.${randomName}/images/myavatar`,
+    };
+
+    const webId = md.emulateAs('WebID');
+    await webId.create(profile);
+
+    const options = { accept: 'application/ld+json' };
+    const serialised = await webId.serialise(options.accept);
+    const webIdResponse = await app.webFetch(profile.uri, options);
+    should(webIdResponse.headers['Content-Type']).be.equal(options.accept);
+    return should(serialised).be.equal(webIdResponse.body);
+  });
+
   it('verify _publicNames is populated for creating several WebIDs', async () => {
     const numOfWebIds = 3;
     const pubNamesApp = await h.publicNamesTestApp();
