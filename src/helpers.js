@@ -209,6 +209,15 @@ const getSafeAppLibFilename = (defaultDir, options) =>
 const getSystemUriLibFilename = (defaultDir, options) =>
   getNativeLibPath(defaultDir, options, consts.SYSTEM_URI_LIB_FILENAME);
 
+const escapeHtmlEntities = (str) =>
+    str
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\//g, '&#x2F;');
+
 module.exports = {
   EXPOSE_AS_EXPERIMENTAL_API,
   ONLY_IF_EXPERIMENTAL_API_ENABLED,
@@ -217,5 +226,6 @@ module.exports = {
   autoref,
   validateShareMDataPermissions,
   getSafeAppLibFilename,
-  getSystemUriLibFilename
+  getSystemUriLibFilename,
+  escapeHtmlEntities
 };

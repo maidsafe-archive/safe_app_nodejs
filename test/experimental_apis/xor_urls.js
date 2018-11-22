@@ -14,6 +14,7 @@
 const should = require('should');
 const helpers = require('../helpers');
 const errConst = require('../../src/error_const');
+const { escapeHtmlEntities } = require('../../src/helpers');
 
 const containersPermissions = {
   _public: ['Read'],
@@ -161,6 +162,13 @@ describe('WebFetch with XOR URL', () => {
     const info = await md.getNameAndTag();
     const data = await unregisteredApp.webFetch(`${info.xorUrl.toUpperCase()}`);
     return should(data.headers).eql({ 'Content-Type': 'text/html' });
+  });
+
+  it('helper function escapeHtmlEntities', () => {
+    const html = '<script>script-injection</script>"safe://xorurl:15000/folder#fragment?arg1=44&arg2=56"';
+    const escapedHtml = '&lt;script&gt;script-injection&lt;&#x2F;script&gt;&quot;safe:&#x2F;&#x2F;xorurl:15000&#x2F;folder#fragment?arg1=44&amp;arg2=56&quot;';
+    const text = escapeHtmlEntities(html);
+    return should(text).be.equal(escapedHtml);
   });
 
   it('does not return a MD explorer if experimental apis is disabled', async () => {

@@ -7,7 +7,7 @@ const nodePath = require('path');
 const multihash = require('multihashes');
 const CID = require('cids');
 const { EXPOSE_AS_EXPERIMENTAL_API,
-        ONLY_IF_EXPERIMENTAL_API_ENABLED } = require('./helpers');
+        ONLY_IF_EXPERIMENTAL_API_ENABLED, escapeHtmlEntities } = require('./helpers');
 
 const MIME_TYPE_BYTERANGES = 'multipart/byteranges';
 const MIME_TYPE_OCTET_STREAM = 'application/octet-stream';
@@ -304,12 +304,11 @@ async function genMDExplorerHtml(url, md) {
    // TODO: confirm this will be ok for any type of data stored in MD entries,
   // e.g. binary data or different charset encodings, etc.
   entriesList.forEach((entry) => {
-    const key = entry.key.toString();
+    const key = escapeHtmlEntities(entry.key.toString());
     const version = entry.value.version;
     let value;
     if (entry.value.buf.length > 0) {
-      value = entry.value.buf.toString();
-      value = value.replace(/safe:\/\/[^\s^"]*/gi, (str) => (`<a href='${str}'>${str}</a>`));
+      value = escapeHtmlEntities(entry.value.buf.toString());
     } else {
       value = '<i>-- entry deleted --</i>';
     }
