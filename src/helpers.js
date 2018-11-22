@@ -64,8 +64,8 @@ function checkExperimentalApisFlag(fn) {
   this._warningLoggedAlready = true;
 }
 
-/* Helper to be used by all __ASYNC__ experimental APIs.
- * For example, the following snippet shows how an experimental (async) function
+/* Helper to be used by all experimental APIs (async and sync).
+ * For example, the following snippet shows how an experimental function
  * called 'testFn' can be exposed:
  * async function testFn(arg1, arg2) {
      return EXPOSE_AS_EXPERIMENTAL_API.call(this, async function testFn() {
@@ -75,26 +75,20 @@ function checkExperimentalApisFlag(fn) {
      });
  * }
 */
-async function EXPOSE_AS_EXPERIMENTAL_API(fn) {
-  checkExperimentalApisFlag.call(this, fn);
-  const res = await fn.call(this);
-  return res;
-}
-
-/* Helper to be used by all __SYNC__ experimental APIs (only for sync APIs).
- * For example, the following snippet shows how an experimental (sync) function
- * called 'testSyncFn' can be exposed:
- * async function testSyncFn(arg1, arg2) {
-     return EXPOSE_AS_EXPERIMENTAL_API_SYNC.call(this, function testSyncFn() {
-       // 'testSyncFn' function's actual implementation goes here
-       console.log("Experimental Sync Function which uses arg1 and arg2: ", arg1, arg2);
-       ...
-     });
- * }
-*/
-function EXPOSE_AS_EXPERIMENTAL_API_SYNC(fn) {
+function EXPOSE_AS_EXPERIMENTAL_API(fn) {
   checkExperimentalApisFlag.call(this, fn);
   return fn.call(this);
+}
+
+/* Helper to be used by experimental features which shouldn't
+ * be executed if the enableExperimentalApis flag is not set.
+ * Note this doesn't trigger any exeception or warning message if the flag is
+ * not set, it's just helps to execute/skip a piece of experimental funcitonality.
+*/
+function ONLY_IF_EXPERIMENTAL_API_ENABLED(fn) {
+  if (isExperimentalApisEnabled || this.options.enableExperimentalApis) {
+    return fn.call(this);
+  }
 }
 
 /**
@@ -215,13 +209,23 @@ const getSafeAppLibFilename = (defaultDir, options) =>
 const getSystemUriLibFilename = (defaultDir, options) =>
   getNativeLibPath(defaultDir, options, consts.SYSTEM_URI_LIB_FILENAME);
 
+const escapeHtmlEntities = (str) =>
+    str
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\//g, '&#x2F;');
+
 module.exports = {
   EXPOSE_AS_EXPERIMENTAL_API,
-  EXPOSE_AS_EXPERIMENTAL_API_SYNC,
+  ONLY_IF_EXPERIMENTAL_API_ENABLED,
   useMockByDefault,
   NetworkObject,
   autoref,
   validateShareMDataPermissions,
   getSafeAppLibFilename,
-  getSystemUriLibFilename
+  getSystemUriLibFilename,
+  escapeHtmlEntities
 };

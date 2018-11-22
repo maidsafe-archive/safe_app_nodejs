@@ -4,12 +4,7 @@
 ### Added
 - Add instructions to the README for how to generate API docs locally
 - Support for exposing experimental APIs when `--enable-experimental-apis` argument is passed, or when `enableExperimentalApis` flag is set in the initialisation option
-- Experimental function `fetch` which can fetch a network resource from a URL, returning the target network object (`content`), the type of the resource fetched (`resourceType`), and the parsed path from the provided URL (`parsedPath`)
-- Experimental RDF emulation layer which provides an abstraction to generate and manipulate RDF data on the SAFE network
-- Experimental WebID emulation layer which provides an abstraction to generate and manipulate WebID profile documents on the SAFE network.
-- Experimental Web API which provides utilities to manage public names and subNames, get the list of owned WebIDs, get list of owned public names, etc.
-- Rename `isMockBuild` function to `appIsMock` to match the renaming in safe_app lib v0.9.0.
-- Constant to automatically obtain correct file version for updates and deletes
+- Constant `GET_NEXT_VERSION` added to automatically obtain correct file version for updates and deletes
 
 ### Changed
 - Dependency downloader configuration to download both mock and prod libs without `NODE_ENV=dev`
@@ -17,6 +12,7 @@
 - Code refactoring in the browsing tests cases
 - Upgrade safe_app native library to v0.9.0
 - Refactors instances of deprecated `new Buffer` to `Buffer.from` to comply with Node v10
+- Rename `isMockBuild` function to `appIsMock` to match the renaming in safe_app lib v0.9.0
 
 ### Fixed
 - Change docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions.
@@ -24,6 +20,16 @@
 - RDF emulation now encrypts also the entries' values (issue #281)
 - RDF emulation now can decrypt data fetched from a private MutableData (issue #283)
 - Resolved issue #282, populate `_publicNames` correctly when creating multiple WebIDs
+
+### Experimental APIs/features (enabled with `--enable-experimental-apis`)
+- Experimental function `fetch` which can fetch a network resource from a URL, returning the target network object (`content`), the type of the resource fetched (`resourceType`), and the parsed path from the provided URL (`parsedPath`)
+- Experimental RDF emulation layer which provides an abstraction to generate and manipulate RDF data on the SAFE network
+- Experimental WebID emulation layer which provides an abstraction to generate and manipulate WebID profile documents on the SAFE network
+- Experimental Web API which provides utilities to manage publicNames and subNames, get the list of owned WebIDs, get the list of owned Public Names, etc.
+- The `webFetch` function supports XOR-URLs as an experimental feature
+- The MutableData `getNameAndTag` function returns the XOR-URL as `xorUrl` attribute in the returned object
+- The ImmutableData `close` function of the `Writer` accepts an additional `getXorUrl` boolean argument to request the XOR-URL which is returned along with the XOR name in an object: `{ name: <xor addr>, xorUrl: <XOR-URL> }`
+- The ImmutableData `close` function of the `Writer` accepts the `mimeType` additional argument to be used as the content-type encoded in the XOR-URL being generated
 
 ### SAFE libraries Dependencies
 - safe_app: v0.9.0

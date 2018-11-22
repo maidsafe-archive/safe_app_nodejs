@@ -4,13 +4,19 @@ const makeError = require('./native/_error.js');
 const { parse: parseUrl } = require('url');
 const mime = require('mime');
 const nodePath = require('path');
-const { EXPOSE_AS_EXPERIMENTAL_API } = require('./helpers');
+const multihash = require('multihashes');
+const CID = require('cids');
+const { EXPOSE_AS_EXPERIMENTAL_API,
+        ONLY_IF_EXPERIMENTAL_API_ENABLED, escapeHtmlEntities } = require('./helpers');
 
 const MIME_TYPE_BYTERANGES = 'multipart/byteranges';
 const MIME_TYPE_OCTET_STREAM = 'application/octet-stream';
+const MIME_TYPE_HTML = 'text/html';
 const HEADERS_CONTENT_TYPE = 'Content-Type';
 const HEADERS_CONTENT_LENGTH = 'Content-Length';
 const HEADERS_CONTENT_RANGE = 'Content-Range';
+const DATA_TYPE_MD = 'MD';
+const DATA_TYPE_IMMD = 'IMMD';
 const DATA_TYPE_NFS = 'NFS';
 const DATA_TYPE_RDF = 'RDF';
 
@@ -196,6 +202,41 @@ const readContentFromFile = async (openedFile, defaultMimeType, opts) => {
   return response;
 };
 
+// Helper function to fetch the Container/content from a CID
+async function getContainerFromCid(cidString, typeTag) {
+  let content;
+  let type;
+  let codec;
+  try {
+    const cid = new CID(cidString);
+    const encodedHash = multihash.decode(cid.multihash);
+    const address = encodedHash.digest;
+    codec = cid.codec.replace(consts.CID_MIME_CODEC_PREFIX, '');
+    if (codec === consts.CID_DEFAULT_CODEC) {
+      codec = consts.MIME_TYPE_OCTET_STREAM;
+    }
+    if (typeTag) {
+      // it's supposed to be a MutableData
+      content = await this.mutableData.newPublic(address, typeTag);
+      await content.getEntries();
+      type = DATA_TYPE_MD;
+    } else {
+      // then it's supposed to be an ImmutableData
+      content = await this.immutableData.fetch(address);
+      type = DATA_TYPE_IMMD;
+    }
+  } catch (err) {
+    // only if it was looking up specifically for a MD thru a CID
+    // we report it as failing to find content
+    if (typeTag) {
+      throw makeError(errConst.ERR_CONTENT_NOT_FOUND.code, errConst.ERR_CONTENT_NOT_FOUND.msg);
+    }
+    // it's not a valid CID then
+    throw err;
+  }
+  return { content, type, codec };
+}
+
 // Helper function which is able to fetch a resource from the network
 // using a URL. It parses the URL and calls the subName/publicName resolver helper
 // (it can also call other type of resolvers like XOR-URL resolver in the future),
@@ -212,16 +253,148 @@ async function fetchHelper(url) {
   const hostParts = parsedUrl.hostname.split('.');
   const publicName = hostParts.pop(); // last one is 'publicName'
   const subName = hostParts.join('.'); // all others are the 'subName'
-  const parsedPath = parsedUrl.pathname ? decodeURI(parsedUrl.pathname) : '';
 
-  // Let's try to find the container and read
-  // its content using the helpers functions
+  // let's decompose and normalise the path
+  const originalPath = (parsedUrl.pathname === '/') ? '' : parsedUrl.pathname;
+  const parsedPath = originalPath ? decodeURI(originalPath) : '';
+
+  try {
+    const resource = await ONLY_IF_EXPERIMENTAL_API_ENABLED.call(this, async () => {
+      if (subName.length === 0) {
+        // this could be a XOR-URL, let's try to
+        // decode the publicName part as a CID
+        const content = await getContainerFromCid.call(this, publicName,
+                                                        parseInt(parsedUrl.port, 10));
+
+        const resourceType = (content.type === DATA_TYPE_MD) ? DATA_TYPE_NFS : content.type;
+
+        return {
+          content: content.content,
+          resourceType,
+          parsedPath,
+          mimeType: content.codec
+        };
+      }
+    });
+    if (resource) return resource;
+  } catch (err) {
+    if (err.code === errConst.ERR_CONTENT_NOT_FOUND.code) {
+      // it was meant to be found as a CID but content wasn't found,
+      // so let's throw the error
+      throw (err);
+    }
+    // then just fallback to public name lookup
+  }
+
+  // Let's then try to find the container by a public name lookup,
+  // and read its content using the helpers functions
   const md = await getContainerFromPublicId.call(this, publicName, subName);
   return {
     content: md.serviceMd,
     resourceType: md.type,
     parsedPath
   };
+}
+
+// helper function to generate an HTML based MutableData visualiser and explorer
+async function genMDExplorerHtml(url, md) {
+  const entries = await md.getEntries();
+  const entriesList = await entries.listEntries();
+  let tbody = '';
+   // TODO: confirm this will be ok for any type of data stored in MD entries,
+  // e.g. binary data or different charset encodings, etc.
+  entriesList.forEach((entry) => {
+    const key = escapeHtmlEntities(entry.key.toString());
+    const version = entry.value.version;
+    let value;
+    if (entry.value.buf.length > 0) {
+      value = escapeHtmlEntities(entry.value.buf.toString());
+    } else {
+      value = '<i>-- entry deleted --</i>';
+    }
+    tbody += `
+      <tr>
+        <td class="detailsColumn">${key}</td>
+        <td class="detailsColumn">${version}</td>
+        <td class="detailsColumn">${value}</td>
+      </tr>`;
+  });
+  const perms = await md.getPermissions();
+  const permsSetList = await perms.listPermissionSets();
+  const getPermsInfo = permsSetList.map((perm) => perm.signKey.getRaw()
+      .then((raw) => ({ permSet: perm.permSet, signKey: raw.buffer.toString('hex') }))
+  );
+  const permsList = await Promise.all(getPermsInfo);
+  let tperms = '';
+   /* eslint-disable dot-notation */
+  permsList.forEach((perm) => {
+    tperms += `
+      <tr>
+        <td class="detailsColumn">
+          <input type="checkbox" disabled ${perm.permSet['Read'] ? 'checked' : ''}>Read
+          <input type="checkbox" disabled ${perm.permSet['Insert'] ? 'checked' : ''}>Insert<br/>
+          <input type="checkbox" disabled ${perm.permSet['Update'] ? 'checked' : ''}>Update
+          <input type="checkbox" disabled ${perm.permSet['Delete'] ? 'checked' : ''}>Delete<br/>
+          <input type="checkbox" disabled ${perm.permSet['ManagePermissions'] ? 'checked' : ''}>Manage Permissions
+        </td>
+        <td class="detailsColumn">0x${perm.signKey}</td>
+      </tr>`;
+  });
+  /* eslint-enable dot-notation */
+  const htmlPage = `
+    <html>
+      <head>
+        <title>MutableData at ${url}</title>
+        <style>
+          h2 {
+            border-bottom: 1px solid #c0c0c0;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            white-space: nowrap;
+          }
+           tr:nth-child(odd) {
+              background-color: #dddddd;
+          }
+           td.detailsColumn {
+            -webkit-padding-start: 1em;
+            -webkit-padding-end: 1em;
+            white-space: nowrap;
+          }
+           td {
+            padding-right: 5px;
+          }
+        </style>
+      </head>
+      <body>
+        <h2>MutableData at ${url}</h2>
+        <h3>Entries:</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Version</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tbody}
+          </tbody>
+        </table>
+        <h3>Permissions:</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Permissions Set</th>
+              <th>Sign Key</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tperms}
+          </tbody>
+        </table>
+      </body>
+    </html>`;
+  return htmlPage;
 }
 
 /**
@@ -271,9 +444,9 @@ async function fetch(url) {
 * @returns {Promise<Object>} the object with body of content and headers
 */
 async function webFetch(url, options) {
-  const { content, resourceType, parsedPath } = await fetchHelper.call(this, url);
-  const emulation = content.emulateAs(resourceType);
+  const { content, resourceType, parsedPath, mimeType } = await fetchHelper.call(this, url);
   if (resourceType === DATA_TYPE_RDF) {
+    const emulation = content.emulateAs(resourceType);
     await emulation.nowOrWhenFetched();
 
     // TODO: support qvalue in the Accept header with multile mime types and weights
@@ -288,18 +461,50 @@ async function webFetch(url, options) {
       body: serialisedRdf
     };
     return response;
+  } else if (resourceType === DATA_TYPE_IMMD) {
+    const data = await readContentFromFile(content, mimeType, options);
+    return data;
   }
 
+  // then it's expected to be an NFS container
   const tokens = parsedPath.split('/');
   if (!tokens[tokens.length - 1] && tokens.length > 1) {
     tokens.pop();
     tokens.push(consts.INDEX_HTML);
   }
   const path = tokens.join('/') || `/${consts.INDEX_HTML}`;
-  const { file, mimeType } = await tryDifferentPaths(emulation.fetch.bind(emulation), path);
-  const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
-  const data = await readContentFromFile(openedFile, mimeType, options);
-  return data;
+  try {
+    const emulation = content.emulateAs(resourceType);
+    const { file, mimeType: fileMimeType } = await
+                            tryDifferentPaths(emulation.fetch.bind(emulation), path);
+    const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
+    const data = await readContentFromFile(openedFile, fileMimeType, options);
+    return data;
+  } catch (err) {
+    if (parsedPath) {
+      // it was meant to fetch a path so throw the error
+      throw (err);
+    }
+
+    // We couldn't read it with NFS emulation, and there was no path,
+    // if experimental apis are enabled let's generate a MD viewer
+    const mdViewer = await ONLY_IF_EXPERIMENTAL_API_ENABLED.call(this, async () => {
+      // we couldn't read it as an NFS Container, it's a simple MD,
+      // then let's return it as an html page to see the entries, follow links...
+      const body = await genMDExplorerHtml(url, content);
+      return {
+        headers: {
+          [HEADERS_CONTENT_TYPE]: MIME_TYPE_HTML
+        },
+        body
+      };
+    });
+
+    // ok, that's a shame, let's just return the error then
+    if (!mdViewer) throw err;
+
+    return mdViewer;
+  }
 }
 
 module.exports = {

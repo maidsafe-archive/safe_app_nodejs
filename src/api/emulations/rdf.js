@@ -14,7 +14,7 @@
 const rdflib = require('rdflib');
 const errConst = require('../../error_const');
 const makeError = require('../../native/_error.js');
-const { EXPOSE_AS_EXPERIMENTAL_API_SYNC } = require('../../helpers');
+const { EXPOSE_AS_EXPERIMENTAL_API } = require('../../helpers');
 
 const JSON_LD_MIME_TYPE = 'application/ld+json';
 const RDF_GRAPH_ID = '@id';
@@ -314,7 +314,7 @@ class rdfEmulationFactory {
   */
   constructor(mData) {
     /* eslint-disable camelcase, prefer-arrow-callback */
-    return EXPOSE_AS_EXPERIMENTAL_API_SYNC.call(mData.app, function RDF_Emulation() {
+    return EXPOSE_AS_EXPERIMENTAL_API.call(mData.app, function RDF_Emulation() {
       return new RDF(mData);
     });
   }
