@@ -61,10 +61,11 @@ class RDF {
     let entries;
 
     if (ids && ids.length > 0) {
+      const graphsToFetch = (!Array.isArray(ids)) ? [ids] : ids;
       // TODO: support a list of more than one id
       // Promise.all(ids.map(async (e) => {
-      const serialisedGraph = await this.mData.get(ids[0]);
-      entriesList.push({ key: ids[0], value: serialisedGraph });
+      const serialisedGraph = await this.mData.get(graphsToFetch[0]);
+      entriesList.push({ key: graphsToFetch[0], value: serialisedGraph });
       // }));
     } else {
       entries = await this.mData.getEntries();

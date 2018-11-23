@@ -14,36 +14,40 @@ const consts = require('../../consts');
 const { parse: parseUrl } = require('url');
 const { EXPOSE_AS_EXPERIMENTAL_API } = require('../../helpers');
 
+const POSTS_MD_TYPE_TAG = 30303;
+
 // Helper for creating a WebID profile document RDF resource
-const createWebIdProfileDoc = async (rdf, vocabs, profile, postsLocation) => {
+const createWebIdProfileDoc = async (rdf, vocabs, profile, postsXorUrl) => {
   // TODO: Webid URI validation: https://github.com/joshuef/webIdManager/issues/2
   const id = rdf.sym(profile.uri);
   rdf.setId(profile.uri);
   const hasMeAlready = profile.uri.includes('#me');
   const webIdWithHashTag = hasMeAlready ? rdf.sym(profile.uri) : rdf.sym(`${profile.uri}#me`);
-  const webIdPosts = rdf.sym(`${profile.uri}/posts`);
 
   // TODO: we are overwritting the entire RDF when updating, we could make it
   // more efficient and only add the new triples when updating.
   rdf.add(id, vocabs.RDFS('type'), vocabs.FOAF('PersonalProfileDocument'));
+
+  rdf.removeMany(id, vocabs.DCTERMS('title'), null);
   rdf.add(id, vocabs.DCTERMS('title'), rdf.literal(`${profile.name}'s profile document`));
   rdf.add(id, vocabs.FOAF('maker'), webIdWithHashTag);
   rdf.add(id, vocabs.FOAF('primaryTopic'), webIdWithHashTag);
 
   rdf.add(webIdWithHashTag, vocabs.RDFS('type'), vocabs.FOAF('Person'));
+  rdf.removeMany(webIdWithHashTag, vocabs.FOAF('name'), null);
   rdf.add(webIdWithHashTag, vocabs.FOAF('name'), rdf.literal(profile.name));
+  rdf.removeMany(webIdWithHashTag, vocabs.FOAF('nick'), null);
   rdf.add(webIdWithHashTag, vocabs.FOAF('nick'), rdf.literal(profile.nick));
 
-  if (profile.image) { rdf.add(webIdWithHashTag, vocabs.FOAF('image'), rdf.literal(profile.image)); } // TODO: this needs to be linked with a XOR-URLs
+  rdf.removeMany(webIdWithHashTag, vocabs.FOAF('image'), null);
+  if (profile.image) { rdf.add(webIdWithHashTag, vocabs.FOAF('image'), rdf.sym(profile.image)); }
 
-  if (profile.website) { rdf.add(webIdWithHashTag, vocabs.FOAF('website'), rdf.literal(profile.website)); }
+  rdf.removeMany(webIdWithHashTag, vocabs.FOAF('website'), null);
+  if (profile.website) { rdf.add(webIdWithHashTag, vocabs.FOAF('website'), rdf.sym(profile.website)); }
 
-  if (postsLocation) {
-    rdf.add(webIdPosts, vocabs.RDFS('type'), vocabs.SAFETERMS('Posts'));
-    rdf.add(webIdPosts, vocabs.DCTERMS('title'), rdf.literal('Container for social apps posts'));
-    rdf.add(webIdPosts, vocabs.SAFETERMS('xorName'), rdf.literal(postsLocation.name.toString()));
-    rdf.add(webIdPosts, vocabs.SAFETERMS('typeTag'), rdf.literal(postsLocation.typeTag.toString()));
-  }
+  rdf.removeMany(webIdWithHashTag, vocabs.FOAF('posts'), null);
+  const postsLink = postsXorUrl || profile.posts;
+  if (postsLink) { rdf.add(webIdWithHashTag, vocabs.FOAF('posts'), rdf.sym(postsLink)); }
 
   const location = await rdf.commit();
   return location;
@@ -95,18 +99,17 @@ class WebID {
     const subName = hostParts.join('.'); // all others are 'subNames'
 
     // Create inbox container for posts
-    const postsMd = await app.mutableData.newRandomPublic(303030);
+    const postsMd = await app.mutableData.newRandomPublic(POSTS_MD_TYPE_TAG);
     const perms = await app.mutableData.newPermissions();
     const appKey = await app.crypto.getAppPubSignKey();
     const pmSet = ['Insert', 'Update', 'Delete', 'ManagePermissions'];
     await perms.insertPermissionSet(appKey, pmSet);
     await perms.insertPermissionSet(consts.pubConsts.USER_ANYONE, ['Insert']);
     await postsMd.put(perms);
-    const postsLocation = await postsMd.getNameAndTag();
+    const { xorUrl } = await postsMd.getNameAndTag();
 
-    // TODO: Do we create the md in here? Is it needed quicksetup outside?
     const webIdLocation =
-      await createWebIdProfileDoc(this.rdf, this.vocabs, profile, postsLocation);
+      await createWebIdProfileDoc(this.rdf, this.vocabs, profile, xorUrl);
 
     await app.web.addWebIdToDirectory(profile.uri, displayName || profile.nick);
 
@@ -118,13 +121,34 @@ class WebID {
 
   async update(profile) {
     await this.init();
+    // For backward compatibility let's check if the link to posts
+    // is in the old format which is a named graph. If so, let's
+    // convert it to be a XOR-URL link
+    let postsXorUrl;
+    const postsGraph = `${profile.uri}/posts`;
+    if (!profile.posts) {
+      try {
+        await this.rdf.nowOrWhenFetched(postsGraph);
+        const postsSym = this.rdf.sym(postsGraph);
+        const typeTagMatch = this.rdf.statementsMatching(postsSym, this.rdf.vocabs.SAFETERMS('typeTag'), null);
+        const typeTag = typeTagMatch[0] && parseInt(typeTagMatch[0].object.value, 10);
+        const xorNameMatch = this.rdf.statementsMatching(postsSym, this.rdf.vocabs.SAFETERMS('xorName'), null);
+        const xorName = xorNameMatch[0] && xorNameMatch[0].object.value.split(',');
+        if (xorName && typeTag) {
+          const postsMd = await this.mData.app.mutableData.newPublic(xorName, typeTag);
+          const { xorUrl } = await postsMd.getNameAndTag();
+          postsXorUrl = xorUrl;
+        }
+      } catch (err) {
+        // we log the error but just ignore it
+        console.error('Fail migrating posts graph to XOR-URL link:', err);
+      }
+    }
+    // let's now get rid of the old format graph for posts
+    // even if there was one and we couldn't fetch it
+    await this.rdf.removeMany(this.rdf.sym(postsGraph), null, null);
 
-    // We should look for better ways of supporting the update as this is inefficient.
-    this.rdf.removeMany(undefined, undefined, undefined);
-    // FIXME: we need to keep the posts graph only if that's not been updated,
-    // which shouldn't be expected really.
-    await this.rdf.nowOrWhenFetched([`${profile.uri}/posts`]);
-    await createWebIdProfileDoc(this.rdf, this.vocabs, profile);
+    await createWebIdProfileDoc(this.rdf, this.vocabs, profile, postsXorUrl);
   }
 
   async serialise(mimeType) {
