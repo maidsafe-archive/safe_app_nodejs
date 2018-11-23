@@ -17,7 +17,7 @@ const { EXPOSE_AS_EXPERIMENTAL_API } = require('../../helpers');
 const POSTS_MD_TYPE_TAG = 30303;
 
 // Helper for creating a WebID profile document RDF resource
-const createWebIdProfileDoc = async (rdf, vocabs, profile, postsXorUrl) => {
+const createWebIdProfileDoc = async (rdf, vocabs, profile, inboxXorUrl) => {
   // TODO: Webid URI validation: https://github.com/joshuef/webIdManager/issues/2
   const id = rdf.sym(profile.uri);
   rdf.setId(profile.uri);
@@ -45,9 +45,10 @@ const createWebIdProfileDoc = async (rdf, vocabs, profile, postsXorUrl) => {
   rdf.removeMany(webIdWithHashTag, vocabs.FOAF('website'), null);
   if (profile.website) { rdf.add(webIdWithHashTag, vocabs.FOAF('website'), rdf.sym(profile.website)); }
 
-  rdf.removeMany(webIdWithHashTag, vocabs.FOAF('posts'), null);
-  const postsLink = postsXorUrl || profile.posts;
-  if (postsLink) { rdf.add(webIdWithHashTag, vocabs.FOAF('posts'), rdf.sym(postsLink)); }
+  const ACTIVITYSTREAMS = rdf.namespace('https://www.w3.org/ns/activitystreams/');
+  rdf.removeMany(webIdWithHashTag, ACTIVITYSTREAMS('inbox'), null);
+  const inboxLink = inboxXorUrl || profile.inbox;
+  if (inboxLink) { rdf.add(webIdWithHashTag, ACTIVITYSTREAMS('inbox'), rdf.sym(inboxLink)); }
 
   const location = await rdf.commit();
   return location;
@@ -121,34 +122,32 @@ class WebID {
 
   async update(profile) {
     await this.init();
-    // For backward compatibility let's check if the link to posts
-    // is in the old format which is a named graph. If so, let's
-    // convert it to be a XOR-URL link
-    let postsXorUrl;
-    const postsGraph = `${profile.uri}/posts`;
-    if (!profile.posts) {
+    let inboxXorUrl;
+    if (!profile.inbox) {
+      // For backward compatibility let's check if the link to posts
+      // is in the old format which is a named graph. If so, let's
+      // convert it to be an 'inbox' XOR-URL link
       try {
+        const postsGraph = `${profile.uri}/posts`;
         await this.rdf.nowOrWhenFetched(postsGraph);
         const postsSym = this.rdf.sym(postsGraph);
         const typeTagMatch = this.rdf.statementsMatching(postsSym, this.rdf.vocabs.SAFETERMS('typeTag'), null);
         const typeTag = typeTagMatch[0] && parseInt(typeTagMatch[0].object.value, 10);
         const xorNameMatch = this.rdf.statementsMatching(postsSym, this.rdf.vocabs.SAFETERMS('xorName'), null);
         const xorName = xorNameMatch[0] && xorNameMatch[0].object.value.split(',');
+        // let's now get rid of the old format graph for posts
+        await this.rdf.removeMany(this.rdf.sym(postsGraph), null, null);
         if (xorName && typeTag) {
           const postsMd = await this.mData.app.mutableData.newPublic(xorName, typeTag);
           const { xorUrl } = await postsMd.getNameAndTag();
-          postsXorUrl = xorUrl;
+          inboxXorUrl = xorUrl;
         }
       } catch (err) {
-        // we log the error but just ignore it
-        console.error('Fail migrating posts graph to XOR-URL link:', err);
+        // if the old link to posts is not found or invalid we just ignore it
       }
     }
-    // let's now get rid of the old format graph for posts
-    // even if there was one and we couldn't fetch it
-    await this.rdf.removeMany(this.rdf.sym(postsGraph), null, null);
 
-    await createWebIdProfileDoc(this.rdf, this.vocabs, profile, postsXorUrl);
+    await createWebIdProfileDoc(this.rdf, this.vocabs, profile, inboxXorUrl);
   }
 
   async serialise(mimeType) {

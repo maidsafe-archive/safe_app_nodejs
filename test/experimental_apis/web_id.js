@@ -98,9 +98,9 @@ describe('Experimental WebID emulation', () => {
     await webId.create(profile);
     const serialised = await webId.serialise(JSON_LD_MIME_TYPE);
     const jsonld = JSON.parse(serialised);
-    const postsLink = jsonld[1]['http://xmlns.com/foaf/0.1/posts'][0]['@id'];
+    const inboxLink = jsonld[1]['https://www.w3.org/ns/activitystreams/inbox'][0]['@id'];
     const safeApp = await h.createUnregisteredTestApp({ enableExperimentalApis: true });
-    return should(safeApp.webFetch(postsLink)).be.fulfilled();
+    return should(safeApp.webFetch(inboxLink)).be.fulfilled();
   });
 
   it('fetch existing WebID', async () => {
@@ -173,9 +173,10 @@ describe('Experimental WebID emulation', () => {
     // n0:posts <safe://${nameAndTag.xorUrl}>
     const serialisedUpdated = await webId.serialise(JSON_LD_MIME_TYPE);
     const jsonld = JSON.parse(serialisedUpdated);
-    const postsVocab = rdf.vocabs.FOAF('posts').value;
-    const postsLink = jsonld.find((graph) => graph[postsVocab]);
-    return should(postsLink[postsVocab][0]['@id']).be.equal(nameAndTag.xorUrl);
+    const inboxNamespace = rdf.namespace('https://www.w3.org/ns/activitystreams/');
+    const inboxTerm = inboxNamespace('inbox').value;
+    const inboxLink = jsonld.find((graph) => graph[inboxTerm]);
+    return should(inboxLink[inboxTerm][0]['@id']).be.equal(nameAndTag.xorUrl);
   });
 
   it('retrieving WebID object from URI as Turtle', async () => {
