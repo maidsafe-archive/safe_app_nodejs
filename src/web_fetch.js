@@ -321,9 +321,21 @@ async function genMDExplorerHtml(url, md) {
   });
   const perms = await md.getPermissions();
   const permsSetList = await perms.listPermissionSets();
-  const getPermsInfo = permsSetList.map((perm) => perm.signKey.getRaw()
-      .then((raw) => ({ permSet: perm.permSet, signKey: raw.buffer.toString('hex') }))
-  );
+  const getPermsInfo = permsSetList.map(async (perm) => {
+    try {
+      const raw = await perm.signKey.getRaw();
+      return { permSet: perm.permSet, signKey: `0x${raw.buffer.toString('hex')}` };
+    } catch (err) {
+      // error -1011 is 'Invalid sign public key handle'
+      // this error is because the sign key is USER_ANYONE
+      // https://github.com/maidsafe/safe_client_libs/issues/699
+      if (err.code !== -1011) {
+        throw err;
+      }
+      // let's handle it nicely showing 'ANYONE' as the sign key string
+      return { permSet: perm.permSet, signKey: 'ANYONE' };
+    }
+  });
   const permsList = await Promise.all(getPermsInfo);
   let tperms = '';
    /* eslint-disable dot-notation */
@@ -337,7 +349,7 @@ async function genMDExplorerHtml(url, md) {
           <input type="checkbox" disabled ${perm.permSet['Delete'] ? 'checked' : ''}>Delete<br/>
           <input type="checkbox" disabled ${perm.permSet['ManagePermissions'] ? 'checked' : ''}>Manage Permissions
         </td>
-        <td class="detailsColumn">0x${perm.signKey}</td>
+        <td class="detailsColumn">${perm.signKey}</td>
       </tr>`;
   });
   /* eslint-enable dot-notation */

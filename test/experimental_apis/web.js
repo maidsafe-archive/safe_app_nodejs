@@ -267,7 +267,7 @@ describe('Experimental Web API', () => {
       should(webIds[0]['@type']).equal('http://xmlns.com/foaf/0.1/PersonalProfileDocument');
       should(webIds[0]['#me']).not.be.undefined();
       should(webIds[0]['#me']).be.a.Object();
-      should(webIds[0].posts).be.a.Object();
+      should(webIds[0]['#me'].inbox).be.a.Object();
     });
   });
 

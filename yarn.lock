@@ -4317,7 +4317,7 @@ rc@^1.1.2, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-rdflib@^0.19.0:
+rdflib@^0.19.1:
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/rdflib/-/rdflib-0.19.1.tgz#66141051902c7e7e407b4b61d075461cc0c0a28c"
   dependencies:
