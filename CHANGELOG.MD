@@ -1,6 +1,6 @@
 # safe_app nodejs Change Log
 
-## [Unreleased]
+## [0.10.0] - 26-11-2018
 ### Added
 - Add instructions to the README for how to generate API docs locally
 - Support for exposing experimental APIs when `--enable-experimental-apis` argument is passed, or when `enableExperimentalApis` flag is set in the initialisation option
@@ -8,18 +8,16 @@
 
 ### Changed
 - Dependency downloader configuration to download both mock and prod libs without `NODE_ENV=dev`
-- Upgrades deps_downloader to v0.3.0
+- Upgrades `deps_downloader` to v0.3.0
 - Code refactoring in the browsing tests cases
-- Upgrade safe_app native library to v0.9.0
-- Refactors instances of deprecated `new Buffer` to `Buffer.from` to comply with Node v10
-- Rename `isMockBuild` function to `appIsMock` to match the renaming in safe_app lib v0.9.0
+- Upgrade `safe_app` native library to v0.9.0
+- Re-factor instances of deprecated `new Buffer` to `Buffer.from`
+- Rename `isMockBuild` function to `appIsMock` to match the renaming in `safe_app` native lib v0.9.0
+- All experimental APIs are now being exposed behind the `--enableExperimentalApis` flag. See section below for more details
 
 ### Fixed
-- Change docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions.
+- Changed docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions
 - NFS write argument to match documentation annotation
-- RDF emulation now encrypts also the entries' values (issue #281)
-- RDF emulation now can decrypt data fetched from a private MutableData (issue #283)
-- Resolved issue #282, populate `_publicNames` correctly when creating multiple WebIDs
 
 ### Experimental APIs/features (enabled with `--enable-experimental-apis`)
 - Experimental function `fetch` which can fetch a network resource from a URL, returning the target network object (`content`), the type of the resource fetched (`resourceType`), and the parsed path from the provided URL (`parsedPath`)
@@ -30,6 +28,10 @@
 - The MutableData `getNameAndTag` function returns the XOR-URL as `xorUrl` attribute in the returned object
 - The ImmutableData `close` function of the `Writer` accepts an additional `getXorUrl` boolean argument to request the XOR-URL which is returned along with the XOR name in an object: `{ name: <xor addr>, xorUrl: <XOR-URL> }`
 - The ImmutableData `close` function of the `Writer` accepts the `mimeType` additional argument to be used as the content-type encoded in the XOR-URL being generated
+- RDF emulation now encrypts also the entries' values (issue #281)
+- RDF emulation now can decrypt data fetched from a private MutableData (issue #283)
+- Resolved issue #282, populate `_publicNames` correctly when creating multiple WebIDs
+- WebID now is fully compliant with linked-data standard using URLs for links (i.e. image/avatar and posts inbox links)
 
 ### SAFE libraries Dependencies
 - safe_app: v0.9.0
