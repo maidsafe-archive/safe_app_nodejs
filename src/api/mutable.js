@@ -16,9 +16,14 @@ const lib = require('../native/lib');
 const t = require('../native/types');
 const emulations = require('./emulations');
 const { PubSignKey } = require('./crypto');
-const { pubConsts: CONSTANTS } = require('../consts');
+const consts = require('../consts');
 const errConst = require('../error_const');
 const makeError = require('../native/_error.js');
+const { ONLY_IF_EXPERIMENTAL_API_ENABLED } = require('../helpers');
+const multihash = require('multihashes');
+const CID = require('cids');
+
+const CONSTANTS = consts.pubConsts;
 
 /**
 * Holds the permissions of a MutableData object
@@ -133,14 +138,14 @@ class EntryMutationTransaction extends h.NetworkObject {
   }
 
   /**
-  * Store a new `Remove`-Action in the transaction to remove an existing entry.
+  * Store a new `Delete`-Action in the transaction to delete an existing entry.
   *
-  * @param {(String|Buffer)} keyName the key you want to remove
+  * @param {(String|Buffer)} keyName the key you want to delete
   * @param {Number} version the version successor, to confirm you are
   *        actually asking for the right version
   * @returns {Promise} resolves once the storing is done
   */
-  remove(keyName, version) {
+  delete(keyName, version) {
     return lib.mdata_entry_actions_delete(
       this.app.connection,
       this.ref,
@@ -246,7 +251,7 @@ class Entries extends h.NetworkObject {
 /**
 * @typedef {Object} NameAndTag
 * @param {Buffer} name - the XoR-name/address on the network
-* @param {Number} type_tag - the type tag
+* @param {Number} typeTag - the type tag
 */
 
 /**
@@ -372,13 +377,24 @@ class MutableData extends h.NetworkObject {
   * Look up the name and tag of the MutableData as required to look it
   * up on the network.
   *
-  * @returns {Promise<NameAndTag>} the XoR-name and type tag
+  * @returns {Promise<NameAndTag>} the XoR-name and type tag. If the
+  * experimental APIs are enabled the XOR-URL is also returned in the object.
   */
-  getNameAndTag() {
-    return Promise.resolve({
-      name: this.ref.name,
-      type_tag: this.ref.type_tag
+  async getNameAndTag() {
+    // If the experimental apis are enabled we also return the XOR-URL
+    const xorUrl = ONLY_IF_EXPERIMENTAL_API_ENABLED.call(this.app, () => {
+      const address = Buffer.from(this.ref.name);
+      const encodedHash = multihash.encode(address, consts.CID_HASH_FN);
+      const newCid = new CID(consts.CID_VERSION, consts.CID_DEFAULT_CODEC, encodedHash);
+      const cidStr = newCid.toBaseEncodedString(consts.CID_BASE_ENCODING);
+      return `safe://${cidStr}:${this.ref.typeTag}`;
     });
+
+    return {
+      name: this.ref.name,
+      typeTag: this.ref.typeTag,
+      xorUrl
+    };
   }
 
   /**

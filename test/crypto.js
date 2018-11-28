@@ -18,15 +18,11 @@ const errConst = require('../src/error_const');
 
 describe('Crypto Smoke Test', () => {
   l.init({});
-  it('properly sha3 hashes strings', () => l.sha3_hash('test').then((resp) => {
-    should(resp.toString())
-        .equal(Buffer('36f028580bb02cc8272a9a020f4200e346e276ae664e45ee80745574e2f5ab80', 'hex').toString());
-  }));
+  it('properly sha3 hashes strings', () => l.sha3_hash('test').then((resp) => should(resp.toString())
+        .equal(Buffer('36f028580bb02cc8272a9a020f4200e346e276ae664e45ee80745574e2f5ab80', 'hex').toString())));
 
-  it('properly sha3 hashes buffers', () => l.sha3_hash(new Buffer('test a different value in a buffer')).then((resp) => {
-    should(resp.toString())
-        .equal(Buffer('bc262d37858c674b3a8950bed94f642f6e52b32fe7ac5725f287cb311d9d9d27', 'hex').toString());
-  }));
+  it('properly sha3 hashes buffers', () => l.sha3_hash(Buffer.from('test a different value in a buffer')).then((resp) => should(resp.toString())
+        .equal(Buffer('bc262d37858c674b3a8950bed94f642f6e52b32fe7ac5725f287cb311d9d9d27', 'hex').toString())));
 });
 
 
@@ -134,9 +130,7 @@ describe('Encryption keys', () => {
     let theirHandleOnMyPubKey;
 
     /* eslint-disable func-names */
-    before(function () {
-      this.timeout(10000);
-      return h.createAuthenticatedTestApp()
+    before(() => h.createAuthenticatedTestApp()
         .then((app) => {
           me = app;
           return h.createAuthenticatedTestApp();
@@ -165,7 +159,19 @@ describe('Encryption keys', () => {
         .then((w) => {
           myHandleOnTheirPubKey = w;
           should(myHandleOnTheirPubKey).not.be.undefined();
-        });
+        }));
+
+    it('encrypt with secret key', async () => {
+      const text = 'some-text';
+      const cipher = await myKeys.secEncKey.encrypt(text, theirKeys.pubEncKey);
+      return should(text).not.equal(cipher);
+    });
+
+    it('decrypt with public key', async () => {
+      const text = 'some-text';
+      const cipher = await theirKeys.pubEncKey.encrypt(text, theirKeys.secEncKey);
+      const decrypted = await theirKeys.pubEncKey.decrypt(cipher, theirKeys.secEncKey);
+      return should(text).be.equal(decrypted.toString());
     });
 
     it('encrypts and decrypts', () => {
@@ -212,6 +218,10 @@ describe('Encryption keys', () => {
           return should(theirKeys.decryptSealed()).be.rejectedWith('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.');
         });
     });
+
+    it('forceCleanUp on pubEncKey objects', () => myKeys.pubEncKey.forceCleanUp());
+
+    it('forceCleanUp on secEncKey objects', () => myKeys.secEncKey.forceCleanUp());
   });
 });
 
@@ -301,6 +311,10 @@ describe('Sign keys', () => {
             return should(rawPubKeyFromRaw.toString()).be.equal(rawPubKey.toString());
           }));
     });
+
+    it('forceCleanUp on pubSignKey objects', () => signKeyPair.pubSignKey.forceCleanUp());
+
+    it('forceCleanUp on secSignKey objects', () => signKeyPair.secSignKey.forceCleanUp());
   });
 
   describe('signing messages between two apps', () => {
@@ -309,9 +323,7 @@ describe('Sign keys', () => {
     let myKeys;
     let theirHandleOnMyPubKey;
 
-    before(function () {
-      this.timeout(10000);
-      return h.createAuthenticatedTestApp()
+    before(() => h.createAuthenticatedTestApp()
         .then((app) => {
           me = app;
           return h.createAuthenticatedTestApp();
@@ -330,8 +342,7 @@ describe('Sign keys', () => {
             theirHandleOnMyPubKey = w;
             return should(theirHandleOnMyPubKey).not.be.undefined();
           })
-        );
-    });
+        ));
 
     it('sign and verify', () => {
       const plaintext = `random ${Math.random()} plain text`;

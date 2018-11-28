@@ -25,7 +25,7 @@ describe('NFS emulation', () => {
   });
 
   it('opens file in write mode, writes, and returns fetched file', () => app.mutableData.newRandomPublic(TYPE_TAG)
-    .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+    .then((md) => md.quickSetup({}).then(() => md.emulateAs('nfs')))
     .then((nfs) => nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)
         .then((file) => file.write('hello, SAFE world!')
           .then(() => file.close())
@@ -36,7 +36,7 @@ describe('NFS emulation', () => {
   );
 
   it('can write a buffer to a file', () => app.mutableData.newRandomPublic(TYPE_TAG)
-    .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+    .then((md) => md.quickSetup({}).then(() => md.emulateAs('nfs')))
     .then((nfs) => nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)
         .then((file) => file.write(Buffer.from('hello, SAFE world!'))
           .then(() => file.close())
@@ -47,7 +47,7 @@ describe('NFS emulation', () => {
   );
 
   it('reads a file and returns file contents', () => app.mutableData.newRandomPublic(TYPE_TAG)
-    .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+    .then((md) => md.quickSetup({}).then(() => md.emulateAs('nfs')))
     .then((nfs) => nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE)
       .then((file) => file.write('hello, SAFE world!')
         .then(() => file.close())
@@ -56,9 +56,7 @@ describe('NFS emulation', () => {
       .then(() => nfs.fetch('hello.txt'))
       .then((retrievedFile) => nfs.open(retrievedFile, CONSTANTS.NFS_FILE_MODE_READ))
       .then((file) => file.read(CONSTANTS.NFS_FILE_START, CONSTANTS.NFS_FILE_END))
-      .then((data) => {
-        should(data.toString()).be.equal('hello, SAFE world!');
-      })
+      .then((data) => should(data.toString()).be.equal('hello, SAFE world!'))
     )
   );
 
@@ -79,13 +77,13 @@ describe('NFS emulation', () => {
   });
 
   it('provides helper function to create and save file to the network', () => app.mutableData.newRandomPublic(TYPE_TAG)
-    .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+    .then((md) => md.quickSetup({}).then(() => md.emulateAs('nfs')))
     .then((nfs) => should(nfs.create('testing')).be.fulfilled())
   );
 
   it('deletes file', () => app.mutableData.newRandomPrivate(TYPE_TAG)
     // Note we use lowercase 'nfs' below to test that it is case insensitive
-    .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs')))
+    .then((md) => md.quickSetup({}).then(() => md.emulateAs('nfs')))
     .then((nfs) => nfs.create('Hello world')
       .then((file) => nfs.insert('test.txt', file))
       .then(() => nfs.delete('test.txt', 1))
@@ -96,7 +94,7 @@ describe('NFS emulation', () => {
   it('nfs creation and modification date for read', () => {
     let creationDate;
     return app.mutableData.newRandomPrivate(TYPE_TAG)
-      .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
+      .then((md) => md.quickSetup({}).then(() => md.emulateAs('NFS')))
       .then((nfs) => nfs.create('Hello world')
         .then((file) => nfs.insert('test.txt', file))
         .then((fileInserted) => { creationDate = fileInserted.created; })
@@ -114,7 +112,7 @@ describe('NFS emulation', () => {
   it('nfs creation and modification dates for write', () => {
     let creationDate;
     return app.mutableData.newRandomPrivate(TYPE_TAG)
-      .then((m) => m.quickSetup({}).then(() => m.emulateAs('NFS')))
+      .then((md) => md.quickSetup({}).then(() => md.emulateAs('NFS')))
       .then((nfs) => nfs.create('Hello world')
         .then((file) => nfs.insert('test.txt', file))
         .then((fileInserted) => { creationDate = fileInserted.created; })
@@ -131,12 +129,12 @@ describe('NFS emulation', () => {
   });
 
   it('create, delete, update, fetch and finally open to read a file', () => app.mutableData.newRandomPublic(TYPE_TAG)
-    .then((m) => m.quickSetup({}).then(() => m.emulateAs('nfs'))
+    .then((md) => md.quickSetup({}).then(() => md.emulateAs('nfs'))
       .then((nfs) => nfs.create('Hello world')
         .then((file) => nfs.insert('test.txt', file))
         .then(() => nfs.delete('test.txt', 1))
         .then(() => nfs.create('Hello world'))
-        .then((file) => m.get('test.txt').then((value) => nfs.update('test.txt', file, value.version + 1)))
+        .then((file) => md.get('test.txt').then((value) => nfs.update('test.txt', file, value.version + 1)))
         .then(() => nfs.fetch('test.txt'))
         .then((file) => nfs.open(file, 4))
         .then((f) => f.read(CONSTANTS.NFS_FILE_START, CONSTANTS.NFS_FILE_END))
@@ -147,7 +145,7 @@ describe('NFS emulation', () => {
   it('reads file size', async () => {
     const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
     await mData.quickSetup({});
-    const nfs = await mData.emulateAs('nfs');
+    const nfs = mData.emulateAs('nfs');
     let file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
     await file.write('hello, SAFE world!');
     await file.close();
@@ -163,7 +161,7 @@ describe('NFS emulation', () => {
   it('returns file version from underlying mutable data entry version', async () => {
     const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
     await mData.quickSetup({});
-    const nfs = await mData.emulateAs('nfs');
+    const nfs = mData.emulateAs('nfs');
     let file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
     await file.write('hello, SAFE world!');
     await file.close();
@@ -176,7 +174,7 @@ describe('NFS emulation', () => {
   it('throws error if close is called on a non-open file', async () => {
     const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
     await mData.quickSetup({});
-    const nfs = await mData.emulateAs('nfs');
+    const nfs = mData.emulateAs('nfs');
     const file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
     await file.write('hello, SAFE world!');
     await file.close();
@@ -187,7 +185,7 @@ describe('NFS emulation', () => {
   it('throws error if write is called on a non-open file', async () => {
     const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
     await mData.quickSetup({});
-    const nfs = await mData.emulateAs('nfs');
+    const nfs = mData.emulateAs('nfs');
     const file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
     await file.write('hello, SAFE world!');
     await file.close();
@@ -198,7 +196,7 @@ describe('NFS emulation', () => {
   it('throws error if read is called on a non-open file', async () => {
     const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
     await mData.quickSetup({});
-    const nfs = await mData.emulateAs('nfs');
+    const nfs = mData.emulateAs('nfs');
     const file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
     await file.write('hello, SAFE world!');
     await file.close();
@@ -209,19 +207,70 @@ describe('NFS emulation', () => {
   it('resolves file size if file is not open', async () => {
     const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
     await mData.quickSetup({});
-    const nfs = await mData.emulateAs('nfs');
+    const nfs = mData.emulateAs('nfs');
     const file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
     await file.write('hello, SAFE world!');
     await file.close();
     const size = await file.size();
     return should(size).be.equal(18);
   });
-//  describe('internal function', () => {
-//    it.only('verifies if file meta data is String instance', async () => {
-//      const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
-//      await mData.quickSetup({});
-//      const nfs = await mData.emulateAs('nfs');
-//      const file = await nfs.open(null, CONSTANTS.NFS_FILE_MODE_OVERWRITE);
-//    });
-//  });
-}).timeout(30000);
+
+  it('inserts file with user metadata', async () => {
+    const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await mData.quickSetup({});
+    const nfs = mData.emulateAs('nfs');
+    const userMetadata = 'text/plain';
+    let file = await nfs.create('hello, SAFE world!');
+    file = await nfs.insert('hello.txt', file, userMetadata);
+    return should(file.userMetadata.toString())
+      .be.equal(userMetadata);
+  });
+
+  it('updates file user metadata', async () => {
+    const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await mData.quickSetup({});
+    const nfs = mData.emulateAs('nfs');
+    const userMetadata = 'text/plain';
+    let file = await nfs.create('hello, SAFE world!');
+    file = await nfs.insert('hello.txt', file, userMetadata);
+    should(file.userMetadata.toString()).be.equal(userMetadata);
+    const fileVersion = file.version;
+    file = await nfs.update('hello.txt', file, fileVersion + 1, 'text/javascript');
+    should(file.version).be.equal(1);
+    return should(file.userMetadata.toString())
+      .be.equal('text/javascript');
+  });
+
+  it('automatically obtains correct file version when passing constant', async () => {
+    const m = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await m.quickSetup({});
+    const nfs = await m.emulateAs('nfs');
+    const userMetadata = 'text/plain';
+    let file = await nfs.create('hello, SAFE world!');
+    file = await nfs.insert('hello.txt', file, userMetadata);
+    should(file.version).be.equal(0);
+    file = await nfs.update('hello.txt', file, CONSTANTS.GET_NEXT_VERSION, 'text/javascript');
+    return should(file.version).be.equal(1);
+  });
+
+  it('throws error if invalid user metadata type is passed while updating file', async () => {
+    const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await mData.quickSetup({});
+    const nfs = mData.emulateAs('nfs');
+    const userMetadata = 'text/plain';
+    let file = await nfs.create('hello, SAFE world!');
+    file = await nfs.insert('hello.txt', file, userMetadata);
+    const fileVersion = file.version;
+    const test = () => nfs.update('hello.txt', file, fileVersion + 1, { meta: 'data' });
+    return should(test).throw('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.');
+  });
+
+  it('throws error if invalid user metadata type is passed while inserting file', async () => {
+    const mData = await app.mutableData.newRandomPublic(TYPE_TAG);
+    await mData.quickSetup({});
+    const nfs = mData.emulateAs('nfs');
+    const file = nfs.create('hello, SAFE world!');
+    const test = () => nfs.insert('hello.txt', file, 5);
+    return should(test).throw('"value" argument must not be a number');
+  });
+});

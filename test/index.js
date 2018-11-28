@@ -12,14 +12,17 @@
 
 
 const lib = require('../src/native/lib');
+const fs = require('fs');
+const path = require('path');
 const should = require('should');
-const { fromAuthURI, CONSTANTS, initializeApp } = require('../src');
+const { fromAuthUri, CONSTANTS, initialiseApp } = require('../src');
 const h = require('./helpers');
 const api = require('../src/native/api');
-const fs = require('fs');
-const LIB_CONSTANTS = require('../src/consts');
-const path = require('path');
+const appHelpers = require('../src/helpers');
+const App = require('../src/app');
+const consts = require('../src/consts');
 const errConst = require('../src/error_const');
+const { useMockByDefault, getSafeAppLibFilename, getSystemUriLibFilename } = require('../src/helpers');
 
 const appInfo = {
   id: 'net.maidsafe.example.tests',
@@ -28,13 +31,9 @@ const appInfo = {
 };
 
 describe('Smoke testing', () => {
-  it('confirms there is a lib', () => {
-    should(lib).be.Object();
-  });
+  it('confirms there is a lib', () => should(lib).be.Object());
 
-  it('confirms the CONSTANTS are exposed', () => {
-    should(CONSTANTS).be.Object();
-  });
+  it('confirms the CONSTANTS are exposed', () => should(CONSTANTS).be.Object());
 
   it('confirms the full list of constants', () => {
     // let's check all contants to make sure we don't break any app
@@ -48,14 +47,15 @@ describe('Smoke testing', () => {
       USER_ANYONE: 0,
       MD_METADATA_KEY: '_metadata',
       MD_ENTRIES_EMPTY: 0,
-      MD_PERMISSION_EMPTY: 0
+      MD_PERMISSION_EMPTY: 0,
+      GET_NEXT_VERSION: 0
     };
     return should(CONSTANTS).be.eql(expectedConsts);
   });
 
   it('requires additional functions for testing, if in non-production', () => {
     const testingApi = api[api.length - 1];
-    should(LIB_CONSTANTS.inTesting).be.true();
+    should(useMockByDefault).be.true();
     should.exist(testingApi.functions.test_create_app);
     return should.exist(testingApi.functions.test_create_app_with_access);
   });
@@ -77,101 +77,121 @@ describe('Smoke testing', () => {
   });
 
   it('system uri lib contains "mock" dir (as we\'re testing)', () => {
-    const sysUriPath = LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME;
+    const sysUriPath = getSystemUriLibFilename('./');
     return should(sysUriPath.includes('mock')).be.true();
   });
 
   it('safe app lib contains "mock" dir (as we\'re testing)', () => {
-    const libPath = LIB_CONSTANTS.LIB_FILENAME;
+    const libPath = getSafeAppLibFilename('./');
     return should(libPath.includes('mock')).be.true();
   });
 
-  it('hasMockFlag is set FALSE for testing', () => {
-    const hasMock = LIB_CONSTANTS.hasMockFlag;
-    return should(hasMock).be.false();
+  it('safe app lib contains "mock" dir if we force use of mock', () => {
+    const libPath = getSafeAppLibFilename('./', { forceUseMock: true });
+    return should(libPath.includes('mock')).be.true();
   });
 
   it('throws error if lib fails to load', () => {
-    fs.renameSync(path.join(__dirname, `../src/native/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`), path.join(__dirname, '../src/native/hideLib.so'));
     try {
-      h.createAuthenticatedTestApp();
+      appHelpers.autoref(new App(h.appInfo, null, {
+        libPath: '/home',
+        log: false
+      }));
     } catch (err) {
       const errArray = err.message.split('libraries: ');
       should(errConst.FAILED_TO_LOAD_LIB.msg(errArray[1])).be.equal(err.message);
     }
-    return fs.renameSync(path.join(__dirname, '../src/native/hideLib.so'), path.join(__dirname, `../src/native/${LIB_CONSTANTS.SYSTEM_URI_LIB_FILENAME}`));
-  }).timeout(10000);
+  });
+
+  it('will not init system_uri if library does not exist at expected path', async () => {
+    delete lib.registerUriScheme;
+    delete lib.openUri;
+    const libDir = path.dirname(getSystemUriLibFilename('./src/native/'));
+    fs.renameSync(path.join(libDir, consts.SYSTEM_URI_LIB_FILENAME), path.join(libDir, 'hideLib'));
+    await h.createTestApp(null, null, { registerScheme: false });
+    fs.renameSync(path.join(libDir, 'hideLib'), path.join(libDir, consts.SYSTEM_URI_LIB_FILENAME));
+    should.not.exist(lib.registerUriScheme);
+    return should.not.exist(lib.openUri);
+  });
+
+  it('autoref on object with no "free" function', () => {
+    class NoStaticFreeFn {}
+    const test = () => appHelpers.autoref(new NoStaticFreeFn());
+    should(test).throw('No static "free" function found on object to autoref');
+  });
 });
 
 describe('External API', () => {
-  describe('initializeApp', () => {
+  describe('initialiseApp', () => {
     it('creates and returns new App instance to interface with network', async () => {
-      const app = await initializeApp(appInfo);
+      const app = await initialiseApp(appInfo);
       return should(app).have.properties(['auth', 'appInfo', 'crypto', 'cipherOpt', 'mutableData', 'immutableData', 'networkState']);
     });
 
     it('customExecPath with an array of args', async () => {
       const wrongAppInfo = Object.assign({}, appInfo, { customExecPath: ['arg0', 'arg1', 'arg2'] });
-      return should(initializeApp(wrongAppInfo)).be.fulfilled();
+      return should(initialiseApp(wrongAppInfo)).be.fulfilled();
     });
 
     it('invalid customExecPath param format', async () => {
       const wrongAppInfo = Object.assign({}, appInfo, { customExecPath: 'non-array-exec-path' });
-      return should(initializeApp(wrongAppInfo)).be.rejectedWith('Exec command must be an array of string arguments');
+      return should(initialiseApp(wrongAppInfo)).be.rejectedWith('Exec command must be an array of string arguments');
     });
+
+    it('throws error for missing appInfo property', () => should(initialiseApp({ id: 'id1', vendor: 'vendor' })).be.rejectedWith(errConst.MALFORMED_APP_INFO.msg));
   });
 
-  describe('fromAuthURI', () => {
-    it('should connect registered', () => fromAuthURI(appInfo, h.authUris.registeredUri, null, { log: false })
+  describe('fromAuthUri', () => {
+    it('should connect registered', () => fromAuthUri(appInfo, h.authUris.registeredUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
 
-    it('should connect unregistered', () => fromAuthURI(appInfo, h.authUris.unregisteredUri, null, { log: false })
+    it('should connect unregistered', () => fromAuthUri(appInfo, h.authUris.unregisteredUri, null, { log: false })
         .then((app) => should(app.auth.registered).not.be.true())
     );
 
-    it('should connect with authorised containers', () => fromAuthURI(appInfo, h.authUris.containersUri, null, { log: false })
+    it('should connect with authorised containers', () => fromAuthUri(appInfo, h.authUris.containersUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
 
-    it('should connect with authorised shared MD', () => fromAuthURI(appInfo, h.authUris.sharedMdataUri, null, { log: false })
+    it('should connect with authorised shared MD', () => fromAuthUri(appInfo, h.authUris.sharedMdataUri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true())
     );
   });
 
-  describe('fromAuthURI with URI variations', () => {
+  describe('fromAuthUri with URI variations', () => {
     it('URI == safe-:<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe-:');
-      return fromAuthURI(appInfo, uri, null, { log: false })
+      return fromAuthUri(appInfo, uri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true());
     });
 
     it('URI == <auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, '');
-      return fromAuthURI(appInfo, uri, null, { log: false })
+      return fromAuthUri(appInfo, uri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true());
     });
 
     // this is the case in Fedora where '/' characters are added after the ':' by the OS
     it('URI == safe-<app id>:///<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-([^:]*):?/g, 'safe-$1:///');
-      return fromAuthURI(appInfo, uri, null, { log: false })
+      return fromAuthUri(appInfo, uri, null, { log: false })
         .then((app) => should(app.auth.registered).be.true());
     });
 
     it('fail with safe-<app info>://<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, '$&//$\'');
-      return should(fromAuthURI(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+      return should(fromAuthUri(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
     });
 
     it('fail with safe-<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe-');
-      return should(fromAuthURI(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+      return should(fromAuthUri(appInfo, uri, null, { log: false })).be.rejectedWith('IPC error: InvalidMsg');
     });
 
     it('fail with safe:<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe:');
-      return should(fromAuthURI(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+      return should(fromAuthUri(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
     });
   });
 });

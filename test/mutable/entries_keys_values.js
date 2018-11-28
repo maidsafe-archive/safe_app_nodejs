@@ -74,18 +74,36 @@ describe('Mutable Data Entries', () => {
     });
   }).timeout(10000);
 
+  it('list entries after deleting an entry', async () => {
+    const md = await app.mutableData.newRandomPrivate(TYPE_TAG);
+    await md.quickSetup({ key1: 'value1' });
+    let entries = await md.getEntries();
+    let listEntries = await entries.listEntries();
+    let value = listEntries[0].value;
+    should(value).not.be.undefined();
+    should(value.buf.toString()).equal('value1');
+    should(value.version).equal(0);
+
+    const mut = await app.mutableData.newMutation();
+    await mut.delete('key1', 1);
+    await md.applyEntriesMutation(mut);
+    entries = await md.getEntries();
+    listEntries = await entries.listEntries();
+    value = listEntries[0].value;
+    should(value).not.be.undefined();
+    should(value.buf.toString()).equal('');
+    return should(value.version).equal(1);
+  });
+
   it('get list of keys', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
       .then((keys) => should(keys.length).equal(Object.keys(TEST_ENTRIES).length))
   );
 
-  it('check list of keys', (done) => {
-    app.mutableData.newRandomPublic(TYPE_TAG)
+  it('check list of keys', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
       .then((keys) => Promise.all(keys.map((key) =>
-        should(TEST_ENTRIES).have.ownProperty(key.toString())
-      )).then(() => done(), (err) => done(err)));
-  });
+        should(TEST_ENTRIES).have.ownProperty(key.toString())))));
 
   it('get empty list of keys', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup({}).then(() => m.getKeys()))
@@ -97,16 +115,14 @@ describe('Mutable Data Entries', () => {
       .then((values) => should(values.length).equal(Object.keys(TEST_ENTRIES).length))
   );
 
-  it('check list of values', (done) => {
-    app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
-      .then((values) => Promise.all(values.map((value) =>
-        should(TEST_ENTRIES).matchAny((v) => {
-          should(v).be.eql(value.buf.toString());
-          should(value.version).be.equal(0);
-        })
-      )).then(() => done(), (err) => done(err)));
-  });
+  it('check list of values', () => app.mutableData.newRandomPublic(TYPE_TAG)
+    .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
+    .then((values) => Promise.all(values.map((value) =>
+      should(TEST_ENTRIES).matchAny((v) => {
+        should(v).be.eql(value.buf.toString());
+        return should(value.version).be.equal(0);
+      })
+    ))));
 
   it('get empty list of values', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup({}).then(() => m.getValues()))

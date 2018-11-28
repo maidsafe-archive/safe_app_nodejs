@@ -14,17 +14,18 @@
 const should = require('should');
 const h = require('./helpers');
 const errConst = require('../src/error_const');
+const lib = require('../src/native/lib');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 const createTestApp = h.createTestApp;
 
+const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
+
 /* eslint-disable no-shadow */
 describe('auth interface', () => {
   let app;
-
   before(async () => {
-    const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
-    app = await createAuthenticatedTestApp('_test_scope', containersPermissions);
+    app = await createAuthenticatedTestApp({ scope: '_test_scope' }, containersPermissions);
   });
 
   it('should build some authentication uri', async () => {
@@ -39,9 +40,6 @@ describe('auth interface', () => {
       .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
-  // TODO: issue MAID-2542 has been raised for safe_app lib as it's panicking
-  // instead of returning an error code and message.
-  // We'll need to adapt the test accordingly nce that's fixed.
   it('throws error if permissions object contains invalid permission', async () => {
     const app = await h.createTestApp();
     const test = () => app.auth.genAuthUri({ _public: ['Invalid'] });
@@ -49,9 +47,12 @@ describe('auth interface', () => {
   });
 
   it('should throw error if non-standard container is requested', () => {
-    const containersPermissions = { _app: ['Read', 'Insert', 'ManagePermissions'] };
-    return should(createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true }))
-      .be.rejected();
+    const containersPermissions = {
+      _public: ['Insert', 'Read', 'Update'],
+      _second: ['Read']
+    };
+    return should(createAuthenticatedTestApp({ scope: '_test_scope' }, containersPermissions, { own_container: true }))
+      .be.rejectedWith("'_second' not found in the access container");
   });
 
   it('is authenticated for testing', () => should(app.auth.registered).be.true());
@@ -77,7 +78,7 @@ describe('auth interface', () => {
   it('should build some shared MD uri', async () => {
     const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
-    const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
+    const perms = [{ typeTag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
     return app.auth.genShareMDataUri(perms)
         .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
@@ -99,7 +100,7 @@ describe('auth interface', () => {
   it('should throw error for malformed share MD request permission', async () => {
     const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
-    const perms = { type_tag: 15001, name: sharedMdXorName, perms: ['Insert'] };
+    const perms = { typeTag: 15001, name: sharedMdXorName, perms: ['Insert'] };
     const test = () => app.auth.genShareMDataUri(perms);
     return should(test).throw(errConst.INVALID_PERMS_ARRAY.msg);
   });
@@ -107,15 +108,15 @@ describe('auth interface', () => {
   it('should throw error for invalid share MD request permission', async () => {
     const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
-    const perms = [{ type_tag: 15001, name: sharedMdXorName, perms: ['Wrong'] }];
+    const perms = [{ typeTag: 15001, name: sharedMdXorName, perms: ['Wrong'] }];
     const test = () => app.auth.genShareMDataUri(perms);
     return should(test).throw(`${perms[0].perms[0]} is not a valid permission`);
   });
 
-  it('should throw error for share MD request if type_tag is non-integer', async () => {
+  it('should throw error for share MD request if typeTag is non-integer', async () => {
     const app = await h.createTestApp();
     const sharedMdXorName = h.createRandomXorName();
-    const perms = [{ type_tag: 'non-integer', name: sharedMdXorName, perms: ['Insert'] }];
+    const perms = [{ typeTag: 'non-integer', name: sharedMdXorName, perms: ['Insert'] }];
     const test = () => app.auth.genShareMDataUri(perms);
     return should(test).throw(
       errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(perms[0]))
@@ -125,7 +126,7 @@ describe('auth interface', () => {
   it('should throw error for share MD request if name is not 32 byte buffer', async () => {
     const app = await h.createTestApp();
     const mdName = 'not 32 byte buffer';
-    const perms = [{ type_tag: 15001, name: mdName, perms: ['Insert'] }];
+    const perms = [{ typeTag: 15001, name: mdName, perms: ['Insert'] }];
     const test = () => app.auth.genShareMDataUri(perms);
     return should(test).throw(
       errConst.INVALID_SHARE_MD_PERMISSION.msg(JSON.stringify(perms[0]))
@@ -141,22 +142,27 @@ describe('auth interface', () => {
       });
   });
 
+  it('throws error if no URI provided to app_unregistered', async () => {
+    const app = await createTestApp();
+    return should(lib.app_unregistered(app)).be.rejectedWith(errConst.MISSING_AUTH_URI.msg);
+  });
+
   it('logs in to network with URI response from authenticator', async () => {
     const app = await h.createTestApp();
-    return should(app.auth.loginFromURI(h.authUris.registeredUri)).be.fulfilled();
+    return should(app.auth.loginFromUri(h.authUris.registeredUri)).be.fulfilled();
   });
 
   it('creates an authenticated session just for testing', async () => {
     const app = await h.createTestApp();
     return should(app.auth.loginForTest()).be.fulfilled();
-  }).timeout(20000);
+  });
 });
 
 describe('Get granted containers permissions from auth URI', () => {
   it('invalid uri', async () => {
     const appNoConnect = await createTestApp();
-    should(appNoConnect.auth.readGrantedPermissions('safe-invalid-uri'))
-              .be.rejectedWith('Serialisation error');
+    return should(appNoConnect.auth.readGrantedPermissions('safe-invalid-uri'))
+              .be.rejectedWith('IPC error: InvalidMsg');
   });
 
   it('uri with no auth granted information', async () => {
@@ -170,7 +176,7 @@ describe('Get granted containers permissions from auth URI', () => {
     const contsPerms = await should(appNoConnect.auth.readGrantedPermissions(
                                       h.authUris.registeredUriNoContsPerms)
                                     ).be.fulfilled();
-    should(Object.keys(contsPerms).length).be.equal(0);
+    return should(Object.keys(contsPerms).length).be.equal(0);
   });
 
   /* eslint-disable no-underscore-dangle */
@@ -186,7 +192,7 @@ describe('Get granted containers permissions from auth URI', () => {
       ManagePermissions: false
     });
     const ownContainerName = 'apps/net.maidsafe.examples.mailtutorial';
-    should(contsPerms[ownContainerName]).be.eql({
+    return should(contsPerms[ownContainerName]).be.eql({
       Read: true,
       Insert: true,
       Delete: true,
@@ -198,21 +204,62 @@ describe('Get granted containers permissions from auth URI', () => {
 
 describe('Access Container', () => {
   let app;
+  const containersPermissions = {
+    _documents: ['Read'],
+    _downloads: ['Insert'],
+    _music: ['Delete'],
+    _pictures: ['Read', 'Delete'],
+    _videos: ['Update', 'ManagePermissions'],
+    _public: ['Read'],
+    _publicNames: ['Read', 'Insert', 'ManagePermissions']
+  };
 
   before(async () => {
-    const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
-    app = await createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true });
+    app = await createAuthenticatedTestApp({ scope: '_test_scope' }, containersPermissions, { own_container: true });
   });
 
-  it('should have a connection object after completing app authentication', () => {
-    should.exist(app.connection);
-  });
+  it('should have a connection object after completing app authentication', () => should.exist(app.connection));
 
   /* eslint-disable no-underscore-dangle */
   it('get container names', () => app.auth.refreshContainersPermissions().then(() =>
     app.auth.getContainersPermissions().then((contsPerms) => {
       // we always get a our own sandboxed container in tests
-      should(Object.keys(contsPerms).length).be.equal(3);
+      should(Object.keys(contsPerms).length).be.equal(8);
+      should(contsPerms._documents).be.eql({
+        Read: true,
+        Insert: false,
+        Delete: false,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms._downloads).be.eql({
+        Read: false,
+        Insert: true,
+        Delete: false,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms._music).be.eql({
+        Read: false,
+        Insert: false,
+        Delete: true,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms._pictures).be.eql({
+        Read: true,
+        Insert: false,
+        Delete: true,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms._videos).be.eql({
+        Read: false,
+        Insert: false,
+        Delete: false,
+        Update: true,
+        ManagePermissions: true
+      });
       should(contsPerms._public).be.eql({
         Read: true,
         Insert: false,
@@ -220,7 +267,7 @@ describe('Access Container', () => {
         Update: false,
         ManagePermissions: false
       });
-      should(contsPerms._publicNames).be.eql({
+      return should(contsPerms._publicNames).be.eql({
         Read: true,
         Insert: true,
         Delete: false,
@@ -241,7 +288,6 @@ describe('Access Container', () => {
     app.auth.getOwnContainer().then((mdata) => should(mdata).is.not.undefined())));
 
   it('throws error if root container requested but was not created', async () => {
-    const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
     const app = await createAuthenticatedTestApp('_test_scope_2', containersPermissions, { own_container: false });
     return should(app.auth.getOwnContainer()).be.rejectedWith(`'apps/${h.appInfo.id}' not found in the access container`);
   });
@@ -263,7 +309,7 @@ describe('Access Container', () => {
   it('read info of `_public`', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.getContainer('_public').then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
         should(resp.name).is.not.undefined();
-        return should(resp.type_tag).equal(15000);
+        return should(resp.typeTag).equal(15000);
       })));
 
   it('throws error is no container name provided', () => app.auth.refreshContainersPermissions().then(() => {
@@ -274,7 +320,7 @@ describe('Access Container', () => {
   it('read info of own container', () => app.auth.refreshContainersPermissions().then(() =>
       app.auth.getOwnContainer().then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
         should(resp.name).is.not.undefined();
-        return should(resp.type_tag).equal(15000);
+        return should(resp.typeTag).equal(15000);
       })));
 
   it('mutate info of `_publicNames` container', () => app.auth.refreshContainersPermissions().then(() =>
@@ -306,4 +352,15 @@ describe('Access Container', () => {
             return should(value.buf.toString()).equal('value1');
           })
   ));
-}).timeout(15000);
+
+  it('check _public container is a Public MD', async () => {
+    const app = await h.publicNamesTestApp();
+    const md = await app.auth.getContainer('_public');
+    const encKey = await md.encryptKey('_testkey');
+    const mut = await app.mutableData.newMutation();
+    await mut.insert(encKey, 'plain-text');
+    await md.applyEntriesMutation(mut);
+    const value = await md.get('_testkey');
+    should(value.buf.toString()).be.equal('plain-text');
+  });
+});

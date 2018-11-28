@@ -1,22 +1,24 @@
 // Copyright 2018 MaidSafe.net limited.
 //
-// This SAFE Network Software is licensed to you under 
-// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or 
+// This SAFE Network Software is licensed to you under
+// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or
 // the Modified BSD license <LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
 // at your option.
 //
-// This file may not be copied, modified, or distributed except according to those terms. 
+// This file may not be copied, modified, or distributed except according to those terms.
 //
 // Please review the Licences for the specific language governing permissions and limitations
 // relating to use of the SAFE Network Software.
 
 
 const path = require('path');
+const fs = require('fs');
 const FFI = require('ffi');
-const { LIB_FILENAME } = require('../consts');
+const { getSafeAppLibFilename } = require('../helpers');
+const { getSystemUriLibFilename } = require('../helpers');
 const os = require('os');
 
-const dir = path.dirname(__filename);
+const currentDir = path.dirname(__filename);
 
 const api = require('./api');
 const makeError = require('./_error.js');
@@ -30,7 +32,7 @@ let lib = null;
 
 ffi.init = (options) => {
   try {
-    lib = FFI.DynamicLibrary(path.join(options.libPath || dir, LIB_FILENAME), mode);
+    lib = FFI.DynamicLibrary(getSafeAppLibFilename(currentDir, options), mode);
 
     api.forEach((mod) => {
       if (!lib) {
@@ -65,9 +67,12 @@ ffi.init = (options) => {
     // FIXME: As long as `safe-app` doesn't expose system uri itself, we'll
     // patch it directly on it. This should later move into its own sub-module
     // and take care of mobile support for other platforms, too.
-    require('./_system_uri')(ffi, options);
+    const mobileEnv = !fs.existsSync(getSystemUriLibFilename(currentDir));
+    if (!mobileEnv) {
+      require('./_system_uri')(ffi, options);
+    }
   } catch(e) {
-    console.error("ERROR: ", e)
+    console.error(e)
     throw makeError(errConst.FAILED_TO_LOAD_LIB.code,
         errConst.FAILED_TO_LOAD_LIB.msg(e.toString()));
   }

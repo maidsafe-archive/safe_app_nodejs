@@ -10,11 +10,7 @@
 // Please review the Licences for the specific language governing permissions and limitations
 // relating to use of the SAFE Network Software.
 
-
 const os = require('os');
-const path = require('path');
-
-const inTesting = new RegExp('dev|development|testing|test').test(process.env.NODE_ENV || '');
 
 const TAG_TYPE_DNS = 15001;
 const TAG_TYPE_WWW = 15002;
@@ -23,19 +19,8 @@ const NET_STATE_INIT = -100;
 const NET_STATE_DISCONNECTED = -1;
 const NET_STATE_CONNECTED = 0;
 
-// Determine if process is forced to mock
-const allPassedArgs = process.argv;
-
-const hasMockFlag = allPassedArgs.includes('--mock');
-
-const env = hasMockFlag ? 'development' : process.env.NODE_ENV || 'production';
-const isRunningDevelopment = /^dev/.test(env);
-
-let libLocationModifier = 'prod';
-
-if (isRunningDevelopment || inTesting) {
-  libLocationModifier = 'mock';
-}
+const LIB_LOCATION_MOCK = 'mock';
+const LIB_LOCATION_PROD = 'prod';
 
 /**
 * @typedef {Object} CONSTANTS
@@ -94,6 +79,10 @@ if (isRunningDevelopment || inTesting) {
 * This can be used when invoking the `put` function of the MutableData API to
 * signal that it should be committed to the network with an empty set of permissions.
 *
+* @param {Number} GET_NEXT_VERSION Gets next correct file version.
+* This constant may be used in place of the version argument when
+* invoking `update` function of the NFS API to automatically obtain correct file version.
+*
 */
 const pubConsts = {
   NFS_FILE_MODE_OVERWRITE: 1,
@@ -105,26 +94,30 @@ const pubConsts = {
   MD_METADATA_KEY: '_metadata',
   MD_ENTRIES_EMPTY: 0,
   MD_PERMISSION_EMPTY: 0,
+  GET_NEXT_VERSION: 0
 };
 
-const LIB_FILENAME = {
-  win32: path.join('./', libLocationModifier, 'safe_app.dll'),
-  darwin: path.join('./', libLocationModifier, 'libsafe_app.dylib'),
-  linux: path.join('./', libLocationModifier, 'libsafe_app.so')
+const SAFE_APP_LIB_FILENAME = {
+  win32: 'safe_app.dll',
+  darwin: 'libsafe_app.dylib',
+  linux: 'libsafe_app.so'
 }[os.platform()];
 
 const SYSTEM_URI_LIB_FILENAME = {
-  win32: path.join('./', libLocationModifier, 'system_uri.dll'),
-  darwin: path.join('./', libLocationModifier, 'libsystem_uri.dylib'),
-  linux: path.join('./', libLocationModifier, 'libsystem_uri.so')
+  win32: 'system_uri.dll',
+  darwin: 'libsystem_uri.dylib',
+  linux: 'libsystem_uri.so'
 }[os.platform()];
 
 const INDEX_HTML = 'index.html';
 
-module.exports = {
-  LIB_FILENAME,
-  SYSTEM_URI_LIB_FILENAME,
+const CID_VERSION = 1;
+const CID_BASE_ENCODING = 'base32z';
+const CID_HASH_FN = 'sha3-256';
+const CID_DEFAULT_CODEC = 'raw';
+const CID_MIME_CODEC_PREFIX = 'mime/';
 
+module.exports = {
   TAG_TYPE_DNS,
   TAG_TYPE_WWW,
 
@@ -132,8 +125,18 @@ module.exports = {
   NET_STATE_DISCONNECTED,
   NET_STATE_CONNECTED,
 
+  LIB_LOCATION_MOCK,
+  LIB_LOCATION_PROD,
+
   INDEX_HTML,
-  inTesting,
   pubConsts,
-  hasMockFlag
+
+  SAFE_APP_LIB_FILENAME,
+  SYSTEM_URI_LIB_FILENAME,
+
+  CID_VERSION,
+  CID_BASE_ENCODING,
+  CID_HASH_FN,
+  CID_DEFAULT_CODEC,
+  CID_MIME_CODEC_PREFIX,
 };

@@ -1,22 +1,87 @@
 # safe_app nodejs Change Log
 
-[Unreleased]
+## [0.10.0] - 26-11-2018
 ### Added
-- New binding `simulateNetworkDisconnect()` function to simulate a network disconnection event useful for applications testing purposes.
+- Add instructions to the README for how to generate API docs locally
+- Support for exposing experimental APIs when `--enable-experimental-apis` argument is passed, or when `enableExperimentalApis` flag is set in the initialisation option
+- Constant `GET_NEXT_VERSION` added to automatically obtain correct file version for updates and deletes
 
 ### Changed
-- Upgrade safe_app native library to commit `a9b4c05` and adapt to minor API changes
+- Dependency downloader configuration to download both mock and prod libs without `NODE_ENV=dev`
+- Upgrades `deps_downloader` to v0.3.0
+- Code refactoring in the browsing tests cases
+- Upgrade `safe_app` native library to v0.9.0
+- Re-factor instances of deprecated `new Buffer` to `Buffer.from`
+- Rename `isMockBuild` function to `appIsMock` to match the renaming in `safe_app` native lib v0.9.0
+- All experimental APIs are now being exposed behind the `--enableExperimentalApis` flag. See section below for more details
+
+### Fixed
+- Changed docs to reflect testing condition for `loginForTest` and `simulateNetworkDisconnect` functions
+- NFS write argument to match documentation annotation
+
+### Experimental APIs/features (enabled with `--enable-experimental-apis`)
+- Experimental function `fetch` which can fetch a network resource from a URL, returning the target network object (`content`), the type of the resource fetched (`resourceType`), and the parsed path from the provided URL (`parsedPath`)
+- Experimental RDF emulation layer which provides an abstraction to generate and manipulate RDF data on the SAFE network
+- Experimental WebID emulation layer which provides an abstraction to generate and manipulate WebID profile documents on the SAFE network
+- Experimental Web API which provides utilities to manage publicNames and subNames, get the list of owned WebIDs, get the list of owned Public Names, etc.
+- The `webFetch` function supports XOR-URLs as an experimental feature
+- The MutableData `getNameAndTag` function returns the XOR-URL as `xorUrl` attribute in the returned object
+- The ImmutableData `close` function of the `Writer` accepts an additional `getXorUrl` boolean argument to request the XOR-URL which is returned along with the XOR name in an object: `{ name: <xor addr>, xorUrl: <XOR-URL> }`
+- The ImmutableData `close` function of the `Writer` accepts the `mimeType` additional argument to be used as the content-type encoded in the XOR-URL being generated
+- RDF emulation now encrypts also the entries' values (issue #281)
+- RDF emulation now can decrypt data fetched from a private MutableData (issue #283)
+- Resolved issue #282, populate `_publicNames` correctly when creating multiple WebIDs
+- WebID now is fully compliant with linked-data standard using URLs for links (i.e. image/avatar and posts inbox links)
+
+### SAFE libraries Dependencies
+- safe_app: v0.9.0
+- system_uri: v0.4.0
+- deps_downloader: v0.3.0
+
+## [0.9.1] - 27-8-2018
+### Added
+- Error handling for malformed `appInfo` object passed to `initialiseApp` (issue #257)
+
+### Fixed
+- Error "invalid utf-8: corrupt contents" fixed by preventing allocated CString reference from being reassigned to a corrupted value (issue #258)
+
+### SAFE libraries Dependencies
+- safe_app: v0.8.0
+- system_uri: v0.4.0
+- deps_downloader: v0.2.0
+
+## [0.9.0] - 27-7-2018
+### Added
+- New binding `simulateNetworkDisconnect()` function to simulate a network disconnection event useful for applications testing purposes.
+- Support for forcing the use of mock by providing `forceUseMock` boolean to the initialisation options of each safeApp instance, i.e. each safeApp instance can either use mock or prod libs independently.
+- Ability to pass user metadata when inserting and updating file in MutableData
+- Prevents download of `system_uri` if `NODE_ENV=mobile_prod` or `NODE_ENV=mobile_dev`
+
+### Changed
+- Upgrade safe_app native library to v0.8.0
 - Removing `forEach` binding function from the MutableData entries API as it was removed from safe_app lib
 - Adding `listEntries` binding function to the MutableData entries API which returns an array with all entries
-- Moves asynchronous app initialisation opertions out of SAFEApp constructor and into class method
+- Moves asynchronous app initialisation operations out of SAFEApp constructor and into class method
 - The `initializeApp` function is now asynchronous
+- `webFetch` can now receive multipart range requests
+- Changed `fromAuthURI` to `fromAuthUri`
+- Changed `loginFromURI` to `loginFromUri`
+- Uses `delete` instead of `remove` as entry mutation action
+- Changed `initializeApp` to use an `s` instead of `z`
+- Network state callback invoked from `INIT` to `CONNECTED` states
+- Simplified test helper functions
+- Upgraded deps_downloader to v0.2.0
+- Isolated `webFetch` helper functions for testing
+- Unregistered client connection event triggers network status update
 
 ### Fixed
 - Fixed some tests which were giving false positive results
+- Added missing error handling for `app_reconnect` to prevent false connection status
 
-## SAFE libraries Dependencies
-- safe_app: a9b4c05
+### SAFE libraries Dependencies
+- safe_app: v0.8.0
 - system_uri: v0.4.0
+- deps_downloader: v0.2.0
 
 ## [0.8.1] - 9-3-2018
 ### Changed
@@ -60,7 +125,7 @@
 - system_uri: v0.4.0
 
 ## [0.6.1] - 18-1-2018
-## Changed
+### Changed
 - Recommend Node ^8.0.0 for building from source
 - Upgrade CI scripts to test Node 8.0.0
 - Pass the system URI's execution path as an array of arguments to support white spaces in it

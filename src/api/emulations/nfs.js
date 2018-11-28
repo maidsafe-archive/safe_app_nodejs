@@ -18,8 +18,6 @@ const { pubConsts: CONSTANTS } = require('../../consts');
 const errConst = require('../../error_const');
 const makeError = require('../../native/_error.js');
 
-const isString = (arg) => typeof arg === 'string' || (arg.toString ? arg.toString() === '[object String]' : false);
-
 /**
 * A NFS-style File
 *
@@ -54,24 +52,11 @@ class File {
       modified_sec: this._ref.modified_sec,
       modified_nsec: this._ref.modified_nsec,
       data_map_name: this.dataMapName,
+      user_metadata_ptr: this._ref.user_metadata_ptr,
+      user_metadata_len: this._ref.user_metadata_len,
+      user_metadata_cap: this._ref.user_metadata_cap
     };
 
-    if (this._ref.metadata) {
-      let mData = this._ref.metadata;
-      if (!isString(this._ref.metadata)) {
-        mData = JSON.stringify(this._ref.metadata);
-      }
-
-      const buf = new Buffer(mData);
-      data.user_metadata_ptr = buf.ref();
-      data.user_metadata_len = buf.length;
-      data.user_metadata_cap = buf.length;
-    } else {
-      const userData = Buffer.from([]);
-      data.user_metadata_ptr = userData;
-      data.user_metadata_len = userData.length;
-      data.user_metadata_cap = userData.byteLength;
-    }
     return new t.File(data);
   }
 
@@ -81,6 +66,14 @@ class File {
   */
   get dataMapName() {
     return this._ref.data_map_name;
+  }
+
+  /**
+  *
+  * @returns {Buffer} user_metadata
+  */
+  get userMetadata() {
+    return this._ref.user_metadata_ptr;
   }
 
   /**
@@ -136,12 +129,12 @@ class File {
   * @param {Buffer|String} content
   * @returns {Promise}
   */
-  write(fileContent) {
+  write(content) {
     if (!this._fileCtx) {
       return Promise
         .reject(makeError(errConst.ERR_FILE_NOT_FOUND.code, errConst.ERR_FILE_NOT_FOUND.msg));
     }
-    return lib.file_write(this._connection, this._fileCtx, fileContent);
+    return lib.file_write(this._connection, this._fileCtx, content);
   }
 
   /**
@@ -183,15 +176,13 @@ class File {
 }
 
 /**
-* NFS Emulation on top of an MData
+* NFS Emulation on top of a MutableData
+*
+* Instantiate the NFS emulation layer rapping a MutableData instance
+*
+* @param {MutableData} mData the MutableData to wrap around
 */
 class NFS {
-  /**
-  * @private
-  * Instantiate the NFS emulation layer rapping a MutableData instance
-  *
-  * @param {MutableData} mData - the MutableData to wrap around
-  */
   constructor(mData) {
     this.mData = mData;
   }
@@ -224,9 +215,17 @@ class NFS {
   * to the network.
   * @param {(String|Buffer)} fileName - the path to store the file under
   * @param {File} file - the file to serialise and store
+  * @param {String|Buffer} userMetadata
   * @returns {Promise<File>} - the same file
   */
-  insert(fileName, file) {
+  insert(fileName, file, userMetadata) {
+    if (userMetadata) {
+      const userMetadataPtr = Buffer.from(userMetadata);
+      const fileMeta = file._ref; // eslint-disable-line no-underscore-dangle
+      fileMeta.user_metadata_ptr = userMetadataPtr;
+      fileMeta.user_metadata_len = userMetadata.length;
+      fileMeta.user_metadata_cap = userMetadataPtr.length;
+    }
     return lib.dir_insert_file(
         this.mData.app.connection, this.mData.ref, fileName, file.ref.ref()
       )
@@ -239,27 +238,43 @@ class NFS {
 
   /**
   * Replace a path with a new file. Directly commit to the network.
+  *
+  * CONSTANTS.GET_NEXT_VERSION: Applies update to next file version.
+  *
   * @param {(String|Buffer)} fileName - the path to store the file under
   * @param {File} file - the file to serialise and store
-  * @param {Number} version - the version successor number, to ensure you
+  * @param {Number|CONSTANTS.GET_NEXT_VERSION} version - the version successor number, to ensure you
            are overwriting the right one
+  * @param {String|Buffer} userMetadata - optional parameter for updating user metadata
   * @returns {Promise<File>} - the same file
   */
-  update(fileName, file, version) {
+  update(fileName, file, version, userMetadata) {
+    if (userMetadata) {
+      const userMetadataPtr = Buffer.from(userMetadata);
+      const fileMeta = file._ref; // eslint-disable-line no-underscore-dangle
+      fileMeta.user_metadata_ptr = userMetadataPtr;
+      fileMeta.user_metadata_len = userMetadata.length;
+      fileMeta.user_metadata_cap = userMetadataPtr.length;
+    }
+    const fileContext = file;
     return lib.dir_update_file(this.mData.app.connection, this.mData.ref, fileName,
-                           file.ref.ref(), version)
-      .then(() => { file.version = version; })  // eslint-disable-line no-param-reassign
-      .then(() => file);
+                           fileContext.ref.ref(), version)
+      .then((newVersion) => {
+        fileContext.version = newVersion;
+      })
+      .then(() => fileContext);
   }
 
   /**
   * Delete a file from path. Directly commit to the network.
   * @param {(String|Buffer)} fileName
-  * @param {Number} version
-  * @returns {Promise}
+  * @param {Number|CONSTANTS.GET_NEXT_VERSION} version - the version successor number, to ensure you
+           are deleting the right one
+  * @returns {Promise<Number>} - version of deleted file
   */
   delete(fileName, version) {
-    return lib.dir_delete_file(this.mData.app.connection, this.mData.ref, fileName, version);
+    return lib.dir_delete_file(this.mData.app.connection, this.mData.ref, fileName, version)
+      .then((newVersion) => newVersion);
   }
 
   /**
@@ -288,7 +303,7 @@ class NFS {
       created_nsec: now.now_nsec_part,
       modified_sec: now.now_sec_part,
       modified_nsec: now.now_nsec_part,
-      user_metadata_ptr: [],
+      user_metadata_ptr: Buffer.from([]),
       user_metadata_len: 0,
       user_metadata_cap: 0
     };

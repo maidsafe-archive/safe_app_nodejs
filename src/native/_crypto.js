@@ -28,7 +28,7 @@ const EncryptKeyHandle = t.ObjectHandle;
 const strToBuffer = (str) => {
   let res = str;
   if (!Buffer.isBuffer(str)) {
-    res = new Buffer(str);
+    res = Buffer.from(str);
   }
   return [res, res.length]
 }
@@ -36,7 +36,7 @@ const strToBuffer = (str) => {
 const toKeyBytesBuffer = (type) => (app, key) => {
   let keyArr = key;
   if (!Buffer.isBuffer(key)) {
-    const b = new Buffer(key);
+    const b = Buffer.from(key);
     if (b.length != type.size) throw Error(`Sign/Enc Keys _must be_ ${type.size} bytes long.`)
     keyArr = type(b).ref().readPointer(0);
   }

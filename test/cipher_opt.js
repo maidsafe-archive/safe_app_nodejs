@@ -33,6 +33,10 @@ describe('CipherOpt', () => {
     return should(idData.toString()).equal(testString);
   });
 
+  it('forceCleanUp on pubSignKey objects', () => app.cipherOpt.newPlainText()
+      .then((cipherOpt) => cipherOpt.forceCleanUp())
+  );
+
   it('symmetrically encrypts data to be written to immutable structure', async () => {
     const testString = 'information to be encrypted';
     const idWriter = await app.immutableData.create();
@@ -45,7 +49,12 @@ describe('CipherOpt', () => {
   });
 
   it('asymmetrically encrypts data to be written to immutable structure', async () => {
-    const differentApp = await h.createAltAuthTestApp();
+    const differentApp = await h.createAuthenticatedTestApp({
+      id: 'alt-net.maidsafe.test.javascript.id',
+      name: 'alt-NodeJS Test',
+      vendor: 'alt-MaidSafe.net Ltd',
+      forceUseMock: true
+    });
     const pubEncKey = await differentApp.crypto.getAppPubEncKey();
     const rawKey = await pubEncKey.getRaw();
 
@@ -59,7 +68,7 @@ describe('CipherOpt', () => {
     const idReader = await differentApp.immutableData.fetch(idAddress);
     const idData = await idReader.read();
     return should(idData.toString()).equal(testString);
-  }).timeout(10000);
+  });
 
   it('throws error if key is not provided to newAsymmetric', () => {
     const test = () => app.cipherOpt.newAsymmetric();

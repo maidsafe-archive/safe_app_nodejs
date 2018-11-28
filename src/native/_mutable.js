@@ -1,11 +1,11 @@
 // Copyright 2018 MaidSafe.net limited.
 //
-// This SAFE Network Software is licensed to you under 
-// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or 
+// This SAFE Network Software is licensed to you under
+// the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT> or
 // the Modified BSD license <LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
 // at your option.
 //
-// This file may not be copied, modified, or distributed except according to those terms. 
+// This file may not be copied, modified, or distributed except according to those terms.
 //
 // Please review the Licences for the specific language governing permissions and limitations
 // relating to use of the SAFE Network Software.
@@ -105,7 +105,7 @@ const makeMDataInfo = (mDataInfoObj) => {
   }
   return new MDataInfo({
     name: mDataInfoObj.name,
-    type_tag: mDataInfoObj.type_tag,
+    type_tag: mDataInfoObj.typeTag,
     has_enc_info: mDataInfoObj.has_enc_info,
     enc_key,
     enc_nonce,
@@ -123,7 +123,7 @@ const UserMetadata = Struct({
 const UserMetadataPtr = ref.refType(UserMetadata);
 
 const bufferLastEntry = (...varArgs) => {
-  let str = new Buffer(varArgs[varArgs.length - 1]);
+  let str = Buffer.from(varArgs[varArgs.length - 1]);
   return Array.prototype.slice.call(varArgs, 0, varArgs.length - 1)
         .concat([str, str.length]);
 }
@@ -136,7 +136,7 @@ const translatePrivMDInput = (xorname, tag, secKey, nonce) => {
   if(!Number.isInteger(tag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
 
   if (!Buffer.isBuffer(xorname)) {
-    const b = new Buffer(xorname);
+    const b = Buffer.from(xorname);
     if (b.length != t.XOR_NAME.size) throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size))
     name = t.XOR_NAME(b).ref().readPointer(0);
   } else {
@@ -145,7 +145,7 @@ const translatePrivMDInput = (xorname, tag, secKey, nonce) => {
   }
 
   if (!Buffer.isBuffer(secKey)) {
-    const b = new Buffer(secKey);
+    const b = Buffer.from(secKey);
     if (b.length != t.SYM_KEYBYTES.size) throw makeError(errConst.INVALID_SEC_KEY.code, errConst.INVALID_SEC_KEY.msg(t.SYM_KEYBYTES.size))
     sk = t.SYM_KEYBYTES(b).ref().readPointer(0);
   } else {
@@ -154,7 +154,7 @@ const translatePrivMDInput = (xorname, tag, secKey, nonce) => {
   }
 
   if (!Buffer.isBuffer(nonce)) {
-    const b = new Buffer(nonce);
+    const b = Buffer.from(nonce);
     if (b.length != t.SYM_NONCEBYTES.size) throw makeError(errConst.NONCE.code, errConst.NONCE.msg(t.SYM_NONCEBYTES.size))
     n = t.SYM_NONCEBYTES(b).ref().readPointer(0);
   } else {
@@ -183,7 +183,7 @@ const firstToMDataInfoLastToBuffer = (...varArgs) => {
 const strToBuffer = (appPtr, mdata, ...varArgs) => {
     const args = [appPtr, mdata];
     varArgs.forEach(item => {
-      const buf = Buffer.isBuffer(item) ? item : (item.buffer || new Buffer(item));
+      const buf = Buffer.isBuffer(item) ? item : (item.buffer || Buffer.from(item));
       args.push(buf);
       args.push(buf.length);
     });
@@ -195,7 +195,7 @@ const strToBufferButLastEntry = (appPtr, mdata, ...varArgs) => {
     let lastArg = varArgs[varArgs.length - 1];
     const args = [appPtr, mdata];
     Array.prototype.slice.call(varArgs, 0, varArgs.length - 1).forEach(item => {
-      const buf = Buffer.isBuffer(item) ? item : (item.buffer || new Buffer(item));
+      const buf = Buffer.isBuffer(item) ? item : (item.buffer || Buffer.from(item));
       args.push(buf);
       args.push(buf.length);
     });
@@ -205,7 +205,7 @@ const strToBufferButLastEntry = (appPtr, mdata, ...varArgs) => {
 
 const readValueToBuffer = (argsArr) => {
     return {
-        buf: ref.isNull(argsArr[0]) ? argsArr[0] : new Buffer(ref.reinterpret(argsArr[0], argsArr[1], 0)),
+        buf: ref.isNull(argsArr[0]) ? argsArr[0] : Buffer.from(ref.reinterpret(argsArr[0], argsArr[1], 0)),
         version: argsArr[2] // argsArr[2] is expected to be the content's version in the container
     }
 }
@@ -220,23 +220,23 @@ const lastToPermissionSet = (...varArgs) => {
 const makeMDataInfoObj = (mDataInfo) => {
   let name;
   try {
-    name = t.XOR_NAME(new Buffer(mDataInfo.name));
+    name = t.XOR_NAME(Buffer.from(mDataInfo.name));
   } catch (err) {
     throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size));
   }
-  const type_tag = mDataInfo.type_tag;
-  if(!Number.isInteger(type_tag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg); 
+  const typeTag = mDataInfo.type_tag;
+  if(!Number.isInteger(typeTag)) throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
   const has_enc_info = mDataInfo.has_enc_info;
-  const enc_key = t.SYM_KEYBYTES(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_key) : null);
-  const enc_nonce = t.SYM_NONCEBYTES(mDataInfo.enc_nonce ? new Buffer(mDataInfo.enc_nonce) : null);
+  const enc_key = t.SYM_KEYBYTES(mDataInfo.enc_key ? Buffer.from(mDataInfo.enc_key) : null);
+  const enc_nonce = t.SYM_NONCEBYTES(mDataInfo.enc_nonce ? Buffer.from(mDataInfo.enc_nonce) : null);
 
   const has_new_enc_info = mDataInfo.has_new_enc_info;
-  const new_enc_key = t.SYM_KEYBYTES(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_key) : null);
-  const new_enc_nonce = t.SYM_NONCEBYTES(mDataInfo.enc_key ? new Buffer(mDataInfo.enc_nonce) : null);
+  const new_enc_key = t.SYM_KEYBYTES(mDataInfo.enc_key ? Buffer.from(mDataInfo.enc_key) : null);
+  const new_enc_nonce = t.SYM_NONCEBYTES(mDataInfo.enc_key ? Buffer.from(mDataInfo.enc_nonce) : null);
 
-  let retMDataInfo = {
+  let retMDataInfoObj = {
     name,
-    type_tag,
+    typeTag,
     has_enc_info,
     enc_key,
     enc_nonce,
@@ -244,7 +244,7 @@ const makeMDataInfoObj = (mDataInfo) => {
     new_enc_key,
     new_enc_nonce
   }
-  return retMDataInfo;
+  return retMDataInfoObj;
 }
 
 const readMDataInfoPtr = (mDataInfoPtr) => {
@@ -365,8 +365,10 @@ module.exports = {
         let arr = MDataEntriesArray(arrPtr);
         for (let i = 0; i < len ; i++) {
           const currEntry = arr[i];
-          const keyStr = ref.reinterpret(currEntry.key.val_ptr, currEntry.key.val_len, 0);
-          const valueStr = ref.reinterpret(currEntry.value.content_ptr, currEntry.value.content_len, 0);
+          const keyStr = ref.reinterpret(currEntry.key.val_ptr, currEntry.key.val_len);
+          const valueStr = currEntry.value.content_len === 0
+                ? Buffer.alloc(0)
+                : Buffer.from(ref.reinterpret(currEntry.value.content_ptr, currEntry.value.content_len));
           const entryObject = {
             key: keyStr,
             value: { buf: valueStr, version: currEntry.value.entry_version }
@@ -429,7 +431,7 @@ module.exports = {
     mdata_encode_metadata: Promisified((metadata) => {
       return [ref.alloc(UserMetadata, metadata)];
     }, [t.u8Pointer, t.usize], (args) => {
-      return ref.isNull(args[0]) ? args[0] : new Buffer(ref.reinterpret(args[0], args[1], 0))
+      return ref.isNull(args[0]) ? args[0] : Buffer.from(ref.reinterpret(args[0], args[1], 0))
     }),
   }
 };

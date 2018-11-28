@@ -39,7 +39,7 @@ const FileContextHandle = t.ObjectHandle;
 
 const readFileInfo = (fileInfo) => {
   const file = fileInfo[0].deref();
-  let b = new Buffer(file.data_map_name);
+  let b = Buffer.from(file.data_map_name);
   const data_map_name = t.XOR_NAME(b);
   const size = file.size;
   const created_sec = file.created_sec;
@@ -50,24 +50,8 @@ const readFileInfo = (fileInfo) => {
   const user_metadata_cap = file.user_metadata_cap;
 
   let user_metadata_ptr = file.user_metadata_len === 0 
-        ? new Buffer(0)
-        : new Buffer(ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len));
-
-  if (user_metadata_ptr) {
-    try {
-      if(typeof user_metadata_ptr === 'object') {
-        user_metadata_ptr = user_metadata_ptr;
-      } else {
-        user_metadata_ptr = JSON.parse(user_metadata_ptr.toString());
-      }
-
-    } catch (e) {
-      // we can safely ignore this
-      if (console && console.warn) {
-        console.warn(`Parsing user metadata '${user_metadata_ptr}' of '${data_map_name}' failed: ${e}`)
-      }
-    }
-  }
+        ? Buffer.alloc(0)
+        : Buffer.from(ref.reinterpret(file.user_metadata_ptr, file.user_metadata_len));
 
   let retFile = {
     data_map_name,
@@ -107,8 +91,8 @@ module.exports = {
   api: {
     dir_fetch_file: h.Promisified(toMDataInfo, [FilePtr, t.u64], readFileInfo),
     dir_insert_file: h.Promisified(toMDataInfo, []),
-    dir_update_file: h.Promisified(toMDataInfo, []),
-    dir_delete_file: h.Promisified(toMDataInfo, []),
+    dir_update_file: h.Promisified(toMDataInfo, [t.u64]),
+    dir_delete_file: h.Promisified(toMDataInfo, [t.u64]),
     file_open: h.Promisified(toMDataInfo, FileContextHandle),
     file_size: h.Promisified(null, [t.u64]),
     file_read: h.Promisified(null, [t.u8Pointer, t.usize], h.asBuffer),

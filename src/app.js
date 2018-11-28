@@ -18,22 +18,23 @@ const lib = require('./native/lib');
 const consts = require('./consts');
 const errConst = require('./error_const');
 const makeError = require('./native/_error.js');
-const webFetch = require('./web_fetch.js');
+const { webFetch, fetch } = require('./web_fetch.js');
+const { EXPOSE_AS_EXPERIMENTAL_API } = require('./helpers');
 
 /**
+* @private
 * Validates appInfo and properly handles error
 */
 const validateAppInfo = (_appInfo) => {
   const appInfo = _appInfo;
   const appInfoMustHaveProperties = ['id', 'name', 'vendor'];
-  let bool = false;
   const hasCorrectProperties = appInfoMustHaveProperties.every((prop) => {
     if (appInfo && appInfo[prop]) {
       appInfo[prop] = appInfo[prop].trim();
-      bool = Object.prototype.hasOwnProperty.call(appInfo, prop) && appInfo[prop];
+      return Object.prototype.hasOwnProperty.call(appInfo, prop) && appInfo[prop];
     }
 
-    return bool;
+    return false;
   });
 
   if (!hasCorrectProperties) {
@@ -42,6 +43,7 @@ const validateAppInfo = (_appInfo) => {
 };
 
 /**
+* @private
 * Init logging on the underlying library only if it wasn't done already
 */
 const initLogging = (appInfo, options) => {
@@ -52,12 +54,13 @@ const initLogging = (appInfo, options) => {
       .then(() => lib.app_output_log_path(filename))
       .then((logPath) => { SAFEApp.logFilePath = logPath; })
       .catch((err) => {
-        throw makeError(errConst.LOGGER_INIT_ERR.code, errConst.LOGGER_INIT_ERR.msg(err));
+        throw makeError(errConst.LOGGER_INIT_ERROR.code, errConst.LOGGER_INIT_ERROR.msg(err));
       });
   }
 };
 
 /**
+* @private
 * Set additional search path for the config files if it was requested in
 * the options. E.g. log.toml and crust.config files will be search
 * in this additional search path.
@@ -94,8 +97,19 @@ class SAFEApp extends EventEmitter {
     this.options = Object.assign({
       log: true,
       registerScheme: true,
-      configPath: null
+      configPath: null,
+      forceUseMock: false,
+      enableExperimentalApis: false,
     }, options);
+
+    if (typeof this.options.forceUseMock !== 'boolean') {
+      throw new Error('The \'forceUseMock\' option must be a boolean.');
+    }
+
+    if (typeof this.options.enableExperimentalApis !== 'boolean') {
+      throw new Error('The \'enableExperimentalApis\' option must be a boolean.');
+    }
+
     lib.init(this.options);
     this._appInfo = appInfo;
     this.networkState = consts.NET_STATE_INIT;
@@ -120,6 +134,17 @@ class SAFEApp extends EventEmitter {
   */
   get auth() {
     return this._auth;
+  }
+
+  /**
+   * Get the Web API interface
+   * @return {WebInterface} Manage Web RDF Data.
+   */
+  get web() {
+    /* eslint-disable camelcase, prefer-arrow-callback */
+    return EXPOSE_AS_EXPERIMENTAL_API.call(this, function Web_API() {
+      return this._web;
+    });
   }
 
   /**
@@ -154,8 +179,27 @@ class SAFEApp extends EventEmitter {
     return this._mutableData;
   }
 
+  /**
+  * Function to lookup a given `safe://`-URL in accordance with the
+  * public name resolution and find the requested network resource.
+  *
+  * @param {String} url the url you want to fetch
+  * @param {WebFetchOptions} [options=null] additional options
+  * @returns {Promise<Object>} the object with body of content and headers
+  */
   webFetch(url, options) {
     return webFetch.call(this, url, options);
+  }
+
+  /**
+  * Experipental function to lookup a given `safe://`-URL in accordance with the
+  * public name resolution and find the requested network resource.
+  *
+  * @param {String} url the url you want to fetch
+  * @returns {Promise<NetworkResource>} the network resource found from the passed URL
+  */
+  fetch(url) {
+    return fetch.call(this, url);
   }
 
   /**
@@ -303,7 +347,7 @@ class SAFEApp extends EventEmitter {
   static async fromAuthUri(appInfo, authUri, networkStateCallBack, options) {
     const app = autoref(new SAFEApp(appInfo, networkStateCallBack, options));
     await app.init();
-    return app.auth.loginFromURI(authUri);
+    return app.auth.loginFromUri(authUri);
   }
 
   /**
@@ -335,8 +379,7 @@ class SAFEApp extends EventEmitter {
   * Must be invoked when the client decides to connect back after the connection was lost.
   */
   reconnect() {
-    return lib.app_reconnect(this.connection)
-      .then(() => this._networkStateUpdated(null, consts.NET_STATE_CONNECTED));
+    return lib.app_reconnect(this);
   }
 
   /**
@@ -360,8 +403,8 @@ class SAFEApp extends EventEmitter {
   /**
   * Retuns true if the underlyging library was compiled against mock-routing.
   */
-  isMockBuild() {
-    return lib.is_mock_build();
+  appIsMock() {
+    return lib.app_is_mock();
   }
 }
 

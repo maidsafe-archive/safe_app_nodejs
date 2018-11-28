@@ -14,7 +14,7 @@
 const lib = require('../native/lib');
 const nativeH = require('../native/helpers');
 const types = require('../native/types');
-const { inTesting } = require('../consts');
+const { useMockByDefault } = require('../helpers');
 const { validateShareMDataPermissions } = require('../helpers');
 const errConst = require('../error_const');
 const makeError = require('../native/_error.js');
@@ -30,7 +30,7 @@ const makeShareMDataPermissions = nativeH.makeShareMDataPermissions;
 * and making it lower case.
 */
 const genAppUri = (str) => {
-  const urlSafeBase64 = (new Buffer(str))
+  const urlSafeBase64 = (Buffer.from(str))
                           .toString('base64')
                           .replace(/\+/g, '-') // Convert '+' to '-'
                           .replace(/\//g, '_') // Convert '/' to '_'
@@ -127,7 +127,7 @@ class AuthInterface {
   * @param {Boolean} [opts.own_container=false] - whether or not to request
   *    our own container to be created for us, too
   *
-  * @returns {String} `safe-auth://`-URI
+  * @returns {Object} `{id: <id>, uri: 'safe-auth://' }`
   * @example // using an Authentication example:
   * app.auth.genAuthUri({
   *  _public: ['Insert'], // request to insert into public
@@ -157,11 +157,11 @@ class AuthInterface {
   * @returns {String} `safe-auth://`-URI
   * @example // example of requesting permissions for a couple of MutableData's:
   * app.auth.genShareMDataUri([
-  *  { type_tag: 15001,   // request for MD with tag 15001
+  *  { typeTag: 15001,   // request for MD with tag 15001
   *    name: 'XoRname1',  // request for MD located at address 'XoRname1'
   *    perms: ['Insert'], // request for inserting into the referenced MD
   *  },
-  *  { type_tag: 15020,   // request for MD with tag 15020
+  *  { typeTag: 15020,   // request for MD with tag 15020
   *    name: 'XoRname2',  // request for MD located at address 'XoRname2'
   *    perms: ['Insert', `Update`], // request for updating and inserting into the referenced MD
   *  }
@@ -182,7 +182,7 @@ class AuthInterface {
   /**
   * Generate an unregistered connection URI for the app.
   *
-  * @returns {String} `safe-auth://`-URI
+  * @returns {Object} `{id: <id>, uri: 'safe-auth://' }`
   * @example // using an Authentication example:
   * app.auth.genConnUri()
   */
@@ -278,22 +278,8 @@ class AuthInterface {
   * @return {Promise<MutableData>}
   */
   getOwnContainer() {
-    let prms = this.app.getOwnContainerName()
+    return this.app.getOwnContainerName()
       .then((containerName) => this.getContainer(containerName));
-
-    if (inTesting) {
-      prms = prms.catch((err) => {
-        // Error code -1002 corresponds to 'Container not found' case
-        if (err.code !== -1002) return Promise.reject(err);
-        return this.getContainersPermissions().then((contPerms) => {
-          const names = Object.keys(contPerms);
-          const ctrnName = names.find((x) => x.match(/^apps\//));
-          if (!ctrnName) return Promise.reject(err);
-          return this.getContainer(ctrnName);
-        });
-      });
-    }
-    return prms;
   }
 
   /**
@@ -340,7 +326,7 @@ class AuthInterface {
   * @returns {Promise<SAFEApp>} the given app instance with a newly setup and
   *          authenticated session.
   */
-  loginFromURI(uri) {
+  loginFromUri(uri) {
     if (!uri) throw makeError(errConst.MISSING_AUTH_URI.code, errConst.MISSING_AUTH_URI.msg);
     const sanitisedUri = removeSafeProtocol(uri);
     return lib.decode_ipc_msg(sanitisedUri).then((resp) => {
@@ -375,17 +361,19 @@ class AuthInterface {
   }
 
   /**
-  * *ONLY AVAILALBE IF RUN in NODE_ENV='development' || 'testing'*
+  * *ONLY AVAILALBE IF RUN in NODE_ENV='test' OR WITH 'forceUseMock' option*
   *
   * Generate a _locally_ registered App with the given permissions, or
   * a local unregistered App if permissions is `null`.
   * @returns {Promise<SAFEApp>} the locally registered/unregistered App instance
   */
   loginForTest(access, opts) {
-    if (!inTesting) throw makeError(errConst.NON_DEV.code, errConst.NON_DEV.msg);
+    if (!useMockByDefault && !this.app.options.forceUseMock) {
+      throw makeError(errConst.NON_DEV.code, errConst.NON_DEV.msg);
+    }
     if (access) {
       const appInfo = makeAppInfo(this.app.appInfo);
-      const perms = makePermissions(access || {});
+      const perms = makePermissions(access);
       const authReq = new types.AuthReq({
         app: appInfo,
         app_container: !!(opts && opts.own_container),
@@ -410,14 +398,16 @@ class AuthInterface {
   }
 
   /**
-  * *ONLY AVAILALBE IF RUN in NODE_ENV='development' || 'testing'*
+  * *ONLY AVAILALBE IF RUN in NODE_ENV='test' OR WITH 'forceUseMock' option*
   *
   * Simulates a network disconnection event. This can be used to
   * test any logic to be executed by an application when a network
   * diconnection notification is received.
   */
   simulateNetworkDisconnect() {
-    if (!inTesting) throw makeError(errConst.NON_DEV.code, errConst.NON_DEV.msg);
+    if (!useMockByDefault && !this.app.options.forceUseMock) {
+      throw makeError(errConst.NON_DEV.code, errConst.NON_DEV.msg);
+    }
     return lib.test_simulate_network_disconnect(this.app.connection);
   }
 }

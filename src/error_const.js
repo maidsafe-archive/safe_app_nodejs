@@ -14,6 +14,18 @@
 module.exports = {
 
   /**
+   * @name ERR_SERIALISING_DESERIALISING
+   * @type {object}
+   * @description Thrown natively when failing to encrypt/decrypt a MD entry
+   * @property {number} code -1
+   * @property {string} msg
+   */
+  ERR_SERIALISING_DESERIALISING: {
+    code: -1,
+    msg: 'Error while serialising/deserialising.'
+  },
+
+  /**
    * @name ERR_NO_SUCH_DATA
    * @type {object}
    * @description Thrown natively when data not found on network.
@@ -23,6 +35,18 @@ module.exports = {
   ERR_NO_SUCH_DATA: {
     code: -103,
     msg: 'No such data.'
+  },
+
+  /**
+   * @name ERR_DATA_GIVEN_ALREADY_EXISTS
+   * @type {object}
+   * @description Thrown natively when data already exists at the target address on network.
+   * @property {number} code -104
+   * @property {string} msg
+   */
+  ERR_DATA_GIVEN_ALREADY_EXISTS: {
+    code: -104,
+    msg: 'Data already exists at the target address.'
   },
 
   /**
@@ -227,8 +251,8 @@ module.exports = {
   NON_DEV: {
     code: 1012,
     msg: `
-    Not supported outside of Dev and Testing Environment.
-    Set NODE_ENV=dev`
+    Not supported outside of Testing Environment.
+    Set NODE_ENV=test`
   },
 
   /**
@@ -335,5 +359,93 @@ module.exports = {
   INVALID_SEC_KEY: {
     code: 1020,
     msg: (size) => `Secret encryption key _must be_ provided and ${size} bytes long.`
-  }
+  },
+
+  /**
+   * @name EXPERIMENTAL_API_DISABLED
+   * @type {object}
+   * @description Thrown when functions that are experimental APIs were
+   * not enabled but attempted to be used
+   * @property {number} code 1021
+   * @property {string} msg
+   */
+  EXPERIMENTAL_API_DISABLED: {
+    code: 1021,
+    msg: (fn) => `
+    The '${fn}' is disabled as it's part of the set of experimental APIs.
+    Pass --enable-experimental-apis argument to the application, or programatically
+    set the 'enableExperimentalApis' flag in the initialisation options to enable them.`
+  },
+
+  /**
+   * @name @ERR_SERVICE_NOT_FOUND
+   * @type {Object}
+   * @description the service/subname was not found
+   * @property {number} code 1022
+   * @property {function} msg
+   */
+  ERR_SERVICE_NOT_FOUND: {
+    code: 1022,
+    msg: 'Requested service is not found.'
+  },
+
+  /**
+   * @name @ERR_CONTENT_NOT_FOUND
+   * @type {Object}
+   * @description the content was not found at the address provided
+   * @property {number} code 1023
+   * @property {function} msg
+   */
+  ERR_CONTENT_NOT_FOUND: {
+    code: 1023,
+    msg: 'No content found at requested address.'
+  },
+
+  /**
+   * @name @INVALID_RDF_LOCATION
+   * @type {Object}
+   * @description RDF Location provided is not and object with name/typeTag
+   * @property {number} code 1024
+   * @property {function} msg
+   */
+  INVALID_RDF_LOCATION: {
+    code: 1024,
+    msg: 'RDF Location _must_ be an object of the form { name, typeTag }.'
+  },
+
+  /**
+   * @name @INVALID_PUBNAME
+   * @type {Object}
+   * @description public name provided is not valid
+   * @property {number} code 1025
+   * @property {function} msg
+   */
+  INVALID_PUBNAME: {
+    code: 1025,
+    msg: 'A publicName string _must_ be passed for adding services to a publicName.'
+  },
+
+  /**
+   * @name @INVALID_SUBNAME
+   * @type {Object}
+   * @description RDF Location provided is not and object with name/typeTag
+   * @property {number} code 1026
+   * @property {function} msg
+   */
+  INVALID_SUBNAME: {
+    code: 1026,
+    msg: 'A subName string _must_ be passed for adding services to a publicName.'
+  },
+
+  /**
+   * @name @MISSING_RDF_ID
+   * @type {Object}
+   * @description RDF object does not have an ID.
+   * @property {number} code 1027
+   * @property {function} msg
+   */
+  MISSING_RDF_ID: {
+    code: 1027,
+    msg: 'No ID has been found in the RDF graph.'
+  },
 };

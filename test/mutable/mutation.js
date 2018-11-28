@@ -100,11 +100,11 @@ describe('Applying EntryMutationTransaction', () => {
         })))
   );
 
-  it('a remove mutation from existing entries', () => app.mutableData.newRandomPublic(TYPE_TAG)
+  it('a delete mutation from existing entries', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => m.getEntries()
           .then((entries) => entries.mutate()
-            .then((mut) => mut.remove('key2', 1)
+            .then((mut) => mut.delete('key2', 1)
               .then(() => m.applyEntriesMutation(mut))
               .then(() => m.get('key2'))
               .then((value) => {
@@ -115,11 +115,11 @@ describe('Applying EntryMutationTransaction', () => {
           ))))
   );
 
-  it('a remove with invalid key from existing entries', () => app.mutableData.newRandomPublic(TYPE_TAG)
+  it('a delete with invalid key from existing entries', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => m.getEntries()
           .then((entries) => entries.mutate()
-            .then((mut) => mut.remove('__invalid_key', 1)
+            .then((mut) => mut.delete('__invalid_key', 1)
               .then(() => should(m.applyEntriesMutation(mut)).be.rejected())
               .then(() => m.get('key2'))
               .then((value) => {
@@ -130,11 +130,11 @@ describe('Applying EntryMutationTransaction', () => {
           ))))
   );
 
-  it('a remove mutation from existing entries on private MD', () => app.mutableData.newRandomPrivate(TYPE_TAG)
+  it('a delete mutation from existing entries on private MD', () => app.mutableData.newRandomPrivate(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => m.getEntries()
           .then((entries) => entries.mutate()
-            .then((mut) => mut.remove('key2', 1)
+            .then((mut) => mut.delete('key2', 1)
               .then(() => m.applyEntriesMutation(mut))
               .then(() => m.get('key2'))
               .then((value) => {
@@ -145,13 +145,13 @@ describe('Applying EntryMutationTransaction', () => {
           ))))
   );
 
-  it('a remove mutation on public MD', () => {
+  it('a delete mutation on public MD', () => {
     const testXorName = h.createRandomXorName();
     return app.mutableData.newPublic(testXorName, TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES))
       .then(() => app.mutableData.newPublic(testXorName, TYPE_TAG))
       .then((md) => app.mutableData.newMutation()
-        .then((mut) => mut.remove('key1', 1)
+        .then((mut) => mut.delete('key1', 1)
           .then(() => md.applyEntriesMutation(mut))
         ))
       .then(() => app.mutableData.newPublic(testXorName, TYPE_TAG))
@@ -163,13 +163,13 @@ describe('Applying EntryMutationTransaction', () => {
       });
   });
 
-  it('a remove with invalid key on public MD', () => {
+  it('a delete with invalid key on public MD', () => {
     const testXorName = h.createRandomXorName();
     return app.mutableData.newPublic(testXorName, TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES))
       .then(() => app.mutableData.newPublic(testXorName, TYPE_TAG))
       .then((md) => app.mutableData.newMutation()
-        .then((mut) => mut.remove('__invalid_key', 1)
+        .then((mut) => mut.delete('__invalid_key', 1)
           .then(() => should(md.applyEntriesMutation(mut)).be.rejected())
         ))
       .then(() => app.mutableData.newPublic(testXorName, TYPE_TAG))
@@ -181,13 +181,13 @@ describe('Applying EntryMutationTransaction', () => {
       });
   });
 
-  it('a remove mutation on private MD', () => {
+  it('a delete mutation on private MD', () => {
     const testXorName = h.createRandomXorName();
     return app.mutableData.newPrivate(testXorName, TYPE_TAG,
                                       h.createRandomSecKey(), h.createRandomNonce())
       .then((m) => m.quickSetup(TEST_ENTRIES))
       .then((md) => app.mutableData.newMutation()
-        .then((mut) => mut.remove('key1', 1)
+        .then((mut) => mut.delete('key1', 1)
           .then(() => md.applyEntriesMutation(mut))
         )
         .then(() => md.get('key1'))
@@ -199,7 +199,7 @@ describe('Applying EntryMutationTransaction', () => {
       );
   });
 
-  it('a remove mutation on a serialised private MD', () => {
+  it('a delete mutation on a serialised private MD', () => {
     const testXorName = h.createRandomXorName();
     return app.mutableData.newPrivate(testXorName, TYPE_TAG,
                                         h.createRandomSecKey(), h.createRandomNonce())
@@ -207,7 +207,7 @@ describe('Applying EntryMutationTransaction', () => {
       .then((md) => md.serialise())
       .then((serial) => app.mutableData.fromSerial(serial))
       .then((privmd) => app.mutableData.newMutation()
-        .then((mut) => mut.remove('key1', 1)
+        .then((mut) => mut.delete('key1', 1)
           .then(() => privmd.applyEntriesMutation(mut))
         )
         .then(() => privmd.get('key1'))
@@ -294,10 +294,10 @@ describe('Applying EntryMutationTransaction', () => {
         ))
   );
 
-  it('a remove mutation from new mutation obj', () => app.mutableData.newRandomPublic(TYPE_TAG)
+  it('a delete mutation from new mutation obj', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => app.mutableData.newMutation()
-          .then((mut) => mut.remove('key2', 1)
+          .then((mut) => mut.delete('key2', 1)
             .then(() => m.applyEntriesMutation(mut))
             .then(() => m.get('key2'))
             .then((value) => {
@@ -308,12 +308,12 @@ describe('Applying EntryMutationTransaction', () => {
           )))
   );
 
-  // this is currently not supported, a removed key is currently updated with an empty value
+  // this is currently not supported, a deleted key is currently updated with an empty value
   it.skip('a removal followed by an insert with the same key', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => m.getEntries()
           .then((entries) => entries.mutate()
-            .then((mut) => mut.remove('key2', 1)
+            .then((mut) => mut.delete('key2', 1)
               .then(() => m.applyEntriesMutation(mut))
               .then(() => mut.insert('key2', 'newValue'))
               .then(() => m.applyEntriesMutation(mut))
@@ -330,7 +330,7 @@ describe('Applying EntryMutationTransaction', () => {
       .then((m) => m.quickSetup(TEST_ENTRIES)
         .then(() => m.getEntries()
           .then((entries) => entries.mutate()
-            .then((mut) => mut.remove('key2', 1)
+            .then((mut) => mut.delete('key2', 1)
               .then(() => mut.update('key1', 'updatedValue', 1))
               .then(() => m.applyEntriesMutation(mut))
               .then(() => m.get('key2'))

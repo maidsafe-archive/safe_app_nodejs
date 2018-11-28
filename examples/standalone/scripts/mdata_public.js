@@ -45,7 +45,7 @@ const run = async () => {
         //----------------- Create and Read files using NFS -------------------------------//
 
         // Returns NFS Handle, which allows to use NFS functions
-        let nfs = await mData.emulateAs('NFS');
+        let nfs = mData.emulateAs('NFS');
 
         // Creates and Saves the file to the network
         let file = await nfs.create('Hello Safe World');
