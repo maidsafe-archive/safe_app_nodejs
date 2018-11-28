@@ -30,6 +30,67 @@ const hasMockArg = process.argv.includes('--mock');
 const isTestEnv = /^test/.test(process.env.NODE_ENV);
 const useMockByDefault = isTestEnv ? true : hasMockArg;
 
+/* Determines if the argument to enable experimental APIs was provided
+ * When this argument is passed, a set of experimental APIs are additionally exposed
+ * which emit `console.warn` notices about their state, and warning the dev/user
+ * that they may be changed / deprecated / removed in future without too much
+ * notification in advance, they are available only for devs to see the upcoming
+ * APIs and start exploring and testing them as well as provide feedback for enhancements.
+*/
+const isExperimentalApisEnabled = process.argv.includes('--enable-experimental-apis');
+
+// Helper function to check the experimental APIs flag and
+// either throw an error or log a warning message
+function checkExperimentalApisFlag(fn) {
+  const featureName = fn.name.replace('_', ' ');
+  // the experimental APIs can be also enabled by setting
+  // the `enableExperimentalApis` flag can be set to true in the initialisation options.
+  if (!isExperimentalApisEnabled && !this.options.enableExperimentalApis) {
+    throw makeError(errConst.EXPERIMENTAL_API_DISABLED.code,
+                    errConst.EXPERIMENTAL_API_DISABLED.msg(featureName));
+  }
+
+  if (this._warningLoggedAlready) return;
+
+  console.warn(`
+    ** Experimental API WARNING **
+    * The application is making use of a SAFE experimental API *
+    The '${featureName}' is part of a set of experimental functions.
+    Any/all of them may be deprecated, removed, or very likely change in the future.
+    Also regular users won't have this APIs enabled by default unless the flag is provided, so be aware of all these limitations.
+    For more information, updates, or to submit ideas and suggestions, please visit https://github.com/maidsafe/safe_app_nodejs.
+    `);
+
+  this._warningLoggedAlready = true;
+}
+
+/* Helper to be used by all experimental APIs (async and sync).
+ * For example, the following snippet shows how an experimental function
+ * called 'testFn' can be exposed:
+ * async function testFn(arg1, arg2) {
+     return EXPOSE_AS_EXPERIMENTAL_API.call(this, async function testFn() {
+       // 'testFn' function's actual implementation goes here
+       console.log("Experimental Async Function which uses arg1 and arg2: ", arg1, arg2);
+       ...
+     });
+ * }
+*/
+function EXPOSE_AS_EXPERIMENTAL_API(fn) {
+  checkExperimentalApisFlag.call(this, fn);
+  return fn.call(this);
+}
+
+/* Helper to be used by experimental features which shouldn't
+ * be executed if the enableExperimentalApis flag is not set.
+ * Note this doesn't trigger any exeception or warning message if the flag is
+ * not set, it's just helps to execute/skip a piece of experimental funcitonality.
+*/
+function ONLY_IF_EXPERIMENTAL_API_ENABLED(fn) {
+  if (isExperimentalApisEnabled || this.options.enableExperimentalApis) {
+    return fn.call(this);
+  }
+}
+
 /**
 * General purpose interface to link a native handle
 * @private
@@ -108,7 +169,7 @@ function validateShareMDataPermissions(permissions) {
         badPerm = perm;
         return false;
       } else if (bool && prop === 'name') {
-        if (new Buffer(perm[prop]).length !== t.XOR_NAME(32).length) {
+        if (Buffer.from(perm[prop]).length !== t.XOR_NAME(32).length) {
           badPerm = perm;
           return false;
         }
@@ -148,11 +209,23 @@ const getSafeAppLibFilename = (defaultDir, options) =>
 const getSystemUriLibFilename = (defaultDir, options) =>
   getNativeLibPath(defaultDir, options, consts.SYSTEM_URI_LIB_FILENAME);
 
+const escapeHtmlEntities = (str) =>
+    str
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\//g, '&#x2F;');
+
 module.exports = {
+  EXPOSE_AS_EXPERIMENTAL_API,
+  ONLY_IF_EXPERIMENTAL_API_ENABLED,
   useMockByDefault,
   NetworkObject,
   autoref,
   validateShareMDataPermissions,
   getSafeAppLibFilename,
-  getSystemUriLibFilename
+  getSystemUriLibFilename,
+  escapeHtmlEntities
 };

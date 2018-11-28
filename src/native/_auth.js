@@ -146,7 +146,7 @@ const AuthGranted = Struct({
 });
 
 const toBuffer = (ptr, len) => {
-  return new Buffer(ref.reinterpret(ptr, len, 0))
+  return Buffer.from(ref.reinterpret(ptr, len, 0))
 }
 
 const makeAppKeys = (appKeys) => {
@@ -169,54 +169,67 @@ const makeAccessContInfo = (accessContainer) => {
 }
 
 const makeAccessContainerEntry = (accessContainerEntry) => {
-  const contInfoArray = new ContainerInfoArray(accessContainerEntry.length);
-  accessContainerEntry.forEach((entry, index) => {
-    const permissions = new t.PermissionSet({
-      Read: entry.permissions.Read,
-      Insert: entry.permissions.Insert,
-      Update: entry.permissions.Update,
-      Delete: entry.permissions.Delete,
-      ManagePermissions: entry.permissions.ManagePermissions
-    });
-    contInfoArray[index] = new ContainerInfo({
-      name: ref.allocCString(entry.name),
-      mdata_info: helpersForNative.makeMDataInfo(entry.mdata_info),
-      permissions
-    });
-  });
+  const accessContainerEntryCache = {
+    containerInfoArrayCache: null,
+    containerInfoCaches: [],
+  };
+  accessContainerEntryCache.containerInfoArrayCache = new ContainerInfoArray(
+    accessContainerEntry.map((entry) => {
+      const permissions = new t.PermissionSet({
+        Read: entry.permissions.Read,
+        Insert: entry.permissions.Insert,
+        Update: entry.permissions.Update,
+        Delete: entry.permissions.Delete,
+        ManagePermissions: entry.permissions.ManagePermissions
+      });
+      const containerInfo = {
+        name: ref.allocCString(entry.name),
+        mdata_info: helpersForNative.makeMDataInfo(entry.mdata_info),
+        permissions
+      };
+      accessContainerEntryCache.containerInfoCaches.push(containerInfo);
+      return new ContainerInfo(containerInfo);
+    }));
 
-  return new AccessContainerEntry({
-    containers: contInfoArray.buffer,
-    containers_len: contInfoArray.length
-  });
+  return {
+    accessContainerEntry: new AccessContainerEntry({
+      containers: accessContainerEntryCache.containerInfoArrayCache.buffer,
+      containers_len: accessContainerEntryCache.containerInfoArrayCache.length
+    }),
+    accessContainerEntryCache,
+  };
 }
 
 const makeAuthGrantedFfiStruct = (authGrantedObj) => {
-  return new AuthGranted({
-    app_keys: makeAppKeys(authGrantedObj.app_keys),
-    access_container: makeAccessContInfo(authGrantedObj.access_container),
-    access_container_entry: makeAccessContainerEntry(authGrantedObj.access_container_entry),
-    bootstrap_config_ptr: new Buffer(authGrantedObj.bootstrap_config),
-    bootstrap_config_len: authGrantedObj.bootstrap_config.length,
-  });
+  const accessContainerEntry = makeAccessContainerEntry(authGrantedObj.access_container_entry);
+  return {
+    authGranted: new AuthGranted({
+      app_keys: makeAppKeys(authGrantedObj.app_keys),
+      access_container: makeAccessContInfo(authGrantedObj.access_container),
+      access_container_entry: accessContainerEntry.accessContainerEntry,
+      bootstrap_config_ptr: Buffer.from(authGrantedObj.bootstrap_config),
+      bootstrap_config_len: authGrantedObj.bootstrap_config.length,
+    }),
+    authGrantedCache: accessContainerEntry.accessContainerEntryCache,
+  };
 }
 
 const readAppKeys = (appKeys) => {
   return {
-    owner_key: new Buffer(appKeys.owner_key),
-    enc_key: new Buffer(appKeys.enc_key),
-    sign_pk: new Buffer(appKeys.sign_pk),
-    sign_sk: new Buffer(appKeys.sign_sk),
-    enc_pk: new Buffer(appKeys.enc_pk),
-    enc_sk: new Buffer(appKeys.enc_sk),
+    owner_key: Buffer.from(appKeys.owner_key),
+    enc_key: Buffer.from(appKeys.enc_key),
+    sign_pk: Buffer.from(appKeys.sign_pk),
+    sign_sk: Buffer.from(appKeys.sign_sk),
+    enc_pk: Buffer.from(appKeys.enc_pk),
+    enc_sk: Buffer.from(appKeys.enc_sk),
   };
 }
 
 const readAccessContainer = (accessContainer) => {
   return {
-    id: new Buffer(accessContainer.id),
+    id: Buffer.from(accessContainer.id),
     tag: accessContainer.tag,
-    nonce: new Buffer(accessContainer.nonce),
+    nonce: Buffer.from(accessContainer.nonce),
   };
 }
 
@@ -258,7 +271,7 @@ function makeAppInfo(appInfoObj) {
 }
 
 const translateXorName = (str) => {
-  const b = new Buffer(str);
+  const b = Buffer.from(str);
   return t.XOR_NAME(b);
 }
 
@@ -347,7 +360,7 @@ module.exports = {
     encode_auth_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_share_mdata_req: helpers.Promisified(null, ['uint32', 'char *'], remapEncodeValues),
     encode_unregistered_req: helpers.Promisified((appId) => {
-      let str = new Buffer(appId);
+      let str = Buffer.from(appId);
       return [str, str.length];
     }, ['uint32', 'char *'], remapEncodeValues),
     decode_ipc_msg: (lib, fn) => {

@@ -18,22 +18,23 @@ const lib = require('./native/lib');
 const consts = require('./consts');
 const errConst = require('./error_const');
 const makeError = require('./native/_error.js');
-const { webFetch } = require('./web_fetch.js');
+const { webFetch, fetch } = require('./web_fetch.js');
+const { EXPOSE_AS_EXPERIMENTAL_API } = require('./helpers');
 
 /**
+* @private
 * Validates appInfo and properly handles error
 */
 const validateAppInfo = (_appInfo) => {
   const appInfo = _appInfo;
   const appInfoMustHaveProperties = ['id', 'name', 'vendor'];
-  let bool = false;
   const hasCorrectProperties = appInfoMustHaveProperties.every((prop) => {
     if (appInfo && appInfo[prop]) {
       appInfo[prop] = appInfo[prop].trim();
-      bool = Object.prototype.hasOwnProperty.call(appInfo, prop) && appInfo[prop];
+      return Object.prototype.hasOwnProperty.call(appInfo, prop) && appInfo[prop];
     }
 
-    return bool;
+    return false;
   });
 
   if (!hasCorrectProperties) {
@@ -42,6 +43,7 @@ const validateAppInfo = (_appInfo) => {
 };
 
 /**
+* @private
 * Init logging on the underlying library only if it wasn't done already
 */
 const initLogging = (appInfo, options) => {
@@ -58,6 +60,7 @@ const initLogging = (appInfo, options) => {
 };
 
 /**
+* @private
 * Set additional search path for the config files if it was requested in
 * the options. E.g. log.toml and crust.config files will be search
 * in this additional search path.
@@ -95,11 +98,16 @@ class SAFEApp extends EventEmitter {
       log: true,
       registerScheme: true,
       configPath: null,
-      forceUseMock: false
+      forceUseMock: false,
+      enableExperimentalApis: false,
     }, options);
 
     if (typeof this.options.forceUseMock !== 'boolean') {
       throw new Error('The \'forceUseMock\' option must be a boolean.');
+    }
+
+    if (typeof this.options.enableExperimentalApis !== 'boolean') {
+      throw new Error('The \'enableExperimentalApis\' option must be a boolean.');
     }
 
     lib.init(this.options);
@@ -126,6 +134,17 @@ class SAFEApp extends EventEmitter {
   */
   get auth() {
     return this._auth;
+  }
+
+  /**
+   * Get the Web API interface
+   * @return {WebInterface} Manage Web RDF Data.
+   */
+  get web() {
+    /* eslint-disable camelcase, prefer-arrow-callback */
+    return EXPOSE_AS_EXPERIMENTAL_API.call(this, function Web_API() {
+      return this._web;
+    });
   }
 
   /**
@@ -160,8 +179,27 @@ class SAFEApp extends EventEmitter {
     return this._mutableData;
   }
 
+  /**
+  * Function to lookup a given `safe://`-URL in accordance with the
+  * public name resolution and find the requested network resource.
+  *
+  * @param {String} url the url you want to fetch
+  * @param {WebFetchOptions} [options=null] additional options
+  * @returns {Promise<Object>} the object with body of content and headers
+  */
   webFetch(url, options) {
     return webFetch.call(this, url, options);
+  }
+
+  /**
+  * Experipental function to lookup a given `safe://`-URL in accordance with the
+  * public name resolution and find the requested network resource.
+  *
+  * @param {String} url the url you want to fetch
+  * @returns {Promise<NetworkResource>} the network resource found from the passed URL
+  */
+  fetch(url) {
+    return fetch.call(this, url);
   }
 
   /**
@@ -365,8 +403,8 @@ class SAFEApp extends EventEmitter {
   /**
   * Retuns true if the underlyging library was compiled against mock-routing.
   */
-  isMockBuild() {
-    return lib.is_mock_build();
+  appIsMock() {
+    return lib.app_is_mock();
   }
 }
 

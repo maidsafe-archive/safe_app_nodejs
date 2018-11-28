@@ -33,6 +33,10 @@ describe('CipherOpt', () => {
     return should(idData.toString()).equal(testString);
   });
 
+  it('forceCleanUp on pubSignKey objects', () => app.cipherOpt.newPlainText()
+      .then((cipherOpt) => cipherOpt.forceCleanUp())
+  );
+
   it('symmetrically encrypts data to be written to immutable structure', async () => {
     const testString = 'information to be encrypted';
     const idWriter = await app.immutableData.create();

@@ -76,6 +76,7 @@ describe('Smoke test', () => {
       joinSchemes: ['proto'],
       configPath: '/home',
       forceUseMock: false,
+      enableExperimentalApis: false,
     };
     const app = await createTestApp(null, null, optionsObject);
 
@@ -106,6 +107,13 @@ describe('Smoke test', () => {
     should(test).throw("The 'forceUseMock' option must be a boolean.");
   });
 
+  it('throw error if options object contains non-boolean enableExperimentalApis value', () => {
+    const test = () => autoref(new App(h.appInfo, null, {
+      enableExperimentalApis: 'true' // this is expected to be a boolean
+    }));
+    should(test).throw("The 'enableExperimentalApis' option must be a boolean.");
+  });
+
   it('creates registered for testing', () => should(app.auth.registered).be.true());
 
   it('clears object cache invalidating objects', () => app.mutableData.newMutation()
@@ -115,7 +123,7 @@ describe('Smoke test', () => {
     )
     .then(() => should(app.mutableData.newMutation()).be.fulfilled()));
 
-  it('validate is mock build', () => should(app.isMockBuild()).be.true());
+  it('validate is mock build', () => should(app.appIsMock()).be.true());
 
   it('should build an alternative if there is a scope', async () => {
     const firstApp = await createTestApp();

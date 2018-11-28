@@ -129,12 +129,12 @@ class File {
   * @param {Buffer|String} content
   * @returns {Promise}
   */
-  write(fileContent) {
+  write(content) {
     if (!this._fileCtx) {
       return Promise
         .reject(makeError(errConst.ERR_FILE_NOT_FOUND.code, errConst.ERR_FILE_NOT_FOUND.msg));
     }
-    return lib.file_write(this._connection, this._fileCtx, fileContent);
+    return lib.file_write(this._connection, this._fileCtx, content);
   }
 
   /**
@@ -176,15 +176,13 @@ class File {
 }
 
 /**
-* NFS Emulation on top of an MData
+* NFS Emulation on top of a MutableData
+*
+* Instantiate the NFS emulation layer rapping a MutableData instance
+*
+* @param {MutableData} mData the MutableData to wrap around
 */
 class NFS {
-  /**
-  * @private
-  * Instantiate the NFS emulation layer rapping a MutableData instance
-  *
-  * @param {MutableData} mData - the MutableData to wrap around
-  */
   constructor(mData) {
     this.mData = mData;
   }
@@ -240,9 +238,12 @@ class NFS {
 
   /**
   * Replace a path with a new file. Directly commit to the network.
+  *
+  * CONSTANTS.GET_NEXT_VERSION: Applies update to next file version.
+  *
   * @param {(String|Buffer)} fileName - the path to store the file under
   * @param {File} file - the file to serialise and store
-  * @param {Number} version - the version successor number, to ensure you
+  * @param {Number|CONSTANTS.GET_NEXT_VERSION} version - the version successor number, to ensure you
            are overwriting the right one
   * @param {String|Buffer} userMetadata - optional parameter for updating user metadata
   * @returns {Promise<File>} - the same file
@@ -255,20 +256,25 @@ class NFS {
       fileMeta.user_metadata_len = userMetadata.length;
       fileMeta.user_metadata_cap = userMetadataPtr.length;
     }
+    const fileContext = file;
     return lib.dir_update_file(this.mData.app.connection, this.mData.ref, fileName,
-                           file.ref.ref(), version)
-      .then(() => { file.version = version; })  // eslint-disable-line no-param-reassign
-      .then(() => file);
+                           fileContext.ref.ref(), version)
+      .then((newVersion) => {
+        fileContext.version = newVersion;
+      })
+      .then(() => fileContext);
   }
 
   /**
   * Delete a file from path. Directly commit to the network.
   * @param {(String|Buffer)} fileName
-  * @param {Number} version
-  * @returns {Promise}
+  * @param {Number|CONSTANTS.GET_NEXT_VERSION} version - the version successor number, to ensure you
+           are deleting the right one
+  * @returns {Promise<Number>} - version of deleted file
   */
   delete(fileName, version) {
-    return lib.dir_delete_file(this.mData.app.connection, this.mData.ref, fileName, version);
+    return lib.dir_delete_file(this.mData.app.connection, this.mData.ref, fileName, version)
+      .then((newVersion) => newVersion);
   }
 
   /**

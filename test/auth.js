@@ -14,6 +14,7 @@
 const should = require('should');
 const h = require('./helpers');
 const errConst = require('../src/error_const');
+const lib = require('../src/native/lib');
 
 const createAuthenticatedTestApp = h.createAuthenticatedTestApp;
 const createTestApp = h.createTestApp;
@@ -24,7 +25,7 @@ const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Inser
 describe('auth interface', () => {
   let app;
   before(async () => {
-    app = await createAuthenticatedTestApp('_test_scope', containersPermissions);
+    app = await createAuthenticatedTestApp({ scope: '_test_scope' }, containersPermissions);
   });
 
   it('should build some authentication uri', async () => {
@@ -50,7 +51,7 @@ describe('auth interface', () => {
       _public: ['Insert', 'Read', 'Update'],
       _second: ['Read']
     };
-    return should(createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true }))
+    return should(createAuthenticatedTestApp({ scope: '_test_scope' }, containersPermissions, { own_container: true }))
       .be.rejectedWith("'_second' not found in the access container");
   });
 
@@ -141,6 +142,11 @@ describe('auth interface', () => {
       });
   });
 
+  it('throws error if no URI provided to app_unregistered', async () => {
+    const app = await createTestApp();
+    return should(lib.app_unregistered(app)).be.rejectedWith(errConst.MISSING_AUTH_URI.msg);
+  });
+
   it('logs in to network with URI response from authenticator', async () => {
     const app = await h.createTestApp();
     return should(app.auth.loginFromUri(h.authUris.registeredUri)).be.fulfilled();
@@ -156,7 +162,7 @@ describe('Get granted containers permissions from auth URI', () => {
   it('invalid uri', async () => {
     const appNoConnect = await createTestApp();
     return should(appNoConnect.auth.readGrantedPermissions('safe-invalid-uri'))
-              .be.rejectedWith('Serialisation error');
+              .be.rejectedWith('IPC error: InvalidMsg');
   });
 
   it('uri with no auth granted information', async () => {
@@ -198,10 +204,18 @@ describe('Get granted containers permissions from auth URI', () => {
 
 describe('Access Container', () => {
   let app;
-  const containersPermissions = { _public: ['Read'], _publicNames: ['Read', 'Insert', 'ManagePermissions'] };
+  const containersPermissions = {
+    _documents: ['Read'],
+    _downloads: ['Insert'],
+    _music: ['Delete'],
+    _pictures: ['Read', 'Delete'],
+    _videos: ['Update', 'ManagePermissions'],
+    _public: ['Read'],
+    _publicNames: ['Read', 'Insert', 'ManagePermissions']
+  };
 
   before(async () => {
-    app = await createAuthenticatedTestApp('_test_scope', containersPermissions, { own_container: true });
+    app = await createAuthenticatedTestApp({ scope: '_test_scope' }, containersPermissions, { own_container: true });
   });
 
   it('should have a connection object after completing app authentication', () => should.exist(app.connection));
@@ -210,7 +224,42 @@ describe('Access Container', () => {
   it('get container names', () => app.auth.refreshContainersPermissions().then(() =>
     app.auth.getContainersPermissions().then((contsPerms) => {
       // we always get a our own sandboxed container in tests
-      should(Object.keys(contsPerms).length).be.equal(3);
+      should(Object.keys(contsPerms).length).be.equal(8);
+      should(contsPerms._documents).be.eql({
+        Read: true,
+        Insert: false,
+        Delete: false,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms._downloads).be.eql({
+        Read: false,
+        Insert: true,
+        Delete: false,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms._music).be.eql({
+        Read: false,
+        Insert: false,
+        Delete: true,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms._pictures).be.eql({
+        Read: true,
+        Insert: false,
+        Delete: true,
+        Update: false,
+        ManagePermissions: false
+      });
+      should(contsPerms._videos).be.eql({
+        Read: false,
+        Insert: false,
+        Delete: false,
+        Update: true,
+        ManagePermissions: true
+      });
       should(contsPerms._public).be.eql({
         Read: true,
         Insert: false,
@@ -314,4 +363,15 @@ describe('Access Container', () => {
             return should(value.buf.toString()).equal('value1');
           })
   ));
+
+  it('check _public container is a Public MD', async () => {
+    const app = await h.publicNamesTestApp();
+    const md = await app.auth.getContainer('_public');
+    const encKey = await md.encryptKey('_testkey');
+    const mut = await app.mutableData.newMutation();
+    await mut.insert(encKey, 'plain-text');
+    await md.applyEntriesMutation(mut);
+    const value = await md.get('_testkey');
+    should(value.buf.toString()).be.equal('plain-text');
+  });
 });

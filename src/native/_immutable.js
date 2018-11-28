@@ -35,7 +35,7 @@ const translateXorName = (appPtr, str) => {
   } else if (Array.isArray(str)) {
     name = t.XOR_NAME(str).ref().readPointer(0)
   } else {
-    const b = new Buffer(str);
+    const b = Buffer.from(str);
     if (b.length != t.XOR_NAME.size) throw makeError(errConst.XOR_NAME.code, errConst.XOR_NAME.msg(t.XOR_NAME.size))
     name = t.XOR_NAME(b).ref().readPointer(0);
   }

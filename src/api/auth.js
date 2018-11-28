@@ -30,7 +30,7 @@ const makeShareMDataPermissions = nativeH.makeShareMDataPermissions;
 * and making it lower case.
 */
 const genAppUri = (str) => {
-  const urlSafeBase64 = (new Buffer(str))
+  const urlSafeBase64 = (Buffer.from(str))
                           .toString('base64')
                           .replace(/\+/g, '-') // Convert '+' to '-'
                           .replace(/\//g, '_') // Convert '/' to '_'
@@ -278,22 +278,8 @@ class AuthInterface {
   * @return {Promise<MutableData>}
   */
   getOwnContainer() {
-    let prms = this.app.getOwnContainerName()
+    return this.app.getOwnContainerName()
       .then((containerName) => this.getContainer(containerName));
-
-    if (useMockByDefault || this.app.options.forceUseMock) {
-      prms = prms.catch((err) => {
-        // Error code -1002 corresponds to 'Container not found' case
-        if (err.code !== -1002) return Promise.reject(err);
-        return this.getContainersPermissions().then((contPerms) => {
-          const names = Object.keys(contPerms);
-          const ctrnName = names.find((x) => x.match(/^apps\//));
-          if (!ctrnName) return Promise.reject(err);
-          return this.getContainer(ctrnName);
-        });
-      });
-    }
-    return prms;
   }
 
   /**
@@ -375,7 +361,7 @@ class AuthInterface {
   }
 
   /**
-  * *ONLY AVAILALBE IF RUN in NODE_ENV='development' || 'testing'*
+  * *ONLY AVAILALBE IF RUN in NODE_ENV='test' OR WITH 'forceUseMock' option*
   *
   * Generate a _locally_ registered App with the given permissions, or
   * a local unregistered App if permissions is `null`.
@@ -387,7 +373,7 @@ class AuthInterface {
     }
     if (access) {
       const appInfo = makeAppInfo(this.app.appInfo);
-      const perms = makePermissions(access || {});
+      const perms = makePermissions(access);
       const authReq = new types.AuthReq({
         app: appInfo,
         app_container: !!(opts && opts.own_container),
@@ -412,7 +398,7 @@ class AuthInterface {
   }
 
   /**
-  * *ONLY AVAILALBE IF RUN in NODE_ENV='development' || 'testing'*
+  * *ONLY AVAILALBE IF RUN in NODE_ENV='test' OR WITH 'forceUseMock' option*
   *
   * Simulates a network disconnection event. This can be used to
   * test any logic to be executed by an application when a network

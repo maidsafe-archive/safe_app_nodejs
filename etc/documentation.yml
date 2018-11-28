@@ -2,8 +2,8 @@ toc:
 
   - name: External API
     description: The externally exposed API
-  - initializeApp
-  - fromAuthURI
+  - initialiseApp
+  - fromAuthUri
   - AppInfo
   - InitOptions
   - CONSTANTS
@@ -16,6 +16,7 @@ toc:
   - CipherOptInterface
   - ImmutableDataInterface
   - MutableDataInterface
+  - WebInterface
 
   - name: Immutable
   - Reader
@@ -28,8 +29,11 @@ toc:
 
   - name: Emulations
     description: Emulations and Abstractions on top of MData
+  - Emulation
   - NFS
   - File
+  - RDF
+  - WebID
 
   - name: Types
   # - Types
@@ -43,6 +47,8 @@ toc:
   - CipherOpt
   - NameAndTag
   - ValueVersion
+  - NetworkResource
+  - WebFetchOptions
 
   - name: Errors
   - ERR_NO_SUCH_DATA

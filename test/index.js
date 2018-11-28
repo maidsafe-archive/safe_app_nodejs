@@ -47,7 +47,8 @@ describe('Smoke testing', () => {
       USER_ANYONE: 0,
       MD_METADATA_KEY: '_metadata',
       MD_ENTRIES_EMPTY: 0,
-      MD_PERMISSION_EMPTY: 0
+      MD_PERMISSION_EMPTY: 0,
+      GET_NEXT_VERSION: 0
     };
     return should(CONSTANTS).be.eql(expectedConsts);
   });
@@ -136,6 +137,8 @@ describe('External API', () => {
       const wrongAppInfo = Object.assign({}, appInfo, { customExecPath: 'non-array-exec-path' });
       return should(initialiseApp(wrongAppInfo)).be.rejectedWith('Exec command must be an array of string arguments');
     });
+
+    it('throws error for missing appInfo property', () => should(initialiseApp({ id: 'id1', vendor: 'vendor' })).be.rejectedWith(errConst.MALFORMED_APP_INFO.msg));
   });
 
   describe('fromAuthUri', () => {
@@ -183,7 +186,7 @@ describe('External API', () => {
 
     it('fail with safe-<auth info>', () => {
       const uri = h.authUris.registeredUri.replace(/^safe-[^:]*:?/g, 'safe-');
-      return should(fromAuthUri(appInfo, uri, null, { log: false })).be.rejectedWith('Serialisation error');
+      return should(fromAuthUri(appInfo, uri, null, { log: false })).be.rejectedWith('IPC error: InvalidMsg');
     });
 
     it('fail with safe:<auth info>', () => {
