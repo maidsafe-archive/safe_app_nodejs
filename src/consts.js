@@ -23,10 +23,6 @@ const LIB_LOCATION_MOCK = 'mock';
 const LIB_LOCATION_PROD = 'prod';
 
 /**
-* @typedef {Object} CONSTANTS
-* Constants available for the applications to be used in a few cases
-* as values of input parameters.
-*
 * @param {Number} NFS_FILE_MODE_OVERWRITE NFS File open in overwrite mode.
 * When used as the `openMode` parameter for `nfs.open(<fileName>, <openMode>)` the entire content
 * of the file will be replaced when writing data to it.
@@ -84,6 +80,9 @@ const LIB_LOCATION_PROD = 'prod';
 * invoking `update` function of the NFS API to automatically obtain correct file version.
 *
 */
+
+
+/**/
 const pubConsts = {
   NFS_FILE_MODE_OVERWRITE: 1,
   NFS_FILE_MODE_APPEND: 2,

@@ -120,7 +120,7 @@ class NetworkObject {
   /**
   * The reference or object handle to reference
   * the object on the native side with
-  * @returns {(Number|Pointer})}
+  * @returns {(Number|Pointer)}
   */
   get ref() {
     return this._ref;

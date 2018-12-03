@@ -53,8 +53,11 @@ describe('Experimental RDF emulation', () => {
     'http://xmlns.com/foaf/0.1/knows': JSON.stringify([{ '@value': 'Gabriel' }, { '@value': 'Josh' }])
   };
 
-  beforeEach(async () => {
+  before(async () => {
     app = await h.createAuthenticatedTestApp(null, null, null, { enableExperimentalApis: true });
+  });
+
+  beforeEach(async () => {
     xorname = h.createRandomXorName();
     md = await app.mutableData.newPublic(xorname, TYPE_TAG);
     rdf = md.emulateAs('rdf');
@@ -156,15 +159,26 @@ describe('Experimental RDF emulation', () => {
     should(friends).have.length(2);
   });
 
-  it('add literal and find with each', async () => {
+  it('add dateTime literal and find with each', async () => {
     await md.quickSetup({});
     await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
     const XSD = rdf.namespace('http://www.w3.org/2001/XMLSchema#');
-    const birthday = rdf.literal('1977-06-30T10:00:00+00:00', '', XSD('dateTime'));
+    const birthday = rdf.literal('1977-06-30T10:00:00+00:00', XSD('dateTime'));
     rdf.add(me, foaf('birthday'), birthday);
 
     const friends = rdf.each(me, foaf('birthday'), undefined);
+    should(friends[0].datatype).deepEqual(XSD('dateTime'));
     should(friends.length).be.above(0);
+  });
+
+  it('add literal with i18n language tag', async () => {
+    await md.quickSetup({});
+    await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
+    const animal = rdf.literal('Aardvark', 'en-US');
+    rdf.add(me, foaf('interest'), animal);
+
+    const literal = rdf.any(me, foaf('interest'), undefined);
+    should(literal).have.property('lang', 'en-US');
   });
 
   it('remove matching statements', async () => {
@@ -358,5 +372,84 @@ describe('Experimental RDF emulation', () => {
     const notMyRdf = notMyMd.emulateAs('rdf');
     return should(notMyRdf.nowOrWhenFetched(null, encrypted))
                                   .be.rejectedWith(errConst.MISSING_RDF_ID.msg);
+  });
+
+  it('creates blank node resource', () => {
+    const blankNode = rdf.bnode();
+    should(blankNode).have.properties({ termType: 'BlankNode', id: 'n0', value: 'n0' });
+  });
+
+  it('creates a collection of nodes', () => {
+    const DBP = rdf.namespace('http://dbpedia.org/resource/');
+    const planets = [
+      DBP('Mercury'),
+      DBP('Venus'),
+      DBP('Mars'),
+      DBP('Each')
+    ];
+    const nodeCollection = rdf.collection(planets);
+    should(nodeCollection).have.properties({ termType: 'Collection', elements: planets });
+  });
+
+  it('serialises a collection of nodes as text/turtle', async () => {
+    const DBP = rdf.namespace('http://dbpedia.org/resource/');
+    rdf.setId(DBP('Milky_Way').uri);
+    const planets = [
+      DBP('Mercury'),
+      DBP('Venus'),
+      DBP('Mars'),
+      DBP('Each')
+    ];
+    const nodeCollection = rdf.collection(planets);
+    nodeCollection.close();
+    rdf.add(DBP('Milky_Way'), rdf.vocabs.RDF('Bag'), nodeCollection);
+    should(rdf.serialise('text/turtle')).be.fulfilled();
+  });
+
+  it('fails to serialise a collection of nodes as JSON-LD', async () => {
+    const DBP = rdf.namespace('http://dbpedia.org/resource/');
+    rdf.setId(DBP('Milky_Way').uri);
+    const planets = [
+      DBP('Mercury'),
+      DBP('Venus'),
+      DBP('Mars'),
+      DBP('Each')
+    ];
+    const nodeCollection = rdf.collection(planets);
+    nodeCollection.close();
+    rdf.add(DBP('Milky_Way'), rdf.vocabs.RDF('Bag'), nodeCollection);
+    return should(rdf.serialise('application/ld+json')).be.rejectedWith('Error while parsing N-Quads; invalid quad.');
+  });
+
+  it('adds statements with provenance', () => {
+    const id = rdf.sym('safe://pluto.astronomy');
+    rdf.setId(id.uri);
+    const DBP = rdf.namespace('http://dbpedia.org/resource/');
+    const discoveryDate = new Date('18 Feb 1930');
+    const dateTimeDataType = 'http://www.w3.org/2001/XMLSchema#dateTime';
+    const literalNode = rdf.literal(discoveryDate.toISOString(), dateTimeDataType);
+    const triples = [
+      {
+        predicate: rdf.vocabs.RDFS('isDefinedBy'),
+        object: DBP('Pluto')
+      },
+      {
+        predicate: rdf.sym('http://dbpedia.org/property/atmosphereComposition'),
+        object: DBP('Methane')
+      },
+      {
+        predicate: rdf.vocabs.RDF('type'),
+        object: DBP('Dwarf_planet')
+      },
+      {
+        predicate: rdf.sym('http://dbpedia.org/ontology/discovered'),
+        object: literalNode
+      }
+    ];
+    const provenance = id;
+    triples.forEach((triple) => rdf.add(id, triple.predicate, triple.object, provenance));
+    rdf.graphStore.statements.forEach((statement) => {
+      should(statement.why).deepEqual(provenance);
+    });
   });
 });

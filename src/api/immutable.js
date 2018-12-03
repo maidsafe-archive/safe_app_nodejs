@@ -19,16 +19,33 @@ const consts = require('../consts');
 const { EXPOSE_AS_EXPERIMENTAL_API } = require('../helpers');
 
 /**
-* Holds the connection to read an existing ImmutableData
+* {@link ImmutableDataInterface} reader
+* @hideconstructor
 */
 class Reader extends helpers.NetworkObject {
 
   /**
-  * Read the given amount of bytes from the network
-  * @param {Object=} options
-  * @param {Number} [options.offset=0] start position
-  * @param {Number} [options.end=size] end position or end of data
-  */
+   * Read the given amount of bytes from the network
+   * @param {Object=} options
+   * @param {Number} [options.offset=0] start position
+   * @param {Number} [options.end=size] end position or end of data
+   * @returns {Promise<Buffer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const readOptions =
+   *     {
+   *         offset: 0, // starts reading from this byte position
+   *         end: null // ends reading at this byte position
+   *     };
+   *     try {
+   *         const iDataReader = await app.immutableData.fetch(iDataAddress)
+   *         const data = await iDataReader.read(readOptions)
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
   read(options) {
     const opts = Object.assign({}, options);
     let prms;
@@ -46,9 +63,18 @@ class Reader extends helpers.NetworkObject {
   }
 
   /**
-  * The size of the immutable data on the network
-  * @returns {Promise<Number>} length in bytes
-  */
+   * The size of the immutable data on the network
+   * @returns {Promise<Number>} length in bytes
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+             const size = await iDataReader.size()
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
   size() {
     return lib.idata_size(this.app.connection, this.ref);
   }
@@ -67,43 +93,64 @@ class Reader extends helpers.NetworkObject {
 }
 
 /**
-* Holds an Immutable Data Writer
-*
-* @example // write new data to the network
-* app.immutableData.create()
-*  .then((writer) => writer.write("some string\n")
-*    .then(() => writer.write("second string"))
-*    .then(() => app.cipherOpt.newPlainText())
-*    .then((cipher) => writer.close(cipher))
-*  ).then((address) => app.immutableData.fetch(address))
-*  .then((reader) => reader.read())
-*  .then((payload) => {
-*    console.log("Data read from ImmutableData: ", payload.toString());
-*  })
-*
-*/
+ * {@link ImmutableDataInterface} writer
+ * @hideconstructor
+ */
 class Writer extends helpers.NetworkObject {
 
   /**
-  * Append the given data to immutable Data.
-  *
-  * @param {String|Buffer} data The string or buffer to write
-  * @returns {Promise<()>}
-  */
+   * Append the given data to {@link ImmutableDataInterface}. This does not commit data to network.
+   *
+   * @param {String|Buffer} data The string or buffer to write
+   * @returns {Promise}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const iDataWriter = await app.immutableData.create()
+   *         const data = 'Most proteins are glycosylated.
+   *         Mass spectrometry methods are used for mapping glycoprotein.';
+   *         await iDataWriter.write(data);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
   write(data) {
     return lib.idata_write_to_self_encryptor(this.app.connection, this.ref, data);
   }
 
   /**
-  * Close and write the immutable Data to the network.
-  *
-  * @param {CipherOpt} cipherOpt the Cipher Opt to encrypt data with
-  * @param {Boolean} getXorUrl (experimental) if the XOR-URL shall also
-  * be returned along with the xor address
-  * @param {String} mimeType (experimental) the MIME type to encode in
-  * the XOR-URL as the codec of the content
-  * @returns {Promise<String>} the address to the data once written to the network
-  */
+   * Close and commit the {@link ImmutableDataInterface} to the network.
+   *
+   * @param {CipherOpt} cipherOpt The cipher method with which to encrypt data
+   * @param {Boolean} getXorUrl (experimental) if the XOR-URL shall also
+   * be returned along with the xor address
+   * @param {String} mimeType (experimental) the MIME type to encode in
+   * the XOR-URL as the codec of the content
+   * @returns {Promise<Buffer|{ name: Buffer, xorUrl: String }>}
+   * The XOR address to the data once written to the network,
+   * or an object that contains both the XOR address and XOR URL.
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const cipherOpt = await app.cipherOpt.newPlainText();
+   *         const iDataWriter = await app.immutableData.create()
+   *         const data = 'Most proteins are glycosylated.
+   *         Mass spectrometry methods are used for mapping glycoprotein.';
+   *         await iDataWriter.write(data);
+   *         const iDataAddress = await iDataWriter.close(cipherOpt);
+   *
+   *         // Alternatively:
+   *         // const getXorUrl = true;
+   *         // const mimeType = 'text/plain';
+   *         // const iDataMeta = await iDataWriter.close(cipherOpt, getXorUrl, mimeType);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
   async close(cipherOpt, getXorUrl, mimeType) {
     const name = await lib.idata_close_self_encryptor(this.app.connection,
                                                         this.ref, cipherOpt.ref);
@@ -139,15 +186,10 @@ class Writer extends helpers.NetworkObject {
 
 }
 
-/**
-* Interact with Immutable Data of the Network through this Interface.
-*
-* Access it through your {SAFEApp} instance under `app.immutableData`
-*/
 class ImmutableDataInterface {
 
   /**
-  * @private
+  * @hideconstructor
   * @param {SAFEApp} app
   */
   constructor(app) {
@@ -155,19 +197,37 @@ class ImmutableDataInterface {
   }
 
   /**
-  * Create a new ImmutableDataInterface
-  * @returns {Promise<Writer>}
-  */
+   * Create a new {@link ImmutableDataInterface} writer
+   * @returns {Promise<Writer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const iDataWriter = await app.immutableData.create()
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
   create() {
     return lib.idata_new_self_encryptor(this.app.connection)
       .then((ref) => helpers.autoref(new Writer(this.app, ref)));
   }
 
   /**
-  * Look up an existing Immutable Data for the given address
-  * @param {Buffer} address the XorName on the network
-  * @returns {Promise<Reader>}
-  */
+   * Look up an existing {@link ImmutableDataInterface} for the given address
+   * @param {Buffer} Network XOR address
+   * @returns {Promise<Reader>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const iDataReader = await app.immutableData.fetch(iDataAddress);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
   fetch(address) {
     return lib.idata_fetch_self_encryptor(this.app.connection, address)
       .then((ref) => helpers.autoref(new Reader(this.app, ref)));
