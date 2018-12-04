@@ -54,11 +54,51 @@ describe('Experimental fetch function', () => {
     return should(networkResource.content.get(filePath)).be.fulfilled();
   });
 
-  // not supported yet, it needs support for XOR-URL
-  it.skip('fetch a MD resource', async () => {
+  it('fetch a MutableData resource', async () => {
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    const { serviceMd } = await createRandomDomain(content, '', '', app);
+    const info = await serviceMd.getNameAndTag();
+    should(info.xorUrl).not.be.undefined();
+    const networkResource = await unregisteredApp.fetch(info.xorUrl);
+    should(networkResource.resourceType).equal('MD');
+    return should(networkResource.parsedPath).equal('');
   });
 
-  // not supported yet, it needs support for XOR-URL
-  it.skip('fetch an IMD resource', async () => {
+  it('fetch an ImmutableData resource', async () => {
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    const idWriter = await app.immutableData.create();
+    await idWriter.write(content);
+    const cipherOpt = await app.cipherOpt.newPlainText();
+    const getXorUrl = true;
+    const immDataAddr = await idWriter.close(cipherOpt, getXorUrl);
+    should(immDataAddr.xorUrl).not.be.undefined();
+    const networkResource = await unregisteredApp.fetch(immDataAddr.xorUrl);
+    const data = await networkResource.content.read();
+    should(networkResource.resourceType).equal('IMMD');
+    should(networkResource.parsedPath).equal('');
+    return should(data.toString()).be.equal(content);
+  });
+
+  it('fetch an RDF resource', async () => {
+    const randomName = `test_${Math.round(Math.random() * 100000)}`;
+
+    const newApp = await helpers.publicNamesTestApp();
+    const { serviceMd } = await createRandomDomain('', '', '', newApp);
+    const info = await serviceMd.getNameAndTag();
+    should(info.xorUrl).not.be.undefined();
+
+    const profile = {
+      uri: `safe://mywebid.${randomName}`,
+      name: randomName,
+      nick: randomName,
+      website: `safe://mywebsite.${randomName}`,
+      image: `safe://mywebsite.${randomName}/images/myavatar`,
+    };
+    const webId = serviceMd.emulateAs('WebID');
+    await webId.create(profile);
+
+    const networkResource = await unregisteredApp.fetch(profile.uri);
+    should(networkResource.resourceType).equal('RDF');
+    return should(networkResource.parsedPath).equal('');
   });
 });
