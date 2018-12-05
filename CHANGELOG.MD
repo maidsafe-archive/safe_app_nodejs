@@ -1,5 +1,15 @@
 # safe_app nodejs Change Log
 
+## [Unreleased]
+
+### Fixed
+- Experimental function `fetch` was not returning value `MD` in `resourceType` when fetching a MutableData
+
+### SAFE libraries Dependencies
+- safe_app: v0.9.0
+- system_uri: v0.4.0
+- deps_downloader: v0.3.0
+
 ## [0.10.0] - 26-11-2018
 ### Added
 - Add instructions to the README for how to generate API docs locally

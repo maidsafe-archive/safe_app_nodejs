@@ -266,11 +266,9 @@ async function fetchHelper(url) {
         const content = await getContainerFromCid.call(this, publicName,
                                                         parseInt(parsedUrl.port, 10));
 
-        const resourceType = (content.type === DATA_TYPE_MD) ? DATA_TYPE_NFS : content.type;
-
         return {
           content: content.content,
-          resourceType,
+          resourceType: content.type,
           parsedPath,
           mimeType: content.codec
         };
@@ -486,7 +484,7 @@ async function webFetch(url, options) {
   }
   const path = tokens.join('/') || `/${consts.INDEX_HTML}`;
   try {
-    const emulation = content.emulateAs(resourceType);
+    const emulation = content.emulateAs(DATA_TYPE_NFS);
     const { file, mimeType: fileMimeType } = await
                             tryDifferentPaths(emulation.fetch.bind(emulation), path);
     const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
