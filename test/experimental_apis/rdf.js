@@ -122,6 +122,8 @@ describe('Experimental RDF emulation', () => {
     return should(rdf.parse({}, JSON_LD_MIME_TYPE, myUri)).be.rejected();
   });
 
+  it('generate a blank node', async () => should(rdf.bnode).be.not.undefined());
+
   it('add triples and find any friend', async () => {
     await md.quickSetup({});
     await rdf.parse(JSON.stringify(myJsonLd), JSON_LD_MIME_TYPE, myUri);
