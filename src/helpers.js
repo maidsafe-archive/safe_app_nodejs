@@ -42,7 +42,10 @@ const isExperimentalApisEnabled = process.argv.includes('--enable-experimental-a
 // Helper function to check the experimental APIs flag and
 // either throw an error or log a warning message
 function checkExperimentalApisFlag(fn) {
-  const featureName = fn.name.replace('_', ' ');
+  const featureName = fn.name.replace('_', ' ')
+                        // bound added when binding context
+                        .replace('bound ', '');
+
   // the experimental APIs can be also enabled by setting
   // the `enableExperimentalApis` flag can be set to true in the initialisation options.
   if (!isExperimentalApisEnabled && !this.options.enableExperimentalApis) {
@@ -75,9 +78,9 @@ function checkExperimentalApisFlag(fn) {
      });
  * }
 */
-function EXPOSE_AS_EXPERIMENTAL_API(fn) {
+function EXPOSE_AS_EXPERIMENTAL_API(fn, ...args) {
   checkExperimentalApisFlag.call(this, fn);
-  return fn.call(this);
+  return fn.call(this, ...args);
 }
 
 /* Helper to be used by experimental features which shouldn't

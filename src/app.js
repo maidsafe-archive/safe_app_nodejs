@@ -21,6 +21,8 @@ const makeError = require('./native/_error.js');
 const { webFetch, fetch } = require('./web_fetch.js');
 const { EXPOSE_AS_EXPERIMENTAL_API } = require('./helpers');
 
+const EXPERIMENTAL_APIS = ['web'];
+
 /**
 * @private
 * Validates appInfo and properly handles error
@@ -119,6 +121,18 @@ class SAFEApp extends EventEmitter {
     this.connection = null;
     Object.getOwnPropertyNames(api).forEach((key) => {
       this[`_${key}`] = new api[key](this);
+
+      if (EXPERIMENTAL_APIS.includes(key)) {
+        Object.getOwnPropertyNames(api[key].prototype).forEach((experimentalApi) => {
+          if (experimentalApi === 'constructor') {
+            // dont mess with this...
+            return;
+          }
+          const cachedProtoProp = this[`_${key}`][experimentalApi].bind(this[`_${key}`]);
+
+          this[`_${key}`][experimentalApi] = (...args) => EXPOSE_AS_EXPERIMENTAL_API.call(this, cachedProtoProp, ...args);
+        });
+      }
     });
   }
 
@@ -141,10 +155,7 @@ class SAFEApp extends EventEmitter {
    * @return {WebInterface} Manage Web RDF Data.
    */
   get web() {
-    /* eslint-disable camelcase, prefer-arrow-callback */
-    return EXPOSE_AS_EXPERIMENTAL_API.call(this, function Web_API() {
-      return this._web;
-    });
+    return this._web;
   }
 
   /**

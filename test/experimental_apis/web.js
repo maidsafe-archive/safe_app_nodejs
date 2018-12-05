@@ -44,7 +44,7 @@ describe('Experimental Web API', () => {
       } catch (err) {
         error = err;
       }
-      return should(error.message).equal(errConst.EXPERIMENTAL_API_DISABLED.msg('Web API'));
+      return should(error.message).equal(errConst.EXPERIMENTAL_API_DISABLED.msg('getPublicNames'));
     });
 
     it('should throw when app perms are not given for _publicNames', async () => {
