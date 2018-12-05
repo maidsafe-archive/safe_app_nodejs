@@ -14,6 +14,7 @@
 const should = require('should');
 const helpers = require('../helpers');
 const errConst = require('../../src/error_const');
+const { pubConsts: CONSTANTS } = require('../../src/consts');
 
 const createAuthenticatedTestApp = helpers.createAuthenticatedTestApp;
 const createUnregisteredTestApp = helpers.createUnregisteredTestApp;
@@ -48,20 +49,30 @@ describe('Experimental fetch function', () => {
     const filePath = '/yumyum.html';
     const { domain } = await createRandomDomain(content, filePath, '', app);
     const url = `safe://${domain}${filePath}#me`;
+
     const networkResource = await unregisteredApp.fetch(url);
     should(networkResource.resourceType).equal('NFS');
     should(networkResource.parsedPath).equal(filePath);
-    return should(networkResource.content.get(filePath)).be.fulfilled();
+    const nfs = networkResource.content.emulateAs('nfs');
+    const retrievedFile = await nfs.fetch(filePath);
+    const file = await nfs.open(retrievedFile, CONSTANTS.NFS_FILE_MODE_READ);
+    const data = await file.read(CONSTANTS.NFS_FILE_START, CONSTANTS.NFS_FILE_END);
+    return should(data.toString()).be.equal(content);
   });
 
   it('fetch a MutableData resource', async () => {
-    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
-    const { serviceMd } = await createRandomDomain(content, '', '', app);
-    const info = await serviceMd.getNameAndTag();
+    const key = 'some key string';
+    const value = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    const md = await app.mutableData.newRandomPublic(16839);
+    await md.quickSetup({ [key]: value });
+    const info = await md.getNameAndTag();
     should(info.xorUrl).not.be.undefined();
+
     const networkResource = await unregisteredApp.fetch(info.xorUrl);
     should(networkResource.resourceType).equal('MD');
-    return should(networkResource.parsedPath).equal('');
+    should(networkResource.parsedPath).equal('');
+    const data = await networkResource.content.get(key);
+    return should(data.buf.toString()).be.equal(value);
   });
 
   it('fetch an ImmutableData resource', async () => {
@@ -72,6 +83,7 @@ describe('Experimental fetch function', () => {
     const getXorUrl = true;
     const immDataAddr = await idWriter.close(cipherOpt, getXorUrl);
     should(immDataAddr.xorUrl).not.be.undefined();
+
     const networkResource = await unregisteredApp.fetch(immDataAddr.xorUrl);
     const data = await networkResource.content.read();
     should(networkResource.resourceType).equal('IMMD');
@@ -81,12 +93,10 @@ describe('Experimental fetch function', () => {
 
   it('fetch an RDF resource', async () => {
     const randomName = `test_${Math.round(Math.random() * 100000)}`;
-
     const newApp = await helpers.publicNamesTestApp();
     const { serviceMd } = await createRandomDomain('', '', '', newApp);
     const info = await serviceMd.getNameAndTag();
     should(info.xorUrl).not.be.undefined();
-
     const profile = {
       uri: `safe://mywebid.${randomName}`,
       name: randomName,
@@ -96,9 +106,14 @@ describe('Experimental fetch function', () => {
     };
     const webId = serviceMd.emulateAs('WebID');
     await webId.create(profile);
+    const serialisedWebID = await webId.serialise();
 
     const networkResource = await unregisteredApp.fetch(profile.uri);
     should(networkResource.resourceType).equal('RDF');
-    return should(networkResource.parsedPath).equal('');
+    should(networkResource.parsedPath).equal('');
+    const rdf = networkResource.content.emulateAs('rdf');
+    await rdf.nowOrWhenFetched();
+    const serialised = await rdf.serialise();
+    return should(serialised).be.equal(serialisedWebID);
   });
 });
