@@ -1,9 +1,10 @@
 # safe_app nodejs Change Log
 
-## [Unreleased]
+## [0.10.1] - 5-12-2018
 
 ### Fixed
 - Experimental function `fetch` was not returning value `MD` in `resourceType` when fetching a MutableData
+- Experimental `web` API now throw errors when attempting to use exposed web functionality as opposed to when attempting to access `safeApp.web`
 
 ### SAFE libraries Dependencies
 - safe_app: v0.9.0
