@@ -130,14 +130,15 @@ describe('Experimental Web API', () => {
     });
 
     it('should add publicName even on top of container old data format', async () => {
-      const pubNamesCont = await authedApp.auth.getContainer('_publicNames');
-      const mut = await authedApp.mutableData.newMutation();
+      const newAuthedApp = await h.publicNamesTestApp();
+      const pubNamesCont = await newAuthedApp.auth.getContainer('_publicNames');
+      const mut = await newAuthedApp.mutableData.newMutation();
       const encKey = await pubNamesCont.encryptKey('key');
       const encValue = await pubNamesCont.encryptValue('value');
       await mut.insert(encKey, encValue);
       await pubNamesCont.applyEntriesMutation(mut);
-      await authedApp.web.addPublicNameToDirectory('thisIsATestDomain', fakeSubdomainRDF);
-      const publicNames = await authedApp.web.getPublicNames();
+      await newAuthedApp.web.addPublicNameToDirectory('thisIsATestDomain', fakeSubdomainRDF);
+      const publicNames = await newAuthedApp.web.getPublicNames();
       should(publicNames).be.a.Array();
       return should(publicNames).containDeep(['safe://_publicNames#thisIsATestDomain']);
     });
