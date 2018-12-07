@@ -99,8 +99,6 @@ class WebInterface {
 
     const publicNamesContainer = await app.auth.getContainer(PUBLIC_NAMES_CONTAINER);
     const publicNamesRdf = publicNamesContainer.emulateAs('rdf');
-    const toDecrypt = true;
-    await publicNamesRdf.nowOrWhenFetched(null, toDecrypt);
 
     // Here we do basic container setup for RDF entries.
     // Doesn't matter if already existing, will just write same entries.
@@ -110,6 +108,15 @@ class WebInterface {
     const newResourceName = publicNamesRdf.sym(`${graphName}#${publicName}`);
 
     publicNamesRdf.setId(graphName);
+    try {
+      const toDecrypt = true;
+      await publicNamesRdf.nowOrWhenFetched(null, toDecrypt);
+    } catch (e) {
+      // ignore no ID set in case nothing has been added yet
+      if (e.code !== errConst.MISSING_RDF_ID.code) {
+        throw new Error({ code: e.code, message: e.message });
+      }
+    }
 
     const vocabs = this.getVocabs(publicNamesRdf);
     publicNamesRdf.add(id, vocabs.RDFS('type'), vocabs.LDP('DirectContainer'));
@@ -247,10 +254,8 @@ class WebInterface {
     const id = directoryRDF.sym(graphName);
     directoryRDF.setId(graphName);
 
-    let existingRDF = false;
     try {
       await directoryRDF.nowOrWhenFetched();
-      existingRDF = true;
     } catch (e) {
       // ignore no ID set in case nothing has been added yet
       if (e.code !== errConst.MISSING_RDF_ID.code) {
@@ -258,10 +263,8 @@ class WebInterface {
       }
     }
 
-    if (!existingRDF) {
-      directoryRDF.add(id, vocabs.DCTERMS('title'), directoryRDF.literal(`${PUBLIC_CONTAINER} default container`));
-      directoryRDF.add(id, vocabs.DCTERMS('description'), directoryRDF.literal('Container to keep track of public data for the account'));
-    }
+    directoryRDF.add(id, vocabs.DCTERMS('title'), directoryRDF.literal(`${PUBLIC_CONTAINER} default container`));
+    directoryRDF.add(id, vocabs.DCTERMS('description'), directoryRDF.literal('Container to keep track of public data for the account'));
 
     const hostname = parseUrl(webIdUri).hostname;
     const newResourceName = directoryRDF.sym(`${graphName}/${hostname}`);

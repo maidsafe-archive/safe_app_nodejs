@@ -114,7 +114,11 @@ class RDF {
     }, Promise.resolve([]));
 
     const entriesGraphs = await Promise.all(validGraphs);
+
     if (!id) {
+      // This simply means that none of the existing entries are RDF graphs.
+      // We throw the error and it's up to the caller to decide
+      // what to do in such an scenario
       throw makeError(errConst.MISSING_RDF_ID.code, errConst.MISSING_RDF_ID.msg);
     }
 

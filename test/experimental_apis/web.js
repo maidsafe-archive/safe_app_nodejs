@@ -129,6 +129,20 @@ describe('Experimental Web API', () => {
       return should(publicNames).containDeep(['safe://_publicNames#thisIsATestDomain']);
     });
 
+    it('should add publicName even on top of container old data format', async () => {
+      const newAuthedApp = await h.publicNamesTestApp();
+      const pubNamesCont = await newAuthedApp.auth.getContainer('_publicNames');
+      const mut = await newAuthedApp.mutableData.newMutation();
+      const encKey = await pubNamesCont.encryptKey('key');
+      const encValue = await pubNamesCont.encryptValue('value');
+      await mut.insert(encKey, encValue);
+      await pubNamesCont.applyEntriesMutation(mut);
+      await newAuthedApp.web.addPublicNameToDirectory('thisIsATestDomain', fakeSubdomainRDF);
+      const publicNames = await newAuthedApp.web.getPublicNames();
+      should(publicNames).be.a.Array();
+      return should(publicNames).containDeep(['safe://_publicNames#thisIsATestDomain']);
+    });
+
     it('should create two publicNames', async () => {
       await authedApp.web.addPublicNameToDirectory('thisIsATestDomain', fakeSubdomainRDF);
       await authedApp.web.addPublicNameToDirectory('thisIsASecondTestDomain', fakeSubdomainRDF);
@@ -355,18 +369,15 @@ describe('Experimental Web API', () => {
       const entries = await directory.getEntries();
       const entriesList = await entries.listEntries();
 
-      // TODO: Encrypt/Decrypting.
-      const webIds = await entriesList.map((entry) => {
+      const webIds = await entriesList.reduce((ids, entry) => {
         const key = entry.key.toString();
         const value = entry.value.buf.toString();
-        const theId = {};
         if (key.includes('/webId/') && value.length) {
-          theId[key] = value;
+          ids.push({ [key]: value });
         }
-        return theId;
-      });
+        return ids;
+      }, []);
 
-      // TODO: We cannot get from the RDF a specific title AND it's xorName :|
       should(webIds).be.a.Array();
       should(webIds.length).be.equal(2);
       const jsonString = JSON.stringify(webIds);
