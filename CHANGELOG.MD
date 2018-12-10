@@ -1,5 +1,15 @@
 # safe_app nodejs Change Log
 
+## [0.10.2] - 10-12-2018
+
+### Fixed
+- Experimental function `addPublicNameToDirectory` was not adding a publicName to the directory if the `_publicNames` had entries but none were RDF graphs
+
+### SAFE libraries Dependencies
+- safe_app: v0.9.0
+- system_uri: v0.4.0
+- deps_downloader: v0.3.0
+
 ## [0.10.1] - 5-12-2018
 
 ### Fixed
