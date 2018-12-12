@@ -356,6 +356,7 @@ describe('Experimental RDF emulation', () => {
                                                 h.createRandomSecKey(),
                                                 h.createRandomNonce());
     const notMyRdf = notMyMd.emulateAs('rdf');
-    return should(notMyRdf.nowOrWhenFetched(null, encrypted)).be.rejectedWith('Core error: Symmetric decryption failed');
+    return should(notMyRdf.nowOrWhenFetched(null, encrypted))
+                                  .be.rejectedWith(errConst.MISSING_RDF_ID.msg);
   });
 });

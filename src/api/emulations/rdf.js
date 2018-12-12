@@ -87,8 +87,7 @@ class RDF {
           valueStr = decryptedValue.toString();
         } catch (error) {
           if (error.code !== errConst.ERR_SERIALISING_DESERIALISING.code) {
-            console.error('Error decrypting MutableData entry in rdf.nowOrWhenFetched()');
-            throw error;
+            console.warn('Error decrypting MutableData entry in rdf.nowOrWhenFetched()');
           }
           // ok, let's then assume the entry is not encrypted
           // this maybe temporary, just for backward compatibility,
@@ -230,7 +229,7 @@ class RDF {
             keyToCheck = decryptedKey.toString();
           } catch (error) {
             if (error.code !== errConst.ERR_SERIALISING_DESERIALISING.code) {
-              console.error('Error decrypting MutableData entry in rdf.commit():', error);
+              console.warn('Error decrypting MutableData entry in rdf.commit():', error);
             }
             // ok, let's then assume the entry is not encrypted
             // this maybe temporary, just for backward compatibility,
@@ -269,7 +268,7 @@ class RDF {
             keyToCheck = decryptedKey.toString();
           } catch (error) {
             if (error.code !== errConst.ERR_SERIALISING_DESERIALISING.code) {
-              console.error('Error decrypting MutableData entry in rdf.commit():', error);
+              console.warn('Error decrypting MutableData entry in rdf.commit():', error);
             }
             // ok, let's then assume the entry is not encrypted
             // this maybe temporary, just for backward compatibility,
