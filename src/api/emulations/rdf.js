@@ -79,7 +79,7 @@ class RDF {
       const reducedGraphs = await graphs;
       let keyStr = entry.key.toString();
       let valueStr = entry.value.buf.toString();
-      if (toDecrypt) {
+      if (toDecrypt && valueStr.length > 0) {
         try {
           const decryptedKey = await this.mData.decrypt(entry.key);
           keyStr = decryptedKey.toString();
