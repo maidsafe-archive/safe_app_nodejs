@@ -128,4 +128,21 @@ describe('Mutable Data Entries', () => {
       .then((m) => m.quickSetup({}).then(() => m.getValues()))
       .then((values) => should(values.length).equal(0))
   );
+
+  it('fail to decrypt a private MD entry using wrong encryption keys', async () => {
+    const privMd = await app.mutableData.newRandomPrivate(TYPE_TAG);
+    await privMd.quickSetup();
+    const nameAndTag = await privMd.getNameAndTag();
+    const mut = await app.mutableData.newMutation();
+    const encKey = await privMd.encryptKey('encryptedKey');
+    const encValue = await privMd.encryptValue('encryptedValue');
+    await mut.insert(encKey, encValue);
+    await privMd.applyEntriesMutation(mut);
+    const notMyPrivMd = await app.mutableData.newPrivate(nameAndTag.name,
+                                                          nameAndTag.typeTag,
+                                                          h.createRandomSecKey(),
+                                                          h.createRandomNonce());
+    const val = await notMyPrivMd.get(encKey);
+    return should(notMyPrivMd.decrypt(val.buf)).be.rejectedWith('Core error: Symmetric decryption failed');
+  });
 }).timeout(30000);
