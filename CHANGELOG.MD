@@ -1,5 +1,15 @@
 # safe_app nodejs Change Log
 
+## [0.10.3] - 13-12-2018
+
+### Fixed
+- Experimental RDF emulation function `nowOrWhenFetched` was failing when decrypting an entry from `_publicNames` container which was removed by a revocation process (see comments in PR #328 for more details)
+
+### SAFE libraries Dependencies
+- safe_app: v0.9.0
+- system_uri: v0.4.0
+- deps_downloader: v0.3.0
+
 ## [0.10.2] - 10-12-2018
 
 ### Fixed
