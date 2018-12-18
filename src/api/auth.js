@@ -104,7 +104,22 @@ class AuthInterface {
         name: appInfo.name,
         icon: 'test',
         exec: appInfo.customExecPath }, scheme);
+
+      this.registeredAppScheme = scheme;
     }
+  }
+
+  /**
+  * Whether or not this is a registered/authenticated session.
+  *
+  * @returns {Boolean} true if this is an authenticated session
+  */
+  get registeredAppScheme() {
+    return this._registeredScheme;
+  }
+
+  set registeredAppScheme(scheme) {
+    this._registeredScheme = scheme;
   }
 
   /**

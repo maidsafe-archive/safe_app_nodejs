@@ -66,7 +66,12 @@ describe('auth interface', () => {
   it('should build some containers uri if missing containers object', async () => {
     const app = await h.createTestApp();
     return app.auth.genContainerAuthUri()
-      .then((resp) => should(resp.uri).startWith('safe-auth:'));
+      .then((resp) => should(resp.uri)
+      .startWith('safe-auth:'));
+  });
+  it('should register a protocol scheme on the auth object if registering protocols', async () => {
+    const app = await h.createTestApp({}, null, { registerScheme: true });
+    should(app.auth.registeredAppScheme).startWith('safe-');
   });
 
   it('throws error if invalid container permission requested', async () => {
