@@ -1,0 +1,3498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      RDF - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  
+  <link type="text/css" rel="stylesheet" href="styles/collapse.css">
+  
+
+  
+
+  <!-- start Mixpanel -->
+  <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+  0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+  for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+  mixpanel.init("1919205b2da72e4da3b9b6639b444d59");</script>
+  <!-- end Mixpanel -->
+</head>
+
+<body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
+
+  <label for="nav-trigger" class="overlay"></label>
+
+  <div class="top-nav-wrapper">
+    <ul>
+      <li >
+        <a href="index.html">
+          
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+          
+        </a>
+      </li>
+
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      SAFE Network Node.js Client Library
+    </h3>
+
+    
+      <h3>
+        Resources
+      </h3>
+      
+        <a href="https://github.com/maidsafe/safe_app_nodejs">Github Repo</a>
+      
+        <a href=""> | </a>
+      
+        <a href="https://forum.safedev.org/">Dev Forum</a>
+      
+    
+
+    <h3>Classes</h3><ul><li id="AuthInterface-nav"><a href="AuthInterface.html">AuthInterface</a><ul class='methods'><li data-type="method" id="AuthInterface-canAccessContainer-nav"><a href="AuthInterface.html#canAccessContainer">canAccessContainer</a></li><li data-type="method" id="AuthInterface-genAuthUri-nav"><a href="AuthInterface.html#genAuthUri">genAuthUri</a></li><li data-type="method" id="AuthInterface-genConnUri-nav"><a href="AuthInterface.html#genConnUri">genConnUri</a></li><li data-type="method" id="AuthInterface-genContainerAuthUri-nav"><a href="AuthInterface.html#genContainerAuthUri">genContainerAuthUri</a></li><li data-type="method" id="AuthInterface-genShareMDataUri-nav"><a href="AuthInterface.html#genShareMDataUri">genShareMDataUri</a></li><li data-type="method" id="AuthInterface-getContainer-nav"><a href="AuthInterface.html#getContainer">getContainer</a></li><li data-type="method" id="AuthInterface-getContainersPermissions-nav"><a href="AuthInterface.html#getContainersPermissions">getContainersPermissions</a></li><li data-type="method" id="AuthInterface-getOwnContainer-nav"><a href="AuthInterface.html#getOwnContainer">getOwnContainer</a></li><li data-type="method" id="AuthInterface-loginForTest-nav"><a href="AuthInterface.html#loginForTest">loginForTest</a></li><li data-type="method" id="AuthInterface-loginFromUri-nav"><a href="AuthInterface.html#loginFromUri">loginFromUri</a></li><li data-type="method" id="AuthInterface-openUri-nav"><a href="AuthInterface.html#openUri">openUri</a></li><li data-type="method" id="AuthInterface-readGrantedPermissions-nav"><a href="AuthInterface.html#readGrantedPermissions">readGrantedPermissions</a></li><li data-type="method" id="AuthInterface-refreshContainersPermissions-nav"><a href="AuthInterface.html#refreshContainersPermissions">refreshContainersPermissions</a></li><li data-type="method" id="AuthInterface-simulateNetworkDisconnect-nav"><a href="AuthInterface.html#simulateNetworkDisconnect">simulateNetworkDisconnect</a></li></ul></li><li id="CipherOptInterface-nav"><a href="CipherOptInterface.html">CipherOptInterface</a><ul class='methods'><li data-type="method" id="CipherOptInterface-newAsymmetric-nav"><a href="CipherOptInterface.html#newAsymmetric">newAsymmetric</a></li><li data-type="method" id="CipherOptInterface-newPlainText-nav"><a href="CipherOptInterface.html#newPlainText">newPlainText</a></li><li data-type="method" id="CipherOptInterface-newSymmetric-nav"><a href="CipherOptInterface.html#newSymmetric">newSymmetric</a></li></ul></li><li id="CryptoInterface-nav"><a href="CryptoInterface.html">CryptoInterface</a><ul class='methods'><li data-type="method" id="CryptoInterface-generateEncKeyPair-nav"><a href="CryptoInterface.html#generateEncKeyPair">generateEncKeyPair</a></li><li data-type="method" id="CryptoInterface-generateEncKeyPairFromRaw-nav"><a href="CryptoInterface.html#generateEncKeyPairFromRaw">generateEncKeyPairFromRaw</a></li><li data-type="method" id="CryptoInterface-generateNonce-nav"><a href="CryptoInterface.html#generateNonce">generateNonce</a></li><li data-type="method" id="CryptoInterface-generateSignKeyPair-nav"><a href="CryptoInterface.html#generateSignKeyPair">generateSignKeyPair</a></li><li data-type="method" id="CryptoInterface-generateSignKeyPairFromRaw-nav"><a href="CryptoInterface.html#generateSignKeyPairFromRaw">generateSignKeyPairFromRaw</a></li><li data-type="method" id="CryptoInterface-getAppPubEncKey-nav"><a href="CryptoInterface.html#getAppPubEncKey">getAppPubEncKey</a></li><li data-type="method" id="CryptoInterface-getAppPubSignKey-nav"><a href="CryptoInterface.html#getAppPubSignKey">getAppPubSignKey</a></li><li data-type="method" id="CryptoInterface-pubEncKeyFromRaw-nav"><a href="CryptoInterface.html#pubEncKeyFromRaw">pubEncKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-pubSignKeyFromRaw-nav"><a href="CryptoInterface.html#pubSignKeyFromRaw">pubSignKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-secEncKeyFromRaw-nav"><a href="CryptoInterface.html#secEncKeyFromRaw">secEncKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-secSignKeyFromRaw-nav"><a href="CryptoInterface.html#secSignKeyFromRaw">secSignKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-sha3Hash-nav"><a href="CryptoInterface.html#sha3Hash">sha3Hash</a></li></ul></li><li id="EncKeyPair-nav"><a href="EncKeyPair.html">EncKeyPair</a><ul class='methods'><li data-type="method" id="EncKeyPair-decryptSealed-nav"><a href="EncKeyPair.html#decryptSealed">decryptSealed</a></li></ul></li><li id="Entries-nav"><a href="Entries.html">Entries</a><ul class='methods'><li data-type="method" id="Entries-get-nav"><a href="Entries.html#get">get</a></li><li data-type="method" id="Entries-insert-nav"><a href="Entries.html#insert">insert</a></li><li data-type="method" id="Entries-len-nav"><a href="Entries.html#len">len</a></li><li data-type="method" id="Entries-listEntries-nav"><a href="Entries.html#listEntries">listEntries</a></li><li data-type="method" id="Entries-mutate-nav"><a href="Entries.html#mutate">mutate</a></li></ul></li><li id="EntryMutationTransaction-nav"><a href="EntryMutationTransaction.html">EntryMutationTransaction</a><ul class='methods'><li data-type="method" id="EntryMutationTransaction-delete-nav"><a href="EntryMutationTransaction.html#delete">delete</a></li><li data-type="method" id="EntryMutationTransaction-insert-nav"><a href="EntryMutationTransaction.html#insert">insert</a></li><li data-type="method" id="EntryMutationTransaction-update-nav"><a href="EntryMutationTransaction.html#update">update</a></li></ul></li><li id="File-nav"><a href="File.html">File</a><ul class='methods'><li data-type="method" id="File-close-nav"><a href="File.html#close">close</a></li><li data-type="method" id="File-read-nav"><a href="File.html#read">read</a></li><li data-type="method" id="File-size-nav"><a href="File.html#size">size</a></li><li data-type="method" id="File-write-nav"><a href="File.html#write">write</a></li></ul></li><li id="ImmutableDataInterface-nav"><a href="ImmutableDataInterface.html">ImmutableDataInterface</a><ul class='methods'><li data-type="method" id="ImmutableDataInterface-create-nav"><a href="ImmutableDataInterface.html#create">create</a></li><li data-type="method" id="ImmutableDataInterface-fetch-nav"><a href="ImmutableDataInterface.html#fetch">fetch</a></li></ul></li><li id="MutableData-nav"><a href="MutableData.html">MutableData</a><ul class='methods'><li data-type="method" id="MutableData-applyEntriesMutation-nav"><a href="MutableData.html#applyEntriesMutation">applyEntriesMutation</a></li><li data-type="method" id="MutableData-decrypt-nav"><a href="MutableData.html#decrypt">decrypt</a></li><li data-type="method" id="MutableData-delUserPermissions-nav"><a href="MutableData.html#delUserPermissions">delUserPermissions</a></li><li data-type="method" id="MutableData-emulateAs-nav"><a href="MutableData.html#emulateAs">emulateAs</a></li><li data-type="method" id="MutableData-encryptKey-nav"><a href="MutableData.html#encryptKey">encryptKey</a></li><li data-type="method" id="MutableData-encryptValue-nav"><a href="MutableData.html#encryptValue">encryptValue</a></li><li data-type="method" id="MutableData-get-nav"><a href="MutableData.html#get">get</a></li><li data-type="method" id="MutableData-getEntries-nav"><a href="MutableData.html#getEntries">getEntries</a></li><li data-type="method" id="MutableData-getKeys-nav"><a href="MutableData.html#getKeys">getKeys</a></li><li data-type="method" id="MutableData-getNameAndTag-nav"><a href="MutableData.html#getNameAndTag">getNameAndTag</a></li><li data-type="method" id="MutableData-getPermissions-nav"><a href="MutableData.html#getPermissions">getPermissions</a></li><li data-type="method" id="MutableData-getSerialisedSize-nav"><a href="MutableData.html#getSerialisedSize">getSerialisedSize</a></li><li data-type="method" id="MutableData-getUserPermissions-nav"><a href="MutableData.html#getUserPermissions">getUserPermissions</a></li><li data-type="method" id="MutableData-getValues-nav"><a href="MutableData.html#getValues">getValues</a></li><li data-type="method" id="MutableData-getVersion-nav"><a href="MutableData.html#getVersion">getVersion</a></li><li data-type="method" id="MutableData-put-nav"><a href="MutableData.html#put">put</a></li><li data-type="method" id="MutableData-quickSetup-nav"><a href="MutableData.html#quickSetup">quickSetup</a></li><li data-type="method" id="MutableData-serialise-nav"><a href="MutableData.html#serialise">serialise</a></li><li data-type="method" id="MutableData-setMetadata-nav"><a href="MutableData.html#setMetadata">setMetadata</a></li><li data-type="method" id="MutableData-setUserPermissions-nav"><a href="MutableData.html#setUserPermissions">setUserPermissions</a></li></ul></li><li id="MutableDataInterface-nav"><a href="MutableDataInterface.html">MutableDataInterface</a><ul class='methods'><li data-type="method" id="MutableDataInterface-fromSerial-nav"><a href="MutableDataInterface.html#fromSerial">fromSerial</a></li><li data-type="method" id="MutableDataInterface-newEntries-nav"><a href="MutableDataInterface.html#newEntries">newEntries</a></li><li data-type="method" id="MutableDataInterface-newMutation-nav"><a href="MutableDataInterface.html#newMutation">newMutation</a></li><li data-type="method" id="MutableDataInterface-newPermissions-nav"><a href="MutableDataInterface.html#newPermissions">newPermissions</a></li><li data-type="method" id="MutableDataInterface-newPrivate-nav"><a href="MutableDataInterface.html#newPrivate">newPrivate</a></li><li data-type="method" id="MutableDataInterface-newPublic-nav"><a href="MutableDataInterface.html#newPublic">newPublic</a></li><li data-type="method" id="MutableDataInterface-newRandomPrivate-nav"><a href="MutableDataInterface.html#newRandomPrivate">newRandomPrivate</a></li><li data-type="method" id="MutableDataInterface-newRandomPublic-nav"><a href="MutableDataInterface.html#newRandomPublic">newRandomPublic</a></li></ul></li><li id="NFS-nav"><a href="NFS.html">NFS</a><ul class='methods'><li data-type="method" id="NFS-create-nav"><a href="NFS.html#create">create</a></li><li data-type="method" id="NFS-delete-nav"><a href="NFS.html#delete">delete</a></li><li data-type="method" id="NFS-fetch-nav"><a href="NFS.html#fetch">fetch</a></li><li data-type="method" id="NFS-insert-nav"><a href="NFS.html#insert">insert</a></li><li data-type="method" id="NFS-open-nav"><a href="NFS.html#open">open</a></li><li data-type="method" id="NFS-update-nav"><a href="NFS.html#update">update</a></li></ul></li><li id="Permissions-nav"><a href="Permissions.html">Permissions</a><ul class='methods'><li data-type="method" id="Permissions-getPermissionSet-nav"><a href="Permissions.html#getPermissionSet">getPermissionSet</a></li><li data-type="method" id="Permissions-insertPermissionSet-nav"><a href="Permissions.html#insertPermissionSet">insertPermissionSet</a></li><li data-type="method" id="Permissions-len-nav"><a href="Permissions.html#len">len</a></li><li data-type="method" id="Permissions-listPermissionSets-nav"><a href="Permissions.html#listPermissionSets">listPermissionSets</a></li></ul></li><li id="PubEncKey-nav"><a href="PubEncKey.html">PubEncKey</a><ul class='methods'><li data-type="method" id="PubEncKey-decrypt-nav"><a href="PubEncKey.html#decrypt">decrypt</a></li><li data-type="method" id="PubEncKey-encrypt-nav"><a href="PubEncKey.html#encrypt">encrypt</a></li><li data-type="method" id="PubEncKey-encryptSealed-nav"><a href="PubEncKey.html#encryptSealed">encryptSealed</a></li><li data-type="method" id="PubEncKey-getRaw-nav"><a href="PubEncKey.html#getRaw">getRaw</a></li></ul></li><li id="PubSignKey-nav"><a href="PubSignKey.html">PubSignKey</a><ul class='methods'><li data-type="method" id="PubSignKey-getRaw-nav"><a href="PubSignKey.html#getRaw">getRaw</a></li><li data-type="method" id="PubSignKey-verify-nav"><a href="PubSignKey.html#verify">verify</a></li></ul></li><li id="RDF-nav"><a href="RDF.html">RDF</a><ul class='methods'><li data-type="method" id="RDF-add-nav"><a href="RDF.html#add">add</a></li><li data-type="method" id="RDF-any-nav"><a href="RDF.html#any">any</a></li><li data-type="method" id="RDF-append-nav"><a href="RDF.html#append">append</a></li><li data-type="method" id="RDF-bnode-nav"><a href="RDF.html#bnode">bnode</a></li><li data-type="method" id="RDF-commit-nav"><a href="RDF.html#commit">commit</a></li><li data-type="method" id="RDF-each-nav"><a href="RDF.html#each">each</a></li><li data-type="method" id="RDF-literal-nav"><a href="RDF.html#literal">literal</a></li><li data-type="method" id="RDF-namespace-nav"><a href="RDF.html#namespace">namespace</a></li><li data-type="method" id="RDF-nowOrWhenFetched-nav"><a href="RDF.html#nowOrWhenFetched">nowOrWhenFetched</a></li><li data-type="method" id="RDF-parse-nav"><a href="RDF.html#parse">parse</a></li><li data-type="method" id="RDF-removeMany-nav"><a href="RDF.html#removeMany">removeMany</a></li><li data-type="method" id="RDF-serialise-nav"><a href="RDF.html#serialise">serialise</a></li><li data-type="method" id="RDF-setId-nav"><a href="RDF.html#setId">setId</a></li><li data-type="method" id="RDF-statementsMatching-nav"><a href="RDF.html#statementsMatching">statementsMatching</a></li><li data-type="method" id="RDF-sym-nav"><a href="RDF.html#sym">sym</a></li></ul></li><li id="Reader-nav"><a href="Reader.html">Reader</a><ul class='methods'><li data-type="method" id="Reader-read-nav"><a href="Reader.html#read">read</a></li><li data-type="method" id="Reader-size-nav"><a href="Reader.html#size">size</a></li></ul></li><li id="SAFEApp-nav"><a href="SAFEApp.html">SAFEApp</a><ul class='methods'><li data-type="method" id="SAFEApp-appIsMock-nav"><a href="SAFEApp.html#appIsMock">appIsMock</a></li><li data-type="method" id="SAFEApp-clearObjectCache-nav"><a href="SAFEApp.html#clearObjectCache">clearObjectCache</a></li><li data-type="method" id="SAFEApp-fetch-nav"><a href="SAFEApp.html#fetch">fetch</a></li><li data-type="method" id="SAFEApp-getAccountInfo-nav"><a href="SAFEApp.html#getAccountInfo">getAccountInfo</a></li><li data-type="method" id="SAFEApp-getOwnContainerName-nav"><a href="SAFEApp.html#getOwnContainerName">getOwnContainerName</a></li><li data-type="method" id="SAFEApp-isNetStateConnected-nav"><a href="SAFEApp.html#isNetStateConnected">isNetStateConnected</a></li><li data-type="method" id="SAFEApp-isNetStateDisconnected-nav"><a href="SAFEApp.html#isNetStateDisconnected">isNetStateDisconnected</a></li><li data-type="method" id="SAFEApp-isNetStateInit-nav"><a href="SAFEApp.html#isNetStateInit">isNetStateInit</a></li><li data-type="method" id="SAFEApp-logPath-nav"><a href="SAFEApp.html#logPath">logPath</a></li><li data-type="method" id="SAFEApp-reconnect-nav"><a href="SAFEApp.html#reconnect">reconnect</a></li><li data-type="method" id="SAFEApp-webFetch-nav"><a href="SAFEApp.html#webFetch">webFetch</a></li></ul></li><li id="SecEncKey-nav"><a href="SecEncKey.html">SecEncKey</a><ul class='methods'><li data-type="method" id="SecEncKey-decrypt-nav"><a href="SecEncKey.html#decrypt">decrypt</a></li><li data-type="method" id="SecEncKey-encrypt-nav"><a href="SecEncKey.html#encrypt">encrypt</a></li><li data-type="method" id="SecEncKey-getRaw-nav"><a href="SecEncKey.html#getRaw">getRaw</a></li></ul></li><li id="SecSignKey-nav"><a href="SecSignKey.html">SecSignKey</a><ul class='methods'><li data-type="method" id="SecSignKey-getRaw-nav"><a href="SecSignKey.html#getRaw">getRaw</a></li><li data-type="method" id="SecSignKey-sign-nav"><a href="SecSignKey.html#sign">sign</a></li></ul></li><li id="SignKeyPair-nav"><a href="SignKeyPair.html">SignKeyPair</a></li><li id="WebID-nav"><a href="WebID.html">WebID</a><ul class='methods'><li data-type="method" id="WebID-create-nav"><a href="WebID.html#create">create</a></li><li data-type="method" id="WebID-fetchContent-nav"><a href="WebID.html#fetchContent">fetchContent</a></li><li data-type="method" id="WebID-init-nav"><a href="WebID.html#init">init</a></li><li data-type="method" id="WebID-serialise-nav"><a href="WebID.html#serialise">serialise</a></li><li data-type="method" id="WebID-update-nav"><a href="WebID.html#update">update</a></li></ul></li><li id="WebInterface-nav"><a href="WebInterface.html">WebInterface</a><ul class='methods'><li data-type="method" id="WebInterface-addPublicNameToDirectory-nav"><a href="WebInterface.html#addPublicNameToDirectory">addPublicNameToDirectory</a></li><li data-type="method" id="WebInterface-addWebIdToDirectory-nav"><a href="WebInterface.html#addWebIdToDirectory">addWebIdToDirectory</a></li><li data-type="method" id="WebInterface-getPublicNames-nav"><a href="WebInterface.html#getPublicNames">getPublicNames</a></li><li data-type="method" id="WebInterface-getVocabs-nav"><a href="WebInterface.html#getVocabs">getVocabs</a></li><li data-type="method" id="WebInterface-getWebIds-nav"><a href="WebInterface.html#getWebIds">getWebIds</a></li><li data-type="method" id="WebInterface-linkServiceToSubname-nav"><a href="WebInterface.html#linkServiceToSubname">linkServiceToSubname</a></li></ul></li><li id="Writer-nav"><a href="Writer.html">Writer</a><ul class='methods'><li data-type="method" id="Writer-close-nav"><a href="Writer.html#close">close</a></li><li data-type="method" id="Writer-write-nav"><a href="Writer.html#write">write</a></li></ul></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#CONSTANTS">CONSTANTS</a></li><li><a href="global.html#fromAuthUri">fromAuthUri</a></li><li><a href="global.html#initialiseApp">initialiseApp</a></li><li><a href="global.html#VERSION">VERSION</a></li></ul>
+  </nav>
+
+  <div id="main">
+    
+      <h1 class="page-title">
+        RDF
+      </h1>
+    
+
+    
+
+<section>
+  <header>
+    
+      <h2>
+        
+        RDF
+        
+      </h2>
+
+      
+        <div class="class-description">
+          <p>Experimental RDF emulation on top of a <a href="MutableData.html">MutableData</a></p>
+        </div>
+      
+    
+  </header>
+
+  <article>
+    <div class="container-overview">
+      
+        
+
+
+  
+    <h2>Constructor</h2>
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#RDF">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="RDF">
+      <span class="type-signature"></span>new RDF<span class="signature">()</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line51">line 51</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+      <h3 class="subsection-title">Methods</h3>
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#add">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="add">
+      <span class="type-signature"></span>add<span class="signature">(subject<span class="signature-attributes">opt</span>, predicate<span class="signature-attributes">opt</span>, object<span class="signature-attributes">opt</span>, provenance<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Adds RDF statement to graph</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+        <th>Attributes</th>
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>subject</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      <a href="global.html#BlankNode">BlankNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_subject">www.w3.org/TR/rdf-schema/#ch_subject</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>predicate</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_predicate">www.w3.org/TR/rdf-schema/#ch_predicate</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>object</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#LiteralNode">LiteralNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_object">www.w3.org/TR/rdf-schema/#ch_object</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>provenance</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro">www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro</a></p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line555">line 555</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#add-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="add-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst asyncFn = async () => {  try {      const rdf = await mData.emulateAs('RDF');      const id = rdf.sym("safe://pluto.astronomy");      const subject = id;      const predicate = null;      const object = null;      const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );      const triple = {          predicate : rdf.vocabs.RDFS('isDefinedBy'),          object : DBP('Pluto')      };      rdf.add(id, triple.predicate, triple.object)  } catch (err) {    throw err;  }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#any">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="any">
+      <span class="type-signature"></span>any<span class="signature">(subject<span class="signature-attributes">opt</span>, predicate<span class="signature-attributes">opt</span>, object<span class="signature-attributes">opt</span>, provenance<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="global.html#LiteralNode">LiteralNode</a>|<a href="global.html#BlankNode">BlankNode</a>|<a href="global.html#NamedNode">NamedNode</a>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Retrieves one node, the first to match any combination of subject, predicate, or object.
+A null value is a wildcard.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+        <th>Attributes</th>
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>subject</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      <a href="global.html#BlankNode">BlankNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_subject">www.w3.org/TR/rdf-schema/#ch_subject</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>predicate</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_predicate">www.w3.org/TR/rdf-schema/#ch_predicate</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>object</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#LiteralNode">LiteralNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_object">www.w3.org/TR/rdf-schema/#ch_object</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>provenance</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro">www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro</a></p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line333">line 333</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#any-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="any-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst asyncFn = async () => {  try {      const rdf = await mData.emulateAs('RDF');      const id = rdf.sym("safe://pluto.astronomy");      const subject = id;      const predicate = null;      const object = null;      const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );      const triples = [          {              predicate : rdf.vocabs.RDFS('isDefinedBy'),              object : DBP('Pluto')          },          {              predicate : rdf.sym("http://dbpedia.org/property/atmosphereComposition"),              object : DBP("Methane")          },          {              predicate : rdf.vocabs.RDF('type'),              object : DBP("Dwarf_planet")          },          {              predicate : rdf.sym("http://dbpedia.org/ontology/discovered"),              object : literalNode          }      ];      // The subject of each triple is the same in this example      triples.forEach( triple => rdf.add(id, triple.predicate, triple.object) );      const result = rdf.any(subject, predicate, object);  } catch (err) {    throw err;  }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#append">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="append">
+      <span class="type-signature">(async) </span>append<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#NameAndTag">NameAndTag</a>>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Append the triples to the RDF document into the underlying MutableData on the network</p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line745">line 745</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#append-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="append-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst toEncrypt = false;const asyncFn = async () => {    try {      const rdf = await mData.emulateAs('RDF');      const id = rdf.sym("safe://pluto.astronomy");      const subject = id;      const predicate = null;      const object = null;      const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );      const triple = {          predicate : rdf.vocabs.RDFS('isDefinedBy'),          object : DBP('Pluto')      };      rdf.add(id, triple.predicate, triple.object)      let nameAndTag = await rdf.commit(toEncrypt);      rdf.add(id, triple.predicate, triple.object)      const newTriple = {          predicate : rdf.vocabs.RDF('type'),          object : DBP("Dwarf_planet")      };      rdf.add(id, newTriple.predicate, newTriple.object)      nameAndTag = await rdf.append();    } catch(err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#bnode">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="bnode">
+      <span class="type-signature"></span>bnode<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#BlankNode">BlankNode</a>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line266">line 266</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#bnode-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="bnode-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst asyncFn = async () => {  try {    const rdf = await mData.emulateAs('RDF');    const blankNode = rdf.bnode();  } catch (err) {    throw err;  }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#commit">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="commit">
+      <span class="type-signature">(async) </span>commit<span class="signature">(toEncrypt<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#NameAndTag">NameAndTag</a>>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Commit the RDF document to the underlying MutableData on the network</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+        <th>Attributes</th>
+      
+
+      
+        <th>Default</th>
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>toEncrypt</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      Boolean
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+          <td class="default">
+            
+              false
+            
+          </td>
+        
+
+        <td class="description last">
+          <p>flag to encrypt the data to be committed</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line628">line 628</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+  <h5>Throws:</h5>
+  
+      
+
+  <div class="param-desc">
+    
+      
+    <span class="param-type">
+      <a href="global.html#ERR_SERIALISING_DESERIALISING">ERR_SERIALISING_DESERIALISING</a>
+    </span>
+
+    
+
+
+    
+  </div>
+
+
+    
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#commit-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="commit-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst toEncrypt = false;const asyncFn = async () => {    try {      const rdf = await mData.emulateAs('RDF');      const id = rdf.sym("safe://pluto.astronomy");      const subject = id;      const predicate = null;      const object = null;      const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );      const triple = {          predicate : rdf.vocabs.RDFS('isDefinedBy'),          object : DBP('Pluto')      };      rdf.add(id, triple.predicate, triple.object)      const nameAndTag = await rdf.commit(toEncrypt);    } catch(err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#each">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="each">
+      <span class="type-signature"></span>each<span class="signature">(subject<span class="signature-attributes">opt</span>, predicate<span class="signature-attributes">opt</span>, object<span class="signature-attributes">opt</span>, provenance<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Retrieves all nodes matching any combination of subject, predicate, or object.
+A null value is a wildcard.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+        <th>Attributes</th>
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>subject</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      <a href="global.html#BlankNode">BlankNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_subject">www.w3.org/TR/rdf-schema/#ch_subject</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>predicate</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_predicate">www.w3.org/TR/rdf-schema/#ch_predicate</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>object</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#LiteralNode">LiteralNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_object">www.w3.org/TR/rdf-schema/#ch_object</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>provenance</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro">www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro</a></p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line381">line 381</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#each-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="each-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst asyncFn = async () => {  try {      const rdf = await mData.emulateAs('RDF');      const id = rdf.sym("safe://pluto.astronomy");      const subject = id;      const predicate = null;      const object = null;      const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );      const triples = [          {              predicate : rdf.vocabs.RDFS('isDefinedBy'),              object : DBP('Pluto')          },          {              predicate : rdf.sym("http://dbpedia.org/property/atmosphereComposition"),              object : DBP("Methane")          },          {              predicate : rdf.vocabs.RDF('type'),              object : DBP("Dwarf_planet")          },          {              predicate : rdf.sym("http://dbpedia.org/ontology/discovered"),              object : literalNode          }      ];      // The subject of each triple is the same in this example      triples.forEach( triple => rdf.add(id, triple.predicate, triple.object) );      const result = rdf.each(subject, predicate, object);  } catch (err) {    throw err;  }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#literal">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="literal">
+      <span class="type-signature"></span>literal<span class="signature">(value, languageOrDatatype)</span><span class="type-signature"> &rarr; {<a href="global.html#LiteralNode">LiteralNode</a>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>value</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    |
+
+    <span class="param-type">
+      Number
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>Literal value</p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>languageOrDatatype</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>Either i18n language tag or XSD URI data type</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line245">line 245</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#literal-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="literal-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst asyncFn = async () => {  try {    const rdf = await mData.emulateAs('RDF');    const discoveryDate = new Date("18 Feb 1930");    const dateTimeDataType = "http://www.w3.org/2001/XMLSchema#dateTime";    let literalNode = rdf.literal(discoveryDate.toISOString(), dateTimeDataType);    console.log( JSON.stringify(literalNode) );    // Alternatively    literalNode = rdf.literal("Aardvark", "en-US");    console.log( JSON.stringify(literalNode) );  } catch (err) {    throw err;  }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#namespace">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="namespace">
+      <span class="type-signature"></span>namespace<span class="signature">(uri)</span><span class="type-signature"> &rarr; {function}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Creates resource namespace prefix and returns function to create <a href="global.html#NamedNode">NamedNode</a>.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>uri</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>Absolute namespace URI</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line219">line 219</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#namespace-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="namespace-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst asyncFn = async () => {  try {    const rdf = await mData.emulateAs('RDF');    const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );    const dwarfPlanetNodeResource = DBP("Dwarf_planet");    const formerPlanetNodeResource = DBP("Former_planet");  } catch (err) {    throw err;  }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#nowOrWhenFetched">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="nowOrWhenFetched">
+      <span class="type-signature">(async) </span>nowOrWhenFetched<span class="signature">(ids, toDecrypt<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Array>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Fetch the RDF data stored in the underlying MutableData on the network
+and load it in memory to allow manipulating triples before commit them again.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+        <th>Attributes</th>
+      
+
+      
+        <th>Default</th>
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>ids</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      Array.&lt;String>
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+
+            
+
+            
+          </td>
+        
+
+        
+          <td class="default">
+            
+          </td>
+        
+
+        <td class="description last">
+          <p>list of RDF graph IDs to use as a filter for fetching
+graphs, e.g. ['safe://mywebid.mypubname', 'safe://mypubname']</p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>toDecrypt</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      Boolean
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+          <td class="default">
+            
+              false
+            
+          </td>
+        
+
+        <td class="description last">
+          <p>flag to decrypt the data being fetched</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line134">line 134</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+  <h5>Throws:</h5>
+  
+      
+
+  <div class="param-desc">
+    
+      
+    <span class="param-type">
+      <a href="global.html#ERR_SERIALISING_DESERIALISING">ERR_SERIALISING_DESERIALISING</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      <a href="global.html#MISSING_RDF_ID">MISSING_RDF_ID</a>
+    </span>
+
+    
+
+
+    
+  </div>
+
+
+    
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#nowOrWhenFetched-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="nowOrWhenFetched-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst ids = [];const toEncrypt = false;const toDecrypt = false;const asyncFn = async () => {    try {        const rdf = await mData.emulateAs('RDF');        const id = rdf.sym("safe://pluto.astronomy");        const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );        const triples = [            {                predicate : rdf.vocabs.RDFS('isDefinedBy'),                object : DBP('Pluto')            },            {                predicate : rdf.sym("http://dbpedia.org/property/atmosphereComposition"),                object : DBP("Methane")            },            {                predicate : rdf.vocabs.RDF('type'),                object : DBP("Dwarf_planet")            },            {                predicate : rdf.sym("http://dbpedia.org/ontology/discovered"),                object : literalNode            }        ];        // The subject of each triple is the same in this example        triples.forEach( triple => rdf.add(id, triple.predicate, triple.object) );        const nameAndTag = await rdf.commit(toEncrypt);        const entryGraphArray = await rdf.nowOrWhenFetched(ids, toDecrypt);    } catch(err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#parse">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="parse">
+      <span class="type-signature"></span>parse<span class="signature">(data, mimeType, id)</span><span class="type-signature"> &rarr; {Promise.&lt;String>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Parse serialised RDF data and place into graph store</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>data</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>Serialised RDF</p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>mimeType</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>id</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>Arbitrary absolute URI to identify graph</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line514">line 514</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#parse-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="parse-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtained  const mimeType = "text/turtle";  const asyncFn = async () => {      try {          const rdf = await mData.emulateAs('RDF');          const id = rdf.sym("safe://pluto.astronomy");          const serialised = `          </code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#removeMany">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="removeMany">
+      <span class="type-signature"></span>removeMany<span class="signature">(subject<span class="signature-attributes">opt</span>, predicate<span class="signature-attributes">opt</span>, object<span class="signature-attributes">opt</span>, provenance<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Remove all statements matching any combination of subject, predicate or object</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+        <th>Attributes</th>
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>subject</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      <a href="global.html#BlankNode">BlankNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_subject">www.w3.org/TR/rdf-schema/#ch_subject</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>predicate</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_predicate">www.w3.org/TR/rdf-schema/#ch_predicate</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>object</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#LiteralNode">LiteralNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_object">www.w3.org/TR/rdf-schema/#ch_object</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>provenance</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro">www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro</a></p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line475">line 475</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#removeMany-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="removeMany-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst asyncFn = async () => {  try {      const rdf = await mData.emulateAs('RDF');      const id = rdf.sym("safe://pluto.astronomy");      const subject = id;      const predicate = null;      const object = null;      const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );      const triples = [          {              predicate : rdf.vocabs.RDFS('isDefinedBy'),              object : DBP('Pluto')          },          {              predicate : rdf.sym("http://dbpedia.org/property/atmosphereComposition"),              object : DBP("Methane")          },          {              predicate : rdf.vocabs.RDF('type'),              object : DBP("Dwarf_planet")          },          {              predicate : rdf.sym("http://dbpedia.org/ontology/discovered"),              object : literalNode          }      ];      // The subject of each triple is the same in this example      triples.forEach( triple => rdf.add(id, triple.predicate, triple.object) );      rdf.removeMany(subject, predicate, object);  } catch (err) {    throw err;  }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#serialise">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="serialise">
+      <span class="type-signature">(async) </span>serialise<span class="signature">(mimeType)</span><span class="type-signature"> &rarr; {Promise.&lt;String>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Serialise RDF data</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>mimeType</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line586">line 586</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#serialise-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="serialise-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst mimeType = "text/turtle";const asyncFn = async () => {    try {      const rdf = await mData.emulateAs('RDF');      const id = rdf.sym("safe://pluto.astronomy");      const subject = id;      const predicate = null;      const object = null;      const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );      const triple = {          predicate : rdf.vocabs.RDFS('isDefinedBy'),          object : DBP('Pluto')      };      rdf.add(id, triple.predicate, triple.object)      const serialised = await rdf.serialise(mimeType);    } catch(err) {        throw err;    }    console.log(serialised);};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#setId">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="setId">
+      <span class="type-signature"></span>setId<span class="signature">(id)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Sets ID for graph store</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>id</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>ID representing current in-memory graph store.</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line82">line 82</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#setId-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="setId-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst asyncFn = async () => {  try {    const rdf = await mData.emulateAs('RDF');    const id = rdf.sym("safe://pluto.astronomy");    rdf.setId(id.uri);    console.log(rdf.id);  } catch (err) {    throw err;  }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#statementsMatching">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="statementsMatching">
+      <span class="type-signature"></span>statementsMatching<span class="signature">(subject<span class="signature-attributes">opt</span>, predicate<span class="signature-attributes">opt</span>, object<span class="signature-attributes">opt</span>, provenance<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Retrieves all statements matching any combination of subject, predicate, or object.
+A null value is a wildcard.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+        <th>Attributes</th>
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>subject</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      <a href="global.html#BlankNode">BlankNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_subject">www.w3.org/TR/rdf-schema/#ch_subject</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>predicate</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_predicate">www.w3.org/TR/rdf-schema/#ch_predicate</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>object</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#LiteralNode">LiteralNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      null
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/rdf-schema/#ch_object">www.w3.org/TR/rdf-schema/#ch_object</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>provenance</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="global.html#NamedNode">NamedNode</a>
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          <p>https://<a href="http://www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro">www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro</a></p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line429">line 429</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#statementsMatching-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="statementsMatching-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst asyncFn = async () => {  try {      const rdf = await mData.emulateAs('RDF');      const id = rdf.sym("safe://pluto.astronomy");      const subject = id;      const predicate = null;      const object = null;      const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );      const triples = [          {              predicate : rdf.vocabs.RDFS('isDefinedBy'),              object : DBP('Pluto')          },          {              predicate : rdf.sym("http://dbpedia.org/property/atmosphereComposition"),              object : DBP("Methane")          },          {              predicate : rdf.vocabs.RDF('type'),              object : DBP("Dwarf_planet")          },          {              predicate : rdf.sym("http://dbpedia.org/ontology/discovered"),              object : literalNode          }      ];      // The subject of each triple is the same in this example      triples.forEach( triple => rdf.add(id, triple.predicate, triple.object) );      const result = rdf.statementsMatching(subject, predicate, object);  } catch (err) {    throw err;  }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#sym">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="sym">
+      <span class="type-signature"></span>sym<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#NamedNode">NamedNode</a>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Creates an RDF resource identified by a URI</p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_emulations_rdf.js.html">api/emulations/rdf.js</a>, <a href="api_emulations_rdf.js.html#line285">line 285</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#sym-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="sym-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtainedconst asyncFn = async () => {  try {    const rdf = await mData.emulateAs('RDF');    const predicateUri = "http://dbpedia.org/ontology/discovered";    const predicateResource = rdf.sym(predicateUri);  } catch (err) {    throw err;  }};</code></pre>
+
+
+  </div>
+
+
+      
+    
+
+    
+
+    
+  </article>
+</section>
+
+
+
+
+  </div>
+
+  <br class="clear">
+
+  <footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+  </footer>
+
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
+
+  
+
+</body>
+</html>

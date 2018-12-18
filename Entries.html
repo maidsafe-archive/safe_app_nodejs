@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>
-      Home - Documentation
+      Entries - Documentation
   </title>
 
   <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
@@ -51,14 +51,14 @@
 
   <div class="top-nav-wrapper">
     <ul>
-      <li  class="active" >
+      <li >
         <a href="index.html">
           
-          
-            <svg fill="#0095dd" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
               <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
               <path d="M0 0h24v24H0z" fill="none"/>
             </svg>
+          
           
         </a>
       </li>
@@ -91,35 +91,827 @@
 
   <div id="main">
     
+      <h1 class="page-title">
+        Entries
+      </h1>
+    
 
     
+
+<section>
+  <header>
+    
+      <h2>
+        
+        Entries
+        
+      </h2>
+
+      
+        <div class="class-description">
+          <p><a href="MutableData.html">MutableData</a> <a href="Entries.html">Entries</a> operations</p>
+        </div>
+      
+    
+  </header>
+
+  <article>
+    <div class="container-overview">
+      
+        
+
+
+  
+    <h2>Constructor</h2>
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#Entries">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="Entries">
+      <span class="type-signature"></span>new Entries<span class="signature">()</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line261">line 261</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+      <h3 class="subsection-title">Methods</h3>
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#get">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="get">
+      <span class="type-signature"></span>get<span class="signature">(keyName)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#ValueVersion">ValueVersion</a>>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Look up the value of a specific key</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
       
 
-
-
-    
+      <th>Type</th>
 
       
 
+      
 
-  <section class="readme">
-    <article>
-      <h1>Getting started</h1><pre class="prettyprint source lang-bash"><code>git clone https://github.com/maidsafe/safe_app_nodejs.git</code></pre><pre class="prettyprint source lang-bash"><code>cd safe_app_nodejs</code></pre><pre class="prettyprint source lang-bash"><code>yarn</code></pre><pre class="prettyprint source lang-javascript"><code>const safe = require('@maidsafe/safe-node-app');
-const appInfo = {
-    id     : 'net.maidsafe.example',
-    name   : 'Example SAFE app',
-    vendor : 'MaidSafe.net Ltd'
-};
-const asyncFn = async () => {
-    const app = await safe.<a href="global.html#initialiseApp">initialiseApp</a>(appInfo);
-};</code></pre><p><strong>Recommended to build <a href="https://github.com/maidsafe/safe_examples/tree/master/safe_app_electron_quick_start">basic Electron app</a>, while referencing this documentation.</strong></p>
-<p>Our web API exposed in <a href="https://github.com/maidsafe/safe_browser">SAFE Browser</a>, nearly identical to this library with just one variation, is an easy way to start exploring operations.
-Recommended to either follow the <a href="https://github.com/maidsafe/safe_examples/tree/master/safe_web_app_quick_start">web API tutorial</a> or to explore with our <a href="https://github.com/maidsafe/safe_examples/tree/master/safe_web_api_playground">web API playground</a>.</p>
-    </article>
-  </section>
+      <th class="last">Description</th>
+    </tr>
+  </thead>
 
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>keyName</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
 
     
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>the key to lookup</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line311">line 311</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#get-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="get-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPublic(15001);        await mData.quickSetup({ surname: 'Turing' });        const entries = await mData.getEntries();        const value = await entries.get('surname')    } catch(err) {      throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#insert">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="insert">
+      <span class="type-signature"></span>insert<span class="signature">(keyName, value)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Insert a new entry. Once you call <code>MutableData.put</code> with this entry,
+it will fail if the entry already exists or the current app doesn't have the
+permissions to edit that <a href="MutableData.html">MutableData</a>.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>keyName</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    |
+
+    <span class="param-type">
+      Buffer
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>value</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    |
+
+    <span class="param-type">
+      Buffer
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line362">line 362</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#insert-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="insert-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPublic(15001);        await mData.quickSetup({});        const entries = await mData.getEntries();        const  entriesArray = await entries.insert('given_name', 'Alan');    } catch(err) {      throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#len">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="len">
+      <span class="type-signature"></span>len<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Number>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Get the total number of entries in the <a href="MutableData.html">MutableData</a></p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line279">line 279</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#len-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="len-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {      const mData = await app.mutableData.newRandomPublic(15001);      await mData.quickSetup({ surname: 'Turing' });      const perms = await mData.getPermissions();      const length = await perms.len();    } catch(err) {      throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#listEntries">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="listEntries">
+      <span class="type-signature"></span>listEntries<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Get a list with the entries contained in this <a href="MutableData.html">MutableData</a></p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line337">line 337</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#listEntries-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="listEntries-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPublic(15001);        await mData.quickSetup({ key1: 'value1', key2: 'value2' });        const entries = await mData.getEntries();        const  entriesArray = await entries.listEntries();        entriesArray.forEach((entry) => {          const key = entry.key.toString();          const value = entry.value.buf.toString();          console.log('Key: ', key);          console.log('Value: ', value);        });    } catch(err) {      throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#mutate">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="mutate">
+      <span class="type-signature"></span>mutate<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="EntryMutationTransaction.html">EntryMutationTransaction</a>>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Create a new mutation transaction for the entries</p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line382">line 382</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#mutate-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="mutate-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPublic(15001);        await mData.quickSetup({});        const entries = await mData.getEntries();        const  mutationIntertace = await entries.mutate();    } catch(err) {      throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+    
+
+    
+
+    
+  </article>
+</section>
+
+
 
 
   </div>

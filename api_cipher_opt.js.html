@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>
-      Home - Documentation
+      api/cipher_opt.js - Documentation
   </title>
 
   <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
@@ -51,14 +53,14 @@
 
   <div class="top-nav-wrapper">
     <ul>
-      <li  class="active" >
+      <li >
         <a href="index.html">
           
-          
-            <svg fill="#0095dd" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
               <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
               <path d="M0 0h24v24H0z" fill="none"/>
             </svg>
+          
           
         </a>
       </li>
@@ -91,33 +93,117 @@
 
   <div id="main">
     
+      <h1 class="page-title">
+        api/cipher_opt.js
+      </h1>
+    
 
     
       
 
+<section>
+  <article>
+    <pre class="prettyprint source linenums"><code>// Copyright 2018 MaidSafe.net limited.
+//
+// This SAFE Network Software is licensed to you under
+// the MIT license &lt;LICENSE-MIT or http://opensource.org/licenses/MIT> or
+// the Modified BSD license &lt;LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
+// at your option.
+//
+// This file may not be copied, modified, or distributed except according to those terms.
+//
+// Please review the Licences for the specific language governing permissions and limitations
+// relating to use of the SAFE Network Software.
 
 
-    
+const h = require('../helpers');
+const lib = require('../native/lib');
+const errConst = require('../error_const');
+const makeError = require('../native/_error.js');
 
-      
+class CipherOpt extends h.NetworkObject {
+  static free(app, ref) {
+    lib.cipher_opt_free(app.connection, ref);
+  }
+}
 
+/**
+* Provides encryption methods for committing {@link ImmutableData}
+*/
+class CipherOptInterface {
 
-  <section class="readme">
-    <article>
-      <h1>Getting started</h1><pre class="prettyprint source lang-bash"><code>git clone https://github.com/maidsafe/safe_app_nodejs.git</code></pre><pre class="prettyprint source lang-bash"><code>cd safe_app_nodejs</code></pre><pre class="prettyprint source lang-bash"><code>yarn</code></pre><pre class="prettyprint source lang-javascript"><code>const safe = require('@maidsafe/safe-node-app');
-const appInfo = {
-    id     : 'net.maidsafe.example',
-    name   : 'Example SAFE app',
-    vendor : 'MaidSafe.net Ltd'
-};
-const asyncFn = async () => {
-    const app = await safe.<a href="global.html#initialiseApp">initialiseApp</a>(appInfo);
-};</code></pre><p><strong>Recommended to build <a href="https://github.com/maidsafe/safe_examples/tree/master/safe_app_electron_quick_start">basic Electron app</a>, while referencing this documentation.</strong></p>
-<p>Our web API exposed in <a href="https://github.com/maidsafe/safe_browser">SAFE Browser</a>, nearly identical to this library with just one variation, is an easy way to start exploring operations.
-Recommended to either follow the <a href="https://github.com/maidsafe/safe_examples/tree/master/safe_web_app_quick_start">web API tutorial</a> or to explore with our <a href="https://github.com/maidsafe/safe_examples/tree/master/safe_web_api_playground">web API playground</a>.</p>
-    </article>
-  </section>
+  /**
+   * @hideconstructor
+   */
+  constructor(app) {
+    this.app = app;
+  }
 
+  /**
+  * Create a plaintext cipher
+  * @returns {Promises&lt;CipherOpt>}
+  * @example
+  * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+  * const asyncFn = async () => {
+  *     const cipherOpt = await app.cipherOpt.newPlainText();
+  *     const immdWriter = await app.immutableData.create();
+  *     await idWriter.write('&lt;public file buffer data>');
+  *     const idAddress = await idWriter.close(cipherOpt);
+  * };
+  */
+  newPlainText() {
+    return lib.cipher_opt_new_plaintext(this.app.connection)
+          .then((c) => h.autoref(new CipherOpt(this.app, c)));
+  }
+
+  /**
+  * Create a new symmetric cipher
+  * @returns {Promises&lt;CipherOpt>}
+  * @example
+  * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+  * const asyncFn = async () => {
+  *     const cipherOpt = await app.cipherOpt.newSymmetric();
+  *     const immdWriter = await app.immutableData.create();
+  *     await idWriter.write('Data for my eyes only.');
+  *     const idAddress = await idWriter.close(cipherOpt);
+  * };
+  */
+  newSymmetric() {
+    return lib.cipher_opt_new_symmetric(this.app.connection)
+        .then((c) => h.autoref(new CipherOpt(this.app, c)));
+  }
+  /**
+  * Create a new asymmetric cipher for the given public encryption key
+  * @param {PubEncKey} pubEncKey
+  * @throws {MISSING_PUB_ENC_KEY}
+  * @returns {Promises&lt;CipherOpt>}
+  * @example
+  * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+  * const asyncFn = async () => {
+  *     // For this example you're encrypting data with our own public encryption key,
+  *     // which only you will be able to deciper, however,
+  *     // the use case is for encrypting with the intended recipient's public encryption key.
+  *     const pubEncKey = await app.crypto.getAppPubEncKey();
+  *     const cipherOpt = await app.cipherOpt.newAsymmetric(pubEncKey);
+  *     const immdWriter = await app.immutableData.create();
+  *     const data = 'Data only decipherable by the holder of the private encryption key
+  *     which is paired to the public encryption key supplied to asymmetric cipher.';
+  *     await idWriter.write(data);
+  *     const idAddress = await idWriter.close(cipherOpt);
+  * };
+  */
+  newAsymmetric(pubEncKey) {
+    if (!pubEncKey) {
+      throw makeError(errConst.MISSING_PUB_ENC_KEY.code, errConst.MISSING_PUB_ENC_KEY.msg);
+    }
+    return lib.cipher_opt_new_asymmetric(this.app.connection, pubEncKey.ref)
+        .then((c) => h.autoref(new CipherOpt(this.app, c)));
+  }
+}
+module.exports = CipherOptInterface;
+</code></pre>
+  </article>
+</section>
 
     
 

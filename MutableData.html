@@ -1,0 +1,3349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      MutableData - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  
+  <link type="text/css" rel="stylesheet" href="styles/collapse.css">
+  
+
+  
+
+  <!-- start Mixpanel -->
+  <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+  0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+  for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+  mixpanel.init("1919205b2da72e4da3b9b6639b444d59");</script>
+  <!-- end Mixpanel -->
+</head>
+
+<body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
+
+  <label for="nav-trigger" class="overlay"></label>
+
+  <div class="top-nav-wrapper">
+    <ul>
+      <li >
+        <a href="index.html">
+          
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+          
+        </a>
+      </li>
+
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      SAFE Network Node.js Client Library
+    </h3>
+
+    
+      <h3>
+        Resources
+      </h3>
+      
+        <a href="https://github.com/maidsafe/safe_app_nodejs">Github Repo</a>
+      
+        <a href=""> | </a>
+      
+        <a href="https://forum.safedev.org/">Dev Forum</a>
+      
+    
+
+    <h3>Classes</h3><ul><li id="AuthInterface-nav"><a href="AuthInterface.html">AuthInterface</a><ul class='methods'><li data-type="method" id="AuthInterface-canAccessContainer-nav"><a href="AuthInterface.html#canAccessContainer">canAccessContainer</a></li><li data-type="method" id="AuthInterface-genAuthUri-nav"><a href="AuthInterface.html#genAuthUri">genAuthUri</a></li><li data-type="method" id="AuthInterface-genConnUri-nav"><a href="AuthInterface.html#genConnUri">genConnUri</a></li><li data-type="method" id="AuthInterface-genContainerAuthUri-nav"><a href="AuthInterface.html#genContainerAuthUri">genContainerAuthUri</a></li><li data-type="method" id="AuthInterface-genShareMDataUri-nav"><a href="AuthInterface.html#genShareMDataUri">genShareMDataUri</a></li><li data-type="method" id="AuthInterface-getContainer-nav"><a href="AuthInterface.html#getContainer">getContainer</a></li><li data-type="method" id="AuthInterface-getContainersPermissions-nav"><a href="AuthInterface.html#getContainersPermissions">getContainersPermissions</a></li><li data-type="method" id="AuthInterface-getOwnContainer-nav"><a href="AuthInterface.html#getOwnContainer">getOwnContainer</a></li><li data-type="method" id="AuthInterface-loginForTest-nav"><a href="AuthInterface.html#loginForTest">loginForTest</a></li><li data-type="method" id="AuthInterface-loginFromUri-nav"><a href="AuthInterface.html#loginFromUri">loginFromUri</a></li><li data-type="method" id="AuthInterface-openUri-nav"><a href="AuthInterface.html#openUri">openUri</a></li><li data-type="method" id="AuthInterface-readGrantedPermissions-nav"><a href="AuthInterface.html#readGrantedPermissions">readGrantedPermissions</a></li><li data-type="method" id="AuthInterface-refreshContainersPermissions-nav"><a href="AuthInterface.html#refreshContainersPermissions">refreshContainersPermissions</a></li><li data-type="method" id="AuthInterface-simulateNetworkDisconnect-nav"><a href="AuthInterface.html#simulateNetworkDisconnect">simulateNetworkDisconnect</a></li></ul></li><li id="CipherOptInterface-nav"><a href="CipherOptInterface.html">CipherOptInterface</a><ul class='methods'><li data-type="method" id="CipherOptInterface-newAsymmetric-nav"><a href="CipherOptInterface.html#newAsymmetric">newAsymmetric</a></li><li data-type="method" id="CipherOptInterface-newPlainText-nav"><a href="CipherOptInterface.html#newPlainText">newPlainText</a></li><li data-type="method" id="CipherOptInterface-newSymmetric-nav"><a href="CipherOptInterface.html#newSymmetric">newSymmetric</a></li></ul></li><li id="CryptoInterface-nav"><a href="CryptoInterface.html">CryptoInterface</a><ul class='methods'><li data-type="method" id="CryptoInterface-generateEncKeyPair-nav"><a href="CryptoInterface.html#generateEncKeyPair">generateEncKeyPair</a></li><li data-type="method" id="CryptoInterface-generateEncKeyPairFromRaw-nav"><a href="CryptoInterface.html#generateEncKeyPairFromRaw">generateEncKeyPairFromRaw</a></li><li data-type="method" id="CryptoInterface-generateNonce-nav"><a href="CryptoInterface.html#generateNonce">generateNonce</a></li><li data-type="method" id="CryptoInterface-generateSignKeyPair-nav"><a href="CryptoInterface.html#generateSignKeyPair">generateSignKeyPair</a></li><li data-type="method" id="CryptoInterface-generateSignKeyPairFromRaw-nav"><a href="CryptoInterface.html#generateSignKeyPairFromRaw">generateSignKeyPairFromRaw</a></li><li data-type="method" id="CryptoInterface-getAppPubEncKey-nav"><a href="CryptoInterface.html#getAppPubEncKey">getAppPubEncKey</a></li><li data-type="method" id="CryptoInterface-getAppPubSignKey-nav"><a href="CryptoInterface.html#getAppPubSignKey">getAppPubSignKey</a></li><li data-type="method" id="CryptoInterface-pubEncKeyFromRaw-nav"><a href="CryptoInterface.html#pubEncKeyFromRaw">pubEncKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-pubSignKeyFromRaw-nav"><a href="CryptoInterface.html#pubSignKeyFromRaw">pubSignKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-secEncKeyFromRaw-nav"><a href="CryptoInterface.html#secEncKeyFromRaw">secEncKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-secSignKeyFromRaw-nav"><a href="CryptoInterface.html#secSignKeyFromRaw">secSignKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-sha3Hash-nav"><a href="CryptoInterface.html#sha3Hash">sha3Hash</a></li></ul></li><li id="EncKeyPair-nav"><a href="EncKeyPair.html">EncKeyPair</a><ul class='methods'><li data-type="method" id="EncKeyPair-decryptSealed-nav"><a href="EncKeyPair.html#decryptSealed">decryptSealed</a></li></ul></li><li id="Entries-nav"><a href="Entries.html">Entries</a><ul class='methods'><li data-type="method" id="Entries-get-nav"><a href="Entries.html#get">get</a></li><li data-type="method" id="Entries-insert-nav"><a href="Entries.html#insert">insert</a></li><li data-type="method" id="Entries-len-nav"><a href="Entries.html#len">len</a></li><li data-type="method" id="Entries-listEntries-nav"><a href="Entries.html#listEntries">listEntries</a></li><li data-type="method" id="Entries-mutate-nav"><a href="Entries.html#mutate">mutate</a></li></ul></li><li id="EntryMutationTransaction-nav"><a href="EntryMutationTransaction.html">EntryMutationTransaction</a><ul class='methods'><li data-type="method" id="EntryMutationTransaction-delete-nav"><a href="EntryMutationTransaction.html#delete">delete</a></li><li data-type="method" id="EntryMutationTransaction-insert-nav"><a href="EntryMutationTransaction.html#insert">insert</a></li><li data-type="method" id="EntryMutationTransaction-update-nav"><a href="EntryMutationTransaction.html#update">update</a></li></ul></li><li id="File-nav"><a href="File.html">File</a><ul class='methods'><li data-type="method" id="File-close-nav"><a href="File.html#close">close</a></li><li data-type="method" id="File-read-nav"><a href="File.html#read">read</a></li><li data-type="method" id="File-size-nav"><a href="File.html#size">size</a></li><li data-type="method" id="File-write-nav"><a href="File.html#write">write</a></li></ul></li><li id="ImmutableDataInterface-nav"><a href="ImmutableDataInterface.html">ImmutableDataInterface</a><ul class='methods'><li data-type="method" id="ImmutableDataInterface-create-nav"><a href="ImmutableDataInterface.html#create">create</a></li><li data-type="method" id="ImmutableDataInterface-fetch-nav"><a href="ImmutableDataInterface.html#fetch">fetch</a></li></ul></li><li id="MutableData-nav"><a href="MutableData.html">MutableData</a><ul class='methods'><li data-type="method" id="MutableData-applyEntriesMutation-nav"><a href="MutableData.html#applyEntriesMutation">applyEntriesMutation</a></li><li data-type="method" id="MutableData-decrypt-nav"><a href="MutableData.html#decrypt">decrypt</a></li><li data-type="method" id="MutableData-delUserPermissions-nav"><a href="MutableData.html#delUserPermissions">delUserPermissions</a></li><li data-type="method" id="MutableData-emulateAs-nav"><a href="MutableData.html#emulateAs">emulateAs</a></li><li data-type="method" id="MutableData-encryptKey-nav"><a href="MutableData.html#encryptKey">encryptKey</a></li><li data-type="method" id="MutableData-encryptValue-nav"><a href="MutableData.html#encryptValue">encryptValue</a></li><li data-type="method" id="MutableData-get-nav"><a href="MutableData.html#get">get</a></li><li data-type="method" id="MutableData-getEntries-nav"><a href="MutableData.html#getEntries">getEntries</a></li><li data-type="method" id="MutableData-getKeys-nav"><a href="MutableData.html#getKeys">getKeys</a></li><li data-type="method" id="MutableData-getNameAndTag-nav"><a href="MutableData.html#getNameAndTag">getNameAndTag</a></li><li data-type="method" id="MutableData-getPermissions-nav"><a href="MutableData.html#getPermissions">getPermissions</a></li><li data-type="method" id="MutableData-getSerialisedSize-nav"><a href="MutableData.html#getSerialisedSize">getSerialisedSize</a></li><li data-type="method" id="MutableData-getUserPermissions-nav"><a href="MutableData.html#getUserPermissions">getUserPermissions</a></li><li data-type="method" id="MutableData-getValues-nav"><a href="MutableData.html#getValues">getValues</a></li><li data-type="method" id="MutableData-getVersion-nav"><a href="MutableData.html#getVersion">getVersion</a></li><li data-type="method" id="MutableData-put-nav"><a href="MutableData.html#put">put</a></li><li data-type="method" id="MutableData-quickSetup-nav"><a href="MutableData.html#quickSetup">quickSetup</a></li><li data-type="method" id="MutableData-serialise-nav"><a href="MutableData.html#serialise">serialise</a></li><li data-type="method" id="MutableData-setMetadata-nav"><a href="MutableData.html#setMetadata">setMetadata</a></li><li data-type="method" id="MutableData-setUserPermissions-nav"><a href="MutableData.html#setUserPermissions">setUserPermissions</a></li></ul></li><li id="MutableDataInterface-nav"><a href="MutableDataInterface.html">MutableDataInterface</a><ul class='methods'><li data-type="method" id="MutableDataInterface-fromSerial-nav"><a href="MutableDataInterface.html#fromSerial">fromSerial</a></li><li data-type="method" id="MutableDataInterface-newEntries-nav"><a href="MutableDataInterface.html#newEntries">newEntries</a></li><li data-type="method" id="MutableDataInterface-newMutation-nav"><a href="MutableDataInterface.html#newMutation">newMutation</a></li><li data-type="method" id="MutableDataInterface-newPermissions-nav"><a href="MutableDataInterface.html#newPermissions">newPermissions</a></li><li data-type="method" id="MutableDataInterface-newPrivate-nav"><a href="MutableDataInterface.html#newPrivate">newPrivate</a></li><li data-type="method" id="MutableDataInterface-newPublic-nav"><a href="MutableDataInterface.html#newPublic">newPublic</a></li><li data-type="method" id="MutableDataInterface-newRandomPrivate-nav"><a href="MutableDataInterface.html#newRandomPrivate">newRandomPrivate</a></li><li data-type="method" id="MutableDataInterface-newRandomPublic-nav"><a href="MutableDataInterface.html#newRandomPublic">newRandomPublic</a></li></ul></li><li id="NFS-nav"><a href="NFS.html">NFS</a><ul class='methods'><li data-type="method" id="NFS-create-nav"><a href="NFS.html#create">create</a></li><li data-type="method" id="NFS-delete-nav"><a href="NFS.html#delete">delete</a></li><li data-type="method" id="NFS-fetch-nav"><a href="NFS.html#fetch">fetch</a></li><li data-type="method" id="NFS-insert-nav"><a href="NFS.html#insert">insert</a></li><li data-type="method" id="NFS-open-nav"><a href="NFS.html#open">open</a></li><li data-type="method" id="NFS-update-nav"><a href="NFS.html#update">update</a></li></ul></li><li id="Permissions-nav"><a href="Permissions.html">Permissions</a><ul class='methods'><li data-type="method" id="Permissions-getPermissionSet-nav"><a href="Permissions.html#getPermissionSet">getPermissionSet</a></li><li data-type="method" id="Permissions-insertPermissionSet-nav"><a href="Permissions.html#insertPermissionSet">insertPermissionSet</a></li><li data-type="method" id="Permissions-len-nav"><a href="Permissions.html#len">len</a></li><li data-type="method" id="Permissions-listPermissionSets-nav"><a href="Permissions.html#listPermissionSets">listPermissionSets</a></li></ul></li><li id="PubEncKey-nav"><a href="PubEncKey.html">PubEncKey</a><ul class='methods'><li data-type="method" id="PubEncKey-decrypt-nav"><a href="PubEncKey.html#decrypt">decrypt</a></li><li data-type="method" id="PubEncKey-encrypt-nav"><a href="PubEncKey.html#encrypt">encrypt</a></li><li data-type="method" id="PubEncKey-encryptSealed-nav"><a href="PubEncKey.html#encryptSealed">encryptSealed</a></li><li data-type="method" id="PubEncKey-getRaw-nav"><a href="PubEncKey.html#getRaw">getRaw</a></li></ul></li><li id="PubSignKey-nav"><a href="PubSignKey.html">PubSignKey</a><ul class='methods'><li data-type="method" id="PubSignKey-getRaw-nav"><a href="PubSignKey.html#getRaw">getRaw</a></li><li data-type="method" id="PubSignKey-verify-nav"><a href="PubSignKey.html#verify">verify</a></li></ul></li><li id="RDF-nav"><a href="RDF.html">RDF</a><ul class='methods'><li data-type="method" id="RDF-add-nav"><a href="RDF.html#add">add</a></li><li data-type="method" id="RDF-any-nav"><a href="RDF.html#any">any</a></li><li data-type="method" id="RDF-append-nav"><a href="RDF.html#append">append</a></li><li data-type="method" id="RDF-bnode-nav"><a href="RDF.html#bnode">bnode</a></li><li data-type="method" id="RDF-commit-nav"><a href="RDF.html#commit">commit</a></li><li data-type="method" id="RDF-each-nav"><a href="RDF.html#each">each</a></li><li data-type="method" id="RDF-literal-nav"><a href="RDF.html#literal">literal</a></li><li data-type="method" id="RDF-namespace-nav"><a href="RDF.html#namespace">namespace</a></li><li data-type="method" id="RDF-nowOrWhenFetched-nav"><a href="RDF.html#nowOrWhenFetched">nowOrWhenFetched</a></li><li data-type="method" id="RDF-parse-nav"><a href="RDF.html#parse">parse</a></li><li data-type="method" id="RDF-removeMany-nav"><a href="RDF.html#removeMany">removeMany</a></li><li data-type="method" id="RDF-serialise-nav"><a href="RDF.html#serialise">serialise</a></li><li data-type="method" id="RDF-setId-nav"><a href="RDF.html#setId">setId</a></li><li data-type="method" id="RDF-statementsMatching-nav"><a href="RDF.html#statementsMatching">statementsMatching</a></li><li data-type="method" id="RDF-sym-nav"><a href="RDF.html#sym">sym</a></li></ul></li><li id="Reader-nav"><a href="Reader.html">Reader</a><ul class='methods'><li data-type="method" id="Reader-read-nav"><a href="Reader.html#read">read</a></li><li data-type="method" id="Reader-size-nav"><a href="Reader.html#size">size</a></li></ul></li><li id="SAFEApp-nav"><a href="SAFEApp.html">SAFEApp</a><ul class='methods'><li data-type="method" id="SAFEApp-appIsMock-nav"><a href="SAFEApp.html#appIsMock">appIsMock</a></li><li data-type="method" id="SAFEApp-clearObjectCache-nav"><a href="SAFEApp.html#clearObjectCache">clearObjectCache</a></li><li data-type="method" id="SAFEApp-fetch-nav"><a href="SAFEApp.html#fetch">fetch</a></li><li data-type="method" id="SAFEApp-getAccountInfo-nav"><a href="SAFEApp.html#getAccountInfo">getAccountInfo</a></li><li data-type="method" id="SAFEApp-getOwnContainerName-nav"><a href="SAFEApp.html#getOwnContainerName">getOwnContainerName</a></li><li data-type="method" id="SAFEApp-isNetStateConnected-nav"><a href="SAFEApp.html#isNetStateConnected">isNetStateConnected</a></li><li data-type="method" id="SAFEApp-isNetStateDisconnected-nav"><a href="SAFEApp.html#isNetStateDisconnected">isNetStateDisconnected</a></li><li data-type="method" id="SAFEApp-isNetStateInit-nav"><a href="SAFEApp.html#isNetStateInit">isNetStateInit</a></li><li data-type="method" id="SAFEApp-logPath-nav"><a href="SAFEApp.html#logPath">logPath</a></li><li data-type="method" id="SAFEApp-reconnect-nav"><a href="SAFEApp.html#reconnect">reconnect</a></li><li data-type="method" id="SAFEApp-webFetch-nav"><a href="SAFEApp.html#webFetch">webFetch</a></li></ul></li><li id="SecEncKey-nav"><a href="SecEncKey.html">SecEncKey</a><ul class='methods'><li data-type="method" id="SecEncKey-decrypt-nav"><a href="SecEncKey.html#decrypt">decrypt</a></li><li data-type="method" id="SecEncKey-encrypt-nav"><a href="SecEncKey.html#encrypt">encrypt</a></li><li data-type="method" id="SecEncKey-getRaw-nav"><a href="SecEncKey.html#getRaw">getRaw</a></li></ul></li><li id="SecSignKey-nav"><a href="SecSignKey.html">SecSignKey</a><ul class='methods'><li data-type="method" id="SecSignKey-getRaw-nav"><a href="SecSignKey.html#getRaw">getRaw</a></li><li data-type="method" id="SecSignKey-sign-nav"><a href="SecSignKey.html#sign">sign</a></li></ul></li><li id="SignKeyPair-nav"><a href="SignKeyPair.html">SignKeyPair</a></li><li id="WebID-nav"><a href="WebID.html">WebID</a><ul class='methods'><li data-type="method" id="WebID-create-nav"><a href="WebID.html#create">create</a></li><li data-type="method" id="WebID-fetchContent-nav"><a href="WebID.html#fetchContent">fetchContent</a></li><li data-type="method" id="WebID-init-nav"><a href="WebID.html#init">init</a></li><li data-type="method" id="WebID-serialise-nav"><a href="WebID.html#serialise">serialise</a></li><li data-type="method" id="WebID-update-nav"><a href="WebID.html#update">update</a></li></ul></li><li id="WebInterface-nav"><a href="WebInterface.html">WebInterface</a><ul class='methods'><li data-type="method" id="WebInterface-addPublicNameToDirectory-nav"><a href="WebInterface.html#addPublicNameToDirectory">addPublicNameToDirectory</a></li><li data-type="method" id="WebInterface-addWebIdToDirectory-nav"><a href="WebInterface.html#addWebIdToDirectory">addWebIdToDirectory</a></li><li data-type="method" id="WebInterface-getPublicNames-nav"><a href="WebInterface.html#getPublicNames">getPublicNames</a></li><li data-type="method" id="WebInterface-getVocabs-nav"><a href="WebInterface.html#getVocabs">getVocabs</a></li><li data-type="method" id="WebInterface-getWebIds-nav"><a href="WebInterface.html#getWebIds">getWebIds</a></li><li data-type="method" id="WebInterface-linkServiceToSubname-nav"><a href="WebInterface.html#linkServiceToSubname">linkServiceToSubname</a></li></ul></li><li id="Writer-nav"><a href="Writer.html">Writer</a><ul class='methods'><li data-type="method" id="Writer-close-nav"><a href="Writer.html#close">close</a></li><li data-type="method" id="Writer-write-nav"><a href="Writer.html#write">write</a></li></ul></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#CONSTANTS">CONSTANTS</a></li><li><a href="global.html#fromAuthUri">fromAuthUri</a></li><li><a href="global.html#initialiseApp">initialiseApp</a></li><li><a href="global.html#VERSION">VERSION</a></li></ul>
+  </nav>
+
+  <div id="main">
+    
+      <h1 class="page-title">
+        MutableData
+      </h1>
+    
+
+    
+
+<section>
+  <header>
+    
+      <h2>
+        
+        MutableData
+        
+      </h2>
+
+      
+    
+  </header>
+
+  <article>
+    <div class="container-overview">
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#MutableData">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="MutableData">
+      <span class="type-signature"></span>new MutableData<span class="signature">()</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line405">line 405</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+      <h3 class="subsection-title">Methods</h3>
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#applyEntriesMutation">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="applyEntriesMutation">
+      <span class="type-signature"></span>applyEntriesMutation<span class="signature">(mutations)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Commit the transaction to the network</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>mutations</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="EntryMutationTransaction.html">EntryMutationTransaction</a>
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>the Mutations you want to apply</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line857">line 857</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#applyEntriesMutation-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="applyEntriesMutation-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        await mData.quickSetup({ key1: 'value1', key2: 'value2' });        const mutation = await app.mutableData.newMutation();        await mutation.insert('key2', 'value2')        await mData.applyEntriesMutation(mutation);    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#decrypt">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="decrypt">
+      <span class="type-signature"></span>decrypt<span class="signature">(value)</span><span class="type-signature"> &rarr; {Promise.&lt;Buffer>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Decrypt the entry key/value provided as parameter with the encryption key
+contained in a private <a href="MutableData.html">MutableData</a>.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>value</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    |
+
+    <span class="param-type">
+      Buffer
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line565">line 565</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#decrypt-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="decrypt-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        const encryptedValue = await mData.encryptValue('value1')        const decryptedValue = await mData.decrypt(encryptedKey)    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#delUserPermissions">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="delUserPermissions">
+      <span class="type-signature"></span>delUserPermissions<span class="signature">(signKey<span class="signature-attributes">opt</span>, version)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Delete the permissions of a specifc key. Directly commits to the network.
+Requires 'ManagePermissions' permission for the app.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+        <th>Attributes</th>
+      
+
+      
+        <th>Default</th>
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>signKey</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="PubSignKey.html">PubSignKey</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      CONSTANTS.USER_ANYONE
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+          <td class="default">
+            
+              CONSTANTS.USER_ANYONE
+            
+          </td>
+        
+
+        <td class="description last">
+          <p>the key to lookup for</p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>version</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      Number
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+
+            
+
+            
+          </td>
+        
+
+        
+          <td class="default">
+            
+          </td>
+        
+
+        <td class="description last">
+          <p>The version successor, to confirm you are
+       actually asking for the right one</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line796">line 796</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#delUserPermissions-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="delUserPermissions-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        await mData.quickSetup({ key1: 'value1', key2: 'value2' });        const version = await mData.getVersion();        const signKey = await app.crypto.getAppPubSignKey();        const permissionSet = mData.delUserPermissions(signKey, version + 1);    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#emulateAs">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="emulateAs">
+      <span class="type-signature"></span>emulateAs<span class="signature">(eml)</span><span class="type-signature"> &rarr; {<a href="global.html#Emulation">Emulation</a>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Wrap this <a href="MutableData.html">MutableData</a> into a known abstraction. Currently only known: <code>NFS</code></p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>eml</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>name of the emulation</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line920">line 920</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#emulateAs-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="emulateAs-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst emulationOptions = {    nfs   : 'NFS',    rdf   : 'RDF',    webid : 'WebId'};const asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        await mData.quickSetup({ });        const nfs = await mData.emulateAs(emulationOptions.nfs)    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#encryptKey">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="encryptKey">
+      <span class="type-signature"></span>encryptKey<span class="signature">(key)</span><span class="type-signature"> &rarr; {Promise.&lt;Buffer>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Encrypt an entry key value for a private <a href="MutableData.html">MutableData</a>.
+If the <a href="MutableData.html">MutableData</a> is public, the same, unencrypted, value is returned.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>key</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    |
+
+    <span class="param-type">
+      Buffer
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line522">line 522</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#encryptKey-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="encryptKey-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {
+             const mData = await app.mutableData.newRandomPrivate(15001);        const encryptedKey = await mData.encryptKey('key1')    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#encryptValue">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="encryptValue">
+      <span class="type-signature"></span>encryptValue<span class="signature">(value)</span><span class="type-signature"> &rarr; {Promise.&lt;Buffer>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Encrypt an entry value for a private <a href="MutableData.html">MutableData</a>.
+If the <a href="MutableData.html">MutableData</a> is public, the same, unencrypted, value is returned.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>value</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    |
+
+    <span class="param-type">
+      Buffer
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line543">line 543</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#encryptValue-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="encryptValue-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {
+             const mData = await app.mutableData.newRandomPrivate(15001);        const encryptedValue = await mData.encryptValue('value1')    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#get">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="get">
+      <span class="type-signature"></span>get<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#ValueVersion">ValueVersion</a>>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Look up the value of a specific key</p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line637">line 637</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#get-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="get-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        const entryValue = await mData.get('key1');    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#getEntries">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="getEntries">
+      <span class="type-signature"></span>getEntries<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="Entries.html">Entries</a>>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Get a Handle to the entries associated with this <a href="MutableData.html">MutableData</a></p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line687">line 687</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#getEntries-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="getEntries-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        await mData.quickSetup({});        const entries = mData.getEntries();    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#getKeys">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="getKeys">
+      <span class="type-signature"></span>getKeys<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Get a list with the keys contained in this <a href="MutableData.html">MutableData</a></p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line707">line 707</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#getKeys-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="getKeys-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        await mData.quickSetup({ key1: 'value1', key2: 'value2' });        const entryKeysArray = mData.getKeys();    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#getNameAndTag">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="getNameAndTag">
+      <span class="type-signature"></span>getNameAndTag<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#NameAndTag">NameAndTag</a>>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Look up the name, tag, and XOR-URL of the <a href="MutableData.html">MutableData</a> as required to look it
+up on the network.</p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line586">line 586</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#getNameAndTag-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="getNameAndTag-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        const  nameAndTag = await mData.getNameAndTag();    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#getPermissions">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="getPermissions">
+      <span class="type-signature"></span>getPermissions<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Permissions.html">Permissions</a>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Get an interface to the permissions associated with this <a href="MutableData.html">MutableData</a></p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line745">line 745</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#getPermissions-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="getPermissions-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        await mData.quickSetup({ key1: 'value1', key2: 'value2' });        const permissionsInterface = mData.getPermissions();    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#getSerialisedSize">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="getSerialisedSize">
+      <span class="type-signature"></span>getSerialisedSize<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Number>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Get serialised size of current <a href="MutableData.html">MutableData</a></p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line895">line 895</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#getSerialisedSize-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="getSerialisedSize-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        await mData.quickSetup({ key1: 'value1', key2: 'value2' });        const serialisedSize = await mData.getSerialisedSize();    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#getUserPermissions">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="getUserPermissions">
+      <span class="type-signature"></span>getUserPermissions<span class="signature">(signKey<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Get an interface to the permissions associated with this <a href="MutableData.html">MutableData</a> for
+a specific signing key</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+        <th>Attributes</th>
+      
+
+      
+        <th>Default</th>
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>signKey</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="PubSignKey.html">PubSignKey</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      CONSTANTS.USER_ANYONE
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+          <td class="default">
+            
+              CONSTANTS.USER_ANYONE
+            
+          </td>
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line768">line 768</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#getUserPermissions-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="getUserPermissions-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        await mData.quickSetup({ key1: 'value1', key2: 'value2' });        const signKey = await app.crypto.getAppPubSignKey();        const permissionSet = await mData.getUserPermissions(signKey);    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#getValues">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="getValues">
+      <span class="type-signature"></span>getValues<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Get the list of values contained in this <a href="MutableData.html">MutableData</a></p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line726">line 726</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#getValues-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="getValues-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        await mData.quickSetup({ key1: 'value1', key2: 'value2' });        const entryValuesArray = mData.getValues();    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#getVersion">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="getVersion">
+      <span class="type-signature"></span>getVersion<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Number>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Look up the mutable data object version on the network</p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line618">line 618</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#getVersion-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="getVersion-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        const version = await mData.getVersion();    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#put">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="put">
+      <span class="type-signature"></span>put<span class="signature">(permissions, entries)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Commit this <a href="MutableData.html">MutableData</a> to the network.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>permissions</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      Permission
+    </span>
+
+    |
+
+    <span class="param-type">
+      CONSTANTS.MD_PERMISSION_EMPTY
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>the permissions to create the mutable data with</p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>entries</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="Entries.html">Entries</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      CONSTANTS.MD_ENTRIES_EMPTY
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>data entries to create the mutable data with</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line665">line 665</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#put-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="put-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        const perms = await mData.newPermissions();        const pmSet = ['Insert', 'Update', 'Delete', 'ManagePermissions'];        const pubSignKey = await app.crypto.getAppPubSignKey();        await perms.insertPermissionsSet(pubSignKey, pmSet);        const entries = await mData.newEntries();        await entries.insert('key1', 'value1');        await mData.put(perms, entries)    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#quickSetup">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="quickSetup">
+      <span class="type-signature"></span>quickSetup<span class="signature">(data, name, description)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="MutableData.html">MutableData</a>>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Easily set up and commit a new <a href="MutableData.html">MutableData</a> with
+the app having full-access permissions (and no other).
+The name and description parameters are metadata for the <a href="MutableData.html">MutableData</a> which
+can be used to identify what this <a href="MutableData.html">MutableData</a> contains.
+The metadata is particularly used by the Authenticator when another
+application has requested mutation permissions on this <a href="MutableData.html">MutableData</a>,
+so the user can make a better decision to either allow or deny such a
+request based on this information.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>data</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      Object
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>a key-value payload it should
+       create the data with</p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>name</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    |
+
+    <span class="param-type">
+      Buffer
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>A descriptive metadata name for the <a href="MutableData.html">MutableData</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>description</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    |
+
+    <span class="param-type">
+      Buffer
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>A detailed metadata description for the <a href="MutableData.html">MutableData</a> content</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line436">line 436</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#quickSetup-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="quickSetup-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    let mData = app.mutableData.newRandomPublic(tagtype);    const entries = {        key1: 'value1',        key2: 'value2'    };    const name = 'My MutableData';    const description = "To store my app\'s data";    mData = await mData.quickSetup(entries, name, description);};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#serialise">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="serialise">
+      <span class="type-signature"></span>serialise<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;String>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Serialise the current <a href="MutableData.html">MutableData</a></p>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line876">line 876</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#serialise-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="serialise-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        await mData.quickSetup({ key1: 'value1', key2: 'value2' });        const serialisedMD = await mData.serialise();    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#setMetadata">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="setMetadata">
+      <span class="type-signature"></span>setMetadata<span class="signature">(name, description)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Set the metadata information in the <a href="MutableData.html">MutableData</a>. Note this can be used
+only if the <a href="MutableData.html">MutableData</a> was already committed to the network, .i.e either
+with <code>put</code>, with <code>quickSetup</code>, or if it is an already existing <a href="MutableData.html">MutableData</a>
+just fetched from the network.
+The metadata is particularly used by the Authenticator when another
+application has requested mutation permissions on this <a href="MutableData.html">MutableData</a>,
+displaying this information to the user, so the user can make a better
+decision to either allow or deny such a request based on it.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>name</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    |
+
+    <span class="param-type">
+      Buffer
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>A descriptive name for the <a href="MutableData.html">MutableData</a></p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>description</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      String
+    </span>
+
+    |
+
+    <span class="param-type">
+      Buffer
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>A detailed description for the <a href="MutableData.html">MutableData</a> content</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line492">line 492</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#setMetadata-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="setMetadata-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    const name = 'Mutable data name';    const description = 'Mutable data description';    try {        const mData = await app.mutableData.newRandomPrivate(15001);        await mData.quickSetup({});        await mData.setMetadata(name, description);    } catch (err) {        return err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#setUserPermissions">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="setUserPermissions">
+      <span class="type-signature"></span>setUserPermissions<span class="signature">(signKey<span class="signature-attributes">opt</span>, permissionSet, version)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Set the permissions of a specifc key. Directly commits to the network.
+Requires 'ManagePermissions' permission for the app.</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+        <th>Attributes</th>
+      
+
+      
+        <th>Default</th>
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>signKey</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      <a href="PubSignKey.html">PubSignKey</a>
+    </span>
+
+    |
+
+    <span class="param-type">
+      CONSTANTS.USER_ANYONE
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+          <td class="default">
+            
+              CONSTANTS.USER_ANYONE
+            
+          </td>
+        
+
+        <td class="description last">
+          <p>the key to lookup for</p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>permissionSet</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      PermissionSet
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+
+            
+
+            
+          </td>
+        
+
+        
+          <td class="default">
+            
+          </td>
+        
+
+        <td class="description last">
+          <p>The permission set to set to</p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>version</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      Number
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+
+            
+
+            
+          </td>
+        
+
+        
+          <td class="default">
+            
+          </td>
+        
+
+        <td class="description last">
+          <p>the version successor, to confirm you are
+       actually asking for the right one</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="api_mutable.js.html">api/mutable.js</a>, <a href="api_mutable.js.html#line829">line 829</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#setUserPermissions-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="setUserPermissions-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>// Assumes <a href="global.html#initialiseApp">SAFEApp</a> interface has been obtainedconst asyncFn = async () => {    try {        const mData = await app.mutableData.newRandomPrivate(15001);        await mData.quickSetup({ key1: 'value1', key2: 'value2' });        const version = await mData.getVersion();        const pmSet = ['Insert'];        const permissionSet = await mData.setUserPermissions(            safe.CONSTANTS.USER_ANYONE, pmSet, version + 1        );    } catch (err) {        throw err;    }};</code></pre>
+
+
+  </div>
+
+
+      
+    
+
+    
+
+    
+  </article>
+</section>
+
+
+
+
+  </div>
+
+  <br class="clear">
+
+  <footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+  </footer>
+
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
+
+  
+
+</body>
+</html>
