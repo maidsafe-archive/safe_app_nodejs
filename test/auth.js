@@ -156,6 +156,16 @@ describe('auth interface', () => {
     const app = await h.createTestApp();
     return should(app.auth.loginForTest()).be.fulfilled();
   });
+
+  it('fails to log in to mock network with live network URI response from authenticator', async () => {
+    const app = await h.createTestApp();
+    return should(app.auth.loginFromUri(h.authUris.liveAuthUri)).be.rejectedWith('IPC error: IncompatibleMockStatus');
+  });
+
+  it('fails to log in to mock network with base 64 auth URI', async () => {
+    const app = await h.createTestApp();
+    return should(app.auth.loginFromUri(h.authUris.base64MockAuthUri)).be.rejectedWith('Serialisation error');
+  });
 });
 
 describe('Get granted containers permissions from auth URI', () => {
