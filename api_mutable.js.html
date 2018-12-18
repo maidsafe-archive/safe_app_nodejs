@@ -1,0 +1,1252 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      api/mutable.js - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  
+  <link type="text/css" rel="stylesheet" href="styles/collapse.css">
+  
+
+  
+
+  <!-- start Mixpanel -->
+  <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+  0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+  for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+  mixpanel.init("1919205b2da72e4da3b9b6639b444d59");</script>
+  <!-- end Mixpanel -->
+</head>
+
+<body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
+
+  <label for="nav-trigger" class="overlay"></label>
+
+  <div class="top-nav-wrapper">
+    <ul>
+      <li >
+        <a href="index.html">
+          
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+          
+        </a>
+      </li>
+
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      SAFE Network Node.js Client Library
+    </h3>
+
+    
+      <h3>
+        Resources
+      </h3>
+      
+        <a href="https://github.com/maidsafe/safe_app_nodejs">Github Repo</a>
+      
+        <a href=""> | </a>
+      
+        <a href="https://forum.safedev.org/">Dev Forum</a>
+      
+    
+
+    <h3>Classes</h3><ul><li id="AuthInterface-nav"><a href="AuthInterface.html">AuthInterface</a><ul class='methods'><li data-type="method" id="AuthInterface-canAccessContainer-nav"><a href="AuthInterface.html#canAccessContainer">canAccessContainer</a></li><li data-type="method" id="AuthInterface-genAuthUri-nav"><a href="AuthInterface.html#genAuthUri">genAuthUri</a></li><li data-type="method" id="AuthInterface-genConnUri-nav"><a href="AuthInterface.html#genConnUri">genConnUri</a></li><li data-type="method" id="AuthInterface-genContainerAuthUri-nav"><a href="AuthInterface.html#genContainerAuthUri">genContainerAuthUri</a></li><li data-type="method" id="AuthInterface-genShareMDataUri-nav"><a href="AuthInterface.html#genShareMDataUri">genShareMDataUri</a></li><li data-type="method" id="AuthInterface-getContainer-nav"><a href="AuthInterface.html#getContainer">getContainer</a></li><li data-type="method" id="AuthInterface-getContainersPermissions-nav"><a href="AuthInterface.html#getContainersPermissions">getContainersPermissions</a></li><li data-type="method" id="AuthInterface-getOwnContainer-nav"><a href="AuthInterface.html#getOwnContainer">getOwnContainer</a></li><li data-type="method" id="AuthInterface-loginForTest-nav"><a href="AuthInterface.html#loginForTest">loginForTest</a></li><li data-type="method" id="AuthInterface-loginFromUri-nav"><a href="AuthInterface.html#loginFromUri">loginFromUri</a></li><li data-type="method" id="AuthInterface-openUri-nav"><a href="AuthInterface.html#openUri">openUri</a></li><li data-type="method" id="AuthInterface-readGrantedPermissions-nav"><a href="AuthInterface.html#readGrantedPermissions">readGrantedPermissions</a></li><li data-type="method" id="AuthInterface-refreshContainersPermissions-nav"><a href="AuthInterface.html#refreshContainersPermissions">refreshContainersPermissions</a></li><li data-type="method" id="AuthInterface-simulateNetworkDisconnect-nav"><a href="AuthInterface.html#simulateNetworkDisconnect">simulateNetworkDisconnect</a></li></ul></li><li id="CipherOptInterface-nav"><a href="CipherOptInterface.html">CipherOptInterface</a><ul class='methods'><li data-type="method" id="CipherOptInterface-newAsymmetric-nav"><a href="CipherOptInterface.html#newAsymmetric">newAsymmetric</a></li><li data-type="method" id="CipherOptInterface-newPlainText-nav"><a href="CipherOptInterface.html#newPlainText">newPlainText</a></li><li data-type="method" id="CipherOptInterface-newSymmetric-nav"><a href="CipherOptInterface.html#newSymmetric">newSymmetric</a></li></ul></li><li id="CryptoInterface-nav"><a href="CryptoInterface.html">CryptoInterface</a><ul class='methods'><li data-type="method" id="CryptoInterface-generateEncKeyPair-nav"><a href="CryptoInterface.html#generateEncKeyPair">generateEncKeyPair</a></li><li data-type="method" id="CryptoInterface-generateEncKeyPairFromRaw-nav"><a href="CryptoInterface.html#generateEncKeyPairFromRaw">generateEncKeyPairFromRaw</a></li><li data-type="method" id="CryptoInterface-generateNonce-nav"><a href="CryptoInterface.html#generateNonce">generateNonce</a></li><li data-type="method" id="CryptoInterface-generateSignKeyPair-nav"><a href="CryptoInterface.html#generateSignKeyPair">generateSignKeyPair</a></li><li data-type="method" id="CryptoInterface-generateSignKeyPairFromRaw-nav"><a href="CryptoInterface.html#generateSignKeyPairFromRaw">generateSignKeyPairFromRaw</a></li><li data-type="method" id="CryptoInterface-getAppPubEncKey-nav"><a href="CryptoInterface.html#getAppPubEncKey">getAppPubEncKey</a></li><li data-type="method" id="CryptoInterface-getAppPubSignKey-nav"><a href="CryptoInterface.html#getAppPubSignKey">getAppPubSignKey</a></li><li data-type="method" id="CryptoInterface-pubEncKeyFromRaw-nav"><a href="CryptoInterface.html#pubEncKeyFromRaw">pubEncKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-pubSignKeyFromRaw-nav"><a href="CryptoInterface.html#pubSignKeyFromRaw">pubSignKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-secEncKeyFromRaw-nav"><a href="CryptoInterface.html#secEncKeyFromRaw">secEncKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-secSignKeyFromRaw-nav"><a href="CryptoInterface.html#secSignKeyFromRaw">secSignKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-sha3Hash-nav"><a href="CryptoInterface.html#sha3Hash">sha3Hash</a></li></ul></li><li id="EncKeyPair-nav"><a href="EncKeyPair.html">EncKeyPair</a><ul class='methods'><li data-type="method" id="EncKeyPair-decryptSealed-nav"><a href="EncKeyPair.html#decryptSealed">decryptSealed</a></li></ul></li><li id="Entries-nav"><a href="Entries.html">Entries</a><ul class='methods'><li data-type="method" id="Entries-get-nav"><a href="Entries.html#get">get</a></li><li data-type="method" id="Entries-insert-nav"><a href="Entries.html#insert">insert</a></li><li data-type="method" id="Entries-len-nav"><a href="Entries.html#len">len</a></li><li data-type="method" id="Entries-listEntries-nav"><a href="Entries.html#listEntries">listEntries</a></li><li data-type="method" id="Entries-mutate-nav"><a href="Entries.html#mutate">mutate</a></li></ul></li><li id="EntryMutationTransaction-nav"><a href="EntryMutationTransaction.html">EntryMutationTransaction</a><ul class='methods'><li data-type="method" id="EntryMutationTransaction-delete-nav"><a href="EntryMutationTransaction.html#delete">delete</a></li><li data-type="method" id="EntryMutationTransaction-insert-nav"><a href="EntryMutationTransaction.html#insert">insert</a></li><li data-type="method" id="EntryMutationTransaction-update-nav"><a href="EntryMutationTransaction.html#update">update</a></li></ul></li><li id="File-nav"><a href="File.html">File</a><ul class='methods'><li data-type="method" id="File-close-nav"><a href="File.html#close">close</a></li><li data-type="method" id="File-read-nav"><a href="File.html#read">read</a></li><li data-type="method" id="File-size-nav"><a href="File.html#size">size</a></li><li data-type="method" id="File-write-nav"><a href="File.html#write">write</a></li></ul></li><li id="ImmutableDataInterface-nav"><a href="ImmutableDataInterface.html">ImmutableDataInterface</a><ul class='methods'><li data-type="method" id="ImmutableDataInterface-create-nav"><a href="ImmutableDataInterface.html#create">create</a></li><li data-type="method" id="ImmutableDataInterface-fetch-nav"><a href="ImmutableDataInterface.html#fetch">fetch</a></li></ul></li><li id="MutableData-nav"><a href="MutableData.html">MutableData</a><ul class='methods'><li data-type="method" id="MutableData-applyEntriesMutation-nav"><a href="MutableData.html#applyEntriesMutation">applyEntriesMutation</a></li><li data-type="method" id="MutableData-decrypt-nav"><a href="MutableData.html#decrypt">decrypt</a></li><li data-type="method" id="MutableData-delUserPermissions-nav"><a href="MutableData.html#delUserPermissions">delUserPermissions</a></li><li data-type="method" id="MutableData-emulateAs-nav"><a href="MutableData.html#emulateAs">emulateAs</a></li><li data-type="method" id="MutableData-encryptKey-nav"><a href="MutableData.html#encryptKey">encryptKey</a></li><li data-type="method" id="MutableData-encryptValue-nav"><a href="MutableData.html#encryptValue">encryptValue</a></li><li data-type="method" id="MutableData-get-nav"><a href="MutableData.html#get">get</a></li><li data-type="method" id="MutableData-getEntries-nav"><a href="MutableData.html#getEntries">getEntries</a></li><li data-type="method" id="MutableData-getKeys-nav"><a href="MutableData.html#getKeys">getKeys</a></li><li data-type="method" id="MutableData-getNameAndTag-nav"><a href="MutableData.html#getNameAndTag">getNameAndTag</a></li><li data-type="method" id="MutableData-getPermissions-nav"><a href="MutableData.html#getPermissions">getPermissions</a></li><li data-type="method" id="MutableData-getSerialisedSize-nav"><a href="MutableData.html#getSerialisedSize">getSerialisedSize</a></li><li data-type="method" id="MutableData-getUserPermissions-nav"><a href="MutableData.html#getUserPermissions">getUserPermissions</a></li><li data-type="method" id="MutableData-getValues-nav"><a href="MutableData.html#getValues">getValues</a></li><li data-type="method" id="MutableData-getVersion-nav"><a href="MutableData.html#getVersion">getVersion</a></li><li data-type="method" id="MutableData-put-nav"><a href="MutableData.html#put">put</a></li><li data-type="method" id="MutableData-quickSetup-nav"><a href="MutableData.html#quickSetup">quickSetup</a></li><li data-type="method" id="MutableData-serialise-nav"><a href="MutableData.html#serialise">serialise</a></li><li data-type="method" id="MutableData-setMetadata-nav"><a href="MutableData.html#setMetadata">setMetadata</a></li><li data-type="method" id="MutableData-setUserPermissions-nav"><a href="MutableData.html#setUserPermissions">setUserPermissions</a></li></ul></li><li id="MutableDataInterface-nav"><a href="MutableDataInterface.html">MutableDataInterface</a><ul class='methods'><li data-type="method" id="MutableDataInterface-fromSerial-nav"><a href="MutableDataInterface.html#fromSerial">fromSerial</a></li><li data-type="method" id="MutableDataInterface-newEntries-nav"><a href="MutableDataInterface.html#newEntries">newEntries</a></li><li data-type="method" id="MutableDataInterface-newMutation-nav"><a href="MutableDataInterface.html#newMutation">newMutation</a></li><li data-type="method" id="MutableDataInterface-newPermissions-nav"><a href="MutableDataInterface.html#newPermissions">newPermissions</a></li><li data-type="method" id="MutableDataInterface-newPrivate-nav"><a href="MutableDataInterface.html#newPrivate">newPrivate</a></li><li data-type="method" id="MutableDataInterface-newPublic-nav"><a href="MutableDataInterface.html#newPublic">newPublic</a></li><li data-type="method" id="MutableDataInterface-newRandomPrivate-nav"><a href="MutableDataInterface.html#newRandomPrivate">newRandomPrivate</a></li><li data-type="method" id="MutableDataInterface-newRandomPublic-nav"><a href="MutableDataInterface.html#newRandomPublic">newRandomPublic</a></li></ul></li><li id="NFS-nav"><a href="NFS.html">NFS</a><ul class='methods'><li data-type="method" id="NFS-create-nav"><a href="NFS.html#create">create</a></li><li data-type="method" id="NFS-delete-nav"><a href="NFS.html#delete">delete</a></li><li data-type="method" id="NFS-fetch-nav"><a href="NFS.html#fetch">fetch</a></li><li data-type="method" id="NFS-insert-nav"><a href="NFS.html#insert">insert</a></li><li data-type="method" id="NFS-open-nav"><a href="NFS.html#open">open</a></li><li data-type="method" id="NFS-update-nav"><a href="NFS.html#update">update</a></li></ul></li><li id="Permissions-nav"><a href="Permissions.html">Permissions</a><ul class='methods'><li data-type="method" id="Permissions-getPermissionSet-nav"><a href="Permissions.html#getPermissionSet">getPermissionSet</a></li><li data-type="method" id="Permissions-insertPermissionSet-nav"><a href="Permissions.html#insertPermissionSet">insertPermissionSet</a></li><li data-type="method" id="Permissions-len-nav"><a href="Permissions.html#len">len</a></li><li data-type="method" id="Permissions-listPermissionSets-nav"><a href="Permissions.html#listPermissionSets">listPermissionSets</a></li></ul></li><li id="PubEncKey-nav"><a href="PubEncKey.html">PubEncKey</a><ul class='methods'><li data-type="method" id="PubEncKey-decrypt-nav"><a href="PubEncKey.html#decrypt">decrypt</a></li><li data-type="method" id="PubEncKey-encrypt-nav"><a href="PubEncKey.html#encrypt">encrypt</a></li><li data-type="method" id="PubEncKey-encryptSealed-nav"><a href="PubEncKey.html#encryptSealed">encryptSealed</a></li><li data-type="method" id="PubEncKey-getRaw-nav"><a href="PubEncKey.html#getRaw">getRaw</a></li></ul></li><li id="PubSignKey-nav"><a href="PubSignKey.html">PubSignKey</a><ul class='methods'><li data-type="method" id="PubSignKey-getRaw-nav"><a href="PubSignKey.html#getRaw">getRaw</a></li><li data-type="method" id="PubSignKey-verify-nav"><a href="PubSignKey.html#verify">verify</a></li></ul></li><li id="RDF-nav"><a href="RDF.html">RDF</a><ul class='methods'><li data-type="method" id="RDF-add-nav"><a href="RDF.html#add">add</a></li><li data-type="method" id="RDF-any-nav"><a href="RDF.html#any">any</a></li><li data-type="method" id="RDF-append-nav"><a href="RDF.html#append">append</a></li><li data-type="method" id="RDF-bnode-nav"><a href="RDF.html#bnode">bnode</a></li><li data-type="method" id="RDF-commit-nav"><a href="RDF.html#commit">commit</a></li><li data-type="method" id="RDF-each-nav"><a href="RDF.html#each">each</a></li><li data-type="method" id="RDF-literal-nav"><a href="RDF.html#literal">literal</a></li><li data-type="method" id="RDF-namespace-nav"><a href="RDF.html#namespace">namespace</a></li><li data-type="method" id="RDF-nowOrWhenFetched-nav"><a href="RDF.html#nowOrWhenFetched">nowOrWhenFetched</a></li><li data-type="method" id="RDF-parse-nav"><a href="RDF.html#parse">parse</a></li><li data-type="method" id="RDF-removeMany-nav"><a href="RDF.html#removeMany">removeMany</a></li><li data-type="method" id="RDF-serialise-nav"><a href="RDF.html#serialise">serialise</a></li><li data-type="method" id="RDF-setId-nav"><a href="RDF.html#setId">setId</a></li><li data-type="method" id="RDF-statementsMatching-nav"><a href="RDF.html#statementsMatching">statementsMatching</a></li><li data-type="method" id="RDF-sym-nav"><a href="RDF.html#sym">sym</a></li></ul></li><li id="Reader-nav"><a href="Reader.html">Reader</a><ul class='methods'><li data-type="method" id="Reader-read-nav"><a href="Reader.html#read">read</a></li><li data-type="method" id="Reader-size-nav"><a href="Reader.html#size">size</a></li></ul></li><li id="SAFEApp-nav"><a href="SAFEApp.html">SAFEApp</a><ul class='methods'><li data-type="method" id="SAFEApp-appIsMock-nav"><a href="SAFEApp.html#appIsMock">appIsMock</a></li><li data-type="method" id="SAFEApp-clearObjectCache-nav"><a href="SAFEApp.html#clearObjectCache">clearObjectCache</a></li><li data-type="method" id="SAFEApp-fetch-nav"><a href="SAFEApp.html#fetch">fetch</a></li><li data-type="method" id="SAFEApp-getAccountInfo-nav"><a href="SAFEApp.html#getAccountInfo">getAccountInfo</a></li><li data-type="method" id="SAFEApp-getOwnContainerName-nav"><a href="SAFEApp.html#getOwnContainerName">getOwnContainerName</a></li><li data-type="method" id="SAFEApp-isNetStateConnected-nav"><a href="SAFEApp.html#isNetStateConnected">isNetStateConnected</a></li><li data-type="method" id="SAFEApp-isNetStateDisconnected-nav"><a href="SAFEApp.html#isNetStateDisconnected">isNetStateDisconnected</a></li><li data-type="method" id="SAFEApp-isNetStateInit-nav"><a href="SAFEApp.html#isNetStateInit">isNetStateInit</a></li><li data-type="method" id="SAFEApp-logPath-nav"><a href="SAFEApp.html#logPath">logPath</a></li><li data-type="method" id="SAFEApp-reconnect-nav"><a href="SAFEApp.html#reconnect">reconnect</a></li><li data-type="method" id="SAFEApp-webFetch-nav"><a href="SAFEApp.html#webFetch">webFetch</a></li></ul></li><li id="SecEncKey-nav"><a href="SecEncKey.html">SecEncKey</a><ul class='methods'><li data-type="method" id="SecEncKey-decrypt-nav"><a href="SecEncKey.html#decrypt">decrypt</a></li><li data-type="method" id="SecEncKey-encrypt-nav"><a href="SecEncKey.html#encrypt">encrypt</a></li><li data-type="method" id="SecEncKey-getRaw-nav"><a href="SecEncKey.html#getRaw">getRaw</a></li></ul></li><li id="SecSignKey-nav"><a href="SecSignKey.html">SecSignKey</a><ul class='methods'><li data-type="method" id="SecSignKey-getRaw-nav"><a href="SecSignKey.html#getRaw">getRaw</a></li><li data-type="method" id="SecSignKey-sign-nav"><a href="SecSignKey.html#sign">sign</a></li></ul></li><li id="SignKeyPair-nav"><a href="SignKeyPair.html">SignKeyPair</a></li><li id="WebID-nav"><a href="WebID.html">WebID</a><ul class='methods'><li data-type="method" id="WebID-create-nav"><a href="WebID.html#create">create</a></li><li data-type="method" id="WebID-fetchContent-nav"><a href="WebID.html#fetchContent">fetchContent</a></li><li data-type="method" id="WebID-init-nav"><a href="WebID.html#init">init</a></li><li data-type="method" id="WebID-serialise-nav"><a href="WebID.html#serialise">serialise</a></li><li data-type="method" id="WebID-update-nav"><a href="WebID.html#update">update</a></li></ul></li><li id="WebInterface-nav"><a href="WebInterface.html">WebInterface</a><ul class='methods'><li data-type="method" id="WebInterface-addPublicNameToDirectory-nav"><a href="WebInterface.html#addPublicNameToDirectory">addPublicNameToDirectory</a></li><li data-type="method" id="WebInterface-addWebIdToDirectory-nav"><a href="WebInterface.html#addWebIdToDirectory">addWebIdToDirectory</a></li><li data-type="method" id="WebInterface-getPublicNames-nav"><a href="WebInterface.html#getPublicNames">getPublicNames</a></li><li data-type="method" id="WebInterface-getVocabs-nav"><a href="WebInterface.html#getVocabs">getVocabs</a></li><li data-type="method" id="WebInterface-getWebIds-nav"><a href="WebInterface.html#getWebIds">getWebIds</a></li><li data-type="method" id="WebInterface-linkServiceToSubname-nav"><a href="WebInterface.html#linkServiceToSubname">linkServiceToSubname</a></li></ul></li><li id="Writer-nav"><a href="Writer.html">Writer</a><ul class='methods'><li data-type="method" id="Writer-close-nav"><a href="Writer.html#close">close</a></li><li data-type="method" id="Writer-write-nav"><a href="Writer.html#write">write</a></li></ul></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#CONSTANTS">CONSTANTS</a></li><li><a href="global.html#fromAuthUri">fromAuthUri</a></li><li><a href="global.html#initialiseApp">initialiseApp</a></li><li><a href="global.html#VERSION">VERSION</a></li></ul>
+  </nav>
+
+  <div id="main">
+    
+      <h1 class="page-title">
+        api/mutable.js
+      </h1>
+    
+
+    
+      
+
+<section>
+  <article>
+    <pre class="prettyprint source linenums"><code>// Copyright 2018 MaidSafe.net limited.
+//
+// This SAFE Network Software is licensed to you under
+// the MIT license &lt;LICENSE-MIT or http://opensource.org/licenses/MIT> or
+// the Modified BSD license &lt;LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
+// at your option.
+//
+// This file may not be copied, modified, or distributed except according to those terms.
+//
+// Please review the Licences for the specific language governing permissions and limitations
+// relating to use of the SAFE Network Software.
+
+
+const h = require('../helpers');
+const lib = require('../native/lib');
+const t = require('../native/types');
+const emulations = require('./emulations');
+const { PubSignKey } = require('./crypto');
+const consts = require('../consts');
+const errConst = require('../error_const');
+const makeError = require('../native/_error.js');
+const { ONLY_IF_EXPERIMENTAL_API_ENABLED } = require('../helpers');
+const multihash = require('multihashes');
+const CID = require('cids');
+
+const CONSTANTS = consts.pubConsts;
+
+/**
+ * Holds the permissions of a {@link MutableData} object
+ * @hideconstructor
+ */
+class Permissions extends h.NetworkObject {
+
+  /**
+   * Total number of permission entries
+   * @returns {Promise&lt;Number>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *       const mData = await app.mutableData.newRandomPublic(15001);
+   *       await mData.quickSetup({});
+   *       const perms = await mData.getPermissions();
+   *       const length = await perms.len();
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  len() {
+    return lib.mdata_permissions_len(this.app.connection, this.ref);
+  }
+
+  /**
+  * @private
+  * used by autoref to clean the reference
+  * @param {SAFEApp} app
+  * @param {handle} ref
+  */
+  static free() {
+    return lib.mdata_permissions_free(this.app.connection, this.ref);
+  }
+
+  /**
+   * Lookup the permissions of a specifc signing key
+   * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] The key to lookup
+   * @returns {Promise&lt;Object>} The permission set for that key
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *        const pubSignKey = await app.crypto.getAppPubSignKey();
+   *        const perms = await mData.getPermissions();
+   *        const permSet = await perms.getPermissionsSet(pubSignKey)
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  getPermissionSet(signKey) {
+    return lib.mdata_permissions_get(this.app.connection,
+                                     this.ref,
+                                     signKey ? signKey.ref : CONSTANTS.USER_ANYONE);
+  }
+
+  /**
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * Insert a new permission set mapped to a specifc key. Directly commits
+   * to the network.
+   * Requires the 'ManagePermissions' permission for the app.
+   * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to map to
+   * @param {Object} permissionSet The permission set to insert
+   * @returns {Promise} Resolves when finished
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *        const pubSignKey = await app.crypto.getAppPubSignKey();
+   *        const perms = await mData.getPermissions();
+   *        const pmSet = ['Insert', 'ManagePermissions'];
+   *        await perms.insertPermissionSet(pubSignKey, pmSet)
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  insertPermissionSet(signKey, permissionSet) {
+    return lib.mdata_permissions_insert(this.app.connection,
+                                        this.ref,
+                                        signKey
+                                          ? signKey.ref
+                                          : CONSTANTS.USER_ANYONE,
+                                        permissionSet);
+  }
+
+  /**
+   * Return the list of all associated permission sets.
+   * @returns {Promise&lt;Array>} the list of permission sets
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *        const mData = await app.mutableData.newRandomPublic(15001);
+   *        await mData.quickSetup({});
+   *        const perms = await mData.getPermissions();
+   *        const permSetsArray = await perms.listPermissionSets();
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  listPermissionSets() {
+    return lib.mdata_list_permission_sets(this.app.connection, this.ref)
+        .then((permSets) => permSets.map((userPermSet) =>
+          ({ signKey: new PubSignKey(this.app, userPermSet.signKey),
+            permSet: userPermSet.permSet
+          })
+        ));
+  }
+
+}
+
+/**
+ * Creates mutation actions to be applied to {@link MutableData}
+ * @hideconstructor
+ */
+class EntryMutationTransaction extends h.NetworkObject {
+
+  /**
+  * @private
+  * used by autoref to clean the reference
+  * @param {SAFEApp} app
+  * @param {handle} ref
+  */
+  static free(app, ref) {
+    return lib.mdata_entry_actions_free(app.connection, ref);
+  }
+
+
+  /**
+   * Creates an action to store a new key/value entry. Does not commit to network.
+   *
+   * @param {(String|Buffer)} keyName
+   * @param {(String|Buffer)} value
+   * @returns {Promise} Resolves when complete
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *        const mData = await app.mutableData.newRandomPublic(15001);
+   *        await mData.quickSetup({});
+   *        const entries = await mData.getEntries();
+   *        const keyName = 'surname';
+   *        const value = 'Turing';
+   *        await entries.insert(keyName, value);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  insert(keyName, value) {
+    return lib.mdata_entry_actions_insert(
+      this.app.connection,
+      this.ref,
+      keyName,
+      value
+    );
+  }
+
+  /**
+   * Creates an action to delete an existing entry. Does not commit to network.
+   *
+   * @param {(String|Buffer)} keyName the key you want to delete
+   * @param {Number} version The version successor, to confirm you are
+   *        actually asking for the correct {@link MutableData} version.
+   * @returns {Promise} Resolves when complete
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *        const mData = await app.mutableData.newRandomPublic(15001);
+   *        await mData.quickSetup({ surname: 'Turing' });
+   *        const version = await mData.getVersion();
+   *        const entries = await mData.getEntries();
+   *        const keyName = 'dnaChecksum';
+   *        await entries.delete(keyName, version + 1);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  delete(keyName, version) {
+    return lib.mdata_entry_actions_delete(
+      this.app.connection,
+      this.ref,
+      keyName,
+      version
+    );
+  }
+
+  /**
+   * Creates an action to update an existing entry. Does not commit to network.
+   *
+   * @param {(String|Buffer)} keyName
+   * @param {(String|Buffer)} value
+   * @param {Number} version The version successor, to confirm you are
+   *        actually asking for the correct {@link MutableData} version.
+   * @returns {Promise} Resolves when complete
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *        const mData = await app.mutableData.newRandomPublic(15001);
+   *        await mData.quickSetup({ surname: 'Turing' });
+   *        const version = await mData.getVersion();
+   *        const entries = await mData.getEntries();
+   *        const keyName = 'street_address';
+   *        const value = '7297 Highfield Road';
+   *        await entries.update(keyName, value, version + 1);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  update(keyName, value, version) {
+    return lib.mdata_entry_actions_update(
+      this.app.connection,
+      this.ref,
+      keyName,
+      value,
+      version
+    );
+  }
+}
+
+
+/**
+ * {@link MutableData} {@link Entries} operations
+ * @hideconstructor
+ */
+class Entries extends h.NetworkObject {
+
+  /**
+   * Get the total number of entries in the {@link MutableData}
+   * @returns {Promise&lt;Number>} number of entries
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *       const mData = await app.mutableData.newRandomPublic(15001);
+   *       await mData.quickSetup({ surname: 'Turing' });
+   *       const perms = await mData.getPermissions();
+   *       const length = await perms.len();
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  len() {
+    return lib.mdata_entries_len(this.app.connection, this.ref);
+  }
+
+  /**
+  * @private
+  * used by autoref to clean the mdata keys reference
+  * @param {SAFEApp} app
+  * @param {handle} ref
+  */
+  static free(app, ref) {
+    return lib.mdata_entries_free(app.connection, ref);
+  }
+
+  /**
+   * Look up the value of a specific key
+   *
+   * @param {String} keyName the key to lookup
+   * @returns {Promise&lt;ValueVersion>} the entry's value and the current version
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPublic(15001);
+   *         await mData.quickSetup({ surname: 'Turing' });
+   *         const entries = await mData.getEntries();
+   *         const value = await entries.get('surname')
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  get(keyName) {
+    return lib.mdata_entries_get(this.app.connection, this.ref, keyName);
+  }
+
+  /**
+   * Get a list with the entries contained in this {@link MutableData}
+   * @returns {Promise&lt;Array>} the entries list
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPublic(15001);
+   *         await mData.quickSetup({ key1: 'value1', key2: 'value2' });
+   *         const entries = await mData.getEntries();
+   *         const  entriesArray = await entries.listEntries();
+   *         entriesArray.forEach((entry) => {
+   *           const key = entry.key.toString();
+   *           const value = entry.value.buf.toString();
+   *           console.log('Key: ', key);
+   *           console.log('Value: ', value);
+   *         });
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  listEntries() {
+    return lib.mdata_list_entries(this.app.connection, this.ref);
+  }
+
+  /**
+   * Insert a new entry. Once you call `MutableData.put` with this entry,
+   * it will fail if the entry already exists or the current app doesn't have the
+   * permissions to edit that {@link MutableData}.
+   *
+   * @param {(String|Buffer)} keyName
+   * @param {(String|Buffer)} value
+   * @returns {Promise} Resolves when complete
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPublic(15001);
+   *         await mData.quickSetup({});
+   *         const entries = await mData.getEntries();
+   *         const  entriesArray = await entries.insert('given_name', 'Alan');
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  insert(keyName, value) {
+    return lib.mdata_entries_insert(this.app.connection, this.ref, keyName, value);
+  }
+
+  /**
+   * Create a new mutation transaction for the entries
+   * @return {Promise&lt;EntryMutationTransaction>} Mutation transaction interface
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPublic(15001);
+   *         await mData.quickSetup({});
+   *         const entries = await mData.getEntries();
+   *         const  mutationIntertace = await entries.mutate();
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  mutate() {
+    return lib.mdata_entry_actions_new(this.app.connection)
+            .then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
+  }
+}
+
+/**
+* @typedef {Object} ValueVersion
+* @property {Buffer} buf the buffer with the value
+* @property {Number} version the version
+* Holds the informatation of a value of a {@link MutableData}
+*/
+
+/**
+* @typedef {Object} NameAndTag
+* @property {Buffer} name - the XoR-name/address on the network
+* @property {Number} typeTag - the type tag
+* @property {String} xorUrl - `safe://` URL representing XOR address of {@link MutableData}, hashed with SHA3-256, and encoded as base32
+*/
+
+/**
+ * @hideconstructor
+ */
+class MutableData extends h.NetworkObject {
+  /**
+   * Easily set up and commit a new {@link MutableData} with
+   * the app having full-access permissions (and no other).
+   * The name and description parameters are metadata for the {@link MutableData} which
+   * can be used to identify what this {@link MutableData} contains.
+   * The metadata is particularly used by the Authenticator when another
+   * application has requested mutation permissions on this {@link MutableData},
+   * so the user can make a better decision to either allow or deny such a
+   * request based on this information.
+   *
+   * @param {Object} data a key-value payload it should
+   *        create the data with
+   * @param {(String|Buffer)} name A descriptive metadata name for the {@link MutableData}
+   * @param {(String|Buffer)} description
+   * A detailed metadata description for the {@link MutableData} content
+   *
+   * @returns {Promise&lt;MutableData>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     let mData = app.mutableData.newRandomPublic(tagtype);
+   *     const entries = {
+   *         key1: 'value1',
+   *         key2: 'value2'
+   *     };
+   *     const name = 'My MutableData';
+   *     const description = "To store my app\'s data";
+   *     mData = await mData.quickSetup(entries, name, description);
+   * };
+   */
+  quickSetup(data, name, description) {
+    const pmSet = ['Insert', 'Update', 'Delete', 'ManagePermissions'];
+
+    return this.app.mutableData.newEntries()
+      .then((entries) => {
+        if (!data) {
+          return entries;
+        }
+        return Promise.all(Object.getOwnPropertyNames(data).map((key) =>
+          entries.insert(key, data[key]))).then(() => entries);
+      })
+      .then((entries) => {
+        if (!name &amp;&amp; !description) {
+          return entries;
+        }
+        const userMetadata = new t.UserMetadata({ name, description });
+        return lib.mdata_encode_metadata(userMetadata)
+          .then((encodedMeta) => entries.insert(CONSTANTS.MD_METADATA_KEY, encodedMeta))
+          .then(() => entries);
+      })
+      .then((entries) => this.app.crypto.getAppPubSignKey()
+        .then((key) => this.app.mutableData.newPermissions()
+            .then((pm) => pm.insertPermissionSet(key, pmSet)
+              .then(() => this.put(pm, entries))))
+      )
+      .then(() => this);
+  }
+
+  /**
+   * Set the metadata information in the {@link MutableData}. Note this can be used
+   * only if the {@link MutableData} was already committed to the network, .i.e either
+   * with `put`, with `quickSetup`, or if it is an already existing {@link MutableData}
+   * just fetched from the network.
+   * The metadata is particularly used by the Authenticator when another
+   * application has requested mutation permissions on this {@link MutableData},
+   * displaying this information to the user, so the user can make a better
+   * decision to either allow or deny such a request based on it.
+   *
+   * @param {(String|Buffer)} name A descriptive name for the {@link MutableData}
+   * @param {(String|Buffer)} description A detailed description for the {@link MutableData} content
+   *
+   * @returns {Promise} Resolves once finished
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const name = 'Mutable data name';
+   *     const description = 'Mutable data description';
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         await mData.quickSetup({});
+   *         await mData.setMetadata(name, description);
+   *     } catch (err) {
+   *         return err;
+   *     }
+   * };
+   */
+  setMetadata(name, description) {
+    const userMetadata = new t.UserMetadata({ name, description });
+    return lib.mdata_encode_metadata(userMetadata)
+      .then((encodedMeta) => this.app.mutableData.newMutation()
+        .then((mut) => this.get(CONSTANTS.MD_METADATA_KEY)
+          .then((metadata) => mut.update(CONSTANTS.MD_METADATA_KEY,
+                                          encodedMeta, metadata.version + 1)
+            , () => mut.insert(CONSTANTS.MD_METADATA_KEY, encodedMeta)
+          )
+          .then(() => this.applyEntriesMutation(mut))
+        ));
+  }
+
+  /**
+   * Encrypt an entry key value for a private {@link MutableData}.
+   * If the {@link MutableData} is public, the same, unencrypted, value is returned.
+   *
+   * @param {(String|Buffer)} key
+   * @returns {Promise&lt;Buffer>} The encrypted entry key
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+             const mData = await app.mutableData.newRandomPrivate(15001);
+   *         const encryptedKey = await mData.encryptKey('key1')
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  encryptKey(key) {
+    return lib.mdata_info_encrypt_entry_key(this.ref, key);
+  }
+
+  /**
+   * Encrypt an entry value for a private {@link MutableData}.
+   * If the {@link MutableData} is public, the same, unencrypted, value is returned.
+   *
+   * @param {(String|Buffer)} value
+   * @returns {Promise&lt;Buffer>} The encrypted entry value
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+             const mData = await app.mutableData.newRandomPrivate(15001);
+   *         const encryptedValue = await mData.encryptValue('value1')
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  encryptValue(value) {
+    return lib.mdata_info_encrypt_entry_value(this.ref, value);
+  }
+
+  /**
+   * Decrypt the entry key/value provided as parameter with the encryption key
+   * contained in a private {@link MutableData}.
+   *
+   * @param {(String|Buffer)} value
+   * @returns {Promise&lt;Buffer>} The decrypted value
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         const encryptedValue = await mData.encryptValue('value1')
+   *         const decryptedValue = await mData.decrypt(encryptedKey)
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  decrypt(value) {
+    return lib.mdata_info_decrypt(this.ref, value);
+  }
+
+  /**
+   * Look up the name, tag, and XOR-URL of the {@link MutableData} as required to look it
+   * up on the network.
+   *
+   * @returns {Promise&lt;NameAndTag>} The XOR name and type tag. If the
+   * experimental APIs are enabled the XOR-URL is also returned in the object.
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         const  nameAndTag = await mData.getNameAndTag();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  getNameAndTag() {
+    // If the experimental apis are enabled we also return the XOR-URL
+    const xorUrl = ONLY_IF_EXPERIMENTAL_API_ENABLED.call(this.app, () => {
+      const address = Buffer.from(this.ref.name);
+      const encodedHash = multihash.encode(address, consts.CID_HASH_FN);
+      const newCid = new CID(consts.CID_VERSION, consts.CID_DEFAULT_CODEC, encodedHash);
+      const cidStr = newCid.toBaseEncodedString(consts.CID_BASE_ENCODING);
+      return `safe://${cidStr}:${this.ref.typeTag}`;
+    });
+
+    return {
+      name: this.ref.name,
+      typeTag: this.ref.typeTag,
+      xorUrl
+    };
+  }
+
+  /**
+   * Look up the mutable data object version on the network
+   *
+   * @returns {Promise&lt;Number>} Current version
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         const version = await mData.getVersion();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  getVersion() {
+    return lib.mdata_get_version(this.app.connection, this.ref);
+  }
+
+  /**
+   * Look up the value of a specific key
+   *
+   * @returns {Promise&lt;ValueVersion>} the entry value and its current version
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         const entryValue = await mData.get('key1');
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  get(key) {
+    return lib.mdata_get_value(this.app.connection, this.ref, key);
+  }
+
+  /**
+   * Commit this {@link MutableData} to the network.
+   * @param {Permission|CONSTANTS.MD_PERMISSION_EMPTY} permissions
+   * the permissions to create the mutable data with
+   * @param {Entries|CONSTANTS.MD_ENTRIES_EMPTY} entries
+   * data entries to create the mutable data with
+   * @returns {Promise}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         const perms = await mData.newPermissions();
+   *         const pmSet = ['Insert', 'Update', 'Delete', 'ManagePermissions'];
+   *         const pubSignKey = await app.crypto.getAppPubSignKey();
+   *         await perms.insertPermissionsSet(pubSignKey, pmSet);
+   *         const entries = await mData.newEntries();
+   *         await entries.insert('key1', 'value1');
+   *         await mData.put(perms, entries)
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  put(permissions, entries) {
+    return lib.mdata_put(this.app.connection,
+                          this.ref,
+                          permissions ? permissions.ref : CONSTANTS.MD_PERMISSION_EMPTY,
+                          entries ? entries.ref : CONSTANTS.MD_ENTRIES_EMPTY);
+  }
+
+  /**
+   * Get a Handle to the entries associated with this {@link MutableData}
+   * @returns {Promise&lt;Entries>} the entries representation object
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         await mData.quickSetup({});
+   *         const entries = mData.getEntries();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  getEntries() {
+    return lib.mdata_entries(this.app.connection, this.ref)
+      .then((r) => h.autoref(new Entries(this.app, r)));
+  }
+
+  /**
+   * Get a list with the keys contained in this {@link MutableData}
+   * @returns {Promise&lt;Array>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         await mData.quickSetup({ key1: 'value1', key2: 'value2' });
+   *         const entryKeysArray = mData.getKeys();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  getKeys() {
+    return lib.mdata_list_keys(this.app.connection, this.ref);
+  }
+
+  /**
+   * Get the list of values contained in this {@link MutableData}
+   * @returns {Promise&lt;Array>} the list of values
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         await mData.quickSetup({ key1: 'value1', key2: 'value2' });
+   *         const entryValuesArray = mData.getValues();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  getValues() {
+    return lib.mdata_list_values(this.app.connection, this.ref);
+  }
+
+  /**
+   * Get an interface to the permissions associated with this {@link MutableData}
+   * @returns {Permissions} The permissions interface object
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         await mData.quickSetup({ key1: 'value1', key2: 'value2' });
+   *         const permissionsInterface = mData.getPermissions();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  getPermissions() {
+    return lib.mdata_list_permissions(this.app.connection, this.ref)
+      .then((r) => h.autoref(new Permissions(this.app, r, this)));
+  }
+
+  /**
+   * Get an interface to the permissions associated with this {@link MutableData} for
+   * a specific signing key
+   * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE]
+   * @returns {Promise&lt;Object>} Permissions set associated to the signing key
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         await mData.quickSetup({ key1: 'value1', key2: 'value2' });
+   *         const signKey = await app.crypto.getAppPubSignKey();
+   *         const permissionSet = await mData.getUserPermissions(signKey);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  getUserPermissions(signKey) {
+    return lib.mdata_list_user_permissions(this.app.connection, this.ref,
+                                                      signKey
+                                                        ? signKey.ref
+                                                        : CONSTANTS.USER_ANYONE);
+  }
+
+  /**
+   * Delete the permissions of a specifc key. Directly commits to the network.
+   * Requires 'ManagePermissions' permission for the app.
+   * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
+   * @param {Number} version The version successor, to confirm you are
+   *        actually asking for the right one
+   * @returns {Promise} once finished
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         await mData.quickSetup({ key1: 'value1', key2: 'value2' });
+   *         const version = await mData.getVersion();
+   *         const signKey = await app.crypto.getAppPubSignKey();
+   *         const permissionSet = mData.delUserPermissions(signKey, version + 1);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  delUserPermissions(signKey, version) {
+    return lib.mdata_del_user_permissions(this.app.connection,
+                                          this.ref,
+                                          signKey
+                                            ? signKey.ref
+                                            : CONSTANTS.USER_ANYONE,
+                                          version);
+  }
+
+  /**
+   * Set the permissions of a specifc key. Directly commits to the network.
+   * Requires 'ManagePermissions' permission for the app.
+   * @param {PubSignKey|CONSTANTS.USER_ANYONE} [signKey=CONSTANTS.USER_ANYONE] the key to lookup for
+   * @param {PermissionSet} permissionSet The permission set to set to
+   * @param {Number} version the version successor, to confirm you are
+   *        actually asking for the right one
+   * @returns {Promise} resolves once finished
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         await mData.quickSetup({ key1: 'value1', key2: 'value2' });
+   *         const version = await mData.getVersion();
+   *         const pmSet = ['Insert'];
+   *         const permissionSet = await mData.setUserPermissions(
+   *             safe.CONSTANTS.USER_ANYONE, pmSet, version + 1
+   *         );
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  setUserPermissions(signKey, permissionSet, version) {
+    return lib.mdata_set_user_permissions(this.app.connection,
+                                          this.ref,
+                                          signKey
+                                            ? signKey.ref
+                                            : CONSTANTS.USER_ANYONE,
+                                          permissionSet || [],
+                                          version);
+  }
+
+  /**
+   * Commit the transaction to the network
+   * @param {EntryMutationTransaction} mutations the Mutations you want to apply
+   * @return {Promise} Resolves once finished
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         await mData.quickSetup({ key1: 'value1', key2: 'value2' });
+   *         const mutation = await app.mutableData.newMutation();
+   *         await mutation.insert('key2', 'value2')
+   *         await mData.applyEntriesMutation(mutation);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  applyEntriesMutation(mutations) {
+    return lib.mdata_mutate_entries(this.app.connection, this.ref, mutations.ref);
+  }
+
+  /**
+   * Serialise the current {@link MutableData}
+   * @returns {Promise&lt;String>} The serialilsed version of the {@link MutableData}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         await mData.quickSetup({ key1: 'value1', key2: 'value2' });
+   *         const serialisedMD = await mData.serialise();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  serialise() {
+    return lib.mdata_info_serialise(this.ref);
+  }
+
+  /**
+   * Get serialised size of current {@link MutableData}
+   * @returns {Promise&lt;Number>} The serialilsed size of the {@link MutableData}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         await mData.quickSetup({ key1: 'value1', key2: 'value2' });
+   *         const serialisedSize = await mData.getSerialisedSize();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  getSerialisedSize() {
+    return lib.mdata_serialised_size(this.app.connection, this.ref);
+  }
+
+  /**
+   * Wrap this {@link MutableData} into a known abstraction. Currently only known: `NFS`
+   * @param {String} eml - name of the emulation
+   * @returns {Emulation} the Emulation you are asking for
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const emulationOptions = {
+   *     nfs   : 'NFS',
+   *     rdf   : 'RDF',
+   *     webid : 'WebId'
+   * };
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *         await mData.quickSetup({ });
+   *         const nfs = await mData.emulateAs(emulationOptions.nfs)
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  emulateAs(eml) {
+    return new emulations[eml.toUpperCase()](this);
+  }
+}
+
+/**
+ * API to initialise new {@link MutableData}, {@link Permissions},
+ * {@link Entries}, or {@link EntryMutationTransaction} instances.
+ */
+class MutableDataInterface {
+  /**
+  * @hideconstructor
+  * Create a new MutableData
+  * @param {SAFEApp} app instance this is bound to
+  */
+  constructor(app) {
+    this.app = app;
+  }
+
+  /**
+   * Create a new private {@link MutableData} at a random address. Entrie can be encrypted.
+   * @param {Number} typeTag
+   * @throws {TYPE_TAG_NAN}
+   * @returns {Promise&lt;MutableData>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPrivate(15001);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  newRandomPrivate(typeTag) {
+    if (!typeTag || !Number.isInteger(typeTag)) {
+      throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
+    }
+    return lib.mdata_info_random_private(typeTag)
+          .then((mDataInfo) => this.wrapMdata(mDataInfo));
+  }
+
+
+  /**
+   * Create a new public {@link MutableData} at a random address
+   * @param {Number} typeTag
+   * @throws {TYPE_TAG_NAN}
+   * @returns {Promise&lt;MutableData>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPublic(15001);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  newRandomPublic(typeTag) {
+    if (!typeTag || !Number.isInteger(typeTag)) {
+      throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
+    }
+    return lib.mdata_info_random_public(typeTag)
+          .then((mDataInfo) => this.wrapMdata(mDataInfo));
+  }
+
+  /**
+   * Initiate a private{@link MutableData} at the given address. Entries can be encrypted.
+   * @param {Buffer|String} name 32-byte name is the network address
+   * @param {Number} typeTag
+   * @param {Buffer|String} secKey
+   * @param {Buffer|String} nonce
+   * @returns {Promise&lt;MutableData>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const name = await app.crypto.sha3Hash('1010101010101');
+   *         const encKeyPair = await app.crypto.generateEncKeyPair();
+   *         const secKey = encKeyPair.secEncKey;
+   *         const nonce = await app.crypto.generateNonce()
+   *         const mData = await app.mutableData.newPrivate(name, 15002, secKey, nonce);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  newPrivate(name, typeTag, secKey, nonce) {
+    return lib.mdata_info_new_private(name, typeTag, secKey, nonce)
+          .then((mDataInfo) => this.wrapMdata(mDataInfo));
+  }
+
+  /**
+   * Initiate a public {@link MutableData} at the given address
+   * @param {Buffer|String} 32-byte name is the network address
+   * @param {Number} typeTag
+   * @returns {Promise&lt;MutableData>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const name = await app.crypto.sha3Hash('1010101010101');
+   *         const mData = await app.mutableData.newPublic(name, 15002);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  newPublic(name, typeTag) {
+    const mDataInfo = lib.makeMDataInfoObj({ name, type_tag: typeTag });
+    return Promise.resolve(this.wrapMdata(mDataInfo));
+  }
+
+  /**
+   * Create a new Permissions object.
+   * @returns {Promise&lt;Permissions>} Permissions interface
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPublic(15001);
+   *         const permissions = await app.mutableData.newPermissions();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  newPermissions() {
+    return lib.mdata_permissions_new(this.app.connection)
+        .then((r) => h.autoref(new Permissions(this.app, r)));
+  }
+
+  /**
+   * Create a new {@link EntryMutationTransaction} object.
+   * @returns {Promise&lt;EntryMutationTransaction>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPublic(15001);
+   *         const permissions = await app.mutableData.newMutation();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  newMutation() {
+    return lib.mdata_entry_actions_new(this.app.connection)
+        .then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
+  }
+
+  /**
+   * Create a new Entries object.
+   * @returns {Promise&lt;Entries>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const mData = await app.mutableData.newRandomPublic(15001);
+   *         const permissions = await app.mutableData.newEntries();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  newEntries() {
+    return lib.mdata_entries_new(this.app.connection)
+        .then((r) => h.autoref(new Entries(this.app, r)));
+  }
+
+  /**
+   * Create a new {@link MutuableData} object from serialised format
+   * @returns {Promise&lt;MutableData>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         let mData = await app.mutableData.newRandomPublic(15001);
+   *         await mData.quickSetup({ });
+   *         const serialisedMD = await mData.serialise();
+   *         mData = await app.mutableData.fromSerial(serialisedMD);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  fromSerial(serial) {
+    return lib.mdata_info_deserialise(serial)
+        .then((mDataInfo) => this.wrapMdata(mDataInfo));
+  }
+
+  /**
+  * @private
+  * Helper to create a new autorefence MutableData for a given
+  * mdata reference from the native layer
+  *
+  * @param {handle} mDataInfo - the native handle
+  * @returns {MutableData} - wrapped
+  */
+  wrapMdata(mDataInfo) {
+    return new MutableData(this.app, mDataInfo);
+  }
+
+}
+
+module.exports = MutableDataInterface;
+</code></pre>
+  </article>
+</section>
+
+    
+
+
+  </div>
+
+  <br class="clear">
+
+  <footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+  </footer>
+
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
+
+  
+
+</body>
+</html>

@@ -1,0 +1,871 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      api/crypto.js - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  
+  <link type="text/css" rel="stylesheet" href="styles/collapse.css">
+  
+
+  
+
+  <!-- start Mixpanel -->
+  <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+  0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+  for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+  mixpanel.init("1919205b2da72e4da3b9b6639b444d59");</script>
+  <!-- end Mixpanel -->
+</head>
+
+<body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
+
+  <label for="nav-trigger" class="overlay"></label>
+
+  <div class="top-nav-wrapper">
+    <ul>
+      <li >
+        <a href="index.html">
+          
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+          
+        </a>
+      </li>
+
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      SAFE Network Node.js Client Library
+    </h3>
+
+    
+      <h3>
+        Resources
+      </h3>
+      
+        <a href="https://github.com/maidsafe/safe_app_nodejs">Github Repo</a>
+      
+        <a href=""> | </a>
+      
+        <a href="https://forum.safedev.org/">Dev Forum</a>
+      
+    
+
+    <h3>Classes</h3><ul><li id="AuthInterface-nav"><a href="AuthInterface.html">AuthInterface</a><ul class='methods'><li data-type="method" id="AuthInterface-canAccessContainer-nav"><a href="AuthInterface.html#canAccessContainer">canAccessContainer</a></li><li data-type="method" id="AuthInterface-genAuthUri-nav"><a href="AuthInterface.html#genAuthUri">genAuthUri</a></li><li data-type="method" id="AuthInterface-genConnUri-nav"><a href="AuthInterface.html#genConnUri">genConnUri</a></li><li data-type="method" id="AuthInterface-genContainerAuthUri-nav"><a href="AuthInterface.html#genContainerAuthUri">genContainerAuthUri</a></li><li data-type="method" id="AuthInterface-genShareMDataUri-nav"><a href="AuthInterface.html#genShareMDataUri">genShareMDataUri</a></li><li data-type="method" id="AuthInterface-getContainer-nav"><a href="AuthInterface.html#getContainer">getContainer</a></li><li data-type="method" id="AuthInterface-getContainersPermissions-nav"><a href="AuthInterface.html#getContainersPermissions">getContainersPermissions</a></li><li data-type="method" id="AuthInterface-getOwnContainer-nav"><a href="AuthInterface.html#getOwnContainer">getOwnContainer</a></li><li data-type="method" id="AuthInterface-loginForTest-nav"><a href="AuthInterface.html#loginForTest">loginForTest</a></li><li data-type="method" id="AuthInterface-loginFromUri-nav"><a href="AuthInterface.html#loginFromUri">loginFromUri</a></li><li data-type="method" id="AuthInterface-openUri-nav"><a href="AuthInterface.html#openUri">openUri</a></li><li data-type="method" id="AuthInterface-readGrantedPermissions-nav"><a href="AuthInterface.html#readGrantedPermissions">readGrantedPermissions</a></li><li data-type="method" id="AuthInterface-refreshContainersPermissions-nav"><a href="AuthInterface.html#refreshContainersPermissions">refreshContainersPermissions</a></li><li data-type="method" id="AuthInterface-simulateNetworkDisconnect-nav"><a href="AuthInterface.html#simulateNetworkDisconnect">simulateNetworkDisconnect</a></li></ul></li><li id="CipherOptInterface-nav"><a href="CipherOptInterface.html">CipherOptInterface</a><ul class='methods'><li data-type="method" id="CipherOptInterface-newAsymmetric-nav"><a href="CipherOptInterface.html#newAsymmetric">newAsymmetric</a></li><li data-type="method" id="CipherOptInterface-newPlainText-nav"><a href="CipherOptInterface.html#newPlainText">newPlainText</a></li><li data-type="method" id="CipherOptInterface-newSymmetric-nav"><a href="CipherOptInterface.html#newSymmetric">newSymmetric</a></li></ul></li><li id="CryptoInterface-nav"><a href="CryptoInterface.html">CryptoInterface</a><ul class='methods'><li data-type="method" id="CryptoInterface-generateEncKeyPair-nav"><a href="CryptoInterface.html#generateEncKeyPair">generateEncKeyPair</a></li><li data-type="method" id="CryptoInterface-generateEncKeyPairFromRaw-nav"><a href="CryptoInterface.html#generateEncKeyPairFromRaw">generateEncKeyPairFromRaw</a></li><li data-type="method" id="CryptoInterface-generateNonce-nav"><a href="CryptoInterface.html#generateNonce">generateNonce</a></li><li data-type="method" id="CryptoInterface-generateSignKeyPair-nav"><a href="CryptoInterface.html#generateSignKeyPair">generateSignKeyPair</a></li><li data-type="method" id="CryptoInterface-generateSignKeyPairFromRaw-nav"><a href="CryptoInterface.html#generateSignKeyPairFromRaw">generateSignKeyPairFromRaw</a></li><li data-type="method" id="CryptoInterface-getAppPubEncKey-nav"><a href="CryptoInterface.html#getAppPubEncKey">getAppPubEncKey</a></li><li data-type="method" id="CryptoInterface-getAppPubSignKey-nav"><a href="CryptoInterface.html#getAppPubSignKey">getAppPubSignKey</a></li><li data-type="method" id="CryptoInterface-pubEncKeyFromRaw-nav"><a href="CryptoInterface.html#pubEncKeyFromRaw">pubEncKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-pubSignKeyFromRaw-nav"><a href="CryptoInterface.html#pubSignKeyFromRaw">pubSignKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-secEncKeyFromRaw-nav"><a href="CryptoInterface.html#secEncKeyFromRaw">secEncKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-secSignKeyFromRaw-nav"><a href="CryptoInterface.html#secSignKeyFromRaw">secSignKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-sha3Hash-nav"><a href="CryptoInterface.html#sha3Hash">sha3Hash</a></li></ul></li><li id="EncKeyPair-nav"><a href="EncKeyPair.html">EncKeyPair</a><ul class='methods'><li data-type="method" id="EncKeyPair-decryptSealed-nav"><a href="EncKeyPair.html#decryptSealed">decryptSealed</a></li></ul></li><li id="Entries-nav"><a href="Entries.html">Entries</a><ul class='methods'><li data-type="method" id="Entries-get-nav"><a href="Entries.html#get">get</a></li><li data-type="method" id="Entries-insert-nav"><a href="Entries.html#insert">insert</a></li><li data-type="method" id="Entries-len-nav"><a href="Entries.html#len">len</a></li><li data-type="method" id="Entries-listEntries-nav"><a href="Entries.html#listEntries">listEntries</a></li><li data-type="method" id="Entries-mutate-nav"><a href="Entries.html#mutate">mutate</a></li></ul></li><li id="EntryMutationTransaction-nav"><a href="EntryMutationTransaction.html">EntryMutationTransaction</a><ul class='methods'><li data-type="method" id="EntryMutationTransaction-delete-nav"><a href="EntryMutationTransaction.html#delete">delete</a></li><li data-type="method" id="EntryMutationTransaction-insert-nav"><a href="EntryMutationTransaction.html#insert">insert</a></li><li data-type="method" id="EntryMutationTransaction-update-nav"><a href="EntryMutationTransaction.html#update">update</a></li></ul></li><li id="File-nav"><a href="File.html">File</a><ul class='methods'><li data-type="method" id="File-close-nav"><a href="File.html#close">close</a></li><li data-type="method" id="File-read-nav"><a href="File.html#read">read</a></li><li data-type="method" id="File-size-nav"><a href="File.html#size">size</a></li><li data-type="method" id="File-write-nav"><a href="File.html#write">write</a></li></ul></li><li id="ImmutableDataInterface-nav"><a href="ImmutableDataInterface.html">ImmutableDataInterface</a><ul class='methods'><li data-type="method" id="ImmutableDataInterface-create-nav"><a href="ImmutableDataInterface.html#create">create</a></li><li data-type="method" id="ImmutableDataInterface-fetch-nav"><a href="ImmutableDataInterface.html#fetch">fetch</a></li></ul></li><li id="MutableData-nav"><a href="MutableData.html">MutableData</a><ul class='methods'><li data-type="method" id="MutableData-applyEntriesMutation-nav"><a href="MutableData.html#applyEntriesMutation">applyEntriesMutation</a></li><li data-type="method" id="MutableData-decrypt-nav"><a href="MutableData.html#decrypt">decrypt</a></li><li data-type="method" id="MutableData-delUserPermissions-nav"><a href="MutableData.html#delUserPermissions">delUserPermissions</a></li><li data-type="method" id="MutableData-emulateAs-nav"><a href="MutableData.html#emulateAs">emulateAs</a></li><li data-type="method" id="MutableData-encryptKey-nav"><a href="MutableData.html#encryptKey">encryptKey</a></li><li data-type="method" id="MutableData-encryptValue-nav"><a href="MutableData.html#encryptValue">encryptValue</a></li><li data-type="method" id="MutableData-get-nav"><a href="MutableData.html#get">get</a></li><li data-type="method" id="MutableData-getEntries-nav"><a href="MutableData.html#getEntries">getEntries</a></li><li data-type="method" id="MutableData-getKeys-nav"><a href="MutableData.html#getKeys">getKeys</a></li><li data-type="method" id="MutableData-getNameAndTag-nav"><a href="MutableData.html#getNameAndTag">getNameAndTag</a></li><li data-type="method" id="MutableData-getPermissions-nav"><a href="MutableData.html#getPermissions">getPermissions</a></li><li data-type="method" id="MutableData-getSerialisedSize-nav"><a href="MutableData.html#getSerialisedSize">getSerialisedSize</a></li><li data-type="method" id="MutableData-getUserPermissions-nav"><a href="MutableData.html#getUserPermissions">getUserPermissions</a></li><li data-type="method" id="MutableData-getValues-nav"><a href="MutableData.html#getValues">getValues</a></li><li data-type="method" id="MutableData-getVersion-nav"><a href="MutableData.html#getVersion">getVersion</a></li><li data-type="method" id="MutableData-put-nav"><a href="MutableData.html#put">put</a></li><li data-type="method" id="MutableData-quickSetup-nav"><a href="MutableData.html#quickSetup">quickSetup</a></li><li data-type="method" id="MutableData-serialise-nav"><a href="MutableData.html#serialise">serialise</a></li><li data-type="method" id="MutableData-setMetadata-nav"><a href="MutableData.html#setMetadata">setMetadata</a></li><li data-type="method" id="MutableData-setUserPermissions-nav"><a href="MutableData.html#setUserPermissions">setUserPermissions</a></li></ul></li><li id="MutableDataInterface-nav"><a href="MutableDataInterface.html">MutableDataInterface</a><ul class='methods'><li data-type="method" id="MutableDataInterface-fromSerial-nav"><a href="MutableDataInterface.html#fromSerial">fromSerial</a></li><li data-type="method" id="MutableDataInterface-newEntries-nav"><a href="MutableDataInterface.html#newEntries">newEntries</a></li><li data-type="method" id="MutableDataInterface-newMutation-nav"><a href="MutableDataInterface.html#newMutation">newMutation</a></li><li data-type="method" id="MutableDataInterface-newPermissions-nav"><a href="MutableDataInterface.html#newPermissions">newPermissions</a></li><li data-type="method" id="MutableDataInterface-newPrivate-nav"><a href="MutableDataInterface.html#newPrivate">newPrivate</a></li><li data-type="method" id="MutableDataInterface-newPublic-nav"><a href="MutableDataInterface.html#newPublic">newPublic</a></li><li data-type="method" id="MutableDataInterface-newRandomPrivate-nav"><a href="MutableDataInterface.html#newRandomPrivate">newRandomPrivate</a></li><li data-type="method" id="MutableDataInterface-newRandomPublic-nav"><a href="MutableDataInterface.html#newRandomPublic">newRandomPublic</a></li></ul></li><li id="NFS-nav"><a href="NFS.html">NFS</a><ul class='methods'><li data-type="method" id="NFS-create-nav"><a href="NFS.html#create">create</a></li><li data-type="method" id="NFS-delete-nav"><a href="NFS.html#delete">delete</a></li><li data-type="method" id="NFS-fetch-nav"><a href="NFS.html#fetch">fetch</a></li><li data-type="method" id="NFS-insert-nav"><a href="NFS.html#insert">insert</a></li><li data-type="method" id="NFS-open-nav"><a href="NFS.html#open">open</a></li><li data-type="method" id="NFS-update-nav"><a href="NFS.html#update">update</a></li></ul></li><li id="Permissions-nav"><a href="Permissions.html">Permissions</a><ul class='methods'><li data-type="method" id="Permissions-getPermissionSet-nav"><a href="Permissions.html#getPermissionSet">getPermissionSet</a></li><li data-type="method" id="Permissions-insertPermissionSet-nav"><a href="Permissions.html#insertPermissionSet">insertPermissionSet</a></li><li data-type="method" id="Permissions-len-nav"><a href="Permissions.html#len">len</a></li><li data-type="method" id="Permissions-listPermissionSets-nav"><a href="Permissions.html#listPermissionSets">listPermissionSets</a></li></ul></li><li id="PubEncKey-nav"><a href="PubEncKey.html">PubEncKey</a><ul class='methods'><li data-type="method" id="PubEncKey-decrypt-nav"><a href="PubEncKey.html#decrypt">decrypt</a></li><li data-type="method" id="PubEncKey-encrypt-nav"><a href="PubEncKey.html#encrypt">encrypt</a></li><li data-type="method" id="PubEncKey-encryptSealed-nav"><a href="PubEncKey.html#encryptSealed">encryptSealed</a></li><li data-type="method" id="PubEncKey-getRaw-nav"><a href="PubEncKey.html#getRaw">getRaw</a></li></ul></li><li id="PubSignKey-nav"><a href="PubSignKey.html">PubSignKey</a><ul class='methods'><li data-type="method" id="PubSignKey-getRaw-nav"><a href="PubSignKey.html#getRaw">getRaw</a></li><li data-type="method" id="PubSignKey-verify-nav"><a href="PubSignKey.html#verify">verify</a></li></ul></li><li id="RDF-nav"><a href="RDF.html">RDF</a><ul class='methods'><li data-type="method" id="RDF-add-nav"><a href="RDF.html#add">add</a></li><li data-type="method" id="RDF-any-nav"><a href="RDF.html#any">any</a></li><li data-type="method" id="RDF-append-nav"><a href="RDF.html#append">append</a></li><li data-type="method" id="RDF-bnode-nav"><a href="RDF.html#bnode">bnode</a></li><li data-type="method" id="RDF-commit-nav"><a href="RDF.html#commit">commit</a></li><li data-type="method" id="RDF-each-nav"><a href="RDF.html#each">each</a></li><li data-type="method" id="RDF-literal-nav"><a href="RDF.html#literal">literal</a></li><li data-type="method" id="RDF-namespace-nav"><a href="RDF.html#namespace">namespace</a></li><li data-type="method" id="RDF-nowOrWhenFetched-nav"><a href="RDF.html#nowOrWhenFetched">nowOrWhenFetched</a></li><li data-type="method" id="RDF-parse-nav"><a href="RDF.html#parse">parse</a></li><li data-type="method" id="RDF-removeMany-nav"><a href="RDF.html#removeMany">removeMany</a></li><li data-type="method" id="RDF-serialise-nav"><a href="RDF.html#serialise">serialise</a></li><li data-type="method" id="RDF-setId-nav"><a href="RDF.html#setId">setId</a></li><li data-type="method" id="RDF-statementsMatching-nav"><a href="RDF.html#statementsMatching">statementsMatching</a></li><li data-type="method" id="RDF-sym-nav"><a href="RDF.html#sym">sym</a></li></ul></li><li id="Reader-nav"><a href="Reader.html">Reader</a><ul class='methods'><li data-type="method" id="Reader-read-nav"><a href="Reader.html#read">read</a></li><li data-type="method" id="Reader-size-nav"><a href="Reader.html#size">size</a></li></ul></li><li id="SAFEApp-nav"><a href="SAFEApp.html">SAFEApp</a><ul class='methods'><li data-type="method" id="SAFEApp-appIsMock-nav"><a href="SAFEApp.html#appIsMock">appIsMock</a></li><li data-type="method" id="SAFEApp-clearObjectCache-nav"><a href="SAFEApp.html#clearObjectCache">clearObjectCache</a></li><li data-type="method" id="SAFEApp-fetch-nav"><a href="SAFEApp.html#fetch">fetch</a></li><li data-type="method" id="SAFEApp-getAccountInfo-nav"><a href="SAFEApp.html#getAccountInfo">getAccountInfo</a></li><li data-type="method" id="SAFEApp-getOwnContainerName-nav"><a href="SAFEApp.html#getOwnContainerName">getOwnContainerName</a></li><li data-type="method" id="SAFEApp-isNetStateConnected-nav"><a href="SAFEApp.html#isNetStateConnected">isNetStateConnected</a></li><li data-type="method" id="SAFEApp-isNetStateDisconnected-nav"><a href="SAFEApp.html#isNetStateDisconnected">isNetStateDisconnected</a></li><li data-type="method" id="SAFEApp-isNetStateInit-nav"><a href="SAFEApp.html#isNetStateInit">isNetStateInit</a></li><li data-type="method" id="SAFEApp-logPath-nav"><a href="SAFEApp.html#logPath">logPath</a></li><li data-type="method" id="SAFEApp-reconnect-nav"><a href="SAFEApp.html#reconnect">reconnect</a></li><li data-type="method" id="SAFEApp-webFetch-nav"><a href="SAFEApp.html#webFetch">webFetch</a></li></ul></li><li id="SecEncKey-nav"><a href="SecEncKey.html">SecEncKey</a><ul class='methods'><li data-type="method" id="SecEncKey-decrypt-nav"><a href="SecEncKey.html#decrypt">decrypt</a></li><li data-type="method" id="SecEncKey-encrypt-nav"><a href="SecEncKey.html#encrypt">encrypt</a></li><li data-type="method" id="SecEncKey-getRaw-nav"><a href="SecEncKey.html#getRaw">getRaw</a></li></ul></li><li id="SecSignKey-nav"><a href="SecSignKey.html">SecSignKey</a><ul class='methods'><li data-type="method" id="SecSignKey-getRaw-nav"><a href="SecSignKey.html#getRaw">getRaw</a></li><li data-type="method" id="SecSignKey-sign-nav"><a href="SecSignKey.html#sign">sign</a></li></ul></li><li id="SignKeyPair-nav"><a href="SignKeyPair.html">SignKeyPair</a></li><li id="WebID-nav"><a href="WebID.html">WebID</a><ul class='methods'><li data-type="method" id="WebID-create-nav"><a href="WebID.html#create">create</a></li><li data-type="method" id="WebID-fetchContent-nav"><a href="WebID.html#fetchContent">fetchContent</a></li><li data-type="method" id="WebID-init-nav"><a href="WebID.html#init">init</a></li><li data-type="method" id="WebID-serialise-nav"><a href="WebID.html#serialise">serialise</a></li><li data-type="method" id="WebID-update-nav"><a href="WebID.html#update">update</a></li></ul></li><li id="WebInterface-nav"><a href="WebInterface.html">WebInterface</a><ul class='methods'><li data-type="method" id="WebInterface-addPublicNameToDirectory-nav"><a href="WebInterface.html#addPublicNameToDirectory">addPublicNameToDirectory</a></li><li data-type="method" id="WebInterface-addWebIdToDirectory-nav"><a href="WebInterface.html#addWebIdToDirectory">addWebIdToDirectory</a></li><li data-type="method" id="WebInterface-getPublicNames-nav"><a href="WebInterface.html#getPublicNames">getPublicNames</a></li><li data-type="method" id="WebInterface-getVocabs-nav"><a href="WebInterface.html#getVocabs">getVocabs</a></li><li data-type="method" id="WebInterface-getWebIds-nav"><a href="WebInterface.html#getWebIds">getWebIds</a></li><li data-type="method" id="WebInterface-linkServiceToSubname-nav"><a href="WebInterface.html#linkServiceToSubname">linkServiceToSubname</a></li></ul></li><li id="Writer-nav"><a href="Writer.html">Writer</a><ul class='methods'><li data-type="method" id="Writer-close-nav"><a href="Writer.html#close">close</a></li><li data-type="method" id="Writer-write-nav"><a href="Writer.html#write">write</a></li></ul></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#CONSTANTS">CONSTANTS</a></li><li><a href="global.html#fromAuthUri">fromAuthUri</a></li><li><a href="global.html#initialiseApp">initialiseApp</a></li><li><a href="global.html#VERSION">VERSION</a></li></ul>
+  </nav>
+
+  <div id="main">
+    
+      <h1 class="page-title">
+        api/crypto.js
+      </h1>
+    
+
+    
+      
+
+<section>
+  <article>
+    <pre class="prettyprint source linenums"><code>// Copyright 2018 MaidSafe.net limited.
+//
+// This SAFE Network Software is licensed to you under
+// the MIT license &lt;LICENSE-MIT or http://opensource.org/licenses/MIT> or
+// the Modified BSD license &lt;LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
+// at your option.
+//
+// This file may not be copied, modified, or distributed except according to those terms.
+//
+// Please review the Licences for the specific language governing permissions and limitations
+// relating to use of the SAFE Network Software.
+
+
+const lib = require('../native/lib');
+const h = require('../helpers');
+const errConst = require('../error_const');
+const makeError = require('../native/_error.js');
+
+/**
+ * Holds the public part of an encryption key pair
+ * @hideconstructor
+ */
+class PubEncKey extends h.NetworkObject {
+
+  /**
+   * Generate raw buffer of public encryption key
+   * @returns {Promise&lt;Buffer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const pubEncKey = encKeyPair.pubEncKey;
+   *     const rawPubEncKey = await pubEncKey.getRaw();
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  getRaw() {
+    return lib.enc_pub_key_get(this.app.connection, this.ref);
+  }
+
+  /**
+  * @private
+  * used by autoref to clean the reference
+  * @param {SAFEApp} app
+  * @param {handle} ref
+  */
+  static free(app, ref) {
+    return lib.enc_pub_key_free(app.connection, ref);
+  }
+
+  /**
+   * Encrypt the input using recipient's public key. Only recipient will be able to decrypt data. Read more about [sealed boxes]{@link https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes}.
+   * @param {String|Buffer} data
+   * @returns {Promise&lt;Buffer>} Encrypted data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const stringOrBuffer = 'plain string to be encrypted';
+   *     try {
+   *       const rawPubEncKey = Buffer.from(&lt;recipient's public encryption key>);
+   *       const pubEncKey = await app.crypto.pubEncKeyFromRaw(rawPubEncKey.buffer);
+   *       const encryptedData = await pubEncKey.encryptSealed(data);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  encryptSealed(data) {
+    return lib.encrypt_sealed_box(this.app.connection, data, this.ref);
+  }
+
+  /**
+   * Decrypt the given cipher text using the sender's public encryption key and the recipient's secret encryption key. Read more about [authenticated encryption]{@link https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption}.
+   *
+   * @arg {Buffer} cipher Encrypted data
+   * @arg {SecEncKey} secretEncKey Recipient's secret encryption key
+   * @returns {Promise&lt;Buffer>} Decrypted data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const cipher = 'plain text to be encrypted';
+   *     try {
+   *       const encKeyPair = await app.crypto.generateEncKeyPair();
+   *       const rawPubEncKey = Buffer.from(&lt;sender's public encryption key>);
+   *       const pubEncKey = await app.crypto.pubEncKeyFromRaw(rawPubEncKey.buffer);
+   *       const secretEncKey = encKeyPair.secEncKey;
+   *       const decryptedData = await pubEncKey.decrypt(cipher, secretEncKey)
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  decrypt(cipher, secretEncKey) {
+    return lib.decrypt(this.app.connection, cipher, this.ref, secretEncKey.ref);
+  }
+
+  /**
+   * Encrypt the input using recipient's public encryption key and sender's secret encryption key, such that each party can generate a shared secret key to verify the integrity of ciphers and to also decrypt them. Read more about [authenticated encryption]{@link https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption}.
+   *
+   * @param {Buffer|String} data
+   * @param {SecEncKey} secretEncKey Sender's secret encryption key
+   * @throws {MISSING_SEC_ENC_KEY}
+   * @returns {Promise&lt;Buffer>} Encrypted data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const data = 'plain text to be encrypted';
+   *     try {
+   *       const encKeyPair = await app.crypto.generateEncKeyPair();
+   *       const rawPubEncKey = Buffer.from(&lt;recipient's public encryption key>);
+   *       const pubEncKey = await app.crypto.pubEncKeyFromRaw(rawPubEncKey.buffer);
+   *       const secretEncKey = encKeyPair.secEncKey;
+   *       const encryptedBuffer = await pubEncKey.encrypt(data, secretEncKey)
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  encrypt(data, secretEncKey) {
+    if (!secretEncKey) {
+      throw makeError(errConst.MISSING_SEC_ENC_KEY.code, errConst.MISSING_SEC_ENC_KEY.msg(32));
+    }
+    return lib.encrypt(this.app.connection, data, this.ref, secretEncKey.ref);
+  }
+}
+
+
+/**
+* Holds the secret part of an encryption key
+* @hideconstructor
+*/
+class SecEncKey extends h.NetworkObject {
+
+  /**
+   * Generate raw buffer of secret encryption key
+   * @returns {Promise&lt;Buffer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const secEncKey = encKeyPair.secEncKey;
+   *     const rawSecEncKey = await secEncKey.getRaw();
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  getRaw() {
+    return lib.enc_secret_key_get(this.app.connection, this.ref);
+  }
+
+  /**
+  * @private
+  * used by autoref to clean the reference
+  * @param {SAFEApp} app
+  * @param {handle} ref
+  */
+  static free(app, ref) {
+    return lib.enc_secret_key_free(app.connection, ref);
+  }
+
+  /**
+   * Decrypt the given encrypted data using the sender's public encryption key and the recipient's secret encryption key. Read more about [authenticated encryption]{@link https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption}.
+   *
+   * An example use case for this method is if you have received messages from multiple
+   * senders, you may fetch your secret key once, then iterate over the messages
+   * passing each associated public encryption key to decrypt each message.
+   *
+   * @arg {Buffer} cipher Encrypted data
+   * @arg {PubEncKey} publicEncKey Sender's public encryption key
+   * @throws {MISSING_PUB_ENC_KEY}
+   * @returns {Promise&lt;Buffer>} Decrypted data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const cipher = 'plain text to be encrypted';
+   *     try {
+   *       const encKeyPair = await app.crypto.generateEncKeyPair();
+   *       const rawPubEncKey = Buffer.from(&lt;sender's public encryption key>);
+   *       const pubEncKey = await app.crypto.pubEncKeyFromRaw(rawPubEncKey.buffer);
+   *       const secretEncKey = encKeyPair.secEncKey;
+   *       const decryptedData = await pubEncKey.decrypt(cipher, secretEncKey)
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  decrypt(cipher, publicEncKey) {
+    if (!publicEncKey) {
+      throw makeError(errConst.MISSING_PUB_ENC_KEY.code, errConst.MISSING_PUB_ENC_KEY.msg);
+    }
+    return lib.decrypt(this.app.connection, cipher, publicEncKey.ref, this.ref);
+  }
+
+  /**
+   * Encrypt the input using recipient's public encryption key and sender's secret encryption key, such that each party can generate a shared secret key to verify the integrity of ciphers and to also decrypt them. Read more about [authenticated encryption]{@link https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption}.
+   *
+   * @param {Buffer|String} data
+   * @param {PubEncKey} recipientPubKey Recipient's public encryption key
+   * @returns {Promise&lt;Buffer>} Encrypted data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const data = 'plain text to be encrypted';
+   *     try {
+   *       const encKeyPair = await app.crypto.generateEncKeyPair();
+   *       const rawPubEncKey = Buffer.from(&lt;recipient's public encryption key>);
+   *       const recipientPubKey = await app.crypto.pubEncKeyFromRaw(rawPubEncKey.buffer);
+   *       const secEncKey = encKeyPair.secEncKey;
+   *       const encryptedBuffer = await secEncKey.encrypt(data, recipientPubKey)
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  encrypt(data, recipientPubKey) {
+    return lib.encrypt(this.app.connection, data, recipientPubKey.ref, this.ref);
+  }
+}
+
+
+/**
+* Asymmetric encryption keypair
+*/
+class EncKeyPair {
+
+  /**
+  * @hideconstructor
+  */
+  constructor(app, pub, secret) {
+    this.app = app;
+    this._public = pub;
+    this._secret = secret;
+  }
+
+
+  /**
+   * Get the public encryption key instance of this keypair
+   * @returns {PubEncKey}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const pubEncKey = encKeyPair.pubEncKey;
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  get pubEncKey() {
+    return this._public;
+  }
+
+
+  /**
+   * Get the secret encryption key instance of this keypair
+   * @returns {secEncKey}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const secEncKey = encKeyPair.secEncKey;
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  get secEncKey() {
+    return this._secret;
+  }
+
+  /**
+   * Decrypt the input using this generated encryption key pair. Only recipient will be able to decrypt data. Read more about [sealed boxes]{@link https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes}.
+   * @param {String|Buffer} cipher Encrypted data
+   * @returns {Promise&lt;Buffer>} Decrypted data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const cipher = &lt;Encrypted data as sealed box>;
+   *     try {
+  *        const encKeyPair = await app.crypto.generateEncKeyPair();
+   *       const decryptedData = await encKeyPair.decryptSealed(cipher);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  decryptSealed(cipher) {
+    return lib.decrypt_sealed_box(this.app.connection, cipher,
+                                  this.pubEncKey.ref, this.secEncKey.ref);
+  }
+}
+
+/**
+* Holds the public part of a sign key pair
+* @hideconstructor
+*/
+class PubSignKey extends h.NetworkObject {
+
+  /**
+   * Generate raw buffer of public sign key.
+   * @returns {Promise&lt;Buffer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const signKeyPair = await app.crypto.generateSignKeyPair();
+   *         const pubSignKey = signKeyPair.pubSignKey;
+   *         const rawPubSignKey = await pubSignKey.getRaw();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  getRaw() {
+    return lib.sign_pub_key_get(this.app.connection, this.ref);
+  }
+
+  /**
+  * @private
+  * used by autoref to clean the reference
+  * @param {SAFEApp} app
+  * @param {handle} ref
+  */
+  static free(app, ref) {
+    return lib.sign_pub_key_free(app.connection, ref);
+  }
+
+  /**
+   * Verify the given signed data using the public sign key
+   * @param {Buffer} data Signed data to be verified
+   * @returns {Promise&lt;Buffer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *       const signKeyPair = await app.crypto.generateSignKeyPair();
+   *       const pubSignKey = signKeyPair.pubSignKey;
+   *       const verifiedData = await pubSignKey.verify(data);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  verify(data) {
+    return lib.verify(this.app.connection, data, this.ref);
+  }
+}
+
+/**
+* Holds the secret part of a sign key pair
+* @hideconstructor
+*/
+class SecSignKey extends h.NetworkObject {
+
+  /**
+   * Generate raw buffer of secret sign key
+   * @returns {Promise&lt;Buffer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const secSignKey = encKeyPair.secSignKey;
+   *     const rawSecSignKey = await secSignKey.getRaw();
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  getRaw() {
+    return lib.sign_sec_key_get(this.app.connection, this.ref);
+  }
+
+  /**
+  * @private
+  * used by autoref to clean the reference
+  * @param {SAFEApp} app
+  * @param {handle} ref
+  */
+  static free(app, ref) {
+    return lib.sign_sec_key_free(app.connection, ref);
+  }
+
+  /**
+   * Sign the given data (buffer or string) using the secret sign key
+   * @param {Buffer} data to sign
+   * @returns {Promise&lt;Buffer>} signed data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const data = 'Information to be signed';
+   *     try {
+   *       const encKeyPair = await app.crypto.generateEncKeyPair();
+   *       const secSignKey = encKeyPair.secSignKey;
+   *       const signedData = await secSignKey.sign(data);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  sign(data) {
+    return lib.sign(this.app.connection, data, this.ref);
+  }
+}
+
+/**
+* Signing keypair
+* @hideconstructor
+*/
+class SignKeyPair {
+
+  constructor(app, pub, secret) {
+    this.app = app;
+    this._public = pub;
+    this._secret = secret;
+  }
+
+
+  /**
+   * get the public sign key instance of this key pair
+   * @returns {PubSignKey}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const pubSignKey = signKeyPair.pubSignKey;
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  get pubSignKey() {
+    return this._public;
+  }
+
+
+  /**
+   * get the secrect sign key instance of this key pair
+   * @returns {SecSignKey}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const secSignKey = await signKeyPair.secSignKey;
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  get secSignKey() {
+    return this._secret;
+  }
+}
+
+/**
+ * Contains all cryptographic related functionality
+ */
+class CryptoInterface {
+
+  /**
+   * @hideconstructor
+   */
+  constructor(app) {
+    this.app = app;
+  }
+
+  /**
+   * Hash the given input with SHA3 Hash
+   * @returns {Promise&lt;Buffer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const hashedString = await app.crypto.sha3Hash('1010101010101')
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  sha3Hash(data) { // eslint-disable-line class-methods-use-this
+    return lib.sha3_hash(data);
+  }
+
+  /**
+   * Get current app's public signing key
+   * @returns {Promise&lt;PubSignKey>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const pubSignKey = await app.crypto.getAppPubSignKey();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  getAppPubSignKey() {
+    return lib.app_pub_sign_key(this.app.connection)
+        .then((c) => h.autoref(new PubSignKey(this.app, c)));
+  }
+
+  /**
+   * Get current app's public encryption key
+   * @returns {Promise&lt;PubEncKey>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const pubEncKey = await app.crypto.getAppPubEncKey();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  getAppPubEncKey() {
+    return lib.app_pub_enc_key(this.app.connection)
+        .then((c) => h.autoref(new PubEncKey(this.app, c)));
+  }
+
+  /**
+   * Generate a new asymmetric encryption key pair
+   * @returns {Promise&lt;EncKeyPair>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  generateEncKeyPair() {
+    return lib.enc_generate_key_pair(this.app.connection)
+        .then((r) => new EncKeyPair(this.app,
+            h.autoref(new PubEncKey(this.app, r[0])),
+            h.autoref(new SecEncKey(this.app, r[1]))
+          ));
+  }
+
+  /**
+   * Generate a new sign key pair
+   * @returns {Promise&lt;SignKeyPair>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const signKeyPair = await app.crypto.generateSignKeyPair();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  generateSignKeyPair() {
+    return lib.sign_generate_key_pair(this.app.connection)
+        .then((r) => new SignKeyPair(this.app,
+            h.autoref(new PubSignKey(this.app, r[0])),
+            h.autoref(new SecSignKey(this.app, r[1]))
+          ));
+  }
+
+  /**
+   * Generate asymmetric encryption key pair instance from raw keys
+   * @returns {Promise&lt;EncKeyPair>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         let encKeyPair = await app.crypto.generateEncKeyPair();
+   *         const pubEncKey = encKeyPair.pubEncKey;
+   *         const secEncKey = encKeyPair.secEncKey;
+   *         const rawPubEncKey = await pubEncKey.getRaw();
+   *         const rawSecEncKey = await secEncKey.getRaw();
+   *         encKeyPair = await app.crypto.generateEncKeyPairFromRaw(
+   *             rawPubEncKey.buffer,
+   *             rawSecEncKey.buffer
+   *         );
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  generateEncKeyPairFromRaw(rawPublicKey, rawSecretkey) {
+    let pubKey;
+    return this.pubEncKeyFromRaw(rawPublicKey)
+        .then((pk) => { pubKey = pk; })
+        .then(() => this.secEncKeyFromRaw(rawSecretkey))
+        .then((sk) => new EncKeyPair(this.app, pubKey, sk));
+  }
+
+  /**
+   * Generate sign key pair from raw keys
+   * @returns {Promise&lt;SignKeyPair>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         let signKeyPair = await app.crypto.generateSignKeyPair();
+   *         const pubSignKey = signKeyPair.pubSignKey;
+   *         const secSignKey = signKeyPair.secSignKey;
+   *         const rawPubSignKey = await pubSignKey.getRaw();
+   *         const rawSecSignKey = await secSignKey.getRaw();
+   *         signKeyPair = await app.crypto.generateSignKeyPairFromRaw(
+   *             rawPubSignKey.buffer,
+   *             rawSecSignKey.buffer
+   *         );
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  generateSignKeyPairFromRaw(rawPublicKey, rawSecretkey) {
+    let pubKey;
+    return this.pubSignKeyFromRaw(rawPublicKey)
+        .then((pk) => { pubKey = pk; })
+        .then(() => this.secSignKeyFromRaw(rawSecretkey))
+        .then((sk) => new SignKeyPair(this.app, pubKey, sk));
+  }
+
+  /**
+   * Generates a public sign key instance from a raw buffer
+   * @param {Buffer} rawPubSignKey
+   * @returns {Promise&lt;PubSignKey>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const signKeyPair = await app.crypto.generateSignKeyPair();
+   *         let pubSignKey = signKeyPair.pubSignKey;
+   *         const rawPubSignKey = await pubSignKey.getRaw();
+   *         pubSignKey = await app.crypto.pubSignKeyFromRaw(rawPubSignKey.buffer);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  pubSignKeyFromRaw(rawPubSignKey) {
+    return lib.sign_pub_key_new(this.app.connection, rawPubSignKey)
+        .then((c) => h.autoref(new PubSignKey(this.app, c)));
+  }
+
+  /**
+   * Generates a secret sign key from a raw buffer
+   * @param {Buffer} rawSecSignKey
+   * @returns {Promise&lt;SecSignKey>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const signKeyPair = await app.crypto.generateSignKeyPair();
+   *         let secSignKey = signKeyPair.secSignKey;
+   *         const rawSecSignKey = await secSignKey.getRaw();
+   *         secSignKey = await app.crypto.secSignKeyFromRaw(rawSecSignKey.buffer);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  secSignKeyFromRaw(rawSecSignKey) {
+    return lib.sign_sec_key_new(this.app.connection, rawSecSignKey)
+        .then((c) => h.autoref(new SecSignKey(this.app, c)));
+  }
+
+  /**
+   * Generates a public encryption key instance from raw buffer
+   * @arg {Buffer} rawPubEncKey
+   * @returns {Promise&lt;PubEncKey>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const encKeyPair = await app.crypto.generateEncKeyPair();
+   *         let pubEncKey = encKeyPair.pubEncKey;
+   *         const rawPubEncKey = await pubEncKey.getRaw();
+   *         pubEncKey = await app.crypto.pubEncKeyFromRaw(rawPubEncKey.buffer);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  pubEncKeyFromRaw(rawPubEncKey) {
+    return lib.enc_pub_key_new(this.app.connection, rawPubEncKey)
+        .then((c) => h.autoref(new PubEncKey(this.app, c)));
+  }
+
+  /**
+   * Generates a secret encryption key instance from raw buffer
+   * @arg {Buffer} raw secret encryption key raw bytes as string
+   * @returns {Promise&lt;SecEncKey>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const encKeyPair = await app.crypto.generateEncKeyPair();
+   *         let secEncKey = encKeyPair.secEncKey;
+   *         const rawSecEncKey = await secEncKey.getRaw();
+   *         secEncKey = await app.crypto.secEncKeyFromRaw(rawSecEncKey.buffer);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  secEncKeyFromRaw(raw) {
+    return lib.enc_secret_key_new(this.app.connection, raw)
+        .then((c) => h.autoref(new SecEncKey(this.app, c)));
+  }
+
+  /**
+   * Generate a nonce that can be used when creating private {@link MutableData}
+   * @returns {Promise&lt;Nonce>} the nonce generated
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const nonce = await app.crypto.generateNonce();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  generateNonce() { // eslint-disable-line class-methods-use-this
+    return lib.generate_nonce();
+  }
+}
+
+
+module.exports = {
+  PubEncKey,
+  SecEncKey,
+  EncKeyPair,
+  PubSignKey,
+  SecSignKey,
+  SignKeyPair,
+  CryptoInterface
+};
+</code></pre>
+  </article>
+</section>
+
+    
+
+
+  </div>
+
+  <br class="clear">
+
+  <footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+  </footer>
+
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
+
+  
+
+</body>
+</html>

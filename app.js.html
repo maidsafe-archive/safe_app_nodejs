@@ -1,0 +1,946 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      app.js - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  
+  <link type="text/css" rel="stylesheet" href="styles/collapse.css">
+  
+
+  
+
+  <!-- start Mixpanel -->
+  <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+  0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+  for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+  mixpanel.init("1919205b2da72e4da3b9b6639b444d59");</script>
+  <!-- end Mixpanel -->
+</head>
+
+<body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
+
+  <label for="nav-trigger" class="overlay"></label>
+
+  <div class="top-nav-wrapper">
+    <ul>
+      <li >
+        <a href="index.html">
+          
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+          
+        </a>
+      </li>
+
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      SAFE Network Node.js Client Library
+    </h3>
+
+    
+      <h3>
+        Resources
+      </h3>
+      
+        <a href="https://github.com/maidsafe/safe_app_nodejs">Github Repo</a>
+      
+        <a href=""> | </a>
+      
+        <a href="https://forum.safedev.org/">Dev Forum</a>
+      
+    
+
+    <h3>Classes</h3><ul><li id="AuthInterface-nav"><a href="AuthInterface.html">AuthInterface</a><ul class='methods'><li data-type="method" id="AuthInterface-canAccessContainer-nav"><a href="AuthInterface.html#canAccessContainer">canAccessContainer</a></li><li data-type="method" id="AuthInterface-genAuthUri-nav"><a href="AuthInterface.html#genAuthUri">genAuthUri</a></li><li data-type="method" id="AuthInterface-genConnUri-nav"><a href="AuthInterface.html#genConnUri">genConnUri</a></li><li data-type="method" id="AuthInterface-genContainerAuthUri-nav"><a href="AuthInterface.html#genContainerAuthUri">genContainerAuthUri</a></li><li data-type="method" id="AuthInterface-genShareMDataUri-nav"><a href="AuthInterface.html#genShareMDataUri">genShareMDataUri</a></li><li data-type="method" id="AuthInterface-getContainer-nav"><a href="AuthInterface.html#getContainer">getContainer</a></li><li data-type="method" id="AuthInterface-getContainersPermissions-nav"><a href="AuthInterface.html#getContainersPermissions">getContainersPermissions</a></li><li data-type="method" id="AuthInterface-getOwnContainer-nav"><a href="AuthInterface.html#getOwnContainer">getOwnContainer</a></li><li data-type="method" id="AuthInterface-loginForTest-nav"><a href="AuthInterface.html#loginForTest">loginForTest</a></li><li data-type="method" id="AuthInterface-loginFromUri-nav"><a href="AuthInterface.html#loginFromUri">loginFromUri</a></li><li data-type="method" id="AuthInterface-openUri-nav"><a href="AuthInterface.html#openUri">openUri</a></li><li data-type="method" id="AuthInterface-readGrantedPermissions-nav"><a href="AuthInterface.html#readGrantedPermissions">readGrantedPermissions</a></li><li data-type="method" id="AuthInterface-refreshContainersPermissions-nav"><a href="AuthInterface.html#refreshContainersPermissions">refreshContainersPermissions</a></li><li data-type="method" id="AuthInterface-simulateNetworkDisconnect-nav"><a href="AuthInterface.html#simulateNetworkDisconnect">simulateNetworkDisconnect</a></li></ul></li><li id="CipherOptInterface-nav"><a href="CipherOptInterface.html">CipherOptInterface</a><ul class='methods'><li data-type="method" id="CipherOptInterface-newAsymmetric-nav"><a href="CipherOptInterface.html#newAsymmetric">newAsymmetric</a></li><li data-type="method" id="CipherOptInterface-newPlainText-nav"><a href="CipherOptInterface.html#newPlainText">newPlainText</a></li><li data-type="method" id="CipherOptInterface-newSymmetric-nav"><a href="CipherOptInterface.html#newSymmetric">newSymmetric</a></li></ul></li><li id="CryptoInterface-nav"><a href="CryptoInterface.html">CryptoInterface</a><ul class='methods'><li data-type="method" id="CryptoInterface-generateEncKeyPair-nav"><a href="CryptoInterface.html#generateEncKeyPair">generateEncKeyPair</a></li><li data-type="method" id="CryptoInterface-generateEncKeyPairFromRaw-nav"><a href="CryptoInterface.html#generateEncKeyPairFromRaw">generateEncKeyPairFromRaw</a></li><li data-type="method" id="CryptoInterface-generateNonce-nav"><a href="CryptoInterface.html#generateNonce">generateNonce</a></li><li data-type="method" id="CryptoInterface-generateSignKeyPair-nav"><a href="CryptoInterface.html#generateSignKeyPair">generateSignKeyPair</a></li><li data-type="method" id="CryptoInterface-generateSignKeyPairFromRaw-nav"><a href="CryptoInterface.html#generateSignKeyPairFromRaw">generateSignKeyPairFromRaw</a></li><li data-type="method" id="CryptoInterface-getAppPubEncKey-nav"><a href="CryptoInterface.html#getAppPubEncKey">getAppPubEncKey</a></li><li data-type="method" id="CryptoInterface-getAppPubSignKey-nav"><a href="CryptoInterface.html#getAppPubSignKey">getAppPubSignKey</a></li><li data-type="method" id="CryptoInterface-pubEncKeyFromRaw-nav"><a href="CryptoInterface.html#pubEncKeyFromRaw">pubEncKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-pubSignKeyFromRaw-nav"><a href="CryptoInterface.html#pubSignKeyFromRaw">pubSignKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-secEncKeyFromRaw-nav"><a href="CryptoInterface.html#secEncKeyFromRaw">secEncKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-secSignKeyFromRaw-nav"><a href="CryptoInterface.html#secSignKeyFromRaw">secSignKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-sha3Hash-nav"><a href="CryptoInterface.html#sha3Hash">sha3Hash</a></li></ul></li><li id="EncKeyPair-nav"><a href="EncKeyPair.html">EncKeyPair</a><ul class='methods'><li data-type="method" id="EncKeyPair-decryptSealed-nav"><a href="EncKeyPair.html#decryptSealed">decryptSealed</a></li></ul></li><li id="Entries-nav"><a href="Entries.html">Entries</a><ul class='methods'><li data-type="method" id="Entries-get-nav"><a href="Entries.html#get">get</a></li><li data-type="method" id="Entries-insert-nav"><a href="Entries.html#insert">insert</a></li><li data-type="method" id="Entries-len-nav"><a href="Entries.html#len">len</a></li><li data-type="method" id="Entries-listEntries-nav"><a href="Entries.html#listEntries">listEntries</a></li><li data-type="method" id="Entries-mutate-nav"><a href="Entries.html#mutate">mutate</a></li></ul></li><li id="EntryMutationTransaction-nav"><a href="EntryMutationTransaction.html">EntryMutationTransaction</a><ul class='methods'><li data-type="method" id="EntryMutationTransaction-delete-nav"><a href="EntryMutationTransaction.html#delete">delete</a></li><li data-type="method" id="EntryMutationTransaction-insert-nav"><a href="EntryMutationTransaction.html#insert">insert</a></li><li data-type="method" id="EntryMutationTransaction-update-nav"><a href="EntryMutationTransaction.html#update">update</a></li></ul></li><li id="File-nav"><a href="File.html">File</a><ul class='methods'><li data-type="method" id="File-close-nav"><a href="File.html#close">close</a></li><li data-type="method" id="File-read-nav"><a href="File.html#read">read</a></li><li data-type="method" id="File-size-nav"><a href="File.html#size">size</a></li><li data-type="method" id="File-write-nav"><a href="File.html#write">write</a></li></ul></li><li id="ImmutableDataInterface-nav"><a href="ImmutableDataInterface.html">ImmutableDataInterface</a><ul class='methods'><li data-type="method" id="ImmutableDataInterface-create-nav"><a href="ImmutableDataInterface.html#create">create</a></li><li data-type="method" id="ImmutableDataInterface-fetch-nav"><a href="ImmutableDataInterface.html#fetch">fetch</a></li></ul></li><li id="MutableData-nav"><a href="MutableData.html">MutableData</a><ul class='methods'><li data-type="method" id="MutableData-applyEntriesMutation-nav"><a href="MutableData.html#applyEntriesMutation">applyEntriesMutation</a></li><li data-type="method" id="MutableData-decrypt-nav"><a href="MutableData.html#decrypt">decrypt</a></li><li data-type="method" id="MutableData-delUserPermissions-nav"><a href="MutableData.html#delUserPermissions">delUserPermissions</a></li><li data-type="method" id="MutableData-emulateAs-nav"><a href="MutableData.html#emulateAs">emulateAs</a></li><li data-type="method" id="MutableData-encryptKey-nav"><a href="MutableData.html#encryptKey">encryptKey</a></li><li data-type="method" id="MutableData-encryptValue-nav"><a href="MutableData.html#encryptValue">encryptValue</a></li><li data-type="method" id="MutableData-get-nav"><a href="MutableData.html#get">get</a></li><li data-type="method" id="MutableData-getEntries-nav"><a href="MutableData.html#getEntries">getEntries</a></li><li data-type="method" id="MutableData-getKeys-nav"><a href="MutableData.html#getKeys">getKeys</a></li><li data-type="method" id="MutableData-getNameAndTag-nav"><a href="MutableData.html#getNameAndTag">getNameAndTag</a></li><li data-type="method" id="MutableData-getPermissions-nav"><a href="MutableData.html#getPermissions">getPermissions</a></li><li data-type="method" id="MutableData-getSerialisedSize-nav"><a href="MutableData.html#getSerialisedSize">getSerialisedSize</a></li><li data-type="method" id="MutableData-getUserPermissions-nav"><a href="MutableData.html#getUserPermissions">getUserPermissions</a></li><li data-type="method" id="MutableData-getValues-nav"><a href="MutableData.html#getValues">getValues</a></li><li data-type="method" id="MutableData-getVersion-nav"><a href="MutableData.html#getVersion">getVersion</a></li><li data-type="method" id="MutableData-put-nav"><a href="MutableData.html#put">put</a></li><li data-type="method" id="MutableData-quickSetup-nav"><a href="MutableData.html#quickSetup">quickSetup</a></li><li data-type="method" id="MutableData-serialise-nav"><a href="MutableData.html#serialise">serialise</a></li><li data-type="method" id="MutableData-setMetadata-nav"><a href="MutableData.html#setMetadata">setMetadata</a></li><li data-type="method" id="MutableData-setUserPermissions-nav"><a href="MutableData.html#setUserPermissions">setUserPermissions</a></li></ul></li><li id="MutableDataInterface-nav"><a href="MutableDataInterface.html">MutableDataInterface</a><ul class='methods'><li data-type="method" id="MutableDataInterface-fromSerial-nav"><a href="MutableDataInterface.html#fromSerial">fromSerial</a></li><li data-type="method" id="MutableDataInterface-newEntries-nav"><a href="MutableDataInterface.html#newEntries">newEntries</a></li><li data-type="method" id="MutableDataInterface-newMutation-nav"><a href="MutableDataInterface.html#newMutation">newMutation</a></li><li data-type="method" id="MutableDataInterface-newPermissions-nav"><a href="MutableDataInterface.html#newPermissions">newPermissions</a></li><li data-type="method" id="MutableDataInterface-newPrivate-nav"><a href="MutableDataInterface.html#newPrivate">newPrivate</a></li><li data-type="method" id="MutableDataInterface-newPublic-nav"><a href="MutableDataInterface.html#newPublic">newPublic</a></li><li data-type="method" id="MutableDataInterface-newRandomPrivate-nav"><a href="MutableDataInterface.html#newRandomPrivate">newRandomPrivate</a></li><li data-type="method" id="MutableDataInterface-newRandomPublic-nav"><a href="MutableDataInterface.html#newRandomPublic">newRandomPublic</a></li></ul></li><li id="NFS-nav"><a href="NFS.html">NFS</a><ul class='methods'><li data-type="method" id="NFS-create-nav"><a href="NFS.html#create">create</a></li><li data-type="method" id="NFS-delete-nav"><a href="NFS.html#delete">delete</a></li><li data-type="method" id="NFS-fetch-nav"><a href="NFS.html#fetch">fetch</a></li><li data-type="method" id="NFS-insert-nav"><a href="NFS.html#insert">insert</a></li><li data-type="method" id="NFS-open-nav"><a href="NFS.html#open">open</a></li><li data-type="method" id="NFS-update-nav"><a href="NFS.html#update">update</a></li></ul></li><li id="Permissions-nav"><a href="Permissions.html">Permissions</a><ul class='methods'><li data-type="method" id="Permissions-getPermissionSet-nav"><a href="Permissions.html#getPermissionSet">getPermissionSet</a></li><li data-type="method" id="Permissions-insertPermissionSet-nav"><a href="Permissions.html#insertPermissionSet">insertPermissionSet</a></li><li data-type="method" id="Permissions-len-nav"><a href="Permissions.html#len">len</a></li><li data-type="method" id="Permissions-listPermissionSets-nav"><a href="Permissions.html#listPermissionSets">listPermissionSets</a></li></ul></li><li id="PubEncKey-nav"><a href="PubEncKey.html">PubEncKey</a><ul class='methods'><li data-type="method" id="PubEncKey-decrypt-nav"><a href="PubEncKey.html#decrypt">decrypt</a></li><li data-type="method" id="PubEncKey-encrypt-nav"><a href="PubEncKey.html#encrypt">encrypt</a></li><li data-type="method" id="PubEncKey-encryptSealed-nav"><a href="PubEncKey.html#encryptSealed">encryptSealed</a></li><li data-type="method" id="PubEncKey-getRaw-nav"><a href="PubEncKey.html#getRaw">getRaw</a></li></ul></li><li id="PubSignKey-nav"><a href="PubSignKey.html">PubSignKey</a><ul class='methods'><li data-type="method" id="PubSignKey-getRaw-nav"><a href="PubSignKey.html#getRaw">getRaw</a></li><li data-type="method" id="PubSignKey-verify-nav"><a href="PubSignKey.html#verify">verify</a></li></ul></li><li id="RDF-nav"><a href="RDF.html">RDF</a><ul class='methods'><li data-type="method" id="RDF-add-nav"><a href="RDF.html#add">add</a></li><li data-type="method" id="RDF-any-nav"><a href="RDF.html#any">any</a></li><li data-type="method" id="RDF-append-nav"><a href="RDF.html#append">append</a></li><li data-type="method" id="RDF-bnode-nav"><a href="RDF.html#bnode">bnode</a></li><li data-type="method" id="RDF-commit-nav"><a href="RDF.html#commit">commit</a></li><li data-type="method" id="RDF-each-nav"><a href="RDF.html#each">each</a></li><li data-type="method" id="RDF-literal-nav"><a href="RDF.html#literal">literal</a></li><li data-type="method" id="RDF-namespace-nav"><a href="RDF.html#namespace">namespace</a></li><li data-type="method" id="RDF-nowOrWhenFetched-nav"><a href="RDF.html#nowOrWhenFetched">nowOrWhenFetched</a></li><li data-type="method" id="RDF-parse-nav"><a href="RDF.html#parse">parse</a></li><li data-type="method" id="RDF-removeMany-nav"><a href="RDF.html#removeMany">removeMany</a></li><li data-type="method" id="RDF-serialise-nav"><a href="RDF.html#serialise">serialise</a></li><li data-type="method" id="RDF-setId-nav"><a href="RDF.html#setId">setId</a></li><li data-type="method" id="RDF-statementsMatching-nav"><a href="RDF.html#statementsMatching">statementsMatching</a></li><li data-type="method" id="RDF-sym-nav"><a href="RDF.html#sym">sym</a></li></ul></li><li id="Reader-nav"><a href="Reader.html">Reader</a><ul class='methods'><li data-type="method" id="Reader-read-nav"><a href="Reader.html#read">read</a></li><li data-type="method" id="Reader-size-nav"><a href="Reader.html#size">size</a></li></ul></li><li id="SAFEApp-nav"><a href="SAFEApp.html">SAFEApp</a><ul class='methods'><li data-type="method" id="SAFEApp-appIsMock-nav"><a href="SAFEApp.html#appIsMock">appIsMock</a></li><li data-type="method" id="SAFEApp-clearObjectCache-nav"><a href="SAFEApp.html#clearObjectCache">clearObjectCache</a></li><li data-type="method" id="SAFEApp-fetch-nav"><a href="SAFEApp.html#fetch">fetch</a></li><li data-type="method" id="SAFEApp-getAccountInfo-nav"><a href="SAFEApp.html#getAccountInfo">getAccountInfo</a></li><li data-type="method" id="SAFEApp-getOwnContainerName-nav"><a href="SAFEApp.html#getOwnContainerName">getOwnContainerName</a></li><li data-type="method" id="SAFEApp-isNetStateConnected-nav"><a href="SAFEApp.html#isNetStateConnected">isNetStateConnected</a></li><li data-type="method" id="SAFEApp-isNetStateDisconnected-nav"><a href="SAFEApp.html#isNetStateDisconnected">isNetStateDisconnected</a></li><li data-type="method" id="SAFEApp-isNetStateInit-nav"><a href="SAFEApp.html#isNetStateInit">isNetStateInit</a></li><li data-type="method" id="SAFEApp-logPath-nav"><a href="SAFEApp.html#logPath">logPath</a></li><li data-type="method" id="SAFEApp-reconnect-nav"><a href="SAFEApp.html#reconnect">reconnect</a></li><li data-type="method" id="SAFEApp-webFetch-nav"><a href="SAFEApp.html#webFetch">webFetch</a></li></ul></li><li id="SecEncKey-nav"><a href="SecEncKey.html">SecEncKey</a><ul class='methods'><li data-type="method" id="SecEncKey-decrypt-nav"><a href="SecEncKey.html#decrypt">decrypt</a></li><li data-type="method" id="SecEncKey-encrypt-nav"><a href="SecEncKey.html#encrypt">encrypt</a></li><li data-type="method" id="SecEncKey-getRaw-nav"><a href="SecEncKey.html#getRaw">getRaw</a></li></ul></li><li id="SecSignKey-nav"><a href="SecSignKey.html">SecSignKey</a><ul class='methods'><li data-type="method" id="SecSignKey-getRaw-nav"><a href="SecSignKey.html#getRaw">getRaw</a></li><li data-type="method" id="SecSignKey-sign-nav"><a href="SecSignKey.html#sign">sign</a></li></ul></li><li id="SignKeyPair-nav"><a href="SignKeyPair.html">SignKeyPair</a></li><li id="WebID-nav"><a href="WebID.html">WebID</a><ul class='methods'><li data-type="method" id="WebID-create-nav"><a href="WebID.html#create">create</a></li><li data-type="method" id="WebID-fetchContent-nav"><a href="WebID.html#fetchContent">fetchContent</a></li><li data-type="method" id="WebID-init-nav"><a href="WebID.html#init">init</a></li><li data-type="method" id="WebID-serialise-nav"><a href="WebID.html#serialise">serialise</a></li><li data-type="method" id="WebID-update-nav"><a href="WebID.html#update">update</a></li></ul></li><li id="WebInterface-nav"><a href="WebInterface.html">WebInterface</a><ul class='methods'><li data-type="method" id="WebInterface-addPublicNameToDirectory-nav"><a href="WebInterface.html#addPublicNameToDirectory">addPublicNameToDirectory</a></li><li data-type="method" id="WebInterface-addWebIdToDirectory-nav"><a href="WebInterface.html#addWebIdToDirectory">addWebIdToDirectory</a></li><li data-type="method" id="WebInterface-getPublicNames-nav"><a href="WebInterface.html#getPublicNames">getPublicNames</a></li><li data-type="method" id="WebInterface-getVocabs-nav"><a href="WebInterface.html#getVocabs">getVocabs</a></li><li data-type="method" id="WebInterface-getWebIds-nav"><a href="WebInterface.html#getWebIds">getWebIds</a></li><li data-type="method" id="WebInterface-linkServiceToSubname-nav"><a href="WebInterface.html#linkServiceToSubname">linkServiceToSubname</a></li></ul></li><li id="Writer-nav"><a href="Writer.html">Writer</a><ul class='methods'><li data-type="method" id="Writer-close-nav"><a href="Writer.html#close">close</a></li><li data-type="method" id="Writer-write-nav"><a href="Writer.html#write">write</a></li></ul></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#CONSTANTS">CONSTANTS</a></li><li><a href="global.html#fromAuthUri">fromAuthUri</a></li><li><a href="global.html#initialiseApp">initialiseApp</a></li><li><a href="global.html#VERSION">VERSION</a></li></ul>
+  </nav>
+
+  <div id="main">
+    
+      <h1 class="page-title">
+        app.js
+      </h1>
+    
+
+    
+      
+
+<section>
+  <article>
+    <pre class="prettyprint source linenums"><code>// Copyright 2018 MaidSafe.net limited.
+//
+// This SAFE Network Software is licensed to you under
+// the MIT license &lt;LICENSE-MIT or http://opensource.org/licenses/MIT> or
+// the Modified BSD license &lt;LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
+// at your option.
+//
+// This file may not be copied, modified, or distributed except according to those terms.
+//
+// Please review the Licences for the specific language governing permissions and limitations
+// relating to use of the SAFE Network Software.
+
+
+const { EventEmitter } = require('events');
+const { autoref } = require('./helpers');
+const api = require('./api');
+const lib = require('./native/lib');
+const consts = require('./consts');
+const errConst = require('./error_const');
+const makeError = require('./native/_error.js');
+const { webFetch, fetch } = require('./web_fetch.js');
+const { EXPOSE_AS_EXPERIMENTAL_API } = require('./helpers');
+
+const EXPERIMENTAL_APIS = ['web'];
+
+/**
+* @private
+* Validates appInfo and properly handles error
+*/
+const validateAppInfo = (_appInfo) => {
+  const appInfo = _appInfo;
+  const appInfoMustHaveProperties = ['id', 'name', 'vendor'];
+  const hasCorrectProperties = appInfoMustHaveProperties.every((prop) => {
+    if (appInfo &amp;&amp; appInfo[prop]) {
+      appInfo[prop] = appInfo[prop].trim();
+      return Object.prototype.hasOwnProperty.call(appInfo, prop) &amp;&amp; appInfo[prop];
+    }
+
+    return false;
+  });
+
+  if (!hasCorrectProperties) {
+    throw makeError(errConst.MALFORMED_APP_INFO.code, errConst.MALFORMED_APP_INFO.msg);
+  }
+};
+
+/**
+* @private
+* Init logging on the underlying library only if it wasn't done already
+*/
+const initLogging = (appInfo, options) => {
+  if (options.log &amp;&amp; !SAFEApp.logFilePath) {
+    let filename = `${appInfo.name}.${appInfo.vendor}`.replace(/[^\w\d_\-.]/g, '_');
+    filename = `${filename}.log`;
+    return lib.app_init_logging(filename)
+      .then(() => lib.app_output_log_path(filename))
+      .then((logPath) => { SAFEApp.logFilePath = logPath; })
+      .catch((err) => {
+        throw makeError(errConst.LOGGER_INIT_ERROR.code, errConst.LOGGER_INIT_ERROR.msg(err));
+      });
+  }
+};
+
+/**
+* @private
+* Set additional search path for the config files if it was requested in
+* the options. E.g. log.toml and crust.config files will be search
+* in this additional search path.
+*/
+const setSearchPath = (options) => {
+  if (options.configPath) {
+    return lib.app_set_additional_search_path(options.configPath)
+      .catch((err) => {
+        throw makeError(errConst.CONFIG_PATH_ERROR.code, errConst.CONFIG_PATH_ERROR.msg(err));
+      });
+  }
+};
+
+/**
+ * Holds a session with the network and is the primary interface to interact
+ * with the network
+ * @example
+ * const safe = require( '@maidsafe/safe-node-app' );
+ *
+ * const appInfo = {
+ *     id     : 'net.maidsafe.example',
+ *     name   : 'Example SAFE App',
+ *     vendor : 'MaidSafe.net Ltd'
+ * };
+ *
+ * const networkStateCallback = (state) => {
+ *     console.log('Network state change event: ', state);
+ * };
+ *
+ * const initialisationOptions = {
+ *     log            : true,
+ *     registerScheme : false
+ * };
+ *
+ * const asyncFn = async () => {
+ *     try {
+ *         const app = await safe.initialiseApp(
+ *             appInfo,
+ *             networkStateCallBack,
+ *             initialisationOptions
+ *         );
+ *     } catch (err) {
+ *         throw err;
+ *     }
+ * };
+ */
+class SAFEApp extends EventEmitter {
+
+  /**
+  * @hideconstructor
+  * Initiate a new SAFEApp instance. Wire up all the API's and set up the
+  * authentication URI-handler with the system.
+  *
+  * @param {AppInfo} appInfo
+  * @param {Function} [networkStateCallBack=null] optional callback function
+  * to receive network state updates
+  * @param {InitOptions} [options] initilalisation options
+  */
+  constructor(appInfo, networkStateCallBack, options) {
+    super();
+    validateAppInfo(appInfo);
+    this.options = Object.assign({
+      log: true,
+      registerScheme: true,
+      configPath: null,
+      forceUseMock: false,
+      enableExperimentalApis: false,
+    }, options);
+
+    if (typeof this.options.forceUseMock !== 'boolean') {
+      throw new Error('The \'forceUseMock\' option must be a boolean.');
+    }
+
+    if (typeof this.options.enableExperimentalApis !== 'boolean') {
+      throw new Error('The \'enableExperimentalApis\' option must be a boolean.');
+    }
+
+    lib.init(this.options);
+    this._appInfo = appInfo;
+    this.networkState = consts.NET_STATE_INIT;
+    if (networkStateCallBack) {
+      this._networkStateCallBack = networkStateCallBack;
+    }
+    this.connection = null;
+    Object.getOwnPropertyNames(api).forEach((key) => {
+      this[`_${key}`] = new api[key](this);
+
+      if (EXPERIMENTAL_APIS.includes(key)) {
+        Object.getOwnPropertyNames(api[key].prototype).forEach((experimentalApi) => {
+          if (experimentalApi === 'constructor') {
+            // dont mess with this...
+            return;
+          }
+          const cachedProtoProp = this[`_${key}`][experimentalApi].bind(this[`_${key}`]);
+
+          this[`_${key}`][experimentalApi] = (...args) => EXPOSE_AS_EXPERIMENTAL_API.call(this, cachedProtoProp, ...args);
+        });
+      }
+    });
+  }
+
+  async init() {
+    await initLogging(this.appInfo, this.options);
+    await setSearchPath(this.options);
+  }
+
+  /**
+   * Get an {@link AuthInterface} instance
+   * @returns {AuthInterface}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const app = await safe.initialiseApp(appInfo);
+   *         const auth = app.auth;
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  get auth() {
+    return this._auth;
+  }
+
+  /**
+   * Get a {@link WebInterface} interface
+   * @returns {WebInterface}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const app = await safe.initialiseApp(appInfo);
+   *         const web = app.web;
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  get web() {
+    return this._web;
+  }
+
+  /**
+   * Get a {@link CryptoInterface} interface
+   * @returns {CryptoInterface}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const app = await safe.initialiseApp(appInfo);
+   *         const crypto = app.crypto;
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  get crypto() {
+    return this._crypto;
+  }
+
+  /**
+   * Get a {@link CipherOptInterface} interface
+   * @returns {CipherOptInterface}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const app = await safe.initialiseApp(appInfo);
+   *         const cipherOpt = app.cipherOpt;
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  get cipherOpt() {
+    return this._cipherOpt;
+  }
+
+  /**
+   * Get an {@link ImmutableDataInterface}
+   * @returns {ImmutableDataInterface}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const app = await safe.initialiseApp(appInfo);
+   *         const immutableData = app.immutableData;
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  get immutableData() {
+    return this._immutableData;
+  }
+
+  /**
+   * Get a {@link MutableDataInterface}
+   * @returns {MutableDataInterface}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const app = await safe.initialiseApp(appInfo);
+   *         const mutableData = app.mutableData;
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  get mutableData() {
+    return this._mutableData;
+  }
+
+  /**
+   * Function to lookup a given `safe://`-URL in accordance with the
+   * public name resolution and find the requested network resource.
+   *
+   * @param {String} url the url you want to fetch
+   * @param {WebFetchOptions} [options=null] additional options
+   * @throws {ERR_SERVICE_NOT_FOUND|ERR_NO_SUCH_DATA|ERR_CONTENT_NOT_FOUND
+   * |ERR_NO_SUCH_ENTRY|ERR_FILE_NOT_FOUND|MISSING_URL|INVALID_URL}
+   * @returns {Promise&lt;{ body: Buffer, headers: Object }>}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   const app = await safe.initialiseApp(appInfo);
+   *   const unRegisteredUri = await app.auth.genConnUri();
+   *   await app.auth.loginFromUri(unRegisteredUri);
+   *   const webFetchOptions = {
+   *       range: {
+   *           start:safe.CONSTANTS.NFS_FILE_START,
+   *           end: safe.CONSTANTS.NFS_FILE_END
+   *       }
+   *   };
+   *   try {
+   *     const data = await app.webFetch(
+   *       'safe://home.safenetwork',
+   *       webFetchOptions
+   *     );
+   *     // Alternatively, fetch an ImmutableData XOR-URL such as:
+   *     // safe://hygkdkftyhkmzma5cjwgcghws9hyorcucqyqna1uaje68hyquah7nd9kh3rjy
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  webFetch(url, options) {
+    return webFetch.call(this, url, options);
+  }
+
+  /**
+   * Experimental function to lookup a given `safe://`-URL in accordance with the
+   * public name resolution and find the requested network resource.
+   *
+   * @param {String} url the url you want to fetch
+   * @throws {ERR_SERVICE_NOT_FOUND|ERR_NO_SUCH_DATA|ERR_CONTENT_NOT_FOUND
+   * |ERR_NO_SUCH_ENTRY|ERR_FILE_NOT_FOUND|MISSING_URL|INVALID_URL}
+   * @returns {Promise&lt;NetworkResource>} the network resource found from the passed URL
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   // If you have an XOR-URL with a type tag, and therefore represents MutableData,
+   *   // use this operation to fetch an interface to the underlying data structure.
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const unRegisteredUri = await app.auth.genConnUri();
+   *     await app.auth.loginFromUri(unRegisteredUri);
+   *     const data = await app.fetch(
+   *         'safe://hyfktcerbwpctjz6ws8468hncw1ddpzrz65z3mapzx9wr413r7gj3w6yt5y:15001'
+   *     );
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  fetch(url) {
+    return fetch.call(this, url);
+  }
+
+  /**
+   * @private
+   * Replace the connection to the native layer. When there is already one
+   * set up for the current app, free it on the native layer. Should only be
+   * used at startup/beginning as it will devaluate all handlers that might
+   * still be around after switching.
+   *
+   * @param {Pointer} conn the pointer to the native object
+   */
+  set connection(conn) {
+    if (this._connection) {
+      lib.app_free(this._connection);
+    }
+    this._connection = conn;
+  }
+
+  /**
+   * Returns pointer to current connection object held in memory.
+   * @throws {SETUP_INCOMPLETE}
+   * @returns {Pointer}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const connection = app.connection;
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  get connection() {
+    if (!this._connection) {
+      throw makeError(errConst.SETUP_INCOMPLETE.code, errConst.SETUP_INCOMPLETE.msg);
+    }
+    return this._connection;
+  }
+
+  /**
+  * @private
+  * Set the new network state based on the state code provided.
+  *
+  * @param {Number} state
+  */
+  set networkState(state) {
+    this._networkState = state;
+  }
+
+  /**
+   * Textual representation of the current network connection state.
+   *
+   * @returns {String} current network connection state
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const networkState = app.networkState;
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  get networkState() {
+    // Although it should never happen, if the state code is invalid
+    // we return the current network conn state as 'Unknown'.
+    let currentState = 'Unknown';
+    switch (this._networkState) {
+      case consts.NET_STATE_INIT:
+        currentState = 'Init';
+        break;
+      case consts.NET_STATE_DISCONNECTED:
+        currentState = 'Disconnected';
+        break;
+      case consts.NET_STATE_CONNECTED:
+        currentState = 'Connected';
+        break;
+      default:
+        break;
+    }
+    return currentState;
+  }
+
+  /**
+   * Returns true if current network connection state is INIT.
+   * This is state means the library has been initialised but there is no
+   * connection made with the network yet.
+   *
+   * @returns {Boolean}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const isNetStateInit = app.isNetStateInit();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  isNetStateInit() {
+    return this._networkState === consts.NET_STATE_INIT;
+  }
+
+  /**
+   * Returns true if current network connection state is CONNECTED.
+   *
+   * @returns {Boolean}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const isNetStateConnected = app.isNetStateConnected();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  isNetStateConnected() {
+    return this._networkState === consts.NET_STATE_CONNECTED;
+  }
+
+  /**
+   * Returns true if current network connection state is DISCONNECTED.
+   *
+   * @returns {Boolean}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const isNetStateDisconnected = app.isNetStateDisconnected();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  isNetStateDisconnected() {
+    return this._networkState === consts.NET_STATE_DISCONNECTED;
+  }
+
+  /**
+   * Returns the {@link AppInfo} used to initialise current app.
+   * @returns {AppInfo}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const appInfo = app.appInfo;
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  get appInfo() {
+    return this._appInfo;
+  }
+
+  /**
+   * Generate the log path for the provided filename.
+   * If the filename provided is null, it then returns
+   * the path of where the safe_core log file is located.
+   * @param {String} [logFilename] optional log filename to generate the path
+   *
+   * @returns {Promise&lt;String>}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const logPath = await app.logPath();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  logPath(logFilename) { // eslint-disable-line class-methods-use-this
+    const filename = logFilename;
+    if (!logFilename) {
+      return Promise.resolve(SAFEApp.logFilePath);
+    }
+    return lib.app_output_log_path(filename);
+  }
+
+  /**
+  * @typedef {Object} AccountInfo
+  * Holds the information about the account.
+  * @property {Number} mutations_done - number of mutations performed
+  * with this account
+  * @property {Number} mutations_available - number of remaining mutations
+  * allowed for this account
+  */
+
+  /**
+   * Returns account information, specifically, number of mutations done and available.
+   *
+   * @returns {Promise&lt;AccountInfo>}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const getAccountInfo = await app.getAccountInfo();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  getAccountInfo() {
+    return lib.app_account_info(this.connection);
+  }
+
+  /**
+   * @private
+   * Create a {@link SAFEApp} and try to login it through the `authUri`
+   * @param {AppInfo} appInfo - the AppInfo
+   * @param {String} authUri - URI containing the authentication info
+   * @param {Function} [networkStateCallBack=null] optional callback function
+   * to receive network state updates
+   * @param {InitOptions}  initialisation options
+   * @returns {Promise&lt;SAFEApp>} Authenticated {@link SAFEApp}
+   */
+  static async fromAuthUri(appInfo, authUri, networkStateCallBack, options) {
+    const app = autoref(new SAFEApp(appInfo, networkStateCallBack, options));
+    await app.init();
+    return app.auth.loginFromUri(authUri);
+  }
+
+  /**
+   * Returns the name of the app's own container.
+   *
+   * @returns {Promise&lt;String>}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const rootContainerName = await app.getOwnContainerName();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  getOwnContainerName() {
+    return lib.app_container_name(this.appInfo.id);
+  }
+
+  /**
+  * @private
+  * Called from the native library whenever the network state
+  * changes.
+  */
+  _networkStateUpdated(userData, newState) {
+    const prevState = this.networkState;
+    this.networkState = newState;
+    this.emit('network-state-updated', this.networkState, prevState);
+    this.emit(`network-state-${this.networkState}`, prevState);
+    if (this._networkStateCallBack) {
+      this._networkStateCallBack.apply(this._networkStateCallBack, [this.networkState]);
+    }
+  }
+
+  /**
+   * Reconnect to the network.
+   * Must be invoked when the client decides to connect back after the connection was lost.
+   * @returns {Promise}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     await app.reconnect();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  reconnect() {
+    return lib.app_reconnect(this);
+  }
+
+  /**
+  * @private
+  * free the app. used by the autoref feature
+  * @param {SAFEApp} app - the app to free
+  */
+  static free(app) {
+    // we are freed last, anything you do after this
+    // will probably fail.
+    lib.app_free(app.connection);
+  }
+
+  /**
+   * Resets the object cache kept by the underlying library.
+   * @returns {Promise}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     await app.clearObjectCache();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  clearObjectCache() {
+    return lib.app_reset_object_cache(this.connection);
+  }
+
+  /**
+   * Returns true if the underlyging library was compiled against mock routing.
+   * @returns {Boolean}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const isMock = await app.appIsMock();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  appIsMock() { // eslint-disable-line class-methods-use-this
+    return lib.app_is_mock();
+  }
+}
+
+SAFEApp.logFilename = null;
+
+module.exports = SAFEApp;
+</code></pre>
+  </article>
+</section>
+
+    
+
+
+  </div>
+
+  <br class="clear">
+
+  <footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+  </footer>
+
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
+
+  
+
+</body>
+</html>

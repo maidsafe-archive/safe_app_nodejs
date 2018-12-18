@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>
-      Home - Documentation
+      api/emulations/index.js - Documentation
   </title>
 
   <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
@@ -51,14 +53,14 @@
 
   <div class="top-nav-wrapper">
     <ul>
-      <li  class="active" >
+      <li >
         <a href="index.html">
           
-          
-            <svg fill="#0095dd" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
               <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
               <path d="M0 0h24v24H0z" fill="none"/>
             </svg>
+          
           
         </a>
       </li>
@@ -91,33 +93,48 @@
 
   <div id="main">
     
+      <h1 class="page-title">
+        api/emulations/index.js
+      </h1>
+    
 
     
       
 
+<section>
+  <article>
+    <pre class="prettyprint source linenums"><code>// Copyright 2018 MaidSafe.net limited.
+//
+// This SAFE Network Software is licensed to you under
+// the MIT license &lt;LICENSE-MIT or http://opensource.org/licenses/MIT> or
+// the Modified BSD license &lt;LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
+// at your option.
+//
+// This file may not be copied, modified, or distributed except according to those terms.
+//
+// Please review the Licences for the specific language governing permissions and limitations
+// relating to use of the SAFE Network Software.
 
 
-    
+const NFS = require('./nfs');
+const RDF = require('./rdf');
+const WEBID = require('./web_id');
 
-      
+/**
+* Emulations are abstraction helpers on top of MData
+* @typedef {NFS} Emulation
+* @typedef {RDF} Emulation
+* @typedef {WebID} Emulation
+*/
 
-
-  <section class="readme">
-    <article>
-      <h1>Getting started</h1><pre class="prettyprint source lang-bash"><code>git clone https://github.com/maidsafe/safe_app_nodejs.git</code></pre><pre class="prettyprint source lang-bash"><code>cd safe_app_nodejs</code></pre><pre class="prettyprint source lang-bash"><code>yarn</code></pre><pre class="prettyprint source lang-javascript"><code>const safe = require('@maidsafe/safe-node-app');
-const appInfo = {
-    id     : 'net.maidsafe.example',
-    name   : 'Example SAFE app',
-    vendor : 'MaidSafe.net Ltd'
+module.exports = {
+  NFS,
+  RDF,
+  WEBID
 };
-const asyncFn = async () => {
-    const app = await safe.<a href="global.html#initialiseApp">initialiseApp</a>(appInfo);
-};</code></pre><p><strong>Recommended to build <a href="https://github.com/maidsafe/safe_examples/tree/master/safe_app_electron_quick_start">basic Electron app</a>, while referencing this documentation.</strong></p>
-<p>Our web API exposed in <a href="https://github.com/maidsafe/safe_browser">SAFE Browser</a>, nearly identical to this library with just one variation, is an easy way to start exploring operations.
-Recommended to either follow the <a href="https://github.com/maidsafe/safe_examples/tree/master/safe_web_app_quick_start">web API tutorial</a> or to explore with our <a href="https://github.com/maidsafe/safe_examples/tree/master/safe_web_api_playground">web API playground</a>.</p>
-    </article>
-  </section>
-
+</code></pre>
+  </article>
+</section>
 
     
 

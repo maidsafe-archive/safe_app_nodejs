@@ -1,0 +1,905 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      api/emulations/rdf.js - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  
+  <link type="text/css" rel="stylesheet" href="styles/collapse.css">
+  
+
+  
+
+  <!-- start Mixpanel -->
+  <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+  0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+  for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+  mixpanel.init("1919205b2da72e4da3b9b6639b444d59");</script>
+  <!-- end Mixpanel -->
+</head>
+
+<body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
+
+  <label for="nav-trigger" class="overlay"></label>
+
+  <div class="top-nav-wrapper">
+    <ul>
+      <li >
+        <a href="index.html">
+          
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+          
+        </a>
+      </li>
+
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      SAFE Network Node.js Client Library
+    </h3>
+
+    
+      <h3>
+        Resources
+      </h3>
+      
+        <a href="https://github.com/maidsafe/safe_app_nodejs">Github Repo</a>
+      
+        <a href=""> | </a>
+      
+        <a href="https://forum.safedev.org/">Dev Forum</a>
+      
+    
+
+    <h3>Classes</h3><ul><li id="AuthInterface-nav"><a href="AuthInterface.html">AuthInterface</a><ul class='methods'><li data-type="method" id="AuthInterface-canAccessContainer-nav"><a href="AuthInterface.html#canAccessContainer">canAccessContainer</a></li><li data-type="method" id="AuthInterface-genAuthUri-nav"><a href="AuthInterface.html#genAuthUri">genAuthUri</a></li><li data-type="method" id="AuthInterface-genConnUri-nav"><a href="AuthInterface.html#genConnUri">genConnUri</a></li><li data-type="method" id="AuthInterface-genContainerAuthUri-nav"><a href="AuthInterface.html#genContainerAuthUri">genContainerAuthUri</a></li><li data-type="method" id="AuthInterface-genShareMDataUri-nav"><a href="AuthInterface.html#genShareMDataUri">genShareMDataUri</a></li><li data-type="method" id="AuthInterface-getContainer-nav"><a href="AuthInterface.html#getContainer">getContainer</a></li><li data-type="method" id="AuthInterface-getContainersPermissions-nav"><a href="AuthInterface.html#getContainersPermissions">getContainersPermissions</a></li><li data-type="method" id="AuthInterface-getOwnContainer-nav"><a href="AuthInterface.html#getOwnContainer">getOwnContainer</a></li><li data-type="method" id="AuthInterface-loginForTest-nav"><a href="AuthInterface.html#loginForTest">loginForTest</a></li><li data-type="method" id="AuthInterface-loginFromUri-nav"><a href="AuthInterface.html#loginFromUri">loginFromUri</a></li><li data-type="method" id="AuthInterface-openUri-nav"><a href="AuthInterface.html#openUri">openUri</a></li><li data-type="method" id="AuthInterface-readGrantedPermissions-nav"><a href="AuthInterface.html#readGrantedPermissions">readGrantedPermissions</a></li><li data-type="method" id="AuthInterface-refreshContainersPermissions-nav"><a href="AuthInterface.html#refreshContainersPermissions">refreshContainersPermissions</a></li><li data-type="method" id="AuthInterface-simulateNetworkDisconnect-nav"><a href="AuthInterface.html#simulateNetworkDisconnect">simulateNetworkDisconnect</a></li></ul></li><li id="CipherOptInterface-nav"><a href="CipherOptInterface.html">CipherOptInterface</a><ul class='methods'><li data-type="method" id="CipherOptInterface-newAsymmetric-nav"><a href="CipherOptInterface.html#newAsymmetric">newAsymmetric</a></li><li data-type="method" id="CipherOptInterface-newPlainText-nav"><a href="CipherOptInterface.html#newPlainText">newPlainText</a></li><li data-type="method" id="CipherOptInterface-newSymmetric-nav"><a href="CipherOptInterface.html#newSymmetric">newSymmetric</a></li></ul></li><li id="CryptoInterface-nav"><a href="CryptoInterface.html">CryptoInterface</a><ul class='methods'><li data-type="method" id="CryptoInterface-generateEncKeyPair-nav"><a href="CryptoInterface.html#generateEncKeyPair">generateEncKeyPair</a></li><li data-type="method" id="CryptoInterface-generateEncKeyPairFromRaw-nav"><a href="CryptoInterface.html#generateEncKeyPairFromRaw">generateEncKeyPairFromRaw</a></li><li data-type="method" id="CryptoInterface-generateNonce-nav"><a href="CryptoInterface.html#generateNonce">generateNonce</a></li><li data-type="method" id="CryptoInterface-generateSignKeyPair-nav"><a href="CryptoInterface.html#generateSignKeyPair">generateSignKeyPair</a></li><li data-type="method" id="CryptoInterface-generateSignKeyPairFromRaw-nav"><a href="CryptoInterface.html#generateSignKeyPairFromRaw">generateSignKeyPairFromRaw</a></li><li data-type="method" id="CryptoInterface-getAppPubEncKey-nav"><a href="CryptoInterface.html#getAppPubEncKey">getAppPubEncKey</a></li><li data-type="method" id="CryptoInterface-getAppPubSignKey-nav"><a href="CryptoInterface.html#getAppPubSignKey">getAppPubSignKey</a></li><li data-type="method" id="CryptoInterface-pubEncKeyFromRaw-nav"><a href="CryptoInterface.html#pubEncKeyFromRaw">pubEncKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-pubSignKeyFromRaw-nav"><a href="CryptoInterface.html#pubSignKeyFromRaw">pubSignKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-secEncKeyFromRaw-nav"><a href="CryptoInterface.html#secEncKeyFromRaw">secEncKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-secSignKeyFromRaw-nav"><a href="CryptoInterface.html#secSignKeyFromRaw">secSignKeyFromRaw</a></li><li data-type="method" id="CryptoInterface-sha3Hash-nav"><a href="CryptoInterface.html#sha3Hash">sha3Hash</a></li></ul></li><li id="EncKeyPair-nav"><a href="EncKeyPair.html">EncKeyPair</a><ul class='methods'><li data-type="method" id="EncKeyPair-decryptSealed-nav"><a href="EncKeyPair.html#decryptSealed">decryptSealed</a></li></ul></li><li id="Entries-nav"><a href="Entries.html">Entries</a><ul class='methods'><li data-type="method" id="Entries-get-nav"><a href="Entries.html#get">get</a></li><li data-type="method" id="Entries-insert-nav"><a href="Entries.html#insert">insert</a></li><li data-type="method" id="Entries-len-nav"><a href="Entries.html#len">len</a></li><li data-type="method" id="Entries-listEntries-nav"><a href="Entries.html#listEntries">listEntries</a></li><li data-type="method" id="Entries-mutate-nav"><a href="Entries.html#mutate">mutate</a></li></ul></li><li id="EntryMutationTransaction-nav"><a href="EntryMutationTransaction.html">EntryMutationTransaction</a><ul class='methods'><li data-type="method" id="EntryMutationTransaction-delete-nav"><a href="EntryMutationTransaction.html#delete">delete</a></li><li data-type="method" id="EntryMutationTransaction-insert-nav"><a href="EntryMutationTransaction.html#insert">insert</a></li><li data-type="method" id="EntryMutationTransaction-update-nav"><a href="EntryMutationTransaction.html#update">update</a></li></ul></li><li id="File-nav"><a href="File.html">File</a><ul class='methods'><li data-type="method" id="File-close-nav"><a href="File.html#close">close</a></li><li data-type="method" id="File-read-nav"><a href="File.html#read">read</a></li><li data-type="method" id="File-size-nav"><a href="File.html#size">size</a></li><li data-type="method" id="File-write-nav"><a href="File.html#write">write</a></li></ul></li><li id="ImmutableDataInterface-nav"><a href="ImmutableDataInterface.html">ImmutableDataInterface</a><ul class='methods'><li data-type="method" id="ImmutableDataInterface-create-nav"><a href="ImmutableDataInterface.html#create">create</a></li><li data-type="method" id="ImmutableDataInterface-fetch-nav"><a href="ImmutableDataInterface.html#fetch">fetch</a></li></ul></li><li id="MutableData-nav"><a href="MutableData.html">MutableData</a><ul class='methods'><li data-type="method" id="MutableData-applyEntriesMutation-nav"><a href="MutableData.html#applyEntriesMutation">applyEntriesMutation</a></li><li data-type="method" id="MutableData-decrypt-nav"><a href="MutableData.html#decrypt">decrypt</a></li><li data-type="method" id="MutableData-delUserPermissions-nav"><a href="MutableData.html#delUserPermissions">delUserPermissions</a></li><li data-type="method" id="MutableData-emulateAs-nav"><a href="MutableData.html#emulateAs">emulateAs</a></li><li data-type="method" id="MutableData-encryptKey-nav"><a href="MutableData.html#encryptKey">encryptKey</a></li><li data-type="method" id="MutableData-encryptValue-nav"><a href="MutableData.html#encryptValue">encryptValue</a></li><li data-type="method" id="MutableData-get-nav"><a href="MutableData.html#get">get</a></li><li data-type="method" id="MutableData-getEntries-nav"><a href="MutableData.html#getEntries">getEntries</a></li><li data-type="method" id="MutableData-getKeys-nav"><a href="MutableData.html#getKeys">getKeys</a></li><li data-type="method" id="MutableData-getNameAndTag-nav"><a href="MutableData.html#getNameAndTag">getNameAndTag</a></li><li data-type="method" id="MutableData-getPermissions-nav"><a href="MutableData.html#getPermissions">getPermissions</a></li><li data-type="method" id="MutableData-getSerialisedSize-nav"><a href="MutableData.html#getSerialisedSize">getSerialisedSize</a></li><li data-type="method" id="MutableData-getUserPermissions-nav"><a href="MutableData.html#getUserPermissions">getUserPermissions</a></li><li data-type="method" id="MutableData-getValues-nav"><a href="MutableData.html#getValues">getValues</a></li><li data-type="method" id="MutableData-getVersion-nav"><a href="MutableData.html#getVersion">getVersion</a></li><li data-type="method" id="MutableData-put-nav"><a href="MutableData.html#put">put</a></li><li data-type="method" id="MutableData-quickSetup-nav"><a href="MutableData.html#quickSetup">quickSetup</a></li><li data-type="method" id="MutableData-serialise-nav"><a href="MutableData.html#serialise">serialise</a></li><li data-type="method" id="MutableData-setMetadata-nav"><a href="MutableData.html#setMetadata">setMetadata</a></li><li data-type="method" id="MutableData-setUserPermissions-nav"><a href="MutableData.html#setUserPermissions">setUserPermissions</a></li></ul></li><li id="MutableDataInterface-nav"><a href="MutableDataInterface.html">MutableDataInterface</a><ul class='methods'><li data-type="method" id="MutableDataInterface-fromSerial-nav"><a href="MutableDataInterface.html#fromSerial">fromSerial</a></li><li data-type="method" id="MutableDataInterface-newEntries-nav"><a href="MutableDataInterface.html#newEntries">newEntries</a></li><li data-type="method" id="MutableDataInterface-newMutation-nav"><a href="MutableDataInterface.html#newMutation">newMutation</a></li><li data-type="method" id="MutableDataInterface-newPermissions-nav"><a href="MutableDataInterface.html#newPermissions">newPermissions</a></li><li data-type="method" id="MutableDataInterface-newPrivate-nav"><a href="MutableDataInterface.html#newPrivate">newPrivate</a></li><li data-type="method" id="MutableDataInterface-newPublic-nav"><a href="MutableDataInterface.html#newPublic">newPublic</a></li><li data-type="method" id="MutableDataInterface-newRandomPrivate-nav"><a href="MutableDataInterface.html#newRandomPrivate">newRandomPrivate</a></li><li data-type="method" id="MutableDataInterface-newRandomPublic-nav"><a href="MutableDataInterface.html#newRandomPublic">newRandomPublic</a></li></ul></li><li id="NFS-nav"><a href="NFS.html">NFS</a><ul class='methods'><li data-type="method" id="NFS-create-nav"><a href="NFS.html#create">create</a></li><li data-type="method" id="NFS-delete-nav"><a href="NFS.html#delete">delete</a></li><li data-type="method" id="NFS-fetch-nav"><a href="NFS.html#fetch">fetch</a></li><li data-type="method" id="NFS-insert-nav"><a href="NFS.html#insert">insert</a></li><li data-type="method" id="NFS-open-nav"><a href="NFS.html#open">open</a></li><li data-type="method" id="NFS-update-nav"><a href="NFS.html#update">update</a></li></ul></li><li id="Permissions-nav"><a href="Permissions.html">Permissions</a><ul class='methods'><li data-type="method" id="Permissions-getPermissionSet-nav"><a href="Permissions.html#getPermissionSet">getPermissionSet</a></li><li data-type="method" id="Permissions-insertPermissionSet-nav"><a href="Permissions.html#insertPermissionSet">insertPermissionSet</a></li><li data-type="method" id="Permissions-len-nav"><a href="Permissions.html#len">len</a></li><li data-type="method" id="Permissions-listPermissionSets-nav"><a href="Permissions.html#listPermissionSets">listPermissionSets</a></li></ul></li><li id="PubEncKey-nav"><a href="PubEncKey.html">PubEncKey</a><ul class='methods'><li data-type="method" id="PubEncKey-decrypt-nav"><a href="PubEncKey.html#decrypt">decrypt</a></li><li data-type="method" id="PubEncKey-encrypt-nav"><a href="PubEncKey.html#encrypt">encrypt</a></li><li data-type="method" id="PubEncKey-encryptSealed-nav"><a href="PubEncKey.html#encryptSealed">encryptSealed</a></li><li data-type="method" id="PubEncKey-getRaw-nav"><a href="PubEncKey.html#getRaw">getRaw</a></li></ul></li><li id="PubSignKey-nav"><a href="PubSignKey.html">PubSignKey</a><ul class='methods'><li data-type="method" id="PubSignKey-getRaw-nav"><a href="PubSignKey.html#getRaw">getRaw</a></li><li data-type="method" id="PubSignKey-verify-nav"><a href="PubSignKey.html#verify">verify</a></li></ul></li><li id="RDF-nav"><a href="RDF.html">RDF</a><ul class='methods'><li data-type="method" id="RDF-add-nav"><a href="RDF.html#add">add</a></li><li data-type="method" id="RDF-any-nav"><a href="RDF.html#any">any</a></li><li data-type="method" id="RDF-append-nav"><a href="RDF.html#append">append</a></li><li data-type="method" id="RDF-bnode-nav"><a href="RDF.html#bnode">bnode</a></li><li data-type="method" id="RDF-commit-nav"><a href="RDF.html#commit">commit</a></li><li data-type="method" id="RDF-each-nav"><a href="RDF.html#each">each</a></li><li data-type="method" id="RDF-literal-nav"><a href="RDF.html#literal">literal</a></li><li data-type="method" id="RDF-namespace-nav"><a href="RDF.html#namespace">namespace</a></li><li data-type="method" id="RDF-nowOrWhenFetched-nav"><a href="RDF.html#nowOrWhenFetched">nowOrWhenFetched</a></li><li data-type="method" id="RDF-parse-nav"><a href="RDF.html#parse">parse</a></li><li data-type="method" id="RDF-removeMany-nav"><a href="RDF.html#removeMany">removeMany</a></li><li data-type="method" id="RDF-serialise-nav"><a href="RDF.html#serialise">serialise</a></li><li data-type="method" id="RDF-setId-nav"><a href="RDF.html#setId">setId</a></li><li data-type="method" id="RDF-statementsMatching-nav"><a href="RDF.html#statementsMatching">statementsMatching</a></li><li data-type="method" id="RDF-sym-nav"><a href="RDF.html#sym">sym</a></li></ul></li><li id="Reader-nav"><a href="Reader.html">Reader</a><ul class='methods'><li data-type="method" id="Reader-read-nav"><a href="Reader.html#read">read</a></li><li data-type="method" id="Reader-size-nav"><a href="Reader.html#size">size</a></li></ul></li><li id="SAFEApp-nav"><a href="SAFEApp.html">SAFEApp</a><ul class='methods'><li data-type="method" id="SAFEApp-appIsMock-nav"><a href="SAFEApp.html#appIsMock">appIsMock</a></li><li data-type="method" id="SAFEApp-clearObjectCache-nav"><a href="SAFEApp.html#clearObjectCache">clearObjectCache</a></li><li data-type="method" id="SAFEApp-fetch-nav"><a href="SAFEApp.html#fetch">fetch</a></li><li data-type="method" id="SAFEApp-getAccountInfo-nav"><a href="SAFEApp.html#getAccountInfo">getAccountInfo</a></li><li data-type="method" id="SAFEApp-getOwnContainerName-nav"><a href="SAFEApp.html#getOwnContainerName">getOwnContainerName</a></li><li data-type="method" id="SAFEApp-isNetStateConnected-nav"><a href="SAFEApp.html#isNetStateConnected">isNetStateConnected</a></li><li data-type="method" id="SAFEApp-isNetStateDisconnected-nav"><a href="SAFEApp.html#isNetStateDisconnected">isNetStateDisconnected</a></li><li data-type="method" id="SAFEApp-isNetStateInit-nav"><a href="SAFEApp.html#isNetStateInit">isNetStateInit</a></li><li data-type="method" id="SAFEApp-logPath-nav"><a href="SAFEApp.html#logPath">logPath</a></li><li data-type="method" id="SAFEApp-reconnect-nav"><a href="SAFEApp.html#reconnect">reconnect</a></li><li data-type="method" id="SAFEApp-webFetch-nav"><a href="SAFEApp.html#webFetch">webFetch</a></li></ul></li><li id="SecEncKey-nav"><a href="SecEncKey.html">SecEncKey</a><ul class='methods'><li data-type="method" id="SecEncKey-decrypt-nav"><a href="SecEncKey.html#decrypt">decrypt</a></li><li data-type="method" id="SecEncKey-encrypt-nav"><a href="SecEncKey.html#encrypt">encrypt</a></li><li data-type="method" id="SecEncKey-getRaw-nav"><a href="SecEncKey.html#getRaw">getRaw</a></li></ul></li><li id="SecSignKey-nav"><a href="SecSignKey.html">SecSignKey</a><ul class='methods'><li data-type="method" id="SecSignKey-getRaw-nav"><a href="SecSignKey.html#getRaw">getRaw</a></li><li data-type="method" id="SecSignKey-sign-nav"><a href="SecSignKey.html#sign">sign</a></li></ul></li><li id="SignKeyPair-nav"><a href="SignKeyPair.html">SignKeyPair</a></li><li id="WebID-nav"><a href="WebID.html">WebID</a><ul class='methods'><li data-type="method" id="WebID-create-nav"><a href="WebID.html#create">create</a></li><li data-type="method" id="WebID-fetchContent-nav"><a href="WebID.html#fetchContent">fetchContent</a></li><li data-type="method" id="WebID-init-nav"><a href="WebID.html#init">init</a></li><li data-type="method" id="WebID-serialise-nav"><a href="WebID.html#serialise">serialise</a></li><li data-type="method" id="WebID-update-nav"><a href="WebID.html#update">update</a></li></ul></li><li id="WebInterface-nav"><a href="WebInterface.html">WebInterface</a><ul class='methods'><li data-type="method" id="WebInterface-addPublicNameToDirectory-nav"><a href="WebInterface.html#addPublicNameToDirectory">addPublicNameToDirectory</a></li><li data-type="method" id="WebInterface-addWebIdToDirectory-nav"><a href="WebInterface.html#addWebIdToDirectory">addWebIdToDirectory</a></li><li data-type="method" id="WebInterface-getPublicNames-nav"><a href="WebInterface.html#getPublicNames">getPublicNames</a></li><li data-type="method" id="WebInterface-getVocabs-nav"><a href="WebInterface.html#getVocabs">getVocabs</a></li><li data-type="method" id="WebInterface-getWebIds-nav"><a href="WebInterface.html#getWebIds">getWebIds</a></li><li data-type="method" id="WebInterface-linkServiceToSubname-nav"><a href="WebInterface.html#linkServiceToSubname">linkServiceToSubname</a></li></ul></li><li id="Writer-nav"><a href="Writer.html">Writer</a><ul class='methods'><li data-type="method" id="Writer-close-nav"><a href="Writer.html#close">close</a></li><li data-type="method" id="Writer-write-nav"><a href="Writer.html#write">write</a></li></ul></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#CONSTANTS">CONSTANTS</a></li><li><a href="global.html#fromAuthUri">fromAuthUri</a></li><li><a href="global.html#initialiseApp">initialiseApp</a></li><li><a href="global.html#VERSION">VERSION</a></li></ul>
+  </nav>
+
+  <div id="main">
+    
+      <h1 class="page-title">
+        api/emulations/rdf.js
+      </h1>
+    
+
+    
+      
+
+<section>
+  <article>
+    <pre class="prettyprint source linenums"><code>// Copyright 2018 MaidSafe.net limited.
+//
+// This SAFE Network Software is licensed to you under
+// the MIT license &lt;LICENSE-MIT or http://opensource.org/licenses/MIT> or
+// the Modified BSD license &lt;LICENSE-BSD or https://opensource.org/licenses/BSD-3-Clause>,
+// at your option.
+//
+// This file may not be copied, modified, or distributed except according to those terms.
+//
+// Please review the Licences for the specific language governing permissions and limitations
+// relating to use of the SAFE Network Software.
+
+
+const rdflib = require('rdflib');
+const errConst = require('../../error_const');
+const makeError = require('../../native/_error.js');
+const { EXPOSE_AS_EXPERIMENTAL_API } = require('../../helpers');
+
+const JSON_LD_MIME_TYPE = 'application/ld+json';
+const RDF_GRAPH_ID = '@id';
+
+/**
+* Represents an RDF node resource named by an absolute URI property
+* @typedef {Object} NamedNode
+* @property {String} termType=NamedNode NamedNode
+* @property {String} value Absolute URI
+* @property {String} uri Absolute URI
+*/
+
+/**
+* Represents a [blank node](https://en.wikipedia.org/wiki/Blank_node} RDF resource
+* @typedef {Object} BlankNode
+* @property {String} termType=BlankNode BlankNode
+* @property {String} value=n0 n0
+* @property {String} id=n0 n0
+*/
+
+/**
+* Represents an literal RDF node resource such as a noun or date-time
+* @typedef {Object} LiteralNode
+* @property {String} termType=LiteralNode LiteralNode
+* @property {String} value Either string or XSD datatype
+* @property {String} [lang] Optional i18n language tag
+* @property {NamedNode} [datatype]
+*/
+
+/**
+* Experimental RDF emulation on top of a {@link MutableData}
+* @hideconstructor
+*/
+class RDF {
+  constructor(mData) {
+    this.mData = mData;
+    this.graphStore = rdflib.graph();
+    this.id = undefined;
+    this.vocabs = {
+      LDP: this.namespace('http://www.w3.org/ns/ldp#'),
+      RDF: this.namespace('http://www.w3.org/2000/01/this-schema#'),
+      RDFS: this.namespace('http://www.w3.org/1999/02/22-this-syntax-ns#'),
+      FOAF: this.namespace('http://xmlns.com/foaf/0.1/'),
+      OWL: this.namespace('http://www.w3.org/2002/07/owl#'),
+      DCTERMS: this.namespace('http://purl.org/dc/terms/'),
+      SAFETERMS: this.namespace('http://safenetwork.org/safevocab/')
+    };
+  }
+  /**
+   * Sets ID for graph store
+   * @param {String} id ID representing current in-memory graph store.
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const rdf = await mData.emulateAs('RDF');
+   *     const id = rdf.sym("safe://pluto.astronomy");
+   *     rdf.setId(id.uri);
+   *     console.log(rdf.id);
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  setId(id) {
+    this.id = id;
+  }
+
+  /**
+   * Fetch the RDF data stored in the underlying MutableData on the network
+   * and load it in memory to allow manipulating triples before commit them again.
+   *
+   * @param {Array&lt;String>} ids list of RDF graph IDs to use as a filter for fetching
+   * graphs, e.g. ['safe://mywebid.mypubname', 'safe://mypubname']
+   * @param {Boolean} [toDecrypt=false] flag to decrypt the data being fetched
+   *
+   * @throws {ERR_SERIALISING_DESERIALISING|MISSING_RDF_ID}
+   * @returns {Promise&lt;Array>}
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   *
+   * const ids = [];
+   * const toEncrypt = false;
+   * const toDecrypt = false;
+   * const asyncFn = async () => {
+   *     try {
+   *         const rdf = await mData.emulateAs('RDF');
+   *         const id = rdf.sym("safe://pluto.astronomy");
+   *         const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );
+   *         const triples = [
+   *             {
+   *                 predicate : rdf.vocabs.RDFS('isDefinedBy'),
+   *                 object : DBP('Pluto')
+   *             },
+   *             {
+   *                 predicate : rdf.sym("http://dbpedia.org/property/atmosphereComposition"),
+   *                 object : DBP("Methane")
+   *             },
+   *             {
+   *                 predicate : rdf.vocabs.RDF('type'),
+   *                 object : DBP("Dwarf_planet")
+   *             },
+   *             {
+   *                 predicate : rdf.sym("http://dbpedia.org/ontology/discovered"),
+   *                 object : literalNode
+   *             }
+   *         ];
+   *         // The subject of each triple is the same in this example
+   *         triples.forEach( triple => rdf.add(id, triple.predicate, triple.object) );
+   *         const nameAndTag = await rdf.commit(toEncrypt);
+   *         const entryGraphArray = await rdf.nowOrWhenFetched(ids, toDecrypt);
+   *     } catch(err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  async nowOrWhenFetched(ids, toDecrypt = false) {
+    let entriesList = [];
+    let entries;
+
+    if (ids &amp;&amp; ids.length > 0) {
+      const graphsToFetch = (!Array.isArray(ids)) ? [ids] : ids;
+      // TODO: support a list of more than one id
+      // Promise.all(ids.map(async (e) => {
+      const serialisedGraph = await this.mData.get(graphsToFetch[0]);
+      entriesList.push({ key: graphsToFetch[0], value: serialisedGraph });
+      // }));
+    } else {
+      entries = await this.mData.getEntries();
+      entriesList = await entries.listEntries();
+    }
+
+    if (entriesList.length === 0) return;
+
+    let id;
+    const validGraphs = await entriesList.reduce(async (graphs, entry) => {
+      const reducedGraphs = await graphs;
+      let keyStr = entry.key.toString();
+      let valueStr = entry.value.buf.toString();
+      if (toDecrypt &amp;&amp; valueStr.length > 0) {
+        try {
+          const decryptedKey = await this.mData.decrypt(entry.key);
+          keyStr = decryptedKey.toString();
+          const decryptedValue = await this.mData.decrypt(entry.value.buf);
+          valueStr = decryptedValue.toString();
+        } catch (error) {
+          if (error.code !== errConst.ERR_SERIALISING_DESERIALISING.code) {
+            console.warn('Error decrypting MutableData entry in rdf.nowOrWhenFetched()');
+          }
+          // ok, let's then assume the entry is not encrypted
+          // this maybe temporary, just for backward compatibility,
+          // but in the future we should always expect them to be encrpyted
+        }
+      }
+
+      // If the entry was soft-deleted skip it, or if it's not
+      // an RDF graph entry also ignore it
+      if (valueStr.length === 0 || !keyStr.startsWith('safe://')) {
+        return reducedGraphs;
+      }
+
+      if (!id) {
+        // FIXME: we need to know which is the main graph in a deterministic way
+        // perhaps when we have XOR-URLs we will be able to check a match between
+        // this MD's location and the @id value which will be set to the XOR-URL.
+        id = JSON.parse(valueStr)[RDF_GRAPH_ID];
+      }
+
+      reducedGraphs.push(valueStr);
+      return reducedGraphs;
+    }, Promise.resolve([]));
+
+    const entriesGraphs = await Promise.all(validGraphs);
+
+    if (!id) {
+      // This simply means that none of the existing entries are RDF graphs.
+      // We throw the error and it's up to the caller to decide
+      // what to do in such an scenario
+      throw makeError(errConst.MISSING_RDF_ID.code, errConst.MISSING_RDF_ID.msg);
+    }
+
+    return Promise.all(entriesGraphs.map((graph) => this.parse(graph, JSON_LD_MIME_TYPE, id)));
+  }
+
+  /**
+   * Creates resource namespace prefix and returns function to create {@link NamedNode}.
+   * @param {String} uri Absolute namespace URI
+   * @returns {function(string): NamedNode}
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const rdf = await mData.emulateAs('RDF');
+   *     const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );
+   *     const dwarfPlanetNodeResource = DBP("Dwarf_planet");
+   *     const formerPlanetNodeResource = DBP("Former_planet");
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  namespace(uri) { // eslint-disable-line class-methods-use-this
+    return rdflib.Namespace(uri);
+  }
+
+  /**
+   * @param {String|Number} value Literal value
+   * @param {String} languageOrDatatype Either i18n language tag or XSD URI data type
+   * @returns {LiteralNode}
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const rdf = await mData.emulateAs('RDF');
+   *     const discoveryDate = new Date("18 Feb 1930");
+   *     const dateTimeDataType = "http://www.w3.org/2001/XMLSchema#dateTime";
+   *     let literalNode = rdf.literal(discoveryDate.toISOString(), dateTimeDataType);
+   *     console.log( JSON.stringify(literalNode) );
+   *
+   *     // Alternatively
+   *     literalNode = rdf.literal("Aardvark", "en-US");
+   *     console.log( JSON.stringify(literalNode) );
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  literal(value, languageOrDatatype) { // eslint-disable-line class-methods-use-this
+    return rdflib.literal(value, languageOrDatatype);
+  }
+
+  collection(nodes) { // eslint-disable-line class-methods-use-this
+    return new rdflib.Collection(nodes);
+  }
+
+  /**
+   * @returns {BlankNode}
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const rdf = await mData.emulateAs('RDF');
+   *     const blankNode = rdf.bnode();
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  bnode() { // eslint-disable-line class-methods-use-this
+    return rdflib.blankNode();
+  }
+
+  /**
+   * Creates an RDF resource identified by a URI
+   * @returns {NamedNode}
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const rdf = await mData.emulateAs('RDF');
+   *     const predicateUri = "http://dbpedia.org/ontology/discovered";
+   *     const predicateResource = rdf.sym(predicateUri);
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  sym(uri) { // eslint-disable-line class-methods-use-this
+    return rdflib.sym(uri);
+  }
+
+  /**
+   * Retrieves one node, the first to match any combination of subject, predicate, or object.
+   * A null value is a wildcard.
+   * @param {NamedNode|BlankNode|null} [subject] https://www.w3.org/TR/rdf-schema/#ch_subject
+   * @param {NamedNode|null} [predicate] https://www.w3.org/TR/rdf-schema/#ch_predicate
+   * @param {LiteralNode|NamedNode|null} [object] https://www.w3.org/TR/rdf-schema/#ch_object
+   * @param {NamedNode} [provenance] https://www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro
+   * @returns {LiteralNode|BlankNode|NamedNode} Single node resource
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *       const rdf = await mData.emulateAs('RDF');
+   *       const id = rdf.sym("safe://pluto.astronomy");
+   *       const subject = id;
+   *       const predicate = null;
+   *       const object = null;
+   *       const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );
+   *       const triples = [
+   *           {
+   *               predicate : rdf.vocabs.RDFS('isDefinedBy'),
+   *               object : DBP('Pluto')
+   *           },
+   *           {
+   *               predicate : rdf.sym("http://dbpedia.org/property/atmosphereComposition"),
+   *               object : DBP("Methane")
+   *           },
+   *           {
+   *               predicate : rdf.vocabs.RDF('type'),
+   *               object : DBP("Dwarf_planet")
+   *           },
+   *           {
+   *               predicate : rdf.sym("http://dbpedia.org/ontology/discovered"),
+   *               object : literalNode
+   *           }
+   *       ];
+   *       // The subject of each triple is the same in this example
+   *       triples.forEach( triple => rdf.add(id, triple.predicate, triple.object) );
+   *       const result = rdf.any(subject, predicate, object);
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  any(subject, predicate, object, provenance) {
+    return this.graphStore.any(subject, predicate, object, provenance);
+  }
+
+  /**
+   * Retrieves all nodes matching any combination of subject, predicate, or object.
+   * A null value is a wildcard.
+   * @param {NamedNode|BlankNode|null} [subject] https://www.w3.org/TR/rdf-schema/#ch_subject
+   * @param {NamedNode|null} [predicate] https://www.w3.org/TR/rdf-schema/#ch_predicate
+   * @param {LiteralNode|NamedNode|null} [object] https://www.w3.org/TR/rdf-schema/#ch_object
+   * @param {NamedNode} [provenance] https://www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro
+   * @returns {Array} Turtle document
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *       const rdf = await mData.emulateAs('RDF');
+   *       const id = rdf.sym("safe://pluto.astronomy");
+   *       const subject = id;
+   *       const predicate = null;
+   *       const object = null;
+   *       const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );
+   *       const triples = [
+   *           {
+   *               predicate : rdf.vocabs.RDFS('isDefinedBy'),
+   *               object : DBP('Pluto')
+   *           },
+   *           {
+   *               predicate : rdf.sym("http://dbpedia.org/property/atmosphereComposition"),
+   *               object : DBP("Methane")
+   *           },
+   *           {
+   *               predicate : rdf.vocabs.RDF('type'),
+   *               object : DBP("Dwarf_planet")
+   *           },
+   *           {
+   *               predicate : rdf.sym("http://dbpedia.org/ontology/discovered"),
+   *               object : literalNode
+   *           }
+   *       ];
+   *       // The subject of each triple is the same in this example
+   *       triples.forEach( triple => rdf.add(id, triple.predicate, triple.object) );
+   *       const result = rdf.each(subject, predicate, object);
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  each(subject, predicate, object, provenance) {
+    return this.graphStore.each(subject, predicate, object, provenance);
+  }
+
+  /**
+   * Retrieves all statements matching any combination of subject, predicate, or object.
+   * A null value is a wildcard.
+   * @param {NamedNode|BlankNode|null} [subject] https://www.w3.org/TR/rdf-schema/#ch_subject
+   * @param {NamedNode|null} [predicate] https://www.w3.org/TR/rdf-schema/#ch_predicate
+   * @param {LiteralNode|NamedNode|null} [object] https://www.w3.org/TR/rdf-schema/#ch_object
+   * @param {NamedNode} [provenance] https://www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro
+   * @returns {Array}
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *       const rdf = await mData.emulateAs('RDF');
+   *       const id = rdf.sym("safe://pluto.astronomy");
+   *       const subject = id;
+   *       const predicate = null;
+   *       const object = null;
+   *       const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );
+   *       const triples = [
+   *           {
+   *               predicate : rdf.vocabs.RDFS('isDefinedBy'),
+   *               object : DBP('Pluto')
+   *           },
+   *           {
+   *               predicate : rdf.sym("http://dbpedia.org/property/atmosphereComposition"),
+   *               object : DBP("Methane")
+   *           },
+   *           {
+   *               predicate : rdf.vocabs.RDF('type'),
+   *               object : DBP("Dwarf_planet")
+   *           },
+   *           {
+   *               predicate : rdf.sym("http://dbpedia.org/ontology/discovered"),
+   *               object : literalNode
+   *           }
+   *       ];
+   *       // The subject of each triple is the same in this example
+   *       triples.forEach( triple => rdf.add(id, triple.predicate, triple.object) );
+   *       const result = rdf.statementsMatching(subject, predicate, object);
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  statementsMatching(subject, predicate, object, provenance) {
+    return this.graphStore.statementsMatching(subject, predicate, object, provenance);
+  }
+
+  /**
+   * Remove all statements matching any combination of subject, predicate or object
+   * @param {NamedNode|BlankNode|null} [subject] https://www.w3.org/TR/rdf-schema/#ch_subject
+   * @param {NamedNode|null} [predicate] https://www.w3.org/TR/rdf-schema/#ch_predicate
+   * @param {LiteralNode|NamedNode|null} [object] https://www.w3.org/TR/rdf-schema/#ch_object
+   * @param {NamedNode} [provenance] https://www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *       const rdf = await mData.emulateAs('RDF');
+   *       const id = rdf.sym("safe://pluto.astronomy");
+   *       const subject = id;
+   *       const predicate = null;
+   *       const object = null;
+   *       const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );
+   *       const triples = [
+   *           {
+   *               predicate : rdf.vocabs.RDFS('isDefinedBy'),
+   *               object : DBP('Pluto')
+   *           },
+   *           {
+   *               predicate : rdf.sym("http://dbpedia.org/property/atmosphereComposition"),
+   *               object : DBP("Methane")
+   *           },
+   *           {
+   *               predicate : rdf.vocabs.RDF('type'),
+   *               object : DBP("Dwarf_planet")
+   *           },
+   *           {
+   *               predicate : rdf.sym("http://dbpedia.org/ontology/discovered"),
+   *               object : literalNode
+   *           }
+   *       ];
+   *       // The subject of each triple is the same in this example
+   *       triples.forEach( triple => rdf.add(id, triple.predicate, triple.object) );
+   *       rdf.removeMany(subject, predicate, object);
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  removeMany(subject, predicate, object, provenance) {
+    return this.graphStore.removeMany(subject, predicate, object, provenance);
+  }
+
+  /**
+   * Parse serialised RDF data and place into graph store
+   * @param {String} data Serialised RDF
+   * @param {String} mimeType
+   * @param {String} id Arbitrary absolute URI to identify graph
+   * @returns {Promise&lt;String>} RDF document according to mime type
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   *   const mimeType = "text/turtle";
+   *   const asyncFn = async () => {
+   *       try {
+   *           const rdf = await mData.emulateAs('RDF');
+   *           const id = rdf.sym("safe://pluto.astronomy");
+   *           const serialised = `
+   *           @prefix : &lt;#>.
+   *           @prefix ont: &lt;http://dbpedia.org/ontology/>.
+   *           @prefix XML: &lt;http://www.w3.org/2001/XMLSchema#>.
+   *           @prefix pro: &lt;http://dbpedia.org/property/>.
+   *           @prefix res: &lt;http://dbpedia.org/resource/>.
+   *           @prefix n0: &lt;http://www.w3.org/1999/02/22-this-syntax-ns#>.
+   *           @prefix thi: &lt;http://www.w3.org/2000/01/this-schema#>.
+   *
+   *           &lt;>
+   *               ont:discovered "1930-02-18T08:00:00.000Z"^^XML:dateTime;
+   *               pro:atmosphereComposition res:Methane;
+   *               n0:isDefinedBy res:Pluto;
+   *               thi:type res:Dwarf_planet.
+   *           `;
+   *           var parsedData = await rdf.parse(serialised, mimeType, id);
+   *       } catch(err) {
+   *           throw err;
+   *       }
+   *       console.log(parsedData);
+   *   };
+   */
+  parse(data, mimeType, id) {
+    return new Promise((resolve, reject) => {
+      const cb = (err, parsed) => {
+        if (err) {
+          return reject(err);
+        }
+        this.setId(id);
+        resolve(parsed);
+      };
+
+      // since we provide a callback then parse becomes async
+      rdflib.parse(data, this.graphStore, id, mimeType, cb);
+    });
+  }
+
+  /**
+   * Adds RDF statement to graph
+   * @param {NamedNode|BlankNode|null} [subject] https://www.w3.org/TR/rdf-schema/#ch_subject
+   * @param {NamedNode|null} [predicate] https://www.w3.org/TR/rdf-schema/#ch_predicate
+   * @param {LiteralNode|NamedNode|null} [object] https://www.w3.org/TR/rdf-schema/#ch_object
+   * @param {NamedNode} [provenance] https://www.w3.org/TR/2014/REC-n-quads-20140225/#sec-intro
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *       const rdf = await mData.emulateAs('RDF');
+   *       const id = rdf.sym("safe://pluto.astronomy");
+   *       const subject = id;
+   *       const predicate = null;
+   *       const object = null;
+   *       const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );
+   *       const triple = {
+   *           predicate : rdf.vocabs.RDFS('isDefinedBy'),
+   *           object : DBP('Pluto')
+   *       };
+   *       rdf.add(id, triple.predicate, triple.object)
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  add(subject, predicate, object, provenance) {
+    this.graphStore.add(subject, predicate, object, provenance);
+  }
+
+  /**
+   * Serialise RDF data
+   * @param {String} mimeType
+   * @returns {Promise&lt;String>} RDF document according to mime type
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const mimeType = "text/turtle";
+   * const asyncFn = async () => {
+   *     try {
+   *       const rdf = await mData.emulateAs('RDF');
+   *       const id = rdf.sym("safe://pluto.astronomy");
+   *       const subject = id;
+   *       const predicate = null;
+   *       const object = null;
+   *       const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );
+   *       const triple = {
+   *           predicate : rdf.vocabs.RDFS('isDefinedBy'),
+   *           object : DBP('Pluto')
+   *       };
+   *       rdf.add(id, triple.predicate, triple.object)
+   *       const serialised = await rdf.serialise(mimeType);
+   *     } catch(err) {
+   *         throw err;
+   *     }
+   *     console.log(serialised);
+   * };
+   */
+  async serialise(mimeType) {
+    return new Promise((resolve, reject) => {
+      const cb = (err, parsed) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(parsed);
+      };
+      // TODO: serialise it with compact when it's jsonld. This is
+      // currently not possible as it's not supporrted by rdflib.js
+      rdflib.serialize(null, this.graphStore, this.id, mimeType, cb);
+    });
+  }
+
+  /**
+   * Commit the RDF document to the underlying MutableData on the network
+   *
+   * @param {Boolean} [toEncrypt=false] flag to encrypt the data to be committed
+   * @throws {ERR_SERIALISING_DESERIALISING}
+   * @returns {Promise&lt;NameAndTag>}
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const toEncrypt = false;
+   * const asyncFn = async () => {
+   *     try {
+   *       const rdf = await mData.emulateAs('RDF');
+   *       const id = rdf.sym("safe://pluto.astronomy");
+   *       const subject = id;
+   *       const predicate = null;
+   *       const object = null;
+   *       const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );
+   *       const triple = {
+   *           predicate : rdf.vocabs.RDFS('isDefinedBy'),
+   *           object : DBP('Pluto')
+   *       };
+   *       rdf.add(id, triple.predicate, triple.object)
+   *       const nameAndTag = await rdf.commit(toEncrypt);
+   *     } catch(err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  async commit(toEncrypt = false) {
+    const serialJsonLd = await this.serialise(JSON_LD_MIME_TYPE);
+    const graphs = JSON.parse(serialJsonLd);
+    const entries = await this.mData.getEntries();
+    const entriesList = await entries.listEntries();
+    const mutation = await this.mData.app.mutableData.newMutation();
+    const mData = this.mData;
+    const graphPromises = graphs.map(async (graph) => {
+      const unencryptedKey = graph[RDF_GRAPH_ID];
+      let key = unencryptedKey;
+      let match = false;
+
+      // find the current graph in the entries list and remove it
+      // (before replacing via the rdf graph) this is to be able to remove any
+      // remaining entries (not readded via rdf) as they have been
+      // removed from this graph.
+      await Promise.all(entriesList.map(async (entry, i) => {
+        if (!entry || !entry.key || match) return;
+
+        let keyToCheck = entry.key.toString();
+
+        if (toEncrypt) {
+          try {
+            const decryptedKey = await mData.decrypt(entry.key);
+            keyToCheck = decryptedKey.toString();
+          } catch (error) {
+            if (error.code !== errConst.ERR_SERIALISING_DESERIALISING.code) {
+              console.warn('Error decrypting MutableData entry in rdf.commit():', error);
+            }
+            // ok, let's then assume the entry is not encrypted
+            // this maybe temporary, just for backward compatibility,
+            // but in the future we should always expect them to be encrpyted
+          }
+        }
+
+        if (unencryptedKey === keyToCheck) {
+          delete entriesList[i];
+          match = entry;
+        }
+      }));
+
+      let stringifiedGraph = JSON.stringify(graph);
+      if (toEncrypt) {
+        key = await mData.encryptKey(key);
+        stringifiedGraph = await mData.encryptValue(stringifiedGraph);
+      }
+
+      if (match) {
+        return mutation.update(key, stringifiedGraph, match.value.version + 1);
+      }
+      return mutation.insert(key, stringifiedGraph);
+    });
+
+    await Promise.all(graphPromises);
+
+    // remove RDF entries which are not present in new RDF
+    await entriesList.forEach(async (entry) => {
+      if (entry) {
+        let keyToCheck = entry.key.toString();
+
+        if (toEncrypt) {
+          try {
+            const decryptedKey = await mData.decrypt(entry.key);
+            keyToCheck = decryptedKey.toString();
+          } catch (error) {
+            if (error.code !== errConst.ERR_SERIALISING_DESERIALISING.code) {
+              console.warn('Error decrypting MutableData entry in rdf.commit():', error);
+            }
+            // ok, let's then assume the entry is not encrypted
+            // this maybe temporary, just for backward compatibility,
+            // but in the future we should always expect them to be encrpyted
+          }
+        }
+
+        if (keyToCheck.startsWith('safe://')) {
+          await mutation.delete(entry.key, entry.value.version + 1);
+        }
+      }
+    });
+
+    await this.mData.applyEntriesMutation(mutation);
+    const nameAndTag = await this.mData.getNameAndTag();
+    return nameAndTag;
+  }
+
+  /**
+  * Append the triples to the RDF document into the underlying MutableData on the network
+  * @returns {Promise&lt;NameAndTag>}
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const toEncrypt = false;
+   * const asyncFn = async () => {
+   *     try {
+   *       const rdf = await mData.emulateAs('RDF');
+   *       const id = rdf.sym("safe://pluto.astronomy");
+   *       const subject = id;
+   *       const predicate = null;
+   *       const object = null;
+   *       const DBP = rdf.namespace( 'http://dbpedia.org/resource/' );
+   *       const triple = {
+   *           predicate : rdf.vocabs.RDFS('isDefinedBy'),
+   *           object : DBP('Pluto')
+   *       };
+   *       rdf.add(id, triple.predicate, triple.object)
+   *       let nameAndTag = await rdf.commit(toEncrypt);
+   *       rdf.add(id, triple.predicate, triple.object)
+   *       const newTriple = {
+   *           predicate : rdf.vocabs.RDF('type'),
+   *           object : DBP("Dwarf_planet")
+   *       };
+   *       rdf.add(id, newTriple.predicate, newTriple.object)
+   *       nameAndTag = await rdf.append();
+   *     } catch(err) {
+   *         throw err;
+   *     }
+   * };
+  */
+  async append() {
+    // TODO: this currently only supports adding graphs with different ID
+    const serialJsonLd = await this.serialise(JSON_LD_MIME_TYPE);
+    const graphs = JSON.parse(serialJsonLd);
+    const mutation = await this.mData.app.mutableData.newMutation();
+    graphs.forEach((e) => {
+      const key = e[RDF_GRAPH_ID];
+      const stringifiedGraph = JSON.stringify(e);
+      mutation.insert(key, stringifiedGraph);
+    });
+
+    await this.mData.applyEntriesMutation(mutation);
+    const nameAndTag = await this.mData.getNameAndTag();
+    return nameAndTag;
+  }
+}
+
+class rdfEmulationFactory {
+  /**
+  * @private
+  * Instantiate the RDF emulation layer wrapping a MutableData instance,
+  * hiding the whole RDF emulation class behind the experimental API flag
+  *
+  * @param {MutableData} mData the MutableData to wrap around
+  */
+  constructor(mData) {
+    /* eslint-disable camelcase, prefer-arrow-callback */
+    return EXPOSE_AS_EXPERIMENTAL_API.call(mData.app, function RDF_Emulation() {
+      return new RDF(mData);
+    });
+  }
+}
+
+module.exports = rdfEmulationFactory;
+</code></pre>
+  </article>
+</section>
+
+    
+
+
+  </div>
+
+  <br class="clear">
+
+  <footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+  </footer>
+
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
+
+  
+
+</body>
+</html>
