@@ -13,7 +13,8 @@
         "includePattern": ".js$"
     },
     "plugins": [
-        "plugins/markdown" 
+        "plugins/markdown",
+        "node_modules/jsdoc-escape-at"
     ],
     "templates": {
         "referenceTitle": "SAFE Network Node.js Client Library",

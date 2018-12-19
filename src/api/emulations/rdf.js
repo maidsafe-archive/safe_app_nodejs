@@ -490,13 +490,13 @@ class RDF {
    *           const rdf = await mData.emulateAs('RDF');
    *           const id = rdf.sym("safe://pluto.astronomy");
    *           const serialised = `
-   *           @prefix : <#>.
-   *           @prefix ont: <http://dbpedia.org/ontology/>.
-   *           @prefix XML: <http://www.w3.org/2001/XMLSchema#>.
-   *           @prefix pro: <http://dbpedia.org/property/>.
-   *           @prefix res: <http://dbpedia.org/resource/>.
-   *           @prefix n0: <http://www.w3.org/1999/02/22-this-syntax-ns#>.
-   *           @prefix thi: <http://www.w3.org/2000/01/this-schema#>.
+   *           \@prefix : <#>.
+   *           \@prefix ont: <http://dbpedia.org/ontology/>.
+   *           \@prefix XML: <http://www.w3.org/2001/XMLSchema#>.
+   *           \@prefix pro: <http://dbpedia.org/property/>.
+   *           \@prefix res: <http://dbpedia.org/resource/>.
+   *           \@prefix n0: <http://www.w3.org/1999/02/22-this-syntax-ns#>.
+   *           \@prefix thi: <http://www.w3.org/2000/01/this-schema#>.
    *
    *           <>
    *               ont:discovered "1930-02-18T08:00:00.000Z"^^XML:dateTime;
