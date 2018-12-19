@@ -2399,7 +2399,7 @@ graphs, e.g. ['safe://mywebid.mypubname', 'safe://mypubname']</p>
     <h5 id="parse-examples">Example</h5>
     
 
-  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtained  const mimeType = "text/turtle";  const asyncFn = async () => {      try {          const rdf = await mData.emulateAs('RDF');          const id = rdf.sym("safe://pluto.astronomy");          const serialised = `          </code></pre>
+  <pre class="prettyprint"><code>// Assumes <a href="MutableData.html">MutableData</a> interface has been obtained  const mimeType = "text/turtle";  const asyncFn = async () => {      try {          const rdf = await mData.emulateAs('RDF');          const id = rdf.sym("safe://pluto.astronomy");          const serialised = `          @prefix : &lt;#>.          @prefix ont: &lt;http://dbpedia.org/ontology/>.          @prefix XML: &lt;http://www.w3.org/2001/XMLSchema#>.          @prefix pro: &lt;http://dbpedia.org/property/>.          @prefix res: &lt;http://dbpedia.org/resource/>.          @prefix n0: &lt;http://www.w3.org/1999/02/22-this-syntax-ns#>.          @prefix thi: &lt;http://www.w3.org/2000/01/this-schema#>.          &lt;>              ont:discovered "1930-02-18T08:00:00.000Z"^^XML:dateTime;              pro:atmosphereComposition res:Methane;              n0:isDefinedBy res:Pluto;              thi:type res:Dwarf_planet.          `;          var parsedData = await rdf.parse(serialised, mimeType, id);      } catch(err) {          throw err;      }      console.log(parsedData);  };</code></pre>
 
 
   </div>
