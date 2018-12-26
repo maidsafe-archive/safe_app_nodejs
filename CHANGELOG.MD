@@ -1,5 +1,20 @@
 # safe_app nodejs Change Log
 
+## [Unreleased]
+
+### Fixed
+- RDF method, `list`, renamed to `collection` and calls correct rdflib.js function
+- RDF method, `bnode` calls correct rdflib.js function, `blankNode`
+- RDF method, `literal` is passed 2 arguments instead of 3
+
+### Changed
+- All RDF methods which take RDF `subject`, `predicate`, `object` arguments now also take a fourth `provenance` argument, to be consistent with rdflib.js
+- Documentation enhanced with improved JSDoc annotation and template
+
+### Added
+- Code examples for experimental API operations: RDF, WebId, WebInterface
+- Code examples where previously missing
+
 ## [0.10.3] - 13-12-2018
 
 ### Fixed

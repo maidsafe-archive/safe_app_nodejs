@@ -14,7 +14,7 @@
 module.exports = {
 
   /**
-   * @name ERR_SERIALISING_DESERIALISING
+   * @typedef ERR_SERIALISING_DESERIALISING
    * @type {object}
    * @description Thrown natively when failing to encrypt/decrypt a MD entry
    * @property {number} code -1
@@ -26,7 +26,7 @@ module.exports = {
   },
 
   /**
-   * @name ERR_NO_SUCH_DATA
+   * @typedef ERR_NO_SUCH_DATA
    * @type {object}
    * @description Thrown natively when data not found on network.
    * @property {number} code -103
@@ -38,7 +38,7 @@ module.exports = {
   },
 
   /**
-   * @name ERR_DATA_GIVEN_ALREADY_EXISTS
+   * @typedef ERR_DATA_GIVEN_ALREADY_EXISTS
    * @type {object}
    * @description Thrown natively when data already exists at the target address on network.
    * @property {number} code -104
@@ -50,7 +50,7 @@ module.exports = {
   },
 
   /**
-   * @name ERR_NO_SUCH_ENTRY
+   * @typedef ERR_NO_SUCH_ENTRY
    * @type {object}
    * @description Thrown natively when entry on found in MutableData.
    * @property {number} code -106
@@ -62,7 +62,7 @@ module.exports = {
   },
 
   /**
-   * @name ERR_FILE_NOT_FOUND
+   * @typedef ERR_FILE_NOT_FOUND
    * @type {object}
    * @description Thrown natively when NFS-style file not found.
    * @property {number} code -301
@@ -74,7 +74,7 @@ module.exports = {
   },
 
   /**
-   * @name INVALID_BYTE_RANGE
+   * @typedef INVALID_BYTE_RANGE
    * @type {object}
    * @description Thrown natively when attempting to fetch partial
    * byte range of NFS-style file that is not within the total byte range.
@@ -89,7 +89,7 @@ module.exports = {
   },
 
   /**
-   * @name FAILED_TO_LOAD_LIB
+   * @typedef FAILED_TO_LOAD_LIB
    * @type {object}
    * @description Thrown when a native library fails to load and which library.
    * @property {number} code 1000
@@ -101,7 +101,7 @@ module.exports = {
   },
 
   /**
-   * @name SETUP_INCOMPLETE
+   * @typedef SETUP_INCOMPLETE
    * @type {object}
    * @description Informs that app is not yet connected to network.
    * @property {number} code 1001
@@ -113,9 +113,9 @@ module.exports = {
   },
 
   /**
-   * @name MALFORMED_APP_INFO
+   * @typedef MALFORMED_APP_INFO
    * @type {object}
-   * @description Informs when app info provided during initialisation is invalid.
+   * @description Informs when {@link AppInfo} provided during initialisation is invalid.
    * @property {number} code 1002
    * @property {string} msg
    */
@@ -133,7 +133,7 @@ module.exports = {
   },
 
   /**
-   * @name MISSING_PERMS_ARRAY
+   * @typedef MISSING_PERMS_ARRAY
    * @type {object}
    * @description Argument should be an array object.
    * @property {number} code 1003
@@ -145,7 +145,7 @@ module.exports = {
   },
 
   /**
-   * @name INVALID_SHARE_MD_PERMISSION
+   * @typedef INVALID_SHARE_MD_PERMISSION
    * @type {object}
    * @description Informs of a specific object in a share MData permissions array that is malformed.
    * @property {number} code 1004
@@ -157,7 +157,7 @@ module.exports = {
   },
 
   /**
-   * @name INVALID_PERMS_ARRAY
+   * @typedef INVALID_PERMS_ARRAY
    * @type {object}
    * @description Thrown when share MD permissions is not an array.
    * @property {number} code 1005
@@ -169,7 +169,7 @@ module.exports = {
   },
 
   /**
-   * @name MISSING_URL
+   * @typedef MISSING_URL
    * @type {object}
    * @description Please provide URL
    * @property {number} code 1006
@@ -181,7 +181,7 @@ module.exports = {
   },
 
   /**
-   * @name INVALID_URL
+   * @typedef INVALID_URL
    * @type {object}
    * @description Please provide URL in string format.
    * @property {number} code 1007
@@ -193,7 +193,7 @@ module.exports = {
   },
 
   /**
-   * @name MISSING_AUTH_URI
+   * @typedef MISSING_AUTH_URI
    * @type {object}
    * @description Thrown when attempting to connect without authorisation URI.
    * @property {number} code 1008
@@ -205,7 +205,7 @@ module.exports = {
   },
 
   /**
-   * @name NON_AUTH_GRANTED_URI
+   * @typedef NON_AUTH_GRANTED_URI
    * @type {object}
    * @description Thrown when attempting extract granted access permissions
    * from a URI which doesn't contain such information.
@@ -218,7 +218,7 @@ module.exports = {
   },
 
   /**
-   * @name INVALID_PERM
+   * @typedef INVALID_PERM
    * @type {object}
    * @description Thrown when invalid permission is requested on container.
    * @property {number} code 1010
@@ -230,7 +230,7 @@ module.exports = {
   },
 
   /**
-   * @name MISSING_CONTAINER_STRING
+   * @typedef MISSING_CONTAINER_STRING
    * @type {object}
    * @description Thrown when attempting to get a container without specifying name with a string.
    * @property {number} code 1011
@@ -242,7 +242,7 @@ module.exports = {
   },
 
   /**
-   * @name NON_DEV
+   * @typedef NON_DEV
    * @type {object}
    * @description Thrown when functions unique to testing environment are attempted  to be used.
    * @property {number} code 1012
@@ -256,7 +256,7 @@ module.exports = {
   },
 
   /**
-   * @name MISSING_PUB_ENC_KEY
+   * @typedef MISSING_PUB_ENC_KEY
    * @type {object}
    * @description Thrown when public encryption key is not provided as necessary function argument.
    * @property {number} code 1013
@@ -273,7 +273,7 @@ module.exports = {
   },
 
   /**
-   * @name MISSING_SEC_ENC_KEY
+   * @typedef MISSING_SEC_ENC_KEY
    * @type {object}
    * @description Thrown when secret encryption key is not provided as necessary function argument.
    * @property {number} code 1014
@@ -288,7 +288,7 @@ module.exports = {
   },
 
   /**
-   * @name LOGGER_INIT_ERROR
+   * @typedef LOGGER_INIT_ERROR
    * @type {object}
    * @description Logger initialisation failed.
    * @property {number} code 1015
@@ -300,7 +300,7 @@ module.exports = {
   },
 
   /**
-   * @name CONFIG_PATH_ERROR
+   * @typedef CONFIG_PATH_ERROR
    * @type {object}
    * @description Informs you when config search path has failed to set, with specific reason.
    * @property {number} code 1016
@@ -312,7 +312,7 @@ module.exports = {
   },
 
   /**
-   * @name XOR_NAME
+   * @typedef XOR_NAME
    * @type {object}
    * @description Custom name used to create public or private
    * MutableData must be 32 bytes in length.
@@ -325,7 +325,7 @@ module.exports = {
   },
 
   /**
-   * @name NONCE
+   * @typedef NONCE
    * @type {object}
    * @description Any string or buffer provided to private MutableData
    * that is not 24 bytes in length will throw error.
@@ -338,7 +338,7 @@ module.exports = {
   },
 
   /**
-   * @name TYPE_TAG_NAN
+   * @typedef TYPE_TAG_NAN
    * @type {object}
    * @description Tag argument when creating private or public MutableData must be a number.
    * @property {number} code 1019
@@ -350,7 +350,7 @@ module.exports = {
   },
 
   /**
-   * @name INVALID_SEC_KEY
+   * @typedef INVALID_SEC_KEY
    * @type {object}
    * @description Secret encryption key of improper length is provided to custom private MutableData
    * @property {number} code 1020
@@ -362,7 +362,7 @@ module.exports = {
   },
 
   /**
-   * @name EXPERIMENTAL_API_DISABLED
+   * @typedef EXPERIMENTAL_API_DISABLED
    * @type {object}
    * @description Thrown when functions that are experimental APIs were
    * not enabled but attempted to be used
@@ -378,7 +378,7 @@ module.exports = {
   },
 
   /**
-   * @name @ERR_SERVICE_NOT_FOUND
+   * @typedef ERR_SERVICE_NOT_FOUND
    * @type {Object}
    * @description the service/subname was not found
    * @property {number} code 1022
@@ -390,7 +390,7 @@ module.exports = {
   },
 
   /**
-   * @name @ERR_CONTENT_NOT_FOUND
+   * @typedef ERR_CONTENT_NOT_FOUND
    * @type {Object}
    * @description the content was not found at the address provided
    * @property {number} code 1023
@@ -402,7 +402,7 @@ module.exports = {
   },
 
   /**
-   * @name @INVALID_RDF_LOCATION
+   * @typedef INVALID_RDF_LOCATION
    * @type {Object}
    * @description RDF Location provided is not and object with name/typeTag
    * @property {number} code 1024
@@ -414,7 +414,7 @@ module.exports = {
   },
 
   /**
-   * @name @INVALID_PUBNAME
+   * @typedef INVALID_PUBNAME
    * @type {Object}
    * @description public name provided is not valid
    * @property {number} code 1025
@@ -426,7 +426,7 @@ module.exports = {
   },
 
   /**
-   * @name @INVALID_SUBNAME
+   * @typedef INVALID_SUBNAME
    * @type {Object}
    * @description RDF Location provided is not and object with name/typeTag
    * @property {number} code 1026
@@ -438,7 +438,7 @@ module.exports = {
   },
 
   /**
-   * @name @MISSING_RDF_ID
+   * @typedef MISSING_RDF_ID
    * @type {Object}
    * @description RDF object does not have an ID.
    * @property {number} code 1027

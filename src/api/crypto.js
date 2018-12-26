@@ -17,14 +17,26 @@ const errConst = require('../error_const');
 const makeError = require('../native/_error.js');
 
 /**
-* Holds the public part of an encryption key
-*/
+ * Holds the public part of an encryption key pair
+ * @hideconstructor
+ */
 class PubEncKey extends h.NetworkObject {
 
   /**
-  * generate raw string copy of public encryption key
-  * @returns {Promise<Buffer>}
-  */
+   * Generate raw buffer of public encryption key
+   * @returns {Promise<Buffer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const pubEncKey = encKeyPair.pubEncKey;
+   *     const rawPubEncKey = await pubEncKey.getRaw();
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
   getRaw() {
     return lib.enc_pub_key_get(this.app.connection, this.ref);
   }
@@ -40,33 +52,73 @@ class PubEncKey extends h.NetworkObject {
   }
 
   /**
-  * Encrypt the input (buffer or string) using the private and public key with a seal
-  * @returns {Promise<Buffer>} Ciphertext
-  */
-  encryptSealed(str) {
-    return lib.encrypt_sealed_box(this.app.connection, str, this.ref);
+   * Encrypt the input using recipient's public key. Only recipient will be able to decrypt data. Read more about [sealed boxes]{@link https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes}.
+   * @param {String|Buffer} data
+   * @returns {Promise<Buffer>} Encrypted data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const stringOrBuffer = 'plain string to be encrypted';
+   *     try {
+   *       const rawPubEncKey = Buffer.from(<recipient's public encryption key>);
+   *       const pubEncKey = await app.crypto.pubEncKeyFromRaw(rawPubEncKey.buffer);
+   *       const encryptedData = await pubEncKey.encryptSealed(data);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  encryptSealed(data) {
+    return lib.encrypt_sealed_box(this.app.connection, data, this.ref);
   }
 
   /**
-  * Decrypt the given cipher text (buffer or string) using this public
-  * encryption key and the given secret key
-  *
-  * @arg {Buffer} cipher to decrypt
-  * @arg {SecEncKey} secretEncKey secret encryption key
-  * @returns {Promise<Buffer>} plain text
-  */
+   * Decrypt the given cipher text using the sender's public encryption key and the recipient's secret encryption key. Read more about [authenticated encryption]{@link https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption}.
+   *
+   * @arg {Buffer} cipher Encrypted data
+   * @arg {SecEncKey} secretEncKey Recipient's secret encryption key
+   * @returns {Promise<Buffer>} Decrypted data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const cipher = 'plain text to be encrypted';
+   *     try {
+   *       const encKeyPair = await app.crypto.generateEncKeyPair();
+   *       const rawPubEncKey = Buffer.from(<sender's public encryption key>);
+   *       const pubEncKey = await app.crypto.pubEncKeyFromRaw(rawPubEncKey.buffer);
+   *       const secretEncKey = encKeyPair.secEncKey;
+   *       const decryptedData = await pubEncKey.decrypt(cipher, secretEncKey)
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
   decrypt(cipher, secretEncKey) {
     return lib.decrypt(this.app.connection, cipher, this.ref, secretEncKey.ref);
   }
 
   /**
-  * Encrypt the input (buffer or string) using this public encryption key
-  * and the given secret key.
-  *
-  * @param {Buffer} data to be encrypted
-  * @param {SecEncKey} secretEncKey secret encrpytion key
-  * @returns {Promise<Buffer>} cipher text
-  */
+   * Encrypt the input using recipient's public encryption key and sender's secret encryption key, such that each party can generate a shared secret key to verify the integrity of ciphers and to also decrypt them. Read more about [authenticated encryption]{@link https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption}.
+   *
+   * @param {Buffer|String} data
+   * @param {SecEncKey} secretEncKey Sender's secret encryption key
+   * @throws {MISSING_SEC_ENC_KEY}
+   * @returns {Promise<Buffer>} Encrypted data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const data = 'plain text to be encrypted';
+   *     try {
+   *       const encKeyPair = await app.crypto.generateEncKeyPair();
+   *       const rawPubEncKey = Buffer.from(<recipient's public encryption key>);
+   *       const pubEncKey = await app.crypto.pubEncKeyFromRaw(rawPubEncKey.buffer);
+   *       const secretEncKey = encKeyPair.secEncKey;
+   *       const encryptedBuffer = await pubEncKey.encrypt(data, secretEncKey)
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
   encrypt(data, secretEncKey) {
     if (!secretEncKey) {
       throw makeError(errConst.MISSING_SEC_ENC_KEY.code, errConst.MISSING_SEC_ENC_KEY.msg(32));
@@ -78,13 +130,25 @@ class PubEncKey extends h.NetworkObject {
 
 /**
 * Holds the secret part of an encryption key
+* @hideconstructor
 */
 class SecEncKey extends h.NetworkObject {
 
   /**
-  * generate raw string copy of secret encryption key
-  * @returns {Promise<Buffer>}
-  */
+   * Generate raw buffer of secret encryption key
+   * @returns {Promise<Buffer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const secEncKey = encKeyPair.secEncKey;
+   *     const rawSecEncKey = await secEncKey.getRaw();
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
   getRaw() {
     return lib.enc_secret_key_get(this.app.connection, this.ref);
   }
@@ -100,17 +164,31 @@ class SecEncKey extends h.NetworkObject {
   }
 
   /**
-  * Decrypt the given cipher text (buffer or string) using this secret
-  * encryption key and the given public key
-  *
-  * An example use case for this method is if you have received messages from multiple
-  * senders, you may fetch your secret key once, then iterate over the messages along
-  * with passing associated public encryption key to decrypt each message.
-  *
-  * @arg {Buffer} cipher to decrypt
-  * @arg {PubEncKey} publicEncKey public encryption key
-  * @returns {Promise<Buffer>} plain text
-  */
+   * Decrypt the given encrypted data using the sender's public encryption key and the recipient's secret encryption key. Read more about [authenticated encryption]{@link https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption}.
+   *
+   * An example use case for this method is if you have received messages from multiple
+   * senders, you may fetch your secret key once, then iterate over the messages
+   * passing each associated public encryption key to decrypt each message.
+   *
+   * @arg {Buffer} cipher Encrypted data
+   * @arg {PubEncKey} publicEncKey Sender's public encryption key
+   * @throws {MISSING_PUB_ENC_KEY}
+   * @returns {Promise<Buffer>} Decrypted data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const cipher = 'plain text to be encrypted';
+   *     try {
+   *       const encKeyPair = await app.crypto.generateEncKeyPair();
+   *       const rawPubEncKey = Buffer.from(<sender's public encryption key>);
+   *       const pubEncKey = await app.crypto.pubEncKeyFromRaw(rawPubEncKey.buffer);
+   *       const secretEncKey = encKeyPair.secEncKey;
+   *       const decryptedData = await pubEncKey.decrypt(cipher, secretEncKey)
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
   decrypt(cipher, publicEncKey) {
     if (!publicEncKey) {
       throw makeError(errConst.MISSING_PUB_ENC_KEY.code, errConst.MISSING_PUB_ENC_KEY.msg);
@@ -119,17 +197,26 @@ class SecEncKey extends h.NetworkObject {
   }
 
   /**
-  * Encrypt the input (buffer or string) using this secret encryption key
-  * and the recipient's public key
-  *
-  * An example use case for this method is if you have multiple intended recipients.
-  * You can fetch your secret key once, then use this method to iterate over
-  * recipient public encryption keys, encrypting data for each key.
-  *
-  * @param {Buffer} data to be encrypted
-  * @param {PubEncKey} recipientPubKey recipient's public encryption key
-  * @returns {Promise<Buffer>} cipher text
-  */
+   * Encrypt the input using recipient's public encryption key and sender's secret encryption key, such that each party can generate a shared secret key to verify the integrity of ciphers and to also decrypt them. Read more about [authenticated encryption]{@link https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption}.
+   *
+   * @param {Buffer|String} data
+   * @param {PubEncKey} recipientPubKey Recipient's public encryption key
+   * @returns {Promise<Buffer>} Encrypted data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const data = 'plain text to be encrypted';
+   *     try {
+   *       const encKeyPair = await app.crypto.generateEncKeyPair();
+   *       const rawPubEncKey = Buffer.from(<recipient's public encryption key>);
+   *       const recipientPubKey = await app.crypto.pubEncKeyFromRaw(rawPubEncKey.buffer);
+   *       const secEncKey = encKeyPair.secEncKey;
+   *       const encryptedBuffer = await secEncKey.encrypt(data, recipientPubKey)
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
   encrypt(data, recipientPubKey) {
     return lib.encrypt(this.app.connection, data, recipientPubKey.ref, this.ref);
   }
@@ -137,10 +224,13 @@ class SecEncKey extends h.NetworkObject {
 
 
 /**
-* Holds an asymmetric encryption keypair
+* Asymmetric encryption keypair
 */
 class EncKeyPair {
 
+  /**
+  * @hideconstructor
+  */
   constructor(app, pub, secret) {
     this.app = app;
     this._public = pub;
@@ -149,27 +239,58 @@ class EncKeyPair {
 
 
   /**
-  * get the Public Encryption key instance of this keypair
-  * @returns {PubEncKey}
-  */
+   * Get the public encryption key instance of this keypair
+   * @returns {PubEncKey}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const pubEncKey = encKeyPair.pubEncKey;
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
   get pubEncKey() {
     return this._public;
   }
 
 
   /**
-  * get the Secrect Encryption key instance of this keypair
-  * @returns {secEncKey}
-  */
+   * Get the secret encryption key instance of this keypair
+   * @returns {secEncKey}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const secEncKey = encKeyPair.secEncKey;
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
   get secEncKey() {
     return this._secret;
   }
 
   /**
-  * Decrypt the given cipher text with a seal (buffer or string) using
-  * this encryption key pair
-  * @returns {Promise<Buffer>} plain text
-  */
+   * Decrypt the input using this generated encryption key pair. Only recipient will be able to decrypt data. Read more about [sealed boxes]{@link https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes}.
+   * @param {String|Buffer} cipher Encrypted data
+   * @returns {Promise<Buffer>} Decrypted data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const cipher = <Encrypted data as sealed box>;
+   *     try {
+  *        const encKeyPair = await app.crypto.generateEncKeyPair();
+   *       const decryptedData = await encKeyPair.decryptSealed(cipher);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
   decryptSealed(cipher) {
     return lib.decrypt_sealed_box(this.app.connection, cipher,
                                   this.pubEncKey.ref, this.secEncKey.ref);
@@ -177,14 +298,26 @@ class EncKeyPair {
 }
 
 /**
-* Holds the public part of a sign key
+* Holds the public part of a sign key pair
+* @hideconstructor
 */
 class PubSignKey extends h.NetworkObject {
 
   /**
-  * generate raw string copy of public sign key
-  * @returns {Promise<Buffer>}
-  */
+   * Generate raw buffer of public sign key.
+   * @returns {Promise<Buffer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const signKeyPair = await app.crypto.generateSignKeyPair();
+   *         const pubSignKey = signKeyPair.pubSignKey;
+   *         const rawPubSignKey = await pubSignKey.getRaw();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   getRaw() {
     return lib.sign_pub_key_get(this.app.connection, this.ref);
   }
@@ -200,24 +333,47 @@ class PubSignKey extends h.NetworkObject {
   }
 
   /**
-  * Verify the given signed data (buffer or string) using the public sign key
-  * @param {Buffer} data to verify signature
-  * @returns {Promise<Buffer>}
-  */
+   * Verify the given signed data using the public sign key
+   * @param {Buffer} data Signed data to be verified
+   * @returns {Promise<Buffer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *       const signKeyPair = await app.crypto.generateSignKeyPair();
+   *       const pubSignKey = signKeyPair.pubSignKey;
+   *       const verifiedData = await pubSignKey.verify(data);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
   verify(data) {
     return lib.verify(this.app.connection, data, this.ref);
   }
 }
 
 /**
-* Holds the secret part of a sign key
+* Holds the secret part of a sign key pair
+* @hideconstructor
 */
 class SecSignKey extends h.NetworkObject {
 
   /**
-  * generate raw string copy of secret sign key
-  * @returns {Promise<Buffer>}
-  */
+   * Generate raw buffer of secret sign key
+   * @returns {Promise<Buffer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const secSignKey = encKeyPair.secSignKey;
+   *     const rawSecSignKey = await secSignKey.getRaw();
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
   getRaw() {
     return lib.sign_sec_key_get(this.app.connection, this.ref);
   }
@@ -233,17 +389,30 @@ class SecSignKey extends h.NetworkObject {
   }
 
   /**
-  * Sign the given data (buffer or string) using the secret sign key
-  * @param {Buffer} data to sign
-  * @returns {Promise<Buffer>} signed data
-  */
+   * Sign the given data (buffer or string) using the secret sign key
+   * @param {Buffer} data to sign
+   * @returns {Promise<Buffer>} signed data
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const data = 'Information to be signed';
+   *     try {
+   *       const encKeyPair = await app.crypto.generateEncKeyPair();
+   *       const secSignKey = encKeyPair.secSignKey;
+   *       const signedData = await secSignKey.sign(data);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
   sign(data) {
     return lib.sign(this.app.connection, data, this.ref);
   }
 }
 
 /**
-* Holds a sign key pair
+* Signing keypair
+* @hideconstructor
 */
 class SignKeyPair {
 
@@ -255,72 +424,121 @@ class SignKeyPair {
 
 
   /**
-  * get the public sign key instance of this key pair
-  * @returns {PubSignKey}
-  */
+   * get the public sign key instance of this key pair
+   * @returns {PubSignKey}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const pubSignKey = signKeyPair.pubSignKey;
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
   get pubSignKey() {
     return this._public;
   }
 
 
   /**
-  * get the secrect sign key instance of this key pair
-  * @returns {SecSignKey}
-  */
+   * get the secrect sign key instance of this key pair
+   * @returns {SecSignKey}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *     const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     const secSignKey = await signKeyPair.secSignKey;
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
   get secSignKey() {
     return this._secret;
   }
 }
 
 /**
-* Encryption functionality for the app
-*
-* Access it through your {SAFEApp} instance under `app.crypto`
-*/
+ * Contains all cryptographic related functionality
+ */
 class CryptoInterface {
 
   /**
-  * @private
-  * @param {SAFEApp} app
-  */
+   * @hideconstructor
+   */
   constructor(app) {
     this.app = app;
   }
 
   /**
-  * Hash the given input with SHA3 Hash
-  * @returns {Promise<Buffer>}
-  */
-  /* eslint-disable class-methods-use-this */
-  sha3Hash(data) {
+   * Hash the given input with SHA3 Hash
+   * @returns {Promise<Buffer>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const hashedString = await app.crypto.sha3Hash('1010101010101')
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  sha3Hash(data) { // eslint-disable-line class-methods-use-this
     return lib.sha3_hash(data);
   }
 
-  /* eslint-enable class-methods-use-this */
-
-
   /**
-  * Get the public signing key of this session
-  * @returns {Promise<SignKey>}
-  */
+   * Get current app's public signing key
+   * @returns {Promise<PubSignKey>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const pubSignKey = await app.crypto.getAppPubSignKey();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   getAppPubSignKey() {
     return lib.app_pub_sign_key(this.app.connection)
         .then((c) => h.autoref(new PubSignKey(this.app, c)));
   }
 
   /**
-  * Get the public encryption key of this session
-  * @returns {Promise<PubEncKey>}
-  */
+   * Get current app's public encryption key
+   * @returns {Promise<PubEncKey>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const pubEncKey = await app.crypto.getAppPubEncKey();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   getAppPubEncKey() {
     return lib.app_pub_enc_key(this.app.connection)
         .then((c) => h.autoref(new PubEncKey(this.app, c)));
   }
 
   /**
-  * Generate a new Asymmetric Encryption Key Pair
-  * @returns {Promise<EncKeyPair>}
-  */
+   * Generate a new asymmetric encryption key pair
+   * @returns {Promise<EncKeyPair>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const encKeyPair = await app.crypto.generateEncKeyPair();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   generateEncKeyPair() {
     return lib.enc_generate_key_pair(this.app.connection)
         .then((r) => new EncKeyPair(this.app,
@@ -330,9 +548,18 @@ class CryptoInterface {
   }
 
   /**
-  * Generate a new Sign Key Pair (public & private keys).
-  * @returns {Promise<SignKeyPair>}
-  */
+   * Generate a new sign key pair
+   * @returns {Promise<SignKeyPair>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const signKeyPair = await app.crypto.generateSignKeyPair();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   generateSignKeyPair() {
     return lib.sign_generate_key_pair(this.app.connection)
         .then((r) => new SignKeyPair(this.app,
@@ -342,9 +569,26 @@ class CryptoInterface {
   }
 
   /**
-  * Generate a new Asymmetric Encryption Key Pair from raw secret and public keys
-  * @returns {Promise<EncKeyPair>}
-  */
+   * Generate asymmetric encryption key pair instance from raw keys
+   * @returns {Promise<EncKeyPair>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         let encKeyPair = await app.crypto.generateEncKeyPair();
+   *         const pubEncKey = encKeyPair.pubEncKey;
+   *         const secEncKey = encKeyPair.secEncKey;
+   *         const rawPubEncKey = await pubEncKey.getRaw();
+   *         const rawSecEncKey = await secEncKey.getRaw();
+   *         encKeyPair = await app.crypto.generateEncKeyPairFromRaw(
+   *             rawPubEncKey.buffer,
+   *             rawSecEncKey.buffer
+   *         );
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   generateEncKeyPairFromRaw(rawPublicKey, rawSecretkey) {
     let pubKey;
     return this.pubEncKeyFromRaw(rawPublicKey)
@@ -354,9 +598,26 @@ class CryptoInterface {
   }
 
   /**
-  * Generate a new Sign Key Pair from raw secret and public keys
-  * @returns {Promise<SignKeyPair>}
-  */
+   * Generate sign key pair from raw keys
+   * @returns {Promise<SignKeyPair>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         let signKeyPair = await app.crypto.generateSignKeyPair();
+   *         const pubSignKey = signKeyPair.pubSignKey;
+   *         const secSignKey = signKeyPair.secSignKey;
+   *         const rawPubSignKey = await pubSignKey.getRaw();
+   *         const rawSecSignKey = await secSignKey.getRaw();
+   *         signKeyPair = await app.crypto.generateSignKeyPairFromRaw(
+   *             rawPubSignKey.buffer,
+   *             rawSecSignKey.buffer
+   *         );
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   generateSignKeyPairFromRaw(rawPublicKey, rawSecretkey) {
     let pubKey;
     return this.pubSignKeyFromRaw(rawPublicKey)
@@ -366,51 +627,107 @@ class CryptoInterface {
   }
 
   /**
-  * Interprete the Public Sign Key from a given raw string
-  * @param {String} raw public sign key raw bytes as string
-  * @returns {Promise<PubSignKey>}
-  */
-  pubSignKeyFromRaw(raw) {
-    return lib.sign_pub_key_new(this.app.connection, raw)
+   * Generates a public sign key instance from a raw buffer
+   * @param {Buffer} rawPubSignKey
+   * @returns {Promise<PubSignKey>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const signKeyPair = await app.crypto.generateSignKeyPair();
+   *         let pubSignKey = signKeyPair.pubSignKey;
+   *         const rawPubSignKey = await pubSignKey.getRaw();
+   *         pubSignKey = await app.crypto.pubSignKeyFromRaw(rawPubSignKey.buffer);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  pubSignKeyFromRaw(rawPubSignKey) {
+    return lib.sign_pub_key_new(this.app.connection, rawPubSignKey)
         .then((c) => h.autoref(new PubSignKey(this.app, c)));
   }
 
   /**
-  * Interprete the Secret Sign Key from a given raw string
-  * @param {String} raw secret sign key raw bytes as string
-  * @returns {Promise<SecSignKey>}
-  */
-  secSignKeyFromRaw(raw) {
-    return lib.sign_sec_key_new(this.app.connection, raw)
+   * Generates a secret sign key from a raw buffer
+   * @param {Buffer} rawSecSignKey
+   * @returns {Promise<SecSignKey>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const signKeyPair = await app.crypto.generateSignKeyPair();
+   *         let secSignKey = signKeyPair.secSignKey;
+   *         const rawSecSignKey = await secSignKey.getRaw();
+   *         secSignKey = await app.crypto.secSignKeyFromRaw(rawSecSignKey.buffer);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  secSignKeyFromRaw(rawSecSignKey) {
+    return lib.sign_sec_key_new(this.app.connection, rawSecSignKey)
         .then((c) => h.autoref(new SecSignKey(this.app, c)));
   }
 
   /**
-  * Interprete the public encryption Key from a given raw string
-  * @arg {String} raw public encryption key raw bytes as string
-  * @returns {Promise<PubEncKey>}
-  */
-  pubEncKeyFromRaw(raw) {
-    return lib.enc_pub_key_new(this.app.connection, raw)
+   * Generates a public encryption key instance from raw buffer
+   * @arg {Buffer} rawPubEncKey
+   * @returns {Promise<PubEncKey>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const encKeyPair = await app.crypto.generateEncKeyPair();
+   *         let pubEncKey = encKeyPair.pubEncKey;
+   *         const rawPubEncKey = await pubEncKey.getRaw();
+   *         pubEncKey = await app.crypto.pubEncKeyFromRaw(rawPubEncKey.buffer);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  pubEncKeyFromRaw(rawPubEncKey) {
+    return lib.enc_pub_key_new(this.app.connection, rawPubEncKey)
         .then((c) => h.autoref(new PubEncKey(this.app, c)));
   }
 
   /**
-  * Interprete the secret encryption Key from a given raw string
-  * @arg {String} raw secret encryption key raw bytes as string
-  * @returns {Promise<SecEncKey>}
-  */
+   * Generates a secret encryption key instance from raw buffer
+   * @arg {Buffer} raw secret encryption key raw bytes as string
+   * @returns {Promise<SecEncKey>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const encKeyPair = await app.crypto.generateEncKeyPair();
+   *         let secEncKey = encKeyPair.secEncKey;
+   *         const rawSecEncKey = await secEncKey.getRaw();
+   *         secEncKey = await app.crypto.secEncKeyFromRaw(rawSecEncKey.buffer);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   secEncKeyFromRaw(raw) {
     return lib.enc_secret_key_new(this.app.connection, raw)
         .then((c) => h.autoref(new SecEncKey(this.app, c)));
   }
 
   /**
-  * Generate a nonce that can be used when creating private MutableData
-  * @returns {Promise<Nonce>} the nonce generated
-  */
-  /* eslint-disable class-methods-use-this */
-  generateNonce() {
+   * Generate a nonce that can be used when creating private {@link MutableData}
+   * @returns {Promise<Nonce>} the nonce generated
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const nonce = await app.crypto.generateNonce();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  generateNonce() { // eslint-disable-line class-methods-use-this
     return lib.generate_nonce();
   }
 }

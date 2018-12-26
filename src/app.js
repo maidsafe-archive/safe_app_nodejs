@@ -77,21 +77,49 @@ const setSearchPath = (options) => {
 };
 
 /**
- * Holds one sessions with the network and is the primary interface to interact
- * with the network. As such it also provides all API-Providers connected through
- * this session.
+ * Holds a session with the network and is the primary interface to interact
+ * with the network
+ * @example
+ * const safe = require( '@maidsafe/safe-node-app' );
+ *
+ * const appInfo = {
+ *     id     : 'net.maidsafe.example',
+ *     name   : 'Example SAFE App',
+ *     vendor : 'MaidSafe.net Ltd'
+ * };
+ *
+ * const networkStateCallback = (state) => {
+ *     console.log('Network state change event: ', state);
+ * };
+ *
+ * const initialisationOptions = {
+ *     log            : true,
+ *     registerScheme : false
+ * };
+ *
+ * const asyncFn = async () => {
+ *     try {
+ *         const app = await safe.initialiseApp(
+ *             appInfo,
+ *             networkStateCallBack,
+ *             initialisationOptions
+ *         );
+ *     } catch (err) {
+ *         throw err;
+ *     }
+ * };
  */
 class SAFEApp extends EventEmitter {
 
   /**
-  * @private
-  * Initiate a new App instace. Wire up all the API's and set up the
+  * @hideconstructor
+  * Initiate a new SAFEApp instance. Wire up all the API's and set up the
   * authentication URI-handler with the system.
   *
   * @param {AppInfo} appInfo
   * @param {Function} [networkStateCallBack=null] optional callback function
   * to receive network state updates
-  * @param {InitOptions} initilalisation options
+  * @param {InitOptions} [options] initilalisation options
   */
   constructor(appInfo, networkStateCallBack, options) {
     super();
@@ -141,87 +169,245 @@ class SAFEApp extends EventEmitter {
     await setSearchPath(this.options);
   }
 
-
   /**
-  * get the AuthInterface instance connected to this session
-  * @returns {AuthInterface}
-  */
+   * Get an {@link AuthInterface} instance
+   * @returns {AuthInterface}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const app = await safe.initialiseApp(appInfo);
+   *         const auth = app.auth;
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   get auth() {
     return this._auth;
   }
 
   /**
-   * Get the Web API interface
-   * @return {WebInterface} Manage Web RDF Data.
+   * Get a {@link WebInterface} interface
+   * @returns {WebInterface}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const app = await safe.initialiseApp(appInfo);
+   *         const web = app.web;
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
    */
   get web() {
     return this._web;
   }
 
   /**
-  * get the Crypto instance connected to this session
-  * @returns {CryptoInterface}
-  */
+   * Get a {@link CryptoInterface} interface
+   * @returns {CryptoInterface}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const app = await safe.initialiseApp(appInfo);
+   *         const crypto = app.crypto;
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   get crypto() {
     return this._crypto;
   }
 
   /**
-  * get the CipherOptInterface instance connected to this session
-  * @returns {CipherOptInterface}
-  */
+   * Get a {@link CipherOptInterface} interface
+   * @returns {CipherOptInterface}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const app = await safe.initialiseApp(appInfo);
+   *         const cipherOpt = app.cipherOpt;
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   get cipherOpt() {
     return this._cipherOpt;
   }
 
   /**
-  * get the ImmutableDataInterface instance connected to this session
-  * @returns {ImmutableDataInterface}
-  */
+   * Get an {@link ImmutableDataInterface}
+   * @returns {ImmutableDataInterface}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const app = await safe.initialiseApp(appInfo);
+   *         const immutableData = app.immutableData;
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   get immutableData() {
     return this._immutableData;
   }
 
   /**
-  * get the MutableDataInterface instance connected to this session
-  * @returns {MutableDataInterface}
-  */
+   * Get a {@link MutableDataInterface}
+   * @returns {MutableDataInterface}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const app = await safe.initialiseApp(appInfo);
+   *         const mutableData = app.mutableData;
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   get mutableData() {
     return this._mutableData;
   }
 
   /**
-  * Function to lookup a given `safe://`-URL in accordance with the
-  * public name resolution and find the requested network resource.
-  *
-  * @param {String} url the url you want to fetch
-  * @param {WebFetchOptions} [options=null] additional options
-  * @returns {Promise<Object>} the object with body of content and headers
-  */
+   * Function to lookup a given `safe://`-URL in accordance with the
+   * public name resolution and find the requested network resource.
+   *
+   * @param {String} url the url you want to fetch
+   * @param {WebFetchOptions} [options=null] additional options
+   * @throws {ERR_SERVICE_NOT_FOUND|ERR_NO_SUCH_DATA|ERR_CONTENT_NOT_FOUND
+   * |ERR_NO_SUCH_ENTRY|ERR_FILE_NOT_FOUND|MISSING_URL|INVALID_URL}
+   * @returns {Promise<{ body: Buffer, headers: Object }>}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   const app = await safe.initialiseApp(appInfo);
+   *   const unRegisteredUri = await app.auth.genConnUri();
+   *   await app.auth.loginFromUri(unRegisteredUri);
+   *   const webFetchOptions = {
+   *       range: {
+   *           start:safe.CONSTANTS.NFS_FILE_START,
+   *           end: safe.CONSTANTS.NFS_FILE_END
+   *       }
+   *   };
+   *   try {
+   *     const data = await app.webFetch(
+   *       'safe://home.safenetwork',
+   *       webFetchOptions
+   *     );
+   *     // Alternatively, fetch an ImmutableData XOR-URL such as:
+   *     // safe://hygkdkftyhkmzma5cjwgcghws9hyorcucqyqna1uaje68hyquah7nd9kh3rjy
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
   webFetch(url, options) {
     return webFetch.call(this, url, options);
   }
 
   /**
-  * Experipental function to lookup a given `safe://`-URL in accordance with the
-  * public name resolution and find the requested network resource.
-  *
-  * @param {String} url the url you want to fetch
-  * @returns {Promise<NetworkResource>} the network resource found from the passed URL
-  */
+   * Experimental function to lookup a given `safe://`-URL in accordance with the
+   * public name resolution and find the requested network resource.
+   *
+   * @param {String} url the url you want to fetch
+   * @throws {ERR_SERVICE_NOT_FOUND|ERR_NO_SUCH_DATA|ERR_CONTENT_NOT_FOUND
+   * |ERR_NO_SUCH_ENTRY|ERR_FILE_NOT_FOUND|MISSING_URL|INVALID_URL}
+   * @returns {Promise<NetworkResource>} the network resource found from the passed URL
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   // If you have an XOR-URL with a type tag, and therefore represents MutableData,
+   *   // use this operation to fetch an interface to the underlying data structure.
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const unRegisteredUri = await app.auth.genConnUri();
+   *     await app.auth.loginFromUri(unRegisteredUri);
+   *     const data = await app.fetch(
+   *         'safe://hyfktcerbwpctjz6ws8468hncw1ddpzrz65z3mapzx9wr413r7gj3w6yt5y:15001'
+   *     );
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
   fetch(url) {
     return fetch.call(this, url);
   }
 
   /**
-  * @private
-  * Replace the connection to the native layer. When there is already one
-  * set up for the current app, free it on the native layer. Should only be
-  * used at startup/beginning as it will devaluate all handlers that might
-  * still be around after switching.
-  *
-  * @param {Pointer} conn the pointer to the native object
-  */
+   * @private
+   * Replace the connection to the native layer. When there is already one
+   * set up for the current app, free it on the native layer. Should only be
+   * used at startup/beginning as it will devaluate all handlers that might
+   * still be around after switching.
+   *
+   * @param {Pointer} conn the pointer to the native object
+   */
   set connection(conn) {
     if (this._connection) {
       lib.app_free(this._connection);
@@ -230,9 +416,27 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
-  * The current connection object hold on the Rust-Side
-  * @returns {Pointer}
-  */
+   * Returns pointer to current connection object held in memory.
+   * @throws {SETUP_INCOMPLETE}
+   * @returns {Pointer}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const connection = app.connection;
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
   get connection() {
     if (!this._connection) {
       throw makeError(errConst.SETUP_INCOMPLETE.code, errConst.SETUP_INCOMPLETE.msg);
@@ -251,10 +455,27 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
-  * Textual representation of the current network connection state.
-  *
-  * @returns {String} current network connection state
-  */
+   * Textual representation of the current network connection state.
+   *
+   * @returns {String} current network connection state
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const networkState = app.networkState;
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
   get networkState() {
     // Although it should never happen, if the state code is invalid
     // we return the current network conn state as 'Unknown'.
@@ -276,51 +497,136 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
-  * Returns true if current network connection state is INIT.
-  * This is state means the library has been initialised but there is no
-  * connection made with the network yet.
-  *
-  * @returns {Boolean}
-  */
+   * Returns true if current network connection state is INIT.
+   * This is state means the library has been initialised but there is no
+   * connection made with the network yet.
+   *
+   * @returns {Boolean}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const isNetStateInit = app.isNetStateInit();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
   isNetStateInit() {
     return this._networkState === consts.NET_STATE_INIT;
   }
 
   /**
-  * Returns true if current network connection state is CONNECTED.
-  *
-  * @returns {Boolean}
-  */
+   * Returns true if current network connection state is CONNECTED.
+   *
+   * @returns {Boolean}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const isNetStateConnected = app.isNetStateConnected();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
   isNetStateConnected() {
     return this._networkState === consts.NET_STATE_CONNECTED;
   }
 
   /**
-  * Returns true if current network connection state is DISCONNECTED.
-  *
-  * @returns {Boolean}
-  */
+   * Returns true if current network connection state is DISCONNECTED.
+   *
+   * @returns {Boolean}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const isNetStateDisconnected = app.isNetStateDisconnected();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
   isNetStateDisconnected() {
     return this._networkState === consts.NET_STATE_DISCONNECTED;
   }
 
   /**
-  * The current appInfo
-  */
+   * Returns the {@link AppInfo} used to initialise current app.
+   * @returns {AppInfo}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const appInfo = app.appInfo;
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
   get appInfo() {
     return this._appInfo;
   }
 
   /**
-  * Generate the log path for the provided filename.
-  * If the filename provided is null, it then returns
-  * the path of where the safe_core log file is located.
-  * @param {String} [logFilename=null] optional log filename to generate the path
-  *
-  * @returns {Promise<String>}
-  */
-  /* eslint-disable class-methods-use-this */
-  logPath(logFilename) {
+   * Generate the log path for the provided filename.
+   * If the filename provided is null, it then returns
+   * the path of where the safe_core log file is located.
+   * @param {String} [logFilename] optional log filename to generate the path
+   *
+   * @returns {Promise<String>}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const logPath = await app.logPath();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  logPath(logFilename) { // eslint-disable-line class-methods-use-this
     const filename = logFilename;
     if (!logFilename) {
       return Promise.resolve(SAFEApp.logFilePath);
@@ -331,30 +637,48 @@ class SAFEApp extends EventEmitter {
   /**
   * @typedef {Object} AccountInfo
   * Holds the information about the account.
-  * @param {Number} mutations_done - number of mutations performed
+  * @property {Number} mutations_done - number of mutations performed
   * with this account
-  * @param {Number} mutations_available - number of remaining mutations
+  * @property {Number} mutations_available - number of remaining mutations
   * allowed for this account
   */
 
   /**
-  * Returns account information, e.g. number of mutations done and available.
-  *
-  * @returns {Promise<AccountInfo>}
-  */
+   * Returns account information, specifically, number of mutations done and available.
+   *
+   * @returns {Promise<AccountInfo>}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const getAccountInfo = await app.getAccountInfo();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
   getAccountInfo() {
     return lib.app_account_info(this.connection);
   }
 
   /**
-  * Create a SAFEApp and try to login it through the `authUri`
-  * @param {AppInfo} appInfo - the AppInfo
-  * @param {String} authUri - URI containing the authentication info
-  * @param {Function} [networkStateCallBack=null] optional callback function
-  * to receive network state updates
-  * @param {InitOptions}  initialisation options
-  * @returns {Promise<SAFEApp>} authenticated and connected SAFEApp
-  */
+   * @private
+   * Create a {@link SAFEApp} and try to login it through the `authUri`
+   * @param {AppInfo} appInfo - the AppInfo
+   * @param {String} authUri - URI containing the authentication info
+   * @param {Function} [networkStateCallBack=null] optional callback function
+   * to receive network state updates
+   * @param {InitOptions}  initialisation options
+   * @returns {Promise<SAFEApp>} Authenticated {@link SAFEApp}
+   */
   static async fromAuthUri(appInfo, authUri, networkStateCallBack, options) {
     const app = autoref(new SAFEApp(appInfo, networkStateCallBack, options));
     await app.init();
@@ -362,10 +686,27 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
-  * Returns the name of the app's own container.
-  *
-  * @returns {Promise<String>}
-  */
+   * Returns the name of the app's own container.
+   *
+   * @returns {Promise<String>}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const rootContainerName = await app.getOwnContainerName();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
   getOwnContainerName() {
     return lib.app_container_name(this.appInfo.id);
   }
@@ -386,9 +727,27 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
-  * Reconnect to the metwork
-  * Must be invoked when the client decides to connect back after the connection was lost.
-  */
+   * Reconnect to the network.
+   * Must be invoked when the client decides to connect back after the connection was lost.
+   * @returns {Promise}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     await app.reconnect();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
   reconnect() {
     return lib.app_reconnect(this);
   }
@@ -405,16 +764,52 @@ class SAFEApp extends EventEmitter {
   }
 
   /**
-  * Resets the object cache kept by the underlyging library.
-  */
+   * Resets the object cache kept by the underlying library.
+   * @returns {Promise}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     await app.clearObjectCache();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
   clearObjectCache() {
     return lib.app_reset_object_cache(this.connection);
   }
 
   /**
-  * Retuns true if the underlyging library was compiled against mock-routing.
-  */
-  appIsMock() {
+   * Returns true if the underlyging library was compiled against mock routing.
+   * @returns {Boolean}
+   * @example
+   * const safe = require( '@maidsafe/safe-node-app' );
+   *
+   * const appInfo = {
+   *     id     : 'net.maidsafe.example',
+   *     name   : 'Example SAFE App',
+   *     vendor : 'MaidSafe.net Ltd'
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const isMock = await app.appIsMock();
+   *   } catch(err) {
+   *     throw err;
+   *   }
+   * };
+   */
+  appIsMock() { // eslint-disable-line class-methods-use-this
     return lib.app_is_mock();
   }
 }

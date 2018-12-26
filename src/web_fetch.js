@@ -410,9 +410,9 @@ async function genMDExplorerHtml(url, md) {
 /**
 * @typedef {Object} NetworkResource
 * holds information about a network resource fetched from a `safe://`-URL
-* @param {Object} content the network resource object
-* @param {Object} resourceType the type of the resource fetched, e.g. 'NFS'
-* @param {Object} parsedPath the parsed path from the provided URL
+* @property {Object} content the network resource object
+* @property {Object} resourceType the type of the resource fetched, e.g. 'NFS'
+* @property {Object} parsedPath the parsed path from the provided URL
 */
 
 /**
@@ -420,7 +420,7 @@ async function genMDExplorerHtml(url, md) {
 * Helper experipental function to lookup a given `safe://`-URL in accordance with the
 * public name resolution and find the requested network resource.
 *
-* @param {String} url the url you want to fetch
+* @property {String} url the url you want to fetch
 * @returns {Promise<NetworkResource>} the network resource found from the passed URL
 */
 async function fetch(url) {
@@ -433,7 +433,7 @@ async function fetch(url) {
 /**
 * @typedef {Object} WebFetchOptions
 * holds additional options for the `webFetch` function.
-* @param {Object} range range of bytes to be retrieved.
+* @property {Object} range range of bytes to be retrieved.
 * The `start` attribute is expected to be the start offset, while the
 * `end` attribute of the `range` object the end position (both inclusive)
 * to be retrieved, e.g. with `range: { start: 2, end: 3 }` the 3rd

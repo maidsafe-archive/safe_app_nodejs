@@ -68,7 +68,11 @@ class WebID {
     this.mData = mData;
   }
 
-  async init() {
+  /**
+   * Initialises WebID interface by emulating underlying {@link MutableData}
+   * as RDF and sets common namespace prefixes on instance
+   */
+  init() {
     if (this.rdf) return; // it was already initialised
 
     this.rdf = this.mData.emulateAs('rdf');
@@ -83,11 +87,46 @@ class WebID {
     };
   }
 
+  /**
+  * Fetches committed WebId data from underlying MutableData and loads in graph store
+  * @returns {Promise}
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const asyncFn = async () => {
+   *   try {
+   *       const webid = await mData.emulateAs('WebId');
+   *       await webid.fetchContent();
+   *   } catch(err) {
+   *       throw err;
+   *   }
+   * };
+  */
   async fetchContent() {
     await this.init();
     await this.rdf.nowOrWhenFetched();
   }
 
+  /**
+   * Creates WebId as RDF data and commits to underlying MutableData
+   * @param {Object} profile
+   * @param {String} nick profile.nick
+   * @returns {Promise}
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const profile = {
+   *     nick: "safedev",
+   *     name: "SAFENetwork Developer",
+   *     uri: "safe://id.safedev"
+   * };
+   * const asyncFn = async () => {
+   *   try {
+   *       const webid = await mData.emulateAs('WebId');
+   *       await webid.create(profile, profile.nick);
+   *   } catch(err) {
+   *       throw err;
+   *   }
+   * };
+   */
   async create(profile, displayName) {
     await this.init();
     const app = this.mData.app;
@@ -120,6 +159,28 @@ class WebID {
     await app.web.addPublicNameToDirectory(publicName, subdomainsRdfLocation);
   }
 
+  /**
+   * Updates WebId as RDF data and commits to underlying MutableData
+   * @param {Object} profile
+   * @returns {Promise}
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const profile = {
+   *     nick: "safedev",
+   *     name: "SAFENetwork Developer",
+   *     uri: "safe://id.safedev"
+   * };
+   * const asyncFn = async () => {
+   *   try {
+   *       const webid = await mData.emulateAs('WebId');
+   *       await webid.create(profile, profile.nick);
+   *       let updatedProfile = Object.assign({}, profile, { name: "Alexander Fleming" });
+   *       await webid.update(profile);
+   *   } catch(err) {
+   *       throw err;
+   *   }
+   * };
+   */
   async update(profile) {
     await this.init();
     let inboxXorUrl;
@@ -150,6 +211,28 @@ class WebID {
     await createWebIdProfileDoc(this.rdf, this.vocabs, profile, inboxXorUrl);
   }
 
+  /**
+   * Serialises WebId RDF data
+   * @param {Object} profile
+   * @returns {Promise<String>} RDF document according to mime type
+   * @example
+   * // Assumes {@link MutableData} interface has been obtained
+   * const mimeType = "text/turtle";
+   * const profile = {
+   *     nick: "safedev",
+   *     name: "SAFENetwork Developer",
+   *     uri: "safe://id.safedev"
+   * };
+   * const asyncFn = async () => {
+   *   try {
+   *       const webid = await mData.emulateAs('WebId');
+   *       await webid.create(profile, profile.nick);
+   *       const serialised = await webid.serialise(mimeType);
+   *   } catch(err) {
+   *       throw err;
+   *   }
+   * };
+   */
   async serialise(mimeType) {
     await this.init();
     const serialised = await this.rdf.serialise(mimeType);

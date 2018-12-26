@@ -41,7 +41,7 @@ const genAppUri = (str) => {
 
 /**
 * @private
-* Prefix the URI with 'safe-auth' protocol
+* Prefix the URI with safe-auth protocol
 */
 const addSafeAuthProtocol = (response) => {
   response.uri = `safe-auth:${response.uri}`; // eslint-disable-line no-param-reassign
@@ -59,22 +59,12 @@ const addSafeAuthProtocol = (response) => {
 const removeSafeProtocol = (uri) => uri.replace(/^safe-[^:]*:?[/]*/g, '');
 
 /**
-* The AuthInterface contains all authentication related
-* functionality with the network. Like creating an authenticated
-* or unauthenticated connection or create messages for the IPC
-* authentitcation protocol.
-*
-* Access your instance through ypur {SAFEApp} instance under `.auth`.
+* Contains all authentication related functionality
 */
 class AuthInterface {
 
   /**
-  * @private
-  * Instantiate a new AuthInterface.
-  *
-  * @param {SAFEApp} app - the SAFEApp instance that is wired to which
-  * is also used to fetch the app's information from.
-  * @param {InitOptions} initialisation options
+  * @hideconstructor
   */
   constructor(app) {
     this.app = app;
@@ -108,32 +98,60 @@ class AuthInterface {
   }
 
   /**
-  * Whether or not this is a registered/authenticated session.
-  *
-  * @returns {Boolean} true if this is an authenticated session
-  */
+   * Whether or not this is a registered/authenticated session.
+   *
+   * @returns {Boolean} true if this is an authenticated session
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const isRegistered = app.auth.registered;
+   */
   get registered() {
     return this._registered;
   }
 
   /**
-  * Generate an authentication URI for the app with
-  * the given permissions and optional parameters.
-  *
-  * @param {Object} permissions - mapping the container-names
-  *                  to a list of permissions you want to
-  *                  request
-  * @param {Object=} opts - optional parameters
-  * @param {Boolean} [opts.own_container=false] - whether or not to request
-  *    our own container to be created for us, too
-  *
-  * @returns {Object} `{id: <id>, uri: 'safe-auth://' }`
-  * @example // using an Authentication example:
-  * app.auth.genAuthUri({
-  *  _public: ['Insert'], // request to insert into public
-  *  _other: ['Insert', 'Update'] // request to insert and update
-  * }, {own_container: true}) // and we want our own container, too
-  */
+   * Generate an authentication URI for the app with
+   * the given permissions and optional parameters.
+   *
+   * @param {Object} permissions - mapping the container-names
+   *                  to a list of permissions you want to
+   *                  request
+   * @param {Object} opts
+   * @param {Boolean} [opts.own_container=false] - whether or not to request
+   *    app's own container to be created
+   *
+   * @returns {Promise<String>} safe-auth URI
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   *
+   * const containerPermissions =
+   * {
+   *   _public: [
+   *     'Read',
+   *     'Insert',
+   *     'Update',
+   *     'Delete'
+   *   ],
+   *   _publicNames: [
+   *     'Read',
+   *     'Insert',
+   *     'Update',
+   *     'Delete'
+   *   ]
+   * };
+   * const authorisationOptions = {own_container: true};
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const authReqUri = await app.auth.genAuthUri(
+   *             containerPermissions,
+   *             authorisationOptions
+   *         );
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   genAuthUri(permissions, opts) {
     const perm = makePermissions(permissions);
     const appInfo = makeAppInfo(this.app.appInfo);
@@ -148,25 +166,33 @@ class AuthInterface {
   }
 
   /**
-  * Generate a `'safe-auth'`-URI to request permissions
-  * on arbitrary owned MutableData's.
-  *
-  * @param {Object} permissions - mapping the MutableData's XoR names
-  *                  to a list of permissions you want to request
-  *
-  * @returns {String} `safe-auth://`-URI
-  * @example // example of requesting permissions for a couple of MutableData's:
-  * app.auth.genShareMDataUri([
-  *  { typeTag: 15001,   // request for MD with tag 15001
-  *    name: 'XoRname1',  // request for MD located at address 'XoRname1'
-  *    perms: ['Insert'], // request for inserting into the referenced MD
-  *  },
-  *  { typeTag: 15020,   // request for MD with tag 15020
-  *    name: 'XoRname2',  // request for MD located at address 'XoRname2'
-  *    perms: ['Insert', `Update`], // request for updating and inserting into the referenced MD
-  *  }
-  * ])
-  */
+   * Generate a safe-auth URI to request permissions on arbitrary owned MutableData's.
+   * Necessary when an authorised app needs access to a MutableData that was created by
+   * another application and is also owned by current account.
+   *
+   * @param {Object} permissions - mapping the MutableData's XoR names
+   *                  to a list of permissions you want to request
+   *
+   * @returns {Promise<String>} safe-auth URI
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   *
+   * const permissions = [
+   *   {
+   *     typeTag: 15001,
+   *     name: mutableDataXorName,
+   *     perms: ['Insert']
+   *   }
+   * ];
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const shareMDataReqUri = await app.auth.genShareMDataUri(permissions);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   genShareMDataUri(permissions) {
     validateShareMDataPermissions(permissions);
     const mdatasPerms = makeShareMDataPermissions(permissions);
@@ -180,37 +206,67 @@ class AuthInterface {
   }
 
   /**
-  * Generate an unregistered connection URI for the app.
-  *
-  * @returns {Object} `{id: <id>, uri: 'safe-auth://' }`
-  * @example // using an Authentication example:
-  * app.auth.genConnUri()
-  */
-  /* eslint-disable class-methods-use-this */
-  genConnUri() {
+   * Generate an unregistered connection URI for the app,
+   * especially for simply browsing and reading data on the network.
+   *
+   * @returns {Promise<String>} safe-auth URI
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     try {
+   *         const unRegisteredUri = await app.auth.genConnUri();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  genConnUri() { // eslint-disable-line class-methods-use-this
     return lib.encode_unregistered_req(this.app.appInfo.id)
       .then(addSafeAuthProtocol);
   }
 
   /**
-  * Open the given Authentication URI to the authenticator
-  */
-  /* eslint-disable class-methods-use-this */
-  openUri(uri) {
+   * Opens URI with system, using respective registered application.
+   * @param {String} uri Authententication
+   * @returns <Promise>
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     try {
+   *         await app.auth.openUri('safe://shouldOpenSafeBrowser');
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  openUri(uri) { // eslint-disable-line class-methods-use-this
     return lib.openUri(uri);
   }
-  /* eslint-enable class-methods-use-this */
 
   /**
-  * Generate a `'safe-auth'`-URI to request further container permissions
-  *
-  * @example // generating a container authorisation URI:
-  * app.auth.genContainerAuthUri(
-  *  _publicNames: ['Insert'], // request to insert into publicNames
-  * })
-  * @returns {String}
-  * @arg {Object} containers mapping container name to list of permissions
-  */
+   * Generate a safe-auth URI to request further container permissions.
+   *
+   * @param {Object} containers mapping container name to list of permissions
+   * @returns {Promise<String>} safe-auth URI
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const containerPermissions =
+   * {
+   *   _videos: [
+   *     'Insert'
+   *   ]
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const contReqUri = await app.auth.genContainerAuthUri(containerPermissions);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   genContainerAuthUri(containers) {
     const ctnrs = makePermissions(containers);
     const appInfo = makeAppInfo(this.app.appInfo);
@@ -224,32 +280,90 @@ class AuthInterface {
   }
 
   /**
-  * Refresh the access persmissions from the network. Useful when you just
-  * connected or received a response from the authenticator in the IPC protocol.
-  * @return {Promise}
-  */
+   * Refresh the access persmissions from the network. Useful when you just
+   * connected or received a response from the authenticator in the IPC protocol.
+   * @return {Promise}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const permissions = {
+   *     _public: ['Read', 'Insert', 'Update', 'Delete', 'ManagePermissions']
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const authReqUri = await app.auth.genAuthUri(permissions, {});
+   *         let authUri = await safe.authorise(authReqUri);
+   *         await app.auth.refreshContainersPermissions();
+   *         const mData = await app.auth.getContainer('_public');
+   *         let permsObject = await app.auth.getContainersPermissions();
+   *
+   *         console.log(permsObject);
+   *
+   *         const updatePermissions = {
+   *           _publicNames: ['Read', 'Insert', 'Update', 'Delete', 'ManagePermissions']
+   *         }
+   *         let contReqUri = await app.auth.genContainerAuthUri(updatePermissions);
+   *         authUri = await safe.authorise(contReqUri);
+   *
+   *         console.log(permsObject);
+   *
+   *         await app.auth.refreshContainersPermissions();
+   *         permsObject = await app.auth.getContainersPermissions();
+   *
+   *         console.log(permsObject);
+   *     } catch (err) {
+   *        throw err;
+   *     }
+   * };
+   */
   refreshContainersPermissions() {
     return lib.access_container_refresh_access_info(this.app.connection);
   }
 
   /**
-  * Get the names of all containers found and the app's granted
-  * permissions for each of them.
-  *
-  * @return {Promise<Array>}
-  */
+   * Get the names of all containers found and the app's granted
+   * permissions for each of them.
+   *
+   * @returns {Promise<Array>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const containerPermissions = await app.auth.getContainersPermissions();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   getContainersPermissions() {
     return lib.access_container_fetch(this.app.connection);
   }
 
   /**
-  * Read granted containers permissions from an auth URI
-  * without the need to connect to the network.
-  * @arg {String} uri the IPC response string given
-  *
-  * @return {Promise<Array>}
-  */
-  readGrantedPermissions(uri) {
+   * Read granted containers permissions from an auth URI
+   * without the need to connect to the network.
+   *
+   * This function appears redundant to app.auth.getContainersPermissions, however the difference
+   * is that readGrantedPermissions doesn't require an authorised app connection.
+   *
+   * @param {String} uri the IPC response string given
+   * @throws {NON_AUTH_GRANTED_URI}
+   * @returns {Promise<Array>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const authReqUri = await app.auth.genAuthUri({});
+   *         await app.auth.openUri(authReqUri);
+   *         const containerPermissions = await app.auth.readGrantedPermissions(
+   *             < returned auth URI from openUri >
+   *         );
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
+  readGrantedPermissions(uri) { // eslint-disable-line class-methods-use-this
     const sanitisedUri = removeSafeProtocol(uri);
 
     return lib.decode_ipc_msg(sanitisedUri)
@@ -273,9 +387,24 @@ class AuthInterface {
   }
 
   /**
-  * Get the MutableData for the app's own container generated by Authenticator.
+  * Get the MutableData for the app's root container.
   * When run in tests, this falls back to the randomly generated version
-  * @return {Promise<MutableData>}
+  * @returns {Promise<MutableData>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const authReqUri = await app.auth.genAuthUri({}, { own_container: true });
+   *         await app.auth.openUri(authReqUri);
+   *         // After URI is opened by SAFE Authenticator and authorised,
+   *         // this snippet assumes that your application has an
+   *         // IPC strategy to receive returned authorisation URI.
+   *         await app.auth.loginFromUri(authUri);
+   *         const mutableDataInterface = await app.auth.getOwnContainer();
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
   */
   getOwnContainer() {
     return this.app.getOwnContainerName()
@@ -283,11 +412,36 @@ class AuthInterface {
   }
 
   /**
-  * Whether or not this session has specifc access permission for a given container.
-  * @arg {String} name  name of the container, e.g. `'_public'`
-  * @arg {(String||Array<String>)} [permissions=['Read']] permissions to check for
-  * @returns {Promise<bool>}
-  */
+   * Whether or not this session has specifc access permission for a given container.
+   * @param {String} name  name of the container, e.g. `'_public'`
+   * @param {(String|Array<String>)} [permissions=['Read']] permissions to check for
+   * @returns {Promise<Boolean>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   *
+   * const containerPermissions =
+   * {
+   *   _public: ['Read']
+   * };
+   *
+   * const asyncFn = async () => {
+   *     try {
+   *         const authReqUri = await app.auth.genAuthUri(
+   *           containerPermissions
+   *         );
+   *         await app.auth.openUri(authReqUri);
+   *         // After URI is opened by SAFE Authenticator and authorised,
+   *         // this snippet assumes that your application has an
+   *         // IPC strategy to receive returned authorisation uri.
+   *         await app.auth.loginFromUri(authUri);
+   *         const container = '_public';
+   *         const permissions = ['Read'];
+   *         const canAccessContainer = await app.auth.canAccessContainer(container, permissions);
+   *     } catch (err) {
+   *         throw err;
+   *     }
+   * };
+   */
   canAccessContainer(name, permissions) {
     let perms = ['Read'];
     if (permissions) {
@@ -307,10 +461,38 @@ class AuthInterface {
   }
 
   /**
-  * Lookup and return the information necessary to access a container.
-  * @arg name {String} name of the container, e.g. `'_public'`
-  * @returns {Promise<MutableData>} the MutableData behind it
-  */
+   * Get interface to MutableData underlying account container.
+   * @param name {String} name of the container, e.g. `'_public'`
+   * @throws {MISSING_CONTAINER_STRING}
+   * @returns {Promise<MutableData>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   *
+   * const containerPermissions =
+   * {
+   *   _public: ['Read', 'Insert', 'Update']
+   * };
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const authReqUri = await app.auth.genAuthUri(containerPermissions);
+   *     await app.auth.openUri(authReqUri);
+   *     // After URI is opened by SAFE Authenticator and authorised,
+   *     // this snippet assumes that your application has an
+   *     // IPC strategy to receive returned authorisation uri.
+   *     await app.auth.loginFromUri(authUri);
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const authReqUri = await app.auth.genAuthUri(
+   *       containerPermissions
+   *     );
+   *     const container = '_public';
+   *     const mutableDataInterface = await app.auth.getContainer(container);
+   *   } catch (err) {
+   *     throw err;
+   *   };
+   * };
+   */
   getContainer(name) {
     if (!name) {
       throw makeError(errConst.MISSING_CONTAINER_STRING.code,
@@ -321,11 +503,28 @@ class AuthInterface {
   }
 
   /**
-  * Create a new authenticated or unregistered session using the provided IPC response.
-  * @arg {String} uri the IPC response string given
-  * @returns {Promise<SAFEApp>} the given app instance with a newly setup and
-  *          authenticated session.
-  */
+   * Create a new authenticated or unregistered network session
+   * using the provided IPC response from SAFE Authenticator.
+   * @param {String} uri the IPC response string given
+   * @throws {MISSING_AUTH_URI}
+   * @returns {Promise<SAFEApp>}
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   *
+   * const asyncFn = async () => {
+   *   try {
+   *     const app = await safe.initialiseApp(appInfo);
+   *     const authReqUri = await app.auth.genAuthUri({});
+   *     await app.auth.openUri(authReqUri);
+   *     // After URI is opened by SAFE Authenticator and authorised,
+   *     // this snippet assumes that your application has an
+   *     // IPC strategy to receive returned authorisation uri.
+   *     await app.auth.loginFromUri(authUri);
+   *   } catch (err) {
+   *     throw err;
+   *   }
+   * };
+   */
   loginFromUri(uri) {
     if (!uri) throw makeError(errConst.MISSING_AUTH_URI.code, errConst.MISSING_AUTH_URI.msg);
     const sanitisedUri = removeSafeProtocol(uri);
@@ -363,9 +562,9 @@ class AuthInterface {
   /**
   * *ONLY AVAILALBE IF RUN in NODE_ENV='test' OR WITH 'forceUseMock' option*
   *
-  * Generate a _locally_ registered App with the given permissions, or
-  * a local unregistered App if permissions is `null`.
-  * @returns {Promise<SAFEApp>} the locally registered/unregistered App instance
+  * Generate a _locally_ registered SAFEApp with the given permissions, or
+  * a local unregistered SAFEApp if permissions is `null`.
+  * @returns {Promise<SAFEApp>}
   */
   loginForTest(access, opts) {
     if (!useMockByDefault && !this.app.options.forceUseMock) {
@@ -403,6 +602,8 @@ class AuthInterface {
   * Simulates a network disconnection event. This can be used to
   * test any logic to be executed by an application when a network
   * diconnection notification is received.
+  * @throws {NON_DEV}
+  * @returns {Promise}
   */
   simulateNetworkDisconnect() {
     if (!useMockByDefault && !this.app.options.forceUseMock) {

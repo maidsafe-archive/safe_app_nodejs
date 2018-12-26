@@ -48,9 +48,7 @@ const flattenWebId = (theData, rootTerm) => {
 };
 
 /**
-* Interact with RDF Data of the Network through this Interface.
-*
-* Access it through your {SAFEApp} instance under `app.immutableData`
+* Manage Web RDF Data
 */
 class WebInterface {
   /**
@@ -65,9 +63,11 @@ class WebInterface {
    * Retrieve vocab for RDF/SAFE Implementation of DNS (publicNames/subDomains/services)
    * @param  {RDF} rdf RDF object to utilise for namespace func
    * @return {Object}  object containing keys with RDF namespace values.
+   * @example
+   * const rdf = mData.emulateAs('RDF');
+   * const vocabs = app.web.getVocabs(rdf);
    */
-  /* eslint-disable class-methods-use-this */
-  getVocabs(rdf) {
+  getVocabs(rdf) { // eslint-disable-line class-methods-use-this
     return {
       LDP: rdf.namespace('http://www.w3.org/ns/ldp#'),
       RDF: rdf.namespace('http://www.w3.org/2000/01/rdf-schema#'),
@@ -78,14 +78,26 @@ class WebInterface {
       SAFETERMS: rdf.namespace('http://safenetwork.org/safevocab/')
     };
   }
-  /* eslint-enable class-methods-use-this */
 
   /**
    * Add entry to _publicNames container, linking to a specific RDF/MD
    * object for subName discovery/service resolution
    * @param  {String} publicName public name string, valid URL
-   * @param  {Object} subNamesRdfLocation MutableData name/typeTag object
+   * @param  {NameAndTag} subNamesRdfLocation MutableData name/typeTag object
+   * @throws {INVALID_RDF_LOCATION|INVALID_URL}
    * @return {Promise} resolves upon commit of data to _publicNames
+   * @example
+   * const asyncFn = async () => {
+   *     try {
+   *         const networkResource = await app.fetch('safe://hyfktce85xaif4kdamgnd16uho3w5z7peeb5zeho836uoi48tgkgbc55bco:30303');
+   *         const nameAndTag = await networkResource.content.getNameAndTag();
+   *         const publicName = 'safedev';
+   *         const subNamesRdfLocation = nameAndTag;
+   *         await app.web.addPublicNameToDirectory(publicName, subNamesRdfLocation);
+   *     } catch(err) {
+   *         throw err;
+   *     }
+   * };
    */
   async addPublicNameToDirectory(publicName, subNamesRdfLocation) {
     if (typeof subNamesRdfLocation !== 'object' ||
@@ -142,7 +154,11 @@ class WebInterface {
 
   /**
    * Links a service/resource to a publicName, with a provided subName
+   * @param {String} subName
+   * @param {String} publicName
+   * @param {NameAndTag} serviceLocation
    *
+   * @throws {INVALID_SUBNAME|INVALID_PUBNAME|INVALID_RDF_LOCATION|ERR_DATA_GIVEN_ALREADY_EXISTS}
    * @return {Promise<Object>} Resolves to an object with xorname and
    * typeTag of the publicName RDF location
    */
@@ -216,7 +232,7 @@ class WebInterface {
 
   /**
    * Return an Array of publicNames
-   * @return {Promise} Returns <Array> of PublicNames
+   * @return {Promise<Array>} Returns array of PublicNames
    */
   async getPublicNames() {
     const pubNamesCntr = await this.app.auth.getContainer(PUBLIC_NAMES_CONTAINER);
@@ -239,8 +255,9 @@ class WebInterface {
 
   /**
    * Adds a WebID to the '_public' container, using
-   * @param  {String}  webIdLocation name/typetag object from SAFE MD.
+   * @param  {String}  webIdUri name/typetag object from SAFE MD.
    * @param  {String}  displayName   optional displayName which will be used when listing webIds.
+   * @throws {INVALID_URL|MISSING_RDF_ID}
    */
   async addWebIdToDirectory(webIdUri, displayName) {
     if (typeof webIdUri !== 'string') {
@@ -281,7 +298,7 @@ class WebInterface {
   /**
    * Retrieve all webIds. Currently as array of JSON objects...
    *
-   * @return {Promise} Resolves to array of webIds objects.
+   * @return {Promise<Array>} Resolves to array of webIds objects.
    */
   async getWebIds() {
     const directory = await this.app.auth.getContainer(PUBLIC_CONTAINER);

@@ -1,0 +1,28 @@
+{
+    "opts": {
+        "template": "node_modules/braintree-jsdoc-template",
+        "destination": "docs/",
+        "recurse": true,
+        "verbose": true
+    },
+    "source": {
+        "include": [
+            "src",
+            "./docs-home.md"
+        ],
+        "includePattern": ".js$"
+    },
+    "plugins": [
+        "plugins/markdown",
+        "node_modules/jsdoc-escape-at"
+    ],
+    "templates": {
+        "referenceTitle": "SAFE Network Node.js Client Library",
+        "collapse": true,
+        "resources": {
+          "Github Repo": "https://github.com/maidsafe/safe_app_nodejs",
+          " | ": "",
+          "Dev Forum": "https://forum.safedev.org/"
+        }
+    }
+}

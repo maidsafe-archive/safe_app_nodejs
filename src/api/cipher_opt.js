@@ -16,10 +16,6 @@ const lib = require('../native/lib');
 const errConst = require('../error_const');
 const makeError = require('../native/_error.js');
 
-/**
-* Holds the reference to a Cipher Options,
-* either PlainText, Symmetric or Asymmetric
-*/
 class CipherOpt extends h.NetworkObject {
   static free(app, ref) {
     lib.cipher_opt_free(app.connection, ref);
@@ -27,17 +23,28 @@ class CipherOpt extends h.NetworkObject {
 }
 
 /**
-* Provide the Cipher Opt API
+* Provides encryption methods for committing {@link ImmutableData}
 */
 class CipherOptInterface {
 
+  /**
+   * @hideconstructor
+   */
   constructor(app) {
     this.app = app;
   }
 
   /**
-  * Create a PlainText Cipher Opt
-  * @returns {CipherOpt}
+  * Create a plaintext cipher
+  * @returns {Promises<CipherOpt>}
+  * @example
+  * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+  * const asyncFn = async () => {
+  *     const cipherOpt = await app.cipherOpt.newPlainText();
+  *     const immdWriter = await app.immutableData.create();
+  *     await idWriter.write('<public file buffer data>');
+  *     const idAddress = await idWriter.close(cipherOpt);
+  * };
   */
   newPlainText() {
     return lib.cipher_opt_new_plaintext(this.app.connection)
@@ -45,18 +52,40 @@ class CipherOptInterface {
   }
 
   /**
-  * Create a new Symmetric Cipher
-  * @returns {CipherOpt}
+  * Create a new symmetric cipher
+  * @returns {Promises<CipherOpt>}
+  * @example
+  * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+  * const asyncFn = async () => {
+  *     const cipherOpt = await app.cipherOpt.newSymmetric();
+  *     const immdWriter = await app.immutableData.create();
+  *     await idWriter.write('Data for my eyes only.');
+  *     const idAddress = await idWriter.close(cipherOpt);
+  * };
   */
   newSymmetric() {
     return lib.cipher_opt_new_symmetric(this.app.connection)
         .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }
-
   /**
-  * Create a new Asymmetric Cipher for the given public encryption key
+  * Create a new asymmetric cipher for the given public encryption key
   * @param {PubEncKey} pubEncKey
-  * @returns {CipherOpt}
+  * @throws {MISSING_PUB_ENC_KEY}
+  * @returns {Promises<CipherOpt>}
+  * @example
+  * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+  * const asyncFn = async () => {
+  *     // For this example you're encrypting data with our own public encryption key,
+  *     // which only you will be able to deciper, however,
+  *     // the use case is for encrypting with the intended recipient's public encryption key.
+  *     const pubEncKey = await app.crypto.getAppPubEncKey();
+  *     const cipherOpt = await app.cipherOpt.newAsymmetric(pubEncKey);
+  *     const immdWriter = await app.immutableData.create();
+  *     const data = 'Data only decipherable by the holder of the private encryption key
+  *     which is paired to the public encryption key supplied to asymmetric cipher.';
+  *     await idWriter.write(data);
+  *     const idAddress = await idWriter.close(cipherOpt);
+  * };
   */
   newAsymmetric(pubEncKey) {
     if (!pubEncKey) {
@@ -65,6 +94,5 @@ class CipherOptInterface {
     return lib.cipher_opt_new_asymmetric(this.app.connection, pubEncKey.ref)
         .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }
-
 }
 module.exports = CipherOptInterface;
