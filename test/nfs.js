@@ -246,7 +246,7 @@ describe('NFS emulation', () => {
     file = await nfs.insert('hello.txt', file, userMetadata);
     const fileVersion = file.version;
     const test = () => nfs.update('hello.txt', file, fileVersion + 1, { meta: 'data' });
-    return should(test).throw('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.');
+    return should(test).throw(/string, Buffer, ArrayBuffer, Array/);
   });
 
   it('throws error if invalid user metadata type is passed while inserting file', async () => {
@@ -255,6 +255,6 @@ describe('NFS emulation', () => {
     const nfs = mData.emulateAs('nfs');
     const file = nfs.create('hello, SAFE world!');
     const test = () => nfs.insert('hello.txt', file, 5);
-    return should(test).throw('"value" argument must not be a number');
+    return should(test).throw(/"value" argument must not be/);
   });
 });

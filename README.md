@@ -16,7 +16,7 @@ The documentation for the latest `safe_app_nodejs` API is available at <http://d
 
 1. Prerequisites
 
-    * [Node.js](https://nodejs.org) ^8.0.0 (we recommend installing it via [nvm](https://github.com/creationix/nvm))
+    * [Node.js](https://nodejs.org) ^10.0.0 (we recommend installing it via [nvm](https://github.com/creationix/nvm))
     * [Git](https://git-scm.com/)
     * [Yarn](https://yarnpkg.com) (as a replacement for `npm`).
     * Windows-specific:

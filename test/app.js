@@ -97,7 +97,7 @@ describe('Smoke test', () => {
       null,
       null,
       optionsObject
-    )).be.rejectedWith(errConst.CONFIG_PATH_ERROR.msg('TypeError: error setting argument 0 - "string" must be a string, Buffer, or ArrayBuffer'));
+    )).be.rejectedWith(/string, Buffer, or ArrayBuffer/);
   });
 
   it('throw error if options object contains non-boolean forceUseMock value', () => {
