@@ -73,6 +73,7 @@ describe('Smoke test', () => {
     const optionsObject = {
       log: false,
       registerScheme: false,
+      suppressWarnings: false,
       joinSchemes: ['proto'],
       configPath: '/home',
       forceUseMock: false,

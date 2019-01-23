@@ -73,6 +73,7 @@ Any/all of them may be deprecated, removed, or very likely change in the future.
 Also regular users won't have this APIs enabled by default unless the flag is provided, so be aware of all these limitations.
 For more information, updates, or to submit ideas and suggestions, please visit https://github.com/maidsafe/safe_app_nodejs
 ```
+Should you need, you can suppress these warnings by using the `--quietSafeApp` flag on the safe_app process, or by passing `suppressWarnings` with the `InitOptions` on `initialiseApp`.
 
 ## Further Help
 

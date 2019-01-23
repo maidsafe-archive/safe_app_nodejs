@@ -101,11 +101,16 @@ class SAFEApp extends EventEmitter {
       registerScheme: true,
       configPath: null,
       forceUseMock: false,
+      suppressWarnings: false,
       enableExperimentalApis: false,
     }, options);
 
     if (typeof this.options.forceUseMock !== 'boolean') {
       throw new Error('The \'forceUseMock\' option must be a boolean.');
+    }
+
+    if (typeof this.options.suppressWarnings !== 'boolean') {
+      throw new Error('The \'suppressWarnings\' option must be a boolean.');
     }
 
     if (typeof this.options.enableExperimentalApis !== 'boolean') {

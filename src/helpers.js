@@ -38,6 +38,7 @@ const useMockByDefault = isTestEnv ? true : hasMockArg;
  * APIs and start exploring and testing them as well as provide feedback for enhancements.
 */
 const isExperimentalApisEnabled = process.argv.includes('--enable-experimental-apis');
+const shouldNotLogWarnings = process.argv.includes('--quietSafeApp');
 
 // Helper function to check the experimental APIs flag and
 // either throw an error or log a warning message
@@ -53,7 +54,11 @@ function checkExperimentalApisFlag(fn) {
                     errConst.EXPERIMENTAL_API_DISABLED.msg(featureName));
   }
 
-  if (this._warningLoggedAlready) return;
+  if (this._warningLoggedAlready ||
+      shouldNotLogWarnings ||
+      this.options.suppressWarnings) {
+    return;
+  }
 
   console.warn(`
     ** Experimental API WARNING **
