@@ -1,5 +1,12 @@
 # safe_app nodejs Change Log
 
+##
+
+### Added
+
+- `app.registredScheme` returns the registered scheme for a given app (if one was registered.)
+- `suppressWarnings` added to optionally prevent experimental warnings.
+
 ## [0.10.3] - 13-12-2018
 
 ### Fixed
