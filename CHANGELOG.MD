@@ -10,6 +10,7 @@
 ### Changed
 - All RDF methods which take RDF `subject`, `predicate`, `object` arguments now also take a fourth `provenance` argument, to be consistent with rdflib.js
 - Documentation enhanced with improved JSDoc annotation and template
+- Upgrade Node-FFI to v2.3.0
 
 ### Added
 - Code examples for experimental API operations: RDF, WebId, WebInterface
