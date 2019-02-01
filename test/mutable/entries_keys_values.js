@@ -40,6 +40,16 @@ describe('Mutable Data Entries', () => {
       })
   );
 
+  it('check numeric key is converted to string by quickSetup', () => app.mutableData.newRandomPublic(TYPE_TAG)
+      .then((m) => m.quickSetup({ 3030: 'value' }).then(() => m.getEntries()))
+      .then((entries) => entries.get('3030'))
+      .then((value) => {
+        should(value).not.be.undefined();
+        should(value.buf.toString()).equal('value');
+        return should(value.version).equal(0);
+      })
+  );
+
   it('insert & get a single value', () => app.mutableData.newRandomPublic(TYPE_TAG)
       .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
       .then((entries) => entries.insert('newKey', 'newValue')
@@ -49,6 +59,11 @@ describe('Mutable Data Entries', () => {
           should(value.buf.toString()).equal('newValue');
           return should(value.version).equal(0);
         }))
+  ));
+
+  it('fail to insert entry with numeric key', () => app.mutableData.newRandomPublic(TYPE_TAG)
+      .then((m) => m.quickSetup().then(() => m.getEntries()))
+      .then((entries) => should(entries.insert(3030, 'numeric')).be.rejectedWith(/"value" argument must not be/)
   ));
 
   it('insert & get a single value from private MD', () => app.mutableData.newRandomPrivate(TYPE_TAG)

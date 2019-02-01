@@ -181,6 +181,14 @@ describe('Applying EntryMutationTransaction', () => {
       });
   });
 
+  it('fail an insert mutation with numeric key', () => app.mutableData.newRandomPublic(TYPE_TAG)
+    .then((m) => m.quickSetup()
+      .then(() => m.getEntries()
+        .then((entries) => entries.mutate()
+          .then((mut) => should(mut.insert(3030, 'newValue')).be.rejectedWith(/"value" argument must not be/)
+        ))))
+  );
+
   it('a delete mutation on private MD', () => {
     const testXorName = h.createRandomXorName();
     return app.mutableData.newPrivate(testXorName, TYPE_TAG,
