@@ -12,6 +12,17 @@ A safe_app library for [Node.js](https://nodejs.org/).
 
 The documentation for the latest `safe_app_nodejs` API is available at <http://docs.maidsafe.net/safe_app_nodejs/>. See the ['Generate API docs' section](#generate-api-docs) further down for instructions to generate this docs locally.
 
+## Using this package as a dependency
+
+Each release of this package is published in [https://www.npmjs.com/package/@maidsafe/safe-node-app](https://www.npmjs.com/package/@maidsafe/safe-node-app), you can add it as a dependency to your project with either
+```bash
+npm i @maidsafe/safe-node-app
+```
+or
+```bash
+yarn add @maidsafe/safe-node-app
+```
+
 ## Development
 
 1. Prerequisites
@@ -31,7 +42,7 @@ The documentation for the latest `safe_app_nodejs` API is available at <http://d
 
 3. Install the dependencies:
 
-    ``` bash
+    ```bash
     cd safe_app_nodejs
     yarn
     ```

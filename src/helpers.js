@@ -59,7 +59,7 @@ function checkExperimentalApisFlag(fn) {
     ** Experimental API WARNING **
     * The application is making use of a SAFE experimental API *
     The '${featureName}' is part of a set of experimental functions.
-    Any/all of them may be deprecated, removed, or very likely change in the future.
+    Any/all of them may be deprecated, removed, or very likely changed in the future.
     Also regular users won't have this APIs enabled by default unless the flag is provided, so be aware of all these limitations.
     For more information, updates, or to submit ideas and suggestions, please visit https://github.com/maidsafe/safe_app_nodejs.
     `);
