@@ -4,9 +4,9 @@ A safe_app library for [Node.js](https://nodejs.org/).
 
 **Maintainer:** Gabriel Viganotti (gabriel.viganotti@maidsafe.net)
 
-|Linux/OS X|Windows|Coverage Status|
+|Linux/macOS|Windows|Coverage Status|
 |:---:|:---:|:---:|
-|[![Build Status](https://travis-ci.org/maidsafe/safe_app_nodejs.svg?branch=master)](https://travis-ci.org/maidsafe/safe_app_nodejs)|[![Build status](https://ci.appveyor.com/api/projects/status/efktyecwydxrhs5d/branch/master?svg=true)](https://ci.appveyor.com/project/MaidSafe-QA/safe-app-nodejs/branch/master)|[![Coverage Status](https://coveralls.io/repos/github/maidsafe/safe_app_nodejs/badge.svg)](https://coveralls.io/github/maidsafe/safe_app_nodejs)|
+|[![Build Status](https://travis-ci.com/maidsafe/safe_app_nodejs.svg?branch=master)](https://travis-ci.com/maidsafe/safe_app_nodejs)|[![Build status](https://ci.appveyor.com/api/projects/status/efktyecwydxrhs5d/branch/master?svg=true)](https://ci.appveyor.com/project/MaidSafe-QA/safe-app-nodejs/branch/master)|[![Coverage Status](https://coveralls.io/repos/github/maidsafe/safe_app_nodejs/badge.svg)](https://coveralls.io/github/maidsafe/safe_app_nodejs)|
 
 ## API Documentation
 
