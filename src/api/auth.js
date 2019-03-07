@@ -55,8 +55,9 @@ const addSafeAuthProtocol = (response) => {
 * some OS like Fedora, making the URI invalid for decoding.
 * This characters are not added by the authenticator, we therefore
 * don't have much choice than just make sure we remove them from here.
+* We also remove any whitespaces from the beginning or end of the string.
 */
-const removeSafeProtocol = (uri) => uri.replace(/^safe-[^:]*:?[/]*/g, '');
+const removeSafeProtocol = (uri) => uri.trim().replace(/^safe-[^:]*:?[/]*/g, '');
 
 /**
 * Contains all authentication related functionality
