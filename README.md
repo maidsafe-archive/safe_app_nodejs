@@ -48,7 +48,7 @@ The documentation for the latest `safe_app_nodejs` API is published at <http://d
 yarn docs
 ```
 
-The documentation for the API is generated using [jsdoc](https://github.com/jsdoc3/jsdoc). The source code of the `safe_app_ndejs` package has comments embedded which can then be scanned by `jsdoc` script to automatically generate the HTML documentation website/webpages.
+The documentation for the API is generated using [jsdoc](https://github.com/jsdoc3/jsdoc). The source code of the `safe_app_nodejs` package has comments embedded which can then be scanned by `jsdoc` script to automatically generate the HTML documentation website/webpages.
 
 The API docs will be generated under the `docs` folder, you can simply open the `docs/index.html` file with your default browser.
 
