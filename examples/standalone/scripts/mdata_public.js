@@ -25,7 +25,7 @@ const run = async () => {
         //----------------Initialise and Authorise App----------------------//
 
         // App has been created and initialised
-        let app = await safeApp.initializeApp(APP.info)
+        let app = await safeApp.initialiseApp(APP.info)
 
         // Used for testing purpose; this function is only available if run in NODE_ENV=dev
         await app.auth.loginForTest(APP.permissions);

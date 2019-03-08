@@ -4,14 +4,14 @@ The examples make use of mock routing and testing feature `loginForTest` to demo
 
 `loginForTest` function will create a client without sending autorisation request to the Authenticator and allows to run these samples as Standalone code.
 
-In production code, it would be a necessity to authenticate with the authenticator and get the URI for connecting to the SAFE Network on user's behalf. Example code for authenticator authorisation can be reffered from the [documentation example snippet](http://docs.maidsafe.net/safe_app_nodejs/#initializeapp). After the URI is obtained, [fromAuthURI](http://docs.maidsafe.net/safe_app_nodejs/#fromauthuri) function can be used to connect to the network.
+In production code, it would be a necessity to authenticate with the authenticator and get the URI for connecting to the SAFE Network on user's behalf. Example code for authenticator authorisation can be reffered from the [documentation example snippet](http://docs.maidsafe.net/safe_app_nodejs/#initialiseApp). After the URI is obtained, [fromAuthURI](http://docs.maidsafe.net/safe_app_nodejs/#fromauthuri) function can be used to connect to the network.
 
 Obtaining the URI from authenticator is skipped and these examples are intended to demonstrate the API usage.
 
 ## Prerequisite
 
-NodeJs version 7.10 or above. [node-gyp](https://github.com/nodejs/node-gyp) must be [installed](https://github.com/nodejs/node-gyp#installation).
-
+* [Node.js](https://nodejs.org) version 10.0.0 or above (we recommend installing it via [nvm](https://github.com/creationix/nvm))
+* [node-gyp](https://github.com/nodejs/node-gyp) must be [installed](https://github.com/nodejs/node-gyp#installation).
 
 ## Building the example
 
@@ -21,7 +21,8 @@ Run `npm install` and this command will install the dependencies in `dev` mode.
 
 ## Running the example
 
-It is recomended to read the [Getting started](https://forum.safedev.org/t/safe-network-api-getting-started-draft/726) introduction for understanding the Data Types and default containers.
+You can discuss development-related questions on the [SAFE Dev Forum](https://forum.safedev.org/).
+If you are just starting to develop an application for the SAFE Network, it's very advisable to visit the [SAFE Network Dev Hub](https://hub.safedev.org) where you will find a lot of relevant information, including a [tutorial to create an example SAFE desktop application](https://hub.safedev.org/platform/nodejs) which makes use of this package, as well as an introduction for understanding the SAFE Network data types and default containers.
 
 ### idata_plain
 
@@ -31,25 +32,25 @@ Execute `npm run idata_plain` for running this example.
 
 ### idata_asymmetric
 
-Demonstrates the ImmuatbleData API for writing data in the SAFE Network and encrypting/decrypting the DataMap with Asymmetric Cipher opt. 
+Demonstrates the ImmutableData API for writing data in the SAFE Network and encrypting/decrypting the DataMap with Asymmetric Cipher opt.
 
 Execute `npm run idata_asymmetric` for running this example.
 
 ### idata_symmetric
 
-Demonstrates the ImmuatbleData API for writing data in the SAFE Network and encrypting/decrypting the DataMap with Symmetric Cipher opt. 
+Demonstrates the ImmutableData API for writing data in the SAFE Network and encrypting/decrypting the DataMap with Symmetric Cipher opt.
 
 Execute `npm run idata_symmetric` for running this example.
 
 ### mdata_private
 
-Demonstrates the MutableData API for creating and updating a private MutableData. Also showcases Serialise and Deserialise APIs for MutableData.  
+Demonstrates the MutableData API for creating and updating a private MutableData. Also showcases serialise and deserialise APIs for privte MutableData.  
 
 Execute `npm run mdata_private` for running this example.
 
 ### mdata_public
 
-Demonstrates the MutableData API for creating and updating public MutableData. Emulate the MutableData as NFS for Inserting the file to mutable data, Reading the content from the file using NFS API.
+Demonstrates the MutableData API for creating and updating public MutableData. Emulate the MutableData as NFS for inserting the file to a mutable data, reading the content from the file using NFS API.
 
 Execute `npm run mdata_public` for running this example.
 

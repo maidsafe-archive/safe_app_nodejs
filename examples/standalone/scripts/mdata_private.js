@@ -25,7 +25,7 @@ const run = async () => {
         //----------------Initialise and Authorise App----------------------//
 
         // App has been created and initialised
-        let app = await safeApp.initializeApp(APP.info);
+        let app = await safeApp.initialiseApp(APP.info);
 
         // Used for testing purpose; this function is only available if run in NODE_ENV=dev
         await app.auth.loginForTest(APP.permissions);
@@ -61,16 +61,17 @@ const run = async () => {
         console.log('New MD entries are inserted and saved to the network successfully')
 
         let entries = await mData.getEntries();
+        let entriesList = await entries.listEntries();
 
         console.log('----------------------------');
         console.log('List of Inserted MD Entries');
         console.log('----------------------------');
 
-        let mdEntries = await entries.forEach((k,v) => {
-            let key = k.toString()
-            let value = v.buf.toString();
+        entriesList.forEach((entry) => {
+            let key = entry.key.toString();
+            let value = entry.value.buf.toString();
 
-            //Shows the list of entries inserted
+            // Shows the list of entries inserted
             console.log(key + ': ' + value);
         });
         console.log('----------------------------');
@@ -97,17 +98,18 @@ const run = async () => {
         console.log('Existing MD entries are updated and saved to the network successfully');
 
         entries = await mData.getEntries();
+        entriesList = await entries.listEntries();
 
         console.log('--------------------------');
         console.log('List of Updated MD Entries');
         console.log('--------------------------');
 
-        mdEntries = await entries.forEach((k,v) => {
-            let key = k.toString();
-            let value = v.buf.toString();
+        entriesList.forEach((entry) => {
+          let key = entry.key.toString();
+          let value = entry.value.buf.toString();
 
-            //Shows the list of entries
-            console.log(key + ': ' + value);
+          // Shows the list of entries
+          console.log(key + ': ' + value);
         });
         console.log('--------------------------');
         console.log('Iteration Completed. Value "Hello" of the key "English" updated to "Hello World" ');
@@ -149,17 +151,18 @@ const run = async () => {
         console.log('The deserialised Mutable Data entry value of key "Spanish": ', value.buf.toString());
 
         entries = await deserial.getEntries();
+        entriesList = await entries.listEntries();
 
         console.log('--------------------------------');
         console.log('List of Deserialised MD Entries');
         console.log('--------------------------------');
 
-        deserialisedMD = await entries.forEach((k,v) => {
-            let key = k.toString()
-            let value = v.buf.toString();
+        entriesList.forEach((entry) => {
+          let key = entry.key.toString();
+          let value = entry.value.buf.toString();
 
-            //Shows the list of entries deserialised
-            console.log(key + ': ' + value);
+          // Shows the list of entries deserialised
+          console.log(key + ': ' + value);
         });
         console.log('--------------------------------');
 
