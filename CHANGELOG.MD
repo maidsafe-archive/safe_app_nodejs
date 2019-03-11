@@ -16,6 +16,7 @@
 - Code examples for experimental API operations: RDF, WebId, WebInterface
 - Code examples where previously missing
 - Tests added to verify MutableData entries' keys are always stored as strings
+- Any leading/trailing whitespaces are automatically trimmed from the authorisation URI by `loginFromUri` function
 
 ## [0.10.3] - 13-12-2018
 

@@ -152,6 +152,12 @@ describe('auth interface', () => {
     return should(app.auth.loginFromUri(h.authUris.registeredUri)).be.fulfilled();
   });
 
+  it('white spaces are trimmed automatically from auth URI', async () => {
+    const app = await h.createTestApp();
+    const withWhiteSpaces = `   ${h.authUris.registeredUri}     `;
+    return should(app.auth.loginFromUri(withWhiteSpaces)).be.fulfilled();
+  });
+
   it('creates an authenticated session just for testing', async () => {
     const app = await h.createTestApp();
     return should(app.auth.loginForTest()).be.fulfilled();
