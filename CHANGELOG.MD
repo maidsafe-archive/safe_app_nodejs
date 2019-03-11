@@ -17,6 +17,7 @@
 - Code examples where previously missing
 - Tests added to verify MutableData entries' keys are always stored as strings
 - Any leading/trailing whitespaces are automatically trimmed from the authorisation URI by `loginFromUri` function
+- Added `getXorUrl` experimental function to the ImmutableData Reader which generates the XOR-URL of an already existing and fetched ImmutableData
 
 ## [0.10.3] - 13-12-2018
 
