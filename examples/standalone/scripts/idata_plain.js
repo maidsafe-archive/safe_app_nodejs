@@ -22,7 +22,7 @@ const run = async () => {
         console.log('***********************************');
 
         // App1 initialised and logged in (This is for testing purpose. Need to set NODE_ENV=dev to use this function)
-        let app = await safeApp.initializeApp(APP.info);
+        let app = await safeApp.initialiseApp(APP.info);
         await app.auth.loginForTest(APP.permissions);
         console.log('App initialisation and login successful');
 

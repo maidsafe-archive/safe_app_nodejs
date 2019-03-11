@@ -31,8 +31,8 @@ const run = async () => {
         console.log('****************************************');
 
         // AppA and AppB initialised and logged in (This is for testing purpose. Need to set NODE_ENV=dev to use this function)
-        let appA = await safeApp.initializeApp(APP.info);
-        let appB = await safeApp.initializeApp(APP_2.info);
+        let appA = await safeApp.initialiseApp(APP.info);
+        let appB = await safeApp.initialiseApp(APP_2.info);
         await appA.auth.loginForTest(APP.permissions);
         await appB.auth.loginForTest(APP_2.permissions);
         console.log('App initialisation and login successful');
