@@ -18,6 +18,7 @@ const { useMockByDefault } = require('../helpers');
 const { validateShareMDataPermissions } = require('../helpers');
 const errConst = require('../error_const');
 const makeError = require('../native/_error.js');
+const base32 = require('base32');
 
 const makeAppInfo = nativeH.makeAppInfo;
 const makePermissions = nativeH.makePermissions;
@@ -25,18 +26,12 @@ const makeShareMDataPermissions = nativeH.makeShareMDataPermissions;
 
 /**
 * @private
-* Generates the app's URI converting the string into a base64 format, removing
-* characters or symbols which are not valid for a URL like '=' sign,
-* and making it lower case.
+* Generates the app's URI converting the string into a base32 format
+* which is case insensitive.
 */
 const genAppUri = (str) => {
-  const urlSafeBase64 = (Buffer.from(str))
-                          .toString('base64')
-                          .replace(/\+/g, '-') // Convert '+' to '-'
-                          .replace(/\//g, '_') // Convert '/' to '_'
-                          .replace(/=+$/, '') // Remove ending '='
-                          .toLowerCase();
-  return `safe-${urlSafeBase64}`;
+  const urlSafeBase32 = base32.encode(str);
+  return `safe-${urlSafeBase32}`;
 };
 
 /**
