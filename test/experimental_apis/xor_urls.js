@@ -59,7 +59,8 @@ describe('WebFetch with XOR URL', () => {
   });
 
   it('undefined XOR-URL from MD if experimental apis flag is not set', async () => {
-    const safeApp = await createUnregisteredTestApp({ enableExperimentalApis: false });
+    const safeApp = await createAuthenticatedTestApp('_test_scope', null, null,
+                                                    { enableExperimentalApis: false });
     const md = await safeApp.mutableData.newRandomPublic(TYPE_TAG);
     await md.quickSetup();
     const info = await md.getNameAndTag();
@@ -68,7 +69,8 @@ describe('WebFetch with XOR URL', () => {
 
   it('fail to get XOR-URL from IMD if experimental apis flag is not set', async () => {
     let error;
-    const safeApp = await createUnregisteredTestApp({ enableExperimentalApis: false });
+    const safeApp = await createAuthenticatedTestApp('_test_scope', null, null,
+                                                    { enableExperimentalApis: false });
     try {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const idWriter = await safeApp.immutableData.create();
@@ -80,6 +82,24 @@ describe('WebFetch with XOR URL', () => {
       error = err;
     }
     return should(error.message).equal(errConst.EXPERIMENTAL_API_DISABLED.msg('XOR URLs'));
+  });
+
+  it('fail to call getXorUrl function from exisintg IMD if experimental apis flag is not set', async () => {
+    let error;
+    const safeApp = await createAuthenticatedTestApp('_test_scope', null, null,
+                                                    { enableExperimentalApis: false });
+    try {
+      const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+      const idWriter = await safeApp.immutableData.create();
+      await idWriter.write(content);
+      const cipherOpt = await safeApp.cipherOpt.newPlainText();
+      const immDataAddr = await idWriter.close(cipherOpt);
+      const idReader = await safeApp.immutableData.fetch(immDataAddr);
+      idReader.getXorUrl();
+    } catch (err) {
+      error = err;
+    }
+    return should(error.message).equal(errConst.EXPERIMENTAL_API_DISABLED.msg('getXorUrl'));
   });
 
   it('valid MD XOR-URL for non existing content, rejected', async () =>
@@ -232,5 +252,32 @@ describe('WebFetch with XOR URL', () => {
     await createDomain(cid, content, '', '');
     const data = await unregisteredApp.webFetch(`safe://${cid}`);
     should(data.body.toString()).equal(content);
+  });
+
+  it('get XOR-URL with codec from already existing ImmD', async () => {
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    const idWriter = await app.immutableData.create();
+    await idWriter.write(content);
+    const cipherOpt = await app.cipherOpt.newPlainText();
+    const immDataAddr = await idWriter.close(cipherOpt);
+
+    const idReader = await app.immutableData.fetch(immDataAddr);
+    const mimeType = 'text/plain';
+    const xorUrl = idReader.getXorUrl(mimeType);
+    const data = await unregisteredApp.webFetch(xorUrl);
+    should(data.body.toString()).equal(content);
+    should(data.headers).eql({ 'Content-Type': mimeType });
+  });
+
+  it('existing ImmD get XOR-URL with invalid codec code, rejected', async () => {
+    const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
+    const idWriter = await app.immutableData.create();
+    await idWriter.write(content);
+    const cipherOpt = await app.cipherOpt.newPlainText();
+    const immDataAddr = await idWriter.close(cipherOpt);
+
+    const idReader = await app.immutableData.fetch(immDataAddr);
+    const getXorUrlCall = () => idReader.getXorUrl('invalid-codec');
+    return should(getXorUrlCall).throw('Codec `mime/invalid-codec` not found');
   });
 });

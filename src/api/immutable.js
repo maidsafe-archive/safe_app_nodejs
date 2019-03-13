@@ -18,6 +18,14 @@ const CID = require('cids');
 const consts = require('../consts');
 const { EXPOSE_AS_EXPERIMENTAL_API } = require('../helpers');
 
+const genXorUrl = (xorName, mimeType) => {
+  const encodedHash = multihash.encode(xorName, consts.CID_HASH_FN);
+  const codec = mimeType ? `${consts.CID_MIME_CODEC_PREFIX}${mimeType}` : consts.CID_DEFAULT_CODEC;
+  const newCid = new CID(consts.CID_VERSION, codec, encodedHash);
+  const cidStr = newCid.toBaseEncodedString(consts.CID_BASE_ENCODING);
+  return `safe://${cidStr}`;
+};
+
 /**
 * {@link ImmutableDataInterface} reader
 * @hideconstructor
@@ -80,6 +88,42 @@ class Reader extends helpers.NetworkObject {
   }
 
   /**
+   * Get the XOR-URL of the {@link ImmutableDataInterface}.
+   *
+   * @param {String} mimeType (experimental) the MIME type to encode in
+   * the XOR-URL as the codec of the content
+   * @returns {String}
+   * The XOR-URL of the ImmutableData.
+   * @example
+   * // Assumes {@link initialiseApp|SAFEApp} interface has been obtained
+   * const asyncFn = async () => {
+   *     try {
+   *         const cipherOpt = await app.cipherOpt.newPlainText();
+   *         const iDataWriter = await app.immutableData.create()
+   *         const data = `Most proteins are glycosylated.
+   *         Mass spectrometry methods are used for mapping glycoprotein.`;
+   *         await iDataWriter.write(data);
+   *         const iDataAddress = await iDataWriter.close(cipherOpt);
+   *         const idReader = await app.immutableData.fetch(iDataAddress);
+   *         const mimeType = 'text/plain';
+   *         const xorUrl = idReader.getXorUrl(mimeType);
+   *     } catch(err) {
+   *       throw err;
+   *     }
+   * };
+   */
+  getXorUrl(mimeType) {
+    const xorName = this.xorName;
+    // Let's either generate the XOR-URL, or generate an error if the
+    // experimental APIs are not enabled
+    /* eslint-disable no-shadow, prefer-arrow-callback */
+    return EXPOSE_AS_EXPERIMENTAL_API.call(this.app, function getXorUrl() {
+      const address = Buffer.from(xorName);
+      return genXorUrl(address, mimeType);
+    });
+  }
+
+  /**
   * @private
   * free the reference of reader of the app on the native side
   * used by the autoref feature
@@ -108,8 +152,8 @@ class Writer extends helpers.NetworkObject {
    * const asyncFn = async () => {
    *     try {
    *         const iDataWriter = await app.immutableData.create()
-   *         const data = 'Most proteins are glycosylated.
-   *         Mass spectrometry methods are used for mapping glycoprotein.';
+   *         const data = `Most proteins are glycosylated.
+   *         Mass spectrometry methods are used for mapping glycoprotein.`;
    *         await iDataWriter.write(data);
    *     } catch(err) {
    *       throw err;
@@ -137,8 +181,8 @@ class Writer extends helpers.NetworkObject {
    *     try {
    *         const cipherOpt = await app.cipherOpt.newPlainText();
    *         const iDataWriter = await app.immutableData.create()
-   *         const data = 'Most proteins are glycosylated.
-   *         Mass spectrometry methods are used for mapping glycoprotein.';
+   *         const data = `Most proteins are glycosylated.
+   *         Mass spectrometry methods are used for mapping glycoprotein.`;
    *         await iDataWriter.write(data);
    *         const iDataAddress = await iDataWriter.close(cipherOpt);
    *
@@ -159,15 +203,11 @@ class Writer extends helpers.NetworkObject {
     }
 
     // Let's either generate the XOR-URL, or generate an error if the
-    // experimental apis are not enabled
+    // experimental APIs are not enabled
     /* eslint-disable camelcase, prefer-arrow-callback */
     const xorUrl = EXPOSE_AS_EXPERIMENTAL_API.call(this.app, function XOR_URLs() {
       const address = Buffer.from(name);
-      const encodedHash = multihash.encode(address, consts.CID_HASH_FN);
-      const codec = mimeType ? `${consts.CID_MIME_CODEC_PREFIX}${mimeType}` : consts.CID_DEFAULT_CODEC;
-      const newCid = new CID(consts.CID_VERSION, codec, encodedHash);
-      const cidStr = newCid.toBaseEncodedString(consts.CID_BASE_ENCODING);
-      return `safe://${cidStr}`;
+      return genXorUrl(address, mimeType);
     });
 
     return { name, xorUrl };
@@ -230,7 +270,11 @@ class ImmutableDataInterface {
    */
   fetch(address) {
     return lib.idata_fetch_self_encryptor(this.app.connection, address)
-      .then((ref) => helpers.autoref(new Reader(this.app, ref)));
+      .then((ref) => {
+        const readerObj = new Reader(this.app, ref);
+        readerObj.xorName = address;
+        return helpers.autoref(readerObj);
+      });
   }
 }
 
