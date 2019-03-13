@@ -929,7 +929,7 @@ class MutableData extends h.NetworkObject {
 class MutableDataInterface {
   /**
   * @hideconstructor
-  * Create a new MutableData
+  * Create a new MutableDataInterface
   * @param {SAFEApp} app instance this is bound to
   */
   constructor(app) {

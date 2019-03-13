@@ -100,8 +100,8 @@ class Reader extends helpers.NetworkObject {
    *     try {
    *         const cipherOpt = await app.cipherOpt.newPlainText();
    *         const iDataWriter = await app.immutableData.create()
-   *         const data = 'Most proteins are glycosylated.
-   *         Mass spectrometry methods are used for mapping glycoprotein.';
+   *         const data = `Most proteins are glycosylated.
+   *         Mass spectrometry methods are used for mapping glycoprotein.`;
    *         await iDataWriter.write(data);
    *         const iDataAddress = await iDataWriter.close(cipherOpt);
    *         const idReader = await app.immutableData.fetch(iDataAddress);
@@ -152,8 +152,8 @@ class Writer extends helpers.NetworkObject {
    * const asyncFn = async () => {
    *     try {
    *         const iDataWriter = await app.immutableData.create()
-   *         const data = 'Most proteins are glycosylated.
-   *         Mass spectrometry methods are used for mapping glycoprotein.';
+   *         const data = `Most proteins are glycosylated.
+   *         Mass spectrometry methods are used for mapping glycoprotein.`;
    *         await iDataWriter.write(data);
    *     } catch(err) {
    *       throw err;
@@ -181,8 +181,8 @@ class Writer extends helpers.NetworkObject {
    *     try {
    *         const cipherOpt = await app.cipherOpt.newPlainText();
    *         const iDataWriter = await app.immutableData.create()
-   *         const data = 'Most proteins are glycosylated.
-   *         Mass spectrometry methods are used for mapping glycoprotein.';
+   *         const data = `Most proteins are glycosylated.
+   *         Mass spectrometry methods are used for mapping glycoprotein.`;
    *         await iDataWriter.write(data);
    *         const iDataAddress = await iDataWriter.close(cipherOpt);
    *
