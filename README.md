@@ -8,6 +8,25 @@ A [safe_app](https://github.com/maidsafe/safe_client_libs) language binding for 
 |:---:|:---:|:---:|
 |[![Build Status](https://travis-ci.com/maidsafe/safe_app_nodejs.svg?branch=master)](https://travis-ci.com/maidsafe/safe_app_nodejs)|[![Build status](https://ci.appveyor.com/api/projects/status/efktyecwydxrhs5d/branch/master?svg=true)](https://ci.appveyor.com/project/MaidSafe-QA/safe-app-nodejs/branch/master)|[![Coverage Status](https://coveralls.io/repos/github/maidsafe/safe_app_nodejs/badge.svg)](https://coveralls.io/github/maidsafe/safe_app_nodejs)|
 
+
+## Table of contents
+1. [High level overview](#high-level-overview)
+2. [The API](#the-api)
+    * [API detailed documentation](#api-detailed-documentation)
+    * [Experimental APIs](#experimental-apis)
+3. [The internal FFI layer](#the-internal-ffi-layer)
+4. [Codebase structure](#codebase-structure)
+5. [Using this package as a dependency](#using-this-package-as-a-dependency)
+6. [Development](#development)
+7. [Contributing](#contributing)
+    * [Project board](#project-board)
+    * [Issues](#issues)
+    * [Commits and Pull Requests](#commits-and-pull-requests)
+    * [Releases and Changelog](#releases-and-changelog)
+    * [Copyrights](#copyrights)
+8. [Further Help](#further-help)
+9. [License](#license)
+
 ## High level overview
 
 The safe_app_nodejs package is a Node.js binding for the [safe_app](https://github.com/maidsafe/safe_client_libs) Rust library which is needed by any desktop application to connect and read/write data on [The SAFE Network](https://safenetwork.tech).
@@ -175,7 +194,7 @@ With enforced linting and commit style clearly layed out, as well as a list of m
 
 This project adheres to the [Contributor Covenant](https://www.contributor-covenant.org/). By participating, you are expected to honor this code.
 
-### Project board/s
+### Project board
 
 GitHub project boards are used by the maintainers of this repository to keep track and organise development priorities.
 
@@ -205,7 +224,7 @@ Issues are labeled in the following way depending on its type:
 - `blocked`: the issue cannot be resolved as it depends on a fix in any of its dependencies
 - `good first issue`: an issue considered more accessible for any developer trying to start contributing
 
-### Commits & Pull Requests
+### Commits and Pull Requests
 
 We use [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0-beta.3/) style messages. (More usually [with a scope](https://www.conventionalcommits.org/en/v1.0.0-beta.3/#commit-message-with-scope)) for commits.
 
@@ -215,7 +234,7 @@ PRs should clearly link to an issue to be tracked on the project board. A PR tha
 
 Where appropriate, commits should _always_ contain tests for the code in question.
 
-### Releases & Changelog
+### Releases and Changelog
 
 The change log is currently maintained manually, each PR sent is expected to have the corresponding modification in the [CHANGELOG](CHANGELOG.MD) file, under the ['Unreleased' section](CHANGELOG.MD#unreleased). We are planning to start using [standard-version](https://www.npmjs.com/package/standard-version) shortly for maintaining the changelog.
 
