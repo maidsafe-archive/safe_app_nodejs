@@ -1,6 +1,6 @@
 {
   "name": "@maidsafe/safe-node-app",
-  "version": "0.10.3",
+  "version": "0.11.0",
   "description": "A safe_app library for Node.js",
   "license": "(MIT OR BSD-3-Clause)",
   "main": "src/index.js",
