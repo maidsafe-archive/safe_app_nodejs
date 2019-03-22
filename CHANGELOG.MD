@@ -1,6 +1,6 @@
 # safe_app nodejs Change Log
 
-## [Unreleased]
+## [0.11.0] - 22-3-2019
 
 ### Fixed
 - RDF method, `list`, renamed to `collection` and calls correct rdflib.js function
