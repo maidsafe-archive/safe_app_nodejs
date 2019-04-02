@@ -21,7 +21,7 @@ module.exports = function(grunt) {
       case 'linux':
         os = 'linux';
         break;
-      case 'windows':
+      case 'win32':
         os = 'win';
         break;
       case 'darwin':
