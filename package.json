@@ -10,8 +10,8 @@
     "postinstall": "download_deps --package package.json",
     "docs": "rimraf docs/ && jsdoc -c jsdoc.json",
     "test": "cross-env NODE_ENV=test mocha --recursive",
-    "test-coverage": "cross-env NODE_ENV=test istanbul cover _mocha --report lcovonly -- -R spec --recursive test",
-    "publish-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test-coverage": "cross-env NODE_ENV=test istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive test --timeout 6000",
+    "publish-coverage": "mv ./coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js",
     "pre-pack": "npm run lint",
     "prepush": "npm run lint && cross-env NODE_ENV=dev npm run test",
     "prepublishOnly": "npm run lint && npm run test"
