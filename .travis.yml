@@ -1,8 +1,13 @@
 sudo: true
 dist: trusty
-os:
-- linux
-- osx
+matrix:
+  include:
+    - os: linux
+    - os: osx
+    - os: windows
+      env:
+        - YARN_GPG=no # otherwise this starts gpg-agent that never exits
+
 language: node_js
 node_js:
 - '10.0.0'

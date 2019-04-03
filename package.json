@@ -7,11 +7,11 @@
   "scripts": {
     "lint": "eslint src test",
     "fix-lint": "eslint --fix src test",
-    "postinstall": "download_deps --package package.json",
+    "postinstall": "grunt download",
     "docs": "rimraf docs/ && jsdoc -c jsdoc.json",
     "test": "cross-env NODE_ENV=test mocha --recursive",
-    "test-coverage": "cross-env NODE_ENV=test istanbul cover _mocha --report lcovonly -- -R spec --recursive test",
-    "publish-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test-coverage": "cross-env NODE_ENV=test istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive test --timeout 6000",
+    "publish-coverage": "mv ./coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js",
     "pre-pack": "npm run lint",
     "prepush": "npm run lint && cross-env NODE_ENV=dev npm run test",
     "prepublishOnly": "npm run lint && npm run test"
@@ -40,9 +40,10 @@
   "dependencies": {
     "cids": "bochaco/js-cid#temp-use-bochaco-multicodec",
     "cross-env": "5.1.3",
-    "deps_downloader": "https://s3.eu-west-2.amazonaws.com/deps-downloader/deps_downloader-0.3.0.tgz",
     "enum": "^2.3.0",
+    "extract-zip": "^1.6.7",
     "ffi": "^2.3.0",
+    "grunt": "^1.0.4",
     "mime": "^2.0.3",
     "multihashes": "^0.4.14",
     "rdflib": "^0.19.1",
@@ -65,50 +66,5 @@
     "mocha-lcov-reporter": "^1.3.0",
     "rimraf": "^2.6.2",
     "should": "^11.1.2"
-  },
-  "download_deps": {
-    "system_uri": {
-      "mirror": "https://s3.eu-west-2.amazonaws.com/system-uri",
-      "version": "v0.4.0",
-      "targetDir": "src/native/prod",
-      "filePattern": "^.*\\.(dll|so|dylib)$",
-      "filename": "system_uri"
-    },
-    "safe_app": {
-      "mirror": "https://s3.eu-west-2.amazonaws.com/safe-client-libs",
-      "version": "0.9.1",
-      "targetDir": "src/native/prod",
-      "filename": "safe_app",
-      "filePattern": "^.*\\.(dll|so|dylib)$",
-      "force": true
-    },
-    "ENV": {
-      "dev": {
-        "safe_app": {
-          "targetDir": "src/native/mock",
-          "filename": "safe_app-mock",
-          "override": false
-        },
-        "system_uri": {
-          "targetDir": "src/native/mock",
-          "override": false
-        }
-      },
-      "mobile_prod": {
-        "system_uri": {
-          "disabled": true
-        }
-      },
-      "mobile_dev": {
-        "system_uri": {
-          "disabled": true
-        },
-        "safe_app": {
-          "targetDir": "src/native/mock",
-          "filename": "safe_app-mock",
-          "override": false
-        }
-      }
-    }
   }
 }
