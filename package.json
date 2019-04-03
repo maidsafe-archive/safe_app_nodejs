@@ -10,7 +10,7 @@
     "postinstall": "grunt download",
     "docs": "rimraf docs/ && jsdoc -c jsdoc.json",
     "test": "cross-env NODE_ENV=test mocha --recursive",
-    "test-coverage": "cross-env NODE_ENV=test istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive test",
+    "test-coverage": "cross-env NODE_ENV=test istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive test --timeout 6000",
     "publish-coverage": "mv ./coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js",
     "pre-pack": "npm run lint",
     "prepush": "npm run lint && cross-env NODE_ENV=dev npm run test",
