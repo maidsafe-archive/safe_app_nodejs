@@ -14,7 +14,7 @@
     "publish-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "pre-pack": "npm run lint",
     "prepush": "npm run lint && cross-env NODE_ENV=dev npm run test",
-    "prepublish": "npm run lint && npm run test"
+    "prepublishOnly": "npm run lint && npm run test"
   },
   "repository": {
     "type": "git",
