@@ -49,7 +49,7 @@
     "ref": "^1.3.3",
     "ref-array": "^1.2.0",
     "ref-struct": "^1.1.0",
-    "weak": "^1.0.1"
+    "weak-napi": "1.0.3"
   },
   "devDependencies": {
     "braintree-jsdoc-template": "^3.3.0",
