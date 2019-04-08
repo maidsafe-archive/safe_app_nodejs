@@ -80,7 +80,10 @@ const { pubConsts: CONSTANTS } = require('./consts.js');
  */
 const initialiseApp = async (appInfo, networkStateCallBack, options) => {
   try {
-    const app = autoref(new App(appInfo, networkStateCallBack, options));
+    const theApp = new App(appInfo, networkStateCallBack, options);
+    const app = autoref(
+      theApp
+    );
     await app.init();
     return Promise.resolve(app);
   } catch (e) {

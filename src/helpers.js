@@ -11,7 +11,7 @@
 // relating to use of the SAFE Network Software.
 
 
-const weak = require('weak');
+const weak = require('weak-napi');
 const path = require('path');
 const makeError = require('./native/_error.js');
 const consts = require('./consts');
