@@ -1,4 +1,15 @@
-# safe_app nodejs Change Log
+# Change Log
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [0.11.1](https://github.com/maidsafe/safe_app_nodejs/compare/v0.11.0...v0.11.1) (2019-04-10)
+
+
+### Bug Fixes
+
+* **weak:** Weak refs via weak-napi. Remove 'weak' ([2aee334](https://github.com/maidsafe/safe_app_nodejs/commit/2aee334))
+
+
 
 ## [0.11.0] - 22-3-2019
 
