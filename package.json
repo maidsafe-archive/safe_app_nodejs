@@ -17,6 +17,11 @@
     "prepublishOnly": "npm run lint && npm run test",
     "release": "standard-version"
   },
+  "standard-version": {
+    "skip": {
+      "tag": true
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/maidsafe/safe_app_nodejs.git"
