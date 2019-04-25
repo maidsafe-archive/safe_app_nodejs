@@ -11,10 +11,10 @@
 // relating to use of the SAFE Network Software.
 
 
-const ffi = require('ffi');
+const ffi = require('ffi-napi');
 const Enum = require('enum');
 const ArrayType = require('ref-array');
-const ref = require('ref');
+const ref = require('ref-napi');
 const Struct = require('ref-struct');
 const base = require('./_base.js');
 const makeError = require('./_error.js');

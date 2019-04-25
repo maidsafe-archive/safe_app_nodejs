@@ -13,7 +13,7 @@
 
 const path = require('path');
 const fs = require('fs');
-const FFI = require('ffi');
+const FFI = require('ffi-napi');
 const { getSafeAppLibFilename } = require('../helpers');
 const { getSystemUriLibFilename } = require('../helpers');
 const os = require('os');

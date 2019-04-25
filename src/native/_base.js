@@ -13,8 +13,8 @@
 
 const makeError = require('./_error.js');
 const errConst = require('../error_const');
-const ffi = require('ffi');
-const ref = require('ref');
+const ffi = require('ffi-napi');
+const ref = require('ref-napi');
 const Enum = require('enum');
 const Struct = require('ref-struct');
 const ArrayType = require('ref-array');
