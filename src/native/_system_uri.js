@@ -12,8 +12,8 @@
 
 
 const path = require('path');
-const FFI = require('ffi');
-const ref = require('ref');
+const FFI = require('ffi-napi');
+const ref = require('ref-napi');
 const { getSystemUriLibFilename } = require('../helpers');
 const makeError = require('./_error.js');
 const h = require('./helpers');

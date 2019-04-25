@@ -11,7 +11,7 @@
 // relating to use of the SAFE Network Software.
 
 
-const ref = require('ref');
+const ref = require('ref-napi');
 const { types: t, helpers: h } = require("./_base");
 const { types } = require('./_auth');
 

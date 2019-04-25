@@ -11,7 +11,7 @@
 // relating to use of the SAFE Network Software.
 
 
-const ffi = require('ffi');
+const ffi = require('ffi-napi');
 const ref = require("ref");
 const Struct = require('ref-struct');
 const base = require('./_base');
