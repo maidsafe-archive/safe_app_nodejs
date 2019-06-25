@@ -7,7 +7,7 @@ const nodePath = require('path');
 const multihash = require('multihashes');
 const CID = require('cids');
 const { EXPOSE_AS_EXPERIMENTAL_API,
-        ONLY_IF_EXPERIMENTAL_API_ENABLED, escapeHtmlEntities } = require('./helpers');
+  ONLY_IF_EXPERIMENTAL_API_ENABLED, escapeHtmlEntities } = require('./helpers');
 
 const MIME_TYPE_BYTERANGES = 'multipart/byteranges';
 const MIME_TYPE_OCTET_STREAM = 'application/octet-stream';
@@ -264,7 +264,7 @@ async function fetchHelper(url) {
         // this could be a XOR-URL, let's try to
         // decode the publicName part as a CID
         const content = await getContainerFromCid.call(this, publicName,
-                                                        parseInt(parsedUrl.port, 10));
+          parseInt(parsedUrl.port, 10));
 
         return {
           content: content.content,
@@ -299,7 +299,7 @@ async function genMDExplorerHtml(url, md) {
   const entries = await md.getEntries();
   const entriesList = await entries.listEntries();
   let tbody = '';
-   // TODO: confirm this will be ok for any type of data stored in MD entries,
+  // TODO: confirm this will be ok for any type of data stored in MD entries,
   // e.g. binary data or different charset encodings, etc.
   entriesList.forEach((entry) => {
     const key = escapeHtmlEntities(entry.key.toString());
@@ -336,7 +336,7 @@ async function genMDExplorerHtml(url, md) {
   });
   const permsList = await Promise.all(getPermsInfo);
   let tperms = '';
-   /* eslint-disable dot-notation */
+  /* eslint-disable dot-notation */
   permsList.forEach((perm) => {
     tperms += `
       <tr>
@@ -466,7 +466,7 @@ async function webFetch(url, options) {
     const response = {
       headers: {
         [HEADERS_CONTENT_TYPE]: reqMimeType,
-        //'Accept-Post': 'text/turtle, application/ld+json, application/rdf+xml, application/nquads'
+        // 'Accept-Post': 'text/turtle, application/ld+json, application/rdf+xml, etc.'
       },
       body: serialisedRdf
     };
@@ -486,7 +486,7 @@ async function webFetch(url, options) {
   try {
     const emulation = content.emulateAs(DATA_TYPE_NFS);
     const { file, mimeType: fileMimeType } = await
-                            tryDifferentPaths(emulation.fetch.bind(emulation), path);
+    tryDifferentPaths(emulation.fetch.bind(emulation), path);
     const openedFile = await emulation.open(file, consts.pubConsts.NFS_FILE_MODE_READ);
     const data = await readContentFromFile(openedFile, fileMimeType, options);
     return data;

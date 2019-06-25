@@ -44,9 +44,9 @@ describe('Mutable Data', () => {
     });
 
     it('create custom private with invalid tag value', () => should(app.mutableData.newPrivate(h.createRandomXorName(), TAG_TYPE_INVALID,
-                                          h.createRandomSecKey(),
-                                          h.createRandomNonce()))
-        .be.rejectedWith(errConst.TYPE_TAG_NAN.msg)
+      h.createRandomSecKey(),
+      h.createRandomNonce()))
+      .be.rejectedWith(errConst.TYPE_TAG_NAN.msg)
     );
 
     it('create custom public with invalid name', () => {
@@ -55,103 +55,103 @@ describe('Mutable Data', () => {
     });
 
     it('create custom private with invalid name', () => should(app.mutableData.newPrivate(TEST_NAME_INVALID, TYPE_TAG,
-                                          h.createRandomSecKey(),
-                                          h.createRandomNonce()))
-        .be.rejectedWith(errConst.XOR_NAME.msg(32)));
+      h.createRandomSecKey(),
+      h.createRandomNonce()))
+      .be.rejectedWith(errConst.XOR_NAME.msg(32)));
 
     it('create custom private with non-Buffer and invalid name', () => should(app.mutableData.newPrivate(h.createRandomInvalidXor().toString(), TYPE_TAG,
-                                    h.createRandomSecKey(), h.createRandomNonce()))
-        .be.rejectedWith(errConst.XOR_NAME.msg(32)));
+      h.createRandomSecKey(), h.createRandomNonce()))
+      .be.rejectedWith(errConst.XOR_NAME.msg(32)));
 
     it('create custom private with non-Buffer and invalid secret key', () => should(app.mutableData.newPrivate(
-                                    h.createRandomXorName(),
-                                    TYPE_TAG,
-                                    h.createRandomInvalidSecKey().toString(),
-                                    h.createRandomNonce()))
-        .be.rejectedWith(errConst.INVALID_SEC_KEY.msg(32)));
+      h.createRandomXorName(),
+      TYPE_TAG,
+      h.createRandomInvalidSecKey().toString(),
+      h.createRandomNonce()))
+      .be.rejectedWith(errConst.INVALID_SEC_KEY.msg(32)));
 
     it('create custom private with non-Buffer and invalid nonce', () => should(app.mutableData.newPrivate(
-                                    h.createRandomXorName(),
-                                    TYPE_TAG,
-                                    h.createRandomSecKey(),
-                                    h.createRandomInvalidNonce().toString()))
-        .be.rejectedWith(errConst.NONCE.msg(24)));
+      h.createRandomXorName(),
+      TYPE_TAG,
+      h.createRandomSecKey(),
+      h.createRandomInvalidNonce().toString()))
+      .be.rejectedWith(errConst.NONCE.msg(24)));
 
     it('create custom private with and invalid name as Buffer', () => should(app.mutableData.newPrivate(h.createRandomInvalidXor(), TYPE_TAG,
-                                    h.createRandomSecKey(), h.createRandomNonce()))
-        .be.rejectedWith(errConst.XOR_NAME.msg(32)));
+      h.createRandomSecKey(), h.createRandomNonce()))
+      .be.rejectedWith(errConst.XOR_NAME.msg(32)));
 
     it('create custom private with and invalid secret key as Buffer', () => should(app.mutableData.newPrivate(h.createRandomXorName(), TYPE_TAG,
-                                    h.createRandomInvalidSecKey(), h.createRandomNonce()))
-        .be.rejectedWith(errConst.INVALID_SEC_KEY.msg(32)));
+      h.createRandomInvalidSecKey(), h.createRandomNonce()))
+      .be.rejectedWith(errConst.INVALID_SEC_KEY.msg(32)));
 
     it('create custom private with and invalid nonce as Buffer', () => should(app.mutableData.newPrivate(h.createRandomXorName(), TYPE_TAG,
-                                    h.createRandomSecKey(), h.createRandomInvalidNonce()))
-        .be.rejectedWith(errConst.NONCE.msg(24)));
+      h.createRandomSecKey(), h.createRandomInvalidNonce()))
+      .be.rejectedWith(errConst.NONCE.msg(24)));
   });
 
   describe('MutableData info', () => {
     it('create random public and read its name', () =>
-        app.mutableData.newRandomPublic(TYPE_TAG)
-            .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
-            .then((r) => {
-              should(r.name).not.be.undefined();
-              return should(r.typeTag).equal(TYPE_TAG);
-            })
+      app.mutableData.newRandomPublic(TYPE_TAG)
+        .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
+        .then((r) => {
+          should(r.name).not.be.undefined();
+          return should(r.typeTag).equal(TYPE_TAG);
+        })
     );
 
     it('create random private and read its name', () =>
-        app.mutableData.newRandomPrivate(TYPE_TAG)
-            .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
-            .then((r) => {
-              should(r.name).not.be.undefined();
-              return should(r.typeTag).equal(TYPE_TAG);
-            })
+      app.mutableData.newRandomPrivate(TYPE_TAG)
+        .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
+        .then((r) => {
+          should(r.name).not.be.undefined();
+          return should(r.typeTag).equal(TYPE_TAG);
+        })
     );
 
     it('create custom public and read its name', () =>
-        app.mutableData.newPublic(h.createRandomXorName(), TYPE_TAG)
-            .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
-            .then((r) => {
-              should(r.name).not.be.undefined();
-              should(r.name).have.length(32);
-              return should(r.typeTag).equal(TYPE_TAG);
-            })
+      app.mutableData.newPublic(h.createRandomXorName(), TYPE_TAG)
+        .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
+        .then((r) => {
+          should(r.name).not.be.undefined();
+          should(r.name).have.length(32);
+          return should(r.typeTag).equal(TYPE_TAG);
+        })
     );
 
     it('throws error if custom private is created with nonce not equal to 24 bytes', async () => {
       const nonce = 'not a nonce';
       return should(
-             app.mutableData.newPrivate(h.createRandomXorName(),
-                                        TYPE_TAG,
-                                        h.createRandomSecKey(),
-                                        nonce))
-            .be.rejectedWith(errConst.NONCE.msg(24));
+        app.mutableData.newPrivate(h.createRandomXorName(),
+          TYPE_TAG,
+          h.createRandomSecKey(),
+          nonce))
+        .be.rejectedWith(errConst.NONCE.msg(24));
     });
 
     it('throws error if custom private is created with invalid secret key', async () => should(
-             app.mutableData.newPrivate(h.createRandomXorName(),
-                                        TYPE_TAG,
-                                        h.createRandomInvalidSecKey(),
-                                        h.createRandomNonce()))
-            .be.rejectedWith(errConst.INVALID_SEC_KEY.msg(32)));
+      app.mutableData.newPrivate(h.createRandomXorName(),
+        TYPE_TAG,
+        h.createRandomInvalidSecKey(),
+        h.createRandomNonce()))
+      .be.rejectedWith(errConst.INVALID_SEC_KEY.msg(32)));
 
     it('create custom private and read its name', () =>
-        app.mutableData.newPrivate(h.createRandomXorName(), TYPE_TAG,
-                                    h.createRandomSecKey(), h.createRandomNonce())
-            .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
-            .then((r) => {
-              should(r.name).not.be.undefined();
-              should(r.name).have.length(32);
-              return should(r.typeTag).equal(TYPE_TAG);
-            })
+      app.mutableData.newPrivate(h.createRandomXorName(), TYPE_TAG,
+        h.createRandomSecKey(), h.createRandomNonce())
+        .then((m) => m.quickSetup({}).then(() => m.getNameAndTag()))
+        .then((r) => {
+          should(r.name).not.be.undefined();
+          should(r.name).have.length(32);
+          return should(r.typeTag).equal(TYPE_TAG);
+        })
     );
 
     it('mdata version', () => app.mutableData.newRandomPrivate(TYPE_TAG)
-        .then((m) => m.quickSetup({}).then(() => m.getVersion()))
-        .then((version) => should(version).equal(0)
-          // test that after a change in mdata (not in the entries) version is incremented
-        )
+      .then((m) => m.quickSetup({}).then(() => m.getVersion()))
+      .then((version) => should(version).equal(0)
+        // test that after a change in mdata (not in the entries) version is incremented
+      )
     );
 
     it('puts mutable data on network', async () => {
@@ -167,25 +167,25 @@ describe('Mutable Data', () => {
 
   describe('QuickSetup', () => {
     it('get non-existing key from public MD', () => app.mutableData.newRandomPublic(TYPE_TAG)
-        .then((m) => m.quickSetup({}).then(() =>
-          should(m.get('_non-existing-key')).be.rejectedWith('Core error: Routing client error -> Requested entry not found')
-        ))
+      .then((m) => m.quickSetup({}).then(() =>
+        should(m.get('_non-existing-key')).be.rejectedWith('Core error: Routing client error -> Requested entry not found')
+      ))
     );
 
     it('get existing key from public MD', () => app.mutableData.newRandomPublic(TYPE_TAG)
-        .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.get('key1')))
-        .then((value) => {
-          should(value).not.be.undefined();
-          should(value.buf.toString()).equal('value1');
-          return should(value.version).equal(0);
-        })
+      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.get('key1')))
+      .then((value) => {
+        should(value).not.be.undefined();
+        should(value.buf.toString()).equal('value1');
+        return should(value.version).equal(0);
+      })
     );
 
     it('get existing key from private MD', () => {
       const testXorName = h.createRandomXorName();
       return app.crypto.generateNonce()
         .then((nonce) => app.mutableData.newPrivate(testXorName, TYPE_TAG,
-                                        h.createRandomSecKey(), nonce))
+          h.createRandomSecKey(), nonce))
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => md.get('key1'))
         .then((value) => {
@@ -198,7 +198,7 @@ describe('Mutable Data', () => {
     it('get existing key from serialised private MD', () => {
       const testXorName = h.createRandomXorName();
       return app.mutableData.newPrivate(testXorName, TYPE_TAG,
-                                        h.createRandomSecKey(), h.createRandomNonce())
+        h.createRandomSecKey(), h.createRandomNonce())
         .then((m) => m.quickSetup(TEST_ENTRIES))
         .then((md) => md.serialise())
         .then((serial) => app.mutableData.fromSerial(serial))
@@ -224,69 +224,69 @@ describe('Mutable Data', () => {
     });
 
     it('serialise/deserialise smoke test', () => app.mutableData.newRandomPublic(TYPE_TAG)
-        .then((m) => m.quickSetup(TEST_ENTRIES)
-          .then(() => m.serialise()))
-          .then((serial) => app.mutableData.fromSerial(serial))
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => m.serialise()))
+      .then((serial) => app.mutableData.fromSerial(serial))
     );
 
     it('serialised size smoke test', () => app.mutableData.newRandomPublic(TYPE_TAG)
-        .then((m) => m.quickSetup(TEST_ENTRIES)
-          .then(() => m.getSerialisedSize()))
-          .then((size) => should(size).be.greaterThan(0))
+      .then((m) => m.quickSetup(TEST_ENTRIES)
+        .then(() => m.getSerialisedSize()))
+      .then((size) => should(size).be.greaterThan(0))
     );
   });
 
   describe('Null entries and/or permissions', () => {
     it('null entries & permissions', () => app.mutableData.newRandomPublic(TYPE_TAG)
-        .then((m) => m.put(CONSTANTS.MD_PERMISSION_EMPTY, CONSTANTS.MD_ENTRIES_EMPTY)
-          .then(() => m.getVersion())
-          .then((version) => {
-            should(version).equal(0);
+      .then((m) => m.put(CONSTANTS.MD_PERMISSION_EMPTY, CONSTANTS.MD_ENTRIES_EMPTY)
+        .then(() => m.getVersion())
+        .then((version) => {
+          should(version).equal(0);
+        })
+        .then(() => m.getNameAndTag())
+        .then((r) => {
+          should(r.name).not.be.undefined();
+          should(r.typeTag).equal(TYPE_TAG);
+        })
+        .then(() => m.getEntries())
+        .then((entries) => entries.len()
+          .then((len) => {
+            should(len).equal(0);
           })
-          .then(() => m.getNameAndTag())
-          .then((r) => {
-            should(r.name).not.be.undefined();
-            should(r.typeTag).equal(TYPE_TAG);
-          })
-          .then(() => m.getEntries())
-          .then((entries) => entries.len()
-            .then((len) => {
-              should(len).equal(0);
-            })
-            .then(() => entries.insert('newKey', 'newValue'))
-            .then(() => should(m.put(CONSTANTS.MD_PERMISSION_EMPTY, entries)).be.rejected())
-          )
+          .then(() => entries.insert('newKey', 'newValue'))
+          .then(() => should(m.put(CONSTANTS.MD_PERMISSION_EMPTY, entries)).be.rejected())
         )
+      )
     );
 
     it('non-null entries and null permissions', () => app.mutableData.newRandomPublic(TYPE_TAG)
-        .then((m) => app.mutableData.newEntries()
-          .then((entries) => entries.insert('key1', 'value1')
-            .then(() => m.put(null, entries)
-              .then(() => m.getVersion())
-              .then((version) => {
-                should(version).equal(0);
-              })
-              .then(() => m.get('key1'))
-              .then((value) => {
-                should(value).not.be.undefined();
-                should(value.buf.toString()).equal('value1');
-                should(value.version).equal(0);
-              })
-              .then(() => entries.insert('newKey', 'newValue'))
-              .then(() => should(m.put(null, entries)).be.rejected())
-            )
+      .then((m) => app.mutableData.newEntries()
+        .then((entries) => entries.insert('key1', 'value1')
+          .then(() => m.put(null, entries)
+            .then(() => m.getVersion())
+            .then((version) => {
+              should(version).equal(0);
+            })
+            .then(() => m.get('key1'))
+            .then((value) => {
+              should(value).not.be.undefined();
+              should(value.buf.toString()).equal('value1');
+              should(value.version).equal(0);
+            })
+            .then(() => entries.insert('newKey', 'newValue'))
+            .then(() => should(m.put(null, entries)).be.rejected())
+          )
         ))
     );
   });
 
   describe('Errors', () => {
     it('invalid user\'s permissions', () => app.mutableData.newRandomPublic(TYPE_TAG)
-        .then((m) => m.quickSetup(TEST_ENTRIES))
-        .then((md) => {
-          const invalidPerm = 'Invalid-Perm';
-          return should(md.setUserPermissions(CONSTANTS.USER_ANYONE, [invalidPerm], 1)).be.rejectedWith(`${invalidPerm} is not a valid permission`);
-        })
+      .then((m) => m.quickSetup(TEST_ENTRIES))
+      .then((md) => {
+        const invalidPerm = 'Invalid-Perm';
+        return should(md.setUserPermissions(CONSTANTS.USER_ANYONE, [invalidPerm], 1)).be.rejectedWith(`${invalidPerm} is not a valid permission`);
+      })
     );
   });
 
@@ -332,25 +332,25 @@ describe('Mutable Data', () => {
 
   describe('Metadata', () => {
     it('set metadata with quickSetup', () => app.mutableData.newRandomPublic(TYPE_TAG)
-        .then((m) => m.quickSetup(TEST_ENTRIES, 'name of MD', 'description of MD'))
-        .then((md) => should(md.get(CONSTANTS.MD_METADATA_KEY)).be.fulfilled())
+      .then((m) => m.quickSetup(TEST_ENTRIES, 'name of MD', 'description of MD'))
+      .then((md) => should(md.get(CONSTANTS.MD_METADATA_KEY)).be.fulfilled())
     );
 
     it('set & update metadata', () => app.mutableData.newRandomPublic(TYPE_TAG)
-        .then((m) => m.quickSetup(TEST_ENTRIES))
-        .then((md) => md.setMetadata('name of MD', 'description of MD')
-          .then(() => md.setMetadata('update name', 'update description'))
-          .then(() => should(md.get(CONSTANTS.MD_METADATA_KEY)).be.fulfilled())
-        )
+      .then((m) => m.quickSetup(TEST_ENTRIES))
+      .then((md) => md.setMetadata('name of MD', 'description of MD')
+        .then(() => md.setMetadata('update name', 'update description'))
+        .then(() => should(md.get(CONSTANTS.MD_METADATA_KEY)).be.fulfilled())
+      )
     );
 
     it('empty metadata', () => app.mutableData.newRandomPublic(TYPE_TAG)
-        .then((m) => m.quickSetup(TEST_ENTRIES))
-        .then((md) => md.setMetadata()
-          .then(() => md.setMetadata('name of MD'))
-          .then(() => md.setMetadata(null, 'description of MD'))
-          .then(() => should(md.get(CONSTANTS.MD_METADATA_KEY)).be.fulfilled())
-        )
+      .then((m) => m.quickSetup(TEST_ENTRIES))
+      .then((md) => md.setMetadata()
+        .then(() => md.setMetadata('name of MD'))
+        .then(() => md.setMetadata(null, 'description of MD'))
+        .then(() => should(md.get(CONSTANTS.MD_METADATA_KEY)).be.fulfilled())
+      )
     );
   });
 

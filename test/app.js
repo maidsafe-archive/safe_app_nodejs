@@ -131,7 +131,7 @@ describe('Smoke test', () => {
       .then(async (firstResp) => {
         const secondApp = await createTestApp({ scope: 'website' });
         return secondApp.auth.genAuthUri({ _public: ['Insert'] })
-            .then((secondResp) => should(secondResp.uri).startWith('safe-auth:').not.equal(firstResp.uri));
+          .then((secondResp) => should(secondResp.uri).startWith('safe-auth:').not.equal(firstResp.uri));
       });
   });
 
@@ -208,10 +208,10 @@ describe('Smoke test', () => {
   it('logs in to network from existing authUri', () => should(h.App.fromAuthUri(h.appInfo, h.authUris.registeredUri)).be.fulfilled());
 
   it('throws error if fromAuthUri missing authUri argument', () => should(h.App.fromAuthUri(h.appInfo))
-      .be.rejectedWith(errConst.MISSING_AUTH_URI.msg));
+    .be.rejectedWith(errConst.MISSING_AUTH_URI.msg));
 
   it('throws error if fromAuthUri missing appInfo argument', () => should(h.App.fromAuthUri(h.authUris.registeredUri))
-      .be.rejectedWith(errConst.MALFORMED_APP_INFO.msg));
+    .be.rejectedWith(errConst.MALFORMED_APP_INFO.msg));
 
   it('returns boolean for network state', () => {
     should(app.isNetStateInit()).be.false();

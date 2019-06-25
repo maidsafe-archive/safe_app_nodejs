@@ -25,57 +25,57 @@ describe('Mutable Data Entries', () => {
 
 
   it('get entries and check length', () => app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
-      .then((entries) => entries.len())
-      .then((len) => should(len).equal(Object.keys(TEST_ENTRIES).length))
+    .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
+    .then((entries) => entries.len())
+    .then((len) => should(len).equal(Object.keys(TEST_ENTRIES).length))
   );
 
   it('get entries and get a value', () => app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
-      .then((entries) => entries.get('key1'))
-      .then((value) => {
-        should(value).not.be.undefined();
-        should(value.buf.toString()).equal('value1');
-        return should(value.version).equal(0);
-      })
+    .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
+    .then((entries) => entries.get('key1'))
+    .then((value) => {
+      should(value).not.be.undefined();
+      should(value.buf.toString()).equal('value1');
+      return should(value.version).equal(0);
+    })
   );
 
   it('check numeric key is converted to string by quickSetup', () => app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup({ 3030: 'value' }).then(() => m.getEntries()))
-      .then((entries) => entries.get('3030'))
-      .then((value) => {
-        should(value).not.be.undefined();
-        should(value.buf.toString()).equal('value');
-        return should(value.version).equal(0);
-      })
+    .then((m) => m.quickSetup({ 3030: 'value' }).then(() => m.getEntries()))
+    .then((entries) => entries.get('3030'))
+    .then((value) => {
+      should(value).not.be.undefined();
+      should(value.buf.toString()).equal('value');
+      return should(value.version).equal(0);
+    })
   );
 
   it('insert & get a single value', () => app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
-      .then((entries) => entries.insert('newKey', 'newValue')
-        .then(entries.get('newKey')
+    .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
+    .then((entries) => entries.insert('newKey', 'newValue')
+      .then(entries.get('newKey')
         .then((value) => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('newValue');
           return should(value.version).equal(0);
         }))
-  ));
+    ));
 
   it('fail to insert entry with numeric key', () => app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup().then(() => m.getEntries()))
-      .then((entries) => should(entries.insert(3030, 'numeric')).be.rejectedWith(/"value" argument must not be/)
-  ));
+    .then((m) => m.quickSetup().then(() => m.getEntries()))
+    .then((entries) => should(entries.insert(3030, 'numeric')).be.rejectedWith(/"value" argument must not be/)
+    ));
 
   it('insert & get a single value from private MD', () => app.mutableData.newRandomPrivate(TYPE_TAG)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
-      .then((entries) => entries.insert('newKey', 'newValue')
-        .then(entries.get('newKey')
+    .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getEntries()))
+    .then((entries) => entries.insert('newKey', 'newValue')
+      .then(entries.get('newKey')
         .then((value) => {
           should(value).not.be.undefined();
           should(value.buf.toString()).equal('newValue');
           return should(value.version).equal(0);
         }))
-  ));
+    ));
 
   it('get list of entries', async () => {
     const m = await app.mutableData.newRandomPublic(TYPE_TAG);
@@ -111,23 +111,23 @@ describe('Mutable Data Entries', () => {
   });
 
   it('get list of keys', () => app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
-      .then((keys) => should(keys.length).equal(Object.keys(TEST_ENTRIES).length))
+    .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
+    .then((keys) => should(keys.length).equal(Object.keys(TEST_ENTRIES).length))
   );
 
   it('check list of keys', () => app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
-      .then((keys) => Promise.all(keys.map((key) =>
-        should(TEST_ENTRIES).have.ownProperty(key.toString())))));
+    .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getKeys()))
+    .then((keys) => Promise.all(keys.map((key) =>
+      should(TEST_ENTRIES).have.ownProperty(key.toString())))));
 
   it('get empty list of keys', () => app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup({}).then(() => m.getKeys()))
-      .then((keys) => should(keys.length).equal(0))
+    .then((m) => m.quickSetup({}).then(() => m.getKeys()))
+    .then((keys) => should(keys.length).equal(0))
   );
 
   it('get list of values', () => app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
-      .then((values) => should(values.length).equal(Object.keys(TEST_ENTRIES).length))
+    .then((m) => m.quickSetup(TEST_ENTRIES).then(() => m.getValues()))
+    .then((values) => should(values.length).equal(Object.keys(TEST_ENTRIES).length))
   );
 
   it('check list of values', () => app.mutableData.newRandomPublic(TYPE_TAG)
@@ -140,8 +140,8 @@ describe('Mutable Data Entries', () => {
     ))));
 
   it('get empty list of values', () => app.mutableData.newRandomPublic(TYPE_TAG)
-      .then((m) => m.quickSetup({}).then(() => m.getValues()))
-      .then((values) => should(values.length).equal(0))
+    .then((m) => m.quickSetup({}).then(() => m.getValues()))
+    .then((values) => should(values.length).equal(0))
   );
 
   it('fail to decrypt a private MD entry using wrong encryption keys', async () => {
@@ -154,9 +154,9 @@ describe('Mutable Data Entries', () => {
     await mut.insert(encKey, encValue);
     await privMd.applyEntriesMutation(mut);
     const notMyPrivMd = await app.mutableData.newPrivate(nameAndTag.name,
-                                                          nameAndTag.typeTag,
-                                                          h.createRandomSecKey(),
-                                                          h.createRandomNonce());
+      nameAndTag.typeTag,
+      h.createRandomSecKey(),
+      h.createRandomNonce());
     const val = await notMyPrivMd.get(encKey);
     return should(notMyPrivMd.decrypt(val.buf)).be.rejectedWith('Core error: Symmetric decryption failed');
   });

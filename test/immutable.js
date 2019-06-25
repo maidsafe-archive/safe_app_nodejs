@@ -175,8 +175,8 @@ describe('Immutable Data', () => {
             .then((mut) => mut.insert('key1', addr)
               .then(() => md.applyEntriesMutation(mut))
             ))
-          )
         )
+      )
       .then(() => app.mutableData.newPublic(testXorName, TYPE_TAG))
       .then((md) => md.getEntries())
       .then((entries) => entries.listEntries())
@@ -184,6 +184,6 @@ describe('Immutable Data', () => {
         entriesArray.map((entry) => app.immutableData.fetch(entry.value.buf)
           .then((r) => r.read())
           .then((res) => should(res.toString()).equal(testString))
-      )));
+        )));
   });
 });

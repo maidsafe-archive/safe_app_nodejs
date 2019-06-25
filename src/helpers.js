@@ -43,14 +43,14 @@ const isExperimentalApisEnabled = process.argv.includes('--enable-experimental-a
 // either throw an error or log a warning message
 function checkExperimentalApisFlag(fn) {
   const featureName = fn.name.replace('_', ' ')
-                        // bound added when binding context
-                        .replace('bound ', '');
+  // bound added when binding context
+    .replace('bound ', '');
 
   // the experimental APIs can be also enabled by setting
   // the `enableExperimentalApis` flag can be set to true in the initialisation options.
   if (!isExperimentalApisEnabled && !this.options.enableExperimentalApis) {
     throw makeError(errConst.EXPERIMENTAL_API_DISABLED.code,
-                    errConst.EXPERIMENTAL_API_DISABLED.msg(featureName));
+      errConst.EXPERIMENTAL_API_DISABLED.msg(featureName));
   }
 
   if (this._warningLoggedAlready) return;
@@ -213,13 +213,13 @@ const getSystemUriLibFilename = (defaultDir, options) =>
   getNativeLibPath(defaultDir, options, consts.SYSTEM_URI_LIB_FILENAME);
 
 const escapeHtmlEntities = (str) =>
-    str
-      .replace(/&/g, '&amp;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/\//g, '&#x2F;');
+  str
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\//g, '&#x2F;');
 
 module.exports = {
   EXPOSE_AS_EXPERIMENTAL_API,

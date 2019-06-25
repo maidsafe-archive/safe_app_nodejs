@@ -310,7 +310,7 @@ describe('Experimental RDF emulation', () => {
 
   it('parse Turtle RDF and serialise it as JSON-LD', async () => {
     await md.quickSetup({});
-     /* eslint-disable no-multi-str */
+    /* eslint-disable no-multi-str */
     const turtle = '@prefix foaf: <http://xmlns.com/foaf/0.1/> .\
                     @prefix anything: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\
                     \
@@ -366,12 +366,12 @@ describe('Experimental RDF emulation', () => {
     const encrypted = true;
     await privRdf.commit(encrypted);
     const notMyMd = await app.mutableData.newPrivate(nameAndTag.name,
-                                                nameAndTag.typeTag,
-                                                h.createRandomSecKey(),
-                                                h.createRandomNonce());
+      nameAndTag.typeTag,
+      h.createRandomSecKey(),
+      h.createRandomNonce());
     const notMyRdf = notMyMd.emulateAs('rdf');
     return should(notMyRdf.nowOrWhenFetched(null, encrypted))
-                                  .be.rejectedWith(errConst.MISSING_RDF_ID.msg);
+      .be.rejectedWith(errConst.MISSING_RDF_ID.msg);
   });
 
   it('creates blank node resource', () => {

@@ -31,7 +31,7 @@ describe('auth interface', () => {
   it('should build some authentication uri', async () => {
     const app = await h.createTestApp();
     return app.auth.genAuthUri({ _public: ['Read'] })
-        .then((resp) => should(resp.uri).startWith('safe-auth:'));
+      .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
   it('should build some authentication uri if missing permissions object', async () => {
@@ -60,7 +60,7 @@ describe('auth interface', () => {
   it('should build some containers uri', async () => {
     const app = await h.createTestApp();
     return app.auth.genContainerAuthUri({ _public: ['Insert'] })
-        .then((resp) => should(resp.uri).startWith('safe-auth:'));
+      .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
   it('should build some containers uri if missing containers object', async () => {
@@ -80,7 +80,7 @@ describe('auth interface', () => {
     const sharedMdXorName = h.createRandomXorName();
     const perms = [{ typeTag: 15001, name: sharedMdXorName, perms: ['Insert'] }];
     return app.auth.genShareMDataUri(perms)
-        .then((resp) => should(resp.uri).startWith('safe-auth:'));
+      .then((resp) => should(resp.uri).startWith('safe-auth:'));
   });
 
   it('should throw error for non-existent permissions array for share MD request', async () => {
@@ -178,20 +178,20 @@ describe('Get granted containers permissions from auth URI', () => {
   it('invalid uri', async () => {
     const appNoConnect = await createTestApp();
     return should(appNoConnect.auth.readGrantedPermissions('safe-invalid-uri'))
-              .be.rejectedWith('IPC error: InvalidMsg');
+      .be.rejectedWith('IPC error: InvalidMsg');
   });
 
   it('uri with no auth granted information', async () => {
     const appNoConnect = await createTestApp();
     return should(appNoConnect.auth.readGrantedPermissions(h.authUris.unregisteredUri))
-              .be.rejectedWith('The URI provided is not for an authenticated app with permissions information');
+      .be.rejectedWith('The URI provided is not for an authenticated app with permissions information');
   });
 
   it('valid auth uri but no containers permissions granted', async () => {
     const appNoConnect = await createTestApp();
     const contsPerms = await should(appNoConnect.auth.readGrantedPermissions(
-                                      h.authUris.registeredUriNoContsPerms)
-                                    ).be.fulfilled();
+      h.authUris.registeredUriNoContsPerms)
+    ).be.fulfilled();
     return should(Object.keys(contsPerms).length).be.equal(0);
   });
 
@@ -309,24 +309,24 @@ describe('Access Container', () => {
   });
 
   it('has read access to `_public`', () => app.auth.refreshContainersPermissions().then(() =>
-      app.auth.canAccessContainer('_public').then((hasAccess) => should(hasAccess).be.true())));
+    app.auth.canAccessContainer('_public').then((hasAccess) => should(hasAccess).be.true())));
 
   it('has access to `_public` for `Read` and Insert`', () => app.auth.refreshContainersPermissions().then(() =>
-      app.auth.canAccessContainer('_public', ['Read', 'Insert']).then((hasAccess) => should(hasAccess).be.false())));
+    app.auth.canAccessContainer('_public', ['Read', 'Insert']).then((hasAccess) => should(hasAccess).be.false())));
 
   it('has access to `_publicNames` for `Read` and ManagePermissions`', () => app.auth.refreshContainersPermissions().then(() =>
-      app.auth.canAccessContainer('_publicNames', ['Read', 'ManagePermissions']).then((hasAccess) => should(hasAccess).be.true())));
+    app.auth.canAccessContainer('_publicNames', ['Read', 'ManagePermissions']).then((hasAccess) => should(hasAccess).be.true())));
 
   it('access permission provided as a string', () => app.auth.refreshContainersPermissions().then(() =>
-      app.auth.canAccessContainer('_public', 'Read').then((hasAccess) => should(hasAccess).be.true())));
+    app.auth.canAccessContainer('_public', 'Read').then((hasAccess) => should(hasAccess).be.true())));
 
   it('can\'t access to `__does_not_exist`', () => app.auth.refreshContainersPermissions().then(() => should(app.auth.canAccessContainer('__does_not_exist')).be.rejected()));
 
   it('read info of `_public`', () => app.auth.refreshContainersPermissions().then(() =>
-      app.auth.getContainer('_public').then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
-        should(resp.name).is.not.undefined();
-        return should(resp.typeTag).equal(15000);
-      })));
+    app.auth.getContainer('_public').then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
+      should(resp.name).is.not.undefined();
+      return should(resp.typeTag).equal(15000);
+    })));
 
   it('throws error is no container name provided', () => app.auth.refreshContainersPermissions().then(() => {
     const test = () => app.auth.getContainer();
@@ -334,39 +334,39 @@ describe('Access Container', () => {
   }));
 
   it('read info of own container', () => app.auth.refreshContainersPermissions().then(() =>
-      app.auth.getOwnContainer().then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
-        should(resp.name).is.not.undefined();
-        return should(resp.typeTag).equal(15000);
-      })));
+    app.auth.getOwnContainer().then((ctnr) => ctnr.getNameAndTag()).then((resp) => {
+      should(resp.name).is.not.undefined();
+      return should(resp.typeTag).equal(15000);
+    })));
 
   it('mutate info of `_publicNames` container', () => app.auth.refreshContainersPermissions().then(() =>
-      app.auth.getContainer('_publicNames')
-        .then((md) => md.getEntries()
-          .then((entries) => entries.mutate()
-            .then((mut) => mut.insert('key1', 'value1')
-              .then(() => md.applyEntriesMutation(mut))
-            )))
-        .then(() => app.auth.getContainer('_publicNames'))
-          .then((md) => md.get('key1'))
-          .then((value) => {
-            should(value.buf).not.be.undefined();
-            return should(value.buf.toString()).equal('value1');
-          })
+    app.auth.getContainer('_publicNames')
+      .then((md) => md.getEntries()
+        .then((entries) => entries.mutate()
+          .then((mut) => mut.insert('key1', 'value1')
+            .then(() => md.applyEntriesMutation(mut))
+          )))
+      .then(() => app.auth.getContainer('_publicNames'))
+      .then((md) => md.get('key1'))
+      .then((value) => {
+        should(value.buf).not.be.undefined();
+        return should(value.buf.toString()).equal('value1');
+      })
   ));
 
   it('mutate info of own container', () => app.auth.refreshContainersPermissions().then(() =>
-      app.auth.getOwnContainer()
-        .then((md) => md.getEntries()
-          .then((entries) => entries.mutate()
-            .then((mut) => mut.insert('key1', 'value1')
-              .then(() => md.applyEntriesMutation(mut))
-            )))
-        .then(() => app.auth.getOwnContainer())
-          .then((md) => md.get('key1'))
-          .then((value) => {
-            should(value.buf).not.be.undefined();
-            return should(value.buf.toString()).equal('value1');
-          })
+    app.auth.getOwnContainer()
+      .then((md) => md.getEntries()
+        .then((entries) => entries.mutate()
+          .then((mut) => mut.insert('key1', 'value1')
+            .then(() => md.applyEntriesMutation(mut))
+          )))
+      .then(() => app.auth.getOwnContainer())
+      .then((md) => md.get('key1'))
+      .then((value) => {
+        should(value.buf).not.be.undefined();
+        return should(value.buf.toString()).equal('value1');
+      })
   ));
 
   it('check _public container is a Public MD', async () => {

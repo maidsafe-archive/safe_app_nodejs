@@ -39,7 +39,7 @@ describe('WebFetch with XOR URL', () => {
 
   before(async () => {
     app = await createAuthenticatedTestApp('_test_scope', containersPermissions,
-                                            null, expApisOpts);
+      null, expApisOpts);
     unregisteredApp = await createUnregisteredTestApp(expApisOpts);
   });
 
@@ -60,7 +60,7 @@ describe('WebFetch with XOR URL', () => {
 
   it('undefined XOR-URL from MD if experimental apis flag is not set', async () => {
     const safeApp = await createAuthenticatedTestApp('_test_scope', null, null,
-                                                    { enableExperimentalApis: false });
+      { enableExperimentalApis: false });
     const md = await safeApp.mutableData.newRandomPublic(TYPE_TAG);
     await md.quickSetup();
     const info = await md.getNameAndTag();
@@ -70,7 +70,7 @@ describe('WebFetch with XOR URL', () => {
   it('fail to get XOR-URL from IMD if experimental apis flag is not set', async () => {
     let error;
     const safeApp = await createAuthenticatedTestApp('_test_scope', null, null,
-                                                    { enableExperimentalApis: false });
+      { enableExperimentalApis: false });
     try {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const idWriter = await safeApp.immutableData.create();
@@ -87,7 +87,7 @@ describe('WebFetch with XOR URL', () => {
   it('fail to call getXorUrl function from exisintg IMD if experimental apis flag is not set', async () => {
     let error;
     const safeApp = await createAuthenticatedTestApp('_test_scope', null, null,
-                                                    { enableExperimentalApis: false });
+      { enableExperimentalApis: false });
     try {
       const content = `hello world, on ${Math.round(Math.random() * 100000)}`;
       const idWriter = await safeApp.immutableData.create();

@@ -30,7 +30,6 @@ const CONSTANTS = consts.pubConsts;
  * @hideconstructor
  */
 class Permissions extends h.NetworkObject {
-
   /**
    * Total number of permission entries
    * @returns {Promise<Number>}
@@ -79,8 +78,8 @@ class Permissions extends h.NetworkObject {
    */
   getPermissionSet(signKey) {
     return lib.mdata_permissions_get(this.app.connection,
-                                     this.ref,
-                                     signKey ? signKey.ref : CONSTANTS.USER_ANYONE);
+      this.ref,
+      signKey ? signKey.ref : CONSTANTS.USER_ANYONE);
   }
 
   /**
@@ -106,11 +105,11 @@ class Permissions extends h.NetworkObject {
    */
   insertPermissionSet(signKey, permissionSet) {
     return lib.mdata_permissions_insert(this.app.connection,
-                                        this.ref,
-                                        signKey
-                                          ? signKey.ref
-                                          : CONSTANTS.USER_ANYONE,
-                                        permissionSet);
+      this.ref,
+      signKey
+        ? signKey.ref
+        : CONSTANTS.USER_ANYONE,
+      permissionSet);
   }
 
   /**
@@ -131,13 +130,12 @@ class Permissions extends h.NetworkObject {
    */
   listPermissionSets() {
     return lib.mdata_list_permission_sets(this.app.connection, this.ref)
-        .then((permSets) => permSets.map((userPermSet) =>
-          ({ signKey: new PubSignKey(this.app, userPermSet.signKey),
-            permSet: userPermSet.permSet
-          })
-        ));
+      .then((permSets) => permSets.map((userPermSet) =>
+        ({ signKey: new PubSignKey(this.app, userPermSet.signKey),
+          permSet: userPermSet.permSet
+        })
+      ));
   }
-
 }
 
 /**
@@ -145,7 +143,6 @@ class Permissions extends h.NetworkObject {
  * @hideconstructor
  */
 class EntryMutationTransaction extends h.NetworkObject {
-
   /**
   * @private
   * used by autoref to clean the reference
@@ -259,7 +256,6 @@ class EntryMutationTransaction extends h.NetworkObject {
  * @hideconstructor
  */
 class Entries extends h.NetworkObject {
-
   /**
    * Get the total number of entries in the {@link MutableData}
    * @returns {Promise<Number>} number of entries
@@ -381,7 +377,7 @@ class Entries extends h.NetworkObject {
    */
   mutate() {
     return lib.mdata_entry_actions_new(this.app.connection)
-            .then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
+      .then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
   }
 }
 
@@ -455,8 +451,8 @@ class MutableData extends h.NetworkObject {
       })
       .then((entries) => this.app.crypto.getAppPubSignKey()
         .then((key) => this.app.mutableData.newPermissions()
-            .then((pm) => pm.insertPermissionSet(key, pmSet)
-              .then(() => this.put(pm, entries))))
+          .then((pm) => pm.insertPermissionSet(key, pmSet)
+            .then(() => this.put(pm, entries))))
       )
       .then(() => this);
   }
@@ -495,7 +491,7 @@ class MutableData extends h.NetworkObject {
       .then((encodedMeta) => this.app.mutableData.newMutation()
         .then((mut) => this.get(CONSTANTS.MD_METADATA_KEY)
           .then((metadata) => mut.update(CONSTANTS.MD_METADATA_KEY,
-                                          encodedMeta, metadata.version + 1)
+            encodedMeta, metadata.version + 1)
             , () => mut.insert(CONSTANTS.MD_METADATA_KEY, encodedMeta)
           )
           .then(() => this.applyEntriesMutation(mut))
@@ -664,9 +660,9 @@ class MutableData extends h.NetworkObject {
    */
   put(permissions, entries) {
     return lib.mdata_put(this.app.connection,
-                          this.ref,
-                          permissions ? permissions.ref : CONSTANTS.MD_PERMISSION_EMPTY,
-                          entries ? entries.ref : CONSTANTS.MD_ENTRIES_EMPTY);
+      this.ref,
+      permissions ? permissions.ref : CONSTANTS.MD_PERMISSION_EMPTY,
+      entries ? entries.ref : CONSTANTS.MD_ENTRIES_EMPTY);
   }
 
   /**
@@ -767,9 +763,9 @@ class MutableData extends h.NetworkObject {
    */
   getUserPermissions(signKey) {
     return lib.mdata_list_user_permissions(this.app.connection, this.ref,
-                                                      signKey
-                                                        ? signKey.ref
-                                                        : CONSTANTS.USER_ANYONE);
+      signKey
+        ? signKey.ref
+        : CONSTANTS.USER_ANYONE);
   }
 
   /**
@@ -795,11 +791,11 @@ class MutableData extends h.NetworkObject {
    */
   delUserPermissions(signKey, version) {
     return lib.mdata_del_user_permissions(this.app.connection,
-                                          this.ref,
-                                          signKey
-                                            ? signKey.ref
-                                            : CONSTANTS.USER_ANYONE,
-                                          version);
+      this.ref,
+      signKey
+        ? signKey.ref
+        : CONSTANTS.USER_ANYONE,
+      version);
   }
 
   /**
@@ -828,12 +824,12 @@ class MutableData extends h.NetworkObject {
    */
   setUserPermissions(signKey, permissionSet, version) {
     return lib.mdata_set_user_permissions(this.app.connection,
-                                          this.ref,
-                                          signKey
-                                            ? signKey.ref
-                                            : CONSTANTS.USER_ANYONE,
-                                          permissionSet || [],
-                                          version);
+      this.ref,
+      signKey
+        ? signKey.ref
+        : CONSTANTS.USER_ANYONE,
+      permissionSet || [],
+      version);
   }
 
   /**
@@ -956,7 +952,7 @@ class MutableDataInterface {
       throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
     }
     return lib.mdata_info_random_private(typeTag)
-          .then((mDataInfo) => this.wrapMdata(mDataInfo));
+      .then((mDataInfo) => this.wrapMdata(mDataInfo));
   }
 
 
@@ -980,7 +976,7 @@ class MutableDataInterface {
       throw makeError(errConst.TYPE_TAG_NAN.code, errConst.TYPE_TAG_NAN.msg);
     }
     return lib.mdata_info_random_public(typeTag)
-          .then((mDataInfo) => this.wrapMdata(mDataInfo));
+      .then((mDataInfo) => this.wrapMdata(mDataInfo));
   }
 
   /**
@@ -1006,7 +1002,7 @@ class MutableDataInterface {
    */
   newPrivate(name, typeTag, secKey, nonce) {
     return lib.mdata_info_new_private(name, typeTag, secKey, nonce)
-          .then((mDataInfo) => this.wrapMdata(mDataInfo));
+      .then((mDataInfo) => this.wrapMdata(mDataInfo));
   }
 
   /**
@@ -1046,7 +1042,7 @@ class MutableDataInterface {
    */
   newPermissions() {
     return lib.mdata_permissions_new(this.app.connection)
-        .then((r) => h.autoref(new Permissions(this.app, r)));
+      .then((r) => h.autoref(new Permissions(this.app, r)));
   }
 
   /**
@@ -1065,7 +1061,7 @@ class MutableDataInterface {
    */
   newMutation() {
     return lib.mdata_entry_actions_new(this.app.connection)
-        .then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
+      .then((r) => h.autoref(new EntryMutationTransaction(this.app, r)));
   }
 
   /**
@@ -1084,7 +1080,7 @@ class MutableDataInterface {
    */
   newEntries() {
     return lib.mdata_entries_new(this.app.connection)
-        .then((r) => h.autoref(new Entries(this.app, r)));
+      .then((r) => h.autoref(new Entries(this.app, r)));
   }
 
   /**
@@ -1105,7 +1101,7 @@ class MutableDataInterface {
    */
   fromSerial(serial) {
     return lib.mdata_info_deserialise(serial)
-        .then((mDataInfo) => this.wrapMdata(mDataInfo));
+      .then((mDataInfo) => this.wrapMdata(mDataInfo));
   }
 
   /**
@@ -1119,7 +1115,6 @@ class MutableDataInterface {
   wrapMdata(mDataInfo) {
     return new MutableData(this.app, mDataInfo);
   }
-
 }
 
 module.exports = MutableDataInterface;

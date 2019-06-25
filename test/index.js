@@ -143,19 +143,19 @@ describe('External API', () => {
 
   describe('fromAuthUri', () => {
     it('should connect registered', () => fromAuthUri(appInfo, h.authUris.registeredUri, null, { log: false })
-        .then((app) => should(app.auth.registered).be.true())
+      .then((app) => should(app.auth.registered).be.true())
     );
 
     it('should connect unregistered', () => fromAuthUri(appInfo, h.authUris.unregisteredUri, null, { log: false })
-        .then((app) => should(app.auth.registered).not.be.true())
+      .then((app) => should(app.auth.registered).not.be.true())
     );
 
     it('should connect with authorised containers', () => fromAuthUri(appInfo, h.authUris.containersUri, null, { log: false })
-        .then((app) => should(app.auth.registered).be.true())
+      .then((app) => should(app.auth.registered).be.true())
     );
 
     it('should connect with authorised shared MD', () => fromAuthUri(appInfo, h.authUris.sharedMdataUri, null, { log: false })
-        .then((app) => should(app.auth.registered).be.true())
+      .then((app) => should(app.auth.registered).be.true())
     );
   });
 
