@@ -27,8 +27,8 @@ describe('Experimental fetch function', () => {
   let unregisteredApp;
   before(async () => {
     app = await createAuthenticatedTestApp({ scope: '_test_scope' },
-                                            containersPermissions, null,
-                                            { enableExperimentalApis: true });
+      containersPermissions, null,
+      { enableExperimentalApis: true });
     // we enable the experimental APIs for this set of tests
     unregisteredApp = await createUnregisteredTestApp({ enableExperimentalApis: true });
   });

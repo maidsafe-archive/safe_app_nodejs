@@ -31,7 +31,6 @@ const genXorUrl = (xorName, mimeType) => {
 * @hideconstructor
 */
 class Reader extends helpers.NetworkObject {
-
   /**
    * Read the given amount of bytes from the network
    * @param {Object=} options
@@ -65,9 +64,9 @@ class Reader extends helpers.NetworkObject {
 
     return prms.then((end) =>
       lib.idata_read_from_self_encryptor(this.app.connection,
-                                         this.ref,
-                                         opts.offset || 0,
-                                         end));
+        this.ref,
+        opts.offset || 0,
+        end));
   }
 
   /**
@@ -133,7 +132,6 @@ class Reader extends helpers.NetworkObject {
   static free(app, ref) {
     lib.idata_self_encryptor_reader_free(app.connection, ref);
   }
-
 }
 
 /**
@@ -141,7 +139,6 @@ class Reader extends helpers.NetworkObject {
  * @hideconstructor
  */
 class Writer extends helpers.NetworkObject {
-
   /**
    * Append the given data to {@link ImmutableDataInterface}. This does not commit data to network.
    *
@@ -197,7 +194,7 @@ class Writer extends helpers.NetworkObject {
    */
   async close(cipherOpt, getXorUrl, mimeType) {
     const name = await lib.idata_close_self_encryptor(this.app.connection,
-                                                        this.ref, cipherOpt.ref);
+      this.ref, cipherOpt.ref);
     if (!getXorUrl) {
       return name;
     }
@@ -223,11 +220,9 @@ class Writer extends helpers.NetworkObject {
   static free(app, ref) {
     lib.idata_self_encryptor_writer_free(app.connection, ref);
   }
-
 }
 
 class ImmutableDataInterface {
-
   /**
   * @hideconstructor
   * @param {SAFEApp} app

@@ -19,10 +19,10 @@ const errConst = require('../src/error_const');
 describe('Crypto Smoke Test', () => {
   l.init({});
   it('properly sha3 hashes strings', () => l.sha3_hash('test').then((resp) => should(resp.toString())
-        .equal(Buffer('36f028580bb02cc8272a9a020f4200e346e276ae664e45ee80745574e2f5ab80', 'hex').toString())));
+    .equal(Buffer('36f028580bb02cc8272a9a020f4200e346e276ae664e45ee80745574e2f5ab80', 'hex').toString())));
 
   it('properly sha3 hashes buffers', () => l.sha3_hash(Buffer.from('test a different value in a buffer')).then((resp) => should(resp.toString())
-        .equal(Buffer('bc262d37858c674b3a8950bed94f642f6e52b32fe7ac5725f287cb311d9d9d27', 'hex').toString())));
+    .equal(Buffer('bc262d37858c674b3a8950bed94f642f6e52b32fe7ac5725f287cb311d9d9d27', 'hex').toString())));
 });
 
 
@@ -35,14 +35,14 @@ describe('App Crypto Tests', () => {
 
   it('can hash nicely', () => app.crypto.sha3Hash('testing input').then((resp) =>
     should(resp.toString())
-        .equal(Buffer('97bc11468af46662f6df912b8d47edb7652e5209062c1588046bccfc7ac2dd7d', 'hex').toString())
+      .equal(Buffer('97bc11468af46662f6df912b8d47edb7652e5209062c1588046bccfc7ac2dd7d', 'hex').toString())
   ));
 
   it('can hash nicely unauthorised', async () => {
     const unAuthedApp = await h.createTestApp();
     const hash = await unAuthedApp.crypto.sha3Hash('testing input');
     return should(hash.toString())
-        .equal(Buffer('97bc11468af46662f6df912b8d47edb7652e5209062c1588046bccfc7ac2dd7d', 'hex').toString());
+      .equal(Buffer('97bc11468af46662f6df912b8d47edb7652e5209062c1588046bccfc7ac2dd7d', 'hex').toString());
   });
 
   it('can get app public sign key', () => app.crypto.getAppPubSignKey().then((key) => {
@@ -71,10 +71,10 @@ describe('Encryption keys', () => {
     });
 
     beforeEach(() => app.crypto.generateEncKeyPair()
-          .then((kp) => {
-            encKeyPair = kp;
-            return should(encKeyPair).not.be.undefined();
-          }));
+      .then((kp) => {
+        encKeyPair = kp;
+        return should(encKeyPair).not.be.undefined();
+      }));
 
     it('generation creates appropriate keys', () => Promise.all([
       encKeyPair.pubEncKey.getRaw().then((r) => {
@@ -131,35 +131,35 @@ describe('Encryption keys', () => {
 
     /* eslint-disable func-names */
     before(() => h.createAuthenticatedTestApp()
-        .then((app) => {
-          me = app;
-          return h.createAuthenticatedTestApp();
-        })
-        .then((app) => {
-          other = app;
-          return me.crypto.generateEncKeyPair();
-        })
-        .then((kp) => {
-          myKeys = kp;
-          should(myKeys).not.be.undefined();
-          return other.crypto.generateEncKeyPair();
-        })
-        .then((kp) => {
-          theirKeys = kp;
-          should(theirKeys).not.be.undefined();
-          return myKeys.pubEncKey.getRaw();
-        })
-        .then((r) => other.crypto.pubEncKeyFromRaw(r))
-        .then((w) => {
-          theirHandleOnMyPubKey = w;
-          should(theirHandleOnMyPubKey).not.be.undefined();
-          return theirKeys.pubEncKey.getRaw();
-        })
-        .then((r) => me.crypto.pubEncKeyFromRaw(r))
-        .then((w) => {
-          myHandleOnTheirPubKey = w;
-          should(myHandleOnTheirPubKey).not.be.undefined();
-        }));
+      .then((app) => {
+        me = app;
+        return h.createAuthenticatedTestApp();
+      })
+      .then((app) => {
+        other = app;
+        return me.crypto.generateEncKeyPair();
+      })
+      .then((kp) => {
+        myKeys = kp;
+        should(myKeys).not.be.undefined();
+        return other.crypto.generateEncKeyPair();
+      })
+      .then((kp) => {
+        theirKeys = kp;
+        should(theirKeys).not.be.undefined();
+        return myKeys.pubEncKey.getRaw();
+      })
+      .then((r) => other.crypto.pubEncKeyFromRaw(r))
+      .then((w) => {
+        theirHandleOnMyPubKey = w;
+        should(theirHandleOnMyPubKey).not.be.undefined();
+        return theirKeys.pubEncKey.getRaw();
+      })
+      .then((r) => me.crypto.pubEncKeyFromRaw(r))
+      .then((w) => {
+        myHandleOnTheirPubKey = w;
+        should(myHandleOnTheirPubKey).not.be.undefined();
+      }));
 
     it('encrypt with secret key', async () => {
       const text = 'some-text';
@@ -235,10 +235,10 @@ describe('Sign keys', () => {
     });
 
     beforeEach(() => app.crypto.generateSignKeyPair()
-          .then((kp) => {
-            signKeyPair = kp;
-            return should(signKeyPair).not.be.undefined();
-          }));
+      .then((kp) => {
+        signKeyPair = kp;
+        return should(signKeyPair).not.be.undefined();
+      }));
 
     it('generation creates appropriate keys', () => Promise.all([
       signKeyPair.pubSignKey.getRaw().then((r) => {
@@ -324,25 +324,25 @@ describe('Sign keys', () => {
     let theirHandleOnMyPubKey;
 
     before(() => h.createAuthenticatedTestApp()
-        .then((app) => {
-          me = app;
-          return h.createAuthenticatedTestApp();
+      .then((app) => {
+        me = app;
+        return h.createAuthenticatedTestApp();
+      })
+      .then((app) => {
+        other = app;
+        return me.crypto.generateSignKeyPair();
+      })
+      .then((kp) => {
+        myKeys = kp;
+        should(myKeys).not.be.undefined();
+      })
+      .then(() => myKeys.pubSignKey.getRaw())
+      .then((r) => other.crypto.pubSignKeyFromRaw(r)
+        .then((w) => {
+          theirHandleOnMyPubKey = w;
+          return should(theirHandleOnMyPubKey).not.be.undefined();
         })
-        .then((app) => {
-          other = app;
-          return me.crypto.generateSignKeyPair();
-        })
-        .then((kp) => {
-          myKeys = kp;
-          should(myKeys).not.be.undefined();
-        })
-        .then(() => myKeys.pubSignKey.getRaw())
-        .then((r) => other.crypto.pubSignKeyFromRaw(r)
-          .then((w) => {
-            theirHandleOnMyPubKey = w;
-            return should(theirHandleOnMyPubKey).not.be.undefined();
-          })
-        ));
+      ));
 
     it('sign and verify', () => {
       const plaintext = `random ${Math.random()} plain text`;

@@ -21,7 +21,6 @@ const makeError = require('../native/_error.js');
  * @hideconstructor
  */
 class PubEncKey extends h.NetworkObject {
-
   /**
    * Generate raw buffer of public encryption key
    * @returns {Promise<Buffer>}
@@ -133,7 +132,6 @@ class PubEncKey extends h.NetworkObject {
 * @hideconstructor
 */
 class SecEncKey extends h.NetworkObject {
-
   /**
    * Generate raw buffer of secret encryption key
    * @returns {Promise<Buffer>}
@@ -227,7 +225,6 @@ class SecEncKey extends h.NetworkObject {
 * Asymmetric encryption keypair
 */
 class EncKeyPair {
-
   /**
   * @hideconstructor
   */
@@ -293,7 +290,7 @@ class EncKeyPair {
    */
   decryptSealed(cipher) {
     return lib.decrypt_sealed_box(this.app.connection, cipher,
-                                  this.pubEncKey.ref, this.secEncKey.ref);
+      this.pubEncKey.ref, this.secEncKey.ref);
   }
 }
 
@@ -302,7 +299,6 @@ class EncKeyPair {
 * @hideconstructor
 */
 class PubSignKey extends h.NetworkObject {
-
   /**
    * Generate raw buffer of public sign key.
    * @returns {Promise<Buffer>}
@@ -358,7 +354,6 @@ class PubSignKey extends h.NetworkObject {
 * @hideconstructor
 */
 class SecSignKey extends h.NetworkObject {
-
   /**
    * Generate raw buffer of secret sign key
    * @returns {Promise<Buffer>}
@@ -415,7 +410,6 @@ class SecSignKey extends h.NetworkObject {
 * @hideconstructor
 */
 class SignKeyPair {
-
   constructor(app, pub, secret) {
     this.app = app;
     this._public = pub;
@@ -465,7 +459,6 @@ class SignKeyPair {
  * Contains all cryptographic related functionality
  */
 class CryptoInterface {
-
   /**
    * @hideconstructor
    */
@@ -505,7 +498,7 @@ class CryptoInterface {
    */
   getAppPubSignKey() {
     return lib.app_pub_sign_key(this.app.connection)
-        .then((c) => h.autoref(new PubSignKey(this.app, c)));
+      .then((c) => h.autoref(new PubSignKey(this.app, c)));
   }
 
   /**
@@ -523,7 +516,7 @@ class CryptoInterface {
    */
   getAppPubEncKey() {
     return lib.app_pub_enc_key(this.app.connection)
-        .then((c) => h.autoref(new PubEncKey(this.app, c)));
+      .then((c) => h.autoref(new PubEncKey(this.app, c)));
   }
 
   /**
@@ -541,10 +534,10 @@ class CryptoInterface {
    */
   generateEncKeyPair() {
     return lib.enc_generate_key_pair(this.app.connection)
-        .then((r) => new EncKeyPair(this.app,
-            h.autoref(new PubEncKey(this.app, r[0])),
-            h.autoref(new SecEncKey(this.app, r[1]))
-          ));
+      .then((r) => new EncKeyPair(this.app,
+        h.autoref(new PubEncKey(this.app, r[0])),
+        h.autoref(new SecEncKey(this.app, r[1]))
+      ));
   }
 
   /**
@@ -562,10 +555,10 @@ class CryptoInterface {
    */
   generateSignKeyPair() {
     return lib.sign_generate_key_pair(this.app.connection)
-        .then((r) => new SignKeyPair(this.app,
-            h.autoref(new PubSignKey(this.app, r[0])),
-            h.autoref(new SecSignKey(this.app, r[1]))
-          ));
+      .then((r) => new SignKeyPair(this.app,
+        h.autoref(new PubSignKey(this.app, r[0])),
+        h.autoref(new SecSignKey(this.app, r[1]))
+      ));
   }
 
   /**
@@ -592,9 +585,9 @@ class CryptoInterface {
   generateEncKeyPairFromRaw(rawPublicKey, rawSecretkey) {
     let pubKey;
     return this.pubEncKeyFromRaw(rawPublicKey)
-        .then((pk) => { pubKey = pk; })
-        .then(() => this.secEncKeyFromRaw(rawSecretkey))
-        .then((sk) => new EncKeyPair(this.app, pubKey, sk));
+      .then((pk) => { pubKey = pk; })
+      .then(() => this.secEncKeyFromRaw(rawSecretkey))
+      .then((sk) => new EncKeyPair(this.app, pubKey, sk));
   }
 
   /**
@@ -621,9 +614,9 @@ class CryptoInterface {
   generateSignKeyPairFromRaw(rawPublicKey, rawSecretkey) {
     let pubKey;
     return this.pubSignKeyFromRaw(rawPublicKey)
-        .then((pk) => { pubKey = pk; })
-        .then(() => this.secSignKeyFromRaw(rawSecretkey))
-        .then((sk) => new SignKeyPair(this.app, pubKey, sk));
+      .then((pk) => { pubKey = pk; })
+      .then(() => this.secSignKeyFromRaw(rawSecretkey))
+      .then((sk) => new SignKeyPair(this.app, pubKey, sk));
   }
 
   /**
@@ -645,7 +638,7 @@ class CryptoInterface {
    */
   pubSignKeyFromRaw(rawPubSignKey) {
     return lib.sign_pub_key_new(this.app.connection, rawPubSignKey)
-        .then((c) => h.autoref(new PubSignKey(this.app, c)));
+      .then((c) => h.autoref(new PubSignKey(this.app, c)));
   }
 
   /**
@@ -667,7 +660,7 @@ class CryptoInterface {
    */
   secSignKeyFromRaw(rawSecSignKey) {
     return lib.sign_sec_key_new(this.app.connection, rawSecSignKey)
-        .then((c) => h.autoref(new SecSignKey(this.app, c)));
+      .then((c) => h.autoref(new SecSignKey(this.app, c)));
   }
 
   /**
@@ -689,7 +682,7 @@ class CryptoInterface {
    */
   pubEncKeyFromRaw(rawPubEncKey) {
     return lib.enc_pub_key_new(this.app.connection, rawPubEncKey)
-        .then((c) => h.autoref(new PubEncKey(this.app, c)));
+      .then((c) => h.autoref(new PubEncKey(this.app, c)));
   }
 
   /**
@@ -711,7 +704,7 @@ class CryptoInterface {
    */
   secEncKeyFromRaw(raw) {
     return lib.enc_secret_key_new(this.app.connection, raw)
-        .then((c) => h.autoref(new SecEncKey(this.app, c)));
+      .then((c) => h.autoref(new SecEncKey(this.app, c)));
   }
 
   /**

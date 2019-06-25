@@ -26,7 +26,6 @@ class CipherOpt extends h.NetworkObject {
 * Provides encryption methods for committing {@link ImmutableData}
 */
 class CipherOptInterface {
-
   /**
    * @hideconstructor
    */
@@ -48,7 +47,7 @@ class CipherOptInterface {
   */
   newPlainText() {
     return lib.cipher_opt_new_plaintext(this.app.connection)
-          .then((c) => h.autoref(new CipherOpt(this.app, c)));
+      .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }
 
   /**
@@ -65,7 +64,7 @@ class CipherOptInterface {
   */
   newSymmetric() {
     return lib.cipher_opt_new_symmetric(this.app.connection)
-        .then((c) => h.autoref(new CipherOpt(this.app, c)));
+      .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }
   /**
   * Create a new asymmetric cipher for the given public encryption key
@@ -92,7 +91,7 @@ class CipherOptInterface {
       throw makeError(errConst.MISSING_PUB_ENC_KEY.code, errConst.MISSING_PUB_ENC_KEY.msg);
     }
     return lib.cipher_opt_new_asymmetric(this.app.connection, pubEncKey.ref)
-        .then((c) => h.autoref(new CipherOpt(this.app, c)));
+      .then((c) => h.autoref(new CipherOpt(this.app, c)));
   }
 }
 module.exports = CipherOptInterface;

@@ -31,11 +31,11 @@ const makeShareMDataPermissions = nativeH.makeShareMDataPermissions;
 */
 const genAppUri = (str) => {
   const urlSafeBase64 = (Buffer.from(str))
-                          .toString('base64')
-                          .replace(/\+/g, '-') // Convert '+' to '-'
-                          .replace(/\//g, '_') // Convert '/' to '_'
-                          .replace(/=+$/, '') // Remove ending '='
-                          .toLowerCase();
+    .toString('base64')
+    .replace(/\+/g, '-') // Convert '+' to '-'
+    .replace(/\//g, '_') // Convert '/' to '_'
+    .replace(/=+$/, '') // Remove ending '='
+    .toLowerCase();
   return `safe-${urlSafeBase64}`;
 };
 
@@ -63,7 +63,6 @@ const removeSafeProtocol = (uri) => uri.trim().replace(/^safe-[^:]*:?[/]*/g, '')
 * Contains all authentication related functionality
 */
 class AuthInterface {
-
   /**
   * @hideconstructor
   */
@@ -163,7 +162,7 @@ class AuthInterface {
       containers_len: perm.length,
       containers_cap: perm.length
     }).ref())
-    .then(addSafeAuthProtocol);
+      .then(addSafeAuthProtocol);
   }
 
   /**
@@ -203,7 +202,7 @@ class AuthInterface {
       mdata: mdatasPerms,
       mdata_len: mdatasPerms.length
     }).ref())
-    .then(addSafeAuthProtocol);
+      .then(addSafeAuthProtocol);
   }
 
   /**
@@ -277,7 +276,7 @@ class AuthInterface {
       containers_len: ctnrs.length,
       containers_cap: ctnrs.length
     }).ref())
-    .then(addSafeAuthProtocol);
+      .then(addSafeAuthProtocol);
   }
 
   /**
@@ -497,7 +496,7 @@ class AuthInterface {
   getContainer(name) {
     if (!name) {
       throw makeError(errConst.MISSING_CONTAINER_STRING.code,
-                      errConst.MISSING_CONTAINER_STRING.msg);
+        errConst.MISSING_CONTAINER_STRING.msg);
     }
     return lib.access_container_get_container_mdata_info(this.app.connection, name)
       .then((data) => this.app.mutableData.wrapMdata(data));
@@ -541,10 +540,10 @@ class AuthInterface {
           const authGranted = resp[1];
           this._registered = true;
           return lib.app_registered(this.app, authGranted);
-            // TODO: in the future: automatically refresh permissions
-            //  .then((app) => this.refreshContainersPermissions()
-            //    .then(() => app)
-            //  );
+          // TODO: in the future: automatically refresh permissions
+          //  .then((app) => this.refreshContainersPermissions()
+          //    .then(() => app)
+          //  );
         }
         case 'containers':
           this._registered = true;

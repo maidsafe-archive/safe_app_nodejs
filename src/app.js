@@ -110,7 +110,6 @@ const setSearchPath = (options) => {
  * };
  */
 class SAFEApp extends EventEmitter {
-
   /**
   * @hideconstructor
   * Initiate a new SAFEApp instance. Wire up all the API's and set up the

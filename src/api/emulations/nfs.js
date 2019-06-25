@@ -22,7 +22,6 @@ const makeError = require('../../native/_error.js');
  * NFS-style file operations
  */
 class File {
-
   /**
   * @hideconstructor
   * Instantiate a new NFS File instance.
@@ -316,8 +315,8 @@ class NFS {
       fileMeta.user_metadata_cap = userMetadataPtr.length;
     }
     return lib.dir_insert_file(
-        this.mData.app.connection, this.mData.ref, fileName, file.ref.ref()
-      )
+      this.mData.app.connection, this.mData.ref, fileName, file.ref.ref()
+    )
       .then(() => {
         const fileObj = file;
         fileObj.version = 0;
@@ -363,7 +362,7 @@ class NFS {
     }
     const fileContext = file;
     return lib.dir_update_file(this.mData.app.connection, this.mData.ref, fileName,
-                           fileContext.ref.ref(), version)
+      fileContext.ref.ref(), version)
       .then((newVersion) => {
         fileContext.version = newVersion;
       })

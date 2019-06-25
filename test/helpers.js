@@ -66,7 +66,7 @@ const createDomain = async (domain, content, path, service, authedApp) => {
   const serviceMd = await app.mutableData.newRandomPublic(consts.TAG_TYPE_WWW);
   await serviceMd.quickSetup();
   const nfs = serviceMd.emulateAs('NFS');
-   // let's write the file
+  // let's write the file
   const file = await nfs.create(content);
   await nfs.insert(path || '/index.html', file);
   const dnsName = await app.crypto.sha3Hash(domain);
@@ -89,7 +89,7 @@ const createRandomPrivateServiceDomain = async (content, path, service, authedAp
   const serviceMd = await app.mutableData.newRandomPrivate(consts.TAG_TYPE_WWW);
   await serviceMd.quickSetup();
   const nfs = serviceMd.emulateAs('NFS');
-   // let's write the file
+  // let's write the file
   const file = await nfs.create(content);
   await nfs.insert(path || '', file);
   const dnsName = await app.crypto.sha3Hash(domain);
@@ -108,8 +108,8 @@ const publicNamesContainerPerms = {
 };
 
 const publicNamesTestApp = () => createAuthenticatedTestApp(null,
-                                            publicNamesContainerPerms, null,
-                                            { enableExperimentalApis: true });
+  publicNamesContainerPerms, null,
+  { enableExperimentalApis: true });
 
 module.exports = {
   App,

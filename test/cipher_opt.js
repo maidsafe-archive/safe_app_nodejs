@@ -34,7 +34,7 @@ describe('CipherOpt', () => {
   });
 
   it('forceCleanUp on pubSignKey objects', () => app.cipherOpt.newPlainText()
-      .then((cipherOpt) => cipherOpt.forceCleanUp())
+    .then((cipherOpt) => cipherOpt.forceCleanUp())
   );
 
   it('symmetrically encrypts data to be written to immutable structure', async () => {
