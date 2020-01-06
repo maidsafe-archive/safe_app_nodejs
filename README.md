@@ -2,7 +2,7 @@
 
 A [safe_app](https://github.com/maidsafe/safe_client_libs) language binding for [Node.js](https://nodejs.org/).
 
-**Maintainer:** Gabriel Viganotti (gabriel.viganotti@maidsafe.net)
+**Note this repository is no longer maintained. It has been deprecated and its functionality replaced by the SAFE NodeJS repository which is maintained in [https://github.com/maidsafe/safe-nodejs](https://github.com/maidsafe/safe-nodejs).**
 
 |Linux/macOS|Windows|Coverage Status|
 |:---:|:---:|:---:|
