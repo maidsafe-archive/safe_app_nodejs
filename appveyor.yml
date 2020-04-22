@@ -1,5 +1,7 @@
 environment:
-  nodejs_version: "10.0.0"
+  matrix:
+    - nodejs_version: "10.0.0"
+    - nodejs_version: "12.0.0"
 
 platform:
   - x64
