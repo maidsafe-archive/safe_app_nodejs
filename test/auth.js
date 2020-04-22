@@ -292,6 +292,17 @@ describe('Access Container', () => {
       });
     })));
 
+  it.only('request permissons for other app\' own container', async () => {
+    const primaryAppInfo = { id: 'primary', vendor: '1' };
+    await createAuthenticatedTestApp(primaryAppInfo, {}, { own_container: true });
+    const perms = {
+      'apps/primary': ['Read']
+    };
+    const secondaryAppInfo = { id: 'secondary', vendor: '2' };
+    const secondApp = await createAuthenticatedTestApp(secondaryAppInfo, perms);
+    await secondApp.auth.getContainersPermissions();
+  });
+
   it('returns empty object if no containers found for app', async () => {
     const appWithNoContainers = await createAuthenticatedTestApp();
     const noContainers = await appWithNoContainers.auth.getContainersPermissions();
